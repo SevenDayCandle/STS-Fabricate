@@ -63,7 +63,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected Map<String, String> eventLog = new HashMap<>();
     protected Random rng;
     protected String startingLoadout;
-    protected transient PCLAbstractPlayerData<?,?> data;
+    protected transient PCLAbstractPlayerData<?, ?> data;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
@@ -145,7 +145,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    private void banItems(PCLAbstractPlayerData<?,?> data) {
+    private void banItems(PCLAbstractPlayerData<?, ?> data) {
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
@@ -337,21 +337,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return replacement;
     }
 
-    // TODO check master deck
-    public boolean tryCancelCardReward(AbstractCard temp) {
-        for (AbstractRelic r : player.relics) {
-            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
-                return true;
-            }
-        }
-        for (AbstractBlight r : player.blights) {
-            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected void importBaseData(PCLDungeon data) {
         ascensionGlyphCounters.clear();
         if (data != null) {
@@ -454,7 +439,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCardsForData(PCLAbstractPlayerData<?,?> data) {
+    private void loadCardsForData(PCLAbstractPlayerData<?, ?> data) {
         // Always include the selected loadout. If for some reason none exists, assign one at random
         if (data.selectedLoadout == null) {
             data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));
@@ -515,6 +500,17 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
+    private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
+        AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
+        ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
+        // Mark this relic as seen so it shows up properly in menus, etc.
+        UnlockTracker.markRelicAsSeen(c.ID);
+        if (relicPool != null && !relicPool.contains(c.ID)) {
+            relicPool.add(c.ID);
+            EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
+        }
+    }
+
     // Add custom relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
     public void loadCustomRelics(AbstractPlayer player) {
         if (allowCustomRelics) {
@@ -524,17 +520,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
                 loadCustomRelicImpl(c);
             }
-        }
-    }
-
-    private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
-        AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
-        ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
-        // Mark this relic as seen so it shows up properly in menus, etc.
-        UnlockTracker.markRelicAsSeen(c.ID);
-        if (relicPool != null && !relicPool.contains(c.ID)) {
-            relicPool.add(c.ID);
-            EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
         }
     }
 
@@ -732,6 +717,21 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     public void setMapData(String eventID, Object value) {
         eventLog.put(eventID, value.toString());
+    }
+
+    // TODO check master deck
+    public boolean tryCancelCardReward(AbstractCard temp) {
+        for (AbstractRelic r : player.relics) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+        for (AbstractBlight r : player.blights) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean tryObtainCard(AbstractCard card) {

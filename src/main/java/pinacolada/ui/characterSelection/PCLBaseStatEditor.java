@@ -114,16 +114,6 @@ public class PCLBaseStatEditor extends EUIHoverable {
         valueDropdown.tryRender(sb);
     }
 
-    @Override
-    public void updateImpl() {
-        hb.update();
-        image.updateImpl();
-        label.setLabel(type.getText(loadout, data)).updateImpl();
-        decreaseButton.setInteractable(interactable && canDecrease()).updateImpl();
-        increaseButton.setInteractable(interactable && canIncrease()).updateImpl();
-        valueDropdown.tryUpdate();
-    }
-
     public void set(int amount) {
         type.setAmount(data, amount);
         editor.updateValidation();
@@ -139,6 +129,16 @@ public class PCLBaseStatEditor extends EUIHoverable {
         this.loadout = loadout;
         this.data = data;
         valueDropdown.setSelection(data.values.getOrDefault(type, 0), true);
+    }
+
+    @Override
+    public void updateImpl() {
+        hb.update();
+        image.updateImpl();
+        label.setLabel(type.getText(loadout, data)).updateImpl();
+        decreaseButton.setInteractable(interactable && canDecrease()).updateImpl();
+        increaseButton.setInteractable(interactable && canIncrease()).updateImpl();
+        valueDropdown.tryUpdate();
     }
 
     public enum StatType {
@@ -198,6 +198,24 @@ public class PCLBaseStatEditor extends EUIHoverable {
             }
         }
 
+        public String getDescription() {
+            switch (this) {
+                case Gold:
+                    return PGR.core.strings.loadout_gold;
+                case HP:
+                    return PGR.core.strings.loadout_maxHP;
+                case CardDraw:
+                    return PGR.core.strings.loadout_cardDrawDesc;
+                case PotionSlot:
+                    return PGR.core.strings.loadout_potionSlot;
+                case Energy:
+                    return PGR.core.strings.loadout_energyDesc;
+                case OrbSlot:
+                    return PGR.core.strings.loadout_orbSlot;
+            }
+            return "";
+        }
+
         public String getText(PCLLoadout loadout, PCLLoadoutData data) {
             if (loadout == null || data == null) {
                 return "";
@@ -220,24 +238,6 @@ public class PCLBaseStatEditor extends EUIHoverable {
             }
         }
 
-        public String getDescription() {
-            switch (this) {
-                case Gold:
-                    return PGR.core.strings.loadout_gold;
-                case HP:
-                    return PGR.core.strings.loadout_maxHP;
-                case CardDraw:
-                    return PGR.core.strings.loadout_cardDrawDesc;
-                case PotionSlot:
-                    return PGR.core.strings.loadout_potionSlot;
-                case Energy:
-                    return PGR.core.strings.loadout_energyDesc;
-                case OrbSlot:
-                    return PGR.core.strings.loadout_orbSlot;
-            }
-            return "";
-        }
-
         public Texture getTexture() {
             switch (this) {
                 case Gold:
@@ -256,6 +256,10 @@ public class PCLBaseStatEditor extends EUIHoverable {
             return ImageMaster.WARNING_ICON_VFX;
         }
 
+        public EUITooltip getTip() {
+            return new EUITooltip(getTitle(), getDescription());
+        }
+
         public String getTitle() {
             switch (this) {
                 case Gold:
@@ -272,10 +276,6 @@ public class PCLBaseStatEditor extends EUIHoverable {
                     return PGR.core.strings.rewards_orbSlot;
             }
             return "";
-        }
-
-        public EUITooltip getTip() {
-            return new EUITooltip(getTitle(), getDescription());
         }
 
         public void setAmount(PCLLoadoutData data, int amount) {

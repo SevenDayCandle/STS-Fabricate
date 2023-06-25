@@ -65,16 +65,6 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     protected int targetWidth = CARD_IMG_WIDTH;
     protected int targetHeight = CARD_IMG_HEIGHT;
 
-    public static PCLCustomImageEffect forCard(Texture texture)
-    {
-        return new PCLCustomImageEffect(texture, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
-    }
-
-    public static PCLCustomImageEffect forRelic(Texture texture)
-    {
-        return new PCLCustomImageEffect(texture, RELIC_IMG_SIZE, RELIC_IMG_SIZE);
-    }
-
     public PCLCustomImageEffect(Texture base, int imageWidth, int imageHeight) {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);
@@ -133,6 +123,14 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         camera = new OrthographicCamera((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         sb = new SpriteBatch();
         sb.setProjectionMatrix(camera.combined.scl(1, -1, 1));
+    }
+
+    public static PCLCustomImageEffect forCard(Texture texture) {
+        return new PCLCustomImageEffect(texture, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
+    }
+
+    public static PCLCustomImageEffect forRelic(Texture texture) {
+        return new PCLCustomImageEffect(texture, RELIC_IMG_SIZE, RELIC_IMG_SIZE);
     }
 
     protected void commit() {

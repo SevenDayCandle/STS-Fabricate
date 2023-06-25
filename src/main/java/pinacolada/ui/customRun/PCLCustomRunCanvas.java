@@ -172,14 +172,54 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     }
 
+    public void close() {
+        InputHelper.pressedEscape = false;
+        this.cancelButton.hb.clicked = false;
+        this.cancelButton.hide();
+        CardCrawlGame.mainMenuScreen.panelScreen.refresh();
+    }
+
+    // Group mods by original color, then sort them alphabetically
+    protected int compareMod(CustomMod a, CustomMod b) {
+        int colorComp = StringUtils.compare(a.color, b.color);
+        if (colorComp != 0) {
+            return colorComp;
+        }
+        return StringUtils.compare(a.name, b.name);
+    }
+
     protected void onScroll(float newPercent) {
         super.onScroll(newPercent);
         updatePositions();
     }
 
-    protected void onUpdateModifiers(List<CustomMod> mods) {
-        this.screen.activeMods = mods;
-        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
+    public void renderImpl(SpriteBatch sb) {
+        if (currentEffect != null) {
+            currentEffect.render(sb);
+        }
+        else {
+            super.renderImpl(sb);
+            titleLabel.tryRender(sb);
+            charTitleLabel.tryRender(sb);
+            modifiersLabel.tryRender(sb);
+            trophiesLabel.tryRender(sb);
+            selectedCharacterLabel.tryRender(sb);
+            endlessToggle.tryRender(sb);
+            endingActToggle.tryRender(sb);
+            customCardToggle.tryRender(sb);
+            customRelicToggle.tryRender(sb);
+            customPotionToggle.tryRender(sb);
+            seedInput.tryRender(sb);
+            ascensionEditor.tryRender(sb);
+            modifierDropdown.tryRender(sb);
+            for (PCLCustomRunCharacterButton b : characters) {
+                b.tryRenderCentered(sb);
+            }
+            editCardPoolButton.renderImpl(sb);
+            editRelicPoolButton.renderImpl(sb);
+            confirmButton.render(sb);
+            cancelButton.render(sb);
+        }
     }
 
     public void updateImpl() {
@@ -224,45 +264,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
         }
     }
 
-    public void renderImpl(SpriteBatch sb) {
-        if (currentEffect != null) {
-            currentEffect.render(sb);
-        }
-        else {
-            super.renderImpl(sb);
-            titleLabel.tryRender(sb);
-            charTitleLabel.tryRender(sb);
-            modifiersLabel.tryRender(sb);
-            trophiesLabel.tryRender(sb);
-            selectedCharacterLabel.tryRender(sb);
-            endlessToggle.tryRender(sb);
-            endingActToggle.tryRender(sb);
-            customCardToggle.tryRender(sb);
-            customRelicToggle.tryRender(sb);
-            customPotionToggle.tryRender(sb);
-            seedInput.tryRender(sb);
-            ascensionEditor.tryRender(sb);
-            modifierDropdown.tryRender(sb);
-            for (PCLCustomRunCharacterButton b : characters) {
-                b.tryRenderCentered(sb);
-            }
-            editCardPoolButton.renderImpl(sb);
-            editRelicPoolButton.renderImpl(sb);
-            confirmButton.render(sb);
-            cancelButton.render(sb);
-        }
+    protected void onUpdateModifiers(List<CustomMod> mods) {
+        this.screen.activeMods = mods;
+        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
     }
 
     public void open() {
         confirmButton.show();
         cancelButton.show(CharacterSelectScreen.TEXT[5]);
-    }
-
-    public void close() {
-        InputHelper.pressedEscape = false;
-        this.cancelButton.hb.clicked = false;
-        this.cancelButton.hide();
-        CardCrawlGame.mainMenuScreen.panelScreen.refresh();
     }
 
     public void openCardPool() {
@@ -315,15 +324,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
         modList = EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID));
         modList.sort(this::compareMod);
         modifierDropdown.setItems(modList);
-    }
-
-    // Group mods by original color, then sort them alphabetically
-    protected int compareMod(CustomMod a, CustomMod b) {
-        int colorComp = StringUtils.compare(a.color, b.color);
-        if (colorComp != 0) {
-            return colorComp;
-        }
-        return StringUtils.compare(a.name, b.name);
     }
 
     protected void updatePositions() {

@@ -188,13 +188,13 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-
+    public String wrapAmount(int input) {
+        return input > 0 ? "+" + input : String.valueOf(input);
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return input > 0 ? "+" + input : String.valueOf(input);
+    public void use(PCLUseInfo info, PCLActions order) {
+
     }
 
     abstract public String getSubDescText();

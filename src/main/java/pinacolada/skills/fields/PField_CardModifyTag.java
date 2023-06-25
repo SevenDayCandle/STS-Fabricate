@@ -29,9 +29,9 @@ public class PField_CardModifyTag extends PField_CardModify {
         return new PField_CardModifyTag(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerPile(groupTypes);
-        editor.registerTag(addTags);
+    public PField_CardModifyTag setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 
     public String getAddTagChoiceString() {
@@ -48,8 +48,8 @@ public class PField_CardModifyTag extends PField_CardModify {
         return setAddTag(Arrays.asList(affinities));
     }
 
-    public PField_CardModifyTag setOr(boolean value) {
-        this.or = value;
-        return this;
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerPile(groupTypes);
+        editor.registerTag(addTags);
     }
 }

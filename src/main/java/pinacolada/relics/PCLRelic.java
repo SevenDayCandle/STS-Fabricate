@@ -157,22 +157,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return DESCRIPTIONS;
     }
 
-    public TextureAtlas.AtlasRegion getPowerIcon() {
-        final Texture texture = img;
-        final int h = texture.getHeight();
-        final int w = texture.getWidth();
-        final int section = h / 2;
-        return new TextureAtlas.AtlasRegion(texture, (w / 2) - (section / 2), (h / 2) - (section / 2), section, section);
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
+    protected FloatyEffect getFEffect() {
+        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
 
     public String getName() {
@@ -195,18 +181,39 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return name;
     }
 
-    public int getValue() {
-        return counter;
+    protected float getOffsetX() {
+        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "offsetX");
     }
 
-    public void loadImage(String path) {
-        Texture t = EUIRM.getTexture(path, true, false);
-        if (t == null) {
-            path = PCLCoreImages.CardAffinity.unknown.path();
-            t = EUIRM.getTexture(path, true, false);
-        }
-        this.img = t;
-        this.outlineImg = t;
+    public TextureAtlas.AtlasRegion getPowerIcon() {
+        final Texture texture = img;
+        final int h = texture.getHeight();
+        final int w = texture.getWidth();
+        final int section = h / 2;
+        return new TextureAtlas.AtlasRegion(texture, (w / 2) - (section / 2), (h / 2) - (section / 2), section, section);
+    }
+
+    // Relics that are replaced with this one when obtained
+    public String[] getReplacementIDs() {
+        return null;
+    }
+
+    protected float getRotation() {
+        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "rotation");
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
+    }
+
+    public int getValue() {
+        return counter;
     }
 
     // Initialize later to ensure relicData is set
@@ -228,30 +235,38 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return !super.grayscale;
     }
 
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, false);
+        if (t == null) {
+            path = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(path, true, false);
+        }
+        this.img = t;
+        this.outlineImg = t;
+    }
+
     @Override
-    public PCLRelic makeCopy() {
-        try {
-            return relicData.create();
+    public void obtain() {
+        String[] replacements = getReplacementIDs();
+        if (replacements != null) {
+            Set<String> ids = new HashSet<>(Arrays.asList(replacements));
+            ArrayList<AbstractRelic> relics = player.relics;
+            for (int i = 0; i < relics.size(); i++) {
+                if (ids.contains(relics.get(i).relicId)) {
+                    instantObtain(player, i, true);
+                    setCounter(relics.get(i).counter);
+                    return;
+                }
+            }
         }
-        catch (Exception e) {
-            return null;
-        }
-    }
 
-    public boolean setEnabled(boolean value) {
-        super.grayscale = !value;
-        return value;
-    }
-
-    public void setupImages(String imagePath) {
-        loadImage(imagePath);
+        super.obtain();
     }
 
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = getUpdatedDescription();
-        if (this.mainTooltip != null)
-        {
+        if (this.mainTooltip != null) {
             this.mainTooltip.setDescription(description);
         }
     }
@@ -287,68 +302,19 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
-    public void obtain()
-    {
-        String[] replacements = getReplacementIDs();
-        if (replacements != null)
-        {
-            Set<String> ids = new HashSet<>(Arrays.asList(replacements));
-            ArrayList<AbstractRelic> relics = player.relics;
-            for (int i = 0; i < relics.size(); i++)
-            {
-                if (ids.contains(relics.get(i).relicId))
-                {
-                    instantObtain(player, i, true);
-                    setCounter(relics.get(i).counter);
-                    return;
-                }
-            }
-        }
-
-        super.obtain();
-    }
-
-    @Override
     public void onVictory() {
         super.onVictory();
 
         deactivateBattleEffect();
     }
 
-    @Override
-    public void renderBossTip(SpriteBatch sb) {
-        EUITooltip.queueTooltips(tips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
-    }
-
-    @Override
-    public void renderTip(SpriteBatch sb) {
-        EUITooltip.queueTooltips(this);
-    }
-
-    public void renderUnseenTip() {
-        EUITooltip.queueTooltip(getHiddenTooltip());
-    }
-
-    @Override
-    protected void initializeTips() {
-        // No-op, use initializePCLTips() instead
-    }
-
     public void renderInTopPanel(SpriteBatch sb) {
         if (!Settings.hideRelics) {
-            PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f,0.5f), grayscale);
+            PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f, 0.5f), grayscale);
             this.renderCounter(sb, true);
             this.renderFlash(sb, true);
             this.hb.render(sb);
         }
-    }
-
-    public void renderWithoutAmount(SpriteBatch sb, Color c) {
-        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
-        if (this.hb.hovered) {
-            this.renderTip(sb);
-        }
-        this.hb.render(sb);
     }
 
     public void render(SpriteBatch sb) {
@@ -380,74 +346,42 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
                 this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
                 -64f,
                 -64f,
-                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float)(System.currentTimeMillis() / 5L % 360L)) : 0.5f);
+                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
         renderHoverTip(sb);
         this.hb.render(sb);
     }
 
-
-    public void renderHoverTip(SpriteBatch sb) {
-        if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
-            if (!this.isSeen) {
-                renderUnseenTip();
-            }
-            else {
-                this.renderTip(sb);
-            }
+    public void renderWithoutAmount(SpriteBatch sb, Color c) {
+        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
+        if (this.hb.hovered) {
+            this.renderTip(sb);
         }
+        this.hb.render(sb);
     }
 
-    public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
-        sb.setColor(color);
-        sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
+    @Override
+    public void renderBossTip(SpriteBatch sb) {
+        EUITooltip.queueTooltips(tips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
     }
 
-    protected PCLAction<AbstractCreature> selectCreatureForTransform() {
-        return PCLActions.bottom.selectCreature(PCLCardTarget.Any, getName())
-                .addCallback(c -> {
-                    if (c.id == null) {
-                        String p = CreatureAnimationInfo.getRandomKey();
-                        if (p != null) {
-                            PGR.dungeon.setCreature(p);
-                        }
-                    }
-                    else {
-                        PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
-                    }
-                });
+    @Override
+    public void renderTip(SpriteBatch sb) {
+        EUITooltip.queueTooltips(this);
     }
 
-    protected void updateFlash() {
-        if (this.flashTimer != 0.0F) {
-            this.flashTimer -= Gdx.graphics.getDeltaTime();
-            if (this.flashTimer < 0.0F) {
-                if (this.pulse) {
-                    this.flashTimer = 1.0F;
-                } else {
-                    this.flashTimer = 0.0F;
-                }
-            }
+    @Override
+    protected void initializeTips() {
+        // No-op, use initializePCLTips() instead
+    }
+
+    @Override
+    public PCLRelic makeCopy() {
+        try {
+            return relicData.create();
         }
-    }
-
-    public PCLRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            updateDescription(null);
+        catch (Exception e) {
+            return null;
         }
-        return this;
-    }
-
-    protected FloatyEffect getFEffect() {
-        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
-    }
-
-    protected float getOffsetX() {
-        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "offsetX");
-    }
-
-    protected float getRotation() {
-        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "rotation");
     }
 
     public boolean canSpawn() {
@@ -472,6 +406,69 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }.getType();
     }
 
-    // Relics that are replaced with this one when obtained
-    public String[] getReplacementIDs() {return null;}
+    public void renderHoverTip(SpriteBatch sb) {
+        if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
+            if (!this.isSeen) {
+                renderUnseenTip();
+            }
+            else {
+                this.renderTip(sb);
+            }
+        }
+    }
+
+    public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
+        sb.setColor(color);
+        sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
+    }
+
+    public void renderUnseenTip() {
+        EUITooltip.queueTooltip(getHiddenTooltip());
+    }
+
+    protected PCLAction<AbstractCreature> selectCreatureForTransform() {
+        return PCLActions.bottom.selectCreature(PCLCardTarget.Any, getName())
+                .addCallback(c -> {
+                    if (c.id == null) {
+                        String p = CreatureAnimationInfo.getRandomKey();
+                        if (p != null) {
+                            PGR.dungeon.setCreature(p);
+                        }
+                    }
+                    else {
+                        PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
+                    }
+                });
+    }
+
+    public boolean setEnabled(boolean value) {
+        super.grayscale = !value;
+        return value;
+    }
+
+    public void setupImages(String imagePath) {
+        loadImage(imagePath);
+    }
+
+    protected void updateFlash() {
+        if (this.flashTimer != 0.0F) {
+            this.flashTimer -= Gdx.graphics.getDeltaTime();
+            if (this.flashTimer < 0.0F) {
+                if (this.pulse) {
+                    this.flashTimer = 1.0F;
+                }
+                else {
+                    this.flashTimer = 0.0F;
+                }
+            }
+        }
+    }
+
+    public PCLRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            updateDescription(null);
+        }
+        return this;
+    }
 }

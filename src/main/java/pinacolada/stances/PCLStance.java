@@ -46,12 +46,6 @@ public abstract class PCLStance extends AbstractStance {
         return EUIUtils.format(strings.DESCRIPTION[0], args);
     }
 
-    protected abstract Color getAuraColor();
-
-    protected abstract Color getMainColor();
-
-    protected abstract Color getParticleColor();
-
     public void onRefreshStance() {
 
     }
@@ -124,4 +118,10 @@ public abstract class PCLStance extends AbstractStance {
             sfxId = -1L;
         }
     }
+
+    protected abstract Color getAuraColor();
+
+    protected abstract Color getMainColor();
+
+    protected abstract Color getParticleColor();
 }

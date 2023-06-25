@@ -32,16 +32,13 @@ public class PCLLoadoutValidation {
     public String getFailingString() {
         StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
 
-        if (!totalValue.v2)
-        {
+        if (!totalValue.v2) {
             sj.add(PGR.core.strings.loadout_invalidLoadoutDescLimit);
         }
-        if (!cardsCount.v2)
-        {
+        if (!cardsCount.v2) {
             sj.add(PGR.core.strings.loadout_invalidLoadoutDescNotEnough);
         }
-        if (!allCardsSeen)
-        {
+        if (!allCardsSeen) {
             sj.add(PGR.core.strings.loadout_invalidLoadoutDescSeen);
         }
 

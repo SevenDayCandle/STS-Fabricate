@@ -8,13 +8,13 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
         return "";
     }
 
+    public void onOpen() {
+
+    }
+
     abstract public TextureCache getTextureCache();
 
     abstract public String getTitle();
 
     abstract public void refresh();
-
-    public void onOpen() {
-
-    }
 }

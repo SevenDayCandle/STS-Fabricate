@@ -101,18 +101,6 @@ public class PCLCardAlly extends PCLCardCreature {
         this.currentHealth = 1;
     }
 
-    public void initializeForCard(PCLCard card, boolean clearPowers, boolean delayForTurn) {
-        super.initializeForCard(card, clearPowers, delayForTurn);
-
-        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
-        if (animFunc != null) {
-            this.animation = animFunc.invoke(this);
-        }
-        if (this.animation == null) {
-            this.animation = new PCLGeneralAllyAnimation(this);
-        }
-    }
-
     @Override
     public void performActions(boolean manual) {
         if (card != null) {
@@ -147,6 +135,18 @@ public class PCLCardAlly extends PCLCardCreature {
                     tryTarget();
                 }
             }
+        }
+    }
+
+    public void initializeForCard(PCLCard card, boolean clearPowers, boolean delayForTurn) {
+        super.initializeForCard(card, clearPowers, delayForTurn);
+
+        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
+        if (animFunc != null) {
+            this.animation = animFunc.invoke(this);
+        }
+        if (this.animation == null) {
+            this.animation = new PCLGeneralAllyAnimation(this);
         }
     }
 
@@ -190,18 +190,6 @@ public class PCLCardAlly extends PCLCardCreature {
             return releasedCard;
         }
         return null;
-    }
-
-    public void renderAnimation(SpriteBatch sb, Color color) {
-        super.renderAnimation(sb, color);
-        if (card != null) {
-            card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
-            card.setDrawScale(0.2f);
-            card.updateGlow(1.5f);
-            card.renderGlowManual(sb);
-            card.renderOuterGlow(sb);
-            card.renderImage(sb, false, true);
-        }
     }
 
     protected float renderCooldown(SpriteBatch sb, CooldownProvider pr, float startY) {
@@ -257,6 +245,18 @@ public class PCLCardAlly extends PCLCardCreature {
 
     protected boolean shouldShowIntents() {
         return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
+    }
+
+    public void renderAnimation(SpriteBatch sb, Color color) {
+        super.renderAnimation(sb, color);
+        if (card != null) {
+            card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
+            card.setDrawScale(0.2f);
+            card.updateGlow(1.5f);
+            card.renderGlowManual(sb);
+            card.renderOuterGlow(sb);
+            card.renderImage(sb, false, true);
+        }
     }
 
     public void tryTarget() {

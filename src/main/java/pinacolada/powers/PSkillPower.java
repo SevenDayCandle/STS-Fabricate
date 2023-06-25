@@ -109,15 +109,6 @@ public class PSkillPower extends PCLPower {
         return damage;
     }
 
-    public PowerType getPowerType() {
-        for (PTrigger trigger : ptriggers) {
-            if (trigger.isDetrimental()) {
-                return PowerType.DEBUFF;
-            }
-        }
-        return PowerType.BUFF;
-    }
-
     @Override
     protected ColoredString getSecondaryAmount(Color c) {
         for (PTrigger trigger : ptriggers) {
@@ -213,6 +204,15 @@ public class PSkillPower extends PCLPower {
         for (PTrigger effect : ptriggers) {
             effect.subscribeChildren();
         }
+    }
+
+    public PowerType getPowerType() {
+        for (PTrigger trigger : ptriggers) {
+            if (trigger.isDetrimental()) {
+                return PowerType.DEBUFF;
+            }
+        }
+        return PowerType.BUFF;
     }
 
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount) {

@@ -4,10 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.ui.combat.DrawPileCardPreview;
 
 public interface DrawPileCardPreviewProvider {
-    AbstractCard findCard();
-
-    void onClick(AbstractCard highlighted);
-
     default void refreshCard() {
         DrawPileCardPreview.refreshCard(this);
     }
@@ -19,4 +15,8 @@ public interface DrawPileCardPreviewProvider {
     default void unsubscribe() {
         DrawPileCardPreview.unsubscribe(this);
     }
+
+    AbstractCard findCard();
+
+    void onClick(AbstractCard highlighted);
 }

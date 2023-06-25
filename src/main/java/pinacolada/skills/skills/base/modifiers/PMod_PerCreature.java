@@ -28,13 +28,13 @@ public class PMod_PerCreature extends PMod_Per<PField_Not> {
         super(DATA, target, amount);
     }
 
+    public String getSubSampleText() {
+        return TEXT.subjects_character;
+    }
+
     @Override
     public int getMultiplier(PCLUseInfo info) {
         return getTargetList(info).size();
-    }
-
-    public String getSubSampleText() {
-        return TEXT.subjects_character;
     }
 
     @Override

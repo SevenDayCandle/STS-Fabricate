@@ -39,7 +39,7 @@ public class SingleRelicViewPopupPatches {
         public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb) {
             AbstractRelic temp = EUIClassUtils.getField(__instance, "relic");
             if (temp instanceof PCLRelic && temp.isSeen) {
-                FontHelper.renderWrappedText(sb, FontHelper.SCP_cardDescFont, ((PCLRelic) temp).getName(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 280.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
+                FontHelper.renderWrappedText(sb, FontHelper.SCP_cardDescFont, ((PCLRelic) temp).getName(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F + 280.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
                 return SpireReturn.Return();
             }
 

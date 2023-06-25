@@ -104,6 +104,11 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
@@ -124,10 +129,5 @@ public class PMove_StackPower extends PMove<PField_Power> {
             }
         }
         super.use(info, order);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return String.valueOf(Math.abs(input));
     }
 }

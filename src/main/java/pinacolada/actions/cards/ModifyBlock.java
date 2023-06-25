@@ -22,11 +22,6 @@ public class ModifyBlock extends ModifyCard {
     }
 
     @Override
-    protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseBlock + change : change;
-    }
-
-    @Override
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
 
@@ -35,5 +30,10 @@ public class ModifyBlock extends ModifyCard {
         }
 
         GameUtilities.modifyBlock(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+    }
+
+    @Override
+    protected int getActualChange(AbstractCard card) {
+        return relative ? card.baseBlock + change : change;
     }
 }

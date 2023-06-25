@@ -80,7 +80,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseDraw;
         }
@@ -94,7 +94,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseEnergy(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseEnergy;
         }
@@ -102,7 +102,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseGold(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseGold;
         }
@@ -116,7 +116,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseHP(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseHP;
         }
@@ -130,7 +130,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseOrbs(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseOrbs;
         }
@@ -281,6 +281,10 @@ public abstract class PCLLoadout {
         return preset >= 0 && preset < MAX_PRESETS;
     }
 
+    public PCLLoadoutValidation createValidation() {
+        return getPreset().validate();
+    }
+
     public String getAuthor() {
         LoadoutStrings strings = PGR.getLoadoutStrings(ID);
         return strings != null ? strings.AUTHOR : "";
@@ -370,7 +374,7 @@ public abstract class PCLLoadout {
         return getPlayerData().useSummons ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
     }
 
-    public PCLAbstractPlayerData<?,?> getPlayerData() {
+    public PCLAbstractPlayerData<?, ?> getPlayerData() {
         return PGR.getPlayerData(color);
     }
 
@@ -424,7 +428,7 @@ public abstract class PCLLoadout {
     public ArrayList<String> getStartingRelics() {
         final ArrayList<String> res = new ArrayList<>();
 
-        PCLAbstractPlayerData<?,?> data = getPlayerData();
+        PCLAbstractPlayerData<?, ?> data = getPlayerData();
         if (data != null) {
             List<String> starterRelics = data.getStartingRelics();
             for (String starterRelic : starterRelics) {
@@ -448,7 +452,7 @@ public abstract class PCLLoadout {
     }
 
     public PCLTrophies getTrophies() {
-        PCLAbstractPlayerData<?,?> data = getPlayerData();
+        PCLAbstractPlayerData<?, ?> data = getPlayerData();
         if (data == null) {
             return null;
         }
@@ -510,7 +514,7 @@ public abstract class PCLLoadout {
 
     public void onVictory(int ascensionLevel, int trophyLevel, int score) {
         PCLTrophies trophies = getTrophies();
-        PCLAbstractPlayerData<?,?> data = getPlayerData();
+        PCLAbstractPlayerData<?, ?> data = getPlayerData();
         if (data != null && data.selectedLoadout.ID.equals(ID)) {
             if (trophyLevel >= 2) {
                 trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);
@@ -546,14 +550,11 @@ public abstract class PCLLoadout {
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
-    public PCLLoadoutValidation createValidation() {
-        return getPreset().validate();
-    }
-
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
-            super("", PGR.core.strings.sui_selected, (a, b, c) -> {}, 0, cardDatas.size());
+            super("", PGR.core.strings.sui_selected, (a, b, c) -> {
+            }, 0, cardDatas.size());
         }
     }
 

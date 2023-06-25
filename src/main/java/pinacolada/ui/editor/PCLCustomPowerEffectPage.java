@@ -41,12 +41,41 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                 .setOnClick(this::openDropdown);
     }
 
+    protected String getNameForEffect(int i) {
+        return EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1);
+    }
+
     @Override
     public void onOpen() {
         super.onOpen();
         EUITourTooltip.queueFirstView(PGR.config.tourEditorPower,
                 quickAddButton.makeTour(true)
         );
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPower;
+    }
+
+    @Override
+    public PSkill<?> getSourceEffect() {
+        PSkill<?> base = screen.currentPowers.get(editorIndex);
+        return base != null ? base.makeCopy() : null;
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        quickAddButton.tryRender(sb);
+        super.renderImpl(sb);
+        quickAddMenu.tryRender(sb);
+    }
+
+    @Override
+    public void updateInner() {
+        super.updateInner();
+        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
+        quickAddMenu.tryUpdate();
     }
 
     protected void openDropdown() {
@@ -62,34 +91,5 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(page, applyPower, PCLCustomEffectNode.NodeType.Move, page.hb);
         page.root.receiveNode(node);
         page.fullRebuild();
-    }
-
-    protected String getNameForEffect(int i) {
-        return EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1);
-    }
-
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPower;
-    }
-
-    @Override
-    public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen.currentPowers.get(editorIndex);
-        return base != null ? base.makeCopy() : null;
-    }
-
-    @Override
-    public void updateInner() {
-        super.updateInner();
-        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
-        quickAddMenu.tryUpdate();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        quickAddButton.tryRender(sb);
-        super.renderImpl(sb);
-        quickAddMenu.tryRender(sb);
     }
 }

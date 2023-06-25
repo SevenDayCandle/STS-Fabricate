@@ -17,10 +17,6 @@ import java.util.ArrayList;
 public class PotionPoolPatches {
     private static boolean FLAG;
 
-    public static void initialize() {
-        FLAG = true;
-    }
-
     // Unset flag to prevent PotionHelper from pulling up custom potions
     // Fire Potion is returned by default if nothing was found
     public static AbstractPotion getDirectPotion(String potionID) {
@@ -31,6 +27,10 @@ public class PotionPoolPatches {
             return !(directPotion instanceof FirePotion) || potionID.equals(FirePotion.POTION_ID) ? directPotion : null;
         }
         return null;
+    }
+
+    public static void initialize() {
+        FLAG = true;
     }
 
     @SpirePatch2(clz = PotionHelper.class, method = "getPotion")

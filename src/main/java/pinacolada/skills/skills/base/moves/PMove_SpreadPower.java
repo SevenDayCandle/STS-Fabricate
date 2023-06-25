@@ -50,6 +50,21 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
+    protected void spreadPower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
+        // Spread amount 0 will spread the entire power
+        if (amount > 0 || baseAmount <= 0) {
+            for (AbstractCreature t : targets) {
+                order.spreadPower(p, t, power.ID, amount);
+            }
+            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+            if (power == PCLPowerHelper.Intangible) {
+                for (AbstractCreature t : targets) {
+                    order.spreadPower(p, t, IntangiblePower.POWER_ID, amount);
+                }
+            }
+        }
+    }
+
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
@@ -70,20 +85,5 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
             }
         }
         super.use(info, order);
-    }
-
-    protected void spreadPower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
-        // Spread amount 0 will spread the entire power
-        if (amount > 0 || baseAmount <= 0) {
-            for (AbstractCreature t : targets) {
-                order.spreadPower(p, t, power.ID, amount);
-            }
-            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-            if (power == PCLPowerHelper.Intangible) {
-                for (AbstractCreature t : targets) {
-                    order.spreadPower(p, t, IntangiblePower.POWER_ID, amount);
-                }
-            }
-        }
     }
 }

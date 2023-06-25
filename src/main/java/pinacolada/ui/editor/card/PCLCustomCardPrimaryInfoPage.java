@@ -207,15 +207,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
-    }
-
-    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary,
                 idInput.makeTour(true),
@@ -229,6 +220,15 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 branchUpgrades.makeTour(true),
                 uniqueToggle.makeTour(true),
                 soulboundToggle.makeTour(true));
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
     }
 
     @Override
@@ -249,24 +249,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public void updateImpl() {
-        header.tryUpdate();
-        idWarning.tryUpdate();
-        maxUpgrades.tryUpdate();
-        maxCopies.tryUpdate();
-        loadoutDropdown.tryUpdate();
-        flagsDropdown.tryUpdate();
-        raritiesDropdown.tryUpdate();
-        typesDropdown.tryUpdate();
-        languageDropdown.tryUpdate();
-        nameInput.tryUpdate();
-        idInput.tryUpdate();
-        branchUpgrades.tryUpdate();
-        uniqueToggle.tryUpdate();
-        soulboundToggle.tryUpdate();
-    }
-
-    @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
@@ -282,6 +264,24 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        header.tryUpdate();
+        idWarning.tryUpdate();
+        maxUpgrades.tryUpdate();
+        maxCopies.tryUpdate();
+        loadoutDropdown.tryUpdate();
+        flagsDropdown.tryUpdate();
+        raritiesDropdown.tryUpdate();
+        typesDropdown.tryUpdate();
+        languageDropdown.tryUpdate();
+        nameInput.tryUpdate();
+        idInput.tryUpdate();
+        branchUpgrades.tryUpdate();
+        uniqueToggle.tryUpdate();
+        soulboundToggle.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

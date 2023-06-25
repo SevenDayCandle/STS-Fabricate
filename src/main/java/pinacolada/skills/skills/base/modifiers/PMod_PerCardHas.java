@@ -29,10 +29,6 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         super(data, amount, count);
     }
 
-    abstract public EUIKeywordTooltip getActionTooltip();
-
-    abstract public List<AbstractCard> getCardPile();
-
     @Override
     public String getConditionText(String childText) {
         if (fields.not) {
@@ -41,12 +37,6 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         }
         String subjString = this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());
         return fields.forced ? TEXT.cond_perThisCombat(childText, subjString, PCLCoreStrings.past(getActionTooltip())) : TEXT.cond_perThisTurn(childText, subjString, PCLCoreStrings.past(getActionTooltip()));
-    }
-
-    @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return EUIUtils.count(fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn(),
-                c -> fields.getFullCardFilter().invoke(c));
     }
 
     @Override
@@ -61,7 +51,17 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
+    public int getMultiplier(PCLUseInfo info) {
+        return EUIUtils.count(fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn(),
+                c -> fields.getFullCardFilter().invoke(c));
+    }
+
+    @Override
     public String getSubText() {
         return fields.getFullCardString();
     }
+
+    abstract public EUIKeywordTooltip getActionTooltip();
+
+    abstract public List<AbstractCard> getCardPile();
 }

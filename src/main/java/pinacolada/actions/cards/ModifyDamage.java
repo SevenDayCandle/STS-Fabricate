@@ -26,11 +26,6 @@ public class ModifyDamage extends ModifyCard {
     }
 
     @Override
-    protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseDamage + change : change;
-    }
-
-    @Override
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
 
@@ -39,5 +34,10 @@ public class ModifyDamage extends ModifyCard {
         }
 
         GameUtilities.modifyDamage(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+    }
+
+    @Override
+    protected int getActualChange(AbstractCard card) {
+        return relative ? card.baseDamage + change : change;
     }
 }

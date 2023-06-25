@@ -29,8 +29,8 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
+    public String getSubText() {
+        return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText() {
-        return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
+    public int getMultiplier(PCLUseInfo info) {
+        return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
     }
 }

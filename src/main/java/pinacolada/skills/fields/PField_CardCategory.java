@@ -108,26 +108,8 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerCard(cardIDs);
     }
 
-    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
-        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
-                        && (colors.isEmpty() || colors.contains(c.color))
-                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
-                        && (rarities.isEmpty() || rarities.contains(c.rarity))
-                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                        && (types.isEmpty() || types.contains(c.type)));
-    }
-
-    public String getFullCardAndString(Object value) {
-        return !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
-    }
-
     public String getFullCardString() {
         return getFullCardOrString(skill.getAmountRawString());
-    }
-
-    public String getFullCardOrString(Object value) {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
     public String getFullCardStringSingular() {
@@ -183,6 +165,24 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
 
         return EUIUtils.joinStrings(" ", stringsToJoin);
+    }
+
+    public String getFullCardAndString(Object value) {
+        return !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+    }
+
+    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
+        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
+                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+                        && (colors.isEmpty() || colors.contains(c.color))
+                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
+                        && (rarities.isEmpty() || rarities.contains(c.rarity))
+                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
+                        && (types.isEmpty() || types.contains(c.type)));
+    }
+
+    public String getFullCardOrString(Object value) {
+        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
     public int getQualifierRange() {

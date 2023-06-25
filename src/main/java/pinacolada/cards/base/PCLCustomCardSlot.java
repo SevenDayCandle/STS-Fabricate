@@ -128,7 +128,9 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return false;
     }
 
-    /** Get the custom card that matches slot ID */
+    /**
+     * Get the custom card that matches slot ID
+     */
     public static PCLCustomCardSlot get(String id) {
         for (ArrayList<PCLCustomCardSlot> slots : CUSTOM_CARDS.values()) {
             for (PCLCustomCardSlot slot : slots) {
@@ -148,7 +150,9 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return getCards(null);
     }
 
-    /** Obtain a list of all of the custom cards created for a specific color. If color is NULL, returns ALL custom cards */
+    /**
+     * Obtain a list of all of the custom cards created for a specific color. If color is NULL, returns ALL custom cards
+     */
     public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor color) {
         if (color == null) {
             return EUIUtils.flattenList(CUSTOM_CARDS.values());
@@ -290,7 +294,9 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return make(false);
     }
 
-    /** Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc. */
+    /**
+     * Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc.
+     */
     public PCLDynamicCard make(boolean shouldFindForms) {
         return getBuilder(0).createImplWithForms(shouldFindForms);
     }

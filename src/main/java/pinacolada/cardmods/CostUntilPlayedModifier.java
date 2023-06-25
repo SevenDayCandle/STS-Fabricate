@@ -39,36 +39,6 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
         return null;
     }
 
-    @Override
-    public void onCardReset(AbstractCard card) {
-        apply(card);
-    }
-
-    @Override
-    public void onInitialApplication(AbstractCard card) {
-        subscribeToAll();
-        apply(card);
-    }
-
-    @Override
-    public void onRemove(AbstractCard card) {
-        unsubscribeFromAll();
-        card.resetAttributes();
-    }
-
-    @Override
-    public AbstractCardModifier makeCopy() {
-        return new CostUntilPlayedModifier(change, temporary);
-    }
-
-    public boolean removeOnCardPlayed(AbstractCard card) {
-        return true;
-    }
-
-    public boolean removeAtEndOfTurn(AbstractCard card) {
-        return temporary;
-    }
-
     public void apply(AbstractCard card) {
         if (card.freeToPlay()) {
             previousAmount = 0;
@@ -86,5 +56,35 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
         if (newCost < 0) {
             previousAmount -= newCost;
         }
+    }
+
+    @Override
+    public void onCardReset(AbstractCard card) {
+        apply(card);
+    }
+
+    public boolean removeOnCardPlayed(AbstractCard card) {
+        return true;
+    }
+
+    public boolean removeAtEndOfTurn(AbstractCard card) {
+        return temporary;
+    }
+
+    @Override
+    public void onInitialApplication(AbstractCard card) {
+        subscribeToAll();
+        apply(card);
+    }
+
+    @Override
+    public void onRemove(AbstractCard card) {
+        unsubscribeFromAll();
+        card.resetAttributes();
+    }
+
+    @Override
+    public AbstractCardModifier makeCopy() {
+        return new CostUntilPlayedModifier(change, temporary);
     }
 }

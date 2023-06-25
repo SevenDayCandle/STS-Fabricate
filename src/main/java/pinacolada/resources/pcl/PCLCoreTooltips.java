@@ -246,6 +246,14 @@ public class PCLCoreTooltips extends PCLTooltips {
         EUIKeywordTooltip.registerID("Gold", gold);
     }
 
+    public static EUICardPreview makePreview(String cardID) {
+        AbstractCard copy = CardLibrary.getCard(cardID);
+        if (copy != null) {
+            return new EUICardPreview(copy, false);
+        }
+        return null;
+    }
+
     public void initializeIcons() {
         for (PCLCardTag tag : PCLCardTag.values()) {
             tag.getTooltip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
@@ -360,13 +368,5 @@ public class PCLCoreTooltips extends PCLTooltips {
         provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
 
         EUIKeywordTooltip.updateTooltipIcons();
-    }
-
-    public static EUICardPreview makePreview(String cardID) {
-        AbstractCard copy = CardLibrary.getCard(cardID);
-        if (copy != null) {
-            return new EUICardPreview(copy, false);
-        }
-        return null;
     }
 }

@@ -82,68 +82,6 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (triggerSource != null && EUIUtils.any(effects, ef -> ef == triggerSource)) {
-            return true;
-        }
-        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
-                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
-    }
-
-    @Override
-    public void recurse(ActionT1<PSkill<?>> onRecurse) {
-        onRecurse.invoke(this);
-        for (PSkill<?> effect : effects) {
-            effect.recurse(onRecurse);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.recurse(onRecurse);
-        }
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        conditionMetCache = checkCondition(info, false, null);
-        boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
-        }
-    }
-
-    @Override
-    public PMultiCond setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiCond setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
-        return this;
-    }
-
-    public void useDirectly(PCLUseInfo info, PCLActions order) {
-        if (this.childEffect != null)
-        {
-            this.childEffect.use(info, order);
-        }
-    }
-
-    @Override
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
@@ -174,14 +112,13 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public String getSpecialData() {
-        return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    public String getSampleText(PSkill<?> caller) {
+        return TEXT.cedit_or;
     }
 
     @Override
-    public String getSampleText(PSkill<?> caller)
-    {
-        return TEXT.cedit_or;
+    public String getSpecialData() {
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
@@ -253,6 +190,17 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         removeSubs(card);
         super.onRemoveFromCard(card);
         return this;
+    }
+
+    @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
     }
 
     @Override
@@ -375,12 +323,6 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
-    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
-    @Override
-    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
-        return checkCondition(info, true, source);
-    }
-
     @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {
@@ -398,5 +340,61 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             effect.useParent(value);
         }
         return this;
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
+        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
+                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.refresh(info, refreshVal);
+        }
+    }
+
+    @Override
+    public PMultiCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    @Override
+    public PMultiCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
+    }
+
+    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
+    @Override
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return checkCondition(info, true, source);
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (triggerSource != null && EUIUtils.any(effects, ef -> ef == triggerSource)) {
+            return true;
+        }
+        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
+    }
+
+    public void useDirectly(PCLUseInfo info, PCLActions order) {
+        if (this.childEffect != null) {
+            this.childEffect.use(info, order);
+        }
     }
 }

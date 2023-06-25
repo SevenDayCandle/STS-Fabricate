@@ -198,6 +198,11 @@ public class PField_CardGeneric extends PField_Not {
         return setCardGroup(Arrays.asList(gt));
     }
 
+    public PField_CardGeneric setDestination(PCLCardSelection destination) {
+        this.destination = destination;
+        return this;
+    }
+
     public PField_CardGeneric setForced(boolean value) {
         this.forced = value;
         return this;
@@ -205,11 +210,6 @@ public class PField_CardGeneric extends PField_Not {
 
     public PField_CardGeneric setOrigin(PCLCardSelection origin) {
         this.origin = origin;
-        return this;
-    }
-
-    public PField_CardGeneric setDestination(PCLCardSelection destination) {
-        this.destination = destination;
         return this;
     }
 

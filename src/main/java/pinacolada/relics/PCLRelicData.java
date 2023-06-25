@@ -74,24 +74,12 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 
-    public int getCounter(int form) {
-        return counter[Math.min(counter.length - 1, form)];
-    }
-
-    public int getCounterUpgrade(int form) {
-        return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
-    }
-
     public static PCLRelicData getStaticData(String cardID) {
         return STATIC_DATA.get(cardID);
     }
 
     public static Collection<PCLRelicData> getTemplates() {
         return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
-    }
-
-    public void initializeImage() {
-        this.imagePath = PGR.getRelicImage(ID);
     }
 
     protected static <T extends PCLRelicData> T registerData(T cardData) {
@@ -103,6 +91,18 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         STATIC_DATA.put(cardData.ID, cardData);
         TEMPLATES.add(cardData);
         return cardData;
+    }
+
+    public int getCounter(int form) {
+        return counter[Math.min(counter.length - 1, form)];
+    }
+
+    public int getCounterUpgrade(int form) {
+        return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getRelicImage(ID);
     }
 
     public PCLRelicData setBranchFactor(int factor) {
@@ -155,6 +155,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
+    public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
+        this.tier = tier;
+        this.sfx = sfx;
+        return this;
+    }
 
     public PCLRelicData setSfx(AbstractRelic.LandingSound sfx) {
         this.sfx = sfx;
@@ -163,12 +168,6 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public PCLRelicData setTier(AbstractRelic.RelicTier tier) {
         this.tier = tier;
-        return this;
-    }
-
-    public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
-        this.tier = tier;
-        this.sfx = sfx;
         return this;
     }
 }

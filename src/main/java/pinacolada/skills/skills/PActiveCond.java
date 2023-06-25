@@ -30,16 +30,16 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
         super(data, target, amount, extra);
     }
 
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
-        return fields.getQualifiers(info);
+    public int getQualifierRange() {
+        return fields.getQualiferRange();
     }
 
     public String getQualifierText(int i) {
         return fields.getQualifierText(i);
     }
 
-    public int getQualifierRange() {
-        return fields.getQualiferRange();
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return fields.getQualifiers(info);
     }
 
     @Override

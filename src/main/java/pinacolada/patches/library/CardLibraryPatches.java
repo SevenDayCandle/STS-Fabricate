@@ -32,6 +32,18 @@ public class CardLibraryPatches {
         return CardLibrary.cards.get(id);
     }
 
+    protected static AbstractCard getRandomFilteredCurse(FuncT1<Boolean, AbstractCard> filterFunc, Random rng) {
+        final RandomizedList<String> cards = new RandomizedList<>();
+        final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
+        for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
+            final AbstractCard c = entry.getValue();
+            if (filterFunc.invoke(c)) {
+                cards.add(entry.getKey());
+            }
+        }
+        return CardLibrary.cards.get(cards.retrieve(rng));
+    }
+
     public static AbstractCard getReplacement(String cardID) {
         return getReplacement(cardID, 0);
     }
@@ -185,17 +197,5 @@ public class CardLibraryPatches {
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
             return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, null, true, true));
         }
-    }
-
-    protected static AbstractCard getRandomFilteredCurse(FuncT1<Boolean, AbstractCard> filterFunc, Random rng) {
-        final RandomizedList<String> cards = new RandomizedList<>();
-        final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
-        for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
-            final AbstractCard c = entry.getValue();
-            if (filterFunc.invoke(c)) {
-                cards.add(entry.getKey());
-            }
-        }
-        return CardLibrary.cards.get(cards.retrieve(rng));
     }
 }

@@ -56,140 +56,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         return (PBranchCond) new PBranchCond().setEffects(effs).setChild(PCond.discard(amount));
     }
 
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (this.childEffect instanceof PCond && this.effects.size() < 2) {
-            return ((PCond<?>) this.childEffect).checkCondition(info, isUsing, triggerSource);
-        }
-        return false;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> caller)
-    {
-        return TEXT.cedit_branchCondition;
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        if (this.childEffect != null) {
-            return getEffectTexts(addPeriod);
-        }
-        return getSubText();
-    }
-
-    @Override
-    public void recurse(ActionT1<PSkill<?>> onRecurse) {
-        onRecurse.invoke(this);
-        for (PSkill<?> effect : effects) {
-            effect.recurse(onRecurse);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.recurse(onRecurse);
-        }
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        conditionMetCache = checkCondition(info, false, null);
-        boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (childEffect instanceof PActiveCond) {
-            ((PActiveCond<?>) childEffect).useImpl(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)), (i) -> {
-            });
-        }
-        else if (childEffect instanceof PCallbackMove) {
-            ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)));
-        }
-        else if (childEffect != null) {
-            useSubEffect(info, order, childEffect.getQualifiers(info));
-        }
-    }
-
-    protected String getEffectTexts(boolean addPeriod) {
-        switch (effects.size()) {
-            case 0:
-                return getSubText();
-            case 1:
-                return super.getText(addPeriod);
-            case 2:
-                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
-                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
-                }
-            default:
-                ArrayList<String> effectTexts = new ArrayList<>();
-                for (int i = 0; i < effects.size(); i++) {
-                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(addPeriod));
-                }
-                return getSubText() + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
-        }
-    }
-
     public PBranchCond addEffect(PCond<?> effect) {
         this.effects.add(effect);
         setParentsForChildren();
-        return this;
-    }
-
-    public PSkill<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    @Override
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
-    }
-
-    @Override
-    public PBranchCond setTemporaryAmount(int amount) {
-        if (childEffect != null) {
-            childEffect.setTemporaryAmount(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setTemporaryExtra(int extra) {
-        if (childEffect != null) {
-            childEffect.setTemporaryExtra(extra);
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond stack(PSkill<?> other) {
-        super.stack(other);
-        if (other instanceof PMultiBase) {
-            stackMulti((PMultiBase<?>) other);
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
         return this;
     }
 
@@ -224,8 +93,18 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public String getSampleText(PSkill<?> caller) {
+        return TEXT.cedit_branchCondition;
+    }
+
+    @Override
     public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    }
+
+    @Override
+    public String getSubText() {
+        return this.childEffect != null ? this.childEffect.getSubText() : "";
     }
 
     @Override
@@ -242,7 +121,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     public PBranchCond makeCopy() {
         PBranchCond copy = (PBranchCond) super.makeCopy();
         for (PSkill<?> effect : effects) {
-            copy.addEffect((PSkill<?>) effect.makeCopy());
+            copy.addEffect(effect.makeCopy());
         }
         return copy;
     }
@@ -280,8 +159,93 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
+    }
+
+    @Override
     public boolean requiresTarget() {
         return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
+    }
+
+    @Override
+    public PBranchCond setTemporaryAmount(int amount) {
+        if (childEffect != null) {
+            childEffect.setTemporaryAmount(amount);
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond setTemporaryExtra(int extra) {
+        if (childEffect != null) {
+            childEffect.setTemporaryExtra(extra);
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond stack(PSkill<?> other) {
+        super.stack(other);
+        if (other instanceof PMultiBase) {
+            stackMulti((PMultiBase<?>) other);
+        }
+        return this;
+    }
+
+    @Override
+    public void subscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    @Override
+    public void unsubscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.unsubscribeChildren();
+        }
+    }
+
+    protected String getEffectTexts(boolean addPeriod) {
+        switch (effects.size()) {
+            case 0:
+                return getSubText();
+            case 1:
+                return super.getText(addPeriod);
+            case 2:
+                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
+                    return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
+                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
+                }
+            default:
+                ArrayList<String> effectTexts = new ArrayList<>();
+                for (int i = 0; i < effects.size(); i++) {
+                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(addPeriod));
+                }
+                return getSubText() + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
+        }
+    }
+
+    public PSkill<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    @Override
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
     }
 
     public PBranchCond setEffects(PSkill<?>... effects) {
@@ -296,13 +260,41 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public void subscribeChildren() {
+    public String getText(boolean addPeriod) {
+        if (this.childEffect != null) {
+            return getEffectTexts(addPeriod);
+        }
+        return getSubText();
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
         for (PSkill<?> effect : effects) {
-            effect.subscribeChildren();
+            effect.refresh(info, refreshVal);
         }
         if (this.childEffect != null) {
-            this.childEffect.subscribeChildren();
+            this.childEffect.refresh(info, refreshVal);
         }
+    }
+
+    @Override
+    public PBranchCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
     }
 
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
@@ -310,18 +302,25 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public void unsubscribeChildren() {
-        for (PSkill<?> effect : effects) {
-            effect.unsubscribeChildren();
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (childEffect instanceof PActiveCond) {
+            ((PActiveCond<?>) childEffect).useImpl(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)), (i) -> {
+            });
         }
-        if (this.childEffect != null) {
-            this.childEffect.unsubscribeChildren();
+        else if (childEffect instanceof PCallbackMove) {
+            ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)));
+        }
+        else if (childEffect != null) {
+            useSubEffect(info, order, childEffect.getQualifiers(info));
         }
     }
 
     @Override
-    public String getSubText() {
-        return this.childEffect != null ? this.childEffect.getSubText() : "";
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (this.childEffect instanceof PCond && this.effects.size() < 2) {
+            return ((PCond<?>) this.childEffect).checkCondition(info, isUsing, triggerSource);
+        }
+        return false;
     }
 
     public void useSubEffect(PCLUseInfo info, PCLActions order, ArrayList<Integer> qualifiers) {

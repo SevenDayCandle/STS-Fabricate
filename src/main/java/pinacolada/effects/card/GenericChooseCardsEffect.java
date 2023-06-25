@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<GenericChooseCardsEffect> {
     protected final Color screenColor;
     protected final FuncT1<Boolean, AbstractCard> filter;
+    public final ArrayList<AbstractCard> cards = new ArrayList<>();
     protected int cardsToChoose;
     protected boolean canCancel;
-    public final ArrayList<AbstractCard> cards = new ArrayList<>();
 
     public GenericChooseCardsEffect(int choose) {
         this(choose, null);
@@ -77,6 +77,22 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
     }
 
+    protected boolean forPurge() {
+        return false;
+    }
+
+    protected boolean forTransform() {
+        return false;
+    }
+
+    protected boolean forUpgrade() {
+        return false;
+    }
+
+    protected String getSelectString() {
+        return PGR.core.strings.grid_chooseCards(cardsToChoose);
+    }
+
     public void openPanel() {
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         for (AbstractCard card : getGroup()) {
@@ -100,23 +116,8 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
     }
 
-    protected String getSelectString() {
-        return PGR.core.strings.grid_chooseCards(cardsToChoose);
-    }
-
-    protected boolean forUpgrade() {
-        return false;
-    }
-
-    protected boolean forTransform() {
-        return false;
-    }
-
-    protected boolean forPurge() {
-        return false;
-    }
-
     protected abstract ArrayList<AbstractCard> getGroup();
+
     public abstract void onCardSelected(AbstractCard c);
 
 

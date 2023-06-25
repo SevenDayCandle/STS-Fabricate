@@ -44,9 +44,9 @@ public enum PCLCardTag implements TooltipProvider {
     Suspensive(new Color(0.5f, 0.65f, 0.75f, 1), 0, 1, true),
     Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1, true);
 
+    public static final float HEIGHT = 38f;
     private static ArrayList<PCLCardTag> PRE;
     private static ArrayList<PCLCardTag> POST;
-    public static final float HEIGHT = 38f;
     public final boolean preText;
     public final int minValue;
     public final int maxValue;
@@ -73,36 +73,28 @@ public enum PCLCardTag implements TooltipProvider {
         return Arrays.asList(values);
     }
 
-    public static List<PCLCardTag> getPost()
-    {
-        if (POST == null)
-        {
+    public static List<PCLCardTag> getPost() {
+        if (POST == null) {
             initializePreAndPost();
         }
         return POST;
     }
 
-    public static List<PCLCardTag> getPre()
-    {
-        if (PRE == null)
-        {
+    public static List<PCLCardTag> getPre() {
+        if (PRE == null) {
             initializePreAndPost();
         }
         return PRE;
     }
 
-    private static void initializePreAndPost()
-    {
+    private static void initializePreAndPost() {
         PRE = new ArrayList<>();
         POST = new ArrayList<>();
-        for (PCLCardTag tag : getAll())
-        {
-            if (tag.preText)
-            {
+        for (PCLCardTag tag : getAll()) {
+            if (tag.preText) {
                 PRE.add(tag);
             }
-            else
-            {
+            else {
                 POST.add(tag);
             }
         }
@@ -240,6 +232,11 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
+    @Override
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Autoplay:
@@ -278,11 +275,6 @@ public enum PCLCardTag implements TooltipProvider {
                 return PGR.core.tooltips.unplayable;
         }
         return new EUIKeywordTooltip(this.name());
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
     }
 
     public boolean has(AbstractCard card) {

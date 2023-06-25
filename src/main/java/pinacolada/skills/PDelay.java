@@ -49,8 +49,6 @@ public abstract class PDelay extends PSkill<PField_Empty> {
         return new PDelay_StartOfTurnPostDraw(amount);
     }
 
-    public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);
-
     @Override
     public String getSubText() {
         return (amount <= 0 ? TEXT.cond_atEndOfTurn() :
@@ -84,4 +82,6 @@ public abstract class PDelay extends PSkill<PField_Empty> {
             getDelayUse(info, (i) -> this.childEffect.use(i, order)).start();
         }
     }
+
+    public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);
 }

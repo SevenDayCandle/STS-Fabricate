@@ -10,8 +10,6 @@ public interface ClickableProvider {
         return "";
     }
 
-    String getID();
-
     default String getName() {
         return "";
     }
@@ -20,8 +18,10 @@ public interface ClickableProvider {
         return AbstractDungeon.player;
     }
 
-    EUITooltip getTooltip();
-
     default void onClicked() {
     }
+
+    String getID();
+
+    EUITooltip getTooltip();
 }

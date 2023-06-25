@@ -29,13 +29,13 @@ public class PMod_PerCreatureHP extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return sumTargets(info, t -> t.currentHealth);
+    public String getSubSampleText() {
+        return PGR.core.tooltips.hp.title;
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.hp.title;
+    public int getMultiplier(PCLUseInfo info) {
+        return sumTargets(info, t -> t.currentHealth);
     }
 
     @Override

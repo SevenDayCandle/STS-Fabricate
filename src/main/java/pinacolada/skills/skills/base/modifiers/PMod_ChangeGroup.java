@@ -28,8 +28,6 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
         fields.setCardGroup(groups);
     }
 
-    public abstract String getConditionSampleText();
-
     public String getConditionText() {
         return getConditionSampleText();
     }
@@ -56,8 +54,6 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
         }
     }
 
-    public abstract boolean meetsCondition(PCLUseInfo info);
-
     // TODO refactor
     protected void useImpl(PCLUseInfo info, ActionT0 callback) {
         if (meetsCondition(info)) {
@@ -81,4 +77,8 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
             }
         }
     }
+
+    public abstract String getConditionSampleText();
+
+    public abstract boolean meetsCondition(PCLUseInfo info);
 }

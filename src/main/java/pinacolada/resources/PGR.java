@@ -154,11 +154,11 @@ public class PGR {
         return getLanguagePack().getOrbString(orbID);
     }
 
-    public static PCLAbstractPlayerData<?,?> getPlayerData(AbstractCard.CardColor playerClass) {
+    public static PCLAbstractPlayerData<?, ?> getPlayerData(AbstractCard.CardColor playerClass) {
         return getResources(playerClass).data;
     }
 
-    public static PCLAbstractPlayerData<?,?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
+    public static PCLAbstractPlayerData<?, ?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
         return getResources(playerClass).data;
     }
 
@@ -372,12 +372,6 @@ public class PGR {
         CountingPanel.register(new PCLAffinityPanelFilter());
     }
 
-    public static void reloadCustoms() {
-        PCLCustomCardSlot.initialize();
-        PCLCustomRelicSlot.initialize();
-        PCLCustomPotionSlot.initialize();
-    }
-
     public static void registerCommands() {
         ConsoleCommand.addCommand("augment", AugmentCommand.class);
         ConsoleCommand.addCommand("effekseer", EffekseerCommand.class);
@@ -405,5 +399,11 @@ public class PGR {
     public static void registerRewards() {
         AugmentReward.Serializer augmentSerializer = new AugmentReward.Serializer();
         BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
+    }
+
+    public static void reloadCustoms() {
+        PCLCustomCardSlot.initialize();
+        PCLCustomRelicSlot.initialize();
+        PCLCustomPotionSlot.initialize();
     }
 }

@@ -31,6 +31,10 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         return getReward(card, rewardItem);
     }
 
+    protected int getBonus() {
+        return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
+    }
+
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {
         return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
     }
@@ -41,6 +45,13 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     }
 
     @Override
+    public void onEquip() {
+        super.onEquip();
+
+        setCounter(0);
+    }
+
+    @Override
     public void onEnterRoom(AbstractRoom room) {
         super.onEnterRoom(room);
 
@@ -48,16 +59,5 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
             setCounter(counter + getBonus());
             flash();
         }
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        setCounter(0);
-    }
-
-    protected int getBonus() {
-        return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
     }
 }

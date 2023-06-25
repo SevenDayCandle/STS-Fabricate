@@ -105,29 +105,6 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         }
     }
 
-    private boolean isCardEligible(AbstractCard.CardRarity rarity) {
-        switch (rarity) {
-            case COMMON:
-            case UNCOMMON:
-            case RARE:
-            case CURSE:
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isRelicEligible(AbstractRelic.RelicTier tier) {
-        switch (tier) {
-            case COMMON:
-            case UNCOMMON:
-            case RARE:
-            case BOSS:
-            case SHOP:
-                return true;
-        }
-        return false;
-    }
-
     @Override
     public int ascensionLevel() {
         return ascensionLevel;
@@ -136,6 +113,33 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     @Override
     public void disableConfirm(boolean value) {
         canvas.confirmButton.isDisabled = value;
+    }
+
+    // TODO investigate what is causing the screen to take focus away from everything else
+    public void close() {
+        super.close();
+        EUI.setActiveElement(null);
+        CardCrawlGame.isPopupOpen = false;
+    }
+
+    public void open() {
+        canvas.open();
+        if (!currentSeed.isEmpty()) {
+            canvas.seedInput.setTextAndCommit(currentSeed);
+        }
+        else {
+            Settings.seed = null;
+            Settings.specialSeed = null;
+        }
+    }
+
+    public void renderImpl(SpriteBatch sb) {
+        canvas.renderImpl(sb);
+    }
+
+    public void updateImpl() {
+        super.updateImpl();
+        canvas.updateImpl();
     }
 
     public void confirm() {
@@ -228,31 +232,27 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         canvas.resetPositions();
     }
 
-    public void open() {
-        canvas.open();
-        if (!currentSeed.isEmpty()) {
-            canvas.seedInput.setTextAndCommit(currentSeed);
+    private boolean isCardEligible(AbstractCard.CardRarity rarity) {
+        switch (rarity) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+            case CURSE:
+                return true;
         }
-        else {
-            Settings.seed = null;
-            Settings.specialSeed = null;
+        return false;
+    }
+
+    private boolean isRelicEligible(AbstractRelic.RelicTier tier) {
+        switch (tier) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+            case BOSS:
+            case SHOP:
+                return true;
         }
-    }
-
-    // TODO investigate what is causing the screen to take focus away from everything else
-    public void close() {
-        super.close();
-        EUI.setActiveElement(null);
-        CardCrawlGame.isPopupOpen = false;
-    }
-
-    public void renderImpl(SpriteBatch sb) {
-        canvas.renderImpl(sb);
-    }
-
-    public void updateImpl() {
-        super.updateImpl();
-        canvas.updateImpl();
+        return false;
     }
 
     public void setAscension(int i) {

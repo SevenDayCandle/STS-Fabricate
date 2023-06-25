@@ -19,6 +19,24 @@ public class WordToken extends PCLTextToken {
         this.extraLength = extraLength;
     }
 
+    protected static EUIKeywordTooltip getTooltip(PCLTextParser parser, String text) {
+        String word = text;
+        PCLTextToken prev = parser.previous;
+        PCLTextToken modToken = null;
+        if (prev instanceof ModifierSplitToken) {
+            modToken = ((ModifierSplitToken) prev).previous;
+            if (modToken != null) {
+                word = modToken.rawText + prev.rawText + word;
+            }
+        }
+        EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(word.toLowerCase());
+        if (tip != null && prev != null && modToken != null) {
+            parser.removeLastToken();
+            parser.removeLastToken();
+        }
+        return tip;
+    }
+
     protected static boolean isLonger(Character character) {
         return character == '%';
     }
@@ -119,23 +137,5 @@ public class WordToken extends PCLTextToken {
             coloredString.text = this.rawText;
         }
         super.render(sb, context, coloredString);
-    }
-
-    protected static EUIKeywordTooltip getTooltip(PCLTextParser parser, String text) {
-        String word = text;
-        PCLTextToken prev = parser.previous;
-        PCLTextToken modToken = null;
-        if (prev instanceof ModifierSplitToken) {
-            modToken = ((ModifierSplitToken) prev).previous;
-            if (modToken != null) {
-                word = modToken.rawText + prev.rawText + word;
-            }
-        }
-        EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(word.toLowerCase());
-        if (tip != null && prev != null && modToken != null) {
-            parser.removeLastToken();
-            parser.removeLastToken();
-        }
-        return tip;
     }
 }

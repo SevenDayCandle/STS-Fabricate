@@ -108,21 +108,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 saveButton.makeTour(true));
     }
 
-    protected void rebuildItem() {
-        previewCard = getBuilder().createImplWithForms(false);
-        if (SingleCardViewPopup.isViewingUpgrade) {
-            //previewCard.upgrade();
-            previewCard.displayUpgrades();
-        }
-        else {
-            previewCard.displayUpgradesForSkills(false);
-        }
-
-        previewCard.drawScale = previewCard.targetDrawScale = 1f;
-        previewCard.current_x = previewCard.target_x = CARD_X;
-        previewCard.current_y = previewCard.target_y = CARD_Y;
-    }
-
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
         imageButton.tryRender(sb);
@@ -147,6 +132,21 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         formEditor.refresh();
     }
 
+    protected void rebuildItem() {
+        previewCard = getBuilder().createImplWithForms(false);
+        if (SingleCardViewPopup.isViewingUpgrade) {
+            //previewCard.upgrade();
+            previewCard.displayUpgrades();
+        }
+        else {
+            previewCard.displayUpgradesForSkills(false);
+        }
+
+        previewCard.drawScale = previewCard.targetDrawScale = 1f;
+        previewCard.current_x = previewCard.target_x = CARD_X;
+        previewCard.current_y = previewCard.target_y = CARD_Y;
+    }
+
     protected void complete() {
         super.complete();
         invalidateItems();
@@ -163,7 +163,7 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 image = portrait.texture;
             }
         }
-        currentDialog = (PCLCustomImageEffect) PCLCustomImageEffect.forCard(image)
+        currentDialog = PCLCustomImageEffect.forCard(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));

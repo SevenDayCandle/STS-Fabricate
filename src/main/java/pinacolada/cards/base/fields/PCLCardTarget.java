@@ -110,6 +110,40 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return mons.size() > 0 ? EUIUtils.safeCast(mons.get(0), AbstractMonster.class) : null;
     }
 
+    public TargetFilter getTargetFilter() {
+        switch (this) {
+            case None:
+                return TargetFilter.None;
+            case AllEnemy:
+                return TargetFilter.AllEnemy;
+            case AllAlly:
+                return T_AllAlly;
+            case Team:
+                return T_Team;
+            case All:
+                return TargetFilter.All;
+            case Self:
+                return TargetFilter.Self;
+            case Single:
+                return TargetFilter.Single;
+            case SingleAlly:
+                return T_SingleAlly;
+            case Any:
+                return TargetFilter.Any;
+            case RandomEnemy:
+                return T_RandomEnemy;
+            case RandomAlly:
+                return T_RandomAlly;
+            case SelfAllEnemy:
+                return T_SelfAllEnemy;
+            case SelfSingle:
+                return T_SelfSingle;
+            case SelfSingleAlly:
+                return T_SelfSingleAlly;
+        }
+        return TargetFilter.None;
+    }
+
     public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
         return getTargets(source, target, 1);
     }
@@ -182,40 +216,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return GameUtilities.getAllCharacters(true);
         }
         return getTargets(source, target);
-    }
-
-    public TargetFilter getTargetFilter() {
-        switch (this) {
-            case None:
-                return TargetFilter.None;
-            case AllEnemy:
-                return TargetFilter.AllEnemy;
-            case AllAlly:
-                return T_AllAlly;
-            case Team:
-                return T_Team;
-            case All:
-                return TargetFilter.All;
-            case Self:
-                return TargetFilter.Self;
-            case Single:
-                return TargetFilter.Single;
-            case SingleAlly:
-                return T_SingleAlly;
-            case Any:
-                return TargetFilter.Any;
-            case RandomEnemy:
-                return T_RandomEnemy;
-            case RandomAlly:
-                return T_RandomAlly;
-            case SelfAllEnemy:
-                return T_SelfAllEnemy;
-            case SelfSingle:
-                return T_SelfSingle;
-            case SelfSingleAlly:
-                return T_SelfSingleAlly;
-        }
-        return TargetFilter.None;
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
@@ -292,6 +292,16 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return false;
     }
 
+    public final boolean targetsRandom() {
+        switch (this) {
+            case RandomAlly:
+            case RandomEnemy:
+            case Any:
+                return true;
+        }
+        return false;
+    }
+
     public final boolean targetsSelf() {
         switch (this) {
             case Self:
@@ -309,16 +319,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case Single:
             case SingleAlly:
-                return true;
-        }
-        return false;
-    }
-
-    public final boolean targetsRandom() {
-        switch (this) {
-            case RandomAlly:
-            case RandomEnemy:
-            case Any:
                 return true;
         }
         return false;

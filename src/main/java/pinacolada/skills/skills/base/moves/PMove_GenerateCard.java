@@ -72,11 +72,13 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         fields.setCardIDs(cardData);
     }
 
+    protected boolean generateSpecificCards() {
+        return !fields.cardIDs.isEmpty();
+    }
+
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
-
-    public abstract EUITooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {
@@ -177,14 +179,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return new ArrayList<>();
     }
 
-    protected boolean generateSpecificCards() {
-        return !fields.cardIDs.isEmpty();
-    }
-
-    protected boolean isOutOf() {
-        return extra > amount;
-    }
-
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
@@ -206,7 +200,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         }
     }
 
-    public abstract void performAction(PCLUseInfo info, PCLActions order, AbstractCard c);
+    protected boolean isOutOf() {
+        return extra > amount;
+    }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
@@ -228,6 +224,10 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                     }
                 });
     }
+
+    public abstract EUITooltip getActionTooltip();
+
+    public abstract void performAction(PCLUseInfo info, PCLActions order, AbstractCard c);
 
 
 }

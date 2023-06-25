@@ -226,21 +226,6 @@ public class SummonPool extends EUIBase {
         }
     }
 
-    public SummonAllyAction summon(PCLCard card, PCLCardAlly target)
-    {
-        return PCLActions.bottom.summonAlly(card, target);
-    }
-
-    public WithdrawAllyAction withdraw(PCLCardAlly target)
-    {
-        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
-    }
-
-    public WithdrawAllyAction withdraw(Collection<PCLCardAlly> target)
-    {
-        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
-    }
-
     @Override
     public void updateImpl() {
         // Update empty animation independently so alpha is the same for all slots
@@ -250,11 +235,23 @@ public class SummonPool extends EUIBase {
         }
     }
 
+    public SummonAllyAction summon(PCLCard card, PCLCardAlly target) {
+        return PCLActions.bottom.summonAlly(card, target);
+    }
+
     public int tryDamage(DamageInfo info, int damageAmount) {
         return countDamage(damageAmount, (ally, amount) -> {
             ally.damage(new DamageInfo(info.owner, amount, info.type));
             return amount;
         });
+    }
+
+    public WithdrawAllyAction withdraw(PCLCardAlly target) {
+        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
+    }
+
+    public WithdrawAllyAction withdraw(Collection<PCLCardAlly> target) {
+        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
     }
 
     public enum DamageMode {

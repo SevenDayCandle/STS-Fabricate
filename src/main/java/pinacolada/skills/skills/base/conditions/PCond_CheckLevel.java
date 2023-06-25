@@ -22,7 +22,9 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
             .pclOnly()
             .selfTarget();
 
-    public PCond_CheckLevel() {this(1);}
+    public PCond_CheckLevel() {
+        this(1);
+    }
 
     public PCond_CheckLevel(PSkillSaveData content) {
         super(DATA, content);
@@ -31,6 +33,18 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
     public PCond_CheckLevel(int amount, PCLAffinity... stance) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setAffinity(stance);
+    }
+
+    public int getQualifierRange() {
+        return fields.getQualiferRange();
+    }
+
+    public String getQualifierText(int i) {
+        return fields.getQualifierText(i);
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return fields.getQualifiers(info);
     }
 
     @Override
@@ -46,18 +60,6 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
             }
         }
         return !fields.not;
-    }
-
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
-        return fields.getQualifiers(info);
-    }
-
-    public String getQualifierText(int i) {
-        return fields.getQualifierText(i);
-    }
-
-    public int getQualifierRange() {
-        return fields.getQualiferRange();
     }
 
     @Override
@@ -78,8 +80,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
 
     @Override
     public void onIntensify(PCLAffinity aff) {
-        if (fields.affinities.isEmpty() || fields.affinities.contains(aff))
-        {
+        if (fields.affinities.isEmpty() || fields.affinities.contains(aff)) {
             useFromTrigger(makeInfo(null).setData(aff));
         }
     }

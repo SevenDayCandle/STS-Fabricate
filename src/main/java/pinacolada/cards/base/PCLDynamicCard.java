@@ -64,25 +64,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         super.fullReset();
     }
 
-    public void setupImages(String imagePath) {
-        portrait = null;
-        if (builder.portraitForeground != null) {
-            this.portraitForeground = builder.portraitForeground;
-        }
-        if (builder.portraitImage != null) {
-            this.portraitImg = builder.portraitImage;
-            assetUrl = imagePath;
-        }
-        else {
-            loadImage(imagePath);
-        }
-    }
-
-    @Override
-    public EditorMaker getDynamicData() {
-        return builder;
-    }
-
     @Override
     public void setup(Object input) {
         if (input instanceof BuilderInfo) {
@@ -176,6 +157,20 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             setProperties(this.builder, form, timesUpgraded);
         }
         return this.auxiliaryData.form;
+    }
+
+    public void setupImages(String imagePath) {
+        portrait = null;
+        if (builder.portraitForeground != null) {
+            this.portraitForeground = builder.portraitForeground;
+        }
+        if (builder.portraitImage != null) {
+            this.portraitImg = builder.portraitImage;
+            assetUrl = imagePath;
+        }
+        else {
+            loadImage(imagePath);
+        }
     }
 
     // These are null when rendering PCL colors
@@ -377,6 +372,11 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             BaseMod.saveEnergyOrbPortraitTexture(color, t);
         }
         return t;
+    }
+
+    @Override
+    public EditorMaker getDynamicData() {
+        return builder;
     }
 
     protected TextureAtlas.AtlasRegion getVanillaCardBackgroundForRender() {

@@ -28,7 +28,7 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count =  EUIUtils.count(AbstractDungeon.player.potions, c -> fields.getFullPotionFilter().invoke(c));
+        int count = EUIUtils.count(AbstractDungeon.player.potions, c -> fields.getFullPotionFilter().invoke(c));
         return amount == 0 ? count == 0 : fields.random ^ count >= amount;
     }
 

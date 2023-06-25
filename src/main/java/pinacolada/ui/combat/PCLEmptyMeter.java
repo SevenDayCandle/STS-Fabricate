@@ -18,6 +18,11 @@ public class PCLEmptyMeter extends PCLPlayerMeter {
         draggableIcon.setActive(false);
     }
 
+    // RENDER NOTHIN
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+    }
+
     @Override
     public String getInfoMainDescrption() {
         return "";
@@ -34,10 +39,5 @@ public class PCLEmptyMeter extends PCLPlayerMeter {
     @Override
     public String getInfoTitle() {
         return "";
-    }
-
-    // RENDER NOTHIN
-    @Override
-    public void renderImpl(SpriteBatch sb) {
     }
 }

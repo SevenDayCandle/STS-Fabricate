@@ -79,24 +79,12 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 
-    public int getCounter(int form) {
-        return counter[Math.min(counter.length - 1, form)];
-    }
-
-    public int getCounterUpgrade(int form) {
-        return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
-    }
-
     public static PCLPotionData getStaticData(String cardID) {
         return STATIC_DATA.get(cardID);
     }
 
     public static Collection<PCLPotionData> getTemplates() {
         return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
-    }
-
-    public void initializeImage() {
-        this.imagePath = PGR.getRelicImage(ID);
     }
 
     protected static <T extends PCLPotionData> T registerData(T cardData) {
@@ -108,6 +96,18 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         STATIC_DATA.put(cardData.ID, cardData);
         TEMPLATES.add(cardData);
         return cardData;
+    }
+
+    public int getCounter(int form) {
+        return counter[Math.min(counter.length - 1, form)];
+    }
+
+    public int getCounterUpgrade(int form) {
+        return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getRelicImage(ID);
     }
 
     public PCLPotionData setBottleColor(Color liquidColor, Color hybridColor, Color spotsColor) {
@@ -149,6 +149,11 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return this;
     }
 
+    public PCLPotionData setEffect(AbstractPotion.PotionEffect effect) {
+        this.effect = effect;
+        return this;
+    }
+
     public PCLPotionData setHybridColor(Color hybridColor) {
         this.hybridColor = hybridColor != null ? hybridColor : Color.WHITE;
         return this;
@@ -177,14 +182,9 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return this;
     }
 
-    public PCLPotionData setEffect(AbstractPotion.PotionEffect effect) {
-        this.effect = effect;
-        return this;
-    }
-
-
-    public PCLPotionData setSize(AbstractPotion.PotionSize size) {
-        this.size = size;
+    public PCLPotionData setProps(AbstractPotion.PotionRarity tier, AbstractPotion.PotionSize sfx) {
+        this.rarity = tier;
+        this.size = sfx;
         return this;
     }
 
@@ -193,9 +193,8 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return this;
     }
 
-    public PCLPotionData setProps(AbstractPotion.PotionRarity tier, AbstractPotion.PotionSize sfx) {
-        this.rarity = tier;
-        this.size = sfx;
+    public PCLPotionData setSize(AbstractPotion.PotionSize size) {
+        this.size = size;
         return this;
     }
 

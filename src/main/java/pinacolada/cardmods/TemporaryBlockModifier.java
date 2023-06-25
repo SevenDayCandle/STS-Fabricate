@@ -44,11 +44,6 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
     }
 
     @Override
-    public AbstractCardModifier makeCopy() {
-        return new TemporaryBlockModifier(change, removeOnPlay, temporary);
-    }
-
-    @Override
     public boolean removeOnCardPlayed(AbstractCard card) {
         return removeOnPlay;
     }
@@ -59,5 +54,10 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
 
     public float modifyBlock(float block, AbstractCard card) {
         return block + change;
+    }
+
+    @Override
+    public AbstractCardModifier makeCopy() {
+        return new TemporaryBlockModifier(change, removeOnPlay, temporary);
     }
 }

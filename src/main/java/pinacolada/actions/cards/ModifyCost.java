@@ -23,10 +23,6 @@ public class ModifyCost extends ModifyCard {
         return super.canSelect(card) && canCardPass(card, getActualChange(card));
     }
 
-    protected int getActualChange(AbstractCard card) {
-        return relative ? change : change - card.costForTurn;
-    }
-
     @Override
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
@@ -44,5 +40,9 @@ public class ModifyCost extends ModifyCard {
             }
         }
 
+    }
+
+    protected int getActualChange(AbstractCard card) {
+        return relative ? change : change - card.costForTurn;
     }
 }

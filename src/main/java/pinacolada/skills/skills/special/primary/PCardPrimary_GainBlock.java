@@ -36,10 +36,6 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         return PCLCardValueSource.Block;
     }
 
-    public PCLCardValueSource getExtraSource() {
-        return PCLCardValueSource.RightCount;
-    }
-
     @Override
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
         return new ColoredString(displayAmount,
@@ -47,6 +43,10 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
                         sourceCard.upgradedBlock ? Settings.GREEN_TEXT_COLOR :
                                 sourceCard.isBlockModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
                                         : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
+    }
+
+    public PCLCardValueSource getExtraSource() {
+        return PCLCardValueSource.RightCount;
     }
 
     public AbstractMonster.Intent getIntent() {

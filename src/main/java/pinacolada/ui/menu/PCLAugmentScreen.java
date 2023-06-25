@@ -42,6 +42,32 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
         return AUGMENT_SCREEN;
     }
 
+    @Override
+    public void update() {
+        if (curEffect != null) {
+            curEffect.update();
+            if (curEffect.isDone) {
+                curEffect = null;
+            }
+        }
+        else {
+            panel.updateImpl();
+        }
+        EUI.countingPanel.tryUpdate();
+
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (curEffect != null) {
+            curEffect.render(sb);
+        }
+        else {
+            panel.renderImpl(sb);
+        }
+        EUI.countingPanel.tryRender(sb);
+    }
+
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
             curEffect = new ActionCallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
@@ -70,34 +96,8 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
-        if (curEffect != null) {
-            curEffect.render(sb);
-        }
-        else {
-            panel.renderImpl(sb);
-        }
-        EUI.countingPanel.tryRender(sb);
-    }
-
-    @Override
     public void openingSettings() {
         AbstractDungeon.previousScreen = curScreen();
-    }
-
-    @Override
-    public void update() {
-        if (curEffect != null) {
-            curEffect.update();
-            if (curEffect.isDone) {
-                curEffect = null;
-            }
-        }
-        else {
-            panel.updateImpl();
-        }
-        EUI.countingPanel.tryUpdate();
-
     }
 
     public void refreshAugments() {

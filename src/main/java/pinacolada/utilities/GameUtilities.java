@@ -986,6 +986,36 @@ public class GameUtilities {
         return inGame() && player != null ? player.chosenClass : null;
     }
 
+    public static <T extends AbstractRelic> T getPlayerRelic(String relicID) {
+        if (player == null) {
+            return null;
+        }
+
+        for (AbstractRelic relic : player.relics) {
+            if (relic != null && relicID.equals(relic.relicId)) {
+                try {
+                    return (T) relic;
+                }
+                catch (ClassCastException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static <T> T getPlayerRelic(Class<T> relicType) {
+        for (AbstractRelic relic : player.relics) {
+            if (relicType.isInstance(relic)) {
+                return relicType.cast(relic);
+            }
+        }
+
+        return null;
+    }
+
     public static ArrayList<AbstractPotion> getPotions(AbstractCard.CardColor cardColor) {
         return EUIUtils.map(PotionHelper.getPotions(EUIGameUtils.getPlayerClassForCardColor(cardColor), cardColor == null), PotionHelper::getPotion);
     }
@@ -1101,36 +1131,6 @@ public class GameUtilities {
         return getRandomElement(getSummons(isAlive), getRNG());
     }
 
-    public static <T extends AbstractRelic> T getPlayerRelic(String relicID) {
-        if (player == null) {
-            return null;
-        }
-
-        for (AbstractRelic relic : player.relics) {
-            if (relic != null && relicID.equals(relic.relicId)) {
-                try {
-                    return (T) relic;
-                }
-                catch (ClassCastException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static <T> T getPlayerRelic(Class<T> relicType) {
-        for (AbstractRelic relic : player.relics) {
-            if (relicType.isInstance(relic)) {
-                return relicType.cast(relic);
-            }
-        }
-
-        return null;
-    }
-
     public static int getRelicCount() {
         return player != null ? player.relics.size() : 0;
     }
@@ -1153,8 +1153,7 @@ public class GameUtilities {
     }
 
     public static HashMap<String, AbstractRelic> getRelics(AbstractCard.CardColor cardColor) {
-        switch (cardColor)
-        {
+        switch (cardColor) {
             case COLORLESS:
                 return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "sharedRelics");
             case RED:
@@ -1216,13 +1215,11 @@ public class GameUtilities {
         return monsters;
     }
 
-    public static String getTagTipPostString(AbstractCard card)
-    {
+    public static String getTagTipPostString(AbstractCard card) {
         return getTagTipString(card, PCLCardTag.getPost());
     }
 
-    public static String getTagTipPreString(AbstractCard card)
-    {
+    public static String getTagTipPreString(AbstractCard card) {
         return getTagTipString(card, PCLCardTag.getPre());
     }
 

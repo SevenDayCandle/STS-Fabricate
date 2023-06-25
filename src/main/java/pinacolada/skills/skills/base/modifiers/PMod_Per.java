@@ -40,19 +40,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         super(data, target, amount, extra);
     }
 
-    public String getConditionText(String childText) {
-        if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText()));
-        }
-        return TEXT.cond_xPerY(childText,
-                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
-    }
-
     @Override
     public ColoredString getColoredValueString() {
         String amString = fields.not && amount >= 0 ? "+" + amount : String.valueOf(amount);
@@ -70,7 +57,18 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
-    public abstract int getMultiplier(PCLUseInfo info);
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
+    }
+
+    public String getConditionText(String childText) {
+        if (fields.not) {
+            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_xPerY(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
+    }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
@@ -86,4 +84,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     public String getSubSampleText() {
         return getSubText();
     }
+
+    public abstract int getMultiplier(PCLUseInfo info);
 }

@@ -53,6 +53,18 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
+    protected void stabilizePower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
+        for (AbstractCreature t : targets) {
+            order.stabilizePower(p, t, power.ID, amount);
+        }
+        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+        if (power == PCLPowerHelper.Intangible) {
+            for (AbstractCreature t : targets) {
+                order.stabilizePower(p, t, IntangiblePower.POWER_ID, amount);
+            }
+        }
+    }
+
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
@@ -73,17 +85,5 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
             }
         }
         super.use(info, order);
-    }
-
-    protected void stabilizePower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
-        for (AbstractCreature t : targets) {
-            order.stabilizePower(p, t, power.ID, amount);
-        }
-        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerHelper.Intangible) {
-            for (AbstractCreature t : targets) {
-                order.stabilizePower(p, t, IntangiblePower.POWER_ID, amount);
-            }
-        }
     }
 }

@@ -36,8 +36,13 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_evoke(TEXT.cond_xPerY(TEXT.subjects_x, PGR.core.tooltips.orb.title));
+    }
+
+    @Override
+    public String getSubText() {
+        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 
     @Override
@@ -59,13 +64,8 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_evoke(TEXT.cond_xPerY(TEXT.subjects_x, PGR.core.tooltips.orb.title));
-    }
-
-    @Override
-    public String getSubText() {
-        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {

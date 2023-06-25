@@ -26,10 +26,6 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
         super(data, amount, count);
     }
 
-    abstract public EUIKeywordTooltip getActionTooltip();
-
-    abstract public List<AbstractCard> getCardPile();
-
     @Override
     public String getConditionText() {
         return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
@@ -53,4 +49,8 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
+
+    abstract public EUIKeywordTooltip getActionTooltip();
+
+    abstract public List<AbstractCard> getCardPile();
 }

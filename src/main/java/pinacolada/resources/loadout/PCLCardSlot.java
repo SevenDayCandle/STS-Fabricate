@@ -8,8 +8,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLCharacterConfig;
-import pinacolada.resources.PCLResources;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
@@ -103,8 +101,7 @@ public class PCLCardSlot {
         final ArrayList<PCLCard> cards = new ArrayList<>();
         for (Item item : this.cards) {
             boolean add = !isIDBanned(item.data.ID) && !item.data.isLocked();
-            if (add)
-            {
+            if (add) {
                 for (PCLCardSlot slot : container.cardSlots) {
                     if (slot != this && slot.getData() == item.data) {
                         add = false;
@@ -126,7 +123,7 @@ public class PCLCardSlot {
     }
 
     public boolean isIDBanned(String id) {
-        PCLAbstractPlayerData<?,?> playerData = container.loadout.getPlayerData();
+        PCLAbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
         return playerData != null && playerData.config.bannedCards.get().contains(id);
     }
 

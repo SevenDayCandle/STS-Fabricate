@@ -53,20 +53,28 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_decrease,"")
+                .setTooltip(PGR.core.strings.loadout_decrease, "")
                 .setClickDelay(0.02f);
         addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_add,"")
+                .setTooltip(PGR.core.strings.loadout_add, "")
                 .setClickDelay(0.02f);
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_remove,"")
+                .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_change,"")
+                .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
         nameColor = Settings.GOLD_COLOR;
 
         setSlot(null);
+    }
+
+    public void refreshValues() {
+        int value = slot == null ? 0 : slot.getEstimatedValue();
+        cardvalueText.setLabel(value)
+                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
+
+        loadoutEditor.updateValidation();
     }
 
     @Override
@@ -179,14 +187,6 @@ public class PCLCardSlotEditor extends EUIBase {
 
         refreshValues();
         return this;
-    }
-
-    public void refreshValues() {
-        int value = slot == null ? 0 : slot.getEstimatedValue();
-        cardvalueText.setLabel(value)
-                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
-
-        loadoutEditor.updateValidation();
     }
 
     public PCLCardSlotEditor translate(float cX, float cY) {

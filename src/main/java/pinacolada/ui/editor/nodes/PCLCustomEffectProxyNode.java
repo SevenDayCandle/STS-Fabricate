@@ -25,9 +25,7 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     }
 
     @Override
-    public void receiveNode(PCLCustomEffectNode node) {
-        node.extractSelf();
-        controller.skill.setChild(node.skill);
+    public void initializeDefaultSkill() {
     }
 
     @Override
@@ -36,16 +34,24 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     }
 
     @Override
+    public void updateImpl() {
+        super.updateImpl();
+        if (PCLCustomEffectHologram.current != null) {
+            this.setTargetColor(Color.WHITE);
+        }
+        else {
+            this.setTargetColor(FADE_COLOR);
+        }
+    }
+
+    @Override
     public void reassignChild(PCLCustomEffectNode node) {
     }
 
     @Override
-    public void startEdit() {
-    }
-
-    @Override
-    public void initializeDefaultSkill()
-    {
+    public void receiveNode(PCLCustomEffectNode node) {
+        node.extractSelf();
+        controller.skill.setChild(node.skill);
     }
 
     @Override
@@ -54,14 +60,6 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     }
 
     @Override
-    public void updateImpl() {
-        super.updateImpl();
-        if (PCLCustomEffectHologram.current != null) {
-            this.setTargetColor(Color.WHITE);
-        }
-        else
-        {
-            this.setTargetColor(FADE_COLOR);
-        }
+    public void startEdit() {
     }
 }

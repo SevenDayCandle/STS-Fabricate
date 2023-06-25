@@ -45,6 +45,18 @@ public class PMove_RemovePower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
     }
 
+    protected void removePower(List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
+        for (AbstractCreature t : targets) {
+            order.removePower(t, t, power.ID);
+        }
+        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+        if (power == PCLPowerHelper.Intangible) {
+            for (AbstractCreature t : targets) {
+                order.removePower(t, t, IntangiblePower.POWER_ID);
+            }
+        }
+    }
+
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
@@ -67,17 +79,5 @@ public class PMove_RemovePower extends PMove<PField_Power> {
             }
         }
         super.use(info, order);
-    }
-
-    protected void removePower(List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
-        for (AbstractCreature t : targets) {
-            order.removePower(t, t, power.ID);
-        }
-        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerHelper.Intangible) {
-            for (AbstractCreature t : targets) {
-                order.removePower(t, t, IntangiblePower.POWER_ID);
-            }
-        }
     }
 }

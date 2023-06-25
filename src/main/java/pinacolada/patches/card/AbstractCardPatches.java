@@ -47,24 +47,22 @@ public class AbstractCardPatches {
             clz = AbstractCard.class,
             method = "hasEnoughEnergy"
     )
-    public static class AbstractCard_HasEnoughEnergy
-    {
+    public static class AbstractCard_HasEnoughEnergy {
         @SpireInsertPatch(
                 locator = Locator.class
         )
         public static SpireReturn<Boolean> Insert(AbstractCard __instance) {
             if (CombatManager.hasEnoughEnergyForCard(__instance)) {
                 return SpireReturn.Return(true);
-            } else {
+            }
+            else {
                 return SpireReturn.Continue();
             }
         }
 
-        private static class Locator extends SpireInsertLocator
-        {
+        private static class Locator extends SpireInsertLocator {
             @Override
-            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception
-            {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
                 Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractCard.class, "costForTurn");
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
@@ -72,8 +70,7 @@ public class AbstractCardPatches {
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "resetAttributes")
-    public static class AbstractCard_ResetAttributes
-    {
+    public static class AbstractCard_ResetAttributes {
         @SpirePostfixPatch
         public static void method(AbstractCard __instance) {
             if (PGR.isLoaded()) {

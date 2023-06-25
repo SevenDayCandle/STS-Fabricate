@@ -104,8 +104,110 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         availableRelics = null;
     }
 
+    public void changeAmountForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    return;
+            }
+        }
+        skill.setAmount(val, upVal);
+    }
+
+    public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    return;
+            }
+        }
+        skill.setExtra(val, upVal);
+    }
+
     public void close() {
         editor.currentEditingSkill = null;
+    }
+
+    public int getAmountForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.amount;
+    }
+
+    public int getAmountUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgrade();
     }
 
     protected ArrayList<AbstractCard> getAvailableCards() {
@@ -156,6 +258,54 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public Color getColorForEffect(PSkill<?> effect) {
         return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
+    }
+
+    public int getExtraForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.extra;
+    }
+
+    public int getExtraUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgradeExtra();
     }
 
     @Override
@@ -219,162 +369,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         }
     }
 
-    public void changeAmountForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getAmountSource()) {
-                case Damage:
-                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
-                    return;
-                case Block:
-                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
-                    return;
-                case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
-                    return;
-                case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHp(val, upVal));
-                    return;
-                case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
-                    return;
-                case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
-                    return;
-            }
-        }
-        skill.setAmount(val, upVal);
-    }
-
-    public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
-                    return;
-                case Block:
-                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
-                    return;
-                case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
-                    return;
-                case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHp(val, upVal));
-                    return;
-                case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
-                    return;
-                case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
-                    return;
-            }
-        }
-        skill.setExtra(val, upVal);
-    }
-
-    public int getAmountForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getAmountSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamage(0);
-                case Block:
-                    return sc.getBuilder().getBlock(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCount(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCount(0);
-            }
-        }
-        return skill.amount;
-    }
-
-    public int getAmountUpgradeForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getAmountSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
-                case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
-            }
-        }
-        return skill.getUpgrade();
-    }
-
-    public int getExtraForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamage(0);
-                case Block:
-                    return sc.getBuilder().getBlock(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCount(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCount(0);
-            }
-        }
-        return skill.extra;
-    }
-
-    public int getExtraUpgradeForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
-                case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
-            }
-        }
-        return skill.getUpgradeExtra();
-    }
-
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
         return initializeRegular(Arrays.asList(items), labelFunc, title, multiselect);
     }
 
     public <T> EUIDropdown<T> initializeRegular(Collection<T> items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
-        return (EUIDropdown<T>) new EUIDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
+        return new EUIDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
                 .setLabelFunctionForOption(labelFunc, false)
                 .setIsMultiSelect(multiselect)
                 .setShouldPositionClearAtTop(true)
@@ -712,6 +712,18 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     @Override
+    public void renderImpl(SpriteBatch sb) {
+        this.backdrop.tryRender(sb);
+        this.effects.tryRender(sb);
+        this.targets.tryRender(sb);
+        this.valueEditor.tryRender(sb);
+        this.extraEditor.tryRender(sb);
+        for (EUIHoverable element : activeElements) {
+            element.tryRender(sb);
+        }
+    }
+
+    @Override
     public void updateImpl() {
         boolean wasBusy = EUI.doesActiveElementExist();
         this.backdrop.tryUpdate();
@@ -725,18 +737,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (EUIInputManager.leftClick.isJustPressed() && !wasBusy &&
                 !backdrop.hb.hovered && !effects.areAnyItemsHovered() && !targets.areAnyItemsHovered() && !valueEditor.hb.hovered && !extraEditor.hb.hovered && !EUIUtils.any(activeElements, e -> e.hb.hovered)) {
             close();
-        }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        this.backdrop.tryRender(sb);
-        this.effects.tryRender(sb);
-        this.targets.tryRender(sb);
-        this.valueEditor.tryRender(sb);
-        this.extraEditor.tryRender(sb);
-        for (EUIHoverable element : activeElements) {
-            element.tryRender(sb);
         }
     }
 }

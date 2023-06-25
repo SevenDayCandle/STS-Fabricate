@@ -30,8 +30,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public static final float START_Y = Settings.HEIGHT * (0.8f);
 
     public final PCLCustomEditEntityScreen<?, ?> screen;
-    public PPrimary<?> rootEffect;
-    public PCLCustomEffectNode root;
     protected int editorIndex;
     protected ActionT1<PSkill<?>> onUpdate;
     protected EUIHitbox hb;
@@ -39,6 +37,8 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     protected EUITextBox info;
     protected PCLCustomEffectEditingPane currentEditingSkill;
     protected PCLCustomEffectSelectorPane buttonsPane;
+    public PPrimary<?> rootEffect;
+    public PCLCustomEffectNode root;
 
     public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         this.screen = screen;
@@ -84,6 +84,14 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
+                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
+                        .setFlash(buttonsPane)
+        );
+    }
+
+    @Override
     public TextureCache getTextureCache() {
         return PCLCoreImages.Menu.editorEffect;
     }
@@ -91,14 +99,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return header.text;
-    }
-
-    @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
-                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
-                        .setFlash(buttonsPane)
-        );
     }
 
     @Override
@@ -122,8 +122,20 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         refresh();
     }
 
-    public void startEdit(PCLCustomEffectNode node) {
-        currentEditingSkill = new PCLCustomEffectEditingPane(this, node, new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.7f, MENU_WIDTH, MENU_HEIGHT));
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+        if (this.root != null) {
+            this.root.render(sb);
+        }
+        PCLCustomEffectHologram.updateAndRenderCurrent(sb);
+        this.header.tryRender(sb);
+        this.buttonsPane.tryRender(sb);
+        this.info.tryRender(sb);
+
+        if (this.currentEditingSkill != null) {
+            this.currentEditingSkill.render(sb);
+        }
     }
 
     @Override
@@ -134,6 +146,10 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         else {
             updateInner();
         }
+    }
+
+    public void startEdit(PCLCustomEffectNode node) {
+        currentEditingSkill = new PCLCustomEffectEditingPane(this, node, new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.7f, MENU_WIDTH, MENU_HEIGHT));
     }
 
     protected void updateInner() {
@@ -149,22 +165,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
         this.header.tryUpdate();
         this.info.tryUpdate();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-        if (this.root != null) {
-            this.root.render(sb);
-        }
-        PCLCustomEffectHologram.updateAndRenderCurrent(sb);
-        this.header.tryRender(sb);
-        this.buttonsPane.tryRender(sb);
-        this.info.tryRender(sb);
-
-        if (this.currentEditingSkill != null) {
-            this.currentEditingSkill.render(sb);
-        }
     }
 
     public void updateRootEffect() {

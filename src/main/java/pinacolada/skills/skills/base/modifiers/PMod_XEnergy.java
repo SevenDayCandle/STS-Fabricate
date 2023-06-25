@@ -33,8 +33,27 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
+    }
+
+    @Override
+    public String getSubText() {
+        return PGR.core.tooltips.energy.getTitleOrIcon();
+    }
+
+    @Override
+    public String wrapAmountChild(PSkill<?> source, String input) {
+        // Only apply X modifier text if the source is the skill that is actually being modified by this modifier
+        if (isSkillAffected(source)) {
+            // If the value is not parseable, don't remove the numbers
+            int value = EUIUtils.parseInt(input, 2);
+            if (value == 1) {
+                input = GameUtilities.EMPTY_STRING;
+            }
+            input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
+        }
+        return parent != null ? parent.wrapAmountChild(source, input) : (input);
     }
 
     @Override
@@ -65,26 +84,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
-    }
-
-    @Override
-    public String getSubText() {
-        return PGR.core.tooltips.energy.getTitleOrIcon();
-    }
-
-    @Override
-    public String wrapAmountChild(PSkill<?> source, String input) {
-        // Only apply X modifier text if the source is the skill that is actually being modified by this modifier
-        if (isSkillAffected(source)) {
-            // If the value is not parseable, don't remove the numbers
-            int value = EUIUtils.parseInt(input, 2);
-            if (value == 1) {
-                input = GameUtilities.EMPTY_STRING;
-            }
-            input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
-        }
-        return parent != null ? parent.wrapAmountChild(source, input) : (input);
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
     }
 }

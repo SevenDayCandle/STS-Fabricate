@@ -15,8 +15,6 @@ public abstract class NestedAction<T> extends PCLAction<T> {
         super(type, duration);
     }
 
-    protected abstract void onNestCompleted();
-
     protected boolean updateAction() {
         if (action == null) {
             return true;
@@ -35,4 +33,6 @@ public abstract class NestedAction<T> extends PCLAction<T> {
             onNestCompleted();
         }
     }
+
+    protected abstract void onNestCompleted();
 }

@@ -27,13 +27,13 @@ public class PMove_ModifyCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyCardHp(c, extra, true, true);
+    public String getObjectSampleText() {
+        return PGR.core.tooltips.hp.title;
     }
 
     @Override
-    public String getObjectSampleText() {
-        return PGR.core.tooltips.hp.title;
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyCardHp(c, extra, true, true);
     }
 
     @Override

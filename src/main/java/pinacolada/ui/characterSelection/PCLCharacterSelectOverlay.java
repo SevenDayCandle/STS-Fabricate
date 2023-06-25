@@ -47,11 +47,11 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     protected static final Random RNG = new Random();
     protected final ArrayList<PCLLoadout> availableLoadouts;
     protected final ArrayList<PCLLoadout> loadouts;
-    protected ArrayList<AbstractRelic> cachedRelics;
     public final ArrayList<PCLGlyphEditor> glyphEditors;
+    protected ArrayList<AbstractRelic> cachedRelics;
     protected CharacterSelectScreen charScreen;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?,?> data;
+    protected PCLAbstractPlayerData<?, ?> data;
     protected PCLLoadout loadout;
     protected PCLYesNoConfirmationEffect currentDialog;
     protected float textScale;
@@ -172,16 +172,17 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    protected float getInfoX() {
+        return EUIClassUtils.getField(characterOption, "infoX");
+    }
+
+    protected float getInfoY() {
+        return EUIClassUtils.getField(characterOption, "infoY");
+    }
+
     public void initialize(CharacterSelectScreen selectScreen) {
         charScreen = selectScreen;
         characterOption = null;
-    }
-
-    private void openResetDialog() {
-        currentDialog = (PCLYesNoConfirmationEffect) new PCLYesNoConfirmationEffect(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialConfirm)
-                .addCallback(() -> {
-                    data.config.resetTutorial();
-                });
     }
 
     private void openInfo() {
@@ -197,6 +198,13 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         if (loadout != null && characterOption != null && data != null) {
             PGR.loadoutEditor.open(loadout, data, characterOption, () -> refresh(characterOption));
         }
+    }
+
+    private void openResetDialog() {
+        currentDialog = (PCLYesNoConfirmationEffect) new PCLYesNoConfirmationEffect(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialConfirm)
+                .addCallback(() -> {
+                    data.config.resetTutorial();
+                });
     }
 
     private void openSeriesSelect() {
@@ -347,14 +355,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
-    public void renderRelicInfo(SpriteBatch sb) {
-        if (cachedRelics != null) {
-            for (AbstractRelic r : cachedRelics) {
-                r.renderWithoutAmount(sb, Color.WHITE);
-            }
-        }
-    }
-
     public void renderImpl(SpriteBatch sb) {
         seriesButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
@@ -394,13 +394,21 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 geditor.tryUpdate();
             }
             if (cachedRelics != null && characterOption != null) {
-                for(int i = 0; i < cachedRelics.size(); i++) {
+                for (int i = 0; i < cachedRelics.size(); i++) {
                     AbstractRelic r = cachedRelics.get(i);
                     r.currentX = getInfoX() + i * 72.0F * Settings.scale * (1.01F - 0.019F * cachedRelics.size());
                     r.currentY = getInfoY() - 60.0F * Settings.scale;
                     r.hb.move(r.currentX, r.currentY);
                     r.hb.update();
                 }
+            }
+        }
+    }
+
+    public void renderRelicInfo(SpriteBatch sb) {
+        if (cachedRelics != null) {
+            for (AbstractRelic r : cachedRelics) {
+                r.renderWithoutAmount(sb, Color.WHITE);
             }
         }
     }
@@ -432,13 +440,5 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 return;
             }
         }
-    }
-
-    protected float getInfoX() {
-        return EUIClassUtils.getField(characterOption, "infoX");
-    }
-
-    protected float getInfoY() {
-        return EUIClassUtils.getField(characterOption, "infoY");
     }
 }

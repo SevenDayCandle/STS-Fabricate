@@ -36,11 +36,42 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         super(data, xPos, yPos);
     }
 
+    public void acquireTarget() {
+        if (card.pclTarget.targetsRandom()) {
+            target = GameUtilities.getRandomEnemy(true);
+        }
+        if (target == null || GameUtilities.isDeadOrEscaped(target)) {
+            target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);
+        }
+        this.card.calculateCardDamage(GameUtilities.asMonster(target));
+    }
+
     @Override
     public void atEndOfRound() {
         super.atEndOfRound();
         for (AbstractPower p : powers) {
             p.atEndOfRound();
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (this.animation != null) {
+            super.render(sb);
+        }
+        if (isHovered()) {
+            renderTip(sb);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (card != null) {
+            this.card.currentHealth = this.currentHealth;
+            if (this.animation instanceof PCLAllyAnimation) {
+                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
+            }
         }
     }
 
@@ -53,17 +84,6 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
             card.useEffectsWithoutPowers(info);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
             applyTurnPowers();
-        }
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (card != null) {
-            this.card.currentHealth = this.currentHealth;
-            if (this.animation instanceof PCLAllyAnimation) {
-                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
-            }
         }
     }
 
@@ -156,35 +176,15 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         }
     }
 
-    public void acquireTarget() {
-        if (card.pclTarget.targetsRandom()) {
-            target = GameUtilities.getRandomEnemy(true);
-        }
-        if (target == null || GameUtilities.isDeadOrEscaped(target)) {
-            target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);
-        }
-        this.card.calculateCardDamage(GameUtilities.asMonster(target));
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (this.animation != null) {
-            super.render(sb);
-        }
-        if (isHovered()) {
-            renderTip(sb);
+    public void renderHealth(SpriteBatch sb) {
+        if (hasCard()) {
+            super.renderHealth(sb);
         }
     }
 
     public void renderName(SpriteBatch sb) {
         if (hasCard()) {
             super.renderName(sb);
-        }
-    }
-
-    public void renderHealth(SpriteBatch sb) {
-        if (hasCard()) {
-            super.renderHealth(sb);
         }
     }
 

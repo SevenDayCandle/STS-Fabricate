@@ -30,6 +30,15 @@ import java.util.Map;
 public class AbstractDungeonPatches {
     public static boolean filterCardGroupForValid;
 
+    // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
+    protected static AbstractCard tryReturnCard(AbstractCard card) {
+        if (card == null) {
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card from specified rarity");
+            return new QuestionMark();
+        }
+        return card;
+    }
+
     @SpirePatch(clz = AbstractDungeon.class, method = "getMonsterForRoomCreation")
     public static class AbstractDungeonPatches_GetMonsterForRoomCreation {
         @SpirePostfixPatch
@@ -107,57 +116,57 @@ public class AbstractDungeonPatches {
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardFromPool", optional = true)
     public static class AbstractDungeonPatches_GetCardFromPool {
-        @SpirePrefixPatch
-        public static void prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
-            filterCardGroupForValid = true;
-        }
-
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
             return tryReturnCard(found);
+        }
+
+        @SpirePrefixPatch
+        public static void prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
+            filterCardGroupForValid = true;
         }
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards {
-        @SpirePrefixPatch
-        public static void prefix(AbstractCard.CardRarity rarity) {
-            filterCardGroupForValid = true;
-        }
-
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
             return tryReturnCard(found);
+        }
+
+        @SpirePrefixPatch
+        public static void prefix(AbstractCard.CardRarity rarity) {
+            filterCardGroupForValid = true;
         }
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class, Random.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards2 {
-        @SpirePrefixPatch
-        public static void prefix(AbstractCard.CardRarity rarity, Random rng) {
-            filterCardGroupForValid = true;
-        }
-
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
             return tryReturnCard(found);
+        }
+
+        @SpirePrefixPatch
+        public static void prefix(AbstractCard.CardRarity rarity, Random rng) {
+            filterCardGroupForValid = true;
         }
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardWithoutRng", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetCardWithoutRng {
-        @SpirePrefixPatch
-        public static void prefix(AbstractCard.CardRarity rarity) {
-            filterCardGroupForValid = true;
-        }
-
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
             return tryReturnCard(found);
+        }
+
+        @SpirePrefixPatch
+        public static void prefix(AbstractCard.CardRarity rarity) {
+            filterCardGroupForValid = true;
         }
     }
 
@@ -170,7 +179,7 @@ public class AbstractDungeonPatches {
 
         // This must be initialized before the battle starts
         @SpireInsertPatch(
-                locator=Locator.class
+                locator = Locator.class
         )
         public static void Insert(AbstractDungeon __instance) {
             CombatManager.onBattleStart();
@@ -182,14 +191,5 @@ public class AbstractDungeonPatches {
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }
-    }
-
-    // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-    protected static AbstractCard tryReturnCard(AbstractCard card) {
-        if (card == null) {
-            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card from specified rarity");
-            return new QuestionMark();
-        }
-        return card;
     }
 }

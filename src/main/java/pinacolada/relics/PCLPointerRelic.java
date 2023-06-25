@@ -89,34 +89,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
-    public void atPreBattle() {
-        super.atPreBattle();
-        subscribe();
-    }
-
-    @Override
-    public void onVictory() {
-        super.onVictory();
-        unsubscribe();
-    }
-
-    @Override
-    public void atBattleStart() {
-        super.atBattleStart();
-        for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnStartOfBattleForRelic();
-        }
-    }
-
-    @Override
-    public void atTurnStart() {
-        super.atTurnStart();
-        if (triggerCondition != null) {
-            triggerCondition.refresh(true, true);
-        }
-    }
-
-    @Override
     public void onEquip() {
         super.onEquip();
         for (PSkill<?> effect : getEffects()) {
@@ -135,6 +107,33 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
+    public void atPreBattle() {
+        super.atPreBattle();
+        subscribe();
+    }
+
+    @Override
+    public void onVictory() {
+        super.onVictory();
+        unsubscribe();
+    }
+
+    @Override
+    public PCLPointerRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            for (PSkill<?> ef : getPowerEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            updateDescription(null);
+        }
+        return this;
+    }
+
+    @Override
     public String getID() {
         return relicId;
     }
@@ -142,6 +141,11 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     @Override
     public Skills getSkills() {
         return skills;
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
     }
 
     @Override
@@ -178,11 +182,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
-    @Override
-    public int timesUpgraded() {
-        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
-    }
-
     protected void unsubscribe() {
         if (triggerCondition != null) {
             triggerCondition = null;
@@ -206,18 +205,19 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
-    public PCLPointerRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            updateDescription(null);
+    public void atBattleStart() {
+        super.atBattleStart();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnStartOfBattleForRelic();
         }
-        return this;
+    }
+
+    @Override
+    public void atTurnStart() {
+        super.atTurnStart();
+        if (triggerCondition != null) {
+            triggerCondition.refresh(true, true);
+        }
     }
 
     public float atDamageModify(float block, AbstractCard c) {

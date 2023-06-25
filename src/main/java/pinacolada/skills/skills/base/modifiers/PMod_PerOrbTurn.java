@@ -46,13 +46,6 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        List<AbstractOrb> orbs = fields.random ? AbstractDungeon.actionManager.orbsChanneledThisCombat : AbstractDungeon.actionManager.orbsChanneledThisTurn;
-        return (fields.orbs.isEmpty() ? orbs.size() :
-                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_xPerYZ(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.channel.past());
     }
@@ -61,6 +54,13 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerRBoolean(editor, TEXT.cedit_combat, null);
+    }
+
+    @Override
+    public int getMultiplier(PCLUseInfo info) {
+        List<AbstractOrb> orbs = fields.random ? AbstractDungeon.actionManager.orbsChanneledThisCombat : AbstractDungeon.actionManager.orbsChanneledThisTurn;
+        return (fields.orbs.isEmpty() ? orbs.size() :
+                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));
     }
 
     @Override

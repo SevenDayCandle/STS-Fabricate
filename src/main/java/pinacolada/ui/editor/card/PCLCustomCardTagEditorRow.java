@@ -117,25 +117,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         }
     }
 
-    public boolean update(boolean isInRange, boolean isSelected) {
-        this.hb.update();
-        this.label.updateImpl();
-        this.checkbox.updateImpl();
-        this.isSelected = isSelected;
-        if (isSelected) {
-            decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).updateImpl();
-            decreaseButton2.setInteractable(displayValue2.getCachedValue() > displayValue.getMin()).updateImpl();
-            increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).updateImpl();
-            increaseButton2.setInteractable(displayValue2.getCachedValue() < displayValue.getMax()).updateImpl();
-            displayValue.updateImpl();
-            displayValue2.updateImpl();
-        }
-        if (!isInRange) {
-            return false;
-        }
-        return tryHover(isSelected);
-    }
-
     protected boolean tryHover(boolean isSelected) {
         if (!isComponentHovered() && this.hb.hovered) {
             this.label.setColor(Settings.GREEN_TEXT_COLOR);
@@ -161,6 +142,25 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
             return true;
         }
         return false;
+    }
+
+    public boolean update(boolean isInRange, boolean isSelected) {
+        this.hb.update();
+        this.label.updateImpl();
+        this.checkbox.updateImpl();
+        this.isSelected = isSelected;
+        if (isSelected) {
+            decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).updateImpl();
+            decreaseButton2.setInteractable(displayValue2.getCachedValue() > displayValue.getMin()).updateImpl();
+            increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).updateImpl();
+            increaseButton2.setInteractable(displayValue2.getCachedValue() < displayValue.getMax()).updateImpl();
+            displayValue.updateImpl();
+            displayValue2.updateImpl();
+        }
+        if (!isInRange) {
+            return false;
+        }
+        return tryHover(isSelected);
     }
 
     public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {

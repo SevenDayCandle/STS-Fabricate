@@ -40,9 +40,6 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         return this;
     }
 
-    // Obtains the target and numerical values from the given card
-    public abstract PCardPrimary<T> setProvider(PointerProvider card);
-
     // We want to execute active mods first because they affect card output, but we want the PCardPrimary to be the parent in order to ensure type safety in the skills object
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
@@ -56,6 +53,9 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
             super.use(info, order);
         }
     }
+
+    // Obtains the target and numerical values from the given card
+    public abstract PCardPrimary<T> setProvider(PointerProvider card);
 
     protected abstract void useImpl(PCLUseInfo info, PCLActions order);
 }

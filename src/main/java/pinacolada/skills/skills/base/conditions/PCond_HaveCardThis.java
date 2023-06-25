@@ -36,10 +36,6 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
-    abstract public EUIKeywordTooltip getActionTooltip();
-
-    abstract public List<AbstractCard> getCardPile();
-
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_ifX(EUIRM.strings.verbNoun(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard));
@@ -63,4 +59,8 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
+
+    abstract public EUIKeywordTooltip getActionTooltip();
+
+    abstract public List<AbstractCard> getCardPile();
 }

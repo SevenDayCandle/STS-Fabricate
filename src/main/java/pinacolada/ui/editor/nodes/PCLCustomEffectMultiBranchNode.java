@@ -10,13 +10,11 @@ public class PCLCustomEffectMultiBranchNode extends PCLCustomEffectMultiCondNode
         super(editor, skill, type, sourceHb);
     }
 
-    protected float getOffsetX()
-    {
+    protected float getOffsetX() {
         return SIZE_X * 2.2f;
     }
 
-    protected float getOffsetY()
-    {
+    protected float getOffsetY() {
         return SIZE_Y * 0.5f;
     }
 }

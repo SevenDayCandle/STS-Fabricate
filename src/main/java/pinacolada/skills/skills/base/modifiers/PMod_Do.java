@@ -55,8 +55,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return action;
     }
 
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
-
     protected String getActionPast() {
         return getActionTooltip().past;
     }
@@ -64,8 +62,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
-
-    public abstract EUIKeywordTooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {
@@ -88,12 +84,10 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         fields.registerRequired(editor);
     }
 
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
-        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
-                c -> fields.getFullCardFilter().invoke(c)
-        )));
+    public String getMoveString(boolean addPeriod) {
+        String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
     }
 
     @Override
@@ -116,10 +110,12 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 });
     }
 
-    public String getMoveString(boolean addPeriod) {
-        String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
-        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
+        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
+                c -> fields.getFullCardFilter().invoke(c)
+        )));
     }
 
     protected boolean isChildEffectUsingParent() {
@@ -130,4 +126,8 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     protected boolean isForced() {
         return fields.forced || isChildEffectUsingParent();
     }
+
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+
+    public abstract EUIKeywordTooltip getActionTooltip();
 }

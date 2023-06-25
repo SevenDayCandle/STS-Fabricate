@@ -57,16 +57,16 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        AbstractDungeon.player.heal(amount);
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             order.heal(info.source, t, amount);
         }
         super.use(info, order);
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        AbstractDungeon.player.heal(amount);
     }
 }

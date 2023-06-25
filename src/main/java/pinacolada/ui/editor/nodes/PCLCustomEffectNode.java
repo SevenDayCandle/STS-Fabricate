@@ -72,8 +72,7 @@ public class PCLCustomEffectNode extends EUIButton {
             initializeDefaultSkill();
         }
 
-        if (this.skill != null)
-        {
+        if (this.skill != null) {
             refresh();
         }
         setOnClick(this::startEdit);
@@ -118,8 +117,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     protected void extractSelf() {
         if (parent != null) {
-            if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill))
-            {
+            if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill)) {
                 if (child != null) {
                     ((PMultiBase<?>) parent.skill).tryAddEffect(child.skill);
                 }
@@ -131,11 +129,9 @@ public class PCLCustomEffectNode extends EUIButton {
                 parent.skill.setChild((PSkill<?>) null);
             }
         }
-        else if (editor.rootEffect == this.skill)
-        {
+        else if (editor.rootEffect == this.skill) {
             editor.rootEffect = new PRoot();
-            if (child != null)
-            {
+            if (child != null) {
                 editor.rootEffect.setChild(child.skill);
             }
         }
@@ -151,8 +147,21 @@ public class PCLCustomEffectNode extends EUIButton {
         return effects;
     }
 
-    public void initializeDefaultSkill()
-    {
+    protected EUIHeaderlessTooltip getWarningTooltip() {
+        StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+
+        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill))) {
+            sj.add(PGR.core.strings.cetut_primaryWarning);
+        }
+        if (skill == null) {
+            sj.add(PGR.core.strings.cetut_corruptedWarning);
+        }
+
+        String res = sj.toString();
+        return StringUtils.isEmpty(res) ? null : new EUIHeaderlessTooltip(res);
+    }
+
+    public void initializeDefaultSkill() {
         getEffects();
         this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef));
 
@@ -160,8 +169,7 @@ public class PCLCustomEffectNode extends EUIButton {
             try {
                 this.skill = effects.size() > 0 ? effects.get(0) : type.getSkillClass().newInstance();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 this.skill = new PRoot();
             }
         }
@@ -178,6 +186,43 @@ public class PCLCustomEffectNode extends EUIButton {
             child.parent = this;
         }
         return this.child;
+    }
+
+    protected void onClickStart() {
+        super.onClickStart();
+        dragging = true;
+    }
+
+    protected void onLeftClick() {
+        super.onLeftClick();
+        dragging = false;
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        if (child != null) {
+            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
+            child.renderImpl(sb);
+        }
+        super.renderImpl(sb);
+        deleteButton.render(sb);
+        warningImage.render(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        if (child != null) {
+            child.updateImpl();
+        }
+        if (dragging && !hb.hovered && hologram == null) {
+            hologram = PCLCustomEffectHologram.queue(this.background, this::onHologramRelease);
+        }
+        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
+            PCLCustomEffectHologram.setHighlighted(this);
+        }
+        deleteButton.update();
+        warningImage.update();
     }
 
     protected void onHologramRelease(PCLCustomEffectHologram hologram) {
@@ -218,22 +263,6 @@ public class PCLCustomEffectNode extends EUIButton {
         warningImage.setActive(warningImage.tooltip != null);
     }
 
-    protected EUIHeaderlessTooltip getWarningTooltip() {
-        StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
-
-        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill)))
-        {
-            sj.add(PGR.core.strings.cetut_primaryWarning);
-        }
-        if (skill == null)
-        {
-            sj.add(PGR.core.strings.cetut_corruptedWarning);
-        }
-
-        String res = sj.toString();
-        return StringUtils.isEmpty(res) ? null : new EUIHeaderlessTooltip(res);
-    }
-
     public void refreshAll() {
         refresh();
         if (child != null) {
@@ -241,54 +270,15 @@ public class PCLCustomEffectNode extends EUIButton {
         }
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        if (child != null) {
-            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
-            child.renderImpl(sb);
-        }
-        super.renderImpl(sb);
-        deleteButton.render(sb);
-        warningImage.render(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        if (child != null) {
-            child.updateImpl();
-        }
-        if (dragging && !hb.hovered && hologram == null) {
-            hologram = PCLCustomEffectHologram.queue(this.background, this::onHologramRelease);
-        }
-        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
-            PCLCustomEffectHologram.setHighlighted(this);
-        }
-        deleteButton.update();
-        warningImage.update();
-    }
-
-    protected void onClickStart() {
-        super.onClickStart();
-        dragging = true;
-    }
-
-    protected void onLeftClick() {
-        super.onLeftClick();
-        dragging = false;
-    }
-
     public void replaceSkill(PSkill<?> skill) {
         skill.setChild(this.skill.getChild());
         this.skill = skill;
         if (parent != null) {
-            if (!(this.parent.skill instanceof PMultiBase) || !((PMultiBase<?>) this.parent.skill).tryReplaceEffect(skill, index))
-            {
+            if (!(this.parent.skill instanceof PMultiBase) || !((PMultiBase<?>) this.parent.skill).tryReplaceEffect(skill, index)) {
                 this.parent.skill.setChild(skill);
             }
         }
-        else if (this.skill instanceof PPrimary)
-        {
+        else if (this.skill instanceof PPrimary) {
             this.editor.rootEffect = (PPrimary<?>) this.skill;
         }
     }
@@ -311,7 +301,8 @@ public class PCLCustomEffectNode extends EUIButton {
         Attack,
         Block,
         Proxy,
-        Root,;
+        Root,
+        ;
 
         // Overriding classes are listed later in the enum
         public static NodeType getTypeForSkill(PSkill<?> skill) {
@@ -325,8 +316,7 @@ public class PCLCustomEffectNode extends EUIButton {
         }
 
         public boolean canRemove() {
-            switch (this)
-            {
+            switch (this) {
                 case Root:
                 case Proxy:
                     return false;
@@ -359,6 +349,31 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PCLCustomEffectProxyNode.FADE_COLOR.cpy();
             }
             return Color.WHITE.cpy();
+        }
+
+        public String getDescription() {
+            switch (this) {
+                case Cond:
+                    return PGR.core.strings.cetut_effectCondition;
+                case Multicond:
+                    return PGR.core.strings.cetut_effectMultiCondition;
+                case Branchcond:
+                    return PGR.core.strings.cetut_effectBranchCondition;
+                case Mod:
+                    return PGR.core.strings.cetut_effectModifier;
+                case Move:
+                    return PGR.core.strings.cetut_effectEffect;
+                case Multimove:
+                    return PGR.core.strings.cetut_effectChoices;
+                case Delay:
+                    return PGR.core.strings.cetut_effectTurnDelay;
+                case Limit:
+                case Trigger:
+                case Attack:
+                case Block:
+                    return PGR.core.strings.cetut_effectPrimary;
+            }
+            return "";
         }
 
         // Because PCond/PMod/PMove cannot be reified further
@@ -397,7 +412,7 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Limit:
                     return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PLimit.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PLimit.class, PShift.class));
                 case Trigger:
-                   return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
+                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
             }
             return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(getSkillClass()) : PSkill.getEligibleEffects(color, getSkillClass()));
         }
@@ -447,31 +462,6 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Attack:
                 case Block:
                     return PGR.core.strings.cedit_primary;
-            }
-            return "";
-        }
-
-        public String getDescription() {
-            switch (this) {
-                case Cond:
-                    return PGR.core.strings.cetut_effectCondition;
-                case Multicond:
-                    return PGR.core.strings.cetut_effectMultiCondition;
-                case Branchcond:
-                    return PGR.core.strings.cetut_effectBranchCondition;
-                case Mod:
-                    return PGR.core.strings.cetut_effectModifier;
-                case Move:
-                    return PGR.core.strings.cetut_effectEffect;
-                case Multimove:
-                    return PGR.core.strings.cetut_effectChoices;
-                case Delay:
-                    return PGR.core.strings.cetut_effectTurnDelay;
-                case Limit:
-                case Trigger:
-                case Attack:
-                case Block:
-                    return PGR.core.strings.cetut_effectPrimary;
             }
             return "";
         }

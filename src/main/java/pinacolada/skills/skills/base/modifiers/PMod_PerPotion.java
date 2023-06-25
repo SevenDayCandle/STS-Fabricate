@@ -27,8 +27,8 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return (EUIUtils.count(AbstractDungeon.player.potions, r -> fields.getFullPotionFilter().invoke(r)));
+    public String getSubText() {
+        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
     }
 
     @Override
-    public String getSubText() {
-        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString();
+    public int getMultiplier(PCLUseInfo info) {
+        return (EUIUtils.count(AbstractDungeon.player.potions, r -> fields.getFullPotionFilter().invoke(r)));
     }
 }

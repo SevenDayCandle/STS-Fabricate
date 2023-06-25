@@ -26,6 +26,22 @@ public enum PCLAugmentCategory implements CountingPanelItem {
         this.color = color;
     }
 
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public int getRank(AbstractCard c) {
+        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
+        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
+    }
+
+    @Override
+    public Texture getIcon() {
+        return PCLCoreImages.CardUI.augment.texture();
+    }
+
     public String getName() {
         switch (this) {
             case Summon:
@@ -40,22 +56,6 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                 return RunHistoryScreen.TEXT[15];
         }
         return AbstractCard.TEXT[5];
-    }
-
-    @Override
-    public int getRank(AbstractCard c) {
-        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
-        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
-    }
-
-    @Override
-    public Color getColor() {
-        return color;
-    }
-
-    @Override
-    public Texture getIcon() {
-        return PCLCoreImages.CardUI.augment.texture();
     }
 
     public boolean isTypeValid(AbstractCard.CardType type) {

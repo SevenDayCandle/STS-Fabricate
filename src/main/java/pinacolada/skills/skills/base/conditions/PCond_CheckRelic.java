@@ -28,7 +28,7 @@ public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count =  EUIUtils.count(AbstractDungeon.player.relics, c -> fields.getFullRelicFilter().invoke(c));
+        int count = EUIUtils.count(AbstractDungeon.player.relics, c -> fields.getFullRelicFilter().invoke(c));
         return amount == 0 ? count == 0 : fields.random ^ count >= amount;
     }
 

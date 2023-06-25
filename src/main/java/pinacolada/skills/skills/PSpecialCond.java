@@ -26,12 +26,12 @@ public class PSpecialCond extends PCustomCond {
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return onUse.invoke(this, info, isUsing);
+    public PSpecialCond makeCopy() {
+        return new PSpecialCond(cardData, descIndex, onUse, amount, extra);
     }
 
     @Override
-    public PSpecialCond makeCopy() {
-        return new PSpecialCond(cardData, descIndex, onUse, amount, extra);
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return onUse.invoke(this, info, isUsing);
     }
 }

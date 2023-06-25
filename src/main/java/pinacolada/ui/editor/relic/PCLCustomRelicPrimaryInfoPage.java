@@ -143,15 +143,6 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
-    }
-
-    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
                 idInput.makeTour(true),
@@ -159,6 +150,15 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 languageDropdown.makeTour(true),
                 tierDropdown.makeTour(true),
                 sfxDropdown.makeTour(true));
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
     }
 
     @Override
@@ -174,19 +174,6 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public void updateImpl() {
-        header.tryUpdate();
-        idWarning.tryUpdate();
-        tierDropdown.tryUpdate();
-        sfxDropdown.tryUpdate();
-        languageDropdown.tryUpdate();
-        nameInput.tryUpdate();
-        idInput.tryUpdate();
-        maxUpgrades.tryUpdate();
-        branchUpgrades.tryUpdate();
-    }
-
-    @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
@@ -197,6 +184,19 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryRender(sb);
         maxUpgrades.tryRender(sb);
         branchUpgrades.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        header.tryUpdate();
+        idWarning.tryUpdate();
+        tierDropdown.tryUpdate();
+        sfxDropdown.tryUpdate();
+        languageDropdown.tryUpdate();
+        nameInput.tryUpdate();
+        idInput.tryUpdate();
+        maxUpgrades.tryUpdate();
+        branchUpgrades.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

@@ -46,11 +46,6 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
     }
 
     @Override
-    public AbstractCardModifier makeCopy() {
-        return new TemporaryDamageModifier(change, removeOnPlay, temporary);
-    }
-
-    @Override
     public boolean removeOnCardPlayed(AbstractCard card) {
         return removeOnPlay;
     }
@@ -61,5 +56,10 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
 
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         return damage + change;
+    }
+
+    @Override
+    public AbstractCardModifier makeCopy() {
+        return new TemporaryDamageModifier(change, removeOnPlay, temporary);
     }
 }

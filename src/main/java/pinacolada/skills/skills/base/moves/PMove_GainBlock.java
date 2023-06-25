@@ -47,6 +47,11 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (amount < 0) {
             for (AbstractCreature c : getTargetList(info)) {
@@ -60,10 +65,5 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
         }
 
         super.use(info, order);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return String.valueOf(Math.abs(input));
     }
 }

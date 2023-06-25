@@ -72,7 +72,8 @@ public class PCLValueEditor extends EUIHoverable {
             tip.setFlash(this.displayValue.image);
             tip.setCanDismiss(canDismiss);
             return tip;
-        } else {
+        }
+        else {
             return null;
         }
     }

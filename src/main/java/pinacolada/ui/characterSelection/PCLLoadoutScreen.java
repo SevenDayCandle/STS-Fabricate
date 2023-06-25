@@ -43,7 +43,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected int preset;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?,?> data;
+    protected PCLAbstractPlayerData<?, ?> data;
     protected PCLCardSlotSelectionEffect cardSelectionEffect;
     protected PCLRelicSlotSelectionEffect relicSelectionEffect;
     protected EUILabel startingDeck;
@@ -313,24 +313,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         contextMenu.tryUpdate();
     }
 
-    public void updateValidation() {
-        val.refresh(presets[preset]);
-
-        hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel));
-        hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
-        cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        cardsvalueText.setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-
-        saveButton.setInteractable(val.isValid);
-        if (val.isValid) {
-            saveButton.setTooltip(null);
-        }
-        else {
-            saveButton.setTooltip(new EUITooltip(PGR.core.strings.loadout_invalidLoadout, val.getFailingString()));
-        }
-    }
-
-    public void open(PCLLoadout loadout, PCLAbstractPlayerData<?,?> data, CharacterOption option, ActionT0 onClose) {
+    public void open(PCLLoadout loadout, PCLAbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
         for (int i = 0; i < loadout.presets.length; i++) {
@@ -448,6 +431,23 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void trySelectRelic(PCLRelicSlot relicSlot) {
         relicSelectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
         setSlotsActive(false);
+    }
+
+    public void updateValidation() {
+        val.refresh(presets[preset]);
+
+        hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel));
+        hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
+        cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        cardsvalueText.setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+
+        saveButton.setInteractable(val.isValid);
+        if (val.isValid) {
+            saveButton.setTooltip(null);
+        }
+        else {
+            saveButton.setTooltip(new EUITooltip(PGR.core.strings.loadout_invalidLoadout, val.getFailingString()));
+        }
     }
 
     public enum ContextOption {

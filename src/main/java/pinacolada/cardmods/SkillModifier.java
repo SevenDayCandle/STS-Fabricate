@@ -34,48 +34,19 @@ public class SkillModifier extends AbstractCardModifier {
         this.serialized = skill.serialize();
     }
 
+    public static ArrayList<? extends SkillModifier> getAll(AbstractCard c) {
+        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, SkillModifier.class));
+    }
+
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {
-        if (info == null)
-        {
+        if (info == null) {
             info = CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, target);
         }
         return info;
     }
 
-    public PCLUseInfo refreshInfo(AbstractCard card, AbstractCreature target)
-    {
-        info = null;
-        return getInfo(card, target);
-    }
-
-    public static ArrayList<? extends SkillModifier> getAll(AbstractCard c) {
-        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, SkillModifier.class));
-    }
-
     public PSkill<?> getSkill() {
         return skill;
-    }
-
-    @Override
-    public void onInitialApplication(AbstractCard card) {
-        if (card instanceof PointerProvider)
-        {
-            skill.setSource((PointerProvider) card);
-        }
-        else
-        {
-            skill.sourceCard = card;
-        }
-    }
-
-    @Override
-    public void onApplyPowers(AbstractCard card) {
-        info = refreshInfo(card, null);
-    }
-
-    @Override
-    public void onCalculateCardDamage(AbstractCard card, AbstractMonster mo) {
-        info = refreshInfo(card, mo);
     }
 
     @Override
@@ -107,6 +78,26 @@ public class SkillModifier extends AbstractCardModifier {
         skill.triggerOnExhaust(card);
     }
 
+    @Override
+    public void onInitialApplication(AbstractCard card) {
+        if (card instanceof PointerProvider) {
+            skill.setSource((PointerProvider) card);
+        }
+        else {
+            skill.sourceCard = card;
+        }
+    }
+
+    @Override
+    public void onApplyPowers(AbstractCard card) {
+        info = refreshInfo(card, null);
+    }
+
+    @Override
+    public void onCalculateCardDamage(AbstractCard card, AbstractMonster mo) {
+        info = refreshInfo(card, mo);
+    }
+
     public void onOtherCardPlayed(AbstractCard card, AbstractCard otherCard, CardGroup group) {
         skill.triggerOnOtherCardPlayed(otherCard);
     }
@@ -125,11 +116,6 @@ public class SkillModifier extends AbstractCardModifier {
         return skill.effectID + skill.getUUID();
     }
 
-    public boolean pclCanPlayCard(AbstractCard card)
-    {
-        return skill.canPlay(getInfo(card, null));
-    }
-
     public void onDiscard(AbstractCard card) {
         skill.triggerOnDiscard(card);
     }
@@ -140,5 +126,14 @@ public class SkillModifier extends AbstractCardModifier {
 
     public void onReshuffled(AbstractCard card, CardGroup group) {
         skill.triggerOnReshuffle(card, group);
+    }
+
+    public boolean pclCanPlayCard(AbstractCard card) {
+        return skill.canPlay(getInfo(card, null));
+    }
+
+    public PCLUseInfo refreshInfo(AbstractCard card, AbstractCreature target) {
+        info = null;
+        return getInfo(card, target);
     }
 }

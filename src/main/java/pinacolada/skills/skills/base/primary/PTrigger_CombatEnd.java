@@ -40,20 +40,13 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_atEndOfCombat() + ": ";
-    }
-
-    @Override
-    public void onBattleEnd() {
-        if (this.childEffect != null) {
-            this.childEffect.useOutsideOfBattle();
-        }
-    }
-
-    @Override
     public void subscribeChildren() {
         subscribeToAll();
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.cond_atEndOfCombat() + ": ";
     }
 
     @Override
@@ -62,5 +55,12 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
                 skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof OutOfCombatMove;
+    }
+
+    @Override
+    public void onBattleEnd() {
+        if (this.childEffect != null) {
+            this.childEffect.useOutsideOfBattle();
+        }
     }
 }

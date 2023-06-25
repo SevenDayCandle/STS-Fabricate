@@ -28,6 +28,24 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
         setOnClick(this::startEdit);
     }
 
+    // For root nodes, we should show triggers while underneath a power or relic
+    public List<PSkill> getEffects() {
+        if (effects == null) {
+            NodeType targetType =
+                    editor instanceof PCLCustomAttackEffectPage ? NodeType.Attack :
+                            editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
+                                    editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
+            effects = EUIUtils.map(targetType.getSkills(editor.screen.getBuilder().getCardColor()),
+                    bc -> bc.scanForTips(bc.getSampleText(editor.rootEffect)));
+        }
+        return effects;
+    }
+
+    public void initializeDefaultSkill() {
+        getEffects();
+        this.skill = new PRoot();
+    }
+
     public PCLCustomEffectNode makeSkillChild() {
         PSkill<?> sc = skill.getChild();
         if (sc != null) {
@@ -37,37 +55,17 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
         return this.child;
     }
 
-    // For root nodes, we should show triggers while underneath a power or relic
-    public List<PSkill> getEffects() {
-        if (effects == null) {
-            NodeType targetType =
-                    editor instanceof PCLCustomAttackEffectPage ? NodeType.Attack :
-                    editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
-                    editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
-            effects = EUIUtils.map(targetType.getSkills(editor.screen.getBuilder().getCardColor()),
-                    bc -> bc.scanForTips(bc.getSampleText(editor.rootEffect)));
-        }
-        return effects;
+    public void refresh() {
+        setText(skill.getSampleText(null));
+        this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
     }
 
     public void startEdit() {
         ArrayList<? extends PPrimary> effects = EUIUtils.mapAsNonnull(getEffects(), s -> EUIUtils.safeCast(s, PPrimary.class));
-        if (effects.size() > 0)
-        {
+        if (effects.size() > 0) {
             replaceSkill(effects.get(0));
             editor.fullRebuild();
             editor.startEdit(editor.root);
         }
-    }
-
-    public void initializeDefaultSkill()
-    {
-        getEffects();
-        this.skill = new PRoot();
-    }
-
-    public void refresh() {
-        setText(skill.getSampleText(null));
-        this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
     }
 }

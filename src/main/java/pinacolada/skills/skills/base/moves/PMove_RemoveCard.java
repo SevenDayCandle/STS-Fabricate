@@ -73,6 +73,12 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()));
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         order.add(fields.createAction(RemoveFromPile::new, info, extra))
                 .setFilter(c -> fields.getFullCardFilter().invoke(c))
@@ -84,11 +90,5 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
                         this.childEffect.use(info, order);
                     }
                 });
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()));
     }
 }

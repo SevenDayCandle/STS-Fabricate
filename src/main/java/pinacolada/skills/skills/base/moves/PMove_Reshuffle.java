@@ -40,16 +40,6 @@ public class PMove_Reshuffle extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return ReshuffleFromPile::new;
-    }
-
-    @Override
-    public EUIKeywordTooltip getActionTooltip() {
-        return PGR.core.tooltips.reshuffle;
-    }
-
-    @Override
     public String getSubText() {
         if (fields.destination == PCLCardSelection.Manual) {
             return super.getSubText();
@@ -59,6 +49,16 @@ public class PMove_Reshuffle extends PMove_Select<PField_CardCategory> {
                 fields.isHandOnly() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), dest) :
                         fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)
                                 : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard, dest);
+    }
+
+    @Override
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return ReshuffleFromPile::new;
+    }
+
+    @Override
+    public EUIKeywordTooltip getActionTooltip() {
+        return PGR.core.tooltips.reshuffle;
     }
 
 }

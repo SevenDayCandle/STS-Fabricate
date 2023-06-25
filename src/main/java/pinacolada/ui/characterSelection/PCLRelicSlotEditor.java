@@ -46,13 +46,20 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_remove,"")
+                .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicNameText.hb.y + 12, 48, 48))
-                .setTooltip(PGR.core.strings.loadout_change,"")
+                .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
 
         setSlot(null);
+    }
+
+    public void refreshValues() {
+        int value = slot == null ? 0 : slot.getEstimatedValue();
+        relicValueText.setLabel(value)
+                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
+        loadoutEditor.updateValidation();
     }
 
     @Override
@@ -139,13 +146,6 @@ public class PCLRelicSlotEditor extends EUIBase {
 
         refreshValues();
         return this;
-    }
-
-    public void refreshValues() {
-        int value = slot == null ? 0 : slot.getEstimatedValue();
-        relicValueText.setLabel(value)
-                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
-        loadoutEditor.updateValidation();
     }
 
     public PCLRelicSlotEditor translate(float cX, float cY) {

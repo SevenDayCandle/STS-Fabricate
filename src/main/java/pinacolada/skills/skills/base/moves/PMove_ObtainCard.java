@@ -58,7 +58,8 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         if (GameUtilities.inBattle()) {
-            use(makeInfo(getOwnerCreature()), PCLActions.top, __ -> {});
+            use(makeInfo(getOwnerCreature()), PCLActions.top, __ -> {
+            });
         }
         else {
             PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));

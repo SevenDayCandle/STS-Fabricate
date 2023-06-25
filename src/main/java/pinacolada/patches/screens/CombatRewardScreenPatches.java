@@ -29,19 +29,15 @@ public class CombatRewardScreenPatches {
     }
 
     @SpirePatch(clz = CombatRewardScreen.class, method = "setupItemReward")
-    public static class CombatRewardScreenPatches_SetupItemReward
-    {
+    public static class CombatRewardScreenPatches_SetupItemReward {
 
         @SpireInsertPatch(locator = Locator.class)
-        public static void Insert(CombatRewardScreen __instance)
-        {
+        public static void Insert(CombatRewardScreen __instance) {
             AbstractRoom currentRoom = GameUtilities.getCurrentRoom();
 
             final AbstractPlayer p = AbstractDungeon.player;
-            for (AbstractRelic r : p.relics)
-            {
-                if (r instanceof OnReceiveRewardsListener)
-                {
+            for (AbstractRelic r : p.relics) {
+                if (r instanceof OnReceiveRewardsListener) {
                     ((OnReceiveRewardsListener) r).onReceiveRewards(__instance.rewards, currentRoom);
                 }
                 if (r instanceof PointerProvider) {
@@ -51,17 +47,14 @@ public class CombatRewardScreenPatches {
                 }
             }
 
-            if (p instanceof OnReceiveRewardsListener)
-            {
+            if (p instanceof OnReceiveRewardsListener) {
                 ((OnReceiveRewardsListener) p).onReceiveRewards(__instance.rewards, currentRoom);
             }
         }
 
-        private static class Locator extends SpireInsertLocator
-        {
+        private static class Locator extends SpireInsertLocator {
             @Override
-            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception
-            {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
                 Matcher finalMatcher = new Matcher.MethodCallMatcher(CombatRewardScreen.class, "positionRewards");
                 int[] found = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
                 return new int[]{found[0]};

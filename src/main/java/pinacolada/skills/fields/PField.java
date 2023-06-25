@@ -290,12 +290,12 @@ public abstract class PField implements Serializable {
         return new ArrayList<>();
     }
 
-    public abstract PField makeCopy();
-
     public PField setSkill(PSkill<?> skill) {
         this.skill = skill;
         return this;
     }
+
+    public abstract PField makeCopy();
 
     // Enables selectors for modifying this objects fields to appear in the card editor
     public abstract void setupEditor(PCLCustomEffectEditingPane editor);

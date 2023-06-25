@@ -61,14 +61,14 @@ public interface PointerProvider {
         return getPointers().get(c - CHAR_OFFSET);
     }
 
-    default String getEffectStrings() {
-        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
-    }
-
     default String getEffectPowerTextStrings() {
         ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
         return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getPowerText));
+    }
+
+    default String getEffectStrings() {
+        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
+        return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
     }
 
     default ArrayList<PSkill<?>> getEffects() {
@@ -96,10 +96,6 @@ public interface PointerProvider {
         return fullList;
     }
 
-    String getID();
-
-    String getName();
-
     // An integer mapping to individual PSkills from anywhere in the Skills tree
     default UniqueList<PSkill<?>> getPointers() {
         return getSkills().effectTextMapping;
@@ -108,8 +104,6 @@ public interface PointerProvider {
     default ArrayList<PTrigger> getPowerEffects() {
         return getSkills().powerEffects;
     }
-
-    Skills getSkills();
 
     default AbstractCreature getSourceCreature() {
         return AbstractDungeon.player;
@@ -232,4 +226,10 @@ public interface PointerProvider {
     default int xValue() {
         return 1;
     }
+
+    String getID();
+
+    String getName();
+
+    Skills getSkills();
 }

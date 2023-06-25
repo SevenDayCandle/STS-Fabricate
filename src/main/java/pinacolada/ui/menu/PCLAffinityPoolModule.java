@@ -84,22 +84,13 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public void initializeSelection(Collection<? extends AbstractCard> cards) {
-        HashSet<PCLLoadout> availableSeries = new HashSet<>();
-        for (AbstractCard card : cards) {
-            availableSeries.add(GameUtilities.getPCLSeries(card));
-            if (card instanceof PCLCard) {
-                ((PCLCard) card).affinities.updateSortedList();
-            }
-        }
-        ArrayList<PCLLoadout> seriesItems = EUIUtils.filter(availableSeries, Objects::nonNull);
-        seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
-        seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
+    public boolean isEmpty() {
+        return currentSeries.isEmpty() && currentAffinities.isEmpty();
+    }
 
-        currentAffinities = EUIUtils.map(PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
-        initializeAffinities();
+    @Override
+    public boolean isHovered() {
+        return seriesDropdown.hb.hovered || EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
     }
 
     @Override
@@ -116,13 +107,22 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public boolean isEmpty() {
-        return currentSeries.isEmpty() && currentAffinities.isEmpty();
-    }
+    public void initializeSelection(Collection<? extends AbstractCard> cards) {
+        HashSet<PCLLoadout> availableSeries = new HashSet<>();
+        for (AbstractCard card : cards) {
+            availableSeries.add(GameUtilities.getPCLSeries(card));
+            if (card instanceof PCLCard) {
+                ((PCLCard) card).affinities.updateSortedList();
+            }
+        }
+        ArrayList<PCLLoadout> seriesItems = EUIUtils.filter(availableSeries, Objects::nonNull);
+        seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
 
-    @Override
-    public boolean isHovered() {
-        return seriesDropdown.hb.hovered || EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
+        currentAffinities = EUIUtils.map(PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
+        currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
+        currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
+        initializeAffinities();
     }
 
     @Override

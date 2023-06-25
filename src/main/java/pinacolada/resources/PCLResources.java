@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
+public abstract class PCLResources<T extends PCLAbstractPlayerData<?, ?>, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber {
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
     }.getType();
@@ -137,8 +137,6 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U exten
         return characterStrings;
     }
 
-    public abstract T getData();
-
     public FileHandle getFallbackFile(String fileName) {
         return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
     }
@@ -162,10 +160,6 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U exten
     public String getReplacement(String cardID) {
         return null;
     }
-
-    public abstract W getStrings();
-
-    public abstract V getTooltips();
 
     public UIStrings getUIStrings(String stringID) {
         return PGR.getLanguagePack().getUIString(PGR.createID(id, stringID));
@@ -274,4 +268,10 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U exten
         tooltips = getTooltips();
         strings = getStrings();
     }
+
+    public abstract T getData();
+
+    public abstract W getStrings();
+
+    public abstract V getTooltips();
 }

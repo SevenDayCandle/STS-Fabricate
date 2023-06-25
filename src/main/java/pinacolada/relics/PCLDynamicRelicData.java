@@ -104,6 +104,26 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return new PCLDynamicRelic(this);
     }
 
+    @Override
+    public AbstractCard.CardColor getCardColor() {
+        return cardColor;
+    }
+
+    @Override
+    public ArrayList<PSkill<?>> getMoves() {
+        return moves;
+    }
+
+    @Override
+    public ArrayList<PTrigger> getPowers() {
+        return powers;
+    }
+
+    @Override
+    public PCLDynamicRelicData makeCopy() {
+        return new PCLDynamicRelicData(this);
+    }
+
     public RelicStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -120,6 +140,12 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return this;
     }
 
+    public PCLDynamicRelicData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
+        return this;
+    }
+
     public PCLDynamicRelicData setID(String fullID) {
         this.ID = fullID;
         return this;
@@ -127,12 +153,6 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
 
     public PCLDynamicRelicData setImage(Texture portraitImage) {
         this.portraitImage = portraitImage;
-
-        return this;
-    }
-
-    public PCLDynamicRelicData setImagePath(String imagePath) {
-        this.imagePath = imagePath;
 
         return this;
     }
@@ -179,25 +199,5 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
 
     public PCLDynamicRelicData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
-    }
-
-    @Override
-    public AbstractCard.CardColor getCardColor() {
-        return cardColor;
-    }
-
-    @Override
-    public ArrayList<PSkill<?>> getMoves() {
-        return moves;
-    }
-
-    @Override
-    public ArrayList<PTrigger> getPowers() {
-        return powers;
-    }
-
-    @Override
-    public PCLDynamicRelicData makeCopy() {
-        return new PCLDynamicRelicData(this);
     }
 }

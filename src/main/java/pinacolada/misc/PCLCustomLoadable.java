@@ -54,8 +54,6 @@ public abstract class PCLCustomLoadable {
         return getCustomFolder(getSubfolderPath());
     }
 
-    abstract protected String getSubfolderPath();
-
     protected String makeFilePath() {
         return getBaseFolderPath() + "/" + ID + ".json";
     }
@@ -67,4 +65,6 @@ public abstract class PCLCustomLoadable {
     protected String makeMigrationImagePath() {
         return FOLDER + "/" + ID + ".png";
     }
+
+    abstract protected String getSubfolderPath();
 }

@@ -46,13 +46,9 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         fields.setCardGroup(h);
     }
 
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
-
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
-
-    public abstract EUITooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {
@@ -70,8 +66,8 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     public String getSubText() {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
                 fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString()) :
-                fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
-                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+                        fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
+                                : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
     }
 
     @Override
@@ -92,6 +88,10 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
                     }
                 });
     }
+
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+
+    public abstract EUITooltip getActionTooltip();
 
 
 }

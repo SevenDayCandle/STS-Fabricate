@@ -25,10 +25,17 @@ import java.util.Arrays;
 public abstract class PCLTutorialMonster extends PCLCreature implements TourProvider {
     public static ArrayList<TutorialInfo> tutorials = new ArrayList<>();
     public static STSConfigItem<Boolean> currentConfig;
-
+    protected EUITourTooltip waitingTip;
     public ArrayList<FuncT0<EUITourTooltip>> steps = new ArrayList<>();
     public int current;
-    protected EUITourTooltip waitingTip;
+
+    public PCLTutorialMonster(PCLCreatureData data) {
+        super(data);
+    }
+
+    public PCLTutorialMonster(PCLCreatureData data, float offsetX, float offsetY) {
+        super(data, offsetX, offsetY);
+    }
 
     public static void register(STSConfigItem<Boolean> config, PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> shouldShow) {
         tutorials.add(new TutorialInfo(config, data, shouldShow));
@@ -48,12 +55,29 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         return null;
     }
 
-    public PCLTutorialMonster(PCLCreatureData data) {
-        super(data);
+    @SafeVarargs
+    public final PCLTutorialMonster addSteps(FuncT0<EUITourTooltip>... steps) {
+        this.steps.addAll(Arrays.asList(steps));
+        return this;
     }
 
-    public PCLTutorialMonster(PCLCreatureData data, float offsetX, float offsetY) {
-        super(data, offsetX, offsetY);
+    public void addToHand(AbstractCard... cards) {
+        AbstractDungeon.player.hand.group.addAll(Arrays.asList(cards));
+    }
+
+    public void clearLists() {
+        AbstractDungeon.player.drawPile.group = new ArrayList<>();
+        AbstractDungeon.player.hand.group = new ArrayList<>();
+        AbstractDungeon.player.discardPile.group = new ArrayList<>();
+        AbstractDungeon.player.limbo.group = new ArrayList<>();
+    }
+
+    public void finishTutorial() {
+        EUITourTooltip.clearTutorialQueue();
+        die();
+        if (currentConfig != null) {
+            currentConfig.set(true);
+        }
     }
 
     @Override
@@ -64,6 +88,22 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
     @Override
     public void usePreBattleAction() {
         performActions(false);
+    }
+
+    public void onComplete() {
+        PCLSFX.play(PCLSFX.TINGSHA);
+        PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
+                .setTargetPosition(Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.68f)
+                .setDuration(1.8f, true)
+        );
+        if (current < steps.size() - 1) {
+            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
+                    PGR.core.strings.tutorial_tutorialStepHeader, PGR.core.strings.tutorial_tutorialNextStep).setCanDismiss(true));
+        }
+        else {
+            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
+                    PGR.core.strings.tutorial_tutorialCompleteHeader, PGR.core.strings.tutorial_tutorialComplete).setCanDismiss(true));
+        }
     }
 
     @Override
@@ -84,54 +124,13 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         }
     }
 
-    @SafeVarargs
-    public final PCLTutorialMonster addSteps(FuncT0<EUITourTooltip>... steps) {
-        this.steps.addAll(Arrays.asList(steps));
-        return this;
-    }
-
-    public void onComplete() {
-        PCLSFX.play(PCLSFX.TINGSHA);
-        PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
-                .setTargetPosition(Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.68f)
-                .setDuration(1.8f, true)
-        );
-        if (current < steps.size() - 1) {
-            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
-                    PGR.core.strings.tutorial_tutorialStepHeader, PGR.core.strings.tutorial_tutorialNextStep).setCanDismiss(true));
-        }
-        else {
-            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
-                    PGR.core.strings.tutorial_tutorialCompleteHeader, PGR.core.strings.tutorial_tutorialComplete).setCanDismiss(true));
-        }
-    }
-
-    public void finishTutorial() {
-        EUITourTooltip.clearTutorialQueue();
-        die();
-        if (currentConfig != null) {
-            currentConfig.set(true);
-        }
+    public void replaceHandWith(AbstractCard... cards) {
+        clearLists();
+        addToHand(cards);
     }
 
     public void talk(String message) {
         PCLEffects.Queue.talk(this, message);
-    }
-
-    public void clearLists() {
-        AbstractDungeon.player.drawPile.group = new ArrayList<>();
-        AbstractDungeon.player.hand.group = new ArrayList<>();
-        AbstractDungeon.player.discardPile.group = new ArrayList<>();
-        AbstractDungeon.player.limbo.group = new ArrayList<>();
-    }
-
-    public void addToHand(AbstractCard... cards) {
-        AbstractDungeon.player.hand.group.addAll(Arrays.asList(cards));
-    }
-
-    public void replaceHandWith(AbstractCard... cards) {
-        clearLists();
-        addToHand(cards);
     }
 
     public static class TutorialInfo {

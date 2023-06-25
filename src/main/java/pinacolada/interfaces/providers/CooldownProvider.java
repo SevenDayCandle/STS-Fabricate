@@ -13,10 +13,6 @@ public interface CooldownProvider {
         return getCooldown() <= 0;
     }
 
-    int getBaseCooldown();
-
-    int getCooldown();
-
     default ColoredString getCooldownString() {
         int amount = getCooldown();
         if (isDisplayingUpgrade()) {
@@ -34,8 +30,6 @@ public interface CooldownProvider {
             return new ColoredString(amount, Settings.CREAM_COLOR);
         }
     }
-
-    boolean isDisplayingUpgrade();
 
     default boolean progressCooldownAndTrigger(AbstractCreature source, AbstractCreature m, int amount) {
         boolean canProgress = CombatManager.onCooldownTriggered(source, m, this);
@@ -55,6 +49,12 @@ public interface CooldownProvider {
     default void reset() {
         setCooldown(getBaseCooldown());
     }
+
+    int getBaseCooldown();
+
+    int getCooldown();
+
+    boolean isDisplayingUpgrade();
 
     void setCooldown(int value);
 }

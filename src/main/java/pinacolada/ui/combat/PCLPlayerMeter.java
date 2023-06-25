@@ -105,12 +105,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return null;
     }
 
-    public abstract String getInfoMainDescrption();
-
-    public abstract EUITutorialPage[] getInfoPages();
-
-    public abstract String getInfoTitle();
-
     public int getLevel(PCLAffinity affinity) {
         return 0;
     }
@@ -178,4 +172,10 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public int size() {
         return 0;
     }
+
+    public abstract String getInfoMainDescrption();
+
+    public abstract EUITutorialPage[] getInfoPages();
+
+    public abstract String getInfoTitle();
 }

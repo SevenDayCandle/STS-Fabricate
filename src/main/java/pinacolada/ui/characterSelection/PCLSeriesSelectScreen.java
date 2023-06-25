@@ -50,7 +50,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected ViewInGameCardPoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?,?> data;
+    protected PCLAbstractPlayerData<?, ?> data;
     protected int totalCardsCache = 0;
     public boolean isScreenDisabled;
 
@@ -138,114 +138,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
     }
 
-    public void forceUpdateText() {
-        container.calculateCardCounts();
-        totalCardsCache = container.shownCards.size();
-        totalCardsChanged(totalCardsCache);
-    }
-
-    public CardGroup getCardPool(PCLLoadout loadout) {
-        final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        if (loadout != null) {
-            for (PCLCardData data : loadout.cardDatas) {
-                AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
-                if (nc instanceof PCLCard) {
-                    ((PCLCard) nc).affinities.updateSortedList();
-                }
-                cards.group.add(nc);
-            }
-        }
-        else {
-            for (PCLLoadout cs : container.getAllLoadouts()) {
-                for (PCLCardData data : cs.cardDatas) {
-                    AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
-                    if (nc instanceof PCLCard) {
-                        ((PCLCard) nc).affinities.updateSortedList();
-                    }
-                    cards.group.add(nc);
-                }
-            }
-        }
-        cards.sortAlphabetically(true);
-        cards.sortByRarity(true);
-        return cards;
-    }
-
-    protected void onCardClicked(AbstractCard card) {
-        if (!isScreenDisabled) {
-            chooseSeries(card);
-        }
-    }
-
-    // Since core sets cannot be toggled, only show the view card option for them
-    public void onCardRightClicked(AbstractCard card) {
-        selectedCard = EUIUtils.safeCast(card, PCLCard.class);
-        PCLLoadout c = container.find(selectedCard);
-
-        contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
-        contextMenu.positionToOpen();
-    }
-
-    public void open(CharacterOption characterOption, PCLAbstractPlayerData<?,?> data, ActionT0 onClose) {
-        super.open();
-        this.onClose = onClose;
-        this.characterOption = characterOption;
-        this.data = data;
-
-        container.createCards(data);
-        cardGrid.addCards(container.getAllCards());
-        updateStartingDeckText();
-
-        EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
-
-        EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
-                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
-                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
-                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_coreInstructions)
-                        .setPosition(Settings.WIDTH * 0.20f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
-                        .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
-                loadoutEditor.makeTour(true)
-        );
-    }
-
-    protected void openLoadoutEditor() {
-        PCLLoadout current = container.find(container.currentSeriesCard);
-        if (characterOption != null && current != null && data != null) {
-            proceed();
-            PGR.loadoutEditor.open(current, data, characterOption, this.onClose);
-        }
-    }
-
-    public void previewCardPool(AbstractCard source) {
-        if (container.shownCards.size() > 0) {
-            PCLLoadout loadout = null;
-            if (source != null) {
-                source.unhover();
-                loadout = container.find(EUIUtils.safeCast(source, PCLCard.class));
-            }
-            final CardGroup cards = getCardPool(loadout);
-            previewCards(cards, loadout);
-        }
-    }
-
-    // Core loadout cards cannot be toggled off
-    public void previewCards(CardGroup cards, PCLLoadout loadout) {
-        previewCardsEffect = new ViewInGameCardPoolEffect(cards, container.bannedCards, this::forceUpdateText)
-                .setCanToggle(loadout != null && !loadout.isCore())
-                .setStartingPosition(InputHelper.mX, InputHelper.mY);
-        PCLEffects.Manual.add(previewCardsEffect);
-    }
-
-    public void proceed() {
-        SingleCardViewPopup.isViewingUpgrade = false;
-        cardGrid.clear();
-        container.commitChanges(data);
-        close();
-    }
-
     @Override
     public void dispose() {
         super.dispose();
@@ -322,6 +214,114 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
 
         contextMenu.tryUpdate();
+    }
+
+    public void forceUpdateText() {
+        container.calculateCardCounts();
+        totalCardsCache = container.shownCards.size();
+        totalCardsChanged(totalCardsCache);
+    }
+
+    public CardGroup getCardPool(PCLLoadout loadout) {
+        final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        if (loadout != null) {
+            for (PCLCardData data : loadout.cardDatas) {
+                AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                if (nc instanceof PCLCard) {
+                    ((PCLCard) nc).affinities.updateSortedList();
+                }
+                cards.group.add(nc);
+            }
+        }
+        else {
+            for (PCLLoadout cs : container.getAllLoadouts()) {
+                for (PCLCardData data : cs.cardDatas) {
+                    AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                    if (nc instanceof PCLCard) {
+                        ((PCLCard) nc).affinities.updateSortedList();
+                    }
+                    cards.group.add(nc);
+                }
+            }
+        }
+        cards.sortAlphabetically(true);
+        cards.sortByRarity(true);
+        return cards;
+    }
+
+    protected void onCardClicked(AbstractCard card) {
+        if (!isScreenDisabled) {
+            chooseSeries(card);
+        }
+    }
+
+    // Since core sets cannot be toggled, only show the view card option for them
+    public void onCardRightClicked(AbstractCard card) {
+        selectedCard = EUIUtils.safeCast(card, PCLCard.class);
+        PCLLoadout c = container.find(selectedCard);
+
+        contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
+        contextMenu.positionToOpen();
+    }
+
+    public void open(CharacterOption characterOption, PCLAbstractPlayerData<?, ?> data, ActionT0 onClose) {
+        super.open();
+        this.onClose = onClose;
+        this.characterOption = characterOption;
+        this.data = data;
+
+        container.createCards(data);
+        cardGrid.addCards(container.getAllCards());
+        updateStartingDeckText();
+
+        EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
+
+        EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
+                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
+                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
+                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_coreInstructions)
+                        .setPosition(Settings.WIDTH * 0.20f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
+                        .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
+                loadoutEditor.makeTour(true)
+        );
+    }
+
+    protected void openLoadoutEditor() {
+        PCLLoadout current = container.find(container.currentSeriesCard);
+        if (characterOption != null && current != null && data != null) {
+            proceed();
+            PGR.loadoutEditor.open(current, data, characterOption, this.onClose);
+        }
+    }
+
+    public void previewCardPool(AbstractCard source) {
+        if (container.shownCards.size() > 0) {
+            PCLLoadout loadout = null;
+            if (source != null) {
+                source.unhover();
+                loadout = container.find(EUIUtils.safeCast(source, PCLCard.class));
+            }
+            final CardGroup cards = getCardPool(loadout);
+            previewCards(cards, loadout);
+        }
+    }
+
+    // Core loadout cards cannot be toggled off
+    public void previewCards(CardGroup cards, PCLLoadout loadout) {
+        previewCardsEffect = new ViewInGameCardPoolEffect(cards, container.bannedCards, this::forceUpdateText)
+                .setCanToggle(loadout != null && !loadout.isCore())
+                .setStartingPosition(InputHelper.mX, InputHelper.mY);
+        PCLEffects.Manual.add(previewCardsEffect);
+    }
+
+    public void proceed() {
+        SingleCardViewPopup.isViewingUpgrade = false;
+        cardGrid.clear();
+        container.commitChanges(data);
+        close();
     }
 
     public void selectAll(boolean value) {

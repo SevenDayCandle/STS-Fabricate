@@ -96,19 +96,16 @@ public class PField_Affinity extends PField_Random {
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
         List<? extends PCLAffinity> list = info.getDataAsList(PCLAffinity.class);
         ArrayList<Integer> indexes = new ArrayList<>();
-        if (list != null)
-        {
+        if (list != null) {
             for (int i = 0; i < affinities.size(); i++) {
                 if (list.contains(affinities.get(i))) {
                     indexes.add(i);
                 }
             }
         }
-        else
-        {
+        else {
             PCLAffinity item = info.getData(PCLAffinity.class);
-            if (item != null)
-            {
+            if (item != null) {
                 for (int i = 0; i < affinities.size(); i++) {
                     if (item == (affinities.get(i))) {
                         indexes.add(i);

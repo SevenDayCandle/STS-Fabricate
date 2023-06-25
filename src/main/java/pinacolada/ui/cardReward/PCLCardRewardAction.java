@@ -42,14 +42,10 @@ public abstract class PCLCardRewardAction extends EUIBase {
         setActive(actionProvider.canAct());
     }
 
-    abstract AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex);
-
     public void close() {
         setActive(false);
         buttons.clear();
     }
-
-    abstract PCLCardRewardActionButton getButton(int index);
 
     protected void onCardAdded(AbstractCard card) {
         if (onCardAdded != null) {
@@ -105,4 +101,8 @@ public abstract class PCLCardRewardAction extends EUIBase {
         }
         shouldClose = true;
     }
+
+    abstract AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex);
+
+    abstract PCLCardRewardActionButton getButton(int index);
 }

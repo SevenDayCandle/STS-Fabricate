@@ -694,10 +694,6 @@ public class CombatManager {
         refreshHandLayout();
     }
 
-    public static void onIncreaseAffinityLevel(PCLAffinity affinity) {
-        subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
-    }
-
     public static int onIncomingDamageFirst(AbstractCreature target, DamageInfo info, int damage) {
         return subscriberInout(OnReceiveDamageFirstSubscriber.class, damage, (s, d) -> s.onReceiveDamageFirst(target, info, d));
     }
@@ -714,6 +710,10 @@ public class CombatManager {
         }
 
         return damage;
+    }
+
+    public static void onIncreaseAffinityLevel(PCLAffinity affinity) {
+        subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
     }
 
     public static float onModifySkillBonus(float amount, AbstractCard card) {
@@ -922,7 +922,7 @@ public class CombatManager {
                 }
             }
             else if (po instanceof PCLPower) {
-                ((PCLPower)po).onRemoveDamagePowers();
+                ((PCLPower) po).onRemoveDamagePowers();
             }
         }
     }

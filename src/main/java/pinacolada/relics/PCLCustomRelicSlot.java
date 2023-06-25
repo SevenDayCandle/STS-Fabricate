@@ -43,6 +43,54 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
 
+    public PCLCustomRelicSlot(AbstractCard.CardColor color) {
+        ID = makeNewID(color);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = color;
+        PCLDynamicRelicData builder = (PCLDynamicRelicData) new PCLDynamicRelicData(ID)
+                .setText("", new String[]{}, "")
+                .setColor(color)
+                .setTier(AbstractRelic.RelicTier.COMMON);
+        builders.add(builder);
+    }
+
+    public PCLCustomRelicSlot(PCLPointerRelic card, AbstractCard.CardColor color) {
+        ID = makeNewID(color);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = color;
+        builders.add((PCLDynamicRelicData) new PCLDynamicRelicData(card.relicData)
+                .setID(ID)
+                .setColor(color)
+                .setImagePath(imagePath)
+                .setPSkill(card.getEffects(), true, true)
+                .setPPower(card.getPowerEffects(), true, true)
+        );
+        recordBuilder();
+    }
+
+    public PCLCustomRelicSlot(PCLCustomRelicSlot other, AbstractCard.CardColor color) {
+        this(other);
+        slotColor = color;
+        for (PCLDynamicRelicData builder : builders) {
+            builder.setColor(color);
+        }
+    }
+
+    public PCLCustomRelicSlot(PCLCustomRelicSlot other) {
+        ID = makeNewID(other.slotColor);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = other.slotColor;
+        for (PCLDynamicRelicData builder : other.builders) {
+            builders.add(new PCLDynamicRelicData(builder)
+                    .setID(ID)
+                    .setImagePath(imagePath));
+        }
+        recordBuilder();
+    }
+
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
@@ -120,54 +168,6 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
     protected static String makeNewID(AbstractCard.CardColor color) {
         return makeNewID(getBaseIDPrefix(color), getRelics(color));
-    }
-
-    public PCLCustomRelicSlot(AbstractCard.CardColor color) {
-        ID = makeNewID(color);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = color;
-        PCLDynamicRelicData builder = (PCLDynamicRelicData) new PCLDynamicRelicData(ID)
-                .setText("", new String[]{}, "")
-                .setColor(color)
-                .setTier(AbstractRelic.RelicTier.COMMON);
-        builders.add(builder);
-    }
-
-    public PCLCustomRelicSlot(PCLPointerRelic card, AbstractCard.CardColor color) {
-        ID = makeNewID(color);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = color;
-        builders.add((PCLDynamicRelicData) new PCLDynamicRelicData(card.relicData)
-                .setID(ID)
-                .setColor(color)
-                .setImagePath(imagePath)
-                .setPSkill(card.getEffects(), true, true)
-                .setPPower(card.getPowerEffects(), true, true)
-        );
-        recordBuilder();
-    }
-
-    public PCLCustomRelicSlot(PCLCustomRelicSlot other, AbstractCard.CardColor color) {
-        this(other);
-        slotColor = color;
-        for (PCLDynamicRelicData builder : builders) {
-            builder.setColor(color);
-        }
-    }
-
-    public PCLCustomRelicSlot(PCLCustomRelicSlot other) {
-        ID = makeNewID(other.slotColor);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = other.slotColor;
-        for (PCLDynamicRelicData builder : other.builders) {
-            builders.add(new PCLDynamicRelicData(builder)
-                    .setID(ID)
-                    .setImagePath(imagePath));
-        }
-        recordBuilder();
     }
 
     public void commitBuilder() {

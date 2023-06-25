@@ -110,6 +110,14 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         super.loadAnimation(atlasUrl, skeletonUrl, scale);
     }
 
+    @Override
+    public void addPower(AbstractPower powerToApply) {
+        super.addPower(powerToApply);
+        if (powerToApply instanceof StunMonsterPower) {
+            stunned = true;
+        }
+    }
+
     // Intentionally avoid calling loadAnimation to avoid registering animations
     protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
@@ -122,42 +130,6 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         this.state = new AnimationState(this.stateData);
     }
 
-    @Override
-    public void addPower(AbstractPower powerToApply) {
-        super.addPower(powerToApply);
-        if (powerToApply instanceof StunMonsterPower) {
-            stunned = true;
-        }
-    }
-
-    protected boolean shouldShowIntents() {
-        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements;
-    }
-
-    public abstract void performActions(boolean manual);
-
-    public void setAnimation(AbstractAnimation animation) {
-        this.animation = animation;
-    }
-
-    // Offset positions should be given with Settings.scaling already applied
-    protected void setupHitbox(float offsetX, float offsetY) {
-        this.drawX = offsetX;
-        this.drawY = offsetY;
-        updateHitbox(creatureData.hbX, creatureData.hbY, creatureData.hbW, creatureData.hbH);
-        refreshHitboxLocation();
-        refreshIntentHbLocation();
-    }
-
-    public void takeTurn(boolean manual) {
-        if (stunned) {
-            stunned = false;
-        }
-        else {
-            performActions(manual);
-        }
-    }
-
     public void render(SpriteBatch sb) {
         if (!this.isDead && !this.escaped) {
             this.renderAnimation(sb);
@@ -165,7 +137,7 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
             if (this == AbstractDungeon.getCurrRoom().monsters.hoveredMonster && this.atlas == null && this.animation == null) {
                 sb.setBlendFunction(770, 1);
                 sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.1F));
-                sb.draw(this.img, this.drawX - (float)this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+                sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
                 sb.setBlendFunction(770, 771);
             }
 
@@ -194,10 +166,12 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     public void renderAnimation(SpriteBatch sb, Color color) {
         if (this.animation != null && this.animation.type() == AbstractAnimation.Type.SPRITE) {
             this.animation.renderSprite(sb, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY);
-        } else if (this.atlas == null) {
+        }
+        else if (this.atlas == null) {
             sb.setColor(color);
-            sb.draw(this.img, this.drawX - (float)this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
-        } else {
+            sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+        }
+        else {
             this.state.update(Gdx.graphics.getDeltaTime());
             this.state.apply(this.skeleton);
             this.skeleton.updateWorldTransform();
@@ -213,6 +187,32 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         }
     }
 
+    public void setAnimation(AbstractAnimation animation) {
+        this.animation = animation;
+    }
+
+    // Offset positions should be given with Settings.scaling already applied
+    protected void setupHitbox(float offsetX, float offsetY) {
+        this.drawX = offsetX;
+        this.drawY = offsetY;
+        updateHitbox(creatureData.hbX, creatureData.hbY, creatureData.hbW, creatureData.hbH);
+        refreshHitboxLocation();
+        refreshIntentHbLocation();
+    }
+
+    protected boolean shouldShowIntents() {
+        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements;
+    }
+
+    public void takeTurn(boolean manual) {
+        if (stunned) {
+            stunned = false;
+        }
+        else {
+            performActions(manual);
+        }
+    }
+
     @Override
     public void update() {
         super.update();
@@ -222,4 +222,6 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     public void takeTurn() {
         takeTurn(false);
     }
+
+    public abstract void performActions(boolean manual);
 }

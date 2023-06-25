@@ -14,11 +14,11 @@ public abstract class ModifyCard extends GenericCardSelection {
     protected Color flashColor = EUIColors.gold(1).cpy();
 
     public ModifyCard(AbstractCard card, int change, boolean permanent, boolean relative) {
-        this(card, 1, change, permanent, relative,false);
+        this(card, 1, change, permanent, relative, false);
     }
 
     public ModifyCard(AbstractCard card, int change, boolean permanent, boolean relative, boolean untilPlayed) {
-        this(card, 1, change, permanent, relative,untilPlayed);
+        this(card, 1, change, permanent, relative, untilPlayed);
     }
 
     protected ModifyCard(AbstractCard card, int amount, int change, boolean permanent, boolean relative, boolean untilPlayed) {
@@ -36,8 +36,6 @@ public abstract class ModifyCard extends GenericCardSelection {
         return this;
     }
 
-    protected abstract int getActualChange(AbstractCard card);
-
     @Override
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
@@ -46,4 +44,6 @@ public abstract class ModifyCard extends GenericCardSelection {
             GameUtilities.flash(card, flashColor, true);
         }
     }
+
+    protected abstract int getActualChange(AbstractCard card);
 }

@@ -28,13 +28,13 @@ public class PMove_GainOrbSlots extends PMove_Gain {
     }
 
     @Override
-    public String gainText() {
-        return PGR.core.tooltips.orbSlot.getTitleOrIcon();
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.orbSlot.title);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.orbSlot.title);
+    public String gainText() {
+        return PGR.core.tooltips.orbSlot.getTitleOrIcon();
     }
 
     @Override

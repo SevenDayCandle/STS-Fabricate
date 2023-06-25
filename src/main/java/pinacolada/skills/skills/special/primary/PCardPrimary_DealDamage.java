@@ -66,10 +66,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         return PCLCardValueSource.Damage;
     }
 
-    public PCLCardValueSource getExtraSource() {
-        return PCLCardValueSource.HitCount;
-    }
-
     @Override
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
         return new ColoredString(displayAmount,
@@ -77,6 +73,10 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
                         sourceCard.upgradedDamage ? Settings.GREEN_TEXT_COLOR :
                                 sourceCard.isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
                                         : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
+    }
+
+    public PCLCardValueSource getExtraSource() {
+        return PCLCardValueSource.HitCount;
     }
 
     public AbstractMonster.Intent getIntent() {
@@ -115,6 +115,26 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     @Override
     public PCardPrimary_DealDamage makeCopy() {
         return (PCardPrimary_DealDamage) super.makeCopy();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
+                    , EUIUtils.arrayList(sc.getBuilder().attackType)
+                    , item -> {
+                        if (item.size() > 0) {
+                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
+                        }
+                    }
+                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                    PGR.core.strings.cedit_attackType,
+                    true,
+                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
+        }
+
+        super.setupEditor(editor);
     }
 
     @Override
@@ -220,26 +240,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
         setSource(card);
         return this;
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
-                    , EUIUtils.arrayList(sc.getBuilder().attackType)
-                    , item -> {
-                        if (item.size() > 0) {
-                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
-                        }
-                    }
-                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
-                    PGR.core.strings.cedit_attackType,
-                    true,
-                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
-        }
-
-        super.setupEditor(editor);
     }
 
     @Override

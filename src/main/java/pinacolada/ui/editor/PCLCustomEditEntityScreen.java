@@ -38,6 +38,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float BUTTON_CY = BUTTON_HEIGHT * 1.5f;
     public static final int EFFECT_COUNT = 3;
     public final T currentSlot;
+    public final boolean fromInGame;
+    protected ActionT0 onSave;
     public ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
     public ArrayList<PTrigger> currentPowers = new ArrayList<>();
     public ArrayList<EUIButton> pageButtons = new ArrayList<>();
@@ -48,12 +50,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public EUIButton saveButton;
     public EUIButton undoButton;
     public int currentPage;
-    public final boolean fromInGame;
     public ArrayList<U> prevBuilders;
     public ArrayList<U> tempBuilders;
     public int currentBuilder;
     public PCLEffectWithCallback<?> currentDialog;
-    protected ActionT0 onSave;
 
     public PCLCustomEditEntityScreen(T slot) {
         this(slot, false);
@@ -81,37 +81,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         for (int i = 0; i < currentPowers.size(); i++) {
             makePowerPage(i);
         }
-    }
-
-    protected void makeEffectPage(int index) {
-        PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1), (be) -> updateEffect(index, be));
-        pages.add(page);
-        effectPages.add(page);
-        page.refresh();
-    }
-
-    protected void updateEffect(int index, PSkill<?> be) {
-        currentEffects.set(index, be);
-        modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
-    }
-
-    protected void makePowerPage(int index) {
-        PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                , EUIUtils.format(PGR.core.strings.cedit_powerX, index + 1), (be) -> updatePowerEffect(index, be));
-        pages.add(page);
-        powerPages.add(page);
-        page.refresh();
-    }
-
-    protected void updatePowerEffect(int index, PSkill<?> be) {
-        if (be instanceof PTrigger) {
-            currentPowers.set(index, (PTrigger) be);
-        }
-        else {
-            currentPowers.set(index, null);
-        }
-        modifyBuilder(e -> e.setPPower(currentPowers, true, true));
     }
 
     protected void clearPages() {
@@ -148,6 +117,22 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public int getPowerCount() {
         return powerPages.size();
+    }
+
+    protected void makeEffectPage(int index) {
+        PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1), (be) -> updateEffect(index, be));
+        pages.add(page);
+        effectPages.add(page);
+        page.refresh();
+    }
+
+    protected void makePowerPage(int index) {
+        PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                , EUIUtils.format(PGR.core.strings.cedit_powerX, index + 1), (be) -> updatePowerEffect(index, be));
+        pages.add(page);
+        powerPages.add(page);
+        page.refresh();
     }
 
     public void modifyAllBuilders(ActionT1<U> updateFunc) {
@@ -192,8 +177,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setTooltip(PGR.core.strings.cedit_undo, PGR.core.strings.cetut_undo)
                 .setOnClick(this::undo);
     }
-
-    abstract protected void rebuildItem();
 
     public void refreshPages() {
         for (PCLCustomGenericPage b : pages) {
@@ -293,6 +276,11 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
+    protected void updateEffect(int index, PSkill<?> be) {
+        currentEffects.set(index, be);
+        modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
+    }
+
     public void updateInnerElements() {
         cancelButton.tryUpdate();
         saveButton.tryUpdate();
@@ -303,7 +291,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
+    protected void updatePowerEffect(int index, PSkill<?> be) {
+        if (be instanceof PTrigger) {
+            currentPowers.set(index, (PTrigger) be);
+        }
+        else {
+            currentPowers.set(index, null);
+        }
+        modifyBuilder(e -> e.setPPower(currentPowers, true, true));
+    }
+
     protected void updateVariant() {
 
     }
+
+    abstract protected void rebuildItem();
 }

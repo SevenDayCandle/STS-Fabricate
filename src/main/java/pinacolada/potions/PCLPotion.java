@@ -97,14 +97,9 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return skills;
     }
 
-    public String getUpdatedDescription() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
-    }
-
-    // May be null before potion data is initialized
     @Override
-    public int getPotency(int i) {
-        return potionData != null && auxiliaryData != null ? potionData.getCounter(auxiliaryData.form) : 0;
+    public int timesUpgraded() {
+        return auxiliaryData.timesUpgraded;
     }
 
     @Override
@@ -113,13 +108,28 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
+    }
+
+    @Override
     public List<EUIKeywordTooltip> getTipsForFilters() {
         return tips.subList(1, tips.size());
     }
 
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
+    public String getUpdatedDescription() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
+    }
+
+    public void initialize() {
+        skills = new Skills();
+        this.potency = this.getPotency();
+        setup();
+        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
+        this.targetRequired = isThrown;
+        initializeTips();
+
+        // TODO create sacred bark hook for effect upgrades
     }
 
     protected void initializeTips() {
@@ -129,6 +139,24 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         mainTooltip = info != null ? new EUIKeywordTooltip(name, description, info.ID) : new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
         EUITooltip.scanForTips(description, tips);
+    }
+
+    @Override
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    @Override
+    public void onLoad(PCLCollectibleSaveData data) {
+        if (data != null) {
+            this.auxiliaryData = new PCLCollectibleSaveData(data);
+        }
+    }
+
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
     }
 
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
@@ -175,23 +203,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
-    public void initialize() {
-        skills = new Skills();
-        this.potency = this.getPotency();
-        setup();
-        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
-        this.targetRequired = isThrown;
-        initializeTips();
-
-        // TODO create sacred bark hook for effect upgrades
-    }
-
     public void setup() {
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return auxiliaryData.timesUpgraded;
     }
 
     @SpireOverride
@@ -202,6 +214,14 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     @SpireOverride
     protected void updateFlash() {
         SpireSuper.call();
+    }
+
+    public PCLPotion upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            initializeTips();
+        }
+        return this;
     }
 
     @Override
@@ -221,14 +241,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
-    public PCLPotion upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            initializeTips();
-        }
-        return this;
-    }
-
     @Override
     public void render(SpriteBatch sb) {
         renderImpl(sb, false);
@@ -245,6 +257,12 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         renderImpl(sb, true);
     }
 
+    // May be null before potion data is initialized
+    @Override
+    public int getPotency(int i) {
+        return potionData != null && auxiliaryData != null ? potionData.getCounter(auxiliaryData.form) : 0;
+    }
+
     @Override
     public AbstractPotion makeCopy() {
         try {
@@ -253,24 +271,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         catch (Exception e) {
             return null;
         }
-    }
-
-    @Override
-    public PCLCollectibleSaveData onSave() {
-        return auxiliaryData;
-    }
-
-    @Override
-    public void onLoad(PCLCollectibleSaveData data) {
-        if (data != null) {
-            this.auxiliaryData = new PCLCollectibleSaveData(data);
-        }
-    }
-
-    @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
     }
 
 

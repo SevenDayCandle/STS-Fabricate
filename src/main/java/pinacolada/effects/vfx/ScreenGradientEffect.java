@@ -51,6 +51,10 @@ public class ScreenGradientEffect extends PCLEffect {
         this.actualColor4 = color4.cpy();
     }
 
+    protected float getLerpAmount() {
+        return 1 + 0.5f * MathUtils.sin(MathUtils.PI * duration / startingDuration);
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.end();
@@ -75,10 +79,6 @@ public class ScreenGradientEffect extends PCLEffect {
         this.actualColor2 = EUIColors.lerp(color2, targetColor2, lerp);
         this.actualColor3 = EUIColors.lerp(color3, targetColor3, lerp);
         this.actualColor4 = EUIColors.lerp(color4, targetColor4, lerp);
-    }
-
-    protected float getLerpAmount() {
-        return 1 + 0.5f * MathUtils.sin(MathUtils.PI * duration / startingDuration);
     }
 
     public ScreenGradientEffect setLooping(boolean loop) {

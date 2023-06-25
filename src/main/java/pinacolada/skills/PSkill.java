@@ -825,8 +825,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return null;
     }
 
-    public abstract String getSubText();
-
     public String getTargetHasString(String desc) {
         return getTargetHasString(target, desc);
     }
@@ -979,6 +977,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return tips;
     }
 
+    public final UUID getUUID() {
+        return uuid;
+    }
+
     public final int getUpgrade() {
         if (upgrade == null || upgrade.length == 0) {
             return 0;
@@ -1000,8 +1002,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public final int getUpgradeLevel() {
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
     }
-
-    public final UUID getUUID() {return uuid;}
 
     public final String getWheneverAreString(Object impl) {
         return TEXT.cond_whenObjectIs(getTargetSubjectString(), getTargetOrdinal(target), impl);
@@ -1630,6 +1630,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public String wrapExtraChild(PSkill<?> source, String input) {
         return parent != null ? parent.wrapExtraChild(source, input) : input;
     }
+
+    public abstract String getSubText();
 
     public enum PCLCardValueSource {
         None,

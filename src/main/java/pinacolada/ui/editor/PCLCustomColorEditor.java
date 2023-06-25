@@ -54,17 +54,8 @@ public class PCLCustomColorEditor extends EUIHoverable {
 
     }
 
-    public void open() {
-        onOpen.invoke(this);
-    }
-
     public Color getColor() {
         return current;
-    }
-
-    public void setColorFromHex(String input) {
-        current = Color.valueOf(input);
-        onUpdate.invoke(current);
     }
 
     public EUITourTooltip makeTour(boolean canDismiss) {
@@ -73,9 +64,14 @@ public class PCLCustomColorEditor extends EUIHoverable {
             tip.setFlash(this.hexInput.image);
             tip.setCanDismiss(canDismiss);
             return tip;
-        } else {
+        }
+        else {
             return null;
         }
+    }
+
+    public void open() {
+        onOpen.invoke(this);
     }
 
     @Override
@@ -84,6 +80,28 @@ public class PCLCustomColorEditor extends EUIHoverable {
         colorButton.tryRender(sb);
         hexInput.tryRender(sb);
         header.tryRender(sb);
+    }
+
+    public PCLCustomColorEditor setColor(Color value) {
+        return setColor(value, true);
+    }
+
+    public PCLCustomColorEditor setColor(Color value, boolean invoke) {
+        if (value != null) {
+            current = value.cpy();
+            colorButton.setColor(current);
+            hexInput.setLabel(current.toString());
+            if (invoke) {
+                onUpdate.invoke(current);
+            }
+        }
+
+        return this;
+    }
+
+    public void setColorFromHex(String input) {
+        current = Color.valueOf(input);
+        onUpdate.invoke(current);
     }
 
     public PCLCustomColorEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {
@@ -121,22 +139,5 @@ public class PCLCustomColorEditor extends EUIHoverable {
         colorButton.tryUpdate();
         hexInput.tryUpdate();
         header.tryUpdate();
-    }
-
-    public PCLCustomColorEditor setColor(Color value) {
-        return setColor(value, true);
-    }
-
-    public PCLCustomColorEditor setColor(Color value, boolean invoke) {
-        if (value != null) {
-            current = value.cpy();
-            colorButton.setColor(current);
-            hexInput.setLabel(current.toString());
-            if (invoke) {
-                onUpdate.invoke(current);
-            }
-        }
-
-        return this;
     }
 }

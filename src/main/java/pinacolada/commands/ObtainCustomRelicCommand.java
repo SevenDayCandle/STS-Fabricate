@@ -41,7 +41,7 @@ public class ObtainCustomRelicCommand extends ConsoleCommand {
                 form = Math.min(ConvertHelper.tryParseInt(tokens[3], 0), slot.builders.size() - 1);
             }
 
-            DevConsole.log("Obtained "  + tokens[1] + " with upgrade level " + upgrade + " with form " + form);
+            DevConsole.log("Obtained " + tokens[1] + " with upgrade level " + upgrade + " with form " + form);
 
             PCLRelic copy = slot.builders.get(form).create();
             for (int i = 0; i < upgrade; i++) {

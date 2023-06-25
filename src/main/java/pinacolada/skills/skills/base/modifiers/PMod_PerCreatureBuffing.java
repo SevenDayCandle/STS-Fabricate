@@ -32,13 +32,13 @@ public class PMod_PerCreatureBuffing extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return EUIUtils.count(getTargetList(info), GameUtilities::isBuffing);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.buff.progressive(), TEXT.subjects_character);
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(PGR.core.tooltips.buff.progressive(), TEXT.subjects_character);
+    public int getMultiplier(PCLUseInfo info) {
+        return EUIUtils.count(getTargetList(info), GameUtilities::isBuffing);
     }
 
     @Override

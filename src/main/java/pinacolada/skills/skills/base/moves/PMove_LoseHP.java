@@ -56,16 +56,16 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     }
 
     @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, amount));
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             order.loseHP(info.source, t, amount, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
         }
         super.use(info, order);
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, amount));
     }
 }

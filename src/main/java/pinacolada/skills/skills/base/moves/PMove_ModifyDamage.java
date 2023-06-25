@@ -31,16 +31,6 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyDamage(c, amount, fields.forced, !fields.not, fields.or);
-    }
-
-    @Override
-    public String getObjectText() {
-        return TEXT.subjects_damage;
-    }
-
-    @Override
     public String getSubText() {
         String base = super.getSubText();
         if (!fields.forced) {
@@ -57,6 +47,16 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardModify> {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
         fields.registerOrBoolean(editor, getUntilPlayedString(), null);
+    }
+
+    @Override
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyDamage(c, amount, fields.forced, !fields.not, fields.or);
+    }
+
+    @Override
+    public String getObjectText() {
+        return TEXT.subjects_damage;
     }
 
     @Override

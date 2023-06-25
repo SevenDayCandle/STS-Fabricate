@@ -90,6 +90,15 @@ public class AbstractPlayerPatches {
     @SpirePatch(clz = AbstractPlayer.class, method = "useCard")
     public static class AbstractPlayer_UseCard {
 
+        public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
+            p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
+        }
+
+        @SpireInsertPatch(locator = Locator.class, localvars = {"c", "monster"})
+        public static void insert(AbstractPlayer __instance, AbstractCard c, AbstractMonster monster) {
+            CombatManager.onPlayCardPostActions(c, monster);
+        }
+
         @SpireInstrumentPatch
         public static ExprEditor instrument() {
             return new ExprEditor() {
@@ -104,9 +113,8 @@ public class AbstractPlayerPatches {
             };
         }
 
-        @SpireInsertPatch(locator = Locator.class, localvars = {"c", "monster"})
-        public static void insert(AbstractPlayer __instance, AbstractCard c, AbstractMonster monster) {
-            CombatManager.onPlayCardPostActions(c, monster);
+        public static boolean use(AbstractCard c, AbstractPlayer p, AbstractMonster m) {
+            return CombatManager.onUsingCard(c, p, m);
         }
 
         private static class Locator extends SpireInsertLocator {
@@ -114,14 +122,6 @@ public class AbstractPlayerPatches {
                 final Matcher matcher = new Matcher.MethodCallMatcher(GameActionManager.class, "addToBottom");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
-        }
-
-        public static boolean use(AbstractCard c, AbstractPlayer p, AbstractMonster m) {
-            return CombatManager.onUsingCard(c, p, m);
-        }
-
-        public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
-            p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
         }
     }
 

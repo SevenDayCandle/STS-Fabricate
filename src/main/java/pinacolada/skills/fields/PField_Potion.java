@@ -116,6 +116,16 @@ public class PField_Potion extends PField_Random {
         return setColor(Arrays.asList(types));
     }
 
+    public PField_Potion setPotionID(Collection<String> orbs) {
+        this.potionIDs.clear();
+        this.potionIDs.addAll(orbs);
+        return this;
+    }
+
+    public PField_Potion setPotionID(String... orbs) {
+        return setPotionID(Arrays.asList(orbs));
+    }
+
     public PField_Potion setRarity(Collection<AbstractPotion.PotionRarity> types) {
         this.rarities.clear();
         this.rarities.addAll(types);
@@ -134,15 +144,5 @@ public class PField_Potion extends PField_Random {
         this.sizes.clear();
         this.sizes.addAll(types);
         return this;
-    }
-
-    public PField_Potion setPotionID(Collection<String> orbs) {
-        this.potionIDs.clear();
-        this.potionIDs.addAll(orbs);
-        return this;
-    }
-
-    public PField_Potion setPotionID(String... orbs) {
-        return setPotionID(Arrays.asList(orbs));
     }
 }

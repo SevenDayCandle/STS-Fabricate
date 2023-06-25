@@ -51,6 +51,16 @@ public class PCLStanceHelper implements TooltipProvider {
         return EUIUtils.find(ALL.values(), h -> affinity.equals(h.affinity));
     }
 
+    public static Collection<PCLStanceHelper> getAll(AbstractCard.CardColor targetColor) {
+        return targetColor == null ? getAll() : EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0 || EUIUtils.any(s.allowedColors, t -> t == targetColor))
+                .stream()
+                .sorted((a, b) -> a.tooltip != null && b.tooltip != null ? StringUtils.compare(a.tooltip.title, b.tooltip.title) : 0).collect(Collectors.toList());
+    }
+
+    public static Collection<PCLStanceHelper> getAll() {
+        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
+    }
+
     public static List<PCLStanceHelper> inGameValues(AbstractCard.CardColor targetColor) {
         return EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0);
     }
@@ -63,16 +73,6 @@ public class PCLStanceHelper implements TooltipProvider {
         return randomHelper().create();
     }
 
-    public static Collection<PCLStanceHelper> getAll(AbstractCard.CardColor targetColor) {
-        return targetColor == null ? getAll() : EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0 || EUIUtils.any(s.allowedColors, t -> t == targetColor))
-                .stream()
-                .sorted((a, b) -> a.tooltip != null && b.tooltip != null ? StringUtils.compare(a.tooltip.title, b.tooltip.title) : 0).collect(Collectors.toList());
-    }
-
-    public static Collection<PCLStanceHelper> getAll() {
-        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
-    }
-
     public AbstractStance create() {
         if (constructor != null) {
             return constructor.invoke();
@@ -83,13 +83,13 @@ public class PCLStanceHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper> {

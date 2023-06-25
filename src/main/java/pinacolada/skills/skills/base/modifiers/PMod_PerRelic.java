@@ -27,8 +27,8 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return (EUIUtils.count(AbstractDungeon.player.relics, r -> fields.getFullRelicFilter().invoke(r)));
+    public String getSubText() {
+        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
     }
 
     @Override
-    public String getSubText() {
-        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString();
+    public int getMultiplier(PCLUseInfo info) {
+        return (EUIUtils.count(AbstractDungeon.player.relics, r -> fields.getFullRelicFilter().invoke(r)));
     }
 }

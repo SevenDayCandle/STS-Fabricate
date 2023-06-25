@@ -26,14 +26,14 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
         super(data, target, amount, extra);
     }
 
+    @Override
+    public String getText(boolean addPeriod) {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    }
+
     // Actual use check is handled in use action. This passes to allow the use effect to run
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return true;
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 }

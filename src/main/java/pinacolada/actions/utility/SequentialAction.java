@@ -28,13 +28,6 @@ public class SequentialAction extends PCLAction<Void> {
         initialize(cur.source, cur.target, cur.amount, "");
     }
 
-    @Override
-    public void updateInternal(float deltaTime) {
-        if (updateAction()) {
-            complete(null);
-        }
-    }
-
     private boolean updateAction() {
         if (cur == null || cur.isDone) {
             cur = actions.poll();
@@ -46,6 +39,13 @@ public class SequentialAction extends PCLAction<Void> {
         }
         else {
             return true;
+        }
+    }
+
+    @Override
+    public void updateInternal(float deltaTime) {
+        if (updateAction()) {
+            complete(null);
         }
     }
 }

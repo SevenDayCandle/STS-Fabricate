@@ -19,6 +19,20 @@ import java.util.ArrayList;
 public class CardGroupPatches {
     private static ArrayList<AbstractCard> tmpCards;
 
+    public static AbstractCard.CardRarity checkRarity(AbstractCard c) {
+        if (!AbstractDungeonPatches.filterCardGroupForValid) {
+            return c.rarity;
+        }
+        return PGR.dungeon.canObtainCopy(c) ? c.rarity : null;
+    }
+
+    public static AbstractCard.CardType checkType(AbstractCard c) {
+        if (!AbstractDungeonPatches.filterCardGroupForValid) {
+            return c.type;
+        }
+        return PGR.dungeon.canObtainCopy(c) ? c.type : null;
+    }
+
     private static void delay(ArrayList<AbstractCard> cards, Random rng) {
         int delayedIndex = 0;
         for (int i = 0; i < cards.size(); i++) {
@@ -79,7 +93,7 @@ public class CardGroupPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance) {
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return((AbstractCard) null);
+                return SpireReturn.Return(null);
             }
             else {
                 return SpireReturn.Continue();
@@ -92,7 +106,7 @@ public class CardGroupPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance) {
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return((AbstractCard) null);
+                return SpireReturn.Return(null);
             }
             else {
                 return SpireReturn.Continue();
@@ -103,6 +117,11 @@ public class CardGroupPatches {
     @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {Random.class})
     public static class CardGroupPatches_GetRandomCard1 {
 
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance) {
+            __instance.group = tmpCards;
+        }
+
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance, Random rng) {
             tmpCards = __instance.group;
@@ -110,19 +129,19 @@ public class CardGroupPatches {
                 __instance.group = EUIUtils.filter(__instance.group, PGR.dungeon::canObtainCopy);
             }
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return((AbstractCard) null);
+                return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
-        }
-
-        @SpirePostfixPatch
-        public static void postfix(CardGroup __instance) {
-            __instance.group = tmpCards;
         }
     }
 
     @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {boolean.class})
     public static class CardGroupPatches_GetRandomCard2 {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance) {
+            __instance.group = tmpCards;
+        }
+
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance, boolean useRng) {
             tmpCards = __instance.group;
@@ -130,14 +149,9 @@ public class CardGroupPatches {
                 __instance.group = EUIUtils.filter(__instance.group, PGR.dungeon::canObtainCopy);
             }
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return((AbstractCard) null);
+                return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
-        }
-
-        @SpirePostfixPatch
-        public static void postfix(CardGroup __instance) {
-            __instance.group = tmpCards;
         }
     }
 
@@ -207,19 +221,5 @@ public class CardGroupPatches {
                 CombatManager.summons.applyPowers();
             }
         }
-    }
-
-    public static AbstractCard.CardRarity checkRarity(AbstractCard c) {
-        if (!AbstractDungeonPatches.filterCardGroupForValid) {
-            return c.rarity;
-        }
-        return PGR.dungeon.canObtainCopy(c) ? c.rarity : null;
-    }
-
-    public static AbstractCard.CardType checkType(AbstractCard c) {
-        if (!AbstractDungeonPatches.filterCardGroupForValid) {
-            return c.type;
-        }
-        return PGR.dungeon.canObtainCopy(c) ? c.type : null;
     }
 }

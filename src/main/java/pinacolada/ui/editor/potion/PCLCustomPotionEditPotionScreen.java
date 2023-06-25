@@ -96,15 +96,6 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
                 saveButton.makeTour(true));
     }
 
-    protected void rebuildItem() {
-        preview = getBuilder().create();
-        preview.scale = 1f;
-        preview.posX = CARD_X;
-        preview.posY = RELIC_Y;
-        preview.hb.move(preview.posX, preview.posY);
-        previewDescription.setLabel(preview.getUpdatedDescription());
-    }
-
     @Override
     public void render(SpriteBatch sb) {
         if (imageEditor != null) {
@@ -153,6 +144,15 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         formEditor.refresh();
     }
 
+    protected void rebuildItem() {
+        preview = getBuilder().create();
+        preview.scale = 1f;
+        preview.posX = CARD_X;
+        preview.posY = RELIC_Y;
+        preview.hb.move(preview.posX, preview.posY);
+        previewDescription.setLabel(preview.getUpdatedDescription());
+    }
+
     protected void complete() {
         super.complete();
         invalidateItems();
@@ -184,7 +184,8 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
 
     private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {});
+        modifyBuilder(__ -> {
+        });
     }
 
 }

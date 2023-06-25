@@ -32,13 +32,13 @@ public class PMod_PerCreatureDebuffing extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return EUIUtils.count(getTargetList(info), GameUtilities::isDebuffing);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.debuff.progressive(), TEXT.subjects_character);
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(PGR.core.tooltips.debuff.progressive(), TEXT.subjects_character);
+    public int getMultiplier(PCLUseInfo info) {
+        return EUIUtils.count(getTargetList(info), GameUtilities::isDebuffing);
     }
 
     @Override

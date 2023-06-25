@@ -6,5 +6,6 @@ import pinacolada.annotations.CombatSubscriber;
 @CombatSubscriber
 public interface OnTrySpendEnergySubscriber extends PCLCombatSubscriber {
     boolean canSpendEnergy(AbstractCard card, boolean originalValue);
+
     int onTrySpendEnergy(AbstractCard card, int originalCost);
 }

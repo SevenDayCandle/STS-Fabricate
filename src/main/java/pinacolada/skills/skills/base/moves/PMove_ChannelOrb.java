@@ -56,6 +56,14 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
                 : TEXT.act_channelX(getAmountRawString(), base);
     }
 
+    protected void modifyFocus(List<AbstractOrb> orbs) {
+        if (extra > 0) {
+            for (AbstractOrb o : orbs) {
+                GameUtilities.modifyOrbBaseFocus(o, extra, true, false);
+            }
+        }
+    }
+
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.orbs.isEmpty()) {
@@ -75,13 +83,5 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
             order.channelRandomOrbs(amount).addCallback(this::modifyFocus);
         }
         super.use(info, order);
-    }
-
-    protected void modifyFocus(List<AbstractOrb> orbs) {
-        if (extra > 0) {
-            for (AbstractOrb o : orbs) {
-                GameUtilities.modifyOrbBaseFocus(o, extra, true, false);
-            }
-        }
     }
 }

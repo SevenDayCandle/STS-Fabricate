@@ -31,13 +31,13 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return GameUtilities.chance(amount);
+    public Color getConditionColor() {
+        return Settings.GOLD_COLOR;
     }
 
     @Override
-    public Color getConditionColor() {
-        return Settings.GOLD_COLOR;
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return GameUtilities.chance(amount);
     }
 
     @Override

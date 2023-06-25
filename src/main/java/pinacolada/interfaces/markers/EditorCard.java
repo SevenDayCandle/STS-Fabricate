@@ -16,15 +16,6 @@ import java.util.ArrayList;
 
 public interface EditorCard extends PointerProvider, CacheableCard {
 
-    void fullReset();
-    void loadImage(String path);
-    int hitCount();
-    int hitCountBase();
-    int rightCount();
-    int rightCountBase();
-    PCLAttackType attackType();
-    Texture getPortraitImageTexture();
-
     default void doEffects(ActionT1<PSkill<?>> action) {
         for (PSkill<?> be : getFullEffects()) {
             action.invoke(be);
@@ -69,4 +60,20 @@ public interface EditorCard extends PointerProvider, CacheableCard {
     default void triggerWhenCreated(boolean startOfBattle) {
         doEffects(be -> be.triggerOnCreate((AbstractCard) this, startOfBattle));
     }
+
+    void fullReset();
+
+    void loadImage(String path);
+
+    int hitCount();
+
+    int hitCountBase();
+
+    int rightCount();
+
+    int rightCountBase();
+
+    PCLAttackType attackType();
+
+    Texture getPortraitImageTexture();
 }

@@ -289,10 +289,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return block;
     }
 
-    public float modifySkillBonus(PCLUseInfo info, float block, AbstractCard c) {
-        return block;
-    }
-
     public float modifyOrbIncoming(float initial) {
         return initial;
     }
@@ -305,10 +301,18 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return block;
     }
 
+    public float modifySkillBonus(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
     protected void onAmountChanged(int previousAmount, int difference) {
         if (difference != 0) {
             updateDescription();
         }
+    }
+
+    public void onRemoveDamagePowers() {
+
     }
 
     protected void onSamePowerApplied(AbstractPower power) {
@@ -568,9 +572,5 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 triggerCondition.addUses(1);
             }
         }
-    }
-
-    public void onRemoveDamagePowers() {
-
     }
 }

@@ -45,10 +45,12 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         return map;
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        super.render(sb);
-        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+    protected void onRightClick() {
+        super.onRightClick();
+        this.getHitbox().unhover();
+        EUITutorial tutorial = new EUITutorial(
+                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
+        EUI.ftueScreen.openScreen(tutorial);
     }
 
     public void update() {
@@ -76,11 +78,9 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         }
     }
 
-    protected void onRightClick() {
-        super.onRightClick();
-        this.getHitbox().unhover();
-        EUITutorial tutorial = new EUITutorial(
-                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
-        EUI.ftueScreen.openScreen(tutorial);
+    @Override
+    public void render(SpriteBatch sb) {
+        super.render(sb);
+        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 }

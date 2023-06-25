@@ -110,6 +110,26 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         return new PCLDynamicPotion(this);
     }
 
+    @Override
+    public AbstractCard.CardColor getCardColor() {
+        return cardColor;
+    }
+
+    @Override
+    public ArrayList<PSkill<?>> getMoves() {
+        return moves;
+    }
+
+    @Override
+    public ArrayList<PTrigger> getPowers() {
+        return powers;
+    }
+
+    @Override
+    public PCLDynamicPotionData makeCopy() {
+        return new PCLDynamicPotionData(this);
+    }
+
     public PotionStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -126,6 +146,12 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         return this;
     }
 
+    public PCLDynamicPotionData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
+        return this;
+    }
+
     public PCLDynamicPotionData setID(String fullID) {
         this.ID = fullID;
         return this;
@@ -133,12 +159,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
 
     public PCLDynamicPotionData setImage(Texture portraitImage) {
         this.portraitImage = portraitImage;
-
-        return this;
-    }
-
-    public PCLDynamicPotionData setImagePath(String imagePath) {
-        this.imagePath = imagePath;
 
         return this;
     }
@@ -180,25 +200,5 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
 
     public PCLDynamicPotionData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
-    }
-
-    @Override
-    public AbstractCard.CardColor getCardColor() {
-        return cardColor;
-    }
-
-    @Override
-    public ArrayList<PSkill<?>> getMoves() {
-        return moves;
-    }
-
-    @Override
-    public ArrayList<PTrigger> getPowers() {
-        return powers;
-    }
-
-    @Override
-    public PCLDynamicPotionData makeCopy() {
-        return new PCLDynamicPotionData(this);
     }
 }

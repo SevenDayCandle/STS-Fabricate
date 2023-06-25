@@ -133,6 +133,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
             this.childEffect.invokeCastChildren(targetClass, onUse);
         }
     }
+
     @Override
     public boolean isBlank() {
         return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
@@ -192,14 +193,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public float modifySkillBonus(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : effects) {
-            amount = be.modifySkillBonus(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
             amount = be.modifyOrbIncoming(info, amount);
@@ -224,10 +217,11 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public PMultiTrait onAddToCard(AbstractCard card) {
-        addSubs(card);
-        super.onAddToCard(card);
-        return this;
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifySkillBonus(info, amount);
+        }
+        return amount;
     }
 
     @Override
@@ -251,14 +245,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public boolean removable() {
         return effects.isEmpty() || EUIUtils.all(effects, PSkill::removable);
-    }
-
-    @Override
-    public PMultiTrait setTemporaryAmount(int amount) {
-        for (PSkill<?> effect : effects) {
-            effect.setTemporaryAmount(amount);
-        }
-        return this;
     }
 
     @Override
@@ -349,6 +335,13 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
+    public PMultiTrait onAddToCard(AbstractCard card) {
+        addSubs(card);
+        super.onAddToCard(card);
+        return this;
+    }
+
+    @Override
     public PMultiTrait onRemoveFromCard(AbstractCard card) {
         removeSubs(card);
         super.onRemoveFromCard(card);
@@ -360,6 +353,14 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         for (PSkill<?> effect : effects) {
             effect.refresh(info, conditionMet);
         }
+    }
+
+    @Override
+    public PMultiTrait setTemporaryAmount(int amount) {
+        for (PSkill<?> effect : effects) {
+            effect.setTemporaryAmount(amount);
+        }
+        return this;
     }
 
     @Override

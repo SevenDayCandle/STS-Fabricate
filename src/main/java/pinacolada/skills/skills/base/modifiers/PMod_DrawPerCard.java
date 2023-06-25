@@ -41,17 +41,17 @@ public class PMod_DrawPerCard extends PMod_Do {
     }
 
     @Override
-    public String getAmountRawOrAllString() {
-        return getAmountRawString();
-    }
-
-    @Override
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
         DrawCards action = new DrawCards(amount);
         if (isForced()) {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c), false);
         }
         return action;
+    }
+
+    @Override
+    public String getAmountRawOrAllString() {
+        return getAmountRawString();
     }
 
     @Override

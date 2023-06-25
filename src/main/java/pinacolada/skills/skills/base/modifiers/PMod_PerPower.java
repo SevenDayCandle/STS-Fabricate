@@ -34,15 +34,15 @@ public class PMod_PerPower extends PMod_Per<PField_Power> {
     }
 
     @Override
+    public String getSubSampleText() {
+        return TEXT.cedit_powers;
+    }
+
+    @Override
     public int getMultiplier(PCLUseInfo info) {
         return fields.powers.isEmpty() ?
                 sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
                 sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID)));
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return TEXT.cedit_powers;
     }
 
     @Override

@@ -94,15 +94,6 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
                 saveButton.makeTour(true));
     }
 
-    protected void rebuildItem() {
-        previewRelic = getBuilder().create();
-        previewRelic.scale = 1f;
-        previewRelic.currentX = previewRelic.targetX = CARD_X;
-        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
-        previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
-        previewDescription.setLabel(previewRelic.getUpdatedDescription());
-    }
-
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
         imageButton.tryRender(sb);
@@ -128,6 +119,15 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         formEditor.refresh();
     }
 
+    protected void rebuildItem() {
+        previewRelic = getBuilder().create();
+        previewRelic.scale = 1f;
+        previewRelic.currentX = previewRelic.targetX = CARD_X;
+        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
+        previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
+        previewDescription.setLabel(previewRelic.getUpdatedDescription());
+    }
+
     protected void complete() {
         super.complete();
         invalidateItems();
@@ -141,7 +141,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        currentDialog = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
+        currentDialog = PCLCustomImageEffect.forRelic(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));
@@ -159,7 +159,8 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {});
+        modifyBuilder(__ -> {
+        });
     }
 
 }

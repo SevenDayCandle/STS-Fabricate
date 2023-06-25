@@ -55,11 +55,6 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
-    }
-
-    @Override
     public String getNumericalObjectText() {
         return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getObjectText()) : getObjectText();
     }
@@ -67,11 +62,6 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public String getObjectSampleText() {
         return TEXT.sui_affinities;
-    }
-
-    @Override
-    public String getObjectText() {
-        return fields.getAddAffinityChoiceString();
     }
 
     @Override
@@ -86,12 +76,22 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         return getBasicGiveString();
     }
 
-    public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices, PCLActions order) {
-        order.tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
-    }
-
     @Override
     public String wrapExtra(int input) {
         return String.valueOf(Math.abs(input));
+    }
+
+    @Override
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
+    }
+
+    @Override
+    public String getObjectText() {
+        return fields.getAddAffinityChoiceString();
+    }
+
+    public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices, PCLActions order) {
+        order.tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
     }
 }

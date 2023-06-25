@@ -44,50 +44,6 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_obtain(TEXT.subjects_relic);
-    }
-
-    @Override
-    public String getSubText() {
-        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.getFullRelicString());
-    }
-
-    @Override
-    public PMove_ObtainRelic onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
-        if (card instanceof KeywordProvider) {
-            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
-            if (tips != null) {
-                for (String r : fields.relicIDs) {
-                    AbstractRelic relic = RelicLibrary.getRelic(r);
-                    if (relic != null) {
-                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
-                    }
-                }
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        createRelic(order::obtainRelic);
-        super.use(info, order);
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        createRelic(PCLEffects.Queue::obtainRelic);
-    }
-
     protected void createRelic(ActionT1<AbstractRelic> onCreate) {
         if (!fields.relicIDs.isEmpty()) {
             for (String r : fields.relicIDs) {
@@ -128,5 +84,49 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                 }
             }
         }
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_obtain(TEXT.subjects_relic);
+    }
+
+    @Override
+    public String getSubText() {
+        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.getFullRelicString());
+    }
+
+    @Override
+    public boolean isMetascaling() {
+        return true;
+    }
+
+    @Override
+    public PMove_ObtainRelic onAddToCard(AbstractCard card) {
+        super.onAddToCard(card);
+        if (card instanceof KeywordProvider) {
+            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
+            if (tips != null) {
+                for (String r : fields.relicIDs) {
+                    AbstractRelic relic = RelicLibrary.getRelic(r);
+                    if (relic != null) {
+                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        createRelic(PCLEffects.Queue::obtainRelic);
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        createRelic(order::obtainRelic);
+        super.use(info, order);
     }
 }

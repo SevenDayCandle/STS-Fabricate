@@ -48,6 +48,13 @@ public class FadingParticleEffect extends PCLEffect {
         this.alpha = 1.0F;
     }
 
+    public FadingParticleEffect setAcceleration(float aX, float aY) {
+        this.aX = aX;
+        this.aY = aY;
+
+        return this;
+    }
+
     public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
         this.blendingMode = blendingMode;
         return this;
@@ -122,13 +129,6 @@ public class FadingParticleEffect extends PCLEffect {
         if (this.duration < halfDuration) {
             this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
         }
-    }
-
-    public FadingParticleEffect setAcceleration(float aX, float aY) {
-        this.aX = aX;
-        this.aY = aY;
-
-        return this;
     }
 
     public FadingParticleEffect setFlip(boolean flipX, boolean flipY) {

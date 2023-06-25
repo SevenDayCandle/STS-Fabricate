@@ -16,8 +16,6 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
         super(data, PCLCardTarget.Self, amount);
     }
 
-    public abstract String gainText();
-
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
@@ -37,4 +35,6 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     public String wrapAmount(int input) {
         return String.valueOf(Math.abs(input));
     }
+
+    public abstract String gainText();
 }

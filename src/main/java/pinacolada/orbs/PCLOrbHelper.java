@@ -92,13 +92,13 @@ public class PCLOrbHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     public final boolean isCommon() {

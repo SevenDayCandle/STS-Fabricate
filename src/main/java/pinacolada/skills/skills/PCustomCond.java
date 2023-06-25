@@ -48,23 +48,6 @@ public class PCustomCond extends PCond<PField_CardCategory> {
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return false;
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        useImpl(info, order);
-        super.use(info, order);
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-        useImpl(info, order);
-        super.use(info, order, shouldPay);
-    }
-
-    @Override
     public String getSubText() {
         return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
     }
@@ -90,6 +73,23 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         }
 
         return copy;
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        useImpl(info, order);
+        super.use(info, order);
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        useImpl(info, order);
+        super.use(info, order, shouldPay);
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return false;
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order) {

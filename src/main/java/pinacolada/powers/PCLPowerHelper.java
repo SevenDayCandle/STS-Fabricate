@@ -196,13 +196,13 @@ public class PCLPowerHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     protected void registerHelper(String powerID) {

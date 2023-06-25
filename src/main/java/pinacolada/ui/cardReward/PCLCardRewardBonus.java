@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardBonus extends EUIBase {
-    protected CardRewardBonusProvider provider;
     protected final ArrayList<CardRewardBundle> bundles = new ArrayList<>();
+    protected CardRewardBonusProvider provider;
     protected RewardItem rewardItem;
 
     public PCLCardRewardBonus() {
@@ -27,12 +27,12 @@ public class PCLCardRewardBonus extends EUIBase {
 
     // Called when rewards get rerolled through dice
     public void addManual(AbstractCard card) {
-         if (provider != null && provider.canActivate(rewardItem)) {
-             CardRewardBundle bundle = provider.getBundle(card);
-             if (bundle != null) {
-                 bundles.add(bundle);
-             }
-         }
+        if (provider != null && provider.canActivate(rewardItem)) {
+            CardRewardBundle bundle = provider.getBundle(card);
+            if (bundle != null) {
+                bundles.add(bundle);
+            }
+        }
     }
 
     // TODO rework to prevent "rerolling" rewards
@@ -52,7 +52,6 @@ public class PCLCardRewardBonus extends EUIBase {
     public void open(RewardItem rewardItem, ArrayList<AbstractCard> cards) {
         this.rewardItem = rewardItem;
         this.bundles.clear();
-
 
 
         final ArrayList<AbstractCard> toRemove = new ArrayList<>();

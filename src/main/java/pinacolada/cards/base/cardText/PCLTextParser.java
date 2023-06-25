@@ -55,24 +55,6 @@ public class PCLTextParser {
         return EUIUtils.flattenList(tokenLines);
     }
 
-    protected boolean isNext(int amount, char character) {
-        final Character other = nextCharacter(amount);
-        if (other != null) {
-            return other == character;
-        }
-
-        return false;
-    }
-
-    protected boolean isWhitespace(int amount) {
-        final Character other = nextCharacter(amount);
-        if (other != null) {
-            return Character.isWhitespace(other);
-        }
-
-        return false;
-    }
-
     public void initialize(PCLCard card, String text) {
         this.card = card;
         this.text = text;
@@ -106,6 +88,24 @@ public class PCLTextParser {
             }
         }
 
+    }
+
+    protected boolean isNext(int amount, char character) {
+        final Character other = nextCharacter(amount);
+        if (other != null) {
+            return other == character;
+        }
+
+        return false;
+    }
+
+    protected boolean isWhitespace(int amount) {
+        final Character other = nextCharacter(amount);
+        if (other != null) {
+            return Character.isWhitespace(other);
+        }
+
+        return false;
     }
 
     protected boolean moveIndex(int amount) {

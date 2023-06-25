@@ -190,6 +190,14 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
+                targetDropdown.makeTour(true),
+                tagsDropdown.makeTour(true),
+                upgradeLabel.makeTour(true));
+    }
+
+    @Override
     public TextureCache getTextureCache() {
         return PCLCoreImages.Menu.editorAttribute;
     }
@@ -197,14 +205,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return header.text;
-    }
-
-    @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
-                targetDropdown.makeTour(true),
-                tagsDropdown.makeTour(true),
-                upgradeLabel.makeTour(true));
     }
 
     @Override
@@ -253,26 +253,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public void updateImpl() {
-        header.tryUpdate();
-        costEditor.tryUpdate();
-        damageEditor.tryUpdate();
-        blockEditor.tryUpdate();
-        magicNumberEditor.tryUpdate();
-        hpEditor.tryUpdate();
-        hitCountEditor.tryUpdate();
-        rightCountEditor.tryUpdate();
-        targetDropdown.tryUpdate();
-        timingDropdown.tryUpdate();
-        tagsDropdown.tryUpdate();
-        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors) {
-            aEditor.tryUpdate();
-        }
-        upgradeLabel.tryUpdate();
-        upgradeLabel2.tryUpdate();
-    }
-
-    @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         upgradeLabel.tryRender(sb);
@@ -290,5 +270,25 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         targetDropdown.tryRender(sb);
         timingDropdown.tryRender(sb);
         tagsDropdown.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        header.tryUpdate();
+        costEditor.tryUpdate();
+        damageEditor.tryUpdate();
+        blockEditor.tryUpdate();
+        magicNumberEditor.tryUpdate();
+        hpEditor.tryUpdate();
+        hitCountEditor.tryUpdate();
+        rightCountEditor.tryUpdate();
+        targetDropdown.tryUpdate();
+        timingDropdown.tryUpdate();
+        tagsDropdown.tryUpdate();
+        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors) {
+            aEditor.tryUpdate();
+        }
+        upgradeLabel.tryUpdate();
+        upgradeLabel2.tryUpdate();
     }
 }

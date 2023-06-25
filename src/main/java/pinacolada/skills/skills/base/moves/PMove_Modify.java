@@ -39,59 +39,6 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         }
     }
 
-    public abstract ActionT1<AbstractCard> getAction(PCLActions order);
-
-    public String getNumericalObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString(), getObjectText());
-    }
-
-    public abstract String getObjectText();
-
-    public String getObjectSampleText() {
-        return getObjectText();
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
-    }
-
-    @Override
-    public String getSubText() {
-        return getBasicAddString();
-    }
-
-    @Override
-    public boolean isAffectedByMods() {
-        return super.isAffectedByMods() && !fields.not;
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
-        fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        boolean selectAll = baseExtra <= 0 || useParent;
-        order.selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
-                .setFilter(this::canCardPass)
-                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.forced)
-                .addCallback(cards -> cardAction(cards, order));
-        super.use(info, order);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
-    }
-
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
-    }
-
     public String getBasicAddString() {
         String giveString = getObjectText();
         if (fields.not) {
@@ -129,7 +76,60 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
     }
 
+    public String getNumericalObjectText() {
+        return EUIRM.strings.numNoun(getAmountRawString(), getObjectText());
+    }
+
+    public String getObjectSampleText() {
+        return getObjectText();
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
+    }
+
+    @Override
+    public String getSubText() {
+        return getBasicAddString();
+    }
+
+    @Override
+    public boolean isAffectedByMods() {
+        return super.isAffectedByMods() && !fields.not;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+    }
+
+    public String wrapExtra(int input) {
+        return String.valueOf(input);
+    }
+
     public String getUntilPlayedString() {
         return EUIUtils.capitalize(TEXT.subjects_untilX("", PGR.core.tooltips.play.past()).trim());
     }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        boolean selectAll = baseExtra <= 0 || useParent;
+        order.selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
+                .setFilter(this::canCardPass)
+                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.forced)
+                .addCallback(cards -> cardAction(cards, order));
+        super.use(info, order);
+    }
+
+    public abstract ActionT1<AbstractCard> getAction(PCLActions order);
+
+    public abstract String getObjectText();
 }

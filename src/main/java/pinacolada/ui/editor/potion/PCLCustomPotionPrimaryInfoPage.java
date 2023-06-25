@@ -142,8 +142,8 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(EUIRM.strings.potion_visualEffect, PGR.core.strings.cetut_potionEffect);
         liquidColorEditor = new PCLCustomColorEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_liquidColor,
                 this::openColorEditor, color -> {
-                    effect.modifyAllBuilders(e -> e.setLiquidColor(color));
-                })
+            effect.modifyAllBuilders(e -> e.setLiquidColor(color));
+        })
                 .setTooltip(PGR.core.strings.cedit_liquidColor, PGR.core.strings.cetut_potionColor);
         hybridColorEditor = new PCLCustomColorEditor(new EUIHitbox(liquidColorEditor.hb.x + liquidColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_hybridColor,
                 this::openColorEditor, color -> {
@@ -174,15 +174,6 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
-    }
-
-    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
                 idInput.makeTour(true),
@@ -190,6 +181,15 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 languageDropdown.makeTour(true),
                 rarityDropdown.makeTour(true),
                 sizeDropdown.makeTour(true));
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
     }
 
     @Override
@@ -208,21 +208,9 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
 
-    @Override
-    public void updateImpl() {
-        header.tryUpdate();
-        idWarning.tryUpdate();
-        rarityDropdown.tryUpdate();
-        sizeDropdown.tryUpdate();
-        effectDropdown.tryUpdate();
-        liquidColorEditor.tryUpdate();
-        hybridColorEditor.tryUpdate();
-        spotsColorEditor.tryUpdate();
-        languageDropdown.tryUpdate();
-        nameInput.tryUpdate();
-        idInput.tryUpdate();
-        maxUpgrades.tryUpdate();
-        branchUpgrades.tryUpdate();
+    protected void openColorEditor(PCLCustomColorEditor editor) {
+        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
+                .addCallback(editor::setColor);
     }
 
     @Override
@@ -242,9 +230,21 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.tryRender(sb);
     }
 
-    protected void openColorEditor(PCLCustomColorEditor editor) {
-        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
-                .addCallback(editor::setColor);
+    @Override
+    public void updateImpl() {
+        header.tryUpdate();
+        idWarning.tryUpdate();
+        rarityDropdown.tryUpdate();
+        sizeDropdown.tryUpdate();
+        effectDropdown.tryUpdate();
+        liquidColorEditor.tryUpdate();
+        hybridColorEditor.tryUpdate();
+        spotsColorEditor.tryUpdate();
+        languageDropdown.tryUpdate();
+        nameInput.tryUpdate();
+        idInput.tryUpdate();
+        maxUpgrades.tryUpdate();
+        branchUpgrades.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

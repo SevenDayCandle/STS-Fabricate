@@ -28,7 +28,8 @@ public abstract class PCallbackMove<T extends PField> extends PMove<T> {
     }
 
     public void use(PCLUseInfo info, PCLActions order) {
-        use(info, order, __ -> {});
+        use(info, order, __ -> {
+        });
     }
 
     public abstract void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback);

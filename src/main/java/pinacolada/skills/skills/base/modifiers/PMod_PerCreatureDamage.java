@@ -32,13 +32,13 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return sumTargets(info, t -> t instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) t).getDamage(true) : 0);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.title, TEXT.subjects_damage);
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.title, TEXT.subjects_damage);
+    public int getMultiplier(PCLUseInfo info) {
+        return sumTargets(info, t -> t instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) t).getDamage(true) : 0);
     }
 
     @Override

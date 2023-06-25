@@ -31,13 +31,13 @@ public class PMod_PerAffinityLevel extends PMod_Per<PField_Affinity> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel);
+    public String getSubSampleText() {
+        return PGR.core.tooltips.level.title;
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.level.title;
+    public int getMultiplier(PCLUseInfo info) {
+        return EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel);
     }
 
     @Override

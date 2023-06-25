@@ -22,11 +22,6 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         return relicData.strings.DESCRIPTIONS;
     }
 
-    @Override
-    public EditorMaker getDynamicData() {
-        return builder;
-    }
-
     // Do not show errors for custom image paths
     @Override
     public void loadImage(String path) {
@@ -47,6 +42,11 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     @Override
     public void setupImages(String path) {
         // No-op, handle images in setupBuilder
+    }
+
+    @Override
+    public EditorMaker getDynamicData() {
+        return builder;
     }
 
     @Override

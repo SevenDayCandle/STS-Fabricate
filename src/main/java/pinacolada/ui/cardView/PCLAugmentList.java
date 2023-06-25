@@ -60,23 +60,16 @@ public class PCLAugmentList extends EUICanvasGrid {
         return augments.size();
     }
 
-    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
-        int multiplier = sortDesc ? -1 : 1;
-        augments.sort((a, b) -> sortImpl(a, b, sortType) * multiplier);
-    }
-
-    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
-        switch (sortType) {
-            case Name:
-                return StringUtils.compare(a.augment.getName(), b.augment.getName());
-            case Count:
-                return Float.compare(a.amount, b.amount);
-            case Category:
-                return a.augment.data.category.ordinal() - b.augment.data.category.ordinal();
-            case Level:
-                return a.augment.data.tier - b.augment.data.tier;
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+        sortButton.renderImpl(sb);
+        for (PCLAugmentListItem item : augments) {
+            if (item.hb.y >= -100f * Settings.scale && item.hb.y <= Settings.HEIGHT + 100f * Settings.scale) {
+                item.renderImpl(sb);
+            }
         }
-        return 0;
+        cancel.renderImpl(sb);
     }
 
     @Override
@@ -105,16 +98,23 @@ public class PCLAugmentList extends EUICanvasGrid {
         cancel.updateImpl();
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-        sortButton.renderImpl(sb);
-        for (PCLAugmentListItem item : augments) {
-            if (item.hb.y >= -100f * Settings.scale && item.hb.y <= Settings.HEIGHT + 100f * Settings.scale) {
-                item.renderImpl(sb);
-            }
+    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
+        int multiplier = sortDesc ? -1 : 1;
+        augments.sort((a, b) -> sortImpl(a, b, sortType) * multiplier);
+    }
+
+    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
+        switch (sortType) {
+            case Name:
+                return StringUtils.compare(a.augment.getName(), b.augment.getName());
+            case Count:
+                return Float.compare(a.amount, b.amount);
+            case Category:
+                return a.augment.data.category.ordinal() - b.augment.data.category.ordinal();
+            case Level:
+                return a.augment.data.tier - b.augment.data.tier;
         }
-        cancel.renderImpl(sb);
+        return 0;
     }
 
 }

@@ -44,50 +44,6 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
         fields.potionIDs.addAll(Arrays.asList(potions));
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_obtain(TEXT.subjects_potion);
-    }
-
-    @Override
-    public String getSubText() {
-        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
-    }
-
-    @Override
-    public PMove_ObtainPotion onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
-        if (card instanceof KeywordProvider) {
-            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
-            if (tips != null) {
-                for (String r : fields.potionIDs) {
-                    AbstractPotion potion = PotionHelper.getPotion(r);
-                    if (potion != null) {
-                        tips.add(new EUIKeywordTooltip(potion.name, potion.description));
-                    }
-                }
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        createRelic(order::obtainPotion);
-        super.use(info, order);
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        createRelic((p) -> AbstractDungeon.player.obtainPotion(p));
-    }
-
     protected void createRelic(ActionT1<AbstractPotion> onCreate) {
         if (!fields.potionIDs.isEmpty()) {
             for (String r : fields.potionIDs) {
@@ -134,5 +90,49 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
                 }
             }
         }
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_obtain(TEXT.subjects_potion);
+    }
+
+    @Override
+    public String getSubText() {
+        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
+    }
+
+    @Override
+    public boolean isMetascaling() {
+        return true;
+    }
+
+    @Override
+    public PMove_ObtainPotion onAddToCard(AbstractCard card) {
+        super.onAddToCard(card);
+        if (card instanceof KeywordProvider) {
+            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
+            if (tips != null) {
+                for (String r : fields.potionIDs) {
+                    AbstractPotion potion = PotionHelper.getPotion(r);
+                    if (potion != null) {
+                        tips.add(new EUIKeywordTooltip(potion.name, potion.description));
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        createRelic((p) -> AbstractDungeon.player.obtainPotion(p));
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        createRelic(order::obtainPotion);
+        super.use(info, order);
     }
 }

@@ -63,27 +63,16 @@ public class VariableToken extends PCLTextToken {
         return 0;
     }
 
-    @Override
-    public void render(SpriteBatch sb, PCLCardText context) {
-        if (coloredString == null) {
-            coloredString = new ColoredString(getVal(context.card), getColor(context.card));
+    protected Color getColor(AbstractCard card) {
+        if (var.isModified(card)) {
+            if (var.value(card) >= var.modifiedBaseValue(card)) {
+                return var.getIncreasedValueColor();
+            }
+            else {
+                return var.getDecreasedValueColor();
+            }
         }
-        else if (EUI.elapsed25()) {
-            coloredString.text = String.valueOf(getVal(context.card));
-            coloredString.color = getColor(context.card);
-        }
-
-        super.render(sb, context, coloredString);
-    }
-
-    @Override
-    protected float getWidth(BitmapFont font, String text) {
-        if (text == null) {
-            return super.getWidth(font, DUMMY); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
-        }
-        else {
-            return super.getWidth(font, text);
-        }
+        return var.getNormalColor();
     }
 
     protected int getVal(AbstractCard card) {
@@ -98,15 +87,27 @@ public class VariableToken extends PCLTextToken {
         return var.value(card);
     }
 
-    protected Color getColor(AbstractCard card) {
-        if (var.isModified(card)) {
-            if (var.value(card) >= var.modifiedBaseValue(card)) {
-                return var.getIncreasedValueColor();
-            } else {
-                return var.getDecreasedValueColor();
-            }
+    @Override
+    protected float getWidth(BitmapFont font, String text) {
+        if (text == null) {
+            return super.getWidth(font, DUMMY); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
         }
-        return var.getNormalColor();
+        else {
+            return super.getWidth(font, text);
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb, PCLCardText context) {
+        if (coloredString == null) {
+            coloredString = new ColoredString(getVal(context.card), getColor(context.card));
+        }
+        else if (EUI.elapsed25()) {
+            coloredString.text = String.valueOf(getVal(context.card));
+            coloredString.color = getColor(context.card);
+        }
+
+        super.render(sb, context, coloredString);
     }
 
     protected void setDynamics(String key, AbstractCard card) {

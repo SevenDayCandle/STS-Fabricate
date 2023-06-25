@@ -228,14 +228,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public float modifySkillBonus(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : effects) {
-            amount = be.modifySkillBonus(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
             amount = be.modifyOrbIncoming(info, amount);
@@ -255,6 +247,14 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public float modifyRightCount(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
             amount = be.modifyRightCount(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifySkillBonus(info, amount);
         }
         return amount;
     }

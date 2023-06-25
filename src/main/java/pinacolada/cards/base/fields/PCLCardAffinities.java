@@ -133,6 +133,31 @@ public class PCLCardAffinities {
         this.updateSortedList();
     }
 
+    public void displayUpgrades(ArrayList<PCLCardAffinity> prev) {
+        if (prev == null) {
+            return;
+        }
+
+        int i = 0;
+        int j = 0;
+
+        while (i < prev.size() && j < sorted.size()) {
+            if (sorted.get(j).type != prev.get(i).type) {
+                sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
+                j++;
+            }
+            else {
+                i++;
+                j++;
+            }
+        }
+
+        while (j < sorted.size()) {
+            sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
+            j++;
+        }
+    }
+
     public PCLCardAffinity get(PCLAffinity affinity) {
         return get(affinity, false);
     }
@@ -455,31 +480,6 @@ public class PCLCardAffinities {
         }
 
         sorted.sort(PCLCardAffinity::compareTo);
-    }
-
-    public void displayUpgrades(ArrayList<PCLCardAffinity> prev) {
-        if (prev == null) {
-            return;
-        }
-
-        int i = 0;
-        int j = 0;
-
-        while (i < prev.size() && j < sorted.size()) {
-            if (sorted.get(j).type != prev.get(i).type) {
-                sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
-                j++;
-            }
-            else {
-                i++;
-                j++;
-            }
-        }
-
-        while (j < sorted.size()) {
-            sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
-            j++;
-        }
     }
 
 }

@@ -30,8 +30,6 @@ public interface PMultiBase<T extends PSkill<?>> {
         return index < getSubEffects().size() ? getSubEffects().get(index) : null;
     }
 
-    List<T> getSubEffects();
-
     default void removeSubs(AbstractCard c) {
         for (PSkill<?> be : getSubEffects()) {
             be.onRemoveFromCard(c);
@@ -86,4 +84,6 @@ public interface PMultiBase<T extends PSkill<?>> {
         }
         return true;
     }
+
+    List<T> getSubEffects();
 }

@@ -29,9 +29,9 @@ public class PField_CardModifyAffinity extends PField_CardModify {
         return new PField_CardModifyAffinity(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerPile(groupTypes);
-        editor.registerAffinity(addAffinities);
+    public PField_CardModifyAffinity setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 
     public String getAddAffinityChoiceString() {
@@ -48,8 +48,8 @@ public class PField_CardModifyAffinity extends PField_CardModify {
         return setAddAffinity(Arrays.asList(affinities));
     }
 
-    public PField_CardModifyAffinity setOr(boolean value) {
-        this.or = value;
-        return this;
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerPile(groupTypes);
+        editor.registerAffinity(addAffinities);
     }
 }

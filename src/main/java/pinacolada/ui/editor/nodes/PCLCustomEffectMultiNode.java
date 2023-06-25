@@ -22,10 +22,16 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         super(editor, skill, type, sourceHb);
     }
 
-    @Override
-    public void reassignChild(PCLCustomEffectNode node) {
-        addSubnode(node);
-        addEffect(node.skill);
+    public void addEffect(PSkill<?> effect) {
+        if (skill instanceof PMultiBase<?>) {
+            ((PMultiBase<?>) skill).tryAddEffect(effect);
+        }
+    }
+
+    public void addSubnode(PCLCustomEffectNode node) {
+        subnodes.add(node);
+        node.index = subnodes.size() - 1;
+        node.parent = this;
     }
 
     @Override
@@ -38,16 +44,14 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         PCLCustomEffectNode first = subnodes.size() > 0 ? subnodes.get(0) : null;
         if (first != null) {
             if (parent != null) {
-                if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill))
-                {
+                if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill)) {
                     ((PMultiBase<?>) parent.skill).tryAddEffect(first.skill);
                 }
                 else {
                     parent.skill.setChild(first.skill);
                 }
             }
-            else if (editor.rootEffect == this.skill)
-            {
+            else if (editor.rootEffect == this.skill) {
                 editor.rootEffect = new PRoot();
                 editor.rootEffect.setChild(first.skill);
             }
@@ -60,12 +64,10 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     // When initializing this node through createTree, also create nodes for the subeffects
     @Override
     public PCLCustomEffectNode makeSkillChild() {
-        if (skill instanceof PMultiBase)
-        {
+        if (skill instanceof PMultiBase) {
             List<? extends PSkill<?>> subEffects = ((PMultiBase<?>) skill).getSubEffects();
             float offsetX = (subEffects.size() - 1) * SIZE_X * -0.7f;
-            for (PSkill<?> subskill : subEffects)
-            {
+            for (PSkill<?> subskill : subEffects) {
                 addSubnode(createTree(editor, subskill, new OriginRelativeHitbox(hb, SIZE_X, SIZE_Y, offsetX, DISTANCE_Y)));
                 offsetX += SIZE_X * 1.4f;
             }
@@ -91,25 +93,16 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     }
 
     @Override
+    public void reassignChild(PCLCustomEffectNode node) {
+        addSubnode(node);
+        addEffect(node.skill);
+    }
+
+    @Override
     public void refreshAll() {
         super.refreshAll();
         for (PCLCustomEffectNode subnode : subnodes) {
             subnode.refreshAll();
-        }
-    }
-
-    public void addSubnode(PCLCustomEffectNode node)
-    {
-        subnodes.add(node);
-        node.index = subnodes.size() - 1;
-        node.parent = this;
-    }
-
-    public void addEffect(PSkill<?> effect)
-    {
-        if (skill instanceof PMultiBase<?>)
-        {
-            ((PMultiBase<?>) skill).tryAddEffect(effect);
         }
     }
 

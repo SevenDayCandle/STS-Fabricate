@@ -40,12 +40,6 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         super(DATA, PCLCardTarget.None, amount);
     }
 
-    // Must return true when using or cooldown will not progress in a multicond
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return isUsing || getCooldown() <= 0;
-    }
-
     @Override
     public int getBaseCooldown() {
         return baseAmount;
@@ -85,11 +79,6 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
-    }
-
-    @Override
     public PCond_Cooldown onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         return this;
@@ -104,6 +93,17 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     // No-op to avoid refreshing effects changing amount
     public PCond_Cooldown setTemporaryAmount(int amount) {
         return this;
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
+        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    }
+
+    // Must return true when using or cooldown will not progress in a multicond
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return isUsing || getCooldown() <= 0;
     }
 
     @Override

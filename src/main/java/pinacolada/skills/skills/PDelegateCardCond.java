@@ -46,8 +46,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         return getDelegateTooltip().title;
     }
 
-    public abstract EUIKeywordTooltip getDelegateTooltip();
-
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return isUnderWhen(callingSkill) ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
@@ -82,4 +80,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
             useFromTrigger(makeInfo(target).setData(Collections.singletonList(c)));
         }
     }
+
+    public abstract EUIKeywordTooltip getDelegateTooltip();
 }

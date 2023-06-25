@@ -32,8 +32,6 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
         return new PLimit_SemiLimited();
     }
 
-    abstract public boolean canActivate(PCLUseInfo info);
-
     @Override
     public Color getConditionColor() {
         return GameUtilities.inBattle() && !limitCache ? EUIColors.gold(0.6f) : Settings.GOLD_COLOR;
@@ -77,6 +75,8 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
             childEffect.use(info, order);
         }
     }
+
+    abstract public boolean canActivate(PCLUseInfo info);
 
     abstract public boolean tryActivate(PCLUseInfo info);
 }

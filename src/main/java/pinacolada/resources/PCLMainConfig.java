@@ -61,9 +61,8 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String TOUR_SERIESSELECT = PCLMainConfig.createFullID("TourSeriesSelect");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
-    private static ExtraModSettingsPanel.Category pclCategory;
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
-
+    private static ExtraModSettingsPanel.Category pclCategory;
     private HashSet<String> tips = null;
     public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(ABBREVIATED_EFFECTS, false);
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
@@ -178,16 +177,6 @@ public class PCLMainConfig extends AbstractConfig {
         removeLineBreaks.addListener(val -> this.updateCardDescriptions());
     }
 
-    public void load() {
-        try {
-            config = new SpireConfig(MOD_ID, MOD_ID);
-            loadImpl();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void load(int slot) {
         load();
     }
@@ -226,6 +215,16 @@ public class PCLMainConfig extends AbstractConfig {
         tourLoadout.addConfig(config);
         tourRelicPrimary.addConfig(config);
         tourSeriesSelect.addConfig(config);
+    }
+
+    public void load() {
+        try {
+            config = new SpireConfig(MOD_ID, MOD_ID);
+            loadImpl();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

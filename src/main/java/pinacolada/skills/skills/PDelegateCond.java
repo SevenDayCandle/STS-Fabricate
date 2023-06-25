@@ -27,12 +27,12 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return triggerSource == this;
+    public String getText(boolean addPeriod) {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return triggerSource == this;
     }
 }

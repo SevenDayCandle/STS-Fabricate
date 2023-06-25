@@ -36,8 +36,6 @@ public abstract class ListSelection<Item> {
         return new Special<>(add, get);
     }
 
-    public abstract void add(List<Item> list, Item item, int index);
-
     public void forEach(ArrayList<Item> modifiableList, int amount, ActionT1<Item> apply) {
         final boolean remove = mode.isRandom();
         final int max = Math.min(modifiableList.size(), amount);
@@ -48,6 +46,8 @@ public abstract class ListSelection<Item> {
             }
         }
     }
+
+    public abstract void add(List<Item> list, Item item, int index);
 
     public abstract Item get(List<Item> list, int index, boolean remove);
 

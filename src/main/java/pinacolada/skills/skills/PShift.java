@@ -14,14 +14,6 @@ import pinacolada.skills.skills.base.primary.PShift_OnRemove;
 
 public abstract class PShift extends PPrimary<PField_Empty> {
 
-    public static PShift_OnObtain obtain() {
-        return new PShift_OnObtain();
-    }
-
-    public static PShift_OnRemove remove() {
-        return new PShift_OnRemove();
-    }
-
     public PShift(PSkillData<PField_Empty> data) {
         super(data);
     }
@@ -30,9 +22,12 @@ public abstract class PShift extends PPrimary<PField_Empty> {
         super(data, content);
     }
 
-    @Override
-    public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? (": " + childEffect.getText(addPeriod)) : "");
+    public static PShift_OnObtain obtain() {
+        return new PShift_OnObtain();
+    }
+
+    public static PShift_OnRemove remove() {
+        return new PShift_OnRemove();
     }
 
     @Override
@@ -41,11 +36,8 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PMultiBase ||
-                skill instanceof PPassiveCond ||
-                skill instanceof PPassiveMod ||
-                skill instanceof OutOfCombatMove;
+    public String getText(boolean addPeriod) {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? (": " + childEffect.getText(addPeriod)) : "");
     }
 
     // Should not activate effects when played normally in battle
@@ -57,6 +49,13 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
     }
 
+    @Override
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return skill instanceof PMultiBase ||
+                skill instanceof PPassiveCond ||
+                skill instanceof PPassiveMod ||
+                skill instanceof OutOfCombatMove;
+    }
 
     public abstract String getDelegateText();
 }

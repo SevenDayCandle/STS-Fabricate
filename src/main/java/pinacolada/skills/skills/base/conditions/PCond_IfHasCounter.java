@@ -50,13 +50,13 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
+    public int getXValue(AbstractCard card) {
+        return GameUtilities.getCounter(sourceCard);
     }
 
     @Override
-    public int getXValue(AbstractCard card) {
-        return GameUtilities.getCounter(sourceCard);
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 
     @Override

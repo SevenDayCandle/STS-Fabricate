@@ -350,10 +350,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     public String getText(boolean addPeriod) {
         return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : COND_SEPARATOR) + childEffect.getText(addPeriod)) : "");
     }
-    
-    public boolean isUnderWhen(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When && !(parent instanceof PCond);
-    }
 
     @Override
     public float modifyBlock(PCLUseInfo info, float amount) {
@@ -396,14 +392,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public float modifySkillBonus(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
-            return this.childEffect.modifySkillBonus(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyOrbIncoming(info, amount);
@@ -423,6 +411,14 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     public float modifyRightCount(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyRightCount(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+            return this.childEffect.modifySkillBonus(info, amount);
         }
         return amount;
     }
@@ -480,8 +476,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
-    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
-
     public boolean checkConditionOutsideOfBattle() {
         return false;
     }
@@ -494,6 +488,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     /* Same as above but for passive conditions */
     public final boolean isPassiveClause() {
         return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
+    }
+
+    public boolean isUnderWhen(PSkill<?> callingSkill) {
+        return callingSkill instanceof PTrigger_When && !(parent instanceof PCond);
     }
 
     /*
@@ -519,10 +517,11 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
                 ((PMultiCond) parent).useDirectly(info, order);
             }
             // When a delegate is triggered from a branch, the resulting effect should be chosen based on the info gleaned from the branch
-            else if (parent instanceof PBranchCond)
-            {
+            else if (parent instanceof PBranchCond) {
                 parent.use(info, order);
             }
         }
     }
+
+    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
 }

@@ -354,20 +354,20 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setNot(true).setForced(true));
     }
 
-    public static PMove_ModifyCost modifyCostForTurn(int cost) {
-        return new PMove_ModifyCost(cost, 1);
-    }
-
-    public static PMove_ModifyCost modifyCostForTurn(int cost, int amount, PCLCardGroupHelper... groups) {
-        return new PMove_ModifyCost(cost, amount, groups);
-    }
-
     public static PMove_ModifyCost modifyCostExactForTurn(int cost) {
         return (PMove_ModifyCost) new PMove_ModifyCost(cost, 1).edit(f -> f.setNot(true));
     }
 
     public static PMove_ModifyCost modifyCostExactForTurn(int cost, int amount, PCLCardGroupHelper... groups) {
         return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setNot(true));
+    }
+
+    public static PMove_ModifyCost modifyCostForTurn(int cost) {
+        return new PMove_ModifyCost(cost, 1);
+    }
+
+    public static PMove_ModifyCost modifyCostForTurn(int cost, int amount, PCLCardGroupHelper... groups) {
+        return new PMove_ModifyCost(cost, amount, groups);
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage) {
@@ -552,6 +552,13 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return this;
     }
 
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (this.vfxFunc != null) {
+            PCLEffects.Queue.add(vfxFunc.invoke(info));
+        }
+        super.use(info, order);
+    }
+
     public PMove<T> setVFX(EffekseerEFK efk) {
         this.vfxFunc = (info) -> VFX.eFX(efk, info.source != null ? info.source.hb : AbstractDungeon.player.hb);
         return this;
@@ -560,13 +567,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     public PMove<T> setVFX(FuncT1<AbstractGameEffect, PCLUseInfo> vfxFunc) {
         this.vfxFunc = vfxFunc;
         return this;
-    }
-
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (this.vfxFunc != null) {
-            PCLEffects.Queue.add(vfxFunc.invoke(info));
-        }
-        super.use(info, order);
     }
 
 }

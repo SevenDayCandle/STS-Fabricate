@@ -68,16 +68,16 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
+    }
+
+    @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
         // For single target powers, the power target needs to match the owner of this skill
         if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
                 : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t).contains(t)))) {
             useFromTrigger(makeInfo(t).setData(power));
         }
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
     }
 }

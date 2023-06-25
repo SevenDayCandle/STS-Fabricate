@@ -47,6 +47,54 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
 
+    public PCLCustomPotionSlot(AbstractCard.CardColor color) {
+        ID = makeNewID(color);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = color;
+        PCLDynamicPotionData builder = (PCLDynamicPotionData) new PCLDynamicPotionData(ID)
+                .setText("", new String[]{})
+                .setColor(color)
+                .setRarity(AbstractPotion.PotionRarity.COMMON);
+        builders.add(builder);
+    }
+
+    public PCLCustomPotionSlot(PCLPotion card, AbstractCard.CardColor color) {
+        ID = makeNewID(color);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = color;
+        builders.add((PCLDynamicPotionData) new PCLDynamicPotionData(card.potionData)
+                .setID(ID)
+                .setColor(color)
+                .setImagePath(imagePath)
+                .setPSkill(card.getEffects(), true, true)
+                .setPPower(card.getPowerEffects(), true, true)
+        );
+        recordBuilder();
+    }
+
+    public PCLCustomPotionSlot(PCLCustomPotionSlot other, AbstractCard.CardColor color) {
+        this(other);
+        slotColor = color;
+        for (PCLDynamicPotionData builder : builders) {
+            builder.setColor(color);
+        }
+    }
+
+    public PCLCustomPotionSlot(PCLCustomPotionSlot other) {
+        ID = makeNewID(other.slotColor);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = other.slotColor;
+        for (PCLDynamicPotionData builder : other.builders) {
+            builders.add(new PCLDynamicPotionData(builder)
+                    .setID(ID)
+                    .setImagePath(imagePath));
+        }
+        recordBuilder();
+    }
+
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
@@ -124,54 +172,6 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
 
     protected static String makeNewID(AbstractCard.CardColor color) {
         return makeNewID(getBaseIDPrefix(color), getPotions(color));
-    }
-
-    public PCLCustomPotionSlot(AbstractCard.CardColor color) {
-        ID = makeNewID(color);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = color;
-        PCLDynamicPotionData builder = (PCLDynamicPotionData) new PCLDynamicPotionData(ID)
-                .setText("", new String[]{})
-                .setColor(color)
-                .setRarity(AbstractPotion.PotionRarity.COMMON);
-        builders.add(builder);
-    }
-
-    public PCLCustomPotionSlot(PCLPotion card, AbstractCard.CardColor color) {
-        ID = makeNewID(color);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = color;
-        builders.add((PCLDynamicPotionData) new PCLDynamicPotionData(card.potionData)
-                .setID(ID)
-                .setColor(color)
-                .setImagePath(imagePath)
-                .setPSkill(card.getEffects(), true, true)
-                .setPPower(card.getPowerEffects(), true, true)
-        );
-        recordBuilder();
-    }
-
-    public PCLCustomPotionSlot(PCLCustomPotionSlot other, AbstractCard.CardColor color) {
-        this(other);
-        slotColor = color;
-        for (PCLDynamicPotionData builder : builders) {
-            builder.setColor(color);
-        }
-    }
-
-    public PCLCustomPotionSlot(PCLCustomPotionSlot other) {
-        ID = makeNewID(other.slotColor);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = other.slotColor;
-        for (PCLDynamicPotionData builder : other.builders) {
-            builders.add(new PCLDynamicPotionData(builder)
-                    .setID(ID)
-                    .setImagePath(imagePath));
-        }
-        recordBuilder();
     }
 
     public void commitBuilder() {
