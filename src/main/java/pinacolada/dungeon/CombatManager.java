@@ -426,6 +426,11 @@ public class CombatManager {
         return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap;
     }
 
+    public static boolean hasEnoughEnergyForCard(AbstractCard card) {
+        boolean canPass = PCLCardTag.Suspensive.has(card);
+        return subscriberInout(OnTrySpendEnergySubscriber.class, canPass, (s, d) -> s.canSpendEnergy(card, d));
+    }
+
     public static List<AbstractCard> hasteInfinitesThisTurn() {
         return hasteInfinitesThisTurn;
     }
@@ -800,7 +805,9 @@ public class CombatManager {
             cost = 0;
         }
 
-        return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, p, d));
+        // TODO implement suspensive logic
+
+        return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, d));
     }
 
     public static int onTryUseXCost(int original, AbstractCard card) {

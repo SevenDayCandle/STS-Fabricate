@@ -138,6 +138,7 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache purge = new TextureCache("images/pcl/cardui/badges/Purge.png");
         public static final TextureCache recast = new TextureCache("images/pcl/cardui/badges/Recast.png");
         public static final TextureCache retain = new TextureCache("images/pcl/cardui/badges/Retain.png");
+        public static final TextureCache suspensive = new TextureCache("images/pcl/cardui/badges/Suspensive.png");
         public static final TextureCache unplayable = new TextureCache("images/pcl/cardui/badges/Unplayable.png");
     }
 

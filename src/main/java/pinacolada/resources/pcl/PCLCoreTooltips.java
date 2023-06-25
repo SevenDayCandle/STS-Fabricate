@@ -207,6 +207,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip stun = EUIKeywordTooltip.findByID("Stun");
     public EUIKeywordTooltip summon = EUIKeywordTooltip.findByID("Summon");
     public EUIKeywordTooltip supercharged = EUIKeywordTooltip.findByID("Supercharged");
+    public EUIKeywordTooltip suspensive = EUIKeywordTooltip.findByID("Suspensive");
     public EUIKeywordTooltip tempHP = EUIKeywordTooltip.findByID("Temporary HP");
     public EUIKeywordTooltip thorns = EUIKeywordTooltip.findByID("Thorns");
     public EUIKeywordTooltip thousandCuts = EUIKeywordTooltip.findByID("Thousand Cuts");

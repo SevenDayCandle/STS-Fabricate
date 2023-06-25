@@ -479,6 +479,10 @@
 		"DESCRIPTION": "Gain additional [E] at the start of each turn.",
 		"NAME": "Supercharged"
 	},
+	"Suspensive":	{
+		"DESCRIPTION": "This card may be played with next turn's [E].",
+		"NAME": "Suspensive"
+	},
 	"Temporary HP":	{
 		"DESCRIPTION": "Temporary HP lasts until end of combat.",
 		"NAME": "Temporary HP"

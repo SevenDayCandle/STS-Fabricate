@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -20,11 +19,6 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     public abstract String gainText();
 
     @Override
-    public ColoredString getColoredValueString() {
-        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
     }
@@ -37,5 +31,10 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     @Override
     public boolean isDetrimental() {
         return amount < 0;
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
     }
 }

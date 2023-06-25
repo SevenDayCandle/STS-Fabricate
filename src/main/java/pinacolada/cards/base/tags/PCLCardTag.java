@@ -41,6 +41,7 @@ public enum PCLCardTag implements TooltipProvider {
     Purge(new Color(0.71f, 0.3f, 0.55f, 1), 0, Integer.MAX_VALUE, false),
     Recast(new Color(0.6f, 0.51f, 0.69f, 1), -1, Integer.MAX_VALUE, false),
     Retain(new Color(0.49f, 0.78f, 0.35f, 1), -1, Integer.MAX_VALUE, true),
+    Suspensive(new Color(0.5f, 0.65f, 0.75f, 1), 0, 1, true),
     Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1, true);
 
     private static ArrayList<PCLCardTag> PRE;
@@ -141,6 +142,8 @@ public enum PCLCardTag implements TooltipProvider {
                 return FragileField.value;
             case Grave:
                 return GraveField.grave;
+            case Suspensive:
+                return SuspensiveField.value;
             case Unplayable:
                 return UnplayableField.value;
         }
@@ -228,6 +231,8 @@ public enum PCLCardTag implements TooltipProvider {
                 return PCLCoreImages.Badges.recast;
             case Retain:
                 return PCLCoreImages.Badges.retain;
+            case Suspensive:
+                return PCLCoreImages.Badges.suspensive;
             case Unplayable:
                 return PCLCoreImages.Badges.unplayable;
         }
@@ -267,6 +272,8 @@ public enum PCLCardTag implements TooltipProvider {
                 return PGR.core.tooltips.recast;
             case Retain:
                 return PGR.core.tooltips.retain;
+            case Suspensive:
+                return PGR.core.tooltips.suspensive;
             case Unplayable:
                 return PGR.core.tooltips.unplayable;
         }
