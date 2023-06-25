@@ -67,11 +67,10 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
 
     protected void initializeAlly() {
         PCLActions.bottom.callback(() -> {
-            this.ally.initializeForCard(card, retainPowers, delayForTurn);
-
             if (showEffect) {
                 PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
             }
+            this.ally.initializeForCard(card, retainPowers, delayForTurn);
         });
     }
 

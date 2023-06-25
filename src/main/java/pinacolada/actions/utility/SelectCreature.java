@@ -20,6 +20,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -111,14 +112,25 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         }
 
         final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
+        final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(true);
         if (enemies.size() == 0 && targeting == PCLCardTarget.Single) {
+            complete(null);
+            return;
+        }
+        else if (summons.size() == 0 && targeting == PCLCardTarget.SingleAlly) {
             complete(null);
             return;
         }
 
         if (autoSelect) {
-            if (targeting == PCLCardTarget.Single && enemies.size() == 1) {
+            if ((targeting == PCLCardTarget.Single || targeting == PCLCardTarget.SelfSingle) && enemies.size() == 1) {
                 target = enemies.get(0);
+                if (card != null) {
+                    card.calculateCardDamage((AbstractMonster) target);
+                }
+            }
+            else if ((targeting == PCLCardTarget.SingleAlly || targeting == PCLCardTarget.SelfSingleAlly) && summons.size() == 1) {
+                target = summons.get(0);
                 if (card != null) {
                     card.calculateCardDamage((AbstractMonster) target);
                 }
@@ -146,7 +158,15 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                     complete(GameUtilities.getRandomEnemy(true));
                     return;
 
+                case RandomAlly:
+                    complete(GameUtilities.getRandomSummon(true));
+                    return;
+
                 case AllEnemy:
+                case All:
+                case Team:
+                case AllAlly:
+                case SelfAllEnemy:
                 case None:
                     complete(null);
                     return;
@@ -181,13 +201,20 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
 
         switch (targeting) {
             case Self:
-                updateTarget(true, false);
+                updateTarget(true, false, false);
                 break;
             case Single:
-                updateTarget(false, true);
+                updateTarget(false, true, true);
                 break;
+            case SingleAlly:
+                updateTarget(false, false, true);
+                break;
+            case SelfSingleAlly:
+                updateTarget(true, false, true);
+                break;
+            case SelfSingle:
             case Any:
-                updateTarget(true, true);
+                updateTarget(true, true, true);
                 break;
         }
 
@@ -195,17 +222,26 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             InputHelper.justClickedLeft = false;
             InputHelper.justReleasedClickLeft = false;
             switch (targeting) {
+                case RandomAlly:
+                    complete(target = GameUtilities.getRandomSummon(true));
+                    return;
                 case RandomEnemy:
                     complete(target = GameUtilities.getRandomEnemy(true));
                     return;
 
                 case AllEnemy:
+                case AllAlly:
+                case All:
+                case Team:
                 case None:
                     complete(null);
                     return;
 
                 case Self:
                 case Single:
+                case SelfSingle:
+                case SelfSingleAlly:
+                case SingleAlly:
                 case Any:
                     if (target != null) {
                         complete(target);
@@ -332,7 +368,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    protected void updateTarget(boolean targetPlayer, boolean targetEnemy) {
+    protected void updateTarget(boolean targetPlayer, boolean targetEnemy, boolean targetAlly) {
         if (target != null) {
             previous = target;
             target = null;
@@ -341,11 +377,21 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         if (targetPlayer && (player.hb.hovered && !player.isDying)) {
             target = player;
         }
-        else if (targetEnemy) {
-            for (AbstractMonster m : GameUtilities.getEnemies(true)) {
-                if (m.hb.hovered && !m.isDying) {
-                    target = m;
-                    break;
+        else {
+            if (targetEnemy) {
+                for (AbstractMonster m : GameUtilities.getEnemies(true)) {
+                    if (m.hb.hovered && !m.isDying) {
+                        target = m;
+                        break;
+                    }
+                }
+            }
+            if (targetAlly && target == null) {
+                for (AbstractMonster m : GameUtilities.getSummons(true)) {
+                    if (m.hb.hovered && !m.isDying) {
+                        target = m;
+                        break;
+                    }
                 }
             }
         }

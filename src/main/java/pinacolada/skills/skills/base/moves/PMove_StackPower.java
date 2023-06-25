@@ -45,46 +45,38 @@ public class PMove_StackPower extends PMove<PField_Power> {
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = fields.getPowerOrString();
             switch (target) {
-                case RandomEnemy:
-                case AllAlly:
-                case AllEnemy:
-                case All:
-                case Team:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
-                case Single:
-                case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Self:
                     if (isFromCreature()) {
                         return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                     }
-                default:
+                case None:
                     return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
                             : TEXT.act_gainAmount(getAmountRawString(), joinedString));
+                case Single:
+                case SingleAlly:
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                default:
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
             }
         }
         joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
         switch (target) {
-            case RandomEnemy:
-            case AllAlly:
-            case AllEnemy:
-            case All:
-            case Team:
-                return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString())
-                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent
-                        ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+            case Self:
+                if (isFromCreature()) {
+                    return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                }
+            case None:
+                return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
+                        : TEXT.act_gainAmount(getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
                         fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent ?
                                 TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
-            case Self:
-                if (isFromCreature()) {
-                    return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
-                }
             default:
-                return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
-                        : TEXT.act_gainAmount(getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString())
+                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent
+                        ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
         }
     }
 

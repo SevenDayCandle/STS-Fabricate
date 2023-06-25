@@ -142,12 +142,14 @@ public class PCLCardAlly extends PCLCardCreature {
         super.initializeForCard(card, clearPowers, delayForTurn);
 
         FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
+        PCLAllyAnimation anim = null;
         if (animFunc != null) {
-            this.animation = animFunc.invoke(this);
+            this.animation = anim = animFunc.invoke(this);
         }
-        if (this.animation == null) {
-            this.animation = new PCLGeneralAllyAnimation(this);
+        if (anim == null) {
+            this.animation = anim = new PCLGeneralAllyAnimation(this);
         }
+        anim.fadeIn();
     }
 
     @Override
@@ -250,12 +252,15 @@ public class PCLCardAlly extends PCLCardCreature {
     public void renderAnimation(SpriteBatch sb, Color color) {
         super.renderAnimation(sb, color);
         if (card != null) {
+            float actualTransparency = card.transparency;
+            card.transparency = hbAlpha;
             card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
             card.updateGlow(1.5f);
             card.renderGlowManual(sb);
             card.renderOuterGlow(sb);
             card.renderImage(sb, false, true);
+            card.transparency = actualTransparency;
         }
     }
 

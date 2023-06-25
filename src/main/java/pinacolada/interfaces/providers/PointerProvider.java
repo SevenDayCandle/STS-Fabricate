@@ -4,8 +4,10 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.text.EUISmartText;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
@@ -42,6 +44,20 @@ public interface PointerProvider {
 
     default void clearSkills() {
         getSkills().clear();
+    }
+
+    default void doEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            action.invoke(be);
+        }
+    }
+
+    default void doNonPowerEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            if (!(be instanceof SummonOnlyMove)) {
+                action.invoke(be);
+            }
+        }
     }
 
     default PCardPrimary_GainBlock getCardBlock() {
@@ -99,6 +115,11 @@ public interface PointerProvider {
     // An integer mapping to individual PSkills from anywhere in the Skills tree
     default UniqueList<PSkill<?>> getPointers() {
         return getSkills().effectTextMapping;
+    }
+
+    default PTrigger getPowerEffect(int i) {
+        ArrayList<PTrigger> effects = getPowerEffects();
+        return effects != null && effects.size() > i ? effects.get(i) : null;
     }
 
     default ArrayList<PTrigger> getPowerEffects() {

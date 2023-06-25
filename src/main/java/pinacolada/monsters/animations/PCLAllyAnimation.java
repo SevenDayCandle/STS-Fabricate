@@ -35,6 +35,15 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
         return null;
     }
 
+    public void fadeIn() {
+        renderColor.a = transitionAlpha = 0f;
+        targetTransitionAlpha = 1f;
+    }
+
+    public float getTransitionRate() {
+        return 5f;
+    }
+
     public void highlight() {
         targetTransitionAlpha = 1f;
     }
@@ -49,7 +58,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
     public void update(float deltaTime, float x, float y) {
         super.update(deltaTime, x, y);
         angle += deltaTime * rate;
-        renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
+        renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * getTransitionRate());
     }
 
     public void unhighlight() {
