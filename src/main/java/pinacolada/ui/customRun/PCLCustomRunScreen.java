@@ -18,7 +18,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
-import extendedui.ui.cardFilter.CustomCardLibraryScreen;
+import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.relics.PCLCustomRelicSlot;

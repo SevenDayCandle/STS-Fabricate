@@ -6,17 +6,28 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 @SpirePatch(clz = BlightHelper.class, method = "getBlight", paramtypez = {String.class})
 public class BlightHelperPatches {
     private static final HashMap<String, Class<? extends AbstractBlight>> customBlights = new HashMap<>();
+
+    public static Collection<String> getCustomBlightIDs() {
+        return customBlights.keySet();
+    }
+
+    public static ArrayList<AbstractBlight> getCustomBlights() {
+        return EUIUtils.map(getCustomBlightIDs(), EUIGameUtils::getSeenBlight);
+    }
 
     public static void loadCustomBlights() {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleBlight.class)) {

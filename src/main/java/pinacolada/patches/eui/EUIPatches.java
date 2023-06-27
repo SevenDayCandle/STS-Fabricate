@@ -4,11 +4,15 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.BlightHelper;
 import extendedui.EUIGameUtils;
+import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -35,6 +39,15 @@ public class EUIPatches {
         @SpirePostfixPatch
         public static boolean postfix(boolean retVal, AbstractCard c) {
             return retVal && !PGR.dungeon.bannedCards.contains(c.cardID);
+        }
+    }
+
+    @SpirePatch(clz = EUIGameUtils.class, method = "getAllBlights")
+    public static class ExtendedUIPatches_GetAllBlights {
+        @SpirePostfixPatch
+        public static ArrayList<AbstractBlight> postfix(ArrayList<AbstractBlight> retVal) {
+            retVal.addAll(BlightHelperPatches.getCustomBlights());
+            return retVal;
         }
     }
 

@@ -20,15 +20,6 @@ public class PCLEnum {
         public static MenuPanelScreen.PanelScreen CUSTOM;
     }
 
-    public static class Panels {
-        @SpireEnum
-        public static MainMenuPanelButton.PanelClickResult CUSTOM_CARDS;
-        @SpireEnum
-        public static MainMenuPanelButton.PanelClickResult CUSTOM_POTIONS;
-        @SpireEnum
-        public static MainMenuPanelButton.PanelClickResult CUSTOM_RELICS;
-    }
-
     public static class Rewards {
         @SpireEnum
         public static RewardItem.RewardType AUGMENT;

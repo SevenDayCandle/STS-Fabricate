@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.interfaces.markers.CustomCardPoolModule;
 import extendedui.ui.EUIBase;
-import extendedui.ui.cardFilter.CustomCardLibraryScreen;
+import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
