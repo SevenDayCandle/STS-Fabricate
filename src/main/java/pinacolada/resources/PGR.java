@@ -51,7 +51,7 @@ import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
 import pinacolada.ui.menu.PCLAffinityPoolModule;
 import pinacolada.ui.menu.PCLAugmentPanelItem;
 import pinacolada.ui.menu.PCLAugmentScreen;
-import pinacolada.ui.menu.PCLLibraryModule;
+import pinacolada.ui.menu.PCLColorlessGroupLibraryModule;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
@@ -80,7 +80,7 @@ public class PGR {
     public static PCLCustomPotionSelectorScreen customPotions;
     public static PCLCustomRelicSelectorScreen customRelics;
     public static PCLCustomRunScreen customMode;
-    public static PCLLibraryModule libraryFilters;
+    public static PCLColorlessGroupLibraryModule colorlessGroups;
     public static PCLLoadoutScreen loadoutEditor;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
@@ -239,7 +239,7 @@ public class PGR {
         PGR.customMode = new PCLCustomRunScreen();
         PGR.charSelectProvider = new PCLCharacterSelectOverlay();
         PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
-        PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
+        PGR.colorlessGroups = new PCLColorlessGroupLibraryModule(EUI.customLibraryScreen);
         PGR.augmentScreen = new PCLAugmentScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
@@ -258,11 +258,11 @@ public class PGR {
         EUI.addSubscriber(PGR.cardPopup);
         EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
-        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.libraryFilters);
-        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.libraryFilters);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.colorlessGroups);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.colorlessGroups);
         for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
             EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
-            EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
+            EUI.setCustomCardLibraryModule(r.cardColor, PGR.colorlessGroups);
         }
 
         BaseMod.addCustomScreen(PGR.augmentScreen);

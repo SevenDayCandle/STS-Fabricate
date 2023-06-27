@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIInputManager;
 import extendedui.ui.controls.EUIRelicGrid;
+import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
@@ -33,7 +34,7 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
         }
 
         if (relics.isEmpty()) {
-            this.grid = new EUIRelicGrid().canDragScreen(false);
+            this.grid = (EUIRelicGrid) new EUIRelicGrid().canDragScreen(false);
             complete();
             return;
         }
@@ -43,10 +44,10 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUIRelicGrid()
+        this.grid = (EUIRelicGrid) new EUIRelicGrid()
                 .canDragScreen(false)
-                .addRelics(relics)
-                .setOnRelicClick(this::complete);
+                .add(relics, RelicInfo::new)
+                .setOnClick(r -> complete(r.relic));
     }
 
     @Override
@@ -81,9 +82,9 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
 
     public void refresh(List<? extends AbstractRelic> cards) {
         this.relics = cards;
-        this.grid = new EUIRelicGrid()
+        this.grid = (EUIRelicGrid) new EUIRelicGrid()
                 .canDragScreen(false)
-                .addRelics(cards);
+                .add(cards, RelicInfo::new);
     }
 
     public PCLGenericSelectRelicEffect setStartingPosition(float x, float y) {

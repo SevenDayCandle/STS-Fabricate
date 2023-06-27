@@ -55,6 +55,7 @@ public class PCLSingleCardPopup extends EUIBase {
     private final EUILabel maxCopiesDescription;
     private final EUILabel artAuthorLabel;
 
+    // TODO refactor to use EUIButtons
     private final EUIHitbox nextHb;
     private final EUIHitbox prevHb;
     private final EUIHitbox cardHb;
@@ -283,8 +284,8 @@ public class PCLSingleCardPopup extends EUIBase {
                 }
             }
 
-            this.prevHb.move((float) Settings.WIDTH / 2f - 400f * Settings.scale, (float) Settings.HEIGHT / 2f);
-            this.nextHb.move((float) Settings.WIDTH / 2f + 400f * Settings.scale, (float) Settings.HEIGHT / 2f);
+            this.prevHb.move(Settings.WIDTH / 2f - 400f * Settings.scale, Settings.HEIGHT / 2f);
+            this.nextHb.move(Settings.WIDTH / 2f + 400f * Settings.scale, Settings.HEIGHT / 2f);
         }
 
         this.cardHb.move((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f);
@@ -299,18 +300,18 @@ public class PCLSingleCardPopup extends EUIBase {
             this.viewBetaArt = UnlockTracker.betaCardPref.getBoolean(card.cardID, false);
 
             if (upgradeToggle.isActive) {
-                this.betaArtHb.move((float) Settings.WIDTH / 2f + 270f * Settings.scale, 70f * Settings.scale);
-                this.upgradeHb.move((float) Settings.WIDTH / 2f - 180f * Settings.scale, 70f * Settings.scale);
+                this.betaArtHb.move(Settings.WIDTH / 2f + 270f * Settings.scale, 70f * Settings.scale);
+                this.upgradeHb.move(Settings.WIDTH / 2f - 180f * Settings.scale, 70f * Settings.scale);
             }
             else {
-                this.betaArtHb.move((float) Settings.WIDTH / 2f, 70f * Settings.scale);
+                this.betaArtHb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
             }
         }
         else {
-            this.upgradeHb.move((float) Settings.WIDTH / 2f, 70f * Settings.scale);
+            this.upgradeHb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
         }
 
-        this.changeVariantHb.move((float) Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 170 * Settings.scale);
+        this.changeVariantHb.move(Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 170 * Settings.scale);
 
 
         PCLCardData cardData = baseCard != null ? baseCard.cardData : null;

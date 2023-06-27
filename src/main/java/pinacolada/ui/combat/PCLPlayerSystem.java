@@ -1,5 +1,6 @@
 package pinacolada.ui.combat;
 
+import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -142,6 +143,10 @@ public class PCLPlayerSystem extends EUIBase {
 
     public void onCardCreated(AbstractCard card, boolean startOfBattle) {
         getActiveMeter().onCardCreated(card, startOfBattle);
+    }
+
+    public AbstractCardModifier onCardModified(AbstractCard card, AbstractCardModifier modifier) {
+        return getActiveMeter().onCardModified(card, modifier);
     }
 
     public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon) {

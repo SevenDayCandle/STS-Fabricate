@@ -22,6 +22,7 @@ import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
@@ -68,9 +69,9 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
 
-        this.grid = new EUIRelicGrid(1f)
-                .setOnRelicClick(this::onRelicClicked)
-                .setOnRelicRightClick(this::onRelicRightClicked);
+        this.grid = (EUIRelicGrid) new EUIRelicGrid(1f)
+                .setOnClick(this::onRelicClicked)
+                .setOnRightClick(this::onRelicRightClicked);
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
@@ -145,7 +146,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                         AbstractRelic newRelic = slot.make();
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                        grid.addRelic(newRelic);
+                        grid.add(newRelic);
                         slot.commitBuilder();
                     });
         }
@@ -160,7 +161,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                         AbstractRelic newRelic = slot.getBuilder(0).create();
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                        grid.addRelic(newRelic);
+                        grid.add(newRelic);
                     });
         }
     }
@@ -178,7 +179,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                                         AbstractRelic newRelic = slot.getBuilder(0).create();
                                         currentSlots.put(newRelic, slot);
                                         PCLCustomRelicSlot.getRelics(co).add(slot);
-                                        grid.addRelic(newRelic);
+                                        grid.add(newRelic);
                                     });
                         }
                     });
@@ -191,10 +192,10 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
                         AbstractRelic newRelic = cardSlot.getBuilder(0).create();
-                        grid.removeRelic(card);
+                        grid.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newRelic, cardSlot);
-                        grid.addRelic(newRelic);
+                        grid.add(newRelic);
                     });
         }
     }
@@ -234,7 +235,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                                 AbstractRelic newRelic = slot.make();
                                 currentSlots.put(newRelic, slot);
                                 PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                                grid.addRelic(newRelic);
+                                grid.add(newRelic);
                             });
                 }
             });
@@ -247,15 +248,15 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                 .setColor(EUIGameUtils.getColorColor(co));
     }
 
-    private void onRelicClicked(AbstractRelic card) {
-        PCLCustomRelicSlot slot = currentSlots.get(card);
+    private void onRelicClicked(RelicInfo relic) {
+        PCLCustomRelicSlot slot = currentSlots.get(relic.relic);
         if (slot != null) {
-            edit(card, slot);
+            edit(relic.relic, slot);
         }
     }
 
-    private void onRelicRightClicked(AbstractRelic card) {
-        clickedRelic = card;
+    private void onRelicRightClicked(RelicInfo card) {
+        clickedRelic = card.relic;
         contextMenu.positionToOpen();
     }
 
@@ -271,11 +272,11 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             UnlockTracker.markRelicAsSeen(relic.relicId);
             relic.isSeen = true;
             currentSlots.put(relic, slot);
-            grid.addRelic(relic);
+            grid.add(relic);
         }
-        EUI.relicFilters.initializeForCustomHeader(grid.relicGroup, __ -> {
+        EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
-            grid.forceUpdateRelicPositions();
+            grid.forceUpdatePositions();
         }, currentColor, false, true);
     }
 
@@ -284,7 +285,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomRelicSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            grid.removeRelic(card);
+                            grid.remove(card);
                             currentSlots.remove(card);
                             v.wipeBuilder();
                         }

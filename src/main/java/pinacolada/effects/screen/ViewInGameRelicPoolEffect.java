@@ -17,6 +17,7 @@ import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.ui.customRun.PCLRandomRelicAmountDialog;
@@ -65,7 +66,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
         }
 
         if (relics.isEmpty()) {
-            this.grid = new EUIRelicGrid().canDragScreen(false);
+            this.grid = (EUIRelicGrid) new EUIRelicGrid().canDragScreen(false);
             complete(relics);
             return;
         }
@@ -75,10 +76,10 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUIRelicGrid()
+        this.grid = (EUIRelicGrid) new EUIRelicGrid()
                 .canDragScreen(false)
-                .setOnRelicClick(this::toggleRelic);
-        this.grid.setRelics(relics);
+                .setOnClick(this::toggleRelic);
+        this.grid.setItems(relics, RelicInfo::new);
         for (AbstractRelic c : relics) {
             updateRelicAlpha(c);
         }
@@ -121,9 +122,9 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
         refreshCountText();
 
-        EUI.relicFilters.initializeForCustomHeader(grid.relicGroup, __ -> {
+        EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
-            grid.forceUpdateRelicPositions();
+            grid.forceUpdatePositions();
         }, AbstractCard.CardColor.COLORLESS, false, false);
     }
 
@@ -248,9 +249,9 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
         randomSelection.open(relics);
     }
 
-    private void toggleRelic(AbstractRelic c) {
+    private void toggleRelic(RelicInfo c) {
         if (canToggle) {
-            toggleRelicImpl(c, bannedRelics.contains(c.relicId));
+            toggleRelicImpl(c.relic, bannedRelics.contains(c.relic.relicId));
             refreshCountText();
         }
     }

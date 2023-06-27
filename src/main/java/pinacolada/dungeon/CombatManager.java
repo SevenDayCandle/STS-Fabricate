@@ -1,5 +1,6 @@
 package pinacolada.dungeon;
 
+import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -101,6 +102,7 @@ public class CombatManager {
     public static boolean isPlayerTurn;
     public static int blockRetained;
     public static int dodgeChance;
+    public static int energySuspended;
     public static int maxHPSinceLastTurn;
 
     public static void addAmplifierBonus(String powerID, int multiplier) {
@@ -182,6 +184,11 @@ public class CombatManager {
 
         if (blockRetained > 0 && !AbstractDungeon.player.hasPower(BarricadePower.POWER_ID) && !AbstractDungeon.player.hasPower(BlurPower.POWER_ID)) {
             blockRetained = 0;
+        }
+
+        if (energySuspended != 0) {
+            player.energy.use(energySuspended);
+            energySuspended = 0;
         }
     }
 
@@ -427,7 +434,7 @@ public class CombatManager {
     }
 
     public static boolean hasEnoughEnergyForCard(AbstractCard card) {
-        boolean canPass = PCLCardTag.Suspensive.has(card);
+        boolean canPass = PCLCardTag.Suspensive.has(card) && card.costForTurn + energySuspended - player.energy.energy <= player.energy.energyMaster;
         return subscriberInout(OnTrySpendEnergySubscriber.class, canPass, (s, d) -> s.canSpendEnergy(card, d));
     }
 
@@ -808,6 +815,10 @@ public class CombatManager {
         subscriberDo(OnTagChangedSubscriber.class, s -> s.onTagChanged(card, tag, value));
     }
 
+    public static AbstractCardModifier onTryAddModifier(AbstractCard card, AbstractCardModifier abstractCardModifier) {
+        return playerSystem.onCardModified(card, abstractCardModifier);
+    }
+
     public static AbstractOrb onTryChannelOrb(AbstractOrb orb) {
         return subscriberInout(OnTryChannelOrbSubscriber.class, orb, OnTryChannelOrbSubscriber::onTryChannelOrb);
     }
@@ -818,7 +829,10 @@ public class CombatManager {
             cost = 0;
         }
 
-        // TODO implement suspensive logic
+        // Suspensive
+        if (cost > p.energy.energy) {
+            energySuspended += cost - p.energy.energy;
+        }
 
         return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, d));
     }

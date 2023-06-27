@@ -20,7 +20,7 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
+public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCardPoolModule {
     private static final HashMap<ColorlessGroup, CardGroup> ColorlessGroupMapping = new HashMap<>();
     private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
     public static ColorlessGroup group = ColorlessGroup.Default;
@@ -28,7 +28,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     public EUIButton groupButton;
     public EUIContextMenu<ColorlessGroup> groupMenu;
 
-    public PCLLibraryModule(CustomCardLibraryScreen screen) {
+    public PCLColorlessGroupLibraryModule(CustomCardLibraryScreen screen) {
         this.screen = screen;
         groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.905f, scale(210), scale(80)))
                 .setColor(Color.DARK_GRAY)

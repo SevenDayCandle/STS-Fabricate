@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIInputManager;
 import extendedui.ui.controls.EUIPotionGrid;
+import extendedui.utilities.PotionInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
@@ -33,7 +34,7 @@ public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<Abstract
         }
 
         if (potions.isEmpty()) {
-            this.grid = new EUIPotionGrid().canDragScreen(false);
+            this.grid = (EUIPotionGrid) new EUIPotionGrid().canDragScreen(false);
             complete();
             return;
         }
@@ -43,10 +44,10 @@ public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<Abstract
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUIPotionGrid()
+        this.grid = (EUIPotionGrid) new EUIPotionGrid()
                 .canDragScreen(false)
-                .addPotions(potions)
-                .setOnPotionClick(this::complete);
+                .add(potions, PotionInfo::new)
+                .setOnClick(c -> complete(c.potion));
     }
 
     @Override
@@ -81,9 +82,9 @@ public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<Abstract
 
     public void refresh(List<? extends AbstractPotion> cards) {
         this.potions = cards;
-        this.grid = new EUIPotionGrid()
+        this.grid = (EUIPotionGrid) new EUIPotionGrid()
                 .canDragScreen(false)
-                .addPotions(cards);
+                .add(cards, PotionInfo::new);
     }
 
     public PCLGenericSelectPotionEffect setStartingPosition(float x, float y) {

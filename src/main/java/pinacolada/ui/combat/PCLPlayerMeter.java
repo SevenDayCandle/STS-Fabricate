@@ -1,5 +1,6 @@
 package pinacolada.ui.combat;
 
+import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -158,6 +159,10 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public void onCardCreated(AbstractCard card, boolean startOfBattle) {
 
+    }
+
+    public AbstractCardModifier onCardModified(AbstractCard card, AbstractCardModifier modifier) {
+        return modifier;
     }
 
     public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon) {
