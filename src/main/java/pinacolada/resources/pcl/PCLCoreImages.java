@@ -45,6 +45,7 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/menu/EditorEffect.png");
         public static final TextureCache editorPower = new TextureCache("images/pcl/ui/menu/EditorPower.png");
         public static final TextureCache info = new TextureCache("images/pcl/ui/menu/Info.png");
+        public static final TextureCache menuAugmentLibrary = new TextureCache("images/pcl/ui/menu/MenuAugmentLibrary.png");
         public static final TextureCache menuCard = new TextureCache("images/pcl/ui/menu/MenuCard.png");
         public static final TextureCache menuPotion = new TextureCache("images/pcl/ui/menu/MenuPotion.png");
         public static final TextureCache menuRelic = new TextureCache("images/pcl/ui/menu/MenuRelic.png");
@@ -93,8 +94,7 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
         public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
         public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
-        public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/Augment.png", true);
-        public static final TextureCache augmentBasic = new TextureCache("images/pcl/cardui/augments/Augment_Basic.png", true);
+        public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/AugmentSlot.png", true);
     }
 
     public static class CardIcons {

@@ -54,6 +54,11 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         return tips;
     }
 
+    @Override
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
+    }
+
     public String getUpdatedDescription() {
         return formatDescription(0, counter);
     }
@@ -74,7 +79,7 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     }
 
     @Override
-    protected void initializeTips() {
+    public void initializeTips() {
         if (tips == null) {
             tips = new ArrayList<>();
         }

@@ -28,21 +28,21 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
 
     public int tier;
     public PCLAugmentCategory category;
-    public PCLAugmentCategorySub lineage;
+    public PCLAugmentCategorySub categorySub;
     public AugmentStrings strings;
     public PSkill<?> skill;
     public PCLAugmentReqs reqs;
     public boolean isSpecial;
 
-    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier) {
-        this(invokeClass, resources, lineage, tier, resources.createID(invokeClass.getSimpleName()));
+    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub categorySub, int tier) {
+        this(invokeClass, resources, categorySub, tier, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier, String id) {
+    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub categorySub, int tier, String id) {
         super(id, invokeClass, resources);
         this.tier = tier;
-        this.lineage = lineage;
-        this.category = lineage.parent;
+        this.categorySub = categorySub;
+        this.category = categorySub.parent;
         strings = PGR.getAugmentStrings(ID);
     }
 

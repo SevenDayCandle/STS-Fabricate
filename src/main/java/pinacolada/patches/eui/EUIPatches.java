@@ -1,5 +1,7 @@
 package pinacolada.patches.eui;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
@@ -7,10 +9,15 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.patches.screens.MenuPanelScreenPatches;
 import extendedui.ui.TextureCache;
 import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
+import extendedui.ui.controls.EUIMainMenuPanelButton;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PCLEnum;
@@ -31,6 +38,25 @@ public class EUIPatches {
                 return SpireReturn.Return(SUMMON);
             }
             return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = MenuPanelScreenPatches.class, method = "getCompendiums")
+    public static class ExtendedUIPatches_GetCompendiums {
+        @SpirePostfixPatch
+        public static ArrayList<EUIMainMenuPanelButton> postfix(ArrayList<EUIMainMenuPanelButton> retVal) {
+            if (EUIUtils.any(PGR.getRegisteredResources(), r -> r.data != null && r.data.useAugments)) {
+                retVal.add(new EUIMainMenuPanelButton(new Color(0.45f, 0.62f, 0.71f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuAugmentLibrary.texture(), PGR.core.strings.menu_augmentLibrary, PGR.core.strings.menu_augmentLibraryDesc, () -> PGR.augmentLibrary.open()));
+            }
+            return retVal;
+        }
+    }
+
+    @SpirePatch(clz = EUI.class, method = "postRender")
+    public static class ExtendedUIPatches_PostRender {
+        @SpirePrefixPatch
+        public static void prefix(SpriteBatch sb) {
+            PGR.augmentFilters.tryRender(sb);
         }
     }
 

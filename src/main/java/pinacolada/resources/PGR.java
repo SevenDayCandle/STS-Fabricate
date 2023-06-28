@@ -48,10 +48,7 @@ import pinacolada.ui.debug.PCLDebugCardPanel;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
-import pinacolada.ui.menu.PCLAffinityPoolModule;
-import pinacolada.ui.menu.PCLAugmentPanelItem;
-import pinacolada.ui.menu.PCLAugmentScreen;
-import pinacolada.ui.menu.PCLColorlessGroupLibraryModule;
+import pinacolada.ui.menu.*;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
@@ -73,6 +70,9 @@ public class PGR {
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;
     public static PCLAffinityPoolModule affinityFilters;
+    public static PCLAugmentKeywordFilters augmentFilters;
+    public static PCLAugmentLibraryScreen augmentLibrary;
+    public static PCLAugmentSortHeader augmentHeader;
     public static PCLAugmentScreen augmentScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCombatScreen combatScreen;
@@ -94,6 +94,10 @@ public class PGR {
 
     public static AugmentStrings getAugmentStrings(String stringID) {
         return AugmentStrings.STRINGS.get(stringID);
+    }
+
+    public static String getAugmentImage(String id) {
+        return getPng(id, "augments");
     }
 
     public static String getBlightImage(String id) {
@@ -242,9 +246,12 @@ public class PGR {
         PGR.colorlessGroups = new PCLColorlessGroupLibraryModule(EUI.customLibraryScreen);
         PGR.augmentScreen = new PCLAugmentScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
+        PGR.augmentFilters = new PCLAugmentKeywordFilters();
+        PGR.augmentHeader = new PCLAugmentSortHeader(null);
+        PGR.augmentLibrary = new PCLAugmentLibraryScreen();
         PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
-                .setColor(0, 0, 0, 0.9f);
+                .setColor(0, 0, 0, 0.8f);
         try {
             PGR.debugAugments = new PCLDebugAugmentPanel();
             PGR.debugCards = new PCLDebugCardPanel();

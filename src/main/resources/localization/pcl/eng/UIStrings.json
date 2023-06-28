@@ -372,12 +372,18 @@
 				"pcl:Menu": {
 								"TEXT": [
 												"Editor",
-												"Card Editor",
+												"Card Printer",
 												"View, create, or edit custom cards to use in Custom Runs.",
-												"Relic Editor",
+												"Relic Tinkerer",
 												"View, create, or edit custom relics to use in Custom Runs.",
-												"Potion Editor",
-												"View, create, or edit custom potions to use in Custom Runs."
+												"Potion Mixer",
+												"View, create, or edit custom potions to use in Custom Runs.",
+												"Blight Weaver",
+												"View, create, or edit custom blights to use in Custom Runs.",
+												"Augment Database",
+												"Discover various Augments that can be used to enhance your cards.",
+												"Augment Factory",
+												"View, create, or edit custom Augments to use in Custom Runs."
 								]
 				},
 				"pcl:Misc": {
@@ -396,7 +402,12 @@
 												"Custom Relics",
 												"Allow relics created with Fabricate to appear in runs",
 												"Custom Potions",
-												"Allow potions created with Fabricate to appear in runs"
+												"Allow potions created with Fabricate to appear in runs",
+												"Custom Blights",
+												"Allow blights created with Fabricate to appear in runs",
+												"Category",
+												"Sub-Category",
+												"Tier"
 								]
 				},
 				"pcl:Options": {

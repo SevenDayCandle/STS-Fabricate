@@ -282,6 +282,12 @@ public class PCLCoreStrings extends PCLStrings {
     public final String menu_relicDesc = menu.TEXT[4];
     public final String menu_potion = menu.TEXT[5];
     public final String menu_potionDesc = menu.TEXT[6];
+    public final String menu_blight = menu.TEXT[7];
+    public final String menu_blightDesc = menu.TEXT[8];
+    public final String menu_augmentLibrary = menu.TEXT[9];
+    public final String menu_augmentLibraryDesc = menu.TEXT[10];
+    public final String menu_augmentCreator = menu.TEXT[11];
+    public final String menu_augmentCreatorDesc = menu.TEXT[12];
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
@@ -298,6 +304,11 @@ public class PCLCoreStrings extends PCLStrings {
     public final String misc_customRelicsDesc = misc.TEXT[12];
     public final String misc_customPotions = misc.TEXT[13];
     public final String misc_customPotionsDesc = misc.TEXT[14];
+    public final String misc_customBlights = misc.TEXT[15];
+    public final String misc_customBlightsDesc = misc.TEXT[16];
+    public final String misc_category = misc.TEXT[17];
+    public final String misc_subCategory = misc.TEXT[18];
+    public final String misc_tier = misc.TEXT[19];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];

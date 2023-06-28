@@ -14,9 +14,9 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public enum PCLAugmentCategory implements CountingPanelItem {
-    General(Color.WHITE),
+    General(Color.GRAY),
     Summon(Color.FIREBRICK),
-    Played(Color.VIOLET),
+    Played(Color.ROYAL),
     Power(Color.BLUE),
     Special(Color.LIME);
 

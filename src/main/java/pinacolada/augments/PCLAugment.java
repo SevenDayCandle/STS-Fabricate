@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -14,15 +16,15 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class PCLAugment implements TooltipProvider {
+public abstract class PCLAugment implements KeywordProvider {
     public static final int WEIGHT_MODIFIER = 3;
     public final PCLAugmentData data;
     public final String ID;
@@ -40,7 +42,7 @@ public abstract class PCLAugment implements TooltipProvider {
     }
 
     protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategorySub category, int tier) {
-        return register(type, PGR.core, category, tier);
+        return register(type, category.resources, category, tier);
     }
 
     protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub category, int tier) {
@@ -95,7 +97,7 @@ public abstract class PCLAugment implements TooltipProvider {
                 && c.getFreeAugmentSlot() >= 0
                 && (data.category.isTypeValid(c.type))
                 && (data.reqs == null || data.reqs.check(c))
-                && (data.lineage == null || !EUIUtils.any(c.getAugments(), a -> a.data.lineage == data.lineage));
+                && (data.categorySub == null || !EUIUtils.any(c.getAugments(), a -> a.data.categorySub == data.categorySub));
     }
 
     public boolean canRemove() {
@@ -131,17 +133,16 @@ public abstract class PCLAugment implements TooltipProvider {
         return skill.getText();
     }
 
-    // TODO More textures
     public Texture getTexture() {
-        return PCLCoreImages.CardUI.augmentBasic.texture();
+        return data.categorySub.getTexture();
     }
 
-    public EUITooltip getTip() {
-        return new EUITooltip(getName(), getFullText());
+    public EUIKeywordTooltip getTip() {
+        return new EUIKeywordTooltip(getName(), getFullText());
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(getTip());
     }
 
