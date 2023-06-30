@@ -189,7 +189,11 @@
 												"#yRarity determines how often this potion appears in rewards",
 												"The shape of the bottle used for this potion's sprite.",
 												"A visual effect that is rendered around this potion.",
-												"Determines how the potion's sprite is colored. Colors can be changed by typing in a hexadecimal color code or by clicking on the button to pick a color from a palette."
+												"Determines how the potion's sprite is colored. Colors can be changed by typing in a hexadecimal color code or by clicking on the button to pick a color from a palette.",
+												"You will only encounter one copy of this #yBlight in each run.",
+												"An #yAugment's category determines the types of cards that it can be slotted in to.",
+												"Cards cannot have more than one #yAugment with the same sub-category.",
+												"An #yAugment's tier denotes how rare that #yAugment is."
 								]
 				},
 				"pcl:CardPile": {
@@ -580,8 +584,12 @@
 												"#ySummoning a card onto a #ySummon #ySlot that already has a #ySummon will #yWithdraw the previous #ySummon, #yTriggering it #b2 times and moving it to your discard pile.",
 												"#ySummons can be targeted with Attacks and Skills like other monsters can.",
 												"If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged. You can view the expected damage your #ySummon will take by enabling the #yShow #yEstimated #yDamage option in #yFabricate.",
-												"Some cards can be slotted with #yAugments to alter their effects. #yAugments can be obtained from events and at the end of monster fights. | The available slots for #yAugments on a card are shown on the left-hand border of the card, underneath its energy cost.",
-												"To view your #yAugments, click on the #yAugment icon on the top bar. You may then click on individual #yAugments to apply them to a card in your deck. || You may also slot #yAugments onto a card by clicking on its #yAugment icons in its pop-up view mode in your master deck. Here, you can either click on an empty #yAugment slot to put an eligible #yAugment in that slot, or click on a filled #yAugment slot to retrieve that #yAugment. || You may insert and remove #yAugment as many times as you wish at any time, but changes will not be applied to cards in the current battle.",
+												"Some cards have triangular symbols on their left-hand border. These symbols denote #yAugment #ySlots, which can be socketed with #yAugments to alter that card's effects.",
+												"Click on the #yAugment icon on the top bar to see a list of #yAugments that you have collected.",
+												"Hover over an #yAugment to view its description. Click on it to slot it into a card with a free #yAugment slot.",
+												"Augments can only be slotted into cards with the types mentioned in that Augment's description. Additionally, a card cannot have more than one copy of any variation of that Augment.",
+												"You may view individual #yAugment on a card by clicking on the #yView #yAugments button in its pop-up view screen.",
+												"Click on an empty #yAugment #ySlot to place an eligible #yAugment into it. Click on a filled #yAugment #ySlot to retrieve its #yAugment. You may insert and remove #yAugments as many times as you wish at any time, but changes will not be applied to cards in the current battle.",
 												"To replay this step, end your turn.",
 												"Nice! End your turn when you are ready for the next step of this tutorial.",
 												"You have completed this tutorial! If you ever need to see it again, click on the #yReset #yTutorial button on this character's character select page. End your turn to leave this tutorial.",

@@ -94,7 +94,8 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
         public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
         public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
-        public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/AugmentSlot.png", true);
+        public static final TextureCache augmentSlot = new TextureCache("images/pcl/cardui/augments/AugmentSlot.png", true);
+        public static final TextureCache augmentBase = new TextureCache("images/pcl/cardui/augments/AugmentBase.png", true);
     }
 
     public static class CardIcons {

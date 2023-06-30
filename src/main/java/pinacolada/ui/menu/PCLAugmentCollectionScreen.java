@@ -9,11 +9,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.screens.EUIDungeonScreen;
+import extendedui.ui.screens.EUIPoolScreen;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.card.ApplyAugmentToCardEffect;
 import pinacolada.effects.utility.ActionCallbackEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardView.PCLAugmentList;
@@ -22,7 +24,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PCLAugmentScreen extends EUIDungeonScreen {
+public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     @SpireEnum
     public static AbstractDungeon.CurrentScreen AUGMENT_SCREEN;
@@ -33,8 +35,8 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
     protected ActionT2<PCLAugment, Integer> addItem;
     protected boolean canSelect;
 
-    public PCLAugmentScreen() {
-        panel = new PCLAugmentList(this::doAction);
+    public PCLAugmentCollectionScreen() {
+        panel = new PCLAugmentList(this::doAction).enableCancel(false);
     }
 
     @Override
@@ -48,6 +50,7 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
             curEffect.update();
             if (curEffect.isDone) {
                 curEffect = null;
+                refreshAugments();
             }
         }
         else {
@@ -70,27 +73,19 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
 
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
-            curEffect = new ActionCallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
-                    .cancellableFromPlayer(true)
-                    .setFilter(augment::canApply)
-                    .addCallback(selection -> {
-                        for (AbstractCard c : selection) {
-                            PGR.dungeon.addAugment(augment.ID, -1);
-                            augment.addToCard((PCLCard) c);
-                            refreshAugments();
-                        }
-                    }));
+            curEffect = new ApplyAugmentToCardEffect(augment)
+                    .addCallback(__ -> refreshAugments());
         }
         else {
             close();
         }
     }
 
-    public void open(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
-        super.open();
+    public void openScreen(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
+        super.reopen();
         this.getEntries = getEntries;
         this.canSelect = canSelect;
-        panel = new PCLAugmentList(this::doAction, rows);
+        panel = new PCLAugmentList(this::doAction, rows).enableCancel(false);
         addItem = canSelect ? (a, b) -> panel.addPanelItem(a, b, EUIUtils.any(AbstractDungeon.player.masterDeck.group, a::canApply)) : panel::addListItem;
         refreshAugments();
     }
@@ -112,6 +107,9 @@ public class PCLAugmentScreen extends EUIDungeonScreen {
             }
         }
         EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
+        if (panel.augments.size() == 0) {
+            close();
+        }
     }
 
 

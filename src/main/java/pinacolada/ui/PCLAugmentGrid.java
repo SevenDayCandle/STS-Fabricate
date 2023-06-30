@@ -2,7 +2,6 @@ package pinacolada.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import extendedui.EUIUtils;
@@ -14,6 +13,9 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
 
     public PCLAugmentGrid() {
         this(0.5f, true);
+        targetScale = 0.75f;
+        startingScale = targetScale;
+        hoveredScale = 1f;
     }
 
     public PCLAugmentGrid(float horizontalAlignment, boolean autoShowScrollbar) {
@@ -34,23 +36,23 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     }
 
     @Override
-    protected float getScrollDistance(PCLAugmentRenderable blight, int index) {
+    protected float getScrollDistance(PCLAugmentRenderable augment, int index) {
         float scrollDistance = 1f / getRowCount();
-        if (blight.targetY > drawTopY) {
+        if (augment.targetY > drawTopY) {
             return -scrollDistance;
         }
-        else if (blight.targetY < 0) {
+        else if (augment.targetY < 0) {
             return scrollDistance;
         }
         return 0;
     }
 
     @Override
-    public void updateItemPosition(PCLAugmentRenderable blight, float x, float y) {
-        blight.targetX = x;
-        blight.targetY = y;
-        blight.currentX = EUIUtils.lerpSnap(blight.currentX, blight.targetX, LERP_SPEED);
-        blight.currentY = EUIUtils.lerpSnap(blight.currentY, blight.targetY, LERP_SPEED);
+    public void updateItemPosition(PCLAugmentRenderable augment, float x, float y) {
+        augment.targetX = x;
+        augment.targetY = y;
+        augment.currentX = EUIUtils.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);
+        augment.currentY = EUIUtils.lerpSnap(augment.currentY, augment.targetY, LERP_SPEED);
     }
 
     @Override
@@ -59,31 +61,31 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     }
 
     @Override
-    public void forceUpdateItemPosition(PCLAugmentRenderable blight, float x, float y) {
-        blight.currentX = blight.targetX = x;
-        blight.currentY = blight.targetY = y;
-        blight.hb.update();
-        blight.hb.move(blight.currentX, blight.currentY);
+    public void forceUpdateItemPosition(PCLAugmentRenderable augment, float x, float y) {
+        augment.currentX = augment.targetX = x;
+        augment.currentY = augment.targetY = y;
+        augment.hb.update();
+        augment.hb.move(augment.currentX, augment.currentY);
     }
 
     @Override
-    protected void updateHoverLogic(PCLAugmentRenderable blight, int i) {
-        blight.hb.update();
-        blight.hb.move(blight.currentX, blight.currentY);
+    protected void updateHoverLogic(PCLAugmentRenderable augment, int i) {
+        augment.hb.update();
+        augment.hb.move(augment.currentX, augment.currentY);
 
-        if (blight.hb.hovered) {
+        if (augment.hb.hovered) {
 
-            hovered = blight;
+            hovered = augment;
             hoveredIndex = i;
-            blight.scale = MathHelper.scaleLerpSnap(blight.scale, scale(hoveredScale));
+            augment.scale = MathHelper.scaleLerpSnap(augment.scale, scale(hoveredScale));
         }
         else {
-            blight.scale = MathHelper.scaleLerpSnap(blight.scale, scale(targetScale));
+            augment.scale = MathHelper.scaleLerpSnap(augment.scale, scale(targetScale));
         }
     }
 
     @Override
-    protected void renderItem(SpriteBatch sb, PCLAugmentRenderable blight) {
-        blight.render(sb);
+    protected void renderItem(SpriteBatch sb, PCLAugmentRenderable augment) {
+        augment.render(sb);
     }
 }

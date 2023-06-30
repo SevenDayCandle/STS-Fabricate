@@ -1,5 +1,6 @@
 package pinacolada.augments;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -23,7 +24,7 @@ public class PCLAugmentRenderable implements KeywordProvider {
     public float currentX;
     public float currentY;
     public float rotation;
-    public float scale;
+    public float scale = 0.75f;
     public float targetX;
     public float targetY;
 
@@ -32,8 +33,12 @@ public class PCLAugmentRenderable implements KeywordProvider {
     }
 
     public PCLAugmentRenderable(PCLAugment augment) {
+        this(augment, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
+    }
+
+    public PCLAugmentRenderable(PCLAugment augment, Hitbox hb) {
         this.augment = augment;
-        this.hb = new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X);
+        this.hb = hb;
         tips = new ArrayList<>();
         initializeTips();
     }
@@ -53,8 +58,9 @@ public class PCLAugmentRenderable implements KeywordProvider {
     }
 
     public void render(SpriteBatch sb) {
-        PCLRenderHelpers.drawColorized(sb, augment.getColor(),
-                s -> s.draw(augment.getTexture(), this.currentX - 64.0F, this.currentY - 48.0F, 48.0F, 64.0F, 96f, 96f, this.scale, this.scale, this.rotation, 0, 0, 128, 128, false, false));
+        sb.setColor(Color.WHITE);
+        sb.draw(augment.getTextureBase(), this.hb.x, this.hb.y, 64.0F, 64.0F, 128f, 128f, this.scale, this.scale, this.rotation, 0, 0, 128, 128, false, false);
+        sb.draw(augment.getTexture(), this.hb.x, this.hb.y, 64.0F, 64.0F, 128f, 128f, this.scale, this.scale, this.rotation, 0, 0, 128, 128, false, false);
         if (this.hb.hovered) {
             this.renderTip(sb);
         }

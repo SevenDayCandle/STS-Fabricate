@@ -62,7 +62,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
             );
             EUITooltip.queueTooltip(this.tooltip);
         }
-        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && AbstractDungeon.screen != PCLAugmentScreen.AUGMENT_SCREEN) {
+        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && AbstractDungeon.screen != PCLAugmentCollectionScreen.AUGMENT_SCREEN) {
             onClick();
         }
         if (lerpAmount < 1) {
@@ -74,7 +74,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     protected void onClick() {
         super.onClick();
         if (PGR.dungeon.getAugmentTotal() > 0) {
-            PGR.augmentScreen.open(this::getAugmentData, PCLAugmentList.DEFAULT, true);
+            PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
         }
     }
 

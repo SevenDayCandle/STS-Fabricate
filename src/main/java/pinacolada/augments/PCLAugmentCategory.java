@@ -14,21 +14,15 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public enum PCLAugmentCategory implements CountingPanelItem {
-    General(Color.GRAY),
-    Summon(Color.FIREBRICK),
-    Played(Color.ROYAL),
-    Power(Color.BLUE),
-    Special(Color.LIME);
-
-    public final Color color;
-
-    PCLAugmentCategory(Color color) {
-        this.color = color;
-    }
+    General,
+    Summon,
+    Played,
+    Power,
+    Special;
 
     @Override
     public Color getColor() {
-        return color;
+        return Color.WHITE;
     }
 
     @Override
@@ -39,7 +33,7 @@ public enum PCLAugmentCategory implements CountingPanelItem {
 
     @Override
     public Texture getIcon() {
-        return PCLCoreImages.CardUI.augment.texture();
+        return PCLCoreImages.CardUI.augmentBase.texture();
     }
 
     public String getName() {

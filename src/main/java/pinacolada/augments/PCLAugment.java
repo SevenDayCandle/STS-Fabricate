@@ -7,20 +7,18 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -83,6 +81,7 @@ public abstract class PCLAugment implements KeywordProvider {
         }
     }
 
+    // TODO allow applying to non-PCLCard
     public boolean canApply(AbstractCard c) {
         return c instanceof PCLCard && canApplyImpl((PCLCard) c);
     }
@@ -102,10 +101,6 @@ public abstract class PCLAugment implements KeywordProvider {
 
     public boolean canRemove() {
         return !data.isSpecial;
-    }
-
-    public Color getColor() {
-        return data.category.color;
     }
 
     public String getFullText() {
@@ -135,6 +130,10 @@ public abstract class PCLAugment implements KeywordProvider {
 
     public Texture getTexture() {
         return data.categorySub.getTexture();
+    }
+
+    public Texture getTextureBase() {
+        return data.category.getIcon();
     }
 
     public EUIKeywordTooltip getTip() {

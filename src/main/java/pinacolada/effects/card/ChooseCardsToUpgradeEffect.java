@@ -19,10 +19,6 @@ public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
         super(remove, filter);
     }
 
-    protected boolean forUpgrade() {
-        return true;
-    }
-
     @Override
     protected ArrayList<AbstractCard> getGroup() {
         return AbstractDungeon.player.masterDeck.getUpgradableCards().group;

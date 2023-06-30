@@ -269,10 +269,13 @@ public class PCLCardText {
     }
 
     private float renderAugment(SpriteBatch sb, PCLAugment augment, float y) {
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augment.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augmentSlot.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
         if (augment != null) {
-            PCLRenderHelpers.drawColorized(sb, augment.getColor(), s ->
-                    PCLRenderHelpers.drawOnCardAuto(s, card, augment.getTexture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, augment.getColor(), card.transparency, 1));
+            PCLRenderHelpers.drawOnCardAuto(sb, card, augment.getTextureBase(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, augment.getTexture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
+        }
+        else {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augmentSlot.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
         }
 
         return 30; // y offset

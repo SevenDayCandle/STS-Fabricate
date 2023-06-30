@@ -9,6 +9,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
@@ -28,7 +29,7 @@ public class PCLAugmentViewer extends EUIHoverable {
 
     public PCLAugmentViewer(EUIHitbox hb, PCLCard card, int index) {
         super(hb);
-        augmentButton = new EUIButton(PCLCoreImages.CardUI.augment.texture(), new RelativeHitbox(hb, AbstractRelic.PAD_X, AbstractRelic.PAD_X, 0, 0)).setTooltip("", "");
+        augmentButton = new EUIButton(PCLCoreImages.CardUI.augmentSlot.texture(), new RelativeHitbox(hb, AbstractRelic.PAD_X, AbstractRelic.PAD_X, 0, 0)).setTooltip("", "");
         augmentTitle = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, hb.width, scale(40), augmentButton.hb.width * 2.8f, 0))
                 .setFontScale(0.85f)
                 .setColor(Settings.GOLD_COLOR)
@@ -50,15 +51,14 @@ public class PCLAugmentViewer extends EUIHoverable {
         if (augment != null) {
             augmentTitle.setLabel(augment.getName());
             augmentButton
-                    .setBackground(augment.getTexture())
-                    .setColor(augment.getColor())
-                    .setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
+                    .setBackground(augment.getTextureBase())
+                    .setBorder(new EUIImage(augment.getTexture()));
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(augment.canRemove() ? PGR.core.strings.scp_clickToRemove : PGR.core.strings.scp_cannotRemove);
             augmentDescription.setLabel(augment.getFullText());
         }
         else {
             augmentTitle.setLabel(PGR.core.strings.scp_emptyAugment);
-            augmentButton.setBackground(PCLCoreImages.CardUI.augment.texture()).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
+            augmentButton.setBackground(PCLCoreImages.CardUI.augmentSlot.texture()).setBorder(null).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
             augmentDescription.setLabel("");
         }

@@ -73,7 +73,7 @@ public class PGR {
     public static PCLAugmentKeywordFilters augmentFilters;
     public static PCLAugmentLibraryScreen augmentLibrary;
     public static PCLAugmentSortHeader augmentHeader;
-    public static PCLAugmentScreen augmentScreen;
+    public static PCLAugmentCollectionScreen augmentScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
@@ -244,7 +244,7 @@ public class PGR {
         PGR.charSelectProvider = new PCLCharacterSelectOverlay();
         PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
         PGR.colorlessGroups = new PCLColorlessGroupLibraryModule(EUI.customLibraryScreen);
-        PGR.augmentScreen = new PCLAugmentScreen();
+        PGR.augmentScreen = new PCLAugmentCollectionScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.augmentFilters = new PCLAugmentKeywordFilters();
         PGR.augmentHeader = new PCLAugmentSortHeader(null);

@@ -2,6 +2,7 @@ package pinacolada.rewards.pcl;
 
 import basemod.BaseMod;
 import basemod.abstracts.CustomReward;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.rewards.RewardItem;
@@ -45,7 +46,8 @@ public class AugmentReward extends PCLReward {
 
     @Override
     public void renderIcon(SpriteBatch sb) {
-        EUIRenderHelpers.drawColorized(sb, s -> EUIRenderHelpers.drawCentered(sb, augment.getColor(), this.icon, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0));
+        EUIRenderHelpers.drawCentered(sb, Color.WHITE, augment.getTextureBase(), RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
+        EUIRenderHelpers.drawCentered(sb, Color.WHITE, this.icon, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
     }
 
     public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {

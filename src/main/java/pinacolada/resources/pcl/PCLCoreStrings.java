@@ -172,6 +172,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_potionSize = cetut.TEXT[53];
     public final String cetut_potionEffect = cetut.TEXT[54];
     public final String cetut_potionColor = cetut.TEXT[55];
+    public final String cetut_blightUnique = cetut.TEXT[56];
+    public final String cetut_augmentCategory = cetut.TEXT[57];
+    public final String cetut_augmentSubCategory = cetut.TEXT[58];
+    public final String cetut_augmentTier = cetut.TEXT[59];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -462,11 +466,15 @@ public class PCLCoreStrings extends PCLStrings {
     public final String tutorial_summonTutorial7 = tutorial.TEXT[9];
     public final String tutorial_augmentTutorial1 = tutorial.TEXT[10];
     public final String tutorial_augmentTutorial2 = tutorial.TEXT[11];
-    public final String tutorial_tutorialReplay = tutorial.TEXT[12];
-    public final String tutorial_tutorialNextStep = tutorial.TEXT[13];
-    public final String tutorial_tutorialComplete = tutorial.TEXT[14];
-    public final String tutorial_tutorialStepHeader = tutorial.TEXT[15];
-    public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[16];
+    public final String tutorial_augmentTutorial3 = tutorial.TEXT[12];
+    public final String tutorial_augmentTutorial4 = tutorial.TEXT[13];
+    public final String tutorial_augmentTutorial5 = tutorial.TEXT[14];
+    public final String tutorial_augmentTutorial6 = tutorial.TEXT[15];
+    public final String tutorial_tutorialReplay = tutorial.TEXT[16];
+    public final String tutorial_tutorialNextStep = tutorial.TEXT[17];
+    public final String tutorial_tutorialComplete = tutorial.TEXT[18];
+    public final String tutorial_tutorialStepHeader = tutorial.TEXT[19];
+    public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[20];
 
     public PCLCoreStrings(PCLResources<?, ?, ?, ?> resources) {
         super(resources);

@@ -9,9 +9,11 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon.CurrentScreen;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
     protected final FuncT1<Boolean, AbstractCard> filter;
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
     protected int cardsToChoose;
+    protected boolean selected;
     protected boolean canCancel;
 
     public GenericChooseCardsEffect(int choose) {
@@ -44,7 +47,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
             openPanel();
         }
         else {
-            complete();
+            complete(this);
         }
     }
 
@@ -65,15 +68,20 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
                     cards.add(card.makeCopy());
                     onCardSelected(card);
                 }
-
+                selected = true;
                 AbstractDungeon.gridSelectScreen.selectedCards.clear();
                 AbstractDungeon.gridSelectScreen.targetGroup.clear();
                 cardsToChoose = 0;
             }
         }
-        else if (tickDuration(deltaTime)) {
-            AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
+        if (selected) {
             complete(this);
+            return;
+        }
+
+        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
+        {
+            complete();
         }
     }
 
@@ -102,7 +110,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
 
         if (cardGroup.size() < cardsToChoose) {
-            complete();
+            complete(this);
             return;
         }
 
@@ -112,7 +120,11 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
             AbstractDungeon.previousScreen = AbstractDungeon.screen;
         }
 
-        AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.INCOMPLETE;
+        // Setting canCancel to true does not ensure the cancel button will be shown
+        if (canCancel) {
+            AbstractDungeon.overlayMenu.cancelButton.show(GridCardSelectScreen.TEXT[1]);
+        }
+
         AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
     }
 

@@ -38,17 +38,17 @@ public class PCLAugmentList extends EUICanvasGrid {
         this.onComplete = onComplete;
         cancel = createHexagonalButton(screenW(0.015f), screenH(0.07f), screenW(0.12f), screenH(0.068f))
                 .setText(CharacterSelectScreen.TEXT[5])
-                .setOnClick(() -> onComplete.invoke(null))
+                .setOnClick(() -> this.onComplete.invoke(null))
                 .setColor(Color.FIREBRICK);
-        sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(170), scale(32)), this::sortAugments);
+        sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(135), scale(32)), this::sortAugments);
     }
 
     public void addListItem(PCLAugment augment, float amount) {
-        this.augments.add(new PCLAugmentListItem(this, augment, amount));
+        this.augments.add(new PCLAugmentListItem(onComplete, augment, amount));
     }
 
     public void addPanelItem(PCLAugment augment, int count, boolean enabled) {
-        this.augments.add(new PCLAugmentButtonListItem(this, augment, count, enabled));
+        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment, count, enabled));
     }
 
     public void clear() {
@@ -60,6 +60,11 @@ public class PCLAugmentList extends EUICanvasGrid {
         return augments.size();
     }
 
+    public PCLAugmentList enableCancel(boolean val) {
+        cancel.setActive(val);
+        return this;
+    }
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
@@ -69,7 +74,7 @@ public class PCLAugmentList extends EUICanvasGrid {
                 item.renderImpl(sb);
             }
         }
-        cancel.renderImpl(sb);
+        cancel.tryRender(sb);
     }
 
     @Override
@@ -95,7 +100,7 @@ public class PCLAugmentList extends EUICanvasGrid {
                 row += 1;
             }
         }
-        cancel.updateImpl();
+        cancel.tryUpdate();
     }
 
     protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
@@ -106,13 +111,13 @@ public class PCLAugmentList extends EUICanvasGrid {
     protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
         switch (sortType) {
             case Name:
-                return StringUtils.compare(a.augment.getName(), b.augment.getName());
+                return StringUtils.compare(a.augment.augment.getName(), b.augment.augment.getName());
             case Count:
                 return Float.compare(a.amount, b.amount);
             case Category:
-                return a.augment.data.category.ordinal() - b.augment.data.category.ordinal();
+                return a.augment.augment.data.category.ordinal() - b.augment.augment.data.category.ordinal();
             case Level:
-                return a.augment.data.tier - b.augment.data.tier;
+                return a.augment.augment.data.tier - b.augment.augment.data.tier;
         }
         return 0;
     }
