@@ -150,8 +150,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
                 .setTooltip(PGR.core.strings.sui_seriesUI, PGR.core.strings.cetut_attrAffinity);
-        loadoutDropdown
-                .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor) && loadoutDropdown.size() > 0);
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
@@ -183,13 +181,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
 
-        PCLResources<?, ?, ?, ?> resources = PGR.getResources(effect.currentSlot.slotColor);
-        if (resources != null) {
-            loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
-        }
-        else {
-            loadoutDropdown.setActive(false);
-        }
+        loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
+        loadoutDropdown
+                .setActive(loadoutDropdown.size() > 0);
 
         refresh();
     }

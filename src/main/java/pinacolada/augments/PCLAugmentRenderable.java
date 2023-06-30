@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PCLAugmentRenderable implements KeywordProvider {
+    public static final float BASE_SCALE = 0.6f;
+
     public final PCLAugment augment;
     public Hitbox hb;
     public ArrayList<EUIKeywordTooltip> tips;
@@ -24,7 +26,7 @@ public class PCLAugmentRenderable implements KeywordProvider {
     public float currentX;
     public float currentY;
     public float rotation;
-    public float scale = 0.75f;
+    public float scale = BASE_SCALE;
     public float targetX;
     public float targetY;
 

@@ -36,7 +36,6 @@ import static pinacolada.ui.characterSelection.PCLLoadoutScreen.MAX_RELIC_SLOTS;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> COLOR_LOADOUTS = new HashMap<>();
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
     public static final int MAX_PRESETS = 5;
@@ -76,7 +75,7 @@ public abstract class PCLLoadout {
     }
 
     public static ArrayList<PCLLoadout> getAll(AbstractCard.CardColor cardColor) {
-        return COLOR_LOADOUTS.getOrDefault(cardColor, new ArrayList<>());
+        return EUIUtils.filter(LOADOUTS.values(), l -> l.color == cardColor);
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {
@@ -154,11 +153,7 @@ public abstract class PCLLoadout {
         return null;
     }
 
-    public static PCLLoadout register(AbstractCard.CardColor color, FuncT1<PCLLoadout, AbstractCard.CardColor> loadoutFunc) {
-        PCLLoadout loadout = loadoutFunc.invoke(color);
-        ArrayList<PCLLoadout> l = COLOR_LOADOUTS.getOrDefault(color, new ArrayList<>());
-        l.add(loadout);
-        COLOR_LOADOUTS.put(color, l);
+    public static <T extends PCLLoadout> T register(T loadout) {
         LOADOUTS.put(loadout.ID, loadout);
         return loadout;
     }

@@ -22,6 +22,7 @@ import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
+import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 
 import java.util.ArrayList;
@@ -30,31 +31,34 @@ import java.util.List;
 public class GridCardSelectScreenMultiformPatches {
     protected static final float ICON_SIZE = 64f * Settings.scale;
     protected static final int DEFAULT_MAX = 3;
-    public static final float[] Y_POSITIONS_2 = new float[]{
+    protected static final float[] Y_POSITIONS_2 = new float[]{
             Settings.HEIGHT * 0.75F - 50.0F * Settings.scale,
             Settings.HEIGHT * 0.25F + 50.0F * Settings.scale
     };
-    public static final float[] Y_POSITIONS_3 = new float[]{
+    protected static final float[] Y_POSITIONS_3 = new float[]{
             Settings.HEIGHT * 0.75F + 25.0F * Settings.scale,
             Settings.HEIGHT * 0.5F,
             Settings.HEIGHT * 0.25F - 25.0F * Settings.scale
     };
-    protected static List<AbstractCard> cardList;
-    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE)).setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90);
-    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE)).setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90);
+    public static PCLAugment augment;
+    protected static ArrayList<AbstractCard> cardList = new ArrayList<>();
+    protected static boolean waitingForBranchUpgradeSelection = false;
+    protected static int branchUpgradeForm = 0;
+    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
+            .setOnClick(GridCardSelectScreenMultiformPatches::subtractIndex);
+    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
+            .setOnClick(GridCardSelectScreenMultiformPatches::addIndex);
     protected static int minIndex = 0;
     protected static int maxIndex = DEFAULT_MAX;
 
-    protected static void addIndex(GridCardSelectScreen instance) {
-        if (maxIndex < getBranchUpgrades(instance).size() - 1) {
+    protected static void addIndex() {
+        if (maxIndex < cardList.size() - 1) {
             minIndex += 1;
             maxIndex += 1;
-            refreshButtons(instance);
+            refreshButtons();
         }
-    }
-
-    protected static List<AbstractCard> getBranchUpgrades(GridCardSelectScreen instance) {
-        return GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(instance);
     }
 
     /**
@@ -69,15 +73,14 @@ public class GridCardSelectScreenMultiformPatches {
         return ReflectionHacks.getPrivate(AbstractDungeon.gridSelectScreen, GridCardSelectScreen.class, "hoveredCard");
     }
 
-    protected static List<AbstractCard> getShownBranchUpgrades(GridCardSelectScreen instance) {
-        List<AbstractCard> list = getBranchUpgrades(instance);
-        return list.size() < 4 ? list : list.subList(minIndex, maxIndex);
+    protected static List<AbstractCard> getShownBranchUpgrades() {
+        return cardList.size() < 4 ? cardList : cardList.subList(minIndex, maxIndex);
     }
 
-    protected static void refreshButtons(GridCardSelectScreen instance) {
+    protected static void refreshButtons() {
         boolean canUp = minIndex > 0;
         upButton.setInteractable(canUp).setColor(canUp ? Color.PURPLE : Color.GRAY);
-        boolean canDown = maxIndex < getBranchUpgrades(instance).size() - 1;
+        boolean canDown = maxIndex < cardList.size() - 1;
         downButton.setInteractable(canDown).setColor(canDown ? Color.PURPLE : Color.GRAY);
     }
 
@@ -92,8 +95,8 @@ public class GridCardSelectScreenMultiformPatches {
 
     public static void selectPCLCardUpgrade(PCLCard card) {
         if (card.cardData.canToggleOnUpgrade) {
-            GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgradeForm.set(AbstractDungeon.gridSelectScreen, card.auxiliaryData.form);
-            if (cardList != null && cardList.size() > 1) {
+            branchUpgradeForm = card.auxiliaryData.form;
+            if (cardList.size() > 1) {
                 card.beginGlowing();
                 cardList.forEach((c) -> {
                     if (c != card) {
@@ -102,18 +105,18 @@ public class GridCardSelectScreenMultiformPatches {
                 });
             }
         }
-        GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, false);
+        waitingForBranchUpgradeSelection = false;
     }
 
-    protected static boolean shouldRenderBranching(PCLCard c) {
-        return c != null && c.cardData.canToggleOnUpgrade;
+    public static void setAugment(PCLAugment aug) {
+        augment = aug;
     }
 
-    protected static void subtractIndex(GridCardSelectScreen instance) {
+    protected static void subtractIndex() {
         if (minIndex > 0) {
             minIndex -= 1;
             maxIndex -= 1;
-            refreshButtons(instance);
+            refreshButtons();
         }
     }
 
@@ -132,9 +135,9 @@ public class GridCardSelectScreenMultiformPatches {
         public static void insert(GridCardSelectScreen __instance) {
             AbstractCard hoveredCard = GridCardSelectScreenMultiformPatches.getHoveredCard();
             if (hoveredCard instanceof PCLCard) {
-                ((PCLCard) hoveredCard).changeForm(BranchSelectFields.branchUpgradeForm.get(__instance), hoveredCard.timesUpgraded);
-                GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgradeForm.set(__instance, 0);
-                cardList = null;
+                ((PCLCard) hoveredCard).changeForm(branchUpgradeForm, hoveredCard.timesUpgraded);
+                branchUpgradeForm = 0;
+                cardList.clear();
             }
 
         }
@@ -161,9 +164,9 @@ public class GridCardSelectScreenMultiformPatches {
 
         @SpirePrefixPatch
         public static void prefix(GridCardSelectScreen __instance) {
-            GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(__instance, false);
-            BranchSelectFields.branchUpgradeForm.set(__instance, 0);
-            cardList = null;
+            waitingForBranchUpgradeSelection = false;
+            branchUpgradeForm = 0;
+            cardList.clear();
         }
     }
 
@@ -183,8 +186,7 @@ public class GridCardSelectScreenMultiformPatches {
 
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(GridCardSelectScreen __instance, SpriteBatch sb) {
-            PCLCard c = EUIUtils.safeCast(GridCardSelectScreenMultiformPatches.getHoveredCard(), PCLCard.class);
-            if (__instance.forUpgrade && shouldRenderBranching(c) && cardList != null && cardList.size() > 1) {
+            if (__instance.forUpgrade && cardList.size() > 1) {
                 float x = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
                 float y = (float) Settings.HEIGHT / 2.0F - 32.0F;
                 float by = 64 * Settings.scale;
@@ -200,14 +202,13 @@ public class GridCardSelectScreenMultiformPatches {
                 sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, 45.0F, 0, 0, 64, 64, false, false);
                 sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, -45.0F, 0, 0, 64, 64, false, false);
 
-                ArrayList<AbstractCard> upgrades = GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(__instance);
-                if (upgrades.size() > 2) {
+                if (cardList.size() > 2) {
                     x = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
                     sb.draw(ImageMaster.UPGRADE_ARROW, x, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1 * Settings.scale, arrowScale1 * Settings.scale, 0, 0, 0, 64, 64, false, false);
                     sb.draw(ImageMaster.UPGRADE_ARROW, x + 64.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2 * Settings.scale, arrowScale2 * Settings.scale, 0, 0, 0, 64, 64, false, false);
                     sb.draw(ImageMaster.UPGRADE_ARROW, x + 128.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, 0, 0, 0, 64, 64, false, false);
 
-                    if (upgrades.size() > DEFAULT_MAX) {
+                    if (cardList.size() > DEFAULT_MAX) {
                         upButton.renderCentered(sb);
                         downButton.renderCentered(sb);
                     }
@@ -233,9 +234,8 @@ public class GridCardSelectScreenMultiformPatches {
 
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(GridSelectConfirmButton __instance, SpriteBatch sb) {
-            PCLCard c = EUIUtils.safeCast(GridCardSelectScreenMultiformPatches.getHoveredCard(), PCLCard.class);
-            return BranchSelectFields.waitingForBranchUpgradeSelection.get(AbstractDungeon.gridSelectScreen)
-                    && shouldRenderBranching(c)
+            return waitingForBranchUpgradeSelection
+                    && !cardList.isEmpty()
                     ? SpireReturn.Return(null) : SpireReturn.Continue();
         }
     }
@@ -262,15 +262,15 @@ public class GridCardSelectScreenMultiformPatches {
         }
 
         public static SpireReturn<Void> render(GridCardSelectScreen __instance, SpriteBatch sb) {
-            PCLCard c = EUIUtils.safeCast(GridCardSelectScreenMultiformPatches.getHoveredCard(), PCLCard.class);
-            if (__instance.forUpgrade && shouldRenderBranching(c)) {
+            AbstractCard c = GridCardSelectScreenMultiformPatches.getHoveredCard();
+            if (__instance.forUpgrade && c != null && !cardList.isEmpty()) {
                 c.current_x = c.target_x = (float) Settings.WIDTH * 0.36F;
                 c.current_y = c.target_y = (float) Settings.HEIGHT / 2.0F;
                 c.render(sb);
                 c.updateHoverLogic();
                 c.hb.resize(0.0F, 0.0F);
 
-                final List<AbstractCard> list = getShownBranchUpgrades(__instance);
+                final List<AbstractCard> list = getShownBranchUpgrades();
                 int size = list.size();
                 if (size == 1) {
                     renderPreviewCard(sb, list.get(0), 1f, Settings.HEIGHT * 0.5f);
@@ -315,10 +315,10 @@ public class GridCardSelectScreenMultiformPatches {
                 locator = GridCardSelectScreen_Update.Locator.class
         )
         public static void insert(GridCardSelectScreen __instance) {
-            for (AbstractCard c : getShownBranchUpgrades(__instance)) {
+            for (AbstractCard c : getShownBranchUpgrades()) {
                 c.update();
             }
-            if (getBranchUpgrades(__instance).size() > DEFAULT_MAX) {
+            if (cardList.size() > DEFAULT_MAX) {
                 upButton.update();
                 downButton.update();
             }
@@ -347,12 +347,15 @@ public class GridCardSelectScreenMultiformPatches {
                 locator = GridCardSelectScreenMultiformPatches.GetBranchingUpgrade.Locator.class
         )
         public static void insert(GridCardSelectScreen __instance) {
+            cardList.clear();
             AbstractCard c = GridCardSelectScreenMultiformPatches.getHoveredCard();
             PCLCard base = EUIUtils.safeCast(c, PCLCard.class);
-            if (base != null && base.cardData.canToggleOnUpgrade) {
-                final ArrayList<AbstractCard> list = GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(__instance);
-                list.clear();
-
+            if (base != null) {
+                if (augment != null) {
+                    cardList.add(base.makeSetAugmentPreview(augment));
+                    selectPCLCardUpgrade((PCLCard) cardList.get(0));
+                }
+                else if (base.cardData.canToggleOnUpgrade) {
                     /* Find the minimum possible upgrade form M at your current upgrade level and form
                         Let B = branch factor, U = current upgrade, F = current form
                         Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
@@ -363,40 +366,37 @@ public class GridCardSelectScreenMultiformPatches {
 
                         See https://en.wikipedia.org/wiki/Geometric_series
                     */
-                if (base.cardData.branchFactor <= 0) {
-                    for (int i = 0; i < base.getMaxForms(); i++) {
-                        list.add(base.makeUpgradePreview(i));
+                    if (base.cardData.branchFactor <= 0) {
+                        for (int i = 0; i < base.getMaxForms(); i++) {
+                            cardList.add(base.makeUpgradePreview(i));
+                        }
+                    }
+                    else {
+                        int minForm = base.cardData.branchFactor != 1 ?
+                                getFormSum(base.cardData.branchFactor, base.timesUpgraded) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded - 1))
+                                : base.timesUpgraded + 1;
+
+                        for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
+                            cardList.add(base.makeUpgradePreview(i));
+                        }
+                    }
+
+                    // If you ran out of forms, do not change the card form
+                    if (cardList.size() == 0) {
+                        cardList.add(base.makeUpgradePreview(base.getForm()));
+                    }
+
+                    // If there is only one card, it should be auto-selected
+                    if (cardList.size() == 1) {
+                        selectPCLCardUpgrade((PCLCard) cardList.get(0));
+                    }
+                    else {
+                        waitingForBranchUpgradeSelection = true;
                     }
                 }
-                else {
-                    int minForm = base.cardData.branchFactor != 1 ?
-                            getFormSum(base.cardData.branchFactor, base.timesUpgraded) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded - 1))
-                            : base.timesUpgraded + 1;
-
-                    for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
-                        list.add(base.makeUpgradePreview(i));
-                    }
-                }
-
-                // If you ran out of forms, do not change the card form
-                if (list.size() == 0) {
-                    list.add(base.makeUpgradePreview(base.getForm()));
-                }
-
-                // If there is only one card, it should be auto-selected
-                if (list.size() == 1) {
-                    selectPCLCardUpgrade((PCLCard) list.get(0));
-                }
-                else {
-                    GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(__instance, true);
-                }
-
-                cardList = list;
                 minIndex = 0;
                 maxIndex = DEFAULT_MAX;
-                upButton.setOnClick(() -> subtractIndex(__instance));
-                downButton.setOnClick(() -> addIndex(__instance));
-                refreshButtons(__instance);
+                refreshButtons();
             }
         }
 
@@ -409,19 +409,5 @@ public class GridCardSelectScreenMultiformPatches {
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
         }
-    }
-
-    @SpirePatch(
-            clz = GridCardSelectScreen.class,
-            method = "<class>"
-    )
-    public static class BranchSelectFields {
-        public static SpireField<ArrayList<AbstractCard>> branchUpgrades = new SpireField<>(ArrayList::new);
-        public static SpireField<Boolean> waitingForBranchUpgradeSelection = new SpireField<>(() -> {
-            return false;
-        });
-        public static SpireField<Integer> branchUpgradeForm = new SpireField<>(() -> {
-            return 0;
-        });
     }
 }

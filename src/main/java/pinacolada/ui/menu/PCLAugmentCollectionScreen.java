@@ -74,7 +74,11 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
             curEffect = new ApplyAugmentToCardEffect(augment)
-                    .addCallback(__ -> refreshAugments());
+                    .addCallback(__ ->
+                            {
+                                refreshAugments();
+                            }
+                    );
         }
         else {
             close();
@@ -107,9 +111,15 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
             }
         }
         EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
-        if (panel.augments.size() == 0) {
-            close();
-        }
+    }
+
+    // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
+    public boolean allowOpenDeck() {
+        return curEffect != null;
+    }
+
+    public boolean allowOpenMap() {
+        return curEffect != null;
     }
 
 

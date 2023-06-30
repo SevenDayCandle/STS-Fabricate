@@ -226,4 +226,12 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache waterSplash3 = new TextureCache("images/pcl/effects/WaterSplash3.png");
         public static final TextureCache whack = new TextureCache("images/pcl/effects/Whack.png");
     }
+
+    public static class Tutorial {
+        public static final TextureCache augTut01 = new TextureCache("images/pcl/ui/tutorial/augtut01.png", true);
+        public static final TextureCache augTut02 = new TextureCache("images/pcl/ui/tutorial/augtut02.png", true);
+        public static final TextureCache augTut03 = new TextureCache("images/pcl/ui/tutorial/augtut03.png", true);
+        public static final TextureCache augTut04 = new TextureCache("images/pcl/ui/tutorial/augtut04.png", true);
+        public static final TextureCache augTut05 = new TextureCache("images/pcl/ui/tutorial/augtut05.png", true);
+    }
 }

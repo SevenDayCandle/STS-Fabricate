@@ -1597,6 +1597,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return makePowerString(getEffectStrings());
     }
 
+    public PCLCard makeSetAugmentPreview(PCLAugment augment) {
+        PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
+        upgrade.addAugment(augment.makeCopy(), false);
+        upgrade.isPreview = true;
+        return upgrade;
+    }
+
     public PCLCard makeUpgradePreview(int form) {
         PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
         upgrade.changeForm(form, timesUpgraded);

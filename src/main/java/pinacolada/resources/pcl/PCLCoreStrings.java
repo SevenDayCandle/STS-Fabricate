@@ -295,7 +295,7 @@ public class PCLCoreStrings extends PCLStrings {
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
-    public final String misc_viewAugmentsNone = misc.TEXT[2];
+    public final String misc_rightClickLearnMore = misc.TEXT[2];
     public final String misc_customCards = misc.TEXT[3];
     public final String misc_customCardsDesc = misc.TEXT[4];
     public final String misc_fabricate = misc.TEXT[5];

@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorial;
-import extendedui.ui.controls.EUITutorialPage;
+import extendedui.ui.controls.EUITutorialImagePage;
 import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
@@ -21,6 +21,8 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.HashMap;
+
+import static pinacolada.ui.combat.PCLPlayerMeter.makeTitle;
 
 public class PCLAugmentPanelItem extends PCLTopPanelItem {
     public static final String ID = createFullID(PCLAugmentPanelItem.class);
@@ -49,7 +51,13 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         super.onRightClick();
         this.getHitbox().unhover();
         EUITutorial tutorial = new EUITutorial(
-                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 1), PGR.core.strings.tutorial_augmentTutorial1, PCLCoreImages.Tutorial.augTut01.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 2), PGR.core.strings.tutorial_augmentTutorial2, PCLCoreImages.Tutorial.augTut02.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 3), PGR.core.strings.tutorial_augmentTutorial3, PCLCoreImages.Tutorial.augTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 4), PGR.core.strings.tutorial_augmentTutorial4, PCLCoreImages.Tutorial.augTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 5), PGR.core.strings.tutorial_augmentTutorial5, PCLCoreImages.Tutorial.augTut04.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 6), PGR.core.strings.tutorial_augmentTutorial6, PCLCoreImages.Tutorial.augTut05.texture())
+        );
         EUI.ftueScreen.openScreen(tutorial);
     }
 
@@ -58,7 +66,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         if (this.tooltip != null && this.getHitbox().hovered) {
             this.tooltip.setText(
                     PGR.core.strings.misc_viewAugments + " (" + PCLHotkeys.viewAugmentScreen.getKeyString() + ")",
-                    EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, PGR.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc_viewAugmentsNone : "")
+                    EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.misc_viewAugmentsDescription, PGR.core.strings.misc_rightClickLearnMore)
             );
             EUITooltip.queueTooltip(this.tooltip);
         }
@@ -73,9 +81,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
 
     protected void onClick() {
         super.onClick();
-        if (PGR.dungeon.getAugmentTotal() > 0) {
-            PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
-        }
+        PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
     }
 
     @Override

@@ -125,6 +125,10 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
             AbstractDungeon.overlayMenu.cancelButton.show(GridCardSelectScreen.TEXT[1]);
         }
 
+        openGridScreen(cardGroup);
+    }
+
+    protected void openGridScreen(CardGroup cardGroup) {
         AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
     }
 

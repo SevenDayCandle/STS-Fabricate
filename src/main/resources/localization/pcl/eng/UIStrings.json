@@ -393,8 +393,8 @@
 				"pcl:Misc": {
 								"TEXT": [
 												"Augments",
-												"View and manage your #yAugments.{0} || {#o:Right-Click to learn more.} ",
-												" (You do not have any #yAugments)",
+												"View and manage your #yAugments.",
+												"{#o:Right-Click to learn more.}",
 												"Custom Cards",
 												"Allow cards created with Fabricate to appear in runs",
 												"Fabricate",
@@ -588,7 +588,7 @@
 												"Click on the #yAugment icon on the top bar to see a list of #yAugments that you have collected.",
 												"Hover over an #yAugment to view its description. Click on it to slot it into a card with a free #yAugment slot.",
 												"Augments can only be slotted into cards with the types mentioned in that Augment's description. Additionally, a card cannot have more than one copy of any variation of that Augment.",
-												"You may view individual #yAugment on a card by clicking on the #yView #yAugments button in its pop-up view screen.",
+												"You may view a card's #yAugments by clicking on the #yView #yAugments button in its pop-up view screen.",
 												"Click on an empty #yAugment #ySlot to place an eligible #yAugment into it. Click on a filled #yAugment #ySlot to retrieve its #yAugment. You may insert and remove #yAugments as many times as you wish at any time, but changes will not be applied to cards in the current battle.",
 												"To replay this step, end your turn.",
 												"Nice! End your turn when you are ready for the next step of this tutorial.",
