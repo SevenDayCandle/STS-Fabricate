@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUILabel;
@@ -16,7 +17,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.relics.PCLRelic;
-import pinacolada.resources.loadout.PCLRelicSlot;
+import pinacolada.resources.loadout.LoadoutRelicSlot;
 
 import java.util.ArrayList;
 
@@ -30,17 +31,16 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
     public static final float TARGET_X = Settings.WIDTH * 0.25f;
     public static final float START_XY = Settings.WIDTH * 0.5f;
-    private final PCLRelicSlot slot;
+    private final LoadoutRelicSlot slot;
     private final ArrayList<RenderItem> relics = new ArrayList<>();
-    //private boolean draggingScreen = false;
-    private PCLRelic selectedRelic;
+    private AbstractRelic selectedRelic;
 
-    public PCLRelicSlotSelectionEffect(PCLRelicSlot slot) {
+    public PCLRelicSlotSelectionEffect(LoadoutRelicSlot slot) {
         super(0.7f, true);
 
         this.selectedRelic = slot.getRelic();
         this.slot = slot;
-        final ArrayList<PCLRelicSlot.Item> slotItems = slot.getSelectableRelics();
+        final ArrayList<LoadoutRelicSlot.Item> slotItems = slot.getSelectableRelics();
         for (int i = 0; i < slotItems.size(); i++) {
             this.relics.add(new RenderItem(slotItems.get(i), i));
         }
@@ -115,12 +115,12 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         }
     }
 
-    private void onRelicClicked(PCLRelic relic) {
+    private void onRelicClicked(AbstractRelic relic) {
         if (selectedRelic != null) {
             selectedRelic.stopPulse();
 
             if (selectedRelic == relic) {
-                slot.select((PCLRelic) null);
+                slot.select((AbstractRelic) null);
                 selectedRelic = null;
                 return;
             }
@@ -137,20 +137,20 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         public final float targetY;
         public final int estimatedValue;
         public final EUIRelic relicImage;
-        public final PCLRelic relic;
+        public final AbstractRelic relic;
         public final EUILabel relicNameText = new EUILabel(FontHelper.cardTitleFont, new EUIHitbox(AbstractCard.IMG_WIDTH, AbstractCard.IMG_HEIGHT * 0.15f))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         public float animTimer;
         public float duration = 0.2f;
 
-        public RenderItem(PCLRelicSlot.Item item, int index) {
+        public RenderItem(LoadoutRelicSlot.Item item, int index) {
             this.relic = item.relic;
             this.estimatedValue = item.estimatedValue;
             this.relicImage = new EUIRelic(relic, new EUIHitbox(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, item.relic.hb.width, item.relic.hb.height));
             this.targetX = TARGET_X;
             this.targetY = Settings.HEIGHT * (0.8f - (index * 0.05f));
-            this.relicNameText.setLabel(item.relic.getName());
+            this.relicNameText.setLabel(item.relic instanceof PCLRelic ? ((PCLRelic) item.relic).getName() : item.relic.name);
         }
 
         public void update(float deltaTime) {

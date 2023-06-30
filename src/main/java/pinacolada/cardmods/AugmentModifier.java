@@ -9,33 +9,44 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.PTrait;
 
+import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 @AbstractCardModifier.SaveIgnore
-public class SkillModifier extends AbstractCardModifier {
-    protected String serialized;
-    protected transient PSkill<?> skill;
+public class AugmentModifier extends AbstractCardModifier {
+    protected String augmentID;
+    protected transient PCLAugment augment;
     protected PCLUseInfo info;
 
-    public SkillModifier(String serialized) {
-        this.serialized = serialized;
-        this.skill = PSkill.get(serialized);
+    public AugmentModifier(String augmentID) {
+        this.augmentID = augmentID;
+        this.augment = PCLAugmentData.get(augmentID).create();
     }
 
-    public SkillModifier(PSkill<?> skill) {
-        this.skill = skill;
-        this.serialized = skill.serialize();
+    public AugmentModifier(PCLAugment augment) {
+        this.augment = augment;
+        this.augmentID = augment.ID;
     }
 
-    public static ArrayList<? extends SkillModifier> getAll(AbstractCard c) {
-        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, SkillModifier.class));
+    public static AugmentModifier apply(PCLAugment augment, AbstractCard c) {
+        AugmentModifier mod = new AugmentModifier(augment);
+        CardModifierManager.addModifier(c, mod);
+        return mod;
+    }
+
+    public static ArrayList<? extends AugmentModifier> getAll(AbstractCard c) {
+        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, AugmentModifier.class));
     }
 
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {
@@ -46,51 +57,56 @@ public class SkillModifier extends AbstractCardModifier {
     }
 
     public PSkill<?> getSkill() {
-        return skill;
+        return augment.skill;
     }
 
     @Override
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return skill.modifyDamage(getInfo(card, target), damage);
+        return augment.skill.modifyDamage(getInfo(card, target), damage);
     }
 
-    // Generate infos manually because we cannot attach the skill to the card if it is not an EditorCard
+    // Generate infos manually because we cannot attach the augment.skill to the card if it is not an EditorCard
     @Override
     public float modifyBlock(float block, AbstractCard card) {
-        return skill.modifyBlock(getInfo(card, null), block);
+        return augment.skill.modifyBlock(getInfo(card, null), block);
     }
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(true);
+        return augment.skill instanceof PTrait ? rawDescription : rawDescription + EUIUtils.SPLIT_LINE + augment.skill.getText(true);
+    }
+
+    @Override
+    public String modifyName(String cardName, AbstractCard card) {
+        return EUIRM.strings.adjNoun(augment.getName(), cardName);
     }
 
     @Override
     public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
-        skill.use(getInfo(card, target), PCLActions.bottom);
+        augment.skill.use(getInfo(card, target), PCLActions.bottom);
     }
 
     public void onDrawn(AbstractCard card) {
-        skill.triggerOnDraw(card);
+        augment.skill.triggerOnDraw(card);
     }
 
     public void onExhausted(AbstractCard card) {
-        skill.triggerOnExhaust(card);
+        augment.skill.triggerOnExhaust(card);
     }
 
     @Override
     public void onInitialApplication(AbstractCard card) {
         if (card instanceof PointerProvider) {
-            skill.setSource((PointerProvider) card).onAddToCard(card);
+            augment.skill.setSource((PointerProvider) card).onAddToCard(card);
         }
         else {
-            skill.sourceCard = card;
+            augment.skill.sourceCard = card;
         }
     }
 
     @Override
     public void onRemove(AbstractCard card) {
-        skill.onRemoveFromCard(card);
+        augment.skill.onRemoveFromCard(card);
     }
 
     @Override
@@ -104,37 +120,37 @@ public class SkillModifier extends AbstractCardModifier {
     }
 
     public void onOtherCardPlayed(AbstractCard card, AbstractCard otherCard, CardGroup group) {
-        skill.triggerOnOtherCardPlayed(otherCard);
+        augment.skill.triggerOnOtherCardPlayed(otherCard);
     }
 
     public boolean canPlayCard(AbstractCard card) {
-        return skill.canPlay(getInfo(card, null));
+        return augment.skill.canPlay(getInfo(card, null));
     }
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new SkillModifier(serialized);
+        return new AugmentModifier(augment.ID);
     }
 
     @Override
     public String identifier(AbstractCard card) {
-        return skill.effectID + skill.getUUID();
+        return augment.skill.effectID + augment.skill.getUUID();
     }
 
     public void onDiscard(AbstractCard card) {
-        skill.triggerOnDiscard(card);
+        augment.skill.triggerOnDiscard(card);
     }
 
     public void onPurged(AbstractCard card) {
-        skill.triggerOnPurge(card);
+        augment.skill.triggerOnPurge(card);
     }
 
     public void onReshuffled(AbstractCard card, CardGroup group) {
-        skill.triggerOnReshuffle(card, group);
+        augment.skill.triggerOnReshuffle(card, group);
     }
 
     public void onUpgraded(AbstractCard card) {
-        skill.triggerOnUpgrade(card);
+        augment.skill.triggerOnUpgrade(card);
     }
 
     public PCLUseInfo refreshInfo(AbstractCard card, AbstractCreature target) {

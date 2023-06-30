@@ -652,10 +652,6 @@ public class CombatManager {
     }
 
     public static void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect) {
-        if (GameUtilities.getEnemies(true).contains(action.source)) {
-            action.target = summons.getTarget(action.source);
-        }
-
         subscriberDo(OnDamageActionSubscriber.class, s -> s.onDamageAction(action, target, info, effect));
     }
 

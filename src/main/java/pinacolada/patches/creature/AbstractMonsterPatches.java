@@ -25,11 +25,6 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class AbstractMonsterPatches {
-    public static AbstractCreature getTarget(AbstractMonster mo) {
-        AbstractCreature c = CombatManager.summons.getTarget(mo);
-        return c != null ? c : AbstractDungeon.player;
-    }
-
     @SpirePatch(clz = AbstractMonster.class, method = "renderTip", paramtypez = {SpriteBatch.class})
     public static class AbstractMonster_RenderTip {
         @SpirePrefixPatch
@@ -120,38 +115,6 @@ public class AbstractMonsterPatches {
         @SpirePrefixPatch
         public static void prefix(AbstractMonster __instance, int dmg) {
             PCLIntentInfo.currentEnemy = __instance;
-        }
-    }
-
-    @SpirePatch(clz = AbstractMonster.class, method = "applyPowers")
-    public static class AbstractMonster_ApplyPowers {
-        @SpireInstrumentPatch
-        public static ExprEditor instrument() {
-            return new ExprEditor() {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("target")) {
-                        m.replace("{ $_ = $proceed($1, pinacolada.patches.creature.AbstractMonsterPatches.getTarget($0)); }");
-                    }
-                }
-            };
-        }
-
-    }
-
-    @SpirePatch(clz = AbstractMonster.class, method = "renderIntent")
-    public static class AbstractMonster_RenderIntent {
-        @SpirePostfixPatch
-        public static void postfix(AbstractMonster __instance, SpriteBatch sb) {
-            if (GameUtilities.isAttacking(__instance.intent)) {
-                AbstractCreature c = CombatManager.summons.getTarget(__instance);
-                // null means aoe
-                if (c == null) {
-                    FontHelper.renderFontCentered(sb, FontHelper.tipBodyFont, PCLCardTarget.AllEnemy.getShortString(), __instance.intentHb.cX - 64.0F, __instance.intentHb.cY - 90.0F + GameUtilities.getBobEffect(__instance).y, Settings.CREAM_COLOR);
-                }
-                else if (c != AbstractDungeon.player && (__instance.hb.hovered || __instance.intentHb.hovered)) {
-                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), __instance.hb, c.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
-                }
-            }
         }
     }
 }

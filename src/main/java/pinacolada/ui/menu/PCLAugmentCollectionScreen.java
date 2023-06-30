@@ -2,22 +2,16 @@ package pinacolada.ui.menu;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
-import extendedui.ui.screens.EUIDungeonScreen;
 import extendedui.ui.screens.EUIPoolScreen;
-import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.card.ApplyAugmentToCardEffect;
-import pinacolada.effects.utility.ActionCallbackEffect;
-import pinacolada.resources.PGR;
+import pinacolada.effects.card.ChooseCardForAugmentEffect;
 import pinacolada.ui.cardView.PCLAugmentList;
 import pinacolada.utilities.GameUtilities;
 
@@ -73,7 +67,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
-            curEffect = new ApplyAugmentToCardEffect(augment)
+            curEffect = new ChooseCardForAugmentEffect(augment)
                     .addCallback(__ ->
                             {
                                 refreshAugments();
@@ -90,7 +84,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         this.getEntries = getEntries;
         this.canSelect = canSelect;
         panel = new PCLAugmentList(this::doAction, rows).enableCancel(false);
-        addItem = canSelect ? (a, b) -> panel.addPanelItem(a, b, EUIUtils.any(AbstractDungeon.player.masterDeck.group, a::canApply)) : panel::addListItem;
+        addItem = canSelect ? (a, b) -> panel.addPanelItem(a, b) : panel::addListItem;
         refreshAugments();
     }
 

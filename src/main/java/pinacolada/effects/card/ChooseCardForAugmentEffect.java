@@ -14,11 +14,11 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class ApplyAugmentToCardEffect extends GenericChooseCardsEffect {
+public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
 
     public final PCLAugment augment;
 
-    public ApplyAugmentToCardEffect(PCLAugment augment) {
+    public ChooseCardForAugmentEffect(PCLAugment augment) {
         super(1, augment::canApply);
         this.augment = augment;
         this.canCancel = true;

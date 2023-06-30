@@ -2,18 +2,20 @@ package pinacolada.commands;
 
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
-import basemod.devcommands.deck.DeckRemove;
 import basemod.helpers.ConvertHelper;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cardmods.AugmentModifier;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class AugmentCommand extends ConsoleCommand {
+public class InfuseAugmentCommand extends ConsoleCommand {
 
-    public AugmentCommand() {
+    public InfuseAugmentCommand() {
         this.requiresPlayer = true;
-        this.minExtraTokens = 1;
+        this.minExtraTokens = 2;
         this.maxExtraTokens = 2;
         this.simpleCheck = true;
     }
@@ -25,21 +27,25 @@ public class AugmentCommand extends ConsoleCommand {
     @Override
     protected void execute(String[] tokens, int depth) {
         PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
-        int amount = tokens.length > 2 ? ConvertHelper.tryParseInt(tokens[2], 1) : 1;
-        if (augment != null) {
-            PGR.dungeon.addAugment(augment.ID, amount);
-            DevConsole.log("Obtained " + amount + " " + tokens[1]);
+        String targetCard = tokens[2];
+        AbstractCard c = AbstractDungeon.player.masterDeck.findCardById(targetCard);
+        if (augment != null && c != null) {
+            AugmentModifier.apply(augment.create(), c);
+            DevConsole.log("Applied " + tokens[1] + " to " + tokens[2]);
+        }
+        else if (augment == null ){
+            DevConsole.log("Could not find augment " + tokens[1]);
         }
         else {
-            DevConsole.log("Could not find augment " + tokens[1]);
+            DevConsole.log("Could not find card " + tokens[2]);
         }
     }
 
     public ArrayList<String> extraOptions(String[] tokens, int depth) {
         ArrayList<String> options = getCustoms();
         if (options.contains(tokens[depth])) {
-            if (tokens.length > depth + 1 && tokens[depth + 1].matches("\\d*")) {
-                return ConsoleCommand.smallNumbers();
+            if (tokens.length > depth + 1) {
+                return ConsoleCommand.getCardOptionsFromCardGroup(AbstractDungeon.player.masterDeck);
             }
         }
 

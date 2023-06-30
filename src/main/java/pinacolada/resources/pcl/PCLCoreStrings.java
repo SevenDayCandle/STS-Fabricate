@@ -1265,24 +1265,24 @@ public class PCLCoreStrings extends PCLStrings {
     public final String grid_cardsInPile(Object item, int amount) {
         return EUIUtils.format(grid_cardsInPile, item, amount);
     }
-    public final String grid_chooseCards(int amount) {
+    public final String grid_chooseCards(Object amount) {
         return EUIUtils.format(grid_chooseCards, amount);
     }
 
-    public final String loadout_cardsCount(int value) {
+    public final String loadout_cardsCount(Object value) {
         return EUIUtils.format(loadout_cardsCount, value);
     }
-    public final String loadout_hindranceValue(int value) {
+    public final String loadout_hindranceValue(Object value) {
         return EUIUtils.format(loadout_hindranceValue, value);
     }
-    public final String loadout_totalValue(int value, int max) {
+    public final String loadout_totalValue(Object value, Object max) {
         return EUIUtils.format(loadout_totalValue, value, max);
     }
 
-    public final String rewards_goldBonus(int amount) {
+    public final String rewards_goldBonus(Object amount) {
         return EUIUtils.format(rewards_goldbonusF1, amount);
     }
-    public final String rewards_maxHPBonus(int amount) {
+    public final String rewards_maxHPBonus(Object amount) {
         return EUIUtils.format(rewards_maxhpbonusF1, amount);
     }
 

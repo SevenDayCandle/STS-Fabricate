@@ -316,6 +316,12 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void open(PCLLoadout loadout, PCLAbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
+        this.loadout = loadout;
+        this.onClose = onClose;
+        this.characterOption = option;
+        this.data = data;
+        this.loadout.onOpen(option);
+
         for (int i = 0; i < loadout.presets.length; i++) {
             presets[i] = loadout.getPreset(i).makeCopy();
         }
@@ -330,11 +336,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 }
             }
         }
-
-        this.loadout = loadout;
-        this.onClose = onClose;
-        this.characterOption = option;
-        this.data = data;
 
         startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", loadout.getName()));
 
@@ -389,7 +390,9 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
 
         loadout.preset = preset;
-        data.saveLoadouts();
+        if (data != null) {
+            data.saveLoadouts();
+        }
         close();
     }
 
@@ -423,12 +426,12 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         SingleCardViewPopup.isViewingUpgrade = value;
     }
 
-    public void trySelectCard(PCLCardSlot cardSlot) {
+    public void trySelectCard(LoadoutCardSlot cardSlot) {
         cardSelectionEffect = new PCLCardSlotSelectionEffect(cardSlot);
         setSlotsActive(false);
     }
 
-    public void trySelectRelic(PCLRelicSlot relicSlot) {
+    public void trySelectRelic(LoadoutRelicSlot relicSlot) {
         relicSelectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
         setSlotsActive(false);
     }
@@ -439,7 +442,9 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel));
         hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
         cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        cardsvalueText.setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        cardsvalueText
+                .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue < 0 ? PGR.core.strings.subjects_infinite : loadout.maxValue))
+                .setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
 
         saveButton.setInteractable(val.isValid);
         if (val.isValid) {

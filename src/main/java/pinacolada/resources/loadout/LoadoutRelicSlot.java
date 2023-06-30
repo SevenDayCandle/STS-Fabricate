@@ -1,28 +1,29 @@
 package pinacolada.resources.loadout;
 
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.utilities.RotatingList;
 import pinacolada.relics.PCLRelic;
 
 import java.util.ArrayList;
 
-public class PCLRelicSlot {
+public class LoadoutRelicSlot {
     public transient final PCLLoadoutData container;
     public transient final RotatingList<Item> relics;
 
     public Item selected;
 
-    public PCLRelicSlot(PCLLoadoutData container) {
+    public LoadoutRelicSlot(PCLLoadoutData container) {
 
         this.relics = new RotatingList<>();
         this.container = container;
     }
 
-    public void addItem(PCLRelic relic, int estimatedValue) {
+    public void addItem(AbstractRelic relic, int estimatedValue) {
         relics.add(new Item(relic, estimatedValue));
     }
 
-    public void addItems(ArrayList<PCLRelic> items, int estimatedValue) {
-        for (PCLRelic data : items) {
+    public void addItems(ArrayList<AbstractRelic> items, int estimatedValue) {
+        for (AbstractRelic data : items) {
             relics.add(new Item(data, estimatedValue));
         }
     }
@@ -31,7 +32,7 @@ public class PCLRelicSlot {
         return (selected != null);
     }
 
-    public PCLRelicSlot clear() {
+    public LoadoutRelicSlot clear() {
         selected = null;
         return this;
     }
@@ -40,22 +41,22 @@ public class PCLRelicSlot {
         return (selected == null ? 0 : selected.estimatedValue);
     }
 
-    public PCLRelic getRelic() {
+    public AbstractRelic getRelic() {
         return selected != null ? selected.relic : null;
     }
 
-    public ArrayList<PCLRelicSlot.Item> getSelectableRelics() {
-        final ArrayList<PCLRelicSlot.Item> relics = new ArrayList<>();
+    public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
+        final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
         for (Item item : this.relics) {
             boolean add = true;
-            for (PCLRelicSlot slot : container.relicSlots) {
+            for (LoadoutRelicSlot slot : container.relicSlots) {
                 if (slot != this && slot.getRelic() == item.relic) {
                     add = false;
                 }
             }
 
             if (add) {
-                relics.add(new PCLRelicSlot.Item(item.relic, item.estimatedValue));
+                relics.add(new LoadoutRelicSlot.Item(item.relic, item.estimatedValue));
             }
         }
 
@@ -66,8 +67,8 @@ public class PCLRelicSlot {
         return container.relicSlots.indexOf(this);
     }
 
-    public PCLRelicSlot makeCopy(PCLLoadoutData container) {
-        final PCLRelicSlot copy = new PCLRelicSlot(container);
+    public LoadoutRelicSlot makeCopy(PCLLoadoutData container) {
+        final LoadoutRelicSlot copy = new LoadoutRelicSlot(container);
         copy.relics.addAll(relics);
         if (selected != null) {
             copy.select(selected.relic);
@@ -87,7 +88,7 @@ public class PCLRelicSlot {
         int i = 0;
         while (true) {
             int currentIndex = i;
-            for (PCLRelicSlot s : container.relicSlots) {
+            for (LoadoutRelicSlot s : container.relicSlots) {
                 if (s != this && selected.relic == s.getRelic()) {
                     select(relics.next(true));
                     i += 1;
@@ -99,13 +100,13 @@ public class PCLRelicSlot {
                 return;
             }
             else if (i >= relics.size()) {
-                select((PCLRelic) null);
+                select((AbstractRelic) null);
                 return;
             }
         }
     }
 
-    public PCLRelicSlot select(PCLRelic relic) {
+    public LoadoutRelicSlot select(AbstractRelic relic) {
         int i = 0;
         for (Item item : relics) {
             if (item.relic == relic) {
@@ -117,16 +118,16 @@ public class PCLRelicSlot {
         return null;
     }
 
-    public PCLRelicSlot select(int index) {
+    public LoadoutRelicSlot select(int index) {
         return select(relics.setIndex(index));
     }
 
-    public PCLRelicSlot select(Item item) {
+    public LoadoutRelicSlot select(Item item) {
         selected = item;
         return this;
     }
 
-    public PCLRelicSlot select(String id) {
+    public LoadoutRelicSlot select(String id) {
         int i = 0;
         for (Item item : relics) {
             if (item.relic.relicId.equals(id)) {
@@ -139,10 +140,10 @@ public class PCLRelicSlot {
     }
 
     public static class Item {
-        public final PCLRelic relic;
+        public final AbstractRelic relic;
         public final int estimatedValue;
 
-        public Item(PCLRelic relic, int estimatedValue) {
+        public Item(AbstractRelic relic, int estimatedValue) {
             this.relic = relic;
             this.estimatedValue = estimatedValue;
         }

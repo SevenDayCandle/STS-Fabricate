@@ -29,7 +29,6 @@ public class SummonPool extends EUIBase {
     public static float OFFSET = scale(120);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
-    public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
     public int triggerTimes = BASE_TRIGGER;
 
     public void add(int times) {
@@ -60,13 +59,6 @@ public class SummonPool extends EUIBase {
             if (ally.hasCard()) {
                 ally.applyPowers();
             }
-        }
-    }
-
-    @Deprecated
-    public void assignMonsterTargets() {
-        for (AbstractMonster mo : GameUtilities.getEnemies(true)) {
-            assignedTargets.put(mo, getRightmostTarget());
         }
     }
 
@@ -154,13 +146,8 @@ public class SummonPool extends EUIBase {
         return returned;
     }
 
-    public AbstractCreature getTarget(AbstractCreature mo) {
-        return assignedTargets.containsKey(mo) ? assignedTargets.get(mo) : AbstractDungeon.player;
-    }
-
     public void initialize() {
         summons.clear();
-        assignedTargets.clear();
         triggerTimes = BASE_TRIGGER;
 
         if (AbstractDungeon.player != null) {
@@ -200,7 +187,6 @@ public class SummonPool extends EUIBase {
     }
 
     public void onStartOfTurn() {
-        assignedTargets.clear();
         for (PCLCardAlly ally : summons) {
             ally.loseBlock();
             ally.applyStartOfTurnPowers();

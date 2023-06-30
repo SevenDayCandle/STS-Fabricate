@@ -83,7 +83,7 @@ public abstract class PCLAugment implements KeywordProvider {
 
     // TODO allow applying to non-PCLCard
     public boolean canApply(AbstractCard c) {
-        return c instanceof PCLCard && canApplyImpl((PCLCard) c);
+        return data.canApply(c);
     }
 
     /* An augment can only be applied if
@@ -92,11 +92,7 @@ public abstract class PCLAugment implements KeywordProvider {
      *   3. Card doesn't already have an augment of its lineage
      */
     protected boolean canApplyImpl(PCLCard c) {
-        return c != null
-                && c.getFreeAugmentSlot() >= 0
-                && (data.category.isTypeValid(c.type))
-                && (data.reqs == null || data.reqs.check(c))
-                && (data.categorySub == null || !EUIUtils.any(c.getAugments(), a -> a.data.categorySub == data.categorySub));
+        return data.canApplyImpl(c);
     }
 
     public boolean canRemove() {

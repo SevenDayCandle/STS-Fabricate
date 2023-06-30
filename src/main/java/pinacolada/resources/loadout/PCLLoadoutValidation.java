@@ -55,7 +55,7 @@ public class PCLLoadoutValidation {
         totalValue.set(0, false);
         allCardsSeen = true;
         int hindrances = 0;
-        for (PCLCardSlot slot : data.cardSlots) {
+        for (LoadoutCardSlot slot : data.cardSlots) {
             if (slot == null) {
                 continue;
             }
@@ -73,7 +73,7 @@ public class PCLLoadoutValidation {
                 }
             }
         }
-        for (PCLRelicSlot slot : data.relicSlots) {
+        for (LoadoutRelicSlot slot : data.relicSlots) {
             if (slot == null) {
                 continue;
             }
@@ -91,8 +91,8 @@ public class PCLLoadoutValidation {
 
         values.putAll(data.values);
         totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
-        totalValue.v2 = totalValue.v1 <= PCLLoadout.MAX_VALUE;
-        cardsCount.v2 = cardsCount.v1 >= PCLLoadout.MIN_CARDS;
+        totalValue.v2 = data.loadout.maxValue < 0 || totalValue.v1 <= data.loadout.maxValue;
+        cardsCount.v2 = cardsCount.v1 >= data.loadout.minCards;
         isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
 
         return this;

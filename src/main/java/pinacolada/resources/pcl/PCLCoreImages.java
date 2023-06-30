@@ -97,7 +97,7 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache augmentSlot = new TextureCache("images/pcl/cardui/augments/AugmentSlot.png", true);
         public static final TextureCache augmentBase = new TextureCache("images/pcl/cardui/augments/AugmentBase.png", true);
         public static final TextureCache augmentPlayed = new TextureCache("images/pcl/cardui/augments/AugmentPlayed.png", true);
-        public static final TextureCache augmentPower = new TextureCache("images/pcl/cardui/augments/AugmentPower.png", true);
+        public static final TextureCache augmentAttackSkill = new TextureCache("images/pcl/cardui/augments/AugmentAttackSkill.png", true);
         public static final TextureCache augmentSummon = new TextureCache("images/pcl/cardui/augments/AugmentSummon.png", true);
         public static final TextureCache augmentSpecial = new TextureCache("images/pcl/cardui/augments/AugmentSpecial.png", true);
     }

@@ -1511,6 +1511,10 @@ public class GameUtilities {
         return isBuffing(monster.intent);
     }
 
+    public static boolean isCardLocked(String id) {
+        return UnlockTracker.isCardLocked(id) || !UnlockTracker.isCardSeen(id);
+    }
+
     // Both colorless and curse are character-independent
     public static boolean isColorlessCardColor(AbstractCard.CardColor cardColor) {
         return cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;

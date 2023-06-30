@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
@@ -14,7 +15,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLRelicSlot;
+import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
@@ -27,8 +28,8 @@ public class PCLRelicSlotEditor extends EUIBase {
     protected EUIButton changeButton;
     protected EUIButton clearButton;
     protected EUIRelic relicImage;
-    protected PCLRelic relic;
-    public PCLRelicSlot slot;
+    protected AbstractRelic relic;
+    public LoadoutRelicSlot slot;
     public PCLLoadoutScreen loadoutEditor;
 
     public PCLRelicSlotEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
@@ -113,7 +114,7 @@ public class PCLRelicSlotEditor extends EUIBase {
         }
     }
 
-    public PCLRelicSlotEditor setSlot(PCLRelicSlot slot) {
+    public PCLRelicSlotEditor setSlot(LoadoutRelicSlot slot) {
         if (slot == null) {
             this.slot = null;
             this.relic = null;
@@ -128,7 +129,7 @@ public class PCLRelicSlotEditor extends EUIBase {
 
         this.slot = slot;
         this.relic = slot.getRelic();
-        this.relicNameText.setLabel(relic != null ? relic.getName() : "").setActive(true);
+        this.relicNameText.setLabel(relic != null ? relic instanceof PCLRelic ? ((PCLRelic) relic).getName() : relic.name : "").setActive(true);
         this.relicValueText.setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();

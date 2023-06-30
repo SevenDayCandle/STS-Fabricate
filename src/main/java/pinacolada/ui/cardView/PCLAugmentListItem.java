@@ -25,10 +25,10 @@ public class PCLAugmentListItem extends EUIHoverable {
     public float amount;
 
     public PCLAugmentListItem(ActionT1<PCLAugment> panel, PCLAugment augment, float amount) {
-        this(panel, augment, amount, 7f, 3.5f, true);
+        this(panel, augment, amount, 7f, 3.5f);
     }
 
-    public PCLAugmentListItem(ActionT1<PCLAugment> panel, PCLAugment augment, float amount, float amountOffset, float titleOffset, boolean enabled) {
+    public PCLAugmentListItem(ActionT1<PCLAugment> panel, PCLAugment augment, float amount, float amountOffset, float titleOffset) {
         super(new EUIHitbox(0, 0, AbstractRelic.PAD_X, AbstractRelic.PAD_X));
         this.augment = new PCLAugmentRenderable(augment, hb);
         this.panel = panel;

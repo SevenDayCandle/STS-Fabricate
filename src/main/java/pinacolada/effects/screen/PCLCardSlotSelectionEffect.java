@@ -13,7 +13,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.resources.loadout.PCLCardSlot;
+import pinacolada.resources.loadout.LoadoutCardSlot;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -26,13 +27,13 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-    private final PCLCardSlot slot;
-    private final ArrayList<PCLCard> cards;
+    private final LoadoutCardSlot slot;
+    private final ArrayList<AbstractCard> cards;
     private final boolean draggingScreen = false;
-    private PCLCard selectedCard;
+    private AbstractCard selectedCard;
     private EUICardGrid grid;
 
-    public PCLCardSlotSelectionEffect(PCLCardSlot slot) {
+    public PCLCardSlotSelectionEffect(LoadoutCardSlot slot) {
         super(0.7f, true);
 
         this.selectedCard = slot.getCard(false);
@@ -47,10 +48,10 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
         this.grid = new EUICardGrid()
                 .addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
                 .setEnlargeOnHover(false)
-                .setOnCardClick(c -> onCardClicked((PCLCard) c))
-                .setOnCardRender((sb, c) -> onCardRender(sb, (PCLCard) c));
+                .setOnCardClick(this::onCardClicked)
+                .setOnCardRender(this::onCardRender);
 
-        for (PCLCard card : cards) {
+        for (AbstractCard card : cards) {
             card.current_x = InputHelper.mX;
             card.current_y = InputHelper.mY;
             grid.addCard(card);
@@ -61,8 +62,8 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
     protected void complete() {
         super.complete();
 
-        if (selectedCard != null && slot.getData() != selectedCard.cardData) {
-            slot.select(selectedCard.cardData, 1);
+        if (selectedCard != null && !selectedCard.cardID.equals(slot.getSelectedID())) {
+            slot.select(selectedCard.cardID, 1);
         }
     }
 
@@ -71,7 +72,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
         super.firstUpdate();
 
         if (selectedCard != null) {
-            for (PCLCard card : cards) {
+            for (AbstractCard card : cards) {
                 if (card.cardID.equals(selectedCard.cardID)) {
                     selectedCard = card;
                     selectedCard.beginGlowing();
@@ -95,8 +96,8 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
         }
     }
 
-    private void onCardClicked(PCLCard card) {
-        if (card.cardData.isLocked() || slot.isIDBanned(card.cardData.ID)) {
+    private void onCardClicked(AbstractCard card) {
+        if (GameUtilities.isCardLocked(card.cardID) || slot.isIDBanned(card.cardID)) {
             CardCrawlGame.sound.play("CARD_REJECT");
         }
         else {
@@ -106,15 +107,15 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
 
             selectedCard = card;
             CardCrawlGame.sound.play("CARD_SELECT");
-            slot.select(card.cardData, 1);
+            slot.select(card.cardID, 1);
             card.beginGlowing();
             complete();
         }
     }
 
-    private void onCardRender(SpriteBatch sb, PCLCard card) {
-        for (PCLCardSlot.Item item : slot.cards) {
-            if (item.data == card.cardData) {
+    private void onCardRender(SpriteBatch sb, AbstractCard card) {
+        for (LoadoutCardSlot.Item item : slot.cards) {
+            if (item.ID.equals(card.cardID)) {
                 cardValue_text
                         .setLabel(item.estimatedValue)
                         .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)

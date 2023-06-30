@@ -17,7 +17,7 @@ public enum PCLAugmentCategory implements CountingPanelItem {
     General,
     Summon,
     Played,
-    Power,
+    AttackSkill,
     Special;
 
     @Override
@@ -38,8 +38,8 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                 return PCLCoreImages.CardUI.augmentSummon.texture();
             case Played:
                 return PCLCoreImages.CardUI.augmentPlayed.texture();
-            case Power:
-                return PCLCoreImages.CardUI.augmentPower.texture();
+            case AttackSkill:
+                return PCLCoreImages.CardUI.augmentAttackSkill.texture();
             case Special:
                 return PCLCoreImages.CardUI.augmentSpecial.texture();
         }
@@ -51,9 +51,9 @@ public enum PCLAugmentCategory implements CountingPanelItem {
             case Summon:
                 return PGR.core.tooltips.summon.title;
             case Played:
+                return PGR.core.tooltips.attack.title + "/" + PGR.core.tooltips.skill.title + "/" + PGR.core.tooltips.power.title;
+            case AttackSkill:
                 return PGR.core.tooltips.attack.title + "/" + PGR.core.tooltips.skill.title;
-            case Power:
-                return PGR.core.tooltips.power.title;
             case General:
                 return PGR.core.strings.ctype_general;
             case Special:
@@ -70,14 +70,19 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                 switch (type) {
                     case ATTACK:
                     case SKILL:
-                    case STATUS:
-                    case CURSE:
+                    case POWER:
                         return true;
                     default:
                         return false;
                 }
-            case Power:
-                return type == AbstractCard.CardType.POWER;
+            case AttackSkill:
+                switch (type) {
+                    case ATTACK:
+                    case SKILL:
+                        return true;
+                    default:
+                        return false;
+                }
         }
         return true;
     }

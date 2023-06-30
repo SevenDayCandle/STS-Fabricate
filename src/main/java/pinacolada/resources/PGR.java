@@ -382,6 +382,7 @@ public class PGR {
     public static void registerCommands() {
         ConsoleCommand.addCommand("augment", AugmentCommand.class);
         ConsoleCommand.addCommand("effekseer", EffekseerCommand.class);
+        ConsoleCommand.addCommand("infuseaugment", InfuseAugmentCommand.class);
         ConsoleCommand.addCommand("jumpanywhere", JumpAnywhereCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCardCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCardCommand.class);

@@ -18,8 +18,8 @@ public class PCLLoadoutData {
     public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>() {
     };
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
-    public final ArrayList<PCLCardSlot> cardSlots = new ArrayList<>();
-    public final ArrayList<PCLRelicSlot> relicSlots = new ArrayList<>();
+    public final ArrayList<LoadoutCardSlot> cardSlots = new ArrayList<>();
+    public final ArrayList<LoadoutRelicSlot> relicSlots = new ArrayList<>();
     public final PCLLoadout loadout;
     public int preset;
 
@@ -38,27 +38,27 @@ public class PCLLoadoutData {
         loadout = other.loadout;
         preset = other.preset;
         values.putAll(other.values);
-        for (PCLCardSlot slot : other.cardSlots) {
+        for (LoadoutCardSlot slot : other.cardSlots) {
             cardSlots.add(slot.makeCopy(other));
         }
-        for (PCLRelicSlot slot : other.relicSlots) {
+        for (LoadoutRelicSlot slot : other.relicSlots) {
             relicSlots.add(slot.makeCopy(other));
         }
     }
 
-    public PCLCardSlot addCardSlot() {
-        return addCardSlot(0, PCLCardSlot.MAX_LIMIT);
+    public LoadoutCardSlot addCardSlot() {
+        return addCardSlot(0, LoadoutCardSlot.MAX_LIMIT);
     }
 
-    public PCLCardSlot addCardSlot(int min, int max) {
-        final PCLCardSlot slot = new PCLCardSlot(this, min, max);
+    public LoadoutCardSlot addCardSlot(int min, int max) {
+        final LoadoutCardSlot slot = new LoadoutCardSlot(this, min, max);
         cardSlots.add(slot);
 
         return slot;
     }
 
-    public PCLRelicSlot addRelicSlot() {
-        final PCLRelicSlot slot = new PCLRelicSlot(this);
+    public LoadoutRelicSlot addRelicSlot() {
+        final LoadoutRelicSlot slot = new LoadoutRelicSlot(this);
         relicSlots.add(slot);
 
         return slot;
@@ -68,11 +68,11 @@ public class PCLLoadoutData {
         return cardSlots.size();
     }
 
-    public PCLCardSlot getCardSlot(int index) {
+    public LoadoutCardSlot getCardSlot(int index) {
         return cardSlots.get(index);
     }
 
-    public PCLRelicSlot getRelicSlot(int index) {
+    public LoadoutRelicSlot getRelicSlot(int index) {
         return relicSlots.get(index);
     }
 
@@ -107,7 +107,7 @@ public class PCLLoadoutData {
             loadout = id;
             preset = data.preset;
             values = EUIUtils.serialize(data.values);
-            cards = EUIUtils.arrayMap(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected.data.ID, d.amount) : null);
+            cards = EUIUtils.arrayMap(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected.ID, d.amount) : null);
             relics = EUIUtils.arrayMap(data.relicSlots, String.class, d -> d.selected != null ? d.selected.relic.relicId : null);
         }
 

@@ -4,10 +4,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
+import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
@@ -44,12 +45,13 @@ public abstract class PCLLoadout {
     public static final int COMMON_LOADOUT_VALUE = 5;
     public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
-    public final AbstractCard.CardColor color;
+    public AbstractCard.CardColor color;
     public final String ID;
-    protected ArrayList<String> startingDeck = new ArrayList<>();
     protected String shortDescription = GameUtilities.EMPTY_STRING;
     public int preset;
     public int unlockLevel = 0;
+    public int maxValue;
+    public int minCards;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
     public ArrayList<PCLCardData> defends = new ArrayList<>();
@@ -57,9 +59,15 @@ public abstract class PCLLoadout {
     public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
 
     public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel) {
+        this(color, id, unlockLevel, MAX_VALUE, MIN_CARDS);
+    }
+
+    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minCards) {
         this.ID = id;
         this.unlockLevel = unlockLevel;
         this.color = color;
+        this.maxValue = maxValue;
+        this.minCards = minCards;
     }
 
     public static String createID(Class<? extends PCLLoadout> type) {
@@ -158,28 +166,28 @@ public abstract class PCLLoadout {
         return loadout;
     }
 
-    public void addBasicDefends(PCLCardSlot slot) {
-        for (PCLCardData data : getPlayerData().getCoreLoadout().defends) {
-            slot.addItem(data, 0);
+    public void addBasicDefends(LoadoutCardSlot slot) {
+        for (PCLCardData card : getPlayerData().getCoreLoadout().defends) {
+            slot.addItem(card, 0);
         }
     }
 
-    public void addBasicStrikes(PCLCardSlot slot) {
-        for (PCLCardData data : getPlayerData().getCoreLoadout().strikes) {
-            slot.addItem(data, 0);
+    public void addBasicStrikes(LoadoutCardSlot slot) {
+        for (PCLCardData card : getPlayerData().getCoreLoadout().strikes) {
+            slot.addItem(card, 0);
         }
     }
 
-    public void addLoadoutCards(PCLCardSlot slot) {
-        for (PCLCardData data : cardDatas) {
-            if (data.cardRarity == AbstractCard.CardRarity.COMMON) {
-                slot.addItem(data, COMMON_LOADOUT_VALUE);
+    public void addLoadoutCards(LoadoutCardSlot slot) {
+        for (PCLCardData card : cardDatas) {
+            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                slot.addItem(card, COMMON_LOADOUT_VALUE);
             }
         }
 
-        for (PCLCardData data : getPlayerData().getCoreLoadout().cardDatas) {
-            if (data.cardRarity == AbstractCard.CardRarity.COMMON) {
-                slot.addItem(data, COMMON_LOADOUT_VALUE);
+        for (PCLCardData card : getPlayerData().getCoreLoadout().cardDatas) {
+            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                slot.addItem(card, COMMON_LOADOUT_VALUE);
             }
         }
 
@@ -189,7 +197,7 @@ public abstract class PCLLoadout {
         }
     }
 
-    public void addLoadoutRelics(PCLRelicSlot r1) {
+    public void addLoadoutRelics(LoadoutRelicSlot r1) {
         r1.addItem(new GenericDice(), 4);
         r1.addItem(new Macroscope(), 4);
         r1.addItem(new HeartShapedBox(), 15);
@@ -274,6 +282,10 @@ public abstract class PCLLoadout {
 
     public boolean canChangePreset(int preset) {
         return preset >= 0 && preset < MAX_PRESETS;
+    }
+
+    public void clearPresets() {
+        presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
     }
 
     public PCLLoadoutValidation createValidation() {
@@ -364,9 +376,8 @@ public abstract class PCLLoadout {
         return base.isEmpty() ? PGR.core.strings.sui_core : base;
     }
 
-    // PCL characters use summons instead of orbs
     public int getOrbSlots() {
-        return getPlayerData().useSummons ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
+        return PCLBaseStatEditor.StatType.OrbSlot.getAmount(this, getPreset());
     }
 
     public PCLAbstractPlayerData<?, ?> getPlayerData() {
@@ -396,25 +407,29 @@ public abstract class PCLLoadout {
 
     public ArrayList<String> getStartingDeck() {
         final ArrayList<String> cards = new ArrayList<>();
-        for (PCLCardSlot slot : getPreset().cardSlots) {
-            PCLCardData data = slot.getData();
-            if (data != null) {
+        for (LoadoutCardSlot slot : getPreset().cardSlots) {
+            String cardID = slot.getSelectedID();
+            if (cardID != null) {
                 for (int i = 0; i < slot.amount; i++) {
-                    cards.add(data.ID);
+                    cards.add(cardID);
                 }
             }
         }
 
         if (cards.isEmpty()) {
             EUIUtils.logWarning(this, "Starting loadout was empty");
-            for (int i = 0; i < 2; i++) {
-                for (PCLCardData data : getPlayerData().getCoreLoadout().strikes) {
-                    cards.add(data.ID);
-                }
-                for (PCLCardData data : getPlayerData().getCoreLoadout().defends) {
-                    cards.add(data.ID);
+            PCLAbstractPlayerData<?, ?> data = getPlayerData();
+            if (data != null) {
+                for (int i = 0; i < 2; i++) {
+                    for (PCLCardData card : data.getCoreLoadout().strikes) {
+                        cards.add(card.ID);
+                    }
+                    for (PCLCardData card : data.getCoreLoadout().defends) {
+                        cards.add(card.ID);
+                    }
                 }
             }
+
         }
 
         return cards;
@@ -431,7 +446,7 @@ public abstract class PCLLoadout {
             }
         }
 
-        for (PCLRelicSlot rSlot : getPreset().relicSlots) {
+        for (LoadoutRelicSlot rSlot : getPreset().relicSlots) {
             if (rSlot.selected != null && rSlot.selected.relic != null) {
                 res.add(rSlot.selected.relic.relicId);
             }
@@ -466,19 +481,19 @@ public abstract class PCLLoadout {
             data.values.put(type, 0);
         }
 
-        PCLCardSlot strikeSlot = data.addCardSlot(1, PCLCardSlot.MAX_LIMIT);
-        PCLCardSlot defendSlot = data.addCardSlot(1, PCLCardSlot.MAX_LIMIT);
+        LoadoutCardSlot strikeSlot = data.addCardSlot(1, LoadoutCardSlot.MAX_LIMIT);
+        LoadoutCardSlot defendSlot = data.addCardSlot(1, LoadoutCardSlot.MAX_LIMIT);
         addBasicStrikes(strikeSlot);
         addBasicDefends(defendSlot);
 
         for (int i = 0; i < CARD_SLOTS; i++) {
-            PCLCardSlot slot = data.addCardSlot(0, PCLCardSlot.MAX_LIMIT);
+            LoadoutCardSlot slot = data.addCardSlot(0, LoadoutCardSlot.MAX_LIMIT);
             addLoadoutCards(slot);
         }
 
         // TODO get relics from loadout
         for (int i = 0; i < MAX_RELIC_SLOTS; i++) {
-            PCLRelicSlot r1 = data.addRelicSlot();
+            LoadoutRelicSlot r1 = data.addRelicSlot();
             addLoadoutRelics(r1);
         }
     }
@@ -524,7 +539,7 @@ public abstract class PCLLoadout {
     }
 
     protected void setDefaultCardsForData(PCLLoadoutData data) {
-        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.data.loadout != this));
+        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.getLoadout() != this));
         data.getCardSlot(0).select(0, 4).markAllSeen();
         data.getCardSlot(1).select(0, 4).markAllSeen();
         data.getCardSlot(2).select(0, 1).markCurrentSeen();
@@ -535,7 +550,7 @@ public abstract class PCLLoadout {
 
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
         data.getRelicSlot(0).select(0);
-        data.getRelicSlot(1).select((PCLRelic) null);
+        data.getRelicSlot(1).select((AbstractRelic) null);
     }
 
     public void sortItems() {
@@ -543,6 +558,10 @@ public abstract class PCLLoadout {
         defends.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
         cardDatas.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+    }
+
+    public void onOpen(CharacterOption option) {
+
     }
 
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch

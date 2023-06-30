@@ -14,8 +14,8 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     public final EUIImage background;
 
-    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugment augment, int count, boolean enabled) {
-        super(panel, augment, count, 1.4f, 4.2f, enabled);
+    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugment augment, int count) {
+        super(panel, augment, count, 1.4f, 4.2f);
         this.amount = count;
         amountText.setColor(Settings.BLUE_TEXT_COLOR);
         background = new EUIImage(ImageMaster.REWARD_SCREEN_ITEM, RelativeHitbox.fromPercentages(hb, 5, 1.12f, 2.2f, 0.7f))

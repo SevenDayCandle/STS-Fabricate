@@ -12,7 +12,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLCardSlot;
+import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
@@ -30,7 +30,7 @@ public class PCLCardSlotEditor extends EUIBase {
     protected EUIButton clearButton;
     protected AbstractCard card;
     protected Color nameColor;
-    public PCLCardSlot slot;
+    public LoadoutCardSlot slot;
     public PCLLoadoutScreen loadoutEditor;
 
     public PCLCardSlotEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
@@ -145,7 +145,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }
     }
 
-    public PCLCardSlotEditor setSlot(PCLCardSlot slot) {
+    public PCLCardSlotEditor setSlot(LoadoutCardSlot slot) {
         if (slot == null) {
             this.slot = null;
             this.card = null;

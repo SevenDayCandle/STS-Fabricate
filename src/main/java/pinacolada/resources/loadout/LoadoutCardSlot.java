@@ -1,19 +1,20 @@
 package pinacolada.resources.loadout;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import extendedui.EUIUtils;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardSlot {
+public class LoadoutCardSlot {
     public static final int MAX_LIMIT = 6;
     public transient final PCLLoadoutData container;
     public transient final RotatingList<Item> cards;
@@ -24,11 +25,11 @@ public class PCLCardSlot {
     public int max;
     public int min;
 
-    public PCLCardSlot(PCLLoadoutData container) {
+    public LoadoutCardSlot(PCLLoadoutData container) {
         this(container, 0, MAX_LIMIT);
     }
 
-    public PCLCardSlot(PCLLoadoutData container, int min, int max) {
+    public LoadoutCardSlot(PCLLoadoutData container, int min, int max) {
         if (min > max) {
             throw new RuntimeException("Min can't be greater than max.");
         }
@@ -49,6 +50,10 @@ public class PCLCardSlot {
         cards.add(new Item(data, estimatedValue));
     }
 
+    public void addItem(String data, int estimatedValue) {
+        cards.add(new Item(data, estimatedValue));
+    }
+
     public boolean canAdd() {
         return (selected != null) && amount < max && amount < currentMax;
     }
@@ -61,7 +66,7 @@ public class PCLCardSlot {
         return (selected != null) && min <= 0;
     }
 
-    public PCLCardSlot clear() {
+    public LoadoutCardSlot clear() {
         return select(null);
     }
 
@@ -80,30 +85,25 @@ public class PCLCardSlot {
         return -1;
     }
 
-    public PCLCardAffinities getAffinities() {
-        PCLCard card = EUIUtils.safeCast(getCard(false), PCLCard.class);
-        return card != null ? card.affinities : null;
-    }
-
-    public PCLCard getCard(boolean refresh) {
+    public AbstractCard getCard(boolean refresh) {
         return selected != null ? selected.getCard(refresh) : null;
     }
 
-    public PCLCardData getData() {
-        return selected != null ? selected.data : null;
+    public String getSelectedID() {
+        return selected != null ? selected.ID : null;
     }
 
     public int getEstimatedValue() {
         return amount * (selected == null ? 0 : selected.estimatedValue);
     }
 
-    public ArrayList<PCLCard> getSelectableCards() {
-        final ArrayList<PCLCard> cards = new ArrayList<>();
+    public ArrayList<AbstractCard> getSelectableCards() {
+        final ArrayList<AbstractCard> cards = new ArrayList<>();
         for (Item item : this.cards) {
-            boolean add = !isIDBanned(item.data.ID) && !item.data.isLocked();
+            boolean add = !isIDBanned(item.ID) && !item.isLocked();
             if (add) {
-                for (PCLCardSlot slot : container.cardSlots) {
-                    if (slot != this && slot.getData() == item.data) {
+                for (LoadoutCardSlot slot : container.cardSlots) {
+                    if (slot != this && item.ID.equals(slot.getSelectedID())) {
                         add = false;
                     }
                 }
@@ -128,14 +128,14 @@ public class PCLCardSlot {
     }
 
     public boolean isInvalid() {
-        return selected.data.isLocked() || isIDBanned(selected.data.ID);
+        return selected.isLocked() || isIDBanned(selected.ID);
     }
 
-    public PCLCardSlot makeCopy(PCLLoadoutData container) {
-        final PCLCardSlot copy = new PCLCardSlot(container, min, max);
+    public LoadoutCardSlot makeCopy(PCLLoadoutData container) {
+        final LoadoutCardSlot copy = new LoadoutCardSlot(container, min, max);
         copy.cards.addAll(cards);
         if (selected != null) {
-            copy.select(selected.data, amount);
+            copy.select(selected.ID, amount);
         }
 
         return copy;
@@ -143,13 +143,13 @@ public class PCLCardSlot {
 
     public void markAllSeen() {
         for (Item item : cards) {
-            item.data.markSeen();
+            item.markAsSeen();
         }
     }
 
     public void markCurrentSeen() {
         if (selected != null) {
-            selected.data.markSeen();
+            selected.markAsSeen();
         }
     }
 
@@ -164,8 +164,8 @@ public class PCLCardSlot {
         int i = 0;
         while (true) {
             int currentIndex = i;
-            for (PCLCardSlot s : container.cardSlots) {
-                if (s != this && selected.data == s.getData()) {
+            for (LoadoutCardSlot s : container.cardSlots) {
+                if (s != this && selected.ID.equals(s.getSelectedID())) {
                     select(cards.next(true));
                     i += 1;
                     break;
@@ -182,11 +182,11 @@ public class PCLCardSlot {
         }
     }
 
-    public PCLCardSlot select(Item item) {
+    public LoadoutCardSlot select(Item item) {
         return select(item, item == null ? 0 : 1);
     }
 
-    public PCLCardSlot select(Item item, int amount) {
+    public LoadoutCardSlot select(Item item, int amount) {
         selected = item;
         if (item == null) {
             if (min > 0) {
@@ -199,7 +199,8 @@ public class PCLCardSlot {
                 throw new RuntimeException("Tried to select an item, but no cards are allowed in this slot.");
             }
 
-            currentMax = Math.min(max, selected.data.maxCopies >= min ? selected.data.maxCopies : max);
+            int maxCopies = selected.maxCopies();
+            currentMax = Math.min(max, maxCopies >= min ? maxCopies : max);
             if (currentMax <= 0) {
                 currentMax = MAX_LIMIT;
             }
@@ -209,26 +210,18 @@ public class PCLCardSlot {
         return this;
     }
 
-    public PCLCardSlot select(PCLCardData data, int amount) {
-        int i = 0;
-        for (Item item : cards) {
-            if (item.data == data) {
-                return select(i, amount);
-            }
-            i += 1;
-        }
-
-        return null;
+    public LoadoutCardSlot select(PCLCardData data, int amount) {
+        return select(data.ID, amount);
     }
 
-    public PCLCardSlot select(int index, int amount) {
+    public LoadoutCardSlot select(int index, int amount) {
         return select(cards.setIndex(index), amount);
     }
 
-    public PCLCardSlot select(String id, int amount) {
+    public LoadoutCardSlot select(String id, int amount) {
         int i = 0;
         for (Item item : cards) {
-            if (item.data.ID.equals(id)) {
+            if (item.ID.equals(id)) {
                 return select(i, amount);
             }
             i += 1;
@@ -238,25 +231,55 @@ public class PCLCardSlot {
     }
 
     public static class Item {
-        public final PCLCardData data;
+        public final String ID;
         public final int estimatedValue;
 
-        protected PCLCard card;
+        protected AbstractCard card;
 
         public Item(PCLCardData data, int estimatedValue) {
-            this.data = data;
+            this(data.ID, estimatedValue);
+        }
+
+        public Item(String id, int estimatedValue) {
+            this.ID = id;
             this.estimatedValue = estimatedValue;
         }
 
-        public PCLCard getCard(boolean forceRefresh) {
+        public AbstractCard getCard(boolean forceRefresh) {
             if (card == null || forceRefresh) {
-                PCLCard eCard = EUIUtils.safeCast(CardLibrary.getCard(data.ID), PCLCard.class);
+                AbstractCard eCard = CardLibrary.getCard(ID);
                 if (eCard != null) {
                     card = eCard.makeStatEquivalentCopy();
                 }
             }
 
             return card;
+        }
+
+        public boolean isLocked() {
+            return GameUtilities.isCardLocked(ID);
+        }
+
+        public void markAsSeen() {
+            if (!UnlockTracker.isCardSeen(ID)) {
+                UnlockTracker.markCardAsSeen(ID);
+            }
+        }
+
+        public int maxCopies() {
+            AbstractCard c = getCard(false);
+            if (c instanceof PCLCard) {
+                return ((PCLCard) c).cardData.maxCopies;
+            }
+            return MAX_LIMIT;
+        }
+
+        public PCLLoadout getLoadout() {
+            AbstractCard c = getCard(false);
+            if (c instanceof PCLCard) {
+                return ((PCLCard) c).cardData.loadout;
+            }
+            return null;
         }
     }
 }

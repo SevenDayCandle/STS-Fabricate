@@ -302,17 +302,11 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public boolean isLocked() {
-        return UnlockTracker.isCardLocked(ID) || !UnlockTracker.isCardSeen(ID);
+        return GameUtilities.isCardLocked(ID);
     }
 
     public AbstractCard makeCardFromLibrary(int upgrade) {
         return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
-    }
-
-    public void markSeen() {
-        if (!UnlockTracker.isCardSeen(ID)) {
-            UnlockTracker.markCardAsSeen(ID);
-        }
     }
 
     public PCLCardData removeTags(PCLCardTag... tags) {

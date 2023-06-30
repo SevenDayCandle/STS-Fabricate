@@ -114,7 +114,11 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     }
 
     protected boolean canApplyImpl(PCLCard c) {
-        return c != null && (reqs == null || reqs.check(c)) && c.getFreeAugmentSlot() >= 0;
+        return c != null
+                && c.getFreeAugmentSlot() >= 0
+                && (category.isTypeValid(c.type))
+                && (reqs == null || reqs.check(c))
+                && (categorySub == null || !EUIUtils.any(c.getAugments(), a -> a.data.categorySub == categorySub));
     }
 
     public PCLAugmentData setReqs(PCLAugmentReqs reqs) {

@@ -11,22 +11,21 @@ import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.Map;
 
-public class PCLAugmentSelectionEffect extends PCLEffectWithCallback<PCLAugment> {
+public class ApplyAugmentToCardEffect extends PCLEffectWithCallback<PCLAugment> {
     protected PCLAugmentList panel;
 
-    public PCLAugmentSelectionEffect(PCLCard card) {
-        this(augment -> card == null || augment.canApply(card));
-    }
-
-    public PCLAugmentSelectionEffect(FuncT1<Boolean, PCLAugment> evalFunc) {
+    public ApplyAugmentToCardEffect(PCLCard card) {
         panel = new PCLAugmentList(this::complete);
         for (Map.Entry<String, Integer> params : PGR.dungeon.augments.entrySet()) {
             PCLAugmentData data = PCLAugmentData.get(params.getKey());
             int amount = params.getValue();
-            if (data != null && amount > 0) {
+            if (data != null && amount > 0 && data.canApply(card)) {
                 PCLAugment augment = data.create();
-                panel.addPanelItem(augment, amount, evalFunc.invoke(augment));
+                panel.addPanelItem(augment, amount);
             }
+        }
+        if (panel.augments.size() == 0) {
+            complete();
         }
     }
 

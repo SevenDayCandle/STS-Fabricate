@@ -47,8 +47,8 @@ public class PCLAugmentList extends EUICanvasGrid {
         this.augments.add(new PCLAugmentListItem(onComplete, augment, amount));
     }
 
-    public void addPanelItem(PCLAugment augment, int count, boolean enabled) {
-        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment, count, enabled));
+    public void addPanelItem(PCLAugment augment, int count) {
+        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment, count));
     }
 
     public void clear() {
