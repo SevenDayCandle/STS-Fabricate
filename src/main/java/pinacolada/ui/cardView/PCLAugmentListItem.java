@@ -32,13 +32,13 @@ public class PCLAugmentListItem extends EUIHoverable {
         super(new EUIHitbox(0, 0, AbstractRelic.PAD_X, AbstractRelic.PAD_X));
         this.augment = new PCLAugmentRenderable(augment, hb);
         this.panel = panel;
-        title = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * titleOffset, hb.height / 2))
+        title = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * titleOffset, hb.height * 0.7f))
                 .setFontScale(0.85f)
                 .setLabel(augment.getName())
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         amountText = new
-                EUILabel(FontHelper.cardTitleFont, RelativeHitbox.fromPercentages(hb, 1, 1, amountOffset, 0.5f))
+                EUILabel(FontHelper.cardTitleFont, RelativeHitbox.fromPercentages(hb, 1, 1, amountOffset, 0.7f))
                 .setAlignment(0.5f, 0.5f)
                 .setLabel(getAmountString(amount))
                 .setFontScale(0.75f);

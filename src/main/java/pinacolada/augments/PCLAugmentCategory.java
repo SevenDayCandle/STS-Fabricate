@@ -33,6 +33,16 @@ public enum PCLAugmentCategory implements CountingPanelItem {
 
     @Override
     public Texture getIcon() {
+        switch (this) {
+            case Summon:
+                return PCLCoreImages.CardUI.augmentSummon.texture();
+            case Played:
+                return PCLCoreImages.CardUI.augmentPlayed.texture();
+            case Power:
+                return PCLCoreImages.CardUI.augmentPower.texture();
+            case Special:
+                return PCLCoreImages.CardUI.augmentSpecial.texture();
+        }
         return PCLCoreImages.CardUI.augmentBase.texture();
     }
 
@@ -41,7 +51,7 @@ public enum PCLAugmentCategory implements CountingPanelItem {
             case Summon:
                 return PGR.core.tooltips.summon.title;
             case Played:
-                return PGR.core.tooltips.play.title;
+                return PGR.core.tooltips.attack.title + "/" + PGR.core.tooltips.skill.title;
             case Power:
                 return PGR.core.tooltips.power.title;
             case General:

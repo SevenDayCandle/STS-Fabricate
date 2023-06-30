@@ -106,7 +106,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
                 addItem.invoke(augment, amount);
             }
         }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
         if (panel.augments.size() == 0) {
             close();
         }

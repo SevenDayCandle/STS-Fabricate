@@ -106,8 +106,7 @@ public abstract class PCLAugment implements KeywordProvider {
     public String getFullText() {
         String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                EUIRM.strings.generic2(PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier), data.category.getName()),
-                data.isSpecial ? PCLCoreStrings.colorString("r", PGR.core.tooltips.specialAugment.title) : null,
+                PCLCoreStrings.colorString("p", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, data.tier), data.category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
                 reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
                 getPowerText());
     }

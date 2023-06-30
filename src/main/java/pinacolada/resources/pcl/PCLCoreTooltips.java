@@ -105,6 +105,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip afterImage = EUIKeywordTooltip.findByID("After Image");
     public EUIKeywordTooltip afterlife = EUIKeywordTooltip.findByID("Afterlife");
     public EUIKeywordTooltip artifact = EUIKeywordTooltip.findByID("Artifact");
+    public EUIKeywordTooltip augment = EUIKeywordTooltip.findByID("Augment");
     public EUIKeywordTooltip autoplay = EUIKeywordTooltip.findByID("Autoplay");
     public EUIKeywordTooltip blinded = EUIKeywordTooltip.findByID("Blinded");
     public EUIKeywordTooltip blur = EUIKeywordTooltip.findByID("Blur");
@@ -197,7 +198,6 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip slow = EUIKeywordTooltip.findByID("Slow");
     public EUIKeywordTooltip sorcery = EUIKeywordTooltip.findByID("Sorcery");
     public EUIKeywordTooltip soulbound = EUIKeywordTooltip.findByID("Soulbound");
-    public EUIKeywordTooltip specialAugment = EUIKeywordTooltip.findByID("Special Augment");
     public EUIKeywordTooltip stabilize = EUIKeywordTooltip.findByID("Stabilize");
     public EUIKeywordTooltip stance = EUIKeywordTooltip.findByID("Stance");
     public EUIKeywordTooltip starter = EUIKeywordTooltip.findByID("Starter");

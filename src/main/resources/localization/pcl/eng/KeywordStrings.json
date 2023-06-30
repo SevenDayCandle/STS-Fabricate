@@ -431,10 +431,6 @@
 		"DESCRIPTION": "Cannot be removed from your deck.",
 		"NAME": "Soulbound"
 	},
-	"Special Augment":	{
-		"DESCRIPTION": "#ySpecial #yAugments cannot be obtained from combat rewards, nor can they be removed from cards.",
-		"NAME": "Special Augment"
-	},
 	"Spread":	{
 		"DESCRIPTION": "Spread a target's power to ALL other enemies.",
 		"NAME": "Spread",
