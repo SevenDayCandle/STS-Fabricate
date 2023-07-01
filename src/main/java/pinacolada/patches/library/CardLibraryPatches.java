@@ -118,27 +118,39 @@ public class CardLibraryPatches {
         }
     }
 
+    protected static SpireReturn<AbstractCard> getActualCard(String key) {
+        if (PGR.isLoaded()) {
+            // Only make replacements in game
+            if (EUIGameUtils.inGame()) {
+                AbstractCard res = getReplacement(key);
+                if (res != null) {
+                    return SpireReturn.Return(res);
+                }
+            }
+
+            // Allow getCard to get custom cards too
+            PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
+            if (slot != null) {
+                return SpireReturn.Return(slot.make(true));
+            }
+        }
+
+        return SpireReturn.Continue();
+    }
+
     @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {String.class})
     public static class CardLibraryPatches_GetCard {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(String key) {
-            if (PGR.isLoaded()) {
-                // Only make replacements in game
-                if (EUIGameUtils.inGame()) {
-                    AbstractCard res = getReplacement(key);
-                    if (res != null) {
-                        return SpireReturn.Return(res);
-                    }
-                }
+            return getActualCard(key);
+        }
+    }
 
-                // Allow getCard to get custom cards too
-                PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
-                if (slot != null) {
-                    return SpireReturn.Return(slot.make(true));
-                }
-            }
-
-            return SpireReturn.Continue();
+    @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {AbstractPlayer.PlayerClass.class, String.class})
+    public static class CardLibraryPatches_GetCard2 {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractCard> prefix(AbstractPlayer.PlayerClass plyrClass, String key) {
+            return getActualCard(key);
         }
     }
 

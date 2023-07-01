@@ -4,6 +4,7 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -239,5 +240,37 @@ public class AbstractPlayerPatches {
         public static void Prefix(AbstractPlayer __instance) {
             replaceTargets(__instance);
         }
+    }
+
+    @SpirePatch(clz = AbstractPlayer.class, method = "initializeStarterDeck")
+    public static class AbstractPlayer_InitializeStarterDeck {
+
+        public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
+            p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
+        }
+
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(MethodCall m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractPlayer.class.getName()) && m.getMethodName().equals("getStartingDeck")) {
+                        m.replace("{ $_ = pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_InitializeStarterDeck.getCardList($0); }");
+                    }
+                }
+            };
+        }
+
+        public static ArrayList<String> getCardList(AbstractPlayer p) {
+            ArrayList<String> getCards = AbstractPlayerFields.overrideCards.get(p);
+            return getCards != null ? getCards : p.getStartingDeck();
+        }
+    }
+
+    @SpirePatch(
+            clz = AbstractPlayer.class,
+            method = SpirePatch.CLASS
+    )
+    public static class AbstractPlayerFields {
+        public static SpireField<ArrayList<String>> overrideCards = new SpireField<>(() -> null);
     }
 }

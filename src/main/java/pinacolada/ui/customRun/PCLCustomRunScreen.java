@@ -24,6 +24,7 @@ import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.FakeLoadout;
 import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 
@@ -41,13 +42,16 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
+    public boolean allowAugments;
     public boolean allowCustomCards;
     public boolean allowCustomPotions;
     public boolean allowCustomRelics;
+    public boolean allowLoadout;
     public boolean isAscensionMode;
     public boolean isEndless;
     public boolean isFinalActAvailable;
     public int ascensionLevel;
+    public FakeLoadout fakeLoadout = new FakeLoadout();
 
     public PCLCustomRunScreen() {
         canvas = new PCLCustomRunCanvas(this);
@@ -160,9 +164,13 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             Random rng = new Random(sourceTime);
             Settings.seed = SeedHelper.generateUnoffensiveSeed(rng);
         }
-
         AbstractDungeon.generateSeeds();
+
         PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>());
+        if (allowLoadout) {
+            trial.fakeLoadout = fakeLoadout;
+        }
+
         trial.addMods(activeMods);
         trial.allowCustomCards = allowCustomCards;
         trial.allowCustomPotions = allowCustomPotions;

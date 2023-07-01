@@ -39,6 +39,8 @@ import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
+import pinacolada.resources.loadout.LoadoutCardSlot;
+import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
@@ -67,6 +69,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
+    public Boolean allowAugments = false;
     public Boolean allowCustomCards = false;
     public Boolean allowCustomPotions = false;
     public Boolean allowCustomRelics = false;
@@ -75,7 +78,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public String currentForm = null;
-    public transient PCLLoadout startingSeries = new FakeLoadout();
+    public transient PCLLoadout loadout;
 
     // When playing as a non-PCL character, remove any colorless cards that should be exclusive to a particular PCL character
     // This includes the example cards from the card editor
@@ -223,8 +226,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     private void fullLog(String message) {
         EUIUtils.logInfo(this, message);
-        if (Settings.isDebug) {
-            EUIUtils.logInfo(this, "Starting Series: " + startingSeries.getName() + ", Preset: " + startingSeries.preset);
+        if (Settings.isDebug && loadout != null) {
+            EUIUtils.logInfo(this, "Starting Series: " + loadout.getName() + ", Preset: " + loadout.preset);
             EUIUtils.logInfo(this, "Loadout ID: " + startingLoadout + ", Banned Cards: " + bannedCards.size());
         }
     }
@@ -337,24 +340,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return replacement;
     }
 
-    protected void importBaseData(PCLDungeon data) {
+    protected void importBaseData(PCLDungeon dungeon) {
         ascensionGlyphCounters.clear();
-        if (data != null) {
-            eventLog = new HashMap<>(data.eventLog);
-            allowCustomCards = data.allowCustomCards;
-            allowCustomPotions = data.allowCustomPotions;
-            allowCustomRelics = data.allowCustomRelics;
-            rNGCounter = data.rNGCounter;
-            highestScore = data.highestScore;
-            ascensionGlyphCounters.addAll(data.ascensionGlyphCounters);
-            rng = data.rng;
+        if (dungeon != null) {
+            eventLog = new HashMap<>(dungeon.eventLog);
+            allowCustomCards = dungeon.allowCustomCards;
+            allowCustomPotions = dungeon.allowCustomPotions;
+            allowCustomRelics = dungeon.allowCustomRelics;
+            rNGCounter = dungeon.rNGCounter;
+            highestScore = dungeon.highestScore;
+            ascensionGlyphCounters.addAll(dungeon.ascensionGlyphCounters);
+            rng = dungeon.rng;
 
-            if (data.currentForm != null) {
-                setCreature(data.currentForm);
+            if (dungeon.currentForm != null) {
+                setCreature(dungeon.currentForm);
             }
         }
         else {
             eventLog = new HashMap<>();
+            allowAugments = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).allowAugments : data != null && data.useAugments;
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
             allowCustomPotions = PGR.config.enableCustomPotions.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomPotions);
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
@@ -373,62 +377,72 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         final AbstractPlayer player = CombatManager.refreshPlayer();
         data = PGR.getPlayerData(player.chosenClass);
 
-        // When playing as a non-PCL character, remove the augment panel and any cards defined in a resource's custom colorless pool
-        if (data == null) {
-            if (panelAdded) {
-                panelAdded = false;
-                BaseMod.removeTopPanelItem(PGR.augmentPanel);
-            }
-            if (isActuallyStartingRun) {
-                loadCustomCards(player);
-            }
-
-            banItems(data);
-            return;
-        }
-
-        loadCardsForData(data);
-        if (isActuallyStartingRun) {
-            loadCustomCards(player);
-        }
-
-        banItems(data);
-        data.updateRelicsForDungeon();
-        if (!panelAdded) {
+        // Add or remove the augment panel
+        if (allowAugments && !panelAdded) {
             panelAdded = true;
             BaseMod.addTopPanelItem(PGR.augmentPanel);
         }
+        else if (panelAdded) {
+            panelAdded = false;
+            BaseMod.removeTopPanelItem(PGR.augmentPanel);
+        }
+
+        if (data != null) {
+            loadCardsForData(data);
+        }
+
+        // Custom loadout
+        PCLLoadout fake = null;
+        if (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout != null) {
+            loadout = fake = ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout;
+        }
 
         if (isActuallyStartingRun) {
-            if (Settings.isStandardRun()) {
-                data.saveTrophies();
-            }
+            loadCustomCards(player);
 
-            initializeLoadoutAttributes();
-
-            // Add glyphs
-            for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++) {
-                boolean shouldAdd = true;
-                for (AbstractBlight blight : player.blights) {
-                    if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
-                        shouldAdd = false;
-                        break;
+            if (fake != null) {
+                for (LoadoutRelicSlot rSlot : fake.getPreset().relicSlots) {
+                    if (rSlot.selected != null && rSlot.selected.relic != null) {
+                        GameUtilities.obtainRelicFromEvent(RelicLibrary.getRelic(rSlot.selected.relic.relicId).makeCopy());
                     }
                 }
-                int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
-                if (shouldAdd && counter > 0) {
-                    AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
-                    blight.setCounter(counter);
-                    GameUtilities.obtainBlightWithoutEffect(blight);
+
+                initializePotions();
+            }
+            else if (data != null) {
+                data.updateRelicsForDungeon();
+                if (Settings.isStandardRun()) {
+                    data.saveTrophies();
                 }
+
+                // Add glyphs
+                for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++) {
+                    boolean shouldAdd = true;
+                    for (AbstractBlight blight : player.blights) {
+                        if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
+                            shouldAdd = false;
+                            break;
+                        }
+                    }
+                    int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
+                    if (shouldAdd && counter > 0) {
+                        AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
+                        blight.setCounter(counter);
+                        GameUtilities.obtainBlightWithoutEffect(blight);
+                    }
+                }
+
+                initializePotions();
             }
         }
+
+        banItems(data);
     }
 
     // Modify starting potion slots and energy
-    private void initializeLoadoutAttributes() {
-        if (data.selectedLoadout != null) {
-            player.potionSlots += data.selectedLoadout.getPotionSlots();
+    private void initializePotions() {
+        if (loadout != null) {
+            player.potionSlots += loadout.getPotionSlots();
             while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot) {
                 player.potions.remove(player.potions.size() - 1);
             }
@@ -444,6 +458,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (data.selectedLoadout == null) {
             data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));
         }
+        loadout = data.selectedLoadout;
 
         for (PCLLoadout loadout : data.getEveryLoadout()) {
             // Series must be unlocked to be present in-game
@@ -566,8 +581,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 loadoutIDs.add(loadout.ID);
             }
 
-            if (startingSeries != null) {
-                startingLoadout = startingSeries.ID;
+            if (loadout != null) {
+                startingLoadout = loadout.ID;
             }
             else {
                 startingLoadout = data.selectedLoadout.ID;
@@ -584,6 +599,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     @Override
     public void onLoad(PCLDungeon loaded) {
+        AbstractPlayer player = CombatManager.refreshPlayer();
+        this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
         importBaseData(loaded);
         loadouts.clear();
         bannedCards.clear();
@@ -591,8 +608,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         augments.clear();
         fragments.clear();
         valueDivisor = 1;
-        AbstractPlayer player = CombatManager.refreshPlayer();
-        this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
 
         if (loaded != null) {
             bannedCards.addAll(loaded.bannedCards);
@@ -605,7 +620,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             }
 
             if (this.data != null) {
-                startingSeries = PCLLoadout.get(loaded.startingLoadout);
+                loadout = PCLLoadout.get(loaded.startingLoadout);
                 for (String proxy : loaded.loadoutIDs) {
                     PCLLoadout loadout = PCLLoadout.get(proxy);
                     if (loadout != null) {
@@ -616,8 +631,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         }
 
-        if (startingSeries == null && this.data != null) {
-            startingSeries = this.data.selectedLoadout;
+        if (loadout == null && this.data != null) {
+            loadout = this.data.selectedLoadout;
         }
         validate();
 
@@ -685,8 +700,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         bannedRelics.clear();
         augments.clear();
         fragments.clear();
-        startingSeries = new FakeLoadout();
-        startingLoadout = startingSeries.ID;
+        loadout = new FakeLoadout();
+        startingLoadout = loadout.ID;
         loadoutIDs.clear();
         valueDivisor = 1;
 
@@ -760,6 +775,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
         else if (rNGCounter == null) {
             rNGCounter = 0;
+        }
+
+        if (allowAugments == null) {
+            allowAugments = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).allowAugments : data != null && data.useAugments;
         }
 
         if (allowCustomCards == null) {

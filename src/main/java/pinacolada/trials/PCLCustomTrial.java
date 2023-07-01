@@ -5,11 +5,17 @@ import com.megacrit.cardcrawl.cards.green.WraithForm;
 import com.megacrit.cardcrawl.cards.purple.DevaForm;
 import com.megacrit.cardcrawl.cards.red.DemonForm;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.BustedCrown;
 import com.megacrit.cardcrawl.relics.SneckoEye;
 import com.megacrit.cardcrawl.relics.UnceasingTop;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.trials.CustomTrial;
+import pinacolada.patches.creature.AbstractPlayerPatches;
+import pinacolada.resources.loadout.FakeLoadout;
+import pinacolada.resources.loadout.LoadoutCardSlot;
+import pinacolada.resources.loadout.LoadoutRelicSlot;
 
 import java.util.*;
 
@@ -29,10 +35,11 @@ public class PCLCustomTrial extends CustomTrial {
     protected Integer maxHpOverride = null;
     protected boolean isKeepingStarterCards = true;
     protected boolean isKeepingStarterRelic = true;
+    public boolean allowAugments;
     public boolean allowCustomCards;
     public boolean allowCustomPotions;
     public boolean allowCustomRelics;
-
+    public FakeLoadout fakeLoadout;
 
     public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics) {
         super();
@@ -107,6 +114,18 @@ public class PCLCustomTrial extends CustomTrial {
 
     // TODO Use custom stuff (i.e. glyphs)
     public AbstractPlayer setupPlayer(AbstractPlayer player) {
+        if (fakeLoadout != null) {
+
+            player.currentHealth = player.startingMaxHP = player.maxHealth = fakeLoadout.getHP();
+            player.masterMaxOrbs = fakeLoadout.getOrbSlots();
+            player.energy.energyMaster = fakeLoadout.getEnergy();
+            player.gameHandSize = player.masterHandSize = fakeLoadout.getDraw();
+            player.displayGold = player.gold = fakeLoadout.getGold();
+
+            AbstractPlayerPatches.AbstractPlayerFields.overrideCards.set(player, fakeLoadout.getStartingDeck());
+            // Loadout relics are added in PCLDungeon
+        }
+
         if (this.maxHpOverride != null) {
             player.maxHealth = this.maxHpOverride;
             player.currentHealth = this.maxHpOverride;

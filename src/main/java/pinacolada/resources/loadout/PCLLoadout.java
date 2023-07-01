@@ -564,6 +564,10 @@ public abstract class PCLLoadout {
 
     }
 
+    public boolean allowCustoms() {
+        return false;
+    }
+
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {

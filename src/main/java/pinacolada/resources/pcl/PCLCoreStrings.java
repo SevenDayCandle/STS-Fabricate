@@ -313,6 +313,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String misc_category = misc.TEXT[17];
     public final String misc_subCategory = misc.TEXT[18];
     public final String misc_tier = misc.TEXT[19];
+    public final String misc_customLoadout = misc.TEXT[20];
+    public final String misc_customLoadoutDesc = misc.TEXT[21];
+    public final String misc_customAugment = misc.TEXT[22];
+    public final String misc_customAugmentDesc = misc.TEXT[23];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];

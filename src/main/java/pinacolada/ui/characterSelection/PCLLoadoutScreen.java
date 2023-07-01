@@ -342,6 +342,12 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         toggleViewUpgrades(false);
         changePreset(loadout.preset);
 
+        seriesButton.setActive(data != null);
+        startingDeck.setActive(data != null);
+        for (EUIButton button : presetButtons) {
+            button.setActive(data != null);
+        }
+
         EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
                 new EUITourTooltip(deckText.hb, deckText.text, PGR.core.strings.loadout_tutorialCard)
                         .setFlash(slotsEditors.get(0).cardnameText.image),
@@ -356,8 +362,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 new EUITourTooltip(attributesText.hb, attributesText.text, PGR.core.strings.loadout_tutorialAttributes),
                 new EUITourTooltip(cardsvalueText.hb, PGR.core.strings.csel_deckEditor, PGR.core.strings.loadout_tutorialRequired)
                         .setFlash(cardsvalueText.image)
-                        .setPosition(cardsvalueText.hb.x - cardsvalueText.hb.width * 2, cardsvalueText.hb.y),
-                seriesButton.makeTour(true)
+                        .setPosition(cardsvalueText.hb.x - cardsvalueText.hb.width * 2, cardsvalueText.hb.y)
         );
     }
 

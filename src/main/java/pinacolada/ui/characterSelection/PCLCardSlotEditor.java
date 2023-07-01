@@ -99,7 +99,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }
         cardnameText.tryUpdate();
 
-        if (changeButton.isActive && cardnameText.hb.hovered) {
+        if (changeButton.isActive && cardnameText.hb.hovered && slot.cards.size() > 1) {
             if (InputHelper.justClickedLeft) {
                 cardnameText.hb.clickStarted = true;
             }

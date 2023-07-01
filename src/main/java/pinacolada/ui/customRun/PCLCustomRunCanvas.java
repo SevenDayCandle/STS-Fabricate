@@ -60,8 +60,10 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUIToggle customCardToggle;
     public final EUIToggle customRelicToggle;
     public final EUIToggle customPotionToggle;
+    public final EUIToggle allowLoadoutToggle;
     public final EUIButton editCardPoolButton;
     public final EUIButton editRelicPoolButton;
+    public final EUIButton editLoadoutButton;
     public final ArrayList<PCLCustomRunCharacterButton> characters = new ArrayList<>();
     public final EUISearchableDropdown<CustomMod> modifierDropdown;
     public final MenuCancelButton cancelButton = new MenuCancelButton();
@@ -89,6 +91,20 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setLabel(CustomModeScreen.TEXT[1]);
         selectedCharacterLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall, new EUIHitbox(screenW(0.18f), screenH(0.05f)))
                 .setColor(Settings.BLUE_TEXT_COLOR);
+
+        editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewCardPool)
+                .setOnClick(this::openCardPool);
+
+        editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewRelicPool)
+                .setOnClick(this::openRelicPool);
+
+        editLoadoutButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, PGR.core.strings.csel_deckEditor)
+                .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
+                .setColor(Color.FOREST)
+                .setOnClick(this::openLoadoutEditor);
 
         RunModStrings endlessStrings = PGR.getRunModStrings(MOD_ENDLESS);
         RunModStrings endingActStrings = PGR.getRunModStrings(MOD_THE_ENDING);
@@ -133,6 +149,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 })
                 .setTooltip(PGR.core.strings.misc_customPotions, PGR.core.strings.misc_customPotionsDesc);
 
+        allowLoadoutToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setText(PGR.core.strings.misc_customLoadout)
+                .setOnToggle(v -> {
+                    screen.allowLoadout = v;
+                })
+                .setTooltip(PGR.core.strings.misc_customLoadout, PGR.core.strings.misc_customLoadoutDesc);
+
         seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panel.texture(),
                 new EUIHitbox(scale(280), scale(48)))
                 .setOnComplete(screen::setSeed)
@@ -155,13 +179,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
 
-        editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewCardPool)
-                .setOnClick(this::openCardPool);
-
-        editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewRelicPool)
-                .setOnClick(this::openRelicPool);
 
         modsTooltip = new EUITooltip(CustomModeScreen.TEXT[6]);
         modifierDropdown.setTooltip(modsTooltip);
@@ -209,6 +226,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customCardToggle.tryRender(sb);
             customRelicToggle.tryRender(sb);
             customPotionToggle.tryRender(sb);
+            allowLoadoutToggle.tryRender(sb);
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
             modifierDropdown.tryRender(sb);
@@ -217,6 +235,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             }
             editCardPoolButton.renderImpl(sb);
             editRelicPoolButton.renderImpl(sb);
+            editLoadoutButton.renderImpl(sb);
             confirmButton.render(sb);
             cancelButton.render(sb);
         }
@@ -241,11 +260,13 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customCardToggle.tryUpdate();
             customRelicToggle.tryUpdate();
             customPotionToggle.tryUpdate();
+            allowLoadoutToggle.tryUpdate();
             seedInput.tryUpdate();
             ascensionEditor.tryUpdate();
             modifierDropdown.tryUpdate();
             editCardPoolButton.updateImpl();
             editRelicPoolButton.updateImpl();
+            editLoadoutButton.updateImpl();
             confirmButton.update();
             cancelButton.update();
             for (PCLCustomRunCharacterButton b : characters) {
@@ -280,6 +301,11 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     public void openRelicPool() {
         currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
+    }
+
+    public void openLoadoutEditor() {
+        allowLoadoutToggle.toggle(true);
+        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {});
     }
 
     protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
@@ -332,7 +358,8 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(titleLabel, SCREEN_X - scale(80), yPos, scale(10));
         yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
         yPos = positionElement(charTitleLabel, yPos, scale(105));
-        selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
+        selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(20));
+        editLoadoutButton.setPosition(Settings.WIDTH * 0.72f, selectedCharacterLabel.hb.cY + scale(20));
 
         int column = 0;
         for (PCLCustomRunCharacterButton character : characters) {
@@ -350,8 +377,9 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(endlessToggle, yPos, scale(35));
         yPos = positionElement(endingActToggle, yPos, scale(35));
         yPos = positionElement(customCardToggle, yPos, scale(35));
-        yPos = positionElement(customRelicToggle, yPos, scale(125));
-        yPos = positionElement(customPotionToggle, yPos, scale(125));
+        yPos = positionElement(customRelicToggle, yPos, scale(35));
+        yPos = positionElement(customPotionToggle, yPos, scale(35));
+        yPos = positionElement(allowLoadoutToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
         seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, modifierDropdown.hb.y + scale(20));

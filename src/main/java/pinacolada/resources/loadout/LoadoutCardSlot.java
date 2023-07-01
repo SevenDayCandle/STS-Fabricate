@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
@@ -100,7 +101,8 @@ public class LoadoutCardSlot {
     public ArrayList<AbstractCard> getSelectableCards() {
         final ArrayList<AbstractCard> cards = new ArrayList<>();
         for (Item item : this.cards) {
-            boolean add = !isIDBanned(item.ID) && !item.isLocked();
+            // Custom cards should not be treated as locked in this effect
+            boolean add = !isIDBanned(item.ID) && (!item.isLocked() || PCLCustomCardSlot.get(item.ID) != null);
             if (add) {
                 for (LoadoutCardSlot slot : container.cardSlots) {
                     if (slot != this && item.ID.equals(slot.getSelectedID())) {
@@ -128,6 +130,10 @@ public class LoadoutCardSlot {
     }
 
     public boolean isInvalid() {
+        PCLCustomCardSlot slot = PCLCustomCardSlot.get(selected.ID);
+        if (slot != null) {
+            return !container.loadout.allowCustoms();
+        }
         return selected.isLocked() || isIDBanned(selected.ID);
     }
 

@@ -68,21 +68,6 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
     }
 
     @Override
-    protected void firstUpdate() {
-        super.firstUpdate();
-
-        if (selectedCard != null) {
-            for (AbstractCard card : cards) {
-                if (card.cardID.equals(selectedCard.cardID)) {
-                    selectedCard = card;
-                    selectedCard.beginGlowing();
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
     public void render(SpriteBatch sb) {
         grid.tryRender(sb);
     }
@@ -97,20 +82,11 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
     }
 
     private void onCardClicked(AbstractCard card) {
-        if (GameUtilities.isCardLocked(card.cardID) || slot.isIDBanned(card.cardID)) {
-            CardCrawlGame.sound.play("CARD_REJECT");
-        }
-        else {
-            if (selectedCard != null) {
-                selectedCard.stopGlowing();
-            }
-
-            selectedCard = card;
-            CardCrawlGame.sound.play("CARD_SELECT");
-            slot.select(card.cardID, 1);
-            card.beginGlowing();
-            complete();
-        }
+        selectedCard = card;
+        CardCrawlGame.sound.play("CARD_SELECT");
+        slot.select(card.cardID, 1);
+        card.beginGlowing();
+        complete();
     }
 
     private void onCardRender(SpriteBatch sb, AbstractCard card) {

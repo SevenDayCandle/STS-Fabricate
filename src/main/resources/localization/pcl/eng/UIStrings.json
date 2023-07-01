@@ -141,7 +141,7 @@
 												"An item's form can be changed when manually upgrading it. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this item's portrait",
 												"Flags qualify cards for certain checks (e.g. counting as a #yStrike for {#y:Perfected Strike}).",
-												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation.",
+												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation. | Tags are rendered on the top-right corner of the card by default, but this can be toggled with the {Display Card Tags in description} setting.",
 												"In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
 												"Affinities are card properties that are used in different ways by different characters. They can also be used as a card filter for effects.",
 												"Conditions determine when effects are allowed activate.",
@@ -411,7 +411,11 @@
 												"Allow blights created with Fabricate to appear in runs",
 												"Category",
 												"Sub-Category",
-												"Tier"
+												"Tier",
+												"Enable Custom Loadout",
+												"Overwrite the starting character's deck and attributes with a custom loadout",
+												"Enable Augments",
+												"Allows #yAugments to appear in runs, which can be used to enhance your cards"
 								]
 				},
 				"pcl:Options": {
@@ -575,7 +579,7 @@
 				"pcl:Tutorial": {
 								"TEXT": [
 												"{#o:Click this icon to learn more.}",
-												"#yTags determine what happens when that card is played or is moved between piles. A card's #yTags are shown on the top-right corner of a card.",
+												"#yTags determine what happens when that card is played or is moved between piles. A card's #yTags are shown on the top-right corner of a card by default, but this can be toggled with the {Display Card Tags in description} setting.",
 												"A card's #yAffinities are shown above its name. | [A-A] counts as #b1 of every #yAffinity. | [A-W] counts as no #yAffinity.",
 												"#ySummon is a card type denoted by a green hexagon †Summon]. These cards have an HP value denoted by the heart symbol to the left of the card type, and a #yTiming property shown to the right of the card type.",
 												"A #ySummon card is played by dragging it onto a #ySummon #ySlot. Doing so creates an ally that stores the card you played, and who is given HP based on that card's HP value.",
