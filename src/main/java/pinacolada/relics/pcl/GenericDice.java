@@ -16,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID);
-    public static final int BONUS_PER_CARDS = 50;
+    public static final int BONUS_PER_CARDS = 60;
 
     public GenericDice() {
         super(DATA);
@@ -35,8 +35,19 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
     }
 
+    protected AbstractCard.CardRarity getRarity(AbstractCard card) {
+        int roll = rng.random(100);
+        if (roll < 10) {
+            return card.rarity == AbstractCard.CardRarity.RARE ? AbstractCard.CardRarity.RARE : AbstractCard.CardRarity.UNCOMMON;
+        }
+        if (roll < 25) {
+            return AbstractCard.CardRarity.UNCOMMON;
+        }
+        return AbstractCard.CardRarity.COMMON;
+    }
+
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {
-        return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
+        return PGR.dungeon.getRandomRewardReplacementCard(getRarity(card), rewardItem.cards, AbstractDungeon.cardRng, true);
     }
 
     @Override

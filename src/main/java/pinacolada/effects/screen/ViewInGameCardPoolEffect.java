@@ -14,10 +14,7 @@ import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUICardGrid;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUIToggle;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
@@ -41,6 +38,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
     private EUIButton selectAllButton;
     private EUIButton selectRandomButton;
     private EUILabel selectedCount;
+    private EUITextBox instructions;
     private EUIToggle upgradeToggle;
     private PCLRandomCardAmountDialog randomSelection;
     private boolean canToggle = true;
@@ -89,12 +87,17 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
         final float buttonWidth = scale(256);
         final float buttonHeight = scale(48);
 
-        selectedCount = new EUILabel(FontHelper.tipHeaderFont, new EUIHitbox(xPos, Settings.HEIGHT * 0.75f, buttonWidth, buttonHeight * 2f))
+        selectedCount = new EUILabel(EUIFontHelper.cardTipTitleFont, new EUIHitbox(xPos, Settings.HEIGHT * 0.84f, buttonWidth, buttonHeight * 2f))
                 .setColor(Settings.CREAM_COLOR)
-                .setAlignment(0.5f, 0.1f, true)
-                .setFont(FontHelper.tipHeaderFont, 1);
+                .setAlignment(0.5f, 0.1f, true);
 
-        deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
+        instructions = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.7f, buttonWidth, Settings.HEIGHT * 0.18f))
+                .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
+                .setAlignment(0.9f, 0.1f, true)
+                .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
+                .setFont(EUIFontHelper.cardTipBodyFont, 1f);
+
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.48f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
@@ -144,6 +147,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
+        instructions.tryRender(sb);
         upgradeToggle.renderImpl(sb);
         selectAllButton.tryRender(sb);
         deselectAllButton.tryRender(sb);
@@ -171,6 +175,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
             selectAllButton.tryUpdate();
             deselectAllButton.tryUpdate();
             selectRandomButton.tryUpdate();
+            instructions.tryUpdate();
             selectedCount.tryUpdate();
 
             if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered) {
@@ -246,7 +251,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
         selectAllButton.setActive(canToggle);
         deselectAllButton.setActive(canToggle);
         selectRandomButton.setActive(canToggle);
-        selectedCount.setActive(canToggle);
+        instructions.setActive(canToggle);
         return this;
     }
 

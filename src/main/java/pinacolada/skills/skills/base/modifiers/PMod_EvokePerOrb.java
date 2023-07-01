@@ -69,8 +69,12 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
+        updateChildAmount(info);
         order.evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
-                .addCallback(callback);
+                .addCallback((orbs) -> {
+                    info.setData(orbs);
+                    callback.invoke();
+                });
     }
 
 }

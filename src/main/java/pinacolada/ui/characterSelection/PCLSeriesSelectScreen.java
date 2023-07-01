@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -19,6 +20,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
@@ -26,11 +28,13 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
+import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_COLORLESS;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
@@ -40,6 +44,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUIButton selectAllButton;
     public final EUIButton deselectAllButton;
     public final EUIButton previewCards;
+    public final EUIButton colorless;
     public final EUIButton cancel;
     public final EUIButton confirm;
     public final EUIButton loadoutEditor;
@@ -52,6 +57,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData<?, ?> data;
     protected int totalCardsCache = 0;
+    protected int totalColorlessCache = 0;
     public boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
@@ -85,23 +91,30 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, screenH(0.09f)))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3f), buttonWidth, screenH(0.09f)))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.61f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
 
-        previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.sui_showCardPool)
+        previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f,PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
+        colorless = EUIButton.createHexagonalButton(xPos, getY.invoke(7.1f), buttonWidth, buttonHeight)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showColorless)
+                .setOnClick(this::previewColorless)
+                .setColor(Color.LIGHT_GRAY);
+
         selectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.sui_selectAll)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_selectAll)
+                .setTooltip(PGR.core.strings.sui_selectAll, PGR.core.strings.sui_selectAllDesc)
                 .setOnClick(() -> this.selectAll(true))
                 .setColor(Color.ROYAL);
 
-        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.8f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.sui_deselectAll)
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.7f), buttonWidth, buttonHeight)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_deselectAll)
+                .setTooltip(PGR.core.strings.sui_deselectAll, PGR.core.strings.sui_deselectDesc)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.FIREBRICK);
 
@@ -160,11 +173,12 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         selectAllButton.tryRender(sb);
         deselectAllButton.tryRender(sb);
         previewCards.renderImpl(sb);
+        colorless.renderImpl(sb);
         cancel.renderImpl(sb);
         confirm.renderImpl(sb);
 
-        typesAmount.renderImpl(sb);
         previewCardsInfo.renderImpl(sb);
+        typesAmount.renderImpl(sb);
 
         if (previewCardsEffect != null) {
             previewCardsEffect.render(sb);
@@ -195,9 +209,10 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             super.updateImpl();
         }
 
-        if (totalCardsCache != container.shownCards.size()) {
+        if (totalCardsCache != container.shownCards.size() || totalColorlessCache != container.shownColorlessCards.size()) {
             totalCardsCache = container.shownCards.size();
-            totalCardsChanged(totalCardsCache);
+            totalColorlessCache = container.shownColorlessCards.size();
+            totalCardsChanged(totalCardsCache, totalColorlessCache);
         }
 
         startingDeck.tryUpdate();
@@ -207,6 +222,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             selectAllButton.tryUpdate();
             deselectAllButton.tryUpdate();
             previewCards.updateImpl();
+            colorless.updateImpl();
             cancel.updateImpl();
             confirm.updateImpl();
             cardGrid.tryUpdate();
@@ -219,7 +235,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void forceUpdateText() {
         container.calculateCardCounts();
         totalCardsCache = container.shownCards.size();
-        totalCardsChanged(totalCardsCache);
+        totalColorlessCache = container.shownColorlessCards.size();
+        totalCardsChanged(totalCardsCache, totalColorlessCache);
     }
 
     public CardGroup getCardPool(PCLLoadout loadout) {
@@ -244,6 +261,31 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 }
             }
         }
+        cards.sortAlphabetically(true);
+        cards.sortByRarity(true);
+        return cards;
+    }
+
+    public CardGroup getColorlessPool() {
+        final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        if (data != null) {
+            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+                if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type) &&
+                        data.resources.containsColorless(c)) {
+                    cards.addToBottom(c.makeCopy());
+                }
+            }
+        }
+        else {
+            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+                for (PCLResources<?,?,?,?> resources : PGR.getRegisteredResources()) {
+                    if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type)  && !resources.filterColorless(c)) {
+                        cards.addToBottom(c.makeCopy());
+                    }
+                }
+            }
+        }
+
         cards.sortAlphabetically(true);
         cards.sortByRarity(true);
         return cards;
@@ -317,6 +359,12 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         PCLEffects.Manual.add(previewCardsEffect);
     }
 
+    public void previewColorless() {
+        previewCardsEffect = new ViewInGameCardPoolEffect(getColorlessPool(), container.bannedColorless, this::forceUpdateText)
+                .setStartingPosition(InputHelper.mX, InputHelper.mY);
+        PCLEffects.Manual.add(previewCardsEffect);
+    }
+
     public void proceed() {
         SingleCardViewPopup.isViewingUpgrade = false;
         cardGrid.clear();
@@ -338,16 +386,18 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         SingleCardViewPopup.isViewingUpgrade = value;
     }
 
-    protected void totalCardsChanged(int totalCards) {
+    protected void totalCardsChanged(int totalCards, int totalColorless) {
         if (EUI.countingPanel.isActive) {
             EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
         }
 
         typesAmount.setLabel(PGR.core.strings.sui_totalCards(
-                totalCards,
-                totalCards + container.bannedCards.size(),
                 totalCards >= MINIMUM_CARDS ? "g" : "r",
-                MINIMUM_CARDS));
+                totalCards,
+                MINIMUM_CARDS,
+                totalColorless >= MINIMUM_COLORLESS ? "g" : "r",
+                totalColorless,
+                MINIMUM_COLORLESS));
 
         confirm.setInteractable(container.isValid());
     }

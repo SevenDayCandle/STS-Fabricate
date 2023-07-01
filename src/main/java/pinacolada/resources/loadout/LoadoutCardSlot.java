@@ -195,16 +195,9 @@ public class LoadoutCardSlot {
     public LoadoutCardSlot select(Item item, int amount) {
         selected = item;
         if (item == null) {
-            if (min > 0) {
-                throw new RuntimeException("Tried to deselect an item, but at least 1 card needs to be selected.");
-            }
             this.amount = 0;
         }
         else {
-            if (max <= 0) {
-                throw new RuntimeException("Tried to select an item, but no cards are allowed in this slot.");
-            }
-
             int maxCopies = selected.maxCopies();
             currentMax = Math.min(max, maxCopies >= min ? maxCopies : max);
             if (currentMax <= 0) {

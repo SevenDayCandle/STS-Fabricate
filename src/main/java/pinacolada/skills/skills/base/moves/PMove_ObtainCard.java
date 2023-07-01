@@ -1,7 +1,11 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.rewards.RewardItem;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.rooms.MonsterRoom;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -57,9 +61,15 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-        if (GameUtilities.inBattle()) {
-            use(makeInfo(getOwnerCreature()), PCLActions.top, __ -> {
-            });
+        AbstractRoom curRoom = GameUtilities.getCurrentRoom();
+        if (curRoom instanceof MonsterRoom || (curRoom != null && curRoom.rewardAllowed)) {
+            RewardItem r = new RewardItem();
+            String name = getName();
+            if (!StringUtils.isEmpty(name)) {
+                r.text = name;
+            }
+            r.cards = getBaseCards(null);
+            curRoom.addCardReward(r);
         }
         else {
             PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));

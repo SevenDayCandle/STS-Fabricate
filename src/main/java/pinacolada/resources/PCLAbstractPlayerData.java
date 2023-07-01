@@ -40,7 +40,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
     public static final int DEFAULT_GOLD = 99;
     public static final int DEFAULT_DRAW = 5;
     public static final int DEFAULT_ENERGY = 3;
-    public static final int DEFAULT_ORBS = 3;
+    public static final int DEFAULT_ORBS = 0;
     public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
@@ -214,7 +214,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         int unlockLevel = resources.getUnlockLevel();
         if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
             for (PCLLoadout loadout : loadouts.values()) {
-                if (unlockLevel >= loadout.unlockLevel) {
+                if (unlockLevel >= loadout.unlockLevel && !loadout.isCore()) {
                     selectedLoadout = loadout;
                     break;
                 }

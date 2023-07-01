@@ -99,7 +99,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     @Override
     public int timesUpgraded() {
-        return auxiliaryData.timesUpgraded;
+        return this.getPotency() - 1;
     }
 
     @Override
@@ -123,7 +123,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     public void initialize() {
         skills = new Skills();
-        this.potency = this.getPotency();
         setup();
         this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
         this.targetRequired = isThrown;
@@ -258,9 +257,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     // May be null before potion data is initialized
+    // Base will be multiplied by 2, then decreased by 1 (so 0 upgrades will give 0 upgrade bonuses without Sacred Bark and 1 with it)
     @Override
     public int getPotency(int i) {
-        return potionData != null && auxiliaryData != null ? potionData.getCounter(auxiliaryData.form) : 0;
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded + 1 : 1;
     }
 
     @Override

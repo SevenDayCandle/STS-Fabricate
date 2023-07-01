@@ -153,8 +153,8 @@ public class PCLCustomEffectNode extends EUIButton {
         if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill))) {
             sj.add(PGR.core.strings.cetut_primaryWarning);
         }
-        if (skill == null) {
-            sj.add(PGR.core.strings.cetut_corruptedWarning);
+        if ((skill instanceof PCond || skill instanceof PMod || skill instanceof PDelay) && skill.getChild() == null) {
+            sj.add(PGR.core.strings.cetut_childWarning);
         }
 
         String res = sj.toString();

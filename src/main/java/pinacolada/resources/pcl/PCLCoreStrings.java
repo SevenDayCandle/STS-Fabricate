@@ -164,7 +164,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_landingSound = cetut.TEXT[45];
     public final String cetut_addToEffect = cetut.TEXT[46];
     public final String cetut_primaryWarning = cetut.TEXT[47];
-    public final String cetut_corruptedWarning = cetut.TEXT[48];
+    public final String cetut_childWarning = cetut.TEXT[48];
     public final String cetut_undo = cetut.TEXT[49];
     public final String cetut_openFolder = cetut.TEXT[50];
     public final String cetut_topBarTutorial = cetut.TEXT[51];
@@ -379,8 +379,9 @@ public class PCLCoreStrings extends PCLStrings {
     public final String sui_deselectDesc = seriesui.TEXT[16];
     public final String sui_selectRandom = seriesui.TEXT[17];
     public final String sui_showCardPool = seriesui.TEXT[18];
-    public final String sui_coreInstructions = seriesui.TEXT[19];
-    public final String sui_totalInstructions = seriesui.TEXT[20];
+    public final String sui_showColorless = seriesui.TEXT[19];
+    public final String sui_coreInstructions = seriesui.TEXT[20];
+    public final String sui_totalInstructions = seriesui.TEXT[21];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -716,6 +717,10 @@ public class PCLCoreStrings extends PCLStrings {
         return act_generic2(PGR.core.tooltips.discard.title, amount);
     }
 
+    public final String act_doThis(Object times) {
+        return actFmt(9, times);
+    }
+
     public final String act_draw(Object amount) {
         return act_generic2(PGR.core.tooltips.draw.title, amount);
     }
@@ -725,7 +730,7 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_enterStance(Object stance) {
-        return actFmt(9, stance);
+        return actFmt(10, stance);
     }
 
     public final String act_evoke(Object subject) {
@@ -741,19 +746,15 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_exitStance() {
-        return actFmt(10);
-    }
-
-    public final String act_fetch(Object amount) {
-        return act_generic2(PGR.core.tooltips.fetch.title, amount);
+        return actFmt(11);
     }
 
     public final String act_gain(Object power) {
-        return actFmt(12, power);
+        return actFmt(13, power);
     }
 
     public final String act_gainAmount(Object amount, Object power) {
-        return actFmt(11, amount, power);
+        return actFmt(12, amount, power);
     }
 
     public final String act_generic2(Object verb, Object subject) {
@@ -773,23 +774,23 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_giveTarget(Object target, Object power) {
-        return actFmt(13, target, power);
+        return actFmt(14, target, power);
     }
 
     public final String act_giveTargetAmount(Object target, Object amount, Object power) {
-        return actFmt(14, target, amount, power);
+        return actFmt(15, target, amount, power);
     }
 
     public final String act_has(Object amount) {
-        return actFmt(15, amount);
+        return actFmt(16, amount);
     }
 
     public final String act_hasAmount(Object amount, Object power) {
-        return actFmt(16, amount, power);
+        return actFmt(17, amount, power);
     }
 
     public final String act_haveObject(Object amount, Object power) {
-        return actFmt(17, amount, power);
+        return actFmt(18, amount, power);
     }
 
     public final String act_heal(Object amount) {
@@ -801,15 +802,15 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_increaseBy(Object power, Object amount) {
-        return actFmt(18, power, amount);
+        return actFmt(19, power, amount);
     }
 
     public final String act_increasePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(19, property, target, amount);
+        return actFmt(20, property, target, amount);
     }
 
     public final String act_increasePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(20, property, target, source, amount);
+        return actFmt(21, property, target, source, amount);
     }
 
     public final String act_kill(String targetString) {
@@ -817,19 +818,19 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_lose(Object power) {
-        return actFmt(21, power);
+        return actFmt(22, power);
     }
 
     public final String act_loseAmount(Object amount, Object power) {
-        return actFmt(22, amount, power);
+        return actFmt(23, amount, power);
     }
 
     public final String act_move(Object amount, Object target) {
-        return actFmt(23, amount, target);
+        return actFmt(24, amount, target);
     }
 
     public final String act_moveTo(Object amount, Object dest, Object target) {
-        return actFmt(24, amount, dest, target);
+        return actFmt(25, amount, dest, target);
     }
 
     public final String act_obtain(Object card) {
@@ -861,7 +862,7 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_reduceBy(Object power, Object amount) {
-        return actFmt(25, power, amount);
+        return actFmt(26, power, amount);
     }
 
     public final String act_reduceCooldown(Object target, Object amount) {
@@ -869,31 +870,27 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public final String act_reducePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(26, property, target, amount);
+        return actFmt(27, property, target, amount);
     }
 
     public final String act_reducePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(27, property, target, source, amount);
+        return actFmt(28, property, target, source, amount);
     }
 
     public final String act_remove(Object item) {
-        return actFmt(28, item);
+        return actFmt(29, item);
     }
 
     public final String act_removeFrom(Object item, Object target) {
-        return actFmt(29, item, target);
+        return actFmt(30, item, target);
     }
 
     public final String act_removeFromPlace(Object item, Object target, Object place) {
-        return actFmt(30, item, target, place);
-    }
-
-    public final String act_removeInPlace(Object item, Object target, Object place) {
         return actFmt(31, item, target, place);
     }
 
-    public final String act_repeat(Object times) {
-        return actFmt(32, times);
+    public final String act_removeInPlace(Object item, Object target, Object place) {
+        return actFmt(32, item, target, place);
     }
 
     public final String act_reshuffle(Object amount) {
@@ -1422,8 +1419,8 @@ public class PCLCoreStrings extends PCLStrings {
         return EUIUtils.format(sui_selected, amount, total);
     }
 
-    public final String sui_totalCards(Object cardCount, Object total, Object color, Object req) {
-        return EUIUtils.format(sui_totalCards, cardCount, total, color, req);
+    public final String sui_totalCards(Object color, Object total, Object req, Object color2, Object total2, Object req2) {
+        return EUIUtils.format(sui_totalCards, color, total, req, color2, total2, req2);
     }
 
     public final String sui_unlocked(Object amount, Object total) {
