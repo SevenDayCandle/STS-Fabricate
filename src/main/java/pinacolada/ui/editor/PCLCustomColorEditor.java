@@ -100,8 +100,12 @@ public class PCLCustomColorEditor extends EUIHoverable {
     }
 
     public void setColorFromHex(String input) {
-        current = Color.valueOf(input);
-        onUpdate.invoke(current);
+        try {
+            current = Color.valueOf(input);
+            onUpdate.invoke(current);
+        }
+        catch (Exception ignored) {
+        }
     }
 
     public PCLCustomColorEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {

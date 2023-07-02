@@ -330,7 +330,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait makeCopy() {
         PMultiTrait copy = (PMultiTrait) super.makeCopy();
         for (PTrait<?> effect : effects) {
-            copy.addEffect(effect.makeCopy());
+            if (effect != null) {
+                copy.addEffect(effect.makeCopy());
+            }
         }
         return copy;
     }

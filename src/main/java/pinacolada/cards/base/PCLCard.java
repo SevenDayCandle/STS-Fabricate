@@ -1669,6 +1669,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (data != null) {
             changeForm(data.form, timesUpgraded);
             this.auxiliaryData = new PCLCardSaveData(data);
+            if (data.modifiedUpgradeLevel != 0 && maxUpgradeLevel > 0) {
+                maxUpgradeLevel += data.modifiedUpgradeLevel;
+            }
             if (data.modifiedDamage != 0) {
                 GameUtilities.modifyDamage(this, baseDamage + data.modifiedDamage, false, false);
             }

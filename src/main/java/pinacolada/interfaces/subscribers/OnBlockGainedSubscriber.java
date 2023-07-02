@@ -5,5 +5,5 @@ import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
 public interface OnBlockGainedSubscriber extends PCLCombatSubscriber {
-    void onBlockGained(AbstractCreature creature, int block);
+    int onBlockGained(AbstractCreature creature, int block);
 }

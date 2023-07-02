@@ -129,7 +129,10 @@
 												"Exact",
 												"Liquid Color",
 												"Hybrid Color",
-												"Spots Color"
+												"Spots Color",
+												"Tint Color",
+												"Enable Tint",
+												"If enables, alters the color of the saved image"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -378,7 +381,7 @@
 												"Editor",
 												"Card Printer",
 												"View, create, or edit custom cards to use in Custom Runs.",
-												"Relic Tinkerer",
+												"Relic Workshop",
 												"View, create, or edit custom relics to use in Custom Runs.",
 												"Potion Mixer",
 												"View, create, or edit custom potions to use in Custom Runs.",

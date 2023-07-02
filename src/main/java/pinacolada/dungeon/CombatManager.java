@@ -539,8 +539,8 @@ public class CombatManager {
         subscriberDo(OnBlockBrokenSubscriber.class, s -> s.onBlockBroken(creature));
     }
 
-    public static void onBlockGained(AbstractCreature creature, int block) {
-        subscriberDo(OnBlockGainedSubscriber.class, s -> s.onBlockGained(creature, block));
+    public static int onBlockGained(AbstractCreature creature, int block) {
+        return subscriberInout(OnBlockGainedSubscriber.class, block, (s, b) -> s.onBlockGained(creature, b));
     }
 
     public static void onCardCreated(AbstractCard card, boolean startOfBattle) {

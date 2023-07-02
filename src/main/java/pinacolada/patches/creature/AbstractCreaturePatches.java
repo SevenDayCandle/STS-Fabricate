@@ -1,5 +1,6 @@
 package pinacolada.patches.creature;
 
+import com.evacipated.cardcrawl.modthespire.lib.ByRef;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
@@ -26,9 +27,9 @@ public class AbstractCreaturePatches {
 
     @SpirePatch(clz = AbstractCreature.class, method = "addBlock", paramtypez = {int.class})
     public static class AbstractCreaturePatches_AddBlock {
-        @SpirePostfixPatch
-        public static void method(AbstractCreature __instance, int block) {
-            CombatManager.onBlockGained(__instance, block);
+        @SpirePrefixPatch
+        public static void method(AbstractCreature __instance, @ByRef int[] block) {
+            block[0] = CombatManager.onBlockGained(__instance, block[0]);
         }
     }
 

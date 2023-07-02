@@ -15,10 +15,13 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
+import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -26,6 +29,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
+import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -51,14 +55,17 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private final EUIButton saveButton;
     private final EUIButton selectExistingButton;
     private final EUIVerticalScrollBar zoomBar;
+    private final PCLCustomColorEditor tintEditor;
+    private final EUIToggle tintToggle;
     private final SpriteBatch sb;
     private final FrameBuffer imageBuffer;
     private final OrthographicCamera camera;
+    private Color tint;
     private Pixmap insideImage;
     private Texture baseTexture;
     private TextureRegion insideImageRenderable;
     private TextureRegion outsideImage;
-    private PCLGenericSelectCardEffect existingCardSelection;
+    private PCLEffectWithCallback<?> curEffect;
     protected float minZoom;
     protected float maxZoom = 1f;
     protected float scale = 1f;
@@ -112,6 +119,18 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 .setColor(Color.WHITE)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFile)
                 .setOnClick(this::getImageFromFileDialog);
+
+        tintEditor = new PCLCustomColorEditor(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.25f, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 2f, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+                , PGR.core.strings.cedit_tintColor,
+                this::openTint,
+                this::setTint);
+        tintEditor.setActive(false);
+
+        tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.25f, tintEditor.hb.y + tintEditor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setText(PGR.core.strings.cedit_enableTint)
+                .setOnToggle(val -> setTint(tint = val ? tintEditor.getColor() : null))
+                .setTooltip(PGR.core.strings.cedit_enableTint, PGR.core.strings.cedit_tintDesc);
 
 
         zoomBar = new EUIVerticalScrollBar(new EUIHitbox(Settings.WIDTH * 0.03f, Settings.HEIGHT * 0.7f))
@@ -170,8 +189,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     @Override
     public void render(SpriteBatch sb) {
-        if (existingCardSelection != null) {
-            existingCardSelection.render(sb);
+        if (curEffect != null) {
+            curEffect.render(sb);
         }
         else {
             hb.render(sb);
@@ -181,6 +200,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             selectExistingButton.tryRender(sb);
             pasteButton.tryRender(sb);
             instructionsLabel.tryRender(sb);
+            tintEditor.tryRender(sb);
+            tintToggle.tryRender(sb);
             zoomBar.tryRender(sb);
 
             if (outsideImage != null) {
@@ -194,10 +215,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     @Override
     protected void updateInternal(float deltaTime) {
-        if (existingCardSelection != null) {
-            existingCardSelection.update();
-            if (existingCardSelection.isDone) {
-                existingCardSelection = null;
+        if (curEffect != null) {
+            curEffect.update();
+            if (curEffect.isDone) {
+                curEffect = null;
             }
         }
         else {
@@ -207,6 +228,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             selectExistingButton.tryUpdate();
             pasteButton.tryUpdate();
             instructionsLabel.tryUpdate();
+            tintEditor.tryUpdate();
+            tintToggle.tryUpdate();
             camera.update();
             if (baseTexture != null) {
                 if (!hb.isDragging()) {
@@ -251,10 +274,15 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
     }
 
+    private void openTint(PCLCustomColorEditor editor) {
+        curEffect = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
+                .addCallback(editor::setColor);
+    }
+
     private void selectExistingCards() {
         CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
         group.sortAlphabetically(true);
-        existingCardSelection = (PCLGenericSelectCardEffect) new PCLGenericSelectCardEffect(group)
+        curEffect = (PCLGenericSelectCardEffect) new PCLGenericSelectCardEffect(group)
                 .addCallback(card -> {
                             if (card != null) {
                                 // TODO handle EYBCardBase with PCLCard check
@@ -267,21 +295,37 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 );
     }
 
+    private void setTint(Color color) {
+        this.tint = color;
+        this.tintEditor.setActive(this.tint != null);
+        if (baseTexture != null) {
+            updatePictures();
+        }
+    }
+
     private void updateBuffer(boolean forCommit) {
         imageBuffer.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
         sb.begin();
+        sb.setColor(Color.WHITE);
 
         if (forCommit) {
             // Generate a temporary resized image and capture it into the framebuffer
             Texture resized = new Texture(PCLRenderHelpers.scalrScaleAsPixmap(baseTexture, scale, scale));
             sb.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
+            if (tint != null) {
+                PCLRenderHelpers.drawColorized(sb, tint, s -> s.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false));
+            }
             updateBufferEnding();
             resized.dispose();
         }
         else {
             sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
+            if (tint != null) {
+                PCLRenderHelpers.drawColorized(sb, tint, s -> s.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false));
+            }
+
             updateBufferEnding();
         }
     }

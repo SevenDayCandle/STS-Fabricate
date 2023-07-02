@@ -121,7 +121,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     public PBranchCond makeCopy() {
         PBranchCond copy = (PBranchCond) super.makeCopy();
         for (PSkill<?> effect : effects) {
-            copy.addEffect(effect.makeCopy());
+            if (effect != null) {
+                copy.addEffect(effect.makeCopy());
+            }
         }
         return copy;
     }

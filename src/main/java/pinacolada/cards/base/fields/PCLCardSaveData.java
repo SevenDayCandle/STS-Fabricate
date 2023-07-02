@@ -14,6 +14,7 @@ public class PCLCardSaveData {
     public int modifiedHitCount;
     public int modifiedRightCount;
     public int modifiedCost;
+    public int modifiedUpgradeLevel;
     public int[] modifiedAffinities;
     public int[] modifiedScaling;
     public HashSet<PCLCardTag> addedTags;
@@ -46,6 +47,7 @@ public class PCLCardSaveData {
         this.modifiedHitCount = original.modifiedHitCount;
         this.modifiedRightCount = original.modifiedRightCount;
         this.modifiedCost = original.modifiedCost;
+        this.modifiedUpgradeLevel = original.modifiedUpgradeLevel;
         this.modifiedAffinities = original.modifiedAffinities;
         this.modifiedScaling = original.modifiedScaling;
         if (original.addedTags != null) {

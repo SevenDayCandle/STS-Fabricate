@@ -195,14 +195,9 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.ID, core);
         List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
-        this.selectedLoadout = core;
-        if (availableLoadouts.size() > 0) {
-            this.selectedLoadout = availableLoadouts.get(0);
-            for (PCLLoadout loadout : getAvailableLoadouts()) {
-                loadouts.put(loadout.ID, loadout);
-            }
+        for (PCLLoadout loadout : getAvailableLoadouts()) {
+            loadouts.put(loadout.ID, loadout);
         }
-
 
         for (PCLLoadout loadout : loadouts.values()) {
             addUnlockBundle(loadout);
@@ -212,7 +207,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
 
     public PCLLoadout prepareLoadout() {
         int unlockLevel = resources.getUnlockLevel();
-        if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
+        if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel || selectedLoadout.isCore()) {
             for (PCLLoadout loadout : loadouts.values()) {
                 if (unlockLevel >= loadout.unlockLevel && !loadout.isCore()) {
                     selectedLoadout = loadout;

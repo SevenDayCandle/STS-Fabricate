@@ -6,8 +6,10 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.subscribers.OnAllyDeathSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
@@ -33,6 +35,7 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     @Override
     public String getSubText() {
         if (isWhenClause()) {
+            String base = !fields.cardIDs.isEmpty() ? fields.getCardIDOrString() : fields.getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
             return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_whenSingle(getDelegatePastText());

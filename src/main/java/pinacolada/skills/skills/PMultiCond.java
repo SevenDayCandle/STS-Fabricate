@@ -155,7 +155,9 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     public PMultiCond makeCopy() {
         PMultiCond copy = (PMultiCond) super.makeCopy();
         for (PCond<?> effect : effects) {
-            copy.addEffect((PCond<?>) effect.makeCopy());
+            if (effect != null) {
+                copy.addEffect((PCond<?>) effect.makeCopy());
+            }
         }
         return copy;
     }

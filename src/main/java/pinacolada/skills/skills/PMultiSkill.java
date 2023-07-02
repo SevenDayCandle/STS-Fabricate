@@ -174,7 +174,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill makeCopy() {
         PMultiSkill copy = (PMultiSkill) super.makeCopy();
         for (PSkill<?> effect : effects) {
-            copy.addEffect(effect.makeCopy());
+            if (effect != null) {
+                copy.addEffect(effect.makeCopy());
+            }
         }
         return copy;
     }

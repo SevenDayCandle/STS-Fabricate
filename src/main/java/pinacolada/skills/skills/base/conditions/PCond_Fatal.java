@@ -44,7 +44,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         if (fields.random) {
             return TEXT.cond_ifX(fields.not ? getTargetIsString(TEXT.cond_not(PGR.core.tooltips.kill.past())) : getTargetIsString(PGR.core.tooltips.kill.past()));
         }
-        return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : TEXT.cond_ifX(PGR.core.tooltips.fatal.title));
+        return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : PGR.core.tooltips.fatal.title);
     }
 
     @Override
