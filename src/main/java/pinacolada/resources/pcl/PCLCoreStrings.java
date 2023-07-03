@@ -118,6 +118,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_tintColor = cedit.TEXT[70];
     public final String cedit_enableTint = cedit.TEXT[71];
     public final String cedit_tintDesc = cedit.TEXT[72];
+    public final String cedit_repeat = cedit.TEXT[73];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];

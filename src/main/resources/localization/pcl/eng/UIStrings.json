@@ -132,7 +132,8 @@
 												"Spots Color",
 												"Tint Color",
 												"Enable Tint",
-												"If enables, alters the color of the saved image"
+												"If enabled, alters the color of the saved image",
+												"Repeat"
 								]
 				},
 				"pcl:CardEditorTutorial": {

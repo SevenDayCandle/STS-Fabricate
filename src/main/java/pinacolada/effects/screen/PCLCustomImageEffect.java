@@ -120,14 +120,14 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFile)
                 .setOnClick(this::getImageFromFileDialog);
 
-        tintEditor = new PCLCustomColorEditor(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.25f, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 2f, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+        tintEditor = new PCLCustomColorEditor(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 2f, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
                 , PGR.core.strings.cedit_tintColor,
                 this::openTint,
                 this::setTint);
         tintEditor.setActive(false);
 
-        tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.25f, tintEditor.hb.y + tintEditor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+        tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, tintEditor.hb.y + tintEditor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f)
                 .setText(PGR.core.strings.cedit_enableTint)
                 .setOnToggle(val -> setTint(tint = val ? tintEditor.getColor() : null))
                 .setTooltip(PGR.core.strings.cedit_enableTint, PGR.core.strings.cedit_tintDesc);

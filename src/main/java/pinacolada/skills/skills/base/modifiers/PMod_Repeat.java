@@ -1,9 +1,11 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -29,7 +31,7 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_doThis(TEXT.subjects_x);
+        return EUIRM.strings.verbNoun(TEXT.cedit_repeat, TEXT.subjects_x);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return capital(childEffect.getText(true), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(), true);
+        return (childEffect != null ? capital(childEffect.getText(false), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(), true) : capital(getSubText(), addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

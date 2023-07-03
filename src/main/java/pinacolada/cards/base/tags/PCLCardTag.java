@@ -9,6 +9,7 @@ import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingFie
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.PSkill;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -85,6 +87,47 @@ public enum PCLCardTag implements TooltipProvider {
             initializePreAndPost();
         }
         return PRE;
+    }
+
+    public static String getTagTipPostString(AbstractCard card) {
+        return getTagTipString(card, getPost());
+    }
+
+    public static String getTagTipPreString(AbstractCard card) {
+        return getTagTipString(card, getPre());
+    }
+
+    private static String getTagTipString(AbstractCard card, List<PCLCardTag> tags) {
+        ArrayList<String> tagNames = new ArrayList<>();
+        for (PCLCardTag tag : tags) {
+            int value = tag.getInt(card);
+            switch (value) {
+                case -1:
+                    // For cards that allow infinite, just show the tag name, imitating vanilla behavior
+                    if (tag.minValue == -1) {
+                        // Except for innate/delayed
+                        if (tag == Innate || tag == Delayed) {
+                            tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite));
+                        }
+                        else {
+                            tagNames.add(tag.getTooltip().title);
+                        }
+                    }
+                    break;
+                case 0:
+                    break;
+                case 1:
+                    // Do not show numerical values for Exhaust, Innate, Delayed or tags that cannot go beyond 1
+                    if (tag.maxValue == 1 || tag == Exhaust || tag == Innate || tag == Delayed) {
+                        tagNames.add(tag.getTooltip().title);
+                        break;
+                    }
+                default:
+                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, value));
+                    break;
+            }
+        }
+        return tagNames.size() > 0 ? EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames) + LocalizedStrings.PERIOD : "";
     }
 
     private static void initializePreAndPost() {

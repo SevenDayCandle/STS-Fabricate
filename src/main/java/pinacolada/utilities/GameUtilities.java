@@ -28,6 +28,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
+import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
@@ -63,6 +65,9 @@ import pinacolada.cardmods.TagDisplayModifier;
 import pinacolada.cardmods.TemporaryBlockModifier;
 import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
@@ -78,10 +83,16 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.patches.basemod.PotionPoolPatches;
+import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.patches.library.RelicLibraryPatches;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLDynamicPotionData;
+import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.powers.PSkillPower;
-import pinacolada.relics.PCLPointerRelic;
+import pinacolada.relics.*;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -453,6 +464,35 @@ public class GameUtilities {
         return ReflectionHacks.getPrivate(mo, AbstractMonster.class, "bobEffect");
     }
 
+    public static String getCardNameForID(String cardID) {
+        if (cardID != null) {
+            // NOT using CardLibrary.getCard as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractCard c = CardLibraryPatches.getDirectCard(cardID);
+            if (c != null) {
+                return c.name;
+            }
+
+            // Try to load data on cards not in the library
+            PCLCardData data = PCLCardData.getStaticData(cardID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create cards here to avoid infinite loops
+            PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicCardData.parseLanguageStrings(slot.languageStrings);
+                CardStrings language = languageMap != null ? PCLDynamicCardData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
+            }
+
+            return cardID;
+        }
+        return "";
+    }
+
     public static CardGroup getCardPool(AbstractCard.CardRarity rarity) {
         if (rarity == null) {
             return AbstractDungeon.colorlessCardPool;
@@ -665,9 +705,8 @@ public class GameUtilities {
                     else if (CloakClasp.ID.equals(r.relicId)) {
                         amount += ((AbstractPlayer) creature).hand.size(); // Hardcoded logic in Cloak Clasp
                     }
-                    // TODO correct this once pointer relics are fully implemented
                     else if (r instanceof PCLPointerRelic) {
-                        amount += getEndOfTurnBlockFromTriggers(((PCLPointerRelic) r).getPowerEffects());
+                        amount += getEndOfTurnBlockFromTriggers(((PCLPointerRelic) r).getEffects());
                     }
                 }
 
@@ -685,9 +724,9 @@ public class GameUtilities {
     }
 
     // TODO less naive approach that accounts for custom conds and out-of-order move hierarchies
-    protected static int getEndOfTurnBlockFromTriggers(Iterable<PTrigger> triggers) {
+    protected static int getEndOfTurnBlockFromTriggers(Iterable<? extends PSkill> triggers) {
         int amount = 0;
-        for (PTrigger trigger : triggers) {
+        for (PSkill<?> trigger : triggers) {
             if (trigger instanceof PTrigger_When
                     && (trigger.hasChildType(OnEndOfTurnFirstSubscriber.class) || trigger.hasChildType(OnEndOfTurnLastSubscriber.class))) {
                 PSkill<?> skill = trigger.getLowestChild();
@@ -964,17 +1003,6 @@ public class GameUtilities {
         return a != null ? a.getLevel(affinity, useStarLevel) : 0;
     }
 
-    public static EUIKeywordTooltip getPCLOrbTooltip(AbstractOrb orb) {
-        // These two Orb tooltips use custom text
-        if (Lightning.ORB_ID.equals(orb.ID)) {
-            return PGR.core.tooltips.lightning;
-        }
-        else if (Dark.ORB_ID.equals(orb.ID)) {
-            return PGR.core.tooltips.dark;
-        }
-        return EUIKeywordTooltip.findByID(orb.ID.replace(PCLCoreResources.ID + ":", ""));
-    }
-
     public static PCLLoadout getPCLSeries(AbstractCard c) {
         if (c instanceof PCLCard) {
             return ((PCLCard) c).cardData.loadout;
@@ -1014,6 +1042,33 @@ public class GameUtilities {
         }
 
         return null;
+    }
+
+    public static String getPotionNameForID(String potionID) {
+        if (potionID != null) {
+            // NOT using PotionHelper.getPotion as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractPotion c = PotionPoolPatches.getDirectPotion(potionID);
+            if (c != null) {
+                return c.name;
+            }
+
+            // Try to load data on potions not in the library
+            PCLPotionData data = PCLPotionData.getStaticData(potionID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create potions here to avoid infinite loops
+            PCLCustomPotionSlot slot = PCLCustomPotionSlot.get(potionID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, PotionStrings> languageMap = PCLDynamicPotionData.parseLanguageStrings(slot.languageStrings);
+                PotionStrings language = languageMap != null ? PCLDynamicPotionData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
+            }
+        }
+        return "";
     }
 
     public static ArrayList<AbstractPotion> getPotions(AbstractCard.CardColor cardColor) {
@@ -1135,6 +1190,38 @@ public class GameUtilities {
         return player != null ? player.relics.size() : 0;
     }
 
+    // PCLRelic may have modified names
+    public static String getRelicName(AbstractRelic relic) {
+        return relic instanceof PCLRelic ? ((PCLRelic) relic).getName() : relic.name;
+    }
+
+    public static String getRelicNameForID(String relicID) {
+        if (relicID != null) {
+            // NOT using RelicLibrary.getRelic as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractRelic c = RelicLibraryPatches.getDirectRelic(relicID);
+            if (c != null) {
+                return c.name;
+            }
+
+            // Try to load data on relics not in the library
+            PCLRelicData data = PCLRelicData.getStaticData(relicID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create relics here to avoid infinite loops
+            PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(relicID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, RelicStrings> languageMap = PCLDynamicRelicData.parseLanguageStrings(slot.languageStrings);
+                RelicStrings language = languageMap != null ? PCLDynamicRelicData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
+            }
+        }
+        return "";
+    }
+
     public static ArrayList<String> getRelicPool(AbstractRelic.RelicTier tier) {
         switch (tier) {
             case COMMON:
@@ -1213,38 +1300,6 @@ public class GameUtilities {
         }
 
         return monsters;
-    }
-
-    public static String getTagTipPostString(AbstractCard card) {
-        return getTagTipString(card, PCLCardTag.getPost());
-    }
-
-    public static String getTagTipPreString(AbstractCard card) {
-        return getTagTipString(card, PCLCardTag.getPre());
-    }
-
-    protected static String getTagTipString(AbstractCard card, List<PCLCardTag> tags) {
-        ArrayList<String> tagNames = new ArrayList<>();
-        for (PCLCardTag tag : tags) {
-            int value = tag.getInt(card);
-            switch (value) {
-                case 1:
-                    tagNames.add(tag.getTooltip().title);
-                    break;
-                case -1:
-                    // Only show the infinite label for cards that allow it
-                    if (tag.minValue == -1) {
-                        tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite));
-                    }
-                    break;
-                case 0:
-                    break;
-                default:
-                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, value));
-                    break;
-            }
-        }
-        return tagNames.size() > 0 ? EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames) + LocalizedStrings.PERIOD : "";
     }
 
     public static int getTempHP() {

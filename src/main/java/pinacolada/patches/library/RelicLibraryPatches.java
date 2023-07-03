@@ -12,6 +12,8 @@ import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.HashMap;
+
 public class RelicLibraryPatches {
     /**
      * Directly get a card from the card library, bypassing postfixes attached to getRelic. Returns NULL instead of circlet if nothing was found
@@ -38,7 +40,12 @@ public class RelicLibraryPatches {
         if (relic != null) {
             return relic;
         }
-        return BaseMod.getCustomRelic(id);
+        for (HashMap<String, AbstractRelic> customMap : BaseMod.getAllCustomRelics().values()) {
+            if (customMap.containsKey(id)) {
+                return customMap.get(id);
+            }
+        }
+        return null;
     }
 
     @SpirePatch(clz = RelicLibrary.class, method = "getRelic", paramtypez = {String.class})

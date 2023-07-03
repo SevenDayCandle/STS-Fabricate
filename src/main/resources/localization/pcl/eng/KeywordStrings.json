@@ -64,6 +64,10 @@
 		"DESCRIPTION": "Activate an effect with a certain probability.",
 		"NAME": "Chance"
 	},
+	"Confused":	{
+		"DESCRIPTION": "Randomize the cost of cards drawn.",
+		"NAME": "Confused"
+	},
 	"Constricted":	{
 		"DESCRIPTION": "Take damage at the end of each turn.",
 		"NAME": "Constricted"

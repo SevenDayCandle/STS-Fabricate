@@ -243,7 +243,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
                 availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
             }
-            availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
+            availableRelics.sort((a, b) -> StringUtils.compare(GameUtilities.getRelicName(a), GameUtilities.getRelicName(b)));
         }
         return availableRelics;
     }
@@ -360,8 +360,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             for (EUIHoverable element : activeElements) {
                 xOff = position(element, xOff);
             }
-            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 3.6f;
-            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 3.1f;
+            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 4f;
+            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 3.3f;
         }
         else if (node.skill == null) {
             valueEditor.setHeaderText(PGR.core.strings.cedit_value);
@@ -450,7 +450,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cards = initializeSearchable(getAvailableCards(), c -> c.name, PGR.core.strings.subjects_card);
-        relics = initializeSearchable(getAvailableRelics(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_relic));
+        relics = initializeSearchable(getAvailableRelics(), GameUtilities::getRelicName, StringUtils.capitalize(PGR.core.strings.subjects_relic));
         potions = initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion));
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);

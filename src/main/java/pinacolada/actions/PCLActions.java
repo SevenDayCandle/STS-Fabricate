@@ -185,28 +185,24 @@ public final class PCLActions {
         return applyPower(power.owner, power.owner, power);
     }
 
-    public ApplyPowerAutoAction applyPower(PCLCardTarget targetHelper, PCLPowerHelper power, int amount) {
-        return applyPower(player, targetHelper, power, amount);
+    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerHelper power) {
+        return add(new ApplyOrReducePowerAction(target, target, power, 1));
     }
 
-    public ApplyPowerAutoAction applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power) {
-        return add(new ApplyPowerAutoAction(target, target, targetHelper, power, 1));
+    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerHelper power, int amount) {
+        return add(new ApplyOrReducePowerAction(target, target, power, amount));
     }
 
-    public ApplyPowerAutoAction applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount) {
-        return add(new ApplyPowerAutoAction(target, target, targetHelper, power, amount));
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power) {
+        return add(new ApplyOrReducePowerAction(source, target, power, 1));
     }
 
-    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power) {
-        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, 1));
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount) {
+        return add(new ApplyOrReducePowerAction(source, target, power, amount));
     }
 
-    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount) {
-        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, amount));
-    }
-
-    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount, boolean temporary) {
-        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, amount).setTemporary(temporary));
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount, boolean temporary) {
+        return add(new ApplyOrReducePowerAction(source, target, power, amount, temporary));
     }
 
     public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractPower power) {
@@ -412,14 +408,6 @@ public final class PCLActions {
 
     public PlayVFX flash(AbstractCard card) {
         return playVFX(new CardFlashVfx(card, Color.ORANGE.cpy()));
-    }
-
-    public ApplyPowerAutoAction gain(PCLPowerHelper po, int amount) {
-        return gain(po, amount, false);
-    }
-
-    public ApplyPowerAutoAction gain(PCLPowerHelper po, int amount, boolean temporary) {
-        return applyPower(AbstractDungeon.player, AbstractDungeon.player, PCLCardTarget.Self, po, amount, temporary);
     }
 
     public GainBlockAction gainBlock(int amount) {

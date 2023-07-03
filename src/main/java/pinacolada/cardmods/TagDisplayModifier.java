@@ -8,9 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
 
 // Modifier for displaying tags if they are applied to a card. Does NOT actually apply any tags
 public class TagDisplayModifier extends AbstractCardModifier {
@@ -29,11 +27,11 @@ public class TagDisplayModifier extends AbstractCardModifier {
     public String modifyDescription(String rawDescription, AbstractCard card) {
         if (PGR.config.displayCardTagDescription.get()) {
             String text = rawDescription;
-            String preString = GameUtilities.getTagTipPreString(card);
+            String preString = PCLCardTag.getTagTipPreString(card);
             if (!preString.isEmpty()) {
                 text = preString + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + text;
             }
-            String postString = GameUtilities.getTagTipPostString(card);
+            String postString = PCLCardTag.getTagTipPostString(card);
             if (!postString.isEmpty()) {
                 text = text + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + postString;
             }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -106,18 +107,24 @@ public class PMove_StackPower extends PMove<PField_Power> {
             if (fields.random) {
                 PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
                 if (power != null) {
-                    order.applyPower(info.source, info.target, target, power, amount);
+                    for (AbstractCreature target : getTargetList(info)) {
+                        order.applyPower(info.source, target, power, amount);
+                    }
                 }
             }
             else {
                 for (PCLPowerHelper power : fields.powers) {
-                    order.applyPower(info.source, info.target, target, power, amount);
+                    for (AbstractCreature target : getTargetList(info)) {
+                        order.applyPower(info.source, target, power, amount);
+                    }
                 }
             }
         }
         else {
             for (int i = 0; i < amount; i++) {
-                order.applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), extra);
+                for (AbstractCreature target : getTargetList(info)) {
+                    order.applyPower(info.source, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), amount);
+                }
             }
         }
         super.use(info, order);

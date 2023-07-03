@@ -40,6 +40,7 @@ public class PCLPowerHelper implements TooltipProvider {
     private static final Map<String, PCLPowerHelper> COMMON_DEBUFFS = new HashMap<>();
     public static final PCLPowerHelper Blinded = new PCLPowerHelper(BlindedPower.POWER_ID, PGR.core.tooltips.blinded, BlindedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Bruised = new PCLPowerHelper(BruisedPower.POWER_ID, PGR.core.tooltips.bruised, BruisedPower::new, Behavior.TurnBased, true, true, false);
+    public static final PCLPowerHelper Confused = new PCLPowerHelper(ConfusionPower.POWER_ID, PGR.core.tooltips.confused, (o, s, a) -> new ConfusionPower(o), Behavior.Permanent, false, true, false);
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
     public static final PCLPowerHelper DelayedDamage = new PCLPowerHelper(DelayedDamagePower.POWER_ID, PGR.core.tooltips.delayedDamage, (o, s, a) -> new DelayedDamagePower(o, a, PCLEnum.AttackEffect.CLAW), Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper DrawMinus = new PCLPowerHelper(DrawMinusPower.POWER_ID, PGR.core.tooltips.nextTurnDrawMinus, DrawMinusPower::new, Behavior.SingleTurn, true, true, false);

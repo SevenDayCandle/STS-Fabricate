@@ -410,7 +410,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> evalFunc) {
-        return info != null && target.evaluateTargets(info.source, info.target, evalFunc);
+        return info != null && target.evaluateTargets(info, evalFunc);
     }
 
     public final int getAmountBaseFromCard() {
@@ -847,7 +847,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
-        return info != null ? target.getTargets(info.source, info.target) : new ArrayList<>();
+        return info != null ? target.getTargets(info) : new ArrayList<>();
     }
 
     public final int getTargetOrdinal() {
@@ -903,6 +903,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, allyBase);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, allyBase);
+            case UseParent:
+                return TEXT.subjects_them(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:
                 if (isFromCreature()) {
                     return TEXT.subjects_thisCard;
@@ -947,6 +949,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_ally);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_ally);
+            case UseParent:
+                return TEXT.subjects_they(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:
                 if (isFromCreature()) {
                     return TEXT.subjects_thisCard;

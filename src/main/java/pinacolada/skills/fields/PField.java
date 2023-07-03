@@ -1,43 +1,25 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.CardStrings;
-import com.megacrit.cardcrawl.localization.PotionStrings;
-import com.megacrit.cardcrawl.localization.RelicStrings;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.patches.basemod.PotionPoolPatches;
-import pinacolada.patches.library.CardLibraryPatches;
-import pinacolada.patches.library.RelicLibraryPatches;
-import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.potions.PCLDynamicPotionData;
-import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLDynamicRelicData;
-import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.utilities.GameUtilities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class PField implements Serializable {
@@ -85,7 +67,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getCardIDAndString(ArrayList<String> cardIDs) {
-        return PCLCoreStrings.joinWithAnd(g -> "{" + getCardNameForID(g) + "}", cardIDs);
+        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getCardNameForID(g) + "}", cardIDs);
     }
 
     public static String getCardIDOrString(ArrayList<String> cardIDs) {
@@ -93,36 +75,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getCardIDString(String cardID) {
-        return "{" + getCardNameForID(cardID) + "}";
-    }
-
-    public static String getCardNameForID(String cardID) {
-        if (cardID != null) {
-            // NOT using CardLibrary.getCard as the replacement patching on that method may cause text glitches or infinite loops in this method
-            AbstractCard c = CardLibraryPatches.getDirectCard(cardID);
-            if (c != null) {
-                return c.name;
-            }
-
-            // Try to load data on cards not in the library
-            PCLCardData data = PCLCardData.getStaticData(cardID);
-            if (data != null) {
-                return data.strings.NAME;
-            }
-
-            // Try to load data from slots. Do not actually create cards here to avoid infinite loops
-            PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
-            if (slot != null) {
-                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicCardData.parseLanguageStrings(slot.languageStrings);
-                CardStrings language = languageMap != null ? PCLDynamicCardData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
-                }
-            }
-
-            return cardID;
-        }
-        return "";
+        return "{" + GameUtilities.getCardNameForID(cardID) + "}";
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities) {
@@ -163,38 +116,11 @@ public abstract class PField implements Serializable {
     }
 
     public static String getPotionIDAndString(ArrayList<String> potionIDs) {
-        return PCLCoreStrings.joinWithAnd(g -> "{" + getPotionNameForID(g) + "}", potionIDs);
+        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", potionIDs);
     }
 
     public static String getPotionIDOrString(ArrayList<String> potionIDs) {
-        return PCLCoreStrings.joinWithOr(g -> "{" + getPotionNameForID(g) + "}", potionIDs);
-    }
-
-    public static String getPotionNameForID(String potionID) {
-        if (potionID != null) {
-            // NOT using PotionHelper.getPotion as the replacement patching on that method may cause text glitches or infinite loops in this method
-            AbstractPotion c = PotionPoolPatches.getDirectPotion(potionID);
-            if (c != null) {
-                return c.name;
-            }
-
-            // Try to load data on potions not in the library
-            PCLPotionData data = PCLPotionData.getStaticData(potionID);
-            if (data != null) {
-                return data.strings.NAME;
-            }
-
-            // Try to load data from slots. Do not actually create potions here to avoid infinite loops
-            PCLCustomPotionSlot slot = PCLCustomPotionSlot.get(potionID);
-            if (slot != null) {
-                HashMap<Settings.GameLanguage, PotionStrings> languageMap = PCLDynamicPotionData.parseLanguageStrings(slot.languageStrings);
-                PotionStrings language = languageMap != null ? PCLDynamicPotionData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
-                }
-            }
-        }
-        return "";
+        return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", potionIDs);
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers) {
@@ -210,38 +136,11 @@ public abstract class PField implements Serializable {
     }
 
     public static String getRelicIDAndString(ArrayList<String> relicIDs) {
-        return PCLCoreStrings.joinWithAnd(g -> "{" + getRelicNameForID(g) + "}", relicIDs);
+        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getRelicNameForID(g) + "}", relicIDs);
     }
 
     public static String getRelicIDOrString(ArrayList<String> relicIDs) {
-        return PCLCoreStrings.joinWithOr(g -> "{" + getRelicNameForID(g) + "}", relicIDs);
-    }
-
-    public static String getRelicNameForID(String relicID) {
-        if (relicID != null) {
-            // NOT using RelicLibrary.getRelic as the replacement patching on that method may cause text glitches or infinite loops in this method
-            AbstractRelic c = RelicLibraryPatches.getDirectRelic(relicID);
-            if (c != null) {
-                return c.name;
-            }
-
-            // Try to load data on relics not in the library
-            PCLRelicData data = PCLRelicData.getStaticData(relicID);
-            if (data != null) {
-                return data.strings.NAME;
-            }
-
-            // Try to load data from slots. Do not actually create relics here to avoid infinite loops
-            PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(relicID);
-            if (slot != null) {
-                HashMap<Settings.GameLanguage, RelicStrings> languageMap = PCLDynamicRelicData.parseLanguageStrings(slot.languageStrings);
-                RelicStrings language = languageMap != null ? PCLDynamicRelicData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
-                }
-            }
-        }
-        return "";
+        return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getRelicNameForID(g) + "}", relicIDs);
     }
 
     public static String getStanceString(ArrayList<PCLStanceHelper> stances) {

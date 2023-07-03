@@ -27,6 +27,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public static final String ICON_ARTIFACT = "artifact";
     public static final String ICON_BLUR = "blur";
     public static final String ICON_BUFFER = "buffer";
+    public static final String ICON_CONFUSION = "confusion";
     public static final String ICON_CONSTRICTED = "constricted";
     public static final String ICON_CURLUP = "closeUp";
     public static final String ICON_DEXTERITY = "dexterity";
@@ -116,6 +117,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip calm = EUIKeywordTooltip.findByID("Calm");
     public EUIKeywordTooltip chance = EUIKeywordTooltip.findByID("Chance");
     public EUIKeywordTooltip channel = EUIKeywordTooltip.findByID("Channel");
+    public EUIKeywordTooltip confused = EUIKeywordTooltip.findByID("Confused");
     public EUIKeywordTooltip constricted = EUIKeywordTooltip.findByID("Constricted");
     public EUIKeywordTooltip cooldown = EUIKeywordTooltip.findByID("Cooldown");
     public EUIKeywordTooltip counter = EUIKeywordTooltip.findByID("Counter");
@@ -304,6 +306,7 @@ public class PCLCoreTooltips extends PCLTooltips {
         artifact.setIconFromPowerRegion(ICON_ARTIFACT);
         blur.setIconFromPowerRegion(ICON_BLUR);
         buffer.setIconFromPowerRegion(ICON_BUFFER);
+        confused.setIconFromPowerRegion(ICON_CONFUSION);
         constricted.setIconFromPowerRegion(ICON_CONSTRICTED);
         curlUp.setIconFromPowerRegion(ICON_CURLUP);
         dexterity.setIconFromPowerRegion(ICON_DEXTERITY);

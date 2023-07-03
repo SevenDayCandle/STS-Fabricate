@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.TargetFilter;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -32,7 +33,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     SelfSingleAlly(AbstractCard.CardTarget.SELF_AND_ENEMY),
     Single(AbstractCard.CardTarget.ENEMY),
     SingleAlly(AbstractCard.CardTarget.ENEMY),
-    Team(AbstractCard.CardTarget.SELF);
+    Team(AbstractCard.CardTarget.SELF),
+    UseParent(AbstractCard.CardTarget.NONE);
 
     public static final TargetFilter T_AllAlly = new TargetFilter(PGR.core.strings.ctype_allAlly);
     public static final TargetFilter T_RandomAlly = new TargetFilter(PGR.core.strings.ctype_randomAlly);
@@ -70,6 +72,19 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return targets;
     }
 
+    public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> tFunc) {
+        ArrayList<? extends AbstractCreature> targets = getTargetsForEvaluation(source, target);
+        ArrayList<AbstractCreature> evaluatedTargets = getEvaluatedTargets(targets, tFunc);
+        info.setData(evaluatedTargets);
+        switch (this) {
+            case AllAlly:
+            case All:
+            case AllEnemy:
+                return targets.size() == evaluatedTargets.size();
+        }
+        return evaluatedTargets.size() > 0;
+    }
+
     public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, FuncT1<Boolean, AbstractCreature> tFunc) {
         return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
     }
@@ -82,6 +97,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return EUIUtils.all(targets, tFunc);
         }
         return EUIUtils.any(targets, tFunc);
+    }
+
+    public final ArrayList<AbstractCreature> getEvaluatedTargets(Iterable<? extends AbstractCreature> targets, FuncT1<Boolean, AbstractCreature> tFunc) {
+        return EUIUtils.filter(targets, tFunc);
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
@@ -142,6 +161,16 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return T_SelfSingleAlly;
         }
         return TargetFilter.None;
+    }
+
+    public final ArrayList<? extends AbstractCreature> getTargets(PCLUseInfo info) {
+        if (this == UseParent) {
+            ArrayList<? extends AbstractCreature> inherited = info.getDataAsArrayList(AbstractCreature.class);
+            if (inherited != null) {
+                return inherited;
+            }
+        }
+        return getTargets(info.source, info.target, 1);
     }
 
     public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
@@ -249,6 +278,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return PGR.core.strings.ctype_selfSingle;
             case SelfSingleAlly:
                 return PGR.core.strings.ctype_selfSingleAlly;
+            case UseParent:
+                return PGR.core.strings.cedit_useParent;
         }
         return "";
     }
@@ -319,6 +350,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case Single:
             case SingleAlly:
+            case SelfSingle:
+            case SelfSingleAlly:
                 return true;
         }
         return false;
@@ -330,6 +363,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case AllAlly:
             case Team:
             case RandomAlly:
+            case SelfSingleAlly:
                 return false;
         }
         return true;

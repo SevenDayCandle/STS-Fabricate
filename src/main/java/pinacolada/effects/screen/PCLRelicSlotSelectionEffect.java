@@ -18,6 +18,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -150,7 +151,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, item.relic.hb.width, item.relic.hb.height));
             this.targetX = TARGET_X;
             this.targetY = Settings.HEIGHT * (0.8f - (index * 0.05f));
-            this.relicNameText.setLabel(item.relic instanceof PCLRelic ? ((PCLRelic) item.relic).getName() : item.relic.name);
+            this.relicNameText.setLabel(GameUtilities.getRelicName(item.relic));
         }
 
         public void update(float deltaTime) {

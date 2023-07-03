@@ -1391,7 +1391,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public void renderCardTip(SpriteBatch sb) {
-        if (!Settings.hideCards && !isFlipped && !isLocked && isSeen && (isPopup || renderTip) && EUITooltip.canRenderTooltips() && (AbstractDungeon.player == null || !AbstractDungeon.player.isDraggingCard || Settings.isTouchScreen)) {
+        if (!Settings.hideCards && !isFlipped && !isLocked && isSeen && (isPopup || renderTip) && (AbstractDungeon.player == null || !AbstractDungeon.player.isDraggingCard || Settings.isTouchScreen)) {
             EUITooltip.queueTooltips(this);
         }
     }

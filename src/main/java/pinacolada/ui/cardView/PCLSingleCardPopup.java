@@ -24,6 +24,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
@@ -598,6 +599,7 @@ public class PCLSingleCardPopup extends EUIBase {
                     !this.toggleAugment.hb.hovered &&
                     (!showAugments || EUIUtils.all(currentAugments, augment -> !augment.augmentButton.hb.hovered)) &&
                     (this.betaArtHb == null || !this.betaArtHb.hovered) &&
+                    (!EUITooltip.isScrollingOnPopup()) &&
                     (!this.viewVariants || (!this.changeVariantHb.hovered && !this.changeVariantNextHb.hovered && !this.changeVariantPrevHb.hovered && !this.changeVariantValueHb.hovered))) {
                 close();
                 InputHelper.justClickedLeft = false;

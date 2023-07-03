@@ -110,7 +110,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                 for (String r : fields.relicIDs) {
                     AbstractRelic relic = RelicLibrary.getRelic(r);
                     if (relic != null) {
-                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
+                        tips.add(new EUIKeywordTooltip(GameUtilities.getRelicName(relic), relic.description));
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
@@ -71,7 +72,9 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (PCLPowerHelper power : fields.powers) {
-            order.applyPower(info.source, info.target, target, power, amount, true);
+            for (AbstractCreature target : getTargetList(info)) {
+                order.applyPower(info.source, target, power, amount, true);
+            }
         }
         super.use(info, order);
     }
