@@ -97,7 +97,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
 
     @Override
     public String getText(boolean addPeriod) {
-        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+        return getConditionRawString(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 
     // Must return true when using or cooldown will not progress in a multicond

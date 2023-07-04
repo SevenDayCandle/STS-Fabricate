@@ -98,7 +98,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public String getText(boolean addPeriod) {
         String subText = getCapitalSubText(addPeriod);
         String childText = (childEffect != null ? childEffect.getText(addPeriod) : "");
-        return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + childText;
+        return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + StringUtils.capitalize(childText);
     }
 
     @Override

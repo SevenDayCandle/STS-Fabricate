@@ -2,6 +2,7 @@ package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -43,7 +44,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public String getText(boolean addPeriod) {
         if (source instanceof AbstractRelic) {
-            return getCapitalSubText(addPeriod) + (childEffect != null ? ": " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
+            return getCapitalSubText(addPeriod) + (childEffect != null ? COLON_SEPARATOR + StringUtils.capitalize(childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
         return childEffect != null ? childEffect.getText(addPeriod) : "";
     }

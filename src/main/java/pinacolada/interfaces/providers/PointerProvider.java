@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import static pinacolada.cards.base.cardText.ConditionToken.CONDITION_TOKEN;
 import static pinacolada.cards.base.cardText.PointerToken.BOUND_TOKEN;
+import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public interface PointerProvider {
@@ -130,7 +131,6 @@ public interface PointerProvider {
         return AbstractDungeon.player;
     }
 
-    // TODO optimize with switch
     default String makeExportString(String baseString) {
         if (baseString == null) {
             return "";
@@ -138,37 +138,48 @@ public interface PointerProvider {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < baseString.length(); i++) {
             char c = baseString.charAt(i);
-            if (c == CONDITION_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN)) {
-                PSkill<?> move = getEffectAt(baseString.charAt(i + 1));
-                if (move != null) {
-                    sb.append(makeExportString(move.getSubText()));
-                }
-                i += 2;
-            }
-            else if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
-                PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
-                if (move != null) {
-                    String s = move.getExportString(baseString.charAt(i + 1));
-                    if (!s.isEmpty()) {
-                        sb.append(s);
+            switch (c) {
+                case CONDITION_TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, CONDITION_TOKEN)) {
+                        PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                        boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
+                        if (move != null) {
+                            sb.append(makeExportString(move.getCapitalSubText(capital)));
+                        }
+                        i += 3;
                     }
-                }
-                i += 3;
-            }
-            else if (c == '$') {
-                StringBuilder sub = new StringBuilder();
-                while (i + 1 < baseString.length()) {
-                    i += 1;
-                    c = baseString.charAt(i);
-                    sub.append(c);
-                    if (c == '$') {
-                        break;
+                    break;
+                case BOUND_TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                        PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                        if (move != null) {
+                            String s = move.getExportString(baseString.charAt(i + 1));
+                            if (!s.isEmpty()) {
+                                sb.append(s);
+                            }
+                        }
+                        i += 3;
                     }
-                }
-                sb.append(EUISmartText.parseLogicString(sub.toString()));
-            }
-            else if (!(c == '{' || c == '}' || c == '[' || c == ']')) {
-                sb.append(c);
+                    break;
+                case '$':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < baseString.length()) {
+                        i += 1;
+                        c = baseString.charAt(i);
+                        sub.append(c);
+                        if (c == '$') {
+                            break;
+                        }
+                    }
+                    sb.append(EUISmartText.parseLogicString(sub.toString()));
+                    break;
+                case '{':
+                case '}':
+                case '[':
+                case ']':
+                    continue;
+                default:
+                    sb.append(c);
             }
         }
 
@@ -184,12 +195,13 @@ public interface PointerProvider {
             char c = baseString.charAt(i);
             switch (c) {
                 case CONDITION_TOKEN:
-                    if (EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN)) {
-                        PSkill<?> move = getEffectAt(baseString.charAt(i + 1));
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, CONDITION_TOKEN)) {
+                        PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                        boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
-                            sb.append(makePowerString(move.getSubText()));
+                            sb.append(makePowerString(move.getCapitalSubText(capital)));
                         }
-                        i += 2;
+                        i += 3;
                     }
                     break;
                 case BOUND_TOKEN:

@@ -15,6 +15,7 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PBranchCond;
@@ -345,19 +346,15 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return EUIUtils.arrayList(checkCondition(info, true, null) ? 1 : 0);
     }
 
-    public String getChildText(boolean addPeriod) {
-        if (childEffect != null) {
-            if (childEffect instanceof PCond && !(childEffect instanceof PBranchCond)) {
-                return EFFECT_SEPARATOR + childEffect.getText(true);
-            }
-            return COMMA_SEPARATOR + childEffect.getText(addPeriod);
-        }
-        return "";
-    }
-
     @Override
     public String getText(boolean addPeriod) {
-        return getConditionRawString() + getChildText(addPeriod);
+        if (childEffect != null) {
+            if (childEffect instanceof PCond && !isWhenClause()) {
+                return PCLCoreStrings.joinWithAnd(getConditionRawString(addPeriod), childEffect.getText(false)) + PCLCoreStrings.period(addPeriod);
+            }
+            return getConditionRawString(addPeriod) + COMMA_SEPARATOR + childEffect.getText(false) + PCLCoreStrings.period(addPeriod);
+        }
+        return getConditionRawString(addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

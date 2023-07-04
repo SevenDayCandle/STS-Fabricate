@@ -104,6 +104,17 @@ public class FakeLoadout extends PCLLoadout {
     public void addLoadoutRelics(LoadoutRelicSlot slot) {
         super.addLoadoutRelics(slot);
         if (!GameUtilities.isColorlessCardColor(color)) {
+            for (AbstractRelic c : GameUtilities.getRelics(color).values()) {
+                switch (c.tier) {
+                    case STARTER:
+                    case COMMON:
+                    case UNCOMMON:
+                    case RARE:
+                    case BOSS:
+                    case SHOP:
+                        slot.addItem(c, getValueForRarity(c.tier));
+                }
+            }
             for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(color)) {
                 PCLDynamicRelicData data = custom.getBuilder(0);
                 switch (data.tier) {
@@ -115,6 +126,17 @@ public class FakeLoadout extends PCLLoadout {
                     case SHOP:
                         slot.addItem(data.create(), getValueForRarity(data.tier));
                 }
+            }
+        }
+        for (AbstractRelic c : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
+            switch (c.tier) {
+                case STARTER:
+                case COMMON:
+                case UNCOMMON:
+                case RARE:
+                case BOSS:
+                case SHOP:
+                    slot.addItem(c, getValueForRarity(c.tier));
             }
         }
         for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {

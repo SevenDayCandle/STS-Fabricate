@@ -75,6 +75,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';
+    public static final char CAPITAL_CHAR = 'C';
+    public static final char LOWER_CHAR = 'c';
     public static final int CHAR_OFFSET = 48;
     public static final int DEFAULT_MAX = Integer.MAX_VALUE / 2; // So that upgrade limits will not go out of bounds
     public static final int DEFAULT_EXTRA_MIN = -1; // Denotes infinity for tags and certain skills
@@ -580,8 +582,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return null;
     }
 
-    public final String getConditionRawString() {
-        return EUIUtils.format(CONDITION_FORMAT, getCardPointer());
+    public final String getConditionRawString(boolean addPeriod) {
+        return EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer());
     }
 
     public final List<PCLCardSelection> getEligibleOrigins() {

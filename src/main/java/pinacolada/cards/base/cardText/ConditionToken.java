@@ -9,6 +9,8 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.skills.PSkill;
 
+import static pinacolada.skills.PSkill.CAPITAL_CHAR;
+
 public class ConditionToken extends PCLTextToken {
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     public static final char CONDITION_TOKEN = '║';
@@ -29,11 +31,12 @@ public class ConditionToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == CONDITION_TOKEN && parser.isNext(2, CONDITION_TOKEN)) {
-            PSkill<?> move = parser.card != null ? parser.card.getEffectAt(parser.nextCharacter(1)) : null;
+        if (parser.character == CONDITION_TOKEN && parser.isNext(3, CONDITION_TOKEN)) {
+            PSkill<?> move = parser.card != null ? parser.card.getEffectAt(parser.nextCharacter(2)) : null;
+            boolean capital = parser.nextCharacter(1) == CAPITAL_CHAR;
 
             if (move != null) {
-                String subText = move.getCapitalSubText(true);
+                String subText = move.getCapitalSubText(capital);
                 if (subText != null) {
                     internalParser.initialize(parser.card, subText);
                     for (PCLTextToken token : internalParser.getTokens()) {
@@ -63,7 +66,7 @@ public class ConditionToken extends PCLTextToken {
                 EUIUtils.logWarning(PointerToken.class, "Invalid pointer: " + parser.text);
             }
 
-            return 3;
+            return 4;
         }
 
         return 0;

@@ -29,7 +29,13 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + getChildText(addPeriod);
+        if (childEffect != null) {
+            if (childEffect instanceof PCond && !isWhenClause()) {
+                return PCLCoreStrings.joinWithAnd(getCapitalSubText(addPeriod), childEffect.getText(false)) + PCLCoreStrings.period(addPeriod);
+            }
+            return getCapitalSubText(addPeriod) + COMMA_SEPARATOR + childEffect.getText(false) + PCLCoreStrings.period(addPeriod);
+        }
+        return getCapitalSubText(addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
