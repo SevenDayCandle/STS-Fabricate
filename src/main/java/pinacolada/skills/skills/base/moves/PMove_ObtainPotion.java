@@ -81,6 +81,9 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
                     }
                 }
             }
+            else {
+                choices.addAll(GameUtilities.getPotions(null));
+            }
 
             choices.addAll(uniques);
             for (int i = 0; i < amount; i++) {

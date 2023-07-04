@@ -88,6 +88,11 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
+    public boolean isMetascaling() {
+        return !isDetrimental() && fields.powers.contains(PCLPowerHelper.Regen);
+    }
+
+    @Override
     public void onDrag(AbstractMonster m) {
         if (m != null) {
             for (PCLPowerHelper power : fields.powers) {

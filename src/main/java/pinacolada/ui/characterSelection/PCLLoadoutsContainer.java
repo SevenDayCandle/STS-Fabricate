@@ -85,6 +85,7 @@ public class PCLLoadoutsContainer {
         banned.addAll(bannedColorless);
         data.config.bannedCards.set(banned);
         data.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit));
+        data.saveSelectedLoadout();
 
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
         EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());

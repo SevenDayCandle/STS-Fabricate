@@ -31,6 +31,14 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
     }
 
     @Override
+    public String getSubText() {
+        if (isWhenClause()) {
+            return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
+        }
+        return super.getSubText();
+    }
+
+    @Override
     public void onAllyTrigger(PCLCard card, PCLCardAlly ally) {
         triggerOnCard(card, ally);
     }

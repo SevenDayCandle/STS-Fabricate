@@ -1,6 +1,7 @@
 package pinacolada.resources.loadout;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.ui.screens.CustomCardLibraryScreen;
@@ -9,13 +10,17 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLDynamicRelicData;
+import pinacolada.relics.pcl.GenericDice;
+import pinacolada.relics.pcl.HeartShapedBox;
+import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-// TODO use this for custom run loadouts
 public class FakeLoadout extends PCLLoadout {
     public FakeLoadout() {
         super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0, -1, 1);
@@ -95,6 +100,37 @@ public class FakeLoadout extends PCLLoadout {
         }
     }
 
+    @Override
+    public void addLoadoutRelics(LoadoutRelicSlot slot) {
+        super.addLoadoutRelics(slot);
+        if (!GameUtilities.isColorlessCardColor(color)) {
+            for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(color)) {
+                PCLDynamicRelicData data = custom.getBuilder(0);
+                switch (data.tier) {
+                    case STARTER:
+                    case COMMON:
+                    case UNCOMMON:
+                    case RARE:
+                    case BOSS:
+                    case SHOP:
+                        slot.addItem(data.create(), getValueForRarity(data.tier));
+                }
+            }
+        }
+        for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
+            PCLDynamicRelicData data = custom.getBuilder(0);
+            switch (data.tier) {
+                case STARTER:
+                case COMMON:
+                case UNCOMMON:
+                case RARE:
+                case BOSS:
+                case SHOP:
+                    slot.addItem(data.create(), getValueForRarity(data.tier));
+            }
+        }
+    }
+
     protected void setDefaultCardsForData(PCLLoadoutData data) {
         data.getCardSlot(0).select(0, 4).markAllSeen();
         data.getCardSlot(1).select(0, 4).markAllSeen();
@@ -112,7 +148,21 @@ public class FakeLoadout extends PCLLoadout {
             case UNCOMMON:
                 return 2 + COMMON_LOADOUT_VALUE * 2;
         }
-        return 5 + COMMON_LOADOUT_VALUE * 3;
+        return COMMON_LOADOUT_VALUE * 4;
+    }
+
+    public int getValueForRarity(AbstractRelic.RelicTier rarity) {
+        switch (rarity) {
+            case COMMON:
+            case STARTER:
+            case SHOP:
+                return COMMON_LOADOUT_VALUE * 2;
+            case UNCOMMON:
+                return COMMON_LOADOUT_VALUE * 3;
+            case RARE:
+                return COMMON_LOADOUT_VALUE * 4;
+        }
+        return COMMON_LOADOUT_VALUE * 5;
     }
 
     public boolean allowCustoms() {

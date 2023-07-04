@@ -1,16 +1,24 @@
 package pinacolada.relics;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.PowerTip;
 import extendedui.EUIInputManager;
+import extendedui.interfaces.delegates.ActionT3;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
+import pinacolada.powers.PCLPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
+import pinacolada.skills.skills.PSpecialPowerSkill;
+import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
 public class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
@@ -22,9 +30,11 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            block = effect.modifyBlock(info, block);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                block = effect.modifyBlock(info, block);
+            }
         }
         return block;
     }
@@ -34,41 +44,51 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     public float atDamageModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyDamage(info, damage);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyDamage(info, damage);
+            }
         }
         return damage;
     }
 
     public float atHealModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyHeal(info, damage);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyHeal(info, damage);
+            }
         }
         return damage;
     }
 
     public float atHitCountModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyHitCount(info, damage);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyHitCount(info, damage);
+            }
         }
         return damage;
     }
 
     public float atRightCountModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyRightCount(info, damage);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyRightCount(info, damage);
+            }
         }
         return damage;
     }
 
     public float atSkillBonusModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifySkillBonus(info, damage);
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifySkillBonus(info, damage);
+            }
         }
         return damage;
     }
@@ -94,7 +114,9 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         for (PSkill<?> effect : getEffects()) {
             effect.triggerOnObtain();
         }
-        subscribe();
+        if (!usedUp) {
+          subscribe();
+        }
     }
 
     @Override
@@ -109,7 +131,9 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     @Override
     public void atPreBattle() {
         super.atPreBattle();
-        subscribe();
+        if (!usedUp) {
+            subscribe();
+        }
     }
 
     @Override
@@ -167,6 +191,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     public void reset() {
         skills = new Skills();
         setup();
+        usedUp = false;
     }
 
     public void setup() {
@@ -194,21 +219,25 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     public void update() {
         super.update();
 
-        if (triggerCondition != null) {
-            triggerCondition.refresh(false, hb.justHovered);
-        }
+        if (!usedUp) {
+            if (triggerCondition != null) {
+                triggerCondition.refresh(false, hb.justHovered);
+            }
 
-        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
-            triggerCondition.targetToUse(1);
-            flash();
+            if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
+                triggerCondition.targetToUse(1);
+                flash();
+            }
         }
     }
 
     @Override
     public void atBattleStart() {
         super.atBattleStart();
-        for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnStartOfBattleForRelic();
+        if (!usedUp) {
+            for (PSkill<?> effect : getEffects()) {
+                effect.triggerOnStartOfBattleForRelic();
+            }
         }
     }
 
@@ -220,9 +249,38 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
+    @Override
     public float atDamageModify(float block, AbstractCard c) {
         return atDamageModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
     }
 
+    @Override
+    public void usedUp() {
+        super.usedUp();
+        unsubscribe();
+    }
 
+    protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
+        return getSpecialMove(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
 }

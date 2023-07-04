@@ -19,6 +19,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.LizardTail;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -265,7 +266,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
-        this.description = getUpdatedDescription();
+        this.description = usedUp ? MSG[2] : getUpdatedDescription();
         if (this.mainTooltip != null) {
             this.mainTooltip.setDescription(description);
         }
@@ -308,6 +309,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         deactivateBattleEffect();
     }
 
+    @Override
     public void renderInTopPanel(SpriteBatch sb) {
         if (!Settings.hideRelics) {
             PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f, 0.5f), grayscale);
@@ -317,6 +319,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
     }
 
+    @Override
     public void render(SpriteBatch sb) {
         if (!Settings.hideRelics) {
             float xOffset = -64;
@@ -341,6 +344,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
     }
 
+    @Override
     public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
         renderRelicImage(sb,
                 this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
@@ -351,6 +355,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         this.hb.render(sb);
     }
 
+    @Override
     public void renderWithoutAmount(SpriteBatch sb, Color c) {
         renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
         if (this.hb.hovered) {
@@ -372,6 +377,17 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     @Override
     protected void initializeTips() {
         // No-op, use initializePCLTips() instead
+    }
+
+    // Imitating lizard tail so that used up status can be saved
+    @Override
+    public void setCounter(int setCounter) {
+        if (setCounter == -2) {
+            this.usedUp();
+        }
+        else {
+            super.setCounter(setCounter);
+        }
     }
 
     @Override
@@ -404,6 +420,15 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public Type savedType() {
         return new TypeToken<PCLCollectibleSaveData>() {
         }.getType();
+    }
+
+    @Override
+    public void usedUp() {
+        this.counter = -2; // Lizard's tail
+        this.grayscale = true;
+        this.usedUp = true;
+        this.description = MSG[2];
+        this.initializePCLTips();
     }
 
     public void renderHoverTip(SpriteBatch sb) {

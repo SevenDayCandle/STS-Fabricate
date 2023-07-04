@@ -31,6 +31,14 @@ public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdra
     }
 
     @Override
+    public String getSubText() {
+        if (isWhenClause()) {
+            return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
+        }
+        return super.getSubText();
+    }
+
+    @Override
     public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally) {
         triggerOnCard(returned, ally);
     }

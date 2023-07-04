@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.resources.PGR;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardBonus extends EUIBase {
     protected final ArrayList<CardRewardBundle> bundles = new ArrayList<>();
-    protected CardRewardBonusProvider provider;
+    protected CardRewardBonusProvider lastProvider;
     protected RewardItem rewardItem;
 
     public PCLCardRewardBonus() {
@@ -27,8 +28,8 @@ public class PCLCardRewardBonus extends EUIBase {
 
     // Called when rewards get rerolled through dice
     public void addManual(AbstractCard card) {
-        if (provider != null && provider.canActivate(rewardItem)) {
-            CardRewardBundle bundle = provider.getBundle(card);
+        if (lastProvider != null && lastProvider.canActivate(rewardItem)) {
+            CardRewardBundle bundle = lastProvider.getBundle(card);
             if (bundle != null) {
                 bundles.add(bundle);
             }
@@ -75,15 +76,18 @@ public class PCLCardRewardBonus extends EUIBase {
         }
 
         // TODO allow card reward bonus provider to be cards/blights as well
-        provider = GameUtilities.getPlayerRelic(CardRewardBonusProvider.class);
-        if (provider != null && provider.canActivate(rewardItem)) {
-            for (AbstractCard c : cards) {
-                CardRewardBundle bundle = provider.getBundle(c);
-                if (bundle != null) {
-                    bundles.add(bundle);
+        for (CardRewardBonusProvider provider : GameUtilities.getPlayerRelics(CardRewardBonusProvider.class)) {
+            if (provider.canActivate(rewardItem)) {
+                lastProvider = provider;
+                for (AbstractCard c : cards) {
+                    CardRewardBundle bundle = provider.getBundle(c);
+                    if (bundle != null && !EUIUtils.any(bundles, b -> b.card == c)) {
+                        bundles.add(bundle);
+                    }
                 }
             }
         }
+
     }
 
     public void remove(AbstractCard card) {

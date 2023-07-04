@@ -37,10 +37,23 @@ public class PField_Not extends PField {
     }
 
     public String getThresholdValString(int amount) {
-        if (not && amount == 0) {
-            return String.valueOf(amount);
+        if (not) {
+            if (amount == 0) {
+                return String.valueOf(amount);
+            }
+            return TEXT.subjects_xOrLess(amount);
         }
-        return amount + (not ? "-" : "+");
+        return amount + "+";
+    }
+
+    public String getThresholdValPercentString(int amount) {
+        if (not) {
+            if (amount == 0) {
+                return amount + "%";
+            }
+            return TEXT.subjects_xOrLess(amount+ "%");
+        }
+        return amount + "%+";
     }
 
     public void registerNotBoolean(PCLCustomEffectEditingPane editor) {

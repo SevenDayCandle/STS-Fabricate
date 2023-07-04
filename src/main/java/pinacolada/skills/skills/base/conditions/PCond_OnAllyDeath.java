@@ -35,10 +35,9 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     @Override
     public String getSubText() {
         if (isWhenClause()) {
-            String base = !fields.cardIDs.isEmpty() ? fields.getCardIDOrString() : fields.getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
-            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+            return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
-        return TEXT.cond_whenSingle(getDelegatePastText());
+        return super.getSubText();
     }
 
     @Override

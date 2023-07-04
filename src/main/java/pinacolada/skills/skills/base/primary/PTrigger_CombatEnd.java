@@ -12,6 +12,7 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscriber {
@@ -45,8 +46,13 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
+    }
+
+    @Override
     public String getSubText() {
-        return TEXT.cond_atEndOfCombat() + ": ";
+        return TEXT.cond_atEndOfCombat() + COLON_SEPARATOR;
     }
 
     @Override

@@ -70,11 +70,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     protected static final String CONDITION_FORMAT = "║{0}║";
     protected static final String SINGLE_FORMAT = "1";
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
+    public static final String COLON_SEPARATOR = ": ";
     public static final String COMMA_SEPARATOR = ", ";
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';
-    public static final char CONDITION_CHAR = 'H';
     public static final int CHAR_OFFSET = 48;
     public static final int DEFAULT_MAX = Integer.MAX_VALUE / 2; // So that upgrade limits will not go out of bounds
     public static final int DEFAULT_EXTRA_MIN = -1; // Denotes infinity for tags and certain skills
@@ -848,6 +848,35 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
         return info != null ? target.getTargets(info) : new ArrayList<>();
+    }
+
+    public final String getTargetOnString(String baseString) {
+        switch (target) {
+            case Team:
+            case AllAlly:
+            case RandomAlly:
+                return TEXT.subjects_onAnyAlly(baseString);
+            case All:
+            case Any:
+                return TEXT.subjects_onAnyCharacter(baseString);
+            case AllEnemy:
+            case SelfAllEnemy:
+            case RandomEnemy:
+                return TEXT.subjects_onAnyEnemy(baseString);
+            case Single:
+            case SingleAlly:
+            case SelfSingle:
+            case SelfSingleAlly:
+                return TEXT.subjects_onTheEnemy(baseString);
+            case UseParent:
+                return TEXT.subjects_onTarget(baseString, TEXT.subjects_them(0));
+            case Self:
+                if (isFromCreature()) {
+                    return TEXT.subjects_onThis(baseString);
+                }
+            default:
+                return TEXT.subjects_onYou(baseString);
+        }
     }
 
     public final int getTargetOrdinal() {

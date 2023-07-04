@@ -24,11 +24,13 @@ public class PCLAugmentCategorySub {
     public static final PCLAugmentCategorySub DamageType = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Summon, "DamageType");
     public static final PCLAugmentCategorySub HP = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Summon, "HP");
     public static final PCLAugmentCategorySub Priority = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Summon, "Priority");
+    public static final PCLAugmentCategorySub TagBounce = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagBounce");
     public static final PCLAugmentCategorySub TagDelayed = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagDelayed");
     public static final PCLAugmentCategorySub TagExhaust = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagExhaust");
     public static final PCLAugmentCategorySub TagHaste = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagHaste");
     public static final PCLAugmentCategorySub TagInnate = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagInnate");
     public static final PCLAugmentCategorySub TagLoyal = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagLoyal");
+    public static final PCLAugmentCategorySub TagRecast = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagRecast");
     public static final PCLAugmentCategorySub TagRetain = new PCLAugmentCategorySub(PGR.core, PCLAugmentCategory.Played, "TagRetain");
 
     public final String ID;

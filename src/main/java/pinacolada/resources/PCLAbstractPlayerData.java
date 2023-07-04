@@ -141,9 +141,6 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         if (selectedLoadout == null) {
             selectedLoadout = prepareLoadout();
         }
-        if (selectedLoadout == null) {
-            selectedLoadout = getCoreLoadout();
-        }
     }
 
     @Deprecated
@@ -186,8 +183,8 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
 
     public void initialize() {
         initializeLoadouts();
-        reload();
         config.load(CardCrawlGame.saveSlot);
+        reload();
     }
 
     protected final void initializeLoadouts() {
@@ -214,7 +211,9 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
                     break;
                 }
             }
-            selectedLoadout = getCoreLoadout();
+            if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
+                selectedLoadout = getCoreLoadout();
+            }
         }
 
         return selectedLoadout;
@@ -268,6 +267,10 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
                 }
             }
         }
+        saveSelectedLoadout();
+    }
+
+    public void saveSelectedLoadout() {
         if (selectedLoadout == null || selectedLoadout == getCoreLoadout()) {
             selectedLoadout = prepareLoadout();
         }

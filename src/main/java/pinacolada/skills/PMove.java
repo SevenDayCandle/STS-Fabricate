@@ -302,6 +302,14 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_Heal(target, amount);
     }
 
+    public static PMove_HealPercent healPercent(int amount) {
+        return new PMove_HealPercent(amount);
+    }
+
+    public static PMove_HealPercent healPercent(PCLCardTarget target, int amount) {
+        return new PMove_HealPercent(target, amount);
+    }
+
     public static PMove_LoseHP loseHp(int amount) {
         return new PMove_LoseHP(amount);
     }

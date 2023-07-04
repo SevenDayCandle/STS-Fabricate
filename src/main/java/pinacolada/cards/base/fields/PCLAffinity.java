@@ -241,32 +241,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return getTooltip().getTitleOrIconForced();
     }
 
-    public EUIKeywordTooltip getLevelTooltip() {
-        return getLevelTooltip(GameUtilities.getActingColor());
-    }
-
-    public EUIKeywordTooltip getLevelTooltip(AbstractCard.CardColor pc) {
-        PCLResources<?, ?, ?, ?> resources = PGR.getResources(pc);
-        if (pc != null) {
-            return resources.tooltips.getLevelTooltip(this);
-        }
-        return PGR.core.tooltips.affinityGeneral;
-    }
-
-    public int getPolarity() {
-        switch (this) {
-            case Yellow:
-                return 1;
-            case Purple:
-                return -1;
-        }
-        return 0;
-    }
-
-    public TextureRegion getPowerIcon() {
-        return getLevelTooltip().icon;
-    }
-
     public String getPowerSymbol() {
         return EUIUtils.format("P-{0}", symbol);
     }

@@ -12,7 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 public class PMove_Kill extends PMove<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_Kill.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_Kill.class, PField_Empty.class, 1, 1);
 
     public PMove_Kill() {
         this(1);

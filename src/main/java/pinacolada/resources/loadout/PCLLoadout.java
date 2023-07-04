@@ -200,7 +200,7 @@ public abstract class PCLLoadout {
     public void addLoadoutRelics(LoadoutRelicSlot r1) {
         r1.addItem(new GenericDice(), 4);
         r1.addItem(new Macroscope(), 4);
-        r1.addItem(new HeartShapedBox(), 15);
+        r1.addItem(new HeartShapedBox(), 10);
     }
 
     public void addStarterRelic(ArrayList<String> res, String id) {
@@ -491,7 +491,6 @@ public abstract class PCLLoadout {
             addLoadoutCards(slot);
         }
 
-        // TODO get relics from loadout
         for (int i = 0; i < MAX_RELIC_SLOTS; i++) {
             LoadoutRelicSlot r1 = data.addRelicSlot();
             addLoadoutRelics(r1);

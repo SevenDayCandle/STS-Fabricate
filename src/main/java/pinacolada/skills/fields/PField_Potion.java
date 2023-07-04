@@ -2,6 +2,7 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.potions.PotionSlot;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -51,6 +52,7 @@ public class PField_Potion extends PField_Random {
                 (c -> (colors.isEmpty() || colors.contains(EUIGameUtils.getPotionColor(c.ID)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (sizes.isEmpty() || sizes.contains(c.size))
+                        && !(c instanceof PotionSlot)
                 );
     }
 

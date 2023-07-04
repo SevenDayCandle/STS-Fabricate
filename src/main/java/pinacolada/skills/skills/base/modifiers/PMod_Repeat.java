@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -42,6 +43,15 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     @Override
     public String getText(boolean addPeriod) {
         return (childEffect != null ? capital(childEffect.getText(false), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(), true) : capital(getSubText(), addPeriod)) + PCLCoreStrings.period(addPeriod);
+    }
+
+    // Does not update child amounts
+    @Override
+    public void onDrag(AbstractMonster m) {
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
     }
 
     @Override

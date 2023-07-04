@@ -116,6 +116,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
+    public String getFullSummonStringSingular() {
+        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
+    }
+
     public String getCardAndString() {
         return getCardAndString(skill.getAmountRawString());
     }

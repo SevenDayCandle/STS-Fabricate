@@ -1,7 +1,9 @@
 package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -15,6 +17,7 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_CombatEnd;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PTrigger extends PPrimary<PField_Not> {
@@ -64,6 +67,10 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return chain(new PTrigger_When().setAmount(perTurn), effects);
     }
 
+    public static PTrigger whenPerCombat(int perTurn, PSkill<?>... effects) {
+        return chain((PTrigger) new PTrigger_When().setAmount(perTurn).edit(f -> f.setNot(true)), effects);
+    }
+
     public PTrigger chain(PSkill<?>... effects) {
         return PSkill.chain(this, effects);
     }
@@ -81,12 +88,17 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     @Override
     public String getSubText() {
-        return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : amount > 0 ? TEXT.cond_timesPerTurn(getAmountRawString()) + ", " : "";
+        if (amount > 0) {
+            return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+        }
+        return "";
     }
 
     @Override
     public String getText(boolean addPeriod) {
-        return getSubText() + (childEffect != null ? childEffect.getText(addPeriod) : "");
+        String subText = getCapitalSubText(addPeriod);
+        String childText = (childEffect != null ? childEffect.getText(addPeriod) : "");
+        return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + childText;
     }
 
     @Override
@@ -141,6 +153,11 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         super.setTemporaryAmount(amount);
         this.usesThisTurn = this.amount;
         return this;
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor, TEXT.cedit_combat, null);
     }
 
     public PTrigger stack(PSkill<?> other) {

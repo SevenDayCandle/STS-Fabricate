@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -42,8 +43,12 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not> {
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValPercentString(input);
+    }
+
+    @Override
     public String getSubText() {
-        String baseString = amount + (fields.not ? "%- " : "%+ ") + PGR.core.tooltips.hp.title;
-        return getTargetHasString(baseString);
+        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
     }
 }

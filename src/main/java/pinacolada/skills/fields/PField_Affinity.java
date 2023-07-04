@@ -46,35 +46,11 @@ public class PField_Affinity extends PField_Random {
     }
 
     public String getAffinityChoiceString() {
-        return affinities.isEmpty() ? TEXT.subjects_anyX(getGeneralAffinityString()) : getAffinityLevelOrString(getColor(), affinities);
-    }
-
-    public String getAffinityLevelAndOrString() {
-        return getAffinityLevelAndOrString(getColor(), affinities, random);
-    }
-
-    public String getAffinityLevelAndString() {
-        return getAffinityLevelAndString(getColor(), affinities);
-    }
-
-    public String getAffinityLevelOrString() {
-        return getAffinityLevelOrString(getColor(), affinities);
+        return affinities.isEmpty() ? TEXT.subjects_anyX(getGeneralAffinityString()) : getAffinityOrString(affinities);
     }
 
     public String getAffinityOrString() {
         return getAffinityOrString(affinities);
-    }
-
-    public String getAffinityPowerAndString() {
-        return getAffinityPowerAndString(affinities);
-    }
-
-    public String getAffinityPowerOrString() {
-        return getAffinityPowerOrString(affinities);
-    }
-
-    public String getAffinityPowerString() {
-        return getAffinityPowerString(affinities);
     }
 
     public String getAffinityString() {

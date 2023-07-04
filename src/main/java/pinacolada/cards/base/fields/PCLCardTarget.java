@@ -165,9 +165,9 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
 
     public final ArrayList<? extends AbstractCreature> getTargets(PCLUseInfo info) {
         if (this == UseParent) {
-            ArrayList<? extends AbstractCreature> inherited = info.getDataAsArrayList(AbstractCreature.class);
+            List<? extends AbstractCreature> inherited = info.getDataAsList(AbstractCreature.class);
             if (inherited != null) {
-                return inherited;
+                return new ArrayList<>(inherited);
             }
         }
         return getTargets(info.source, info.target, 1);

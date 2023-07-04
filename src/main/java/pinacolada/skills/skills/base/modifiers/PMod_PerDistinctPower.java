@@ -67,19 +67,6 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     @Override
     public String getSubText() {
-        String baseString = fields.getPowerSubjectString();
-        switch (target) {
-            case All:
-            case Any:
-                return TEXT.subjects_onAnyCharacter(baseString);
-            case AllEnemy:
-                return TEXT.subjects_onAnyEnemy(baseString);
-            case Single:
-                return TEXT.subjects_onTheEnemy(baseString);
-            case Self:
-                return TEXT.subjects_onYou(baseString);
-            default:
-                return baseString;
-        }
+        return getTargetOnString(fields.getPowerSubjectString());
     }
 }

@@ -34,32 +34,8 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithAnd(PField::safeInvokeTip, affinities);
     }
 
-    public static String getAffinityLevelAndOrString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities, boolean or) {
-        return or ? getAffinityLevelOrString(co, affinities) : getAffinityLevelAndString(co, affinities);
-    }
-
-    public static String getAffinityLevelAndString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithAnd(a -> a.getLevelTooltip(co).getTitleOrIconForced(), affinities);
-    }
-
-    public static String getAffinityLevelOrString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithOr(a -> a.getLevelTooltip(co).getTitleOrIconForced(), affinities);
-    }
-
     public static String getAffinityOrString(ArrayList<PCLAffinity> affinities) {
         return PCLCoreStrings.joinWithOr(PField::safeInvokeTip, affinities);
-    }
-
-    public static String getAffinityPowerAndString(ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithAnd(a -> a.getLevelTooltip().getTitleOrIconForced(), affinities);
-    }
-
-    public static String getAffinityPowerOrString(ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithOr(a -> a.getLevelTooltip().getTitleOrIconForced(), affinities);
-    }
-
-    public static String getAffinityPowerString(ArrayList<PCLAffinity> affinities) {
-        return EUIUtils.joinStringsMapNonnull(" ", a -> a.getLevelTooltip().getTitleOrIconForced(), affinities);
     }
 
     public static String getAffinityString(ArrayList<PCLAffinity> affinities) {

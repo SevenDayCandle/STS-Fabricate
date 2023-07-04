@@ -1044,6 +1044,10 @@ public class GameUtilities {
         return null;
     }
 
+    public static <T> ArrayList<T> getPlayerRelics(Class<T> relicType) {
+        return EUIUtils.mapAsNonnull(player.relics, r -> EUIUtils.safeCast(r, relicType));
+    }
+
     public static String getPotionNameForID(String potionID) {
         if (potionID != null) {
             // NOT using PotionHelper.getPotion as the replacement patching on that method may cause text glitches or infinite loops in this method
