@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 
@@ -20,10 +21,6 @@ public class ScreenGradientEffect extends PCLEffect {
     private Color actualColor2;
     private Color actualColor3;
     private Color actualColor4;
-    private float x;
-    private float y;
-    private float width;
-    private float height;
     private boolean looping;
 
     public ScreenGradientEffect(float duration, Color color1, Color color2) {
@@ -60,7 +57,7 @@ public class ScreenGradientEffect extends PCLEffect {
         sb.end();
         renderer.setProjectionMatrix(sb.getProjectionMatrix());
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.rect(x, y, width, height, actualColor, actualColor2, actualColor3, actualColor4);
+        renderer.rect(0, 0, (float) Settings.WIDTH, (float) Settings.HEIGHT, actualColor, actualColor2, actualColor3, actualColor4);
         renderer.end();
         sb.begin();
     }

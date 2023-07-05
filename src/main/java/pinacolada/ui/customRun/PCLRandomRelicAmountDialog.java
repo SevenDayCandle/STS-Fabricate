@@ -22,7 +22,7 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 
 public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDialog> {
-    protected EUITextBoxNumericalInput inputCards;
+    protected EUITextBoxNumericalInput inputRelics;
     protected EUITextBoxNumericalInput inputColorless;
 
     public PCLRandomRelicAmountDialog(String headerText) {
@@ -39,19 +39,19 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
 
     public PCLRandomRelicAmountDialog(EUIHitbox hb, Texture backgroundTexture, String headerText, String descriptionText) {
         super(hb, backgroundTexture, headerText, descriptionText);
-        this.inputCards = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, hb.y + hb.height / 1.8f, hb.width / 2, scale(54)))
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_characterCards)
+        this.inputRelics = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, hb.y + hb.height / 1.8f, hb.width / 2, scale(54)))
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.loadout_relicHeader)
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
-        this.inputColorless = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, inputCards.hb.y - inputCards.hb.height * 1.2f, hb.width / 2, scale(54)))
+        this.inputColorless = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, inputRelics.hb.y - inputRelics.hb.height * 1.2f, hb.width / 2, scale(54)))
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIGameUtils.getColorName(AbstractCard.CardColor.COLORLESS))
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
-        this.inputCards.forceSetValue(0, false);
+        this.inputRelics.forceSetValue(0, false);
         this.inputColorless.forceSetValue(0, false);
     }
 
@@ -80,14 +80,14 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
-        this.inputCards.tryRender(sb);
+        this.inputRelics.tryRender(sb);
         this.inputColorless.tryRender(sb);
     }
 
     @Override
     public void updateImpl() {
         super.updateImpl();
-        this.inputCards.tryUpdate();
+        this.inputRelics.tryUpdate();
         this.inputColorless.tryUpdate();
     }
 
@@ -102,7 +102,7 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
     }
 
     public int getCardCount() {
-        return inputCards.getCachedValue();
+        return inputRelics.getCachedValue();
     }
 
     public int getColorlessCount() {
@@ -111,10 +111,10 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
 
     public void open(ArrayList<AbstractRelic> relics) {
         setActive(true);
-        inputCards.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) != AbstractCard.CardColor.COLORLESS));
+        inputRelics.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) != AbstractCard.CardColor.COLORLESS));
         inputColorless.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) == AbstractCard.CardColor.COLORLESS));
 
-        inputCards.forceSetValue(inputCards.getMax(), true);
+        inputRelics.forceSetValue(inputRelics.getMax(), true);
         inputColorless.forceSetValue(inputColorless.getMax(), true);
 
         inputColorless.setActive(inputColorless.getMax() > 0);

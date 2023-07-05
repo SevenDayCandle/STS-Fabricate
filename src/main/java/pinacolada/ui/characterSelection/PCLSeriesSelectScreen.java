@@ -91,7 +91,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3f), buttonWidth, screenH(0.09f)))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, screenH(0.09f)))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.61f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);

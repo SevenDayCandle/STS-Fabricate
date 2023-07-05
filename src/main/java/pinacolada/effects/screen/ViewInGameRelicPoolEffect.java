@@ -30,12 +30,12 @@ import java.util.HashSet;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
-public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<AbstractRelic>> {
+public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameRelicPoolEffect> {
     private final ActionT0 onRefresh;
-    private final ArrayList<AbstractRelic> relics;
     private final Color screenColor;
     private final EUIRelicGrid grid;
-    private final HashSet<String> bannedRelics;
+    public final ArrayList<AbstractRelic> relics;
+    public final HashSet<String> bannedRelics;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
     private EUIButton selectCustomButton;
@@ -67,7 +67,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
 
         if (relics.isEmpty()) {
             this.grid = (EUIRelicGrid) new EUIRelicGrid().canDragScreen(false);
-            complete(relics);
+            complete(this);
             return;
         }
 
@@ -80,7 +80,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
                 .canDragScreen(false)
                 .setOnClick(this::toggleRelic);
         this.grid.setItems(relics, RelicInfo::new);
-        for (AbstractRelic c : relics) {
+        for (RelicInfo c : grid.group) {
             updateRelicAlpha(c);
         }
 
@@ -177,7 +177,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
             }
 
             if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
-                complete(this.relics);
+                complete(this);
             }
         }
     }
@@ -193,10 +193,10 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
         randomSelection.setActive(false);
         if (dialog != null) {
             bannedRelics.clear();
-            RandomizedList<AbstractRelic> possibleCards = new RandomizedList<>();
-            RandomizedList<AbstractRelic> possibleColorless = new RandomizedList<>();
-            for (AbstractRelic c : relics) {
-                if (EUIGameUtils.getRelicColor(c.relicId) == AbstractCard.CardColor.COLORLESS) {
+            RandomizedList<RelicInfo> possibleCards = new RandomizedList<>();
+            RandomizedList<RelicInfo> possibleColorless = new RandomizedList<>();
+            for (RelicInfo c : grid.group) {
+                if (EUIGameUtils.getRelicColor(c.relic.relicId) == AbstractCard.CardColor.COLORLESS) {
                     possibleColorless.add(c);
                 }
                 else {
@@ -205,22 +205,22 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
             }
 
             while (possibleCards.size() > dialog.getCardCount()) {
-                AbstractRelic c = possibleCards.retrieveUnseeded(true);
+                RelicInfo c = possibleCards.retrieveUnseeded(true);
                 if (c != null) {
-                    toggleRelicImpl(c, bannedRelics.contains(c.relicId));
+                    toggleRelicImpl(c, bannedRelics.contains(c.relic.relicId));
                 }
             }
             while (possibleColorless.size() > dialog.getColorlessCount()) {
-                AbstractRelic c = possibleColorless.retrieveUnseeded(true);
+                RelicInfo c = possibleColorless.retrieveUnseeded(true);
                 if (c != null) {
-                    toggleRelicImpl(c, bannedRelics.contains(c.relicId));
+                    toggleRelicImpl(c, bannedRelics.contains(c.relic.relicId));
                 }
             }
 
-            for (AbstractRelic c : possibleCards) {
+            for (RelicInfo c : possibleCards) {
                 updateRelicAlpha(c);
             }
-            for (AbstractRelic c : possibleColorless) {
+            for (RelicInfo c : possibleColorless) {
                 updateRelicAlpha(c);
             }
 
@@ -251,23 +251,23 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
 
     private void toggleRelic(RelicInfo c) {
         if (canToggle) {
-            toggleRelicImpl(c.relic, bannedRelics.contains(c.relic.relicId));
+            toggleRelicImpl(c, bannedRelics.contains(c.relic.relicId));
             refreshCountText();
         }
     }
 
-    private void toggleRelicImpl(AbstractRelic c, boolean value) {
+    private void toggleRelicImpl(RelicInfo c, boolean value) {
         if (value) {
-            bannedRelics.remove(c.relicId);
+            bannedRelics.remove(c.relic.relicId);
         }
         else {
-            bannedRelics.add(c.relicId);
+            bannedRelics.add(c.relic.relicId);
         }
         updateRelicAlpha(c);
     }
 
     private void toggleRelics(boolean value) {
-        for (AbstractRelic c : relics) {
+        for (RelicInfo c : grid.group) {
             toggleRelicImpl(c, value);
         }
         refreshCountText();
@@ -278,7 +278,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ArrayList<A
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
     }
 
-    private void updateRelicAlpha(AbstractRelic c) {
-        c.grayscale = bannedRelics.contains(c.relicId);
+    private void updateRelicAlpha(RelicInfo c) {
+        c.faded = bannedRelics.contains(c.relic.relicId);
     }
 }

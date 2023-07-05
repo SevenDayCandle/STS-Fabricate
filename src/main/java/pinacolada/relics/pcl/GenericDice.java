@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoom;
+import com.megacrit.cardcrawl.rooms.RestRoom;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
@@ -16,7 +17,7 @@ import pinacolada.utilities.GameUtilities;
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID);
-    public static final int BONUS_PER_CARDS = 60;
+    public static final int BONUS_PER_CARDS = 25;
 
     public GenericDice() {
         super(DATA);
@@ -37,6 +38,9 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
 
     protected AbstractCard.CardRarity getRarity(AbstractCard card) {
         int roll = rng.random(100);
+        if (roll < 1) {
+            return AbstractCard.CardRarity.RARE;
+        }
         if (roll < 10) {
             return card.rarity == AbstractCard.CardRarity.RARE ? AbstractCard.CardRarity.RARE : AbstractCard.CardRarity.UNCOMMON;
         }
@@ -66,7 +70,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public void onEnterRoom(AbstractRoom room) {
         super.onEnterRoom(room);
 
-        if (room instanceof MonsterRoom) {
+        if (room instanceof RestRoom) {
             setCounter(counter + getBonus());
             flash();
         }

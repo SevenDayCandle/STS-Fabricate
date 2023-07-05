@@ -127,7 +127,8 @@ public class FadingParticleEffect extends PCLEffect {
 
         final float halfDuration = startingDuration * 0.5f;
         if (this.duration < halfDuration) {
-            this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
+            float aMult = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
+            this.color.a = this.color.a * aMult;
         }
     }
 
@@ -191,7 +192,7 @@ public class FadingParticleEffect extends PCLEffect {
 
     public FadingParticleEffect setScaleTarget(float scale, float target, float speed) {
         this.scale = scale;
-        this.vScale = (target - scale) / speed;
+        this.vScale = (target - scale) * speed;
 
         return this;
     }

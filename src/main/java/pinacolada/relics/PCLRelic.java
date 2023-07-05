@@ -451,21 +451,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         EUITooltip.queueTooltip(getHiddenTooltip());
     }
 
-    protected PCLAction<AbstractCreature> selectCreatureForTransform() {
-        return PCLActions.bottom.selectCreature(PCLCardTarget.Any, getName())
-                .addCallback(c -> {
-                    if (c.id == null) {
-                        String p = CreatureAnimationInfo.getRandomKey();
-                        if (p != null) {
-                            PGR.dungeon.setCreature(p);
-                        }
-                    }
-                    else {
-                        PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
-                    }
-                });
-    }
-
     public boolean setEnabled(boolean value) {
         super.grayscale = !value;
         return value;

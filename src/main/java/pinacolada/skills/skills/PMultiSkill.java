@@ -140,8 +140,8 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     @Override
     public String getText(boolean addPeriod) {
-        return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + ": " +
-                (generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, addPeriod)))) :
+        return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + COLON_SEPARATOR +
+                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, addPeriod))), true)) :
                 generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 

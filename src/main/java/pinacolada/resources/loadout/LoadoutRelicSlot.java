@@ -1,8 +1,14 @@
 package pinacolada.resources.loadout;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
+import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -48,23 +54,39 @@ public class LoadoutRelicSlot {
     public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
         final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
         for (Item item : this.relics) {
-            boolean add = true;
-            for (LoadoutRelicSlot slot : container.relicSlots) {
-                if (slot != this && slot.getRelic() == item.relic) {
-                    add = false;
+            // Customs should not be treated as locked in this effect
+            boolean add = !isIDBanned(item.relic.relicId) && (!item.isLocked() || PCLCustomRelicSlot.get(item.relic.relicId) != null);
+            if (add) {
+                // Custom relics may incorrectly be marked as not seen
+                item.relic.isSeen = true;
+                for (LoadoutRelicSlot slot : container.relicSlots) {
+                    if (slot != this && slot.getRelic() == item.relic) {
+                        add = false;
+                    }
                 }
             }
 
             if (add) {
-                relics.add(new LoadoutRelicSlot.Item(item.relic, item.estimatedValue));
+                relics.add(item);
             }
         }
+        relics.sort((a, b) -> {
+            if (a.estimatedValue == b.estimatedValue) {
+                return StringUtils.compare(GameUtilities.getRelicName(a.relic), GameUtilities.getRelicName(b.relic));
+            }
+            return a.estimatedValue - b.estimatedValue;
+        });
 
         return relics;
     }
 
     public int getSlotIndex() {
         return container.relicSlots.indexOf(this);
+    }
+
+    public boolean isIDBanned(String id) {
+        PCLAbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        return playerData != null && playerData.config.bannedRelics.get().contains(id);
     }
 
     public LoadoutRelicSlot makeCopy(PCLLoadoutData container) {
@@ -146,6 +168,16 @@ public class LoadoutRelicSlot {
         public Item(AbstractRelic relic, int estimatedValue) {
             this.relic = relic;
             this.estimatedValue = estimatedValue;
+        }
+
+        public boolean isLocked() {
+            return GameUtilities.isRelicLocked(relic.relicId);
+        }
+
+        public void markAsSeen() {
+            if (!UnlockTracker.isRelicSeen(relic.relicId)) {
+                UnlockTracker.markRelicAsSeen(relic.relicId);
+            }
         }
     }
 }

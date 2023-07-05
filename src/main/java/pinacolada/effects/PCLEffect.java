@@ -109,13 +109,13 @@ public abstract class PCLEffect extends AbstractGameEffect {
     public PCLEffect setColor(Color color) {
         if (color != null) {
             if (this.color == null) {
-                this.color = new Color(color.r, color.g, color.b, 1f);
+                this.color = new Color(color.r, color.g, color.b, color.a);
             }
             else {
                 this.color.r = color.r;
                 this.color.g = color.g;
                 this.color.b = color.b;
-                // do not set alpha
+                this.color.a = color.a;
             }
         }
 

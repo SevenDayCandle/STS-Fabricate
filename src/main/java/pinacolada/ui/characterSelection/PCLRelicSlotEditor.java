@@ -68,7 +68,7 @@ public class PCLRelicSlotEditor extends EUIBase {
     public void renderImpl(SpriteBatch sb) {
         relicNameText.tryRender(sb);
         if (this.relicImage != null) {
-            relicImage.renderImpl(sb);
+            relicImage.renderCentered(sb);
         }
         relicValueText.tryRender(sb);
         changeButton.tryRender(sb);
@@ -141,6 +141,12 @@ public class PCLRelicSlotEditor extends EUIBase {
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this.slot)).setActive(change);
         if (relic != null) {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING / 2, relicValueText.hb.y, relic.hb.width, relic.hb.height));
+            if (relic instanceof PCLRelic) {
+                this.relicImage.setScale(0.65f, 0.65f);
+            }
+            else {
+                this.relicImage.setScale(1.3f, 1.3f);
+            }
         }
         else {
             this.relicImage = null;

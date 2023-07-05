@@ -28,12 +28,12 @@ import java.util.HashSet;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
-public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
+public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCardPoolEffect> {
     private final ActionT0 onRefresh;
-    private final CardGroup cards;
     private final Color screenColor;
     private final EUICardGrid grid;
-    private final HashSet<String> bannedCards;
+    public final CardGroup cards;
+    public final HashSet<String> bannedCards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
     private EUIButton selectRandomButton;
@@ -65,7 +65,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
 
         if (cards.isEmpty()) {
             this.grid = new EUICardGrid().canDragScreen(false);
-            complete(cards);
+            complete(this);
             return;
         }
 
@@ -183,7 +183,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
             }
 
             if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
-                complete(this.cards);
+                complete(this);
             }
         }
     }

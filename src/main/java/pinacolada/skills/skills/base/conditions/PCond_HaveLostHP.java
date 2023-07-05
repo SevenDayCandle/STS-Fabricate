@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import extendedui.EUIRM;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -58,7 +59,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
         if (amount > 0) {
-            useFromTrigger(makeInfo(info.owner));
+            useFromTrigger(makeInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
         return amount;
     }

@@ -219,7 +219,9 @@ public class PCLCoreStrings extends PCLStrings {
     public final String csel_resetTutorialConfirm = charselect.TEXT[7];
     public final String csel_charTutorial = charselect.TEXT[8];
     public final String csel_charTutorialInfo = charselect.TEXT[9];
-    public final String csel_ascensionGlyph = charselect.TEXT[10];
+    public final String csel_relicPool = charselect.TEXT[10];
+    public final String csel_relicPoolInfo = charselect.TEXT[11];
+    public final String csel_ascensionGlyph = charselect.TEXT[12];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

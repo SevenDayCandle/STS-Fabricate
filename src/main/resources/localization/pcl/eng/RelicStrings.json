@@ -2,7 +2,7 @@
 {
 	"pcl:GenericDice":
 	{
-		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use per #b{0} cards in the pool."],
+		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yRest rooms gives #b1 use per #b{0} cards in the pool."],
 		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
 		"NAME": "Generic Dice"
 	},

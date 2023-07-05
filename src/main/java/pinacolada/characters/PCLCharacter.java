@@ -281,7 +281,7 @@ public abstract class PCLCharacter extends CustomPlayer {
                     this.skeleton.setFlip(shouldFlip, this.flipVertical);
                     sb.end();
                     CardCrawlGame.psb.begin();
-                    PCLRenderHelpers.drawWithShader(CardCrawlGame.psb, EUIRenderHelpers.getColorizeShader(), s -> sr.draw(CardCrawlGame.psb, this.skeleton, EUIRenderHelpers.BlendingMode.Glowing.srcFunc, EUIRenderHelpers.BlendingMode.Glowing.dstFunc));
+                    PCLRenderHelpers.drawGlitched(CardCrawlGame.psb, s -> sr.draw(CardCrawlGame.psb, this.skeleton));
                     CardCrawlGame.psb.end();
                     sb.begin();
                 }
@@ -295,9 +295,8 @@ public abstract class PCLCharacter extends CustomPlayer {
                 break;
             case SPRITE:
                 this.animation.setFlip(shouldFlip, this.flipVertical);
-                PCLRenderHelpers.drawBlended(sb, EUIRenderHelpers.BlendingMode.Glowing, (s) ->
-                        PCLRenderHelpers.drawColorized(s, this.getTransparentColor(),
-                                s2 -> this.animation.renderSprite(s, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY)));
+                PCLRenderHelpers.drawGlitched(sb,
+                        s -> this.animation.renderSprite(s, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY));
         }
     }
 

@@ -53,7 +53,7 @@ import java.util.Map;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, OnStartBattleSubscriber, StartActSubscriber {
+public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, StartActSubscriber {
     public static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();
     public transient final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
@@ -77,7 +77,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public HashMap<String, Integer> augments = new HashMap<>();
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
-    public String currentForm = null;
     public transient PCLLoadout loadout;
 
     // When playing as a non-PCL character, remove any colorless cards that should be exclusive to a particular PCL character
@@ -351,10 +350,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             highestScore = dungeon.highestScore;
             ascensionGlyphCounters.addAll(dungeon.ascensionGlyphCounters);
             rng = dungeon.rng;
-
-            if (dungeon.currentForm != null) {
-                setCreature(dungeon.currentForm);
-            }
         }
         else {
             eventLog = new HashMap<>();
@@ -364,7 +359,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
-            currentForm = null;
             for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS) {
                 ascensionGlyphCounters.add(glyph.counter);
             }
@@ -615,9 +609,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             augments.putAll(loaded.augments);
             fragments.putAll(loaded.fragments);
             totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
-            if (loaded.currentForm != null) {
-                setCreature(loaded.currentForm);
-            }
 
             if (this.data != null) {
                 loadout = PCLLoadout.get(loaded.startingLoadout);
@@ -637,13 +628,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         validate();
 
         fullLog("ON LOAD");
-    }
-
-    @Override
-    public void receiveOnBattleStart(AbstractRoom abstractRoom) {
-        if (currentForm != null) {
-            GameUtilities.setCreatureAnimation(player, currentForm);
-        }
     }
 
     @Override
@@ -706,16 +690,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         valueDivisor = 1;
 
         validate();
-    }
-
-    public void setCreature(String id) {
-        currentForm = id;
-        if (currentForm != null) {
-            if (GameUtilities.inBattle()) {
-                PCLEffects.Queue.add(new SmokeEffect(player.hb.cX, player.hb.cY, player.getCardRenderColor()));
-            }
-            GameUtilities.setCreatureAnimation(player, currentForm);
-        }
     }
 
     public void setDivisor(int divisor) {

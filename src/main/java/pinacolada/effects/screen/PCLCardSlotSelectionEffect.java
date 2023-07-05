@@ -12,6 +12,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.utilities.GameUtilities;
@@ -19,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
+public class PCLCardSlotSelectionEffect extends PCLEffect {
     private static final EUITextBox cardValue_text = new
             EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(AbstractCard.IMG_WIDTH * 0.6f, AbstractCard.IMG_HEIGHT * 0.15f))
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
@@ -28,7 +29,6 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
     private final LoadoutCardSlot slot;
-    private final ArrayList<AbstractCard> cards;
     private final boolean draggingScreen = false;
     private AbstractCard selectedCard;
     private EUICardGrid grid;
@@ -38,7 +38,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
 
         this.selectedCard = slot.getCard(false);
         this.slot = slot;
-        this.cards = slot.getSelectableCards();
+        ArrayList<LoadoutCardSlot.Item> cards = slot.getSelectableCards();
 
         if (cards.isEmpty()) {
             complete();
@@ -51,7 +51,8 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
                 .setOnCardClick(this::onCardClicked)
                 .setOnCardRender(this::onCardRender);
 
-        for (AbstractCard card : cards) {
+        for (LoadoutCardSlot.Item item : cards) {
+            AbstractCard card = item.getCard(true);
             card.current_x = InputHelper.mX;
             card.current_y = InputHelper.mY;
             grid.addCard(card);
@@ -100,14 +101,5 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
                 return;
             }
         }
-    }
-
-    public PCLCardSlotSelectionEffect setStartingPosition(float x, float y) {
-        for (AbstractCard c : cards) {
-            c.current_x = x - (c.hb.width * 0.5f);
-            c.current_y = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 }

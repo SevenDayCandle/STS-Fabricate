@@ -2,6 +2,7 @@ package pinacolada.ui.characterSelection;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
@@ -11,6 +12,7 @@ import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
@@ -28,6 +30,7 @@ import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
+import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
@@ -37,6 +40,7 @@ import pinacolada.ui.combat.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
@@ -53,10 +57,11 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData<?, ?> data;
     protected PCLLoadout loadout;
-    protected PCLYesNoConfirmationEffect currentDialog;
+    protected PCLEffect currentDialog;
     protected float textScale;
     public PCLEffect playEffect;
     public EUIButton seriesButton;
+    public EUIButton relicsButton;
     public EUIButton loadoutEditorButton;
     public EUIButton infoButton;
     public EUIButton resetButton;
@@ -124,11 +129,18 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
-        seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
+        relicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
                 .setPosition(startingCardsListLabel.hb.cX, loadoutEditorButton.hb.y + gapY).setText("")
+                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_relicPool)
+                .setTooltip(PGR.core.strings.csel_relicPool, PGR.core.strings.csel_relicPoolInfo)
+                .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
+                .setOnClick(this::openRelicsDialog);
+
+        seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
+                .setPosition(startingCardsListLabel.hb.cX, relicsButton.hb.y + gapY).setText("")
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
-                .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
+                .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
                 .setOnClick(this::openSeriesSelect);
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
@@ -200,8 +212,30 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    private void openRelicsDialog() {
+        if (data != null) {
+            currentDialog = new ViewInGameRelicPoolEffect(getAllPossibleRelics(), new HashSet<>(data.config.bannedRelics.get()))
+                    .addCallback((effect) -> {
+                        data.config.bannedRelics.set(effect.bannedRelics);
+                    });
+        }
+    }
+
+    private ArrayList<AbstractRelic> getAllPossibleRelics() {
+        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
+
+        // Get other non base-game relics
+        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
+            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
+                relics.add(r);
+            }
+        }
+
+        return relics;
+    }
+
     private void openResetDialog() {
-        currentDialog = (PCLYesNoConfirmationEffect) new PCLYesNoConfirmationEffect(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialConfirm)
+        currentDialog = new PCLYesNoConfirmationEffect(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialConfirm)
                 .addCallback(() -> {
                     data.config.resetTutorial();
                 });
@@ -241,6 +275,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             startingCardsLabel.setActive(true);
             startingCardsListLabel.setActive(true);
             seriesButton.setActive(true);
+            relicsButton.setActive(true);
             loadoutEditorButton.setActive(true);
             infoButton.setActive(true);
             resetButton.setActive(true);
@@ -258,6 +293,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
             EUITourTooltip.queueFirstView(PGR.config.tourCharSelect,
                     seriesButton.makeTour(true),
+                    relicsButton.makeTour(true),
                     loadoutEditorButton.makeTour(true),
                     infoButton.makeTour(true),
                     resetButton.makeTour(true));
@@ -265,6 +301,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         else {
             playEffect = null;
             seriesButton.setActive(false);
+            relicsButton.setActive(false);
             loadoutEditorButton.setActive(false);
             infoButton.setActive(false);
             resetButton.setActive(false);
@@ -357,6 +394,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     public void renderImpl(SpriteBatch sb) {
         seriesButton.tryRender(sb);
+        relicsButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
         infoButton.tryRender(sb);
         resetButton.tryRender(sb);
@@ -384,6 +422,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
         else {
             seriesButton.tryUpdate();
+            relicsButton.tryUpdate();
             loadoutEditorButton.tryUpdate();
             infoButton.tryUpdate();
             resetButton.tryUpdate();

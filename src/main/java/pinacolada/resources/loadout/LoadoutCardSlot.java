@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -98,8 +99,8 @@ public class LoadoutCardSlot {
         return amount * (selected == null ? 0 : selected.estimatedValue);
     }
 
-    public ArrayList<AbstractCard> getSelectableCards() {
-        final ArrayList<AbstractCard> cards = new ArrayList<>();
+    public ArrayList<LoadoutCardSlot.Item> getSelectableCards() {
+        final ArrayList<LoadoutCardSlot.Item> cards = new ArrayList<>();
         for (Item item : this.cards) {
             // Custom cards should not be treated as locked in this effect
             boolean add = !isIDBanned(item.ID) && (!item.isLocked() || PCLCustomCardSlot.get(item.ID) != null);
@@ -113,9 +114,16 @@ public class LoadoutCardSlot {
 
 
             if (add) {
-                cards.add(item.getCard(true));
+                cards.add(item);
             }
         }
+
+        cards.sort((a, b) -> {
+            if (a.estimatedValue == b.estimatedValue) {
+                return StringUtils.compare(a.getCard(false).name, b.getCard(false).name);
+            }
+            return a.estimatedValue - b.estimatedValue;
+        });
 
         return cards;
     }

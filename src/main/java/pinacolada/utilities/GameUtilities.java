@@ -1712,6 +1712,22 @@ public class GameUtilities {
         return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }
 
+    public static boolean isRelicLocked(String id) {
+        return UnlockTracker.isRelicLocked(id) || !UnlockTracker.isRelicSeen(id);
+    }
+
+    public static boolean isRelicTierSpawnable(AbstractRelic.RelicTier tier) {
+        switch (tier) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+            case BOSS:
+            case SHOP:
+                return true;
+        }
+        return false;
+    }
+
     public static boolean isStarter(AbstractCard card) {
         final ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
         return played == null || played.isEmpty() || (played.size() == 1 && played.get(0) == card);
