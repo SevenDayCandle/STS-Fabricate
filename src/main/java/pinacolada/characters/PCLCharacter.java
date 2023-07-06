@@ -184,12 +184,6 @@ public abstract class PCLCharacter extends CustomPlayer {
         super.damage(info);
     }
 
-    public Color getTransparentColor() {
-        Color c = getCardRenderColor();
-        c.a = 0.7f;
-        return c;
-    }
-
     // Intentionally avoid calling loadAnimation to avoid registering animations
     protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
@@ -277,11 +271,10 @@ public abstract class PCLCharacter extends CustomPlayer {
                     this.state.apply(this.skeleton);
                     this.skeleton.updateWorldTransform();
                     this.skeleton.setPosition(this.drawX + this.animX, this.drawY + this.animY);
-                    this.skeleton.setColor(this.getTransparentColor());
                     this.skeleton.setFlip(shouldFlip, this.flipVertical);
                     sb.end();
                     CardCrawlGame.psb.begin();
-                    PCLRenderHelpers.drawGlitched(CardCrawlGame.psb, s -> sr.draw(CardCrawlGame.psb, this.skeleton));
+                    renderPlayerSkeleton();
                     CardCrawlGame.psb.end();
                     sb.begin();
                 }
@@ -295,9 +288,16 @@ public abstract class PCLCharacter extends CustomPlayer {
                 break;
             case SPRITE:
                 this.animation.setFlip(shouldFlip, this.flipVertical);
-                PCLRenderHelpers.drawGlitched(sb,
-                        s -> this.animation.renderSprite(s, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY));
+                renderPlayerSprite(sb);
         }
+    }
+
+    protected void renderPlayerSkeleton() {
+        sr.draw(CardCrawlGame.psb, this.skeleton);
+    }
+
+    protected void renderPlayerSprite(SpriteBatch sb) {
+        this.animation.renderSprite(sb, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY);
     }
 
     public void resetCreature() {

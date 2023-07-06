@@ -59,7 +59,7 @@ public class PCLAugmentViewer extends EUIHoverable {
         else {
             augmentTitle.setLabel(PGR.core.strings.scp_emptyAugment);
             augmentButton.setBackground(PCLCoreImages.CardUI.augmentSlot.texture()).setBorder(null).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
-            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
+            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(!PGR.dungeon.augments.isEmpty() ? PGR.core.strings.scp_clickToSlot : PGR.core.strings.scp_noAugments);
             augmentDescription.setLabel("");
         }
     }

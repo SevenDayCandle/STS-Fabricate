@@ -166,9 +166,21 @@ public interface PointerProvider {
                     while (i + 1 < baseString.length()) {
                         i += 1;
                         c = baseString.charAt(i);
-                        sub.append(c);
-                        if (c == '$') {
-                            break;
+                        if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                            PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                            if (move != null) {
+                                String s = move.getAttributeString(baseString.charAt(i + 1));
+                                if (!s.isEmpty()) {
+                                    sub.append(s);
+                                }
+                            }
+                            i += 3;
+                        }
+                        else {
+                            sub.append(c);
+                            if (c == '$') {
+                                break;
+                            }
                         }
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
@@ -221,9 +233,21 @@ public interface PointerProvider {
                     while (i + 1 < baseString.length()) {
                         i += 1;
                         c = baseString.charAt(i);
-                        sub.append(c);
-                        if (c == '$') {
-                            break;
+                        if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                            PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                            if (move != null) {
+                                String s = move.getAttributeString(baseString.charAt(i + 1));
+                                if (!s.isEmpty()) {
+                                    sub.append(s);
+                                }
+                            }
+                            i += 3;
+                        }
+                        else {
+                            sub.append(c);
+                            if (c == '$') {
+                                break;
+                            }
                         }
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));

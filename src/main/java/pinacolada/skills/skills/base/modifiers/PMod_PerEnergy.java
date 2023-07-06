@@ -33,4 +33,9 @@ public class PMod_PerEnergy extends PMod_Per<PField_Not> {
     public String getSubText() {
         return PGR.core.tooltips.energy.getTitleOrIcon();
     }
+
+    @Override
+    public String getSubSampleText() {
+        return PGR.core.tooltips.energy.title;
+    }
 }

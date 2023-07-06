@@ -65,7 +65,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
 
     @Override
     public String getAmountRawOrAllString() {
-        return baseAmount <= 0 ? TEXT.subjects_any : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getRangeToAmountRawString();
+        return baseAmount <= 0 ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any) : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getRangeToAmountRawString();
     }
 
     @Override

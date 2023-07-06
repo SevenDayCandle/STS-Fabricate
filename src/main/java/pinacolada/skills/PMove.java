@@ -339,10 +339,18 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_ModifyBlock modifyBlock(int block) {
-        return new PMove_ModifyBlock(block, 1);
+        return modifyBlock(block, 1);
     }
 
     public static PMove_ModifyBlock modifyBlock(int block, int amount, PCLCardGroupHelper... groups) {
+        return (PMove_ModifyBlock) new PMove_ModifyBlock(block, amount, groups).edit(f -> f.setForced(true));
+    }
+
+    public static PMove_ModifyBlock modifyBlockForTurn(int block) {
+        return new PMove_ModifyBlock(block, 1);
+    }
+
+    public static PMove_ModifyBlock modifyBlockForTurn(int block, int amount, PCLCardGroupHelper... groups) {
         return new PMove_ModifyBlock(block, amount, groups);
     }
 
@@ -379,10 +387,18 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage) {
-        return new PMove_ModifyDamage(damage, 1);
+        return modifyDamage(damage, 1);
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage, int amount, PCLCardGroupHelper... groups) {
+        return (PMove_ModifyDamage) new PMove_ModifyDamage(damage, amount, groups).edit(f -> f.setForced(true));
+    }
+
+    public static PMove_ModifyDamage modifyDamageForTurn(int damage) {
+        return new PMove_ModifyDamage(damage, 1);
+    }
+
+    public static PMove_ModifyDamage modifyDamageForTurn(int damage, int amount, PCLCardGroupHelper... groups) {
         return new PMove_ModifyDamage(damage, amount, groups);
     }
 

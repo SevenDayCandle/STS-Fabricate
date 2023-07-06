@@ -75,8 +75,9 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
 
     @Override
     public String getSubText() {
-        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
+        String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
     }
 
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {

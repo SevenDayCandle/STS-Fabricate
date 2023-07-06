@@ -218,6 +218,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (PCond_OnDraw) new PCond_OnDraw().edit(f -> f.setAffinity(aff));
     }
 
+    public static PCond_OnDraw onDraw(AbstractCard.CardType... aff) {
+        return (PCond_OnDraw) new PCond_OnDraw().edit(f -> f.setType(aff));
+    }
+
     public static PCond_OnExhaust onExhaust() {
         return new PCond_OnExhaust();
     }

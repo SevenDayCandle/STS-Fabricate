@@ -843,7 +843,7 @@ public class CombatManager {
         }
 
         PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
-        if (card instanceof PCLCard) {
+        if (pclCard != null) {
             pclCard.unfadeOut();
             pclCard.lighten(true);
 

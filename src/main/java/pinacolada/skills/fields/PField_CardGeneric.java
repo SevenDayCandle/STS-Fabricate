@@ -141,6 +141,10 @@ public class PField_CardGeneric extends PField_Not {
         return getShortCardString();
     }
 
+    public String getFullCardString(Object parse) {
+        return getFullCardString();
+    }
+
     public String getFullCardStringSingular() {
         return getFullCardString();
     }

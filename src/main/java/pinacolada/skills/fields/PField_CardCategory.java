@@ -112,6 +112,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         return getFullCardOrString(skill.getAmountRawString());
     }
 
+    public String getFullCardString(Object parse) {
+        return getFullCardOrString(parse);
+    }
+
     public String getFullCardStringSingular() {
         return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }

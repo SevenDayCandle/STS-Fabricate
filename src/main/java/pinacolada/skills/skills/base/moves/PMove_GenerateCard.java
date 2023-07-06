@@ -183,7 +183,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
-                : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardString() : fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
     }
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {

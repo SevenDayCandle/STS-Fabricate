@@ -71,6 +71,10 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_BonusOnStarter(amount);
     }
 
+    public static PMod_PerCreature bonusPerCreature(PCLCardTarget target, int amount) {
+        return (PMod_PerCreature) new PMod_PerCreature(target, amount).edit(f -> f.setNot(true));
+    }
+
     public static PMod_PerDamage bonusPerDamage(int amount) {
         return (PMod_PerDamage) new PMod_PerDamage(amount).edit(f -> f.setNot(true));
     }

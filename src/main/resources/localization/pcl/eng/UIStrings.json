@@ -516,7 +516,8 @@
 												"View Tooltips",
 												"{#g:Click this to place an Augment into this slot.}",
 												"{#o:Click this to retrieve this Augment.}",
-												"{#r:This Augment cannot be removed.}"
+												"{#r:This Augment cannot be removed.}",
+												"{#r:You do not have any Augments.}"
 								]
 				},
 				"pcl:Subjects": {

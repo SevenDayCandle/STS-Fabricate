@@ -95,6 +95,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public void addAugment(String id, int count) {
         augments.merge(id, count, Integer::sum);
         totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
+        if (augments.get(id) <= 0) {
+            augments.remove(id);
+        }
         PGR.augmentPanel.flash();
     }
 

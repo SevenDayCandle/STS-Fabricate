@@ -338,12 +338,14 @@ public class PCLSingleCardPopup extends EUIBase {
                 PCLAugmentViewer viewer = new PCLAugmentViewer(new EUIHitbox(AUGMENT_X, curY, scale(300), scale(360)), baseCard, i)
                         .setOnClick(() -> {
                             if (baseCard.augments.get(finalI) == null) {
-                                this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(baseCard)
-                                        .addCallback((augment -> {
-                                            if (augment != null) {
-                                                applyAugment(augment);
-                                            }
-                                        }));
+                                if (PGR.dungeon.augments.size() > 0) {
+                                    this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(baseCard)
+                                            .addCallback((augment -> {
+                                                if (augment != null) {
+                                                    applyAugment(augment);
+                                                }
+                                            }));
+                                }
                             }
                             else {
                                 removeAugment(finalI);
