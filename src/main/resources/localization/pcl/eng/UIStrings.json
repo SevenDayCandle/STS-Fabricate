@@ -139,9 +139,9 @@
 				},
 				"pcl:CardEditorTutorial": {
 								"TEXT": [
-												"{#o:Left-click} a card to edit it. {#o:Right-click} a card for more options. || Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckcustom commands in Basemod's console.",
-												"{#o:Left-click} a relic to edit it. {#o:Right-click} a relic for more options. || Custom relics can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yRelics option selected or through the #orelic or #oobtaincustomrelic commands in Basemod's console.",
-												"{#o:Left-click} a potion to edit it. {#o:Right-click} a potion for more options. || Custom potion can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yPotions option selected or through the #opotion or #oobtaincustompotion commands in Basemod's console.",
+												"{#o:Left-Click} a card to edit it. {#o:Right-Click} a card for more options. || Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckcustom commands in Basemod's console.",
+												"{#o:Left-Click} a relic to edit it. {#o:Right-Click} a relic for more options. || Custom relics can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yRelics option selected or through the #orelic or #oobtaincustomrelic commands in Basemod's console.",
+												"{#o:Left-Click} a potion to edit it. {#o:Right-Click} a potion for more options. || Custom potion can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yPotions option selected or through the #opotion or #oobtaincustompotion commands in Basemod's console.",
 												"Refreshes this grid to reflect the item present in your custom items folder. | This will remove any items that have been moved out of the custom folder.",
 												"An item's form can be changed when manually upgrading it. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this item's portrait",
@@ -517,7 +517,8 @@
 												"{#g:Click this to place an Augment into this slot.}",
 												"{#o:Click this to retrieve this Augment.}",
 												"{#r:This Augment cannot be removed.}",
-												"{#r:You do not have any Augments.}"
+												"{#r:You do not have any Augments.}",
+												"#oRight-Click a tooltip to hide it. Hidden tooltips can be re-enabled in EUI's filter menus."
 								]
 				},
 				"pcl:Subjects": {

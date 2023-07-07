@@ -25,6 +25,7 @@ import extendedui.ui.controls.EUIControllerButton;
 import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
 import pinacolada.utilities.GameUtilities;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import static com.megacrit.cardcrawl.screens.SingleRelicViewPopup.TEXT;
 import static pinacolada.ui.cardView.PCLSingleCardPopup.POPUP_TOOLTIP_Y_BASE;
 
-public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
+public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, AbstractRelic> {
     protected static final float DESC_LINE_SPACING = 30.0F * Settings.scale;
     protected static final float DESC_LINE_WIDTH = 418.0F * Settings.scale;
     protected static final float IMAGE_Y = (float)Settings.HEIGHT / 2.0F - 64.0F + 76.0F * Settings.scale;
@@ -127,6 +128,7 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
 
     public void open(AbstractRelic relic, ArrayList<AbstractRelic> group) {
         super.openImpl(relic, group);
+        this.group = group;
         relic.playLandingSFX();
         relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
         this.relicFrameImg = EUIRM.getTexture(getFramePath(relic));
@@ -141,8 +143,10 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
     protected void openNext(AbstractRelic relic) {
         this.close();
         CardCrawlGame.relicPopup.open(relic, this.group);
-        this.fadeTimer = 0.0F;
-        this.fadeColor.a = 0.9F;
+        forceUnfade();
+        EUIClassUtils.setField(CardCrawlGame.relicPopup, "fadeTimer", 0f);
+        Color otherFadeColor = EUIClassUtils.getField(CardCrawlGame.relicPopup, "fadeColor");
+        otherFadeColor.a = 0.9f;
     }
 
     @Override
@@ -156,8 +160,8 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
 
         this.renderRelicImage(sb);
 
-        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontLarge, relicName, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 265.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
-        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontNormal, relicRarity, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 240.0F * Settings.scale, 9999.0F, relicRarityColor, 1.0F);
+        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontLarge, relicName, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 270.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
+        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontNormal, relicRarity, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 235.0F * Settings.scale, 9999.0F, relicRarityColor, 1.0F);
 
         float height = EUISmartText.getSmartHeight(EUIFontHelper.cardDescriptionFontNormal, relicDescription, DESC_LINE_WIDTH, DESC_LINE_SPACING) / 2.0F;
         EUISmartText.write(sb, EUIFontHelper.cardDescriptionFontNormal, relicDescription, (float)Settings.WIDTH / 2.0F - 200.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F - 140.0F * Settings.scale - height, DESC_LINE_WIDTH, DESC_LINE_SPACING, Settings.CREAM_COLOR);
@@ -171,7 +175,7 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
     }
 
     @Override
-    protected Iterable<? extends EUITooltip> getTipsForRender(AbstractRelic currentItem) {
+    protected String getCredits(AbstractRelic currentItem) {
         return null;
     }
 
@@ -202,6 +206,12 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic> {
 
             sb.draw(currentItem.img, (float)Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
         }
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        scrollBar.update();
     }
 
     protected void setStrings() {

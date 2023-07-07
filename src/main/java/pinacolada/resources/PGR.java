@@ -38,6 +38,7 @@ import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
+import pinacolada.ui.cardView.PCLSingleRelicPopup;
 import pinacolada.ui.characterSelection.PCLCharacterSelectOverlay;
 import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
@@ -84,6 +85,7 @@ public class PGR {
     public static PCLLoadoutScreen loadoutEditor;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
+    public static PCLSingleRelicPopup relicPopup;
     public static PCLDebugAugmentPanel debugAugments;
     public static PCLDebugCardPanel debugCards;
     public static EUIImage blackScreen;
@@ -235,6 +237,7 @@ public class PGR {
     protected static void initializeUI() {
         PGR.combatScreen = new PCLCombatScreen();
         PGR.cardPopup = new PCLSingleCardPopup();
+        PGR.relicPopup = new PCLSingleRelicPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
         PGR.loadoutEditor = new PCLLoadoutScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
@@ -263,6 +266,7 @@ public class PGR {
 
         EUI.addBattleSubscriber(PGR.combatScreen);
         EUI.addSubscriber(PGR.cardPopup);
+        EUI.addSubscriber(PGR.relicPopup);
         EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.colorlessGroups);

@@ -4,15 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -22,7 +21,6 @@ import extendedui.ui.controls.EUIControllerButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
@@ -33,7 +31,7 @@ import java.util.ArrayList;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 
-public abstract class PCLSingleItemPopup<T> extends EUIBase {
+public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     protected static final float TIP_RENDER_X = 0.75f * Settings.WIDTH;
     protected static final float DESC_LINE_SPACING = 30.0F * Settings.scale;
     protected static final float DESC_LINE_WIDTH = 418.0F * Settings.scale;
@@ -47,10 +45,11 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
     protected final EUILabel artAuthorLabel;
     protected final EUILabel whatModLabel;
     protected float popupTooltipY = POPUP_TOOLTIP_Y_BASE;
-    protected T currentItem;
+    protected float popupTooltipYTarget = POPUP_TOOLTIP_Y_BASE;
+    protected U currentItem;
     protected T prevItem;
     protected T nextItem;
-    protected Color fadeColor;
+    protected Color fadeColor = Color.BLACK.cpy();
     protected EUICardPreview preview;
     protected float fadeTimer = 0.0F;
 
@@ -58,9 +57,9 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         this.isActive = false;
         this.popupHb = popupHb;
         this.popupHb.move((float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F);
-        this.prevButton = new EUIControllerButton(CInputActionSet.pageLeftViewDeck, ImageMaster.POPUP_ARROW, new EUIHitbox(160f * Settings.scale, 160f * Settings.scale))
+        this.prevButton = new EUIControllerButton(CInputActionSet.pageLeftViewDeck, ImageMaster.POPUP_ARROW, new EUIHitbox(256.0F * Settings.scale, 256.0F * Settings.scale))
                 .setOnClick(() -> openNext(prevItem));
-        this.nextButton = new EUIControllerButton(CInputActionSet.pageRightViewExhaust, ImageMaster.POPUP_ARROW, new EUIHitbox(160f * Settings.scale, 160f * Settings.scale))
+        this.nextButton = new EUIControllerButton(CInputActionSet.pageRightViewExhaust, ImageMaster.POPUP_ARROW, new EUIHitbox(256.0F * Settings.scale, 256.0F * Settings.scale))
                 .setButtonFlip(true, false)
                 .setOnClick(() -> openNext(nextItem));
         this.prevButton.hb.move((float)Settings.WIDTH / 2.0F - 400.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F);
@@ -71,12 +70,12 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
                 .setOnScroll(this::onScroll);
 
         this.artAuthorLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
-                new EUIHitbox(screenW(0.21f), screenH(0.07f), screenW(0.05f), screenH(0.95f)))
+                new EUIHitbox(screenW(0.008f), screenH(0.91f), screenW(0.21f), screenH(0.07f)))
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_artAuthor);
 
         this.whatModLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
-                new EUIHitbox(screenW(0.21f), screenH(0.07f), screenW(0.05f), screenH(0.92f)))
+                new EUIHitbox(screenW(0.008f), screenH(0.89f), screenW(0.21f), screenH(0.07f)))
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_artAuthor);
     }
@@ -86,6 +85,11 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         CardCrawlGame.isPopupOpen = false;
         this.isActive = false;
         this.currentItem = null;
+    }
+
+    public void forceUnfade() {
+        this.fadeTimer = 0.0F;
+        this.fadeColor.a = 0.9F;
     }
 
     protected void initializeTips() {
@@ -100,28 +104,35 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         if (currentItem instanceof TooltipProvider) {
             preview = ((TooltipProvider) currentItem).getPreview();
         }
+
+        scrollBar.scroll(0, true);
     }
 
-    protected void initializeModText() {
+    protected void initializeLabels() {
+        String author = getCredits(currentItem);
+        artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
+
         ModInfo info = EUIGameUtils.getModInfo(currentItem);
         whatModLabel.setLabel(info != null ? EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info.Name, w -> "#y" + w) : "");
     }
 
-    protected void openImpl(T item, ArrayList<T> group) {
+    protected void openImpl(U item, ArrayList<T> group) {
         currentItem = item;
         this.isActive = true;
         this.prevItem = null;
         this.nextItem = null;
-        for(int i = 0; i < group.size(); ++i) {
-            if (group.get(i) == currentItem) {
-                if (i != 0) {
-                    this.prevItem = group.get(i - 1);
-                }
+        if (group != null) {
+            for(int i = 0; i < group.size(); ++i) {
+                if (group.get(i) == currentItem) {
+                    if (i != 0) {
+                        this.prevItem = group.get(i - 1);
+                    }
 
-                if (i != group.size() - 1) {
-                    this.nextItem = group.get(i + 1);
+                    if (i != group.size() - 1) {
+                        this.nextItem = group.get(i + 1);
+                    }
+                    break;
                 }
-                break;
             }
         }
         this.prevButton.setActive(prevItem != null);
@@ -130,12 +141,13 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         this.nextButton.hb.unhover();
         this.fadeTimer = 0.25F;
         this.fadeColor.a = 0.0F;
-        initializeModText();
+        initializeTips();
+        initializeLabels();
     }
 
     protected void onScroll(float scrollPercentage) {
         scrollBar.scroll(scrollPercentage, false);
-        popupTooltipY = POPUP_TOOLTIP_Y_BASE + Settings.HEIGHT * 0.1f * tooltips.size() * scrollPercentage;
+        popupTooltipYTarget = POPUP_TOOLTIP_Y_BASE + Settings.HEIGHT * 0.1f * tooltips.size() * scrollPercentage;
     }
 
     // Scroll updating should be handled in the individual popup because we may not always want to render/update it
@@ -146,6 +158,7 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         this.popupHb.render(sb);
         artAuthorLabel.renderImpl(sb);
         whatModLabel.renderImpl(sb);
+        renderTips(sb);
     }
 
     protected void updateFade() {
@@ -169,6 +182,7 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
     }
 
     protected void renderTips(SpriteBatch sb) {
+        popupTooltipY = EUIUtils.lerpSnap(popupTooltipY, popupTooltipYTarget, 8);
         float y = popupTooltipY;
         for (int i = 0; i < tooltips.size(); i++) {
             EUITooltip tip = tooltips.get(i);
@@ -190,7 +204,7 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         if (InputHelper.justClickedLeft) {
             if (!this.popupHb.hovered &&
                     !this.prevButton.hb.hovered && !this.nextButton.hb.hovered &&
-                    (!this.scrollBar.hb.hovered) && !isHovered()) {
+                    !this.scrollBar.hb.hovered && !isHovered()) {
                 close();
                 InputHelper.justClickedLeft = false;
             }
@@ -209,7 +223,11 @@ public abstract class PCLSingleItemPopup<T> extends EUIBase {
         }
     }
 
-    abstract protected Iterable<? extends EUITooltip> getTipsForRender(T currentItem);
+    protected Iterable<? extends EUITooltip> getTipsForRender(U currentItem) {
+        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+    }
+
+    abstract protected String getCredits(U currentItem);
     abstract protected boolean isHovered();
     abstract protected void openNext(T relic);
 }

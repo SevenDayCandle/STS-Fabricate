@@ -281,7 +281,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 for (int i = 0; i < presetButtons.length; i++) {
                     final EUIButton button = presetButtons[i];
                     button
-                            .showTooltip(!button.interactable)
                             .setColor((i == preset) ? Color.SKY : button.interactable ? Color.LIGHT_GRAY : Color.DARK_GRAY)
                             .tryUpdate();
                 }

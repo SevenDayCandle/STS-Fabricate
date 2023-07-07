@@ -403,6 +403,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String scp_clickToRemove = scp.TEXT[11];
     public final String scp_cannotRemove = scp.TEXT[12];
     public final String scp_noAugments = scp.TEXT[13];
+    public final String scp_tooltipInfo = scp.TEXT[14];
     // Subjects
     public final String subjects_allyN = subjects.TEXT[0];
     public final String subjects_cardN = subjects.TEXT[1];
