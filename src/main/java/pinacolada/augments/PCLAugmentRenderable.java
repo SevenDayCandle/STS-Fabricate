@@ -2,16 +2,11 @@ package pinacolada.augments;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
-import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +41,20 @@ public class PCLAugmentRenderable implements KeywordProvider {
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
-    }
-
-    @Override
     public List<EUIKeywordTooltip> getTipsForFilters() {
         return tips.subList(1, tips.size());
     }
 
-    public void update() {
-        this.hb.update();
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
+    }
+
+    public void initializeTips() {
+        tips.clear();
+        mainTooltip = augment.getTip();
+        tips.add(mainTooltip);
+        EUITooltip.scanForTips(mainTooltip.description, tips);
     }
 
     public void render(SpriteBatch sb) {
@@ -69,14 +67,11 @@ public class PCLAugmentRenderable implements KeywordProvider {
         this.hb.render(sb);
     }
 
-    public void initializeTips() {
-        tips.clear();
-        mainTooltip = augment.getTip();
-        tips.add(mainTooltip);
-        EUITooltip.scanForTips(mainTooltip.description, tips);
-    }
-
     public void renderTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(getTips());
+    }
+
+    public void update() {
+        this.hb.update();
     }
 }

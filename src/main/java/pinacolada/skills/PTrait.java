@@ -126,11 +126,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getSubText() {
-        return EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
-    }
-
-    @Override
     public PTrait<T> makeCopy() {
         PTrait<T> copy = (PTrait<T>) super.makeCopy();
         copy.conditionMetCache = conditionMetCache;
@@ -184,13 +179,18 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+
+    }
+
+    @Override
     public String wrapAmount(int input) {
         return input > 0 ? "+" + input : String.valueOf(input);
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-
+    public String getSubText() {
+        return EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
     }
 
     abstract public String getSubDescText();

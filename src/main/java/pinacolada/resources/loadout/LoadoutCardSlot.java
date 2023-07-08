@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -91,10 +91,6 @@ public class LoadoutCardSlot {
         return selected != null ? selected.getCard(refresh) : null;
     }
 
-    public String getSelectedID() {
-        return selected != null ? selected.ID : null;
-    }
-
     public int getEstimatedValue() {
         return amount * (selected == null ? 0 : selected.estimatedValue);
     }
@@ -128,12 +124,16 @@ public class LoadoutCardSlot {
         return cards;
     }
 
+    public String getSelectedID() {
+        return selected != null ? selected.ID : null;
+    }
+
     public int getSlotIndex() {
         return container.cardSlots.indexOf(this);
     }
 
     public boolean isIDBanned(String id) {
-        PCLAbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        AbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
         return playerData != null && playerData.config.bannedCards.get().contains(id);
     }
 
@@ -263,6 +263,14 @@ public class LoadoutCardSlot {
             return card;
         }
 
+        public PCLLoadout getLoadout() {
+            AbstractCard c = getCard(false);
+            if (c instanceof PCLCard) {
+                return ((PCLCard) c).cardData.loadout;
+            }
+            return null;
+        }
+
         public boolean isLocked() {
             return GameUtilities.isCardLocked(ID);
         }
@@ -279,14 +287,6 @@ public class LoadoutCardSlot {
                 return ((PCLCard) c).cardData.maxCopies;
             }
             return MAX_LIMIT;
-        }
-
-        public PCLLoadout getLoadout() {
-            AbstractCard c = getCard(false);
-            if (c instanceof PCLCard) {
-                return ((PCLCard) c).cardData.loadout;
-            }
-            return null;
         }
     }
 }

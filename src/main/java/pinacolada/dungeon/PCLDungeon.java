@@ -2,7 +2,6 @@ package pinacolada.dungeon;
 
 import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
-import basemod.interfaces.OnStartBattleSubscriber;
 import basemod.interfaces.PreStartGameSubscriber;
 import basemod.interfaces.StartActSubscriber;
 import basemod.interfaces.StartGameSubscriber;
@@ -18,7 +17,6 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
@@ -31,15 +29,13 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
-import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.trials.PCLCustomTrial;
@@ -65,7 +61,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected Map<String, String> eventLog = new HashMap<>();
     protected Random rng;
     protected String startingLoadout;
-    protected transient PCLAbstractPlayerData<?, ?> data;
+    protected transient AbstractPlayerData<?, ?> data;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
@@ -150,7 +146,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    private void banItems(PCLAbstractPlayerData<?, ?> data) {
+    private void banItems(AbstractPlayerData<?, ?> data) {
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
@@ -362,7 +358,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
-            for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS) {
+            for (AbstractGlyphBlight glyph : AbstractPlayerData.GLYPHS) {
                 ascensionGlyphCounters.add(glyph.counter);
             }
             rng = null;
@@ -413,17 +409,17 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 }
 
                 // Add glyphs
-                for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++) {
+                for (int i = 0; i < AbstractPlayerData.GLYPHS.size(); i++) {
                     boolean shouldAdd = true;
                     for (AbstractBlight blight : player.blights) {
-                        if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
+                        if (AbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
                             shouldAdd = false;
                             break;
                         }
                     }
                     int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
                     if (shouldAdd && counter > 0) {
-                        AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
+                        AbstractBlight blight = AbstractPlayerData.GLYPHS.get(i).makeCopy();
                         blight.setCounter(counter);
                         GameUtilities.obtainBlightWithoutEffect(blight);
                     }
@@ -450,7 +446,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCardsForData(PCLAbstractPlayerData<?, ?> data) {
+    private void loadCardsForData(AbstractPlayerData<?, ?> data) {
         // Always include the selected loadout. If for some reason none exists, assign one at random
         if (data.selectedLoadout == null) {
             data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));

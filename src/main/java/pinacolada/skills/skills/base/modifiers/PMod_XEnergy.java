@@ -38,11 +38,6 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return PGR.core.tooltips.energy.getTitleOrIcon();
-    }
-
-    @Override
     public String wrapAmountChild(PSkill<?> source, String input) {
         // Only apply X modifier text if the source is the skill that is actually being modified by this modifier
         if (isSkillAffected(source)) {
@@ -54,6 +49,11 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
             input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         }
         return parent != null ? parent.wrapAmountChild(source, input) : (input);
+    }
+
+    @Override
+    public String getSubText() {
+        return PGR.core.tooltips.energy.getTitleOrIcon();
     }
 
     @Override

@@ -8,11 +8,11 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.dungeon.PCLDungeon;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData<?, ?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
+public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
     public static final String ID = PGR.BASE_PREFIX;
 
     public PCLCoreResources() {
@@ -30,25 +30,10 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData<?, ?>, 
     }
 
     @Override
-    public PCLAbstractPlayerData<?, ?> getData() {
-        return null;
-    }
-
-    @Override
     public String getReplacement(String cardID) {
         // Prevent example templates from showing up for regular characters
         PCLCardData data = PCLCardData.getStaticData(cardID);
         return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
-    }
-
-    @Override
-    public PCLCoreStrings getStrings() {
-        return new PCLCoreStrings(this);
-    }
-
-    @Override
-    public PCLCoreTooltips getTooltips() {
-        return new PCLCoreTooltips();
     }
 
     protected void postInitialize() {
@@ -69,5 +54,20 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData<?, ?>, 
         loadCustomStrings(RunModStrings.class);
         loadCustomStrings(StanceStrings.class);
         loadAugmentStrings();
+    }
+
+    @Override
+    public AbstractPlayerData<?, ?> getData() {
+        return null;
+    }
+
+    @Override
+    public PCLCoreStrings getStrings() {
+        return new PCLCoreStrings(this);
+    }
+
+    @Override
+    public PCLCoreTooltips getTooltips() {
+        return new PCLCoreTooltips();
     }
 }

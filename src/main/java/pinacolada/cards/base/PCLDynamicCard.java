@@ -59,126 +59,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         return this;
     }
 
-    public void fullReset() {
-        findForms();
-        super.fullReset();
-    }
-
-    @Override
-    public void setup(Object input) {
-        if (input instanceof BuilderInfo) {
-            this.builder = ((BuilderInfo) input).builder;
-            if (((BuilderInfo) input).shouldFindForms) {
-                findForms();
-            }
-        }
-    }
-
-    @Override
-    protected Texture getCardBackground() {
-        return customBg != null ? isPopup ? customBgLarge : customBg : super.getCardBackground();
-    }
-
-    @Override
-    protected Texture getEnergyOrb() {
-        return customEnergyOrb != null ? isPopup ? customEnergyOrbLarge : customEnergyOrb : super.getEnergyOrb();
-    }
-
-    @Override
-    public PCLDynamicCard makeCopy() {
-        PCLDynamicCard copy = new PCLDynamicCard(builder);
-        if (forms != null && !forms.isEmpty()) {
-            copy.setForms(forms);
-        }
-        return copy;
-    }
-
-    @Override
-    protected void renderCardBg(SpriteBatch sb, float x, float y) {
-        if (vanillaBg == null && customBg == null) {
-            super.renderCardBg(sb, x, y);
-        }
-        else {
-            float popUpMultiplier = isPopup ? 0.5f : 1f;
-            Texture mask = getCardBackgroundMask();
-            float width = mask.getWidth();
-            float height = mask.getHeight();
-            TextureAtlas.AtlasRegion vanilla = getVanillaCardBackgroundForRender();
-            if (vanilla != null) {
-                PCLRenderHelpers.drawWithMask(sb,
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanilla, new Vector2(0, 0), vanilla.packedWidth, vanilla.packedHeight, getRenderColor(), transparency, popUpMultiplier)
-                );
-            }
-            else {
-                Texture customBack = getCardBackground();
-                PCLRenderHelpers.drawWithMask(sb,
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBack, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier)
-                );
-            }
-        }
-    }
-
-    @Override
-    protected void renderEnergy(SpriteBatch sb) {
-        if (vanillaEnergyOrb == null && customEnergyOrb == null) {
-            super.renderEnergy(sb);
-        }
-        else if (this.cost > -2 && !getDarken() && !this.isLocked && this.isSeen) {
-            TextureAtlas.AtlasRegion vanilla = getVanillaEnergyOrbForRender();
-            if (vanilla != null) {
-                // TODO better way of doing this instead of blindly copying vanilla SCV
-                if (isPopup) {
-                    this.renderAtlas(sb, getRenderColor(), vanilla, (float) Settings.WIDTH / 2.0F - 270.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F + 380.0F * Settings.scale, 0.5f);
-                }
-                else {
-                    this.renderAtlas(sb, getRenderColor(), vanilla, this.current_x, this.current_y);
-                }
-
-                renderEnergyText(sb);
-            }
-            else {
-                Texture custom = getEnergyOrb();
-                float popUpMultiplier = isPopup ? 0.5f : 1f;
-                PCLRenderHelpers.drawOnCardAuto(sb, this, custom, new Vector2(0, 0), custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
-                renderEnergyText(sb);
-            }
-        }
-    }
-
-    @Override
-    public int setForm(Integer form, int timesUpgraded) {
-        super.setForm(form, timesUpgraded);
-        if (forms != null && forms.size() > form) {
-            this.builder = forms.get(form);
-        }
-        if (this.builder != null) {
-            setProperties(this.builder, form, timesUpgraded);
-        }
-        return this.auxiliaryData.form;
-    }
-
-    public void setupImages(String imagePath) {
-        portrait = null;
-        if (builder.portraitForeground != null) {
-            this.portraitForeground = builder.portraitForeground;
-        }
-        if (builder.portraitImage != null) {
-            this.portraitImg = builder.portraitImage;
-            assetUrl = imagePath;
-        }
-        else {
-            loadImage(imagePath);
-        }
-    }
-
-    // These are null when rendering PCL colors
-    @Override
-    protected boolean shouldUsePCLFrame() {
-        return vanillaBg == null && customBg == null && super.shouldUsePCLFrame();
-    }
-
     protected TextureAtlas.AtlasRegion getBaseGameCardBackground() {
         switch (type) {
             case POWER:
@@ -283,6 +163,126 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                         return null;
                 }
         }
+    }
+
+    @Override
+    protected Texture getCardBackground() {
+        return customBg != null ? isPopup ? customBgLarge : customBg : super.getCardBackground();
+    }
+
+    @Override
+    protected Texture getEnergyOrb() {
+        return customEnergyOrb != null ? isPopup ? customEnergyOrbLarge : customEnergyOrb : super.getEnergyOrb();
+    }
+
+    @Override
+    public PCLDynamicCard makeCopy() {
+        PCLDynamicCard copy = new PCLDynamicCard(builder);
+        if (forms != null && !forms.isEmpty()) {
+            copy.setForms(forms);
+        }
+        return copy;
+    }
+
+    @Override
+    protected void renderCardBg(SpriteBatch sb, float x, float y) {
+        if (vanillaBg == null && customBg == null) {
+            super.renderCardBg(sb, x, y);
+        }
+        else {
+            float popUpMultiplier = isPopup ? 0.5f : 1f;
+            Texture mask = getCardBackgroundMask();
+            float width = mask.getWidth();
+            float height = mask.getHeight();
+            TextureAtlas.AtlasRegion vanilla = getVanillaCardBackgroundForRender();
+            if (vanilla != null) {
+                PCLRenderHelpers.drawWithMask(sb,
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanilla, new Vector2(0, 0), vanilla.packedWidth, vanilla.packedHeight, getRenderColor(), transparency, popUpMultiplier)
+                );
+            }
+            else {
+                Texture customBack = getCardBackground();
+                PCLRenderHelpers.drawWithMask(sb,
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBack, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier)
+                );
+            }
+        }
+    }
+
+    @Override
+    protected void renderEnergy(SpriteBatch sb) {
+        if (vanillaEnergyOrb == null && customEnergyOrb == null) {
+            super.renderEnergy(sb);
+        }
+        else if (this.cost > -2 && !getDarken() && !this.isLocked && this.isSeen) {
+            TextureAtlas.AtlasRegion vanilla = getVanillaEnergyOrbForRender();
+            if (vanilla != null) {
+                // TODO better way of doing this instead of blindly copying vanilla SCV
+                if (isPopup) {
+                    this.renderAtlas(sb, getRenderColor(), vanilla, (float) Settings.WIDTH / 2.0F - 270.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F + 380.0F * Settings.scale, 0.5f);
+                }
+                else {
+                    this.renderAtlas(sb, getRenderColor(), vanilla, this.current_x, this.current_y);
+                }
+
+                renderEnergyText(sb);
+            }
+            else {
+                Texture custom = getEnergyOrb();
+                float popUpMultiplier = isPopup ? 0.5f : 1f;
+                PCLRenderHelpers.drawOnCardAuto(sb, this, custom, new Vector2(0, 0), custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
+                renderEnergyText(sb);
+            }
+        }
+    }
+
+    @Override
+    public void setup(Object input) {
+        if (input instanceof BuilderInfo) {
+            this.builder = ((BuilderInfo) input).builder;
+            if (((BuilderInfo) input).shouldFindForms) {
+                findForms();
+            }
+        }
+    }
+
+    public void fullReset() {
+        findForms();
+        super.fullReset();
+    }
+
+    @Override
+    public int setForm(Integer form, int timesUpgraded) {
+        super.setForm(form, timesUpgraded);
+        if (forms != null && forms.size() > form) {
+            this.builder = forms.get(form);
+        }
+        if (this.builder != null) {
+            setProperties(this.builder, form, timesUpgraded);
+        }
+        return this.auxiliaryData.form;
+    }
+
+    public void setupImages(String imagePath) {
+        portrait = null;
+        if (builder.portraitForeground != null) {
+            this.portraitForeground = builder.portraitForeground;
+        }
+        if (builder.portraitImage != null) {
+            this.portraitImg = builder.portraitImage;
+            assetUrl = imagePath;
+        }
+        else {
+            loadImage(imagePath);
+        }
+    }
+
+    // These are null when rendering PCL colors
+    @Override
+    protected boolean shouldUsePCLFrame() {
+        return vanillaBg == null && customBg == null && super.shouldUsePCLFrame();
     }
 
     protected Texture getCardBackgroundMask() {

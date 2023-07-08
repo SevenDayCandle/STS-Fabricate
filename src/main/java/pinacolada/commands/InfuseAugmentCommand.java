@@ -2,12 +2,10 @@ package pinacolada.commands;
 
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
-import basemod.helpers.ConvertHelper;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cardmods.AugmentModifier;
-import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -33,7 +31,7 @@ public class InfuseAugmentCommand extends ConsoleCommand {
             AugmentModifier.apply(augment.create(), c);
             DevConsole.log("Applied " + tokens[1] + " to " + tokens[2]);
         }
-        else if (augment == null ){
+        else if (augment == null) {
             DevConsole.log("Could not find augment " + tokens[1]);
         }
         else {

@@ -6,7 +6,6 @@ import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -378,6 +377,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setBlock(Integer[] block, Integer[] blockUpgrade) {
         this.block = block;
         this.blockUpgrade = blockUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.block.length, this.blockUpgrade.length);
         return this;
     }
 
@@ -398,6 +398,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         this.blockUpgrade = blockUpgrade;
         this.rightCount = rightCount;
         this.rightCountUpgrade = rightCountUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.block.length, this.blockUpgrade.length, this.rightCount.length, this.rightCountUpgrade.length);
         return this;
     }
 
@@ -440,11 +441,13 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public PCLCardData setCostUpgrades(Integer... costUpgrades) {
         costUpgrade = costUpgrades;
+        this.maxForms = EUIUtils.max(this.maxForms, this.costUpgrade.length);
         return this;
     }
 
     public PCLCardData setCosts(Integer... costs) {
         cost = costs;
+        this.maxForms = EUIUtils.max(this.maxForms, this.cost.length);
         return this;
     }
 
@@ -466,6 +469,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setDamage(Integer[] damage, Integer[] damageUpgrade) {
         this.damage = damage;
         this.damageUpgrade = damageUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.damage.length, this.damageUpgrade.length);
         return this;
     }
 
@@ -486,6 +490,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         this.damageUpgrade = damageUpgrade;
         this.hitCount = hitCount;
         this.hitCountUpgrade = hitCountUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.damage.length, this.damageUpgrade.length, this.hitCount.length, this.hitCountUpgrade.length);
         return this;
     }
 
@@ -513,12 +518,25 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setHitCount(int heal, int healUpgrade) {
         hitCount[0] = heal;
         hitCountUpgrade[0] = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.hitCount.length, this.hitCountUpgrade.length);
         return this;
     }
 
     public PCLCardData setHp(int heal, int healUpgrade) {
         this.hp[0] = heal;
         this.hpUpgrade[0] = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.hp.length, this.hpUpgrade.length);
+        return this;
+    }
+
+    public PCLCardData setHp(int heal, Integer[] healUpgrade) {
+        return setHp(array(heal), healUpgrade);
+    }
+
+    public PCLCardData setHp(Integer[] heal, Integer[] healUpgrade) {
+        this.hp = heal;
+        this.hpUpgrade = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.hp.length, this.hpUpgrade.length);
         return this;
     }
 
@@ -577,6 +595,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setMagicNumber(int heal, int healUpgrade) {
         this.magicNumber[0] = heal;
         this.magicNumberUpgrade[0] = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.magicNumber.length, this.magicNumberUpgrade.length);
         return this;
     }
 
@@ -587,6 +606,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setMagicNumber(Integer[] heal, Integer[] healUpgrade) {
         this.magicNumber = heal;
         this.magicNumberUpgrade = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.magicNumber.length, this.magicNumberUpgrade.length);
         return this;
     }
 
@@ -688,6 +708,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setRightCount(int heal, int healUpgrade) {
         rightCount[0] = heal;
         rightCountUpgrade[0] = healUpgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.rightCount.length, this.rightCountUpgrade.length);
         return this;
     }
 
@@ -759,6 +780,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         for (PCLCardTag tag : other.keySet()) {
             tags.put(tag, other.get(tag));
         }
+        this.maxForms = EUIUtils.max(this.maxForms, EUIUtils.max(other.values(), t -> t.upgrades != null ? t.upgrades.length : 0));
         return this;
     }
 
@@ -771,6 +793,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         for (PCLCardTagInfo tag : tags) {
             this.tags.put(tag.tag, tag);
         }
+        this.maxForms = EUIUtils.max(this.maxForms, EUIUtils.max(tags, t -> t.upgrades != null ? t.upgrades.length : 0));
         return this;
     }
 

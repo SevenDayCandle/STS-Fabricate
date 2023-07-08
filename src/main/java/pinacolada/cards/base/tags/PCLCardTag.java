@@ -275,11 +275,6 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
-    }
-
-    @Override
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Autoplay:
@@ -318,6 +313,11 @@ public enum PCLCardTag implements TooltipProvider {
                 return PGR.core.tooltips.unplayable;
         }
         return new EUIKeywordTooltip(this.name());
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
     }
 
     public boolean has(AbstractCard card) {

@@ -397,6 +397,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(items);
     }
 
+    @SuppressWarnings("rawtypes")
     protected void initializeSelectors() {
         final AbstractCard.CardColor cardColor = getColor();
         effects = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect)))

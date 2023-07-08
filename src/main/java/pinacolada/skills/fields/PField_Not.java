@@ -36,6 +36,16 @@ public class PField_Not extends PField {
         return amount == 1 && !not ? subject : EUIRM.strings.numNoun(valueStr, subject);
     }
 
+    public String getThresholdValPercentString(int amount) {
+        if (not) {
+            if (amount == 0) {
+                return amount + "%";
+            }
+            return TEXT.subjects_xOrLess(amount + "%");
+        }
+        return amount + "%+";
+    }
+
     public String getThresholdValString(int amount) {
         if (not) {
             if (amount == 0) {
@@ -44,16 +54,6 @@ public class PField_Not extends PField {
             return TEXT.subjects_xOrLess(amount);
         }
         return amount + "+";
-    }
-
-    public String getThresholdValPercentString(int amount) {
-        if (not) {
-            if (amount == 0) {
-                return amount + "%";
-            }
-            return TEXT.subjects_xOrLess(amount+ "%");
-        }
-        return amount + "%+";
     }
 
     public void registerNotBoolean(PCLCustomEffectEditingPane editor) {

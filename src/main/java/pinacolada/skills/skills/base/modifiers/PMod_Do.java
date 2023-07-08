@@ -74,14 +74,14 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
-        return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
-    }
-
-    @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerRequired(editor);
+    }
+
+    @Override
+    public String getSubText() {
+        return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
     }
 
     public String getMoveString(boolean addPeriod) {

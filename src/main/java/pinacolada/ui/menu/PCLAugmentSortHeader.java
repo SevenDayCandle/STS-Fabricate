@@ -1,10 +1,7 @@
 package pinacolada.ui.menu;
 
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.mainMenu.SortHeaderButton;
-import extendedui.EUI;
-import extendedui.EUIRM;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.cardFilter.GenericSortHeader;
 import extendedui.utilities.ItemGroup;

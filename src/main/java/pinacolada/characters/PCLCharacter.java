@@ -25,17 +25,15 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.stats.CharStat;
-import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.PCLSFX;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.ui.PCLEnergyOrb;
 import pinacolada.utilities.BlendableSkeletonMeshRenderer;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
@@ -116,7 +114,7 @@ public abstract class PCLCharacter extends CustomPlayer {
 
     @Override
     public int getAscensionMaxHPLoss() {
-        return PCLAbstractPlayerData.DEFAULT_HP / 10;
+        return AbstractPlayerData.DEFAULT_HP / 10;
     }
 
     @Override

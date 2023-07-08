@@ -66,10 +66,6 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    public List<PCond<?>> getSubEffects() {
-        return effects;
-    }
-
     public PMultiCond setEffects(PCond<?>... effects) {
         return setEffects(Arrays.asList(effects));
     }
@@ -79,6 +75,10 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         this.effects.addAll(effects);
         setParentsForChildren();
         return this;
+    }
+
+    public List<PCond<?>> getSubEffects() {
+        return effects;
     }
 
     @Override
@@ -119,11 +119,6 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     @Override
     public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
-    }
-
-    @Override
-    public String getSubText() {
-        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true));
     }
 
     @Override
@@ -342,6 +337,11 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             effect.useParent(value);
         }
         return this;
+    }
+
+    @Override
+    public String getSubText() {
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true));
     }
 
     @Override

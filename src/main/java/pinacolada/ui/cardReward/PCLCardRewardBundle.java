@@ -12,9 +12,9 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class CardRewardBundle {
+public class PCLCardRewardBundle {
     public final AbstractCard card;
-    public final ActionT1<CardRewardBundle> onSelect;
+    public final ActionT1<PCLCardRewardBundle> onSelect;
     public float textOffsetX;
     public float textOffsetY;
     public float iconOffsetX;
@@ -27,7 +27,7 @@ public class CardRewardBundle {
     public Hitbox tooltipHB;
     public int amount;
 
-    public CardRewardBundle(AbstractCard card, ActionT1<CardRewardBundle> onSelect) {
+    public PCLCardRewardBundle(AbstractCard card, ActionT1<PCLCardRewardBundle> onSelect) {
         this.card = card;
         this.onSelect = onSelect;
         this.tooltipHB = new Hitbox(0, 0, AbstractCard.RAW_W, AbstractCard.RAW_H);
@@ -52,13 +52,13 @@ public class CardRewardBundle {
         tooltipHB.render(sb);
     }
 
-    public CardRewardBundle setAmount(int amount) {
+    public PCLCardRewardBundle setAmount(int amount) {
         this.amount = amount;
 
         return this;
     }
 
-    public CardRewardBundle setIcon(Texture icon, float iconOffsetX, float iconOffsetY) {
+    public PCLCardRewardBundle setIcon(Texture icon, float iconOffsetX, float iconOffsetY) {
         this.icon = icon;
         this.iconOffsetX = iconOffsetX;
         this.iconOffsetY = iconOffsetY;
@@ -66,7 +66,7 @@ public class CardRewardBundle {
         return this;
     }
 
-    public CardRewardBundle setText(String text, Color textColor, float textOffsetX, float textOffsetY) {
+    public PCLCardRewardBundle setText(String text, Color textColor, float textOffsetX, float textOffsetY) {
         this.title = text;
         this.textColor = textColor.cpy();
         this.textOffsetX = textOffsetX;
@@ -75,7 +75,7 @@ public class CardRewardBundle {
         return this;
     }
 
-    public CardRewardBundle setTooltip(String header, String body) {
+    public PCLCardRewardBundle setTooltip(String header, String body) {
         this.tooltipHeader = header;
         this.tooltipBody = body;
 

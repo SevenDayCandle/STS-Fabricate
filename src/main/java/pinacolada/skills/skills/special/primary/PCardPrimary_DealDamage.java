@@ -28,7 +28,10 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
-import pinacolada.skills.skills.*;
+import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.skills.skills.PDamageTrait;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
@@ -84,6 +87,31 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
+    public PCardPrimary_DealDamage makeCopy() {
+        return (PCardPrimary_DealDamage) super.makeCopy();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
+                    , EUIUtils.arrayList(sc.getBuilder().attackType)
+                    , item -> {
+                        if (item.size() > 0) {
+                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
+                        }
+                    }
+                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                    PGR.core.strings.cedit_attackType,
+                    true,
+                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
+        }
+
+        super.setupEditor(editor);
+    }
+
+    @Override
     public String getSubText() {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
@@ -110,31 +138,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
         return EUIRM.strings.numNoun(amountString, attackString);
-    }
-
-    @Override
-    public PCardPrimary_DealDamage makeCopy() {
-        return (PCardPrimary_DealDamage) super.makeCopy();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
-                    , EUIUtils.arrayList(sc.getBuilder().attackType)
-                    , item -> {
-                        if (item.size() > 0) {
-                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
-                        }
-                    }
-                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
-                    PGR.core.strings.cedit_attackType,
-                    true,
-                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
-        }
-
-        super.setupEditor(editor);
     }
 
     @Override

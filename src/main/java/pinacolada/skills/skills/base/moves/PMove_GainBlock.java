@@ -39,16 +39,16 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
+    }
+
+    @Override
     public String getSubText() {
         if (isSelfOnlyTarget()) {
             return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.block) : TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
         }
         return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.block);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return String.valueOf(Math.abs(input));
     }
 
     @Override

@@ -15,6 +15,16 @@ import pinacolada.dungeon.CombatManager;
 
 public class UpgradeActionPatches {
 
+    public static void doEdit(javassist.expr.MethodCall m) throws CannotCompileException {
+        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getMethodName().equals("upgrade")) {
+            m.replace("{ pinacolada.patches.card.UpgradeActionPatches.patch($0); $proceed($$);}");
+        }
+    }
+
+    public static void patch(AbstractCard c) {
+        CombatManager.onCardUpgrade(c);
+    }
+
     @SpirePatch(clz = ArmamentsAction.class, method = "update")
     public static class ArmamentsAction_Execute {
         @SpireInstrumentPatch
@@ -64,15 +74,5 @@ public class UpgradeActionPatches {
             Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractCard.class, "upgrade");
             return LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
         }
-    }
-
-    public static void doEdit(javassist.expr.MethodCall m) throws CannotCompileException {
-        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getMethodName().equals("upgrade")) {
-            m.replace("{ pinacolada.patches.card.UpgradeActionPatches.patch($0); $proceed($$);}");
-        }
-    }
-
-    public static void patch(AbstractCard c) {
-        CombatManager.onCardUpgrade(c);
     }
 }

@@ -101,11 +101,6 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     }
 
     @Override
-    public String getSubText() {
-        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
-    }
-
-    @Override
     public boolean isMetascaling() {
         return true;
     }
@@ -131,6 +126,11 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         createRelic((p) -> AbstractDungeon.player.obtainPotion(p));
+    }
+
+    @Override
+    public String getSubText() {
+        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
     }
 
     @Override

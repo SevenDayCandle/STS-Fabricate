@@ -1,11 +1,11 @@
 package pinacolada.resources.pcl;
 
 import extendedui.ui.TextureCache;
-import pinacolada.resources.PCLImages;
+import pinacolada.resources.AbstractImages;
 
 //TODO remove unused images
 
-public class PCLCoreImages extends PCLImages {
+public class PCLCoreImages extends AbstractImages {
     public static final String ORB_VFX_PNG = "images/pcl/ui/menu/canvas/orbVfx.png";
     public static final String EMPTY_SHADOW = "images/pcl/monsters/EmptyShadow.png";
 

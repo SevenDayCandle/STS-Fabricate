@@ -34,13 +34,13 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetString());
+    public boolean isDetrimental() {
+        return target == PCLCardTarget.Self;
     }
 
     @Override
-    public boolean isDetrimental() {
-        return target == PCLCardTarget.Self;
+    public String getSubText() {
+        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetString());
     }
 
     @Override

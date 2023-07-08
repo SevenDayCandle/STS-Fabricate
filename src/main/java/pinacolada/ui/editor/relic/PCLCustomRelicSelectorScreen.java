@@ -144,6 +144,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                     .setOnSave(() -> {
                         AbstractRelic newRelic = slot.make();
+                        newRelic.isSeen = true;
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
                         grid.add(newRelic);
@@ -159,6 +160,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         slot.commitBuilder();
                         AbstractRelic newRelic = slot.getBuilder(0).create();
+                        newRelic.isSeen = true;
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
                         grid.add(newRelic);
@@ -177,6 +179,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                                     .setOnSave(() -> {
                                         slot.commitBuilder();
                                         AbstractRelic newRelic = slot.getBuilder(0).create();
+                                        newRelic.isSeen = true;
                                         currentSlots.put(newRelic, slot);
                                         PCLCustomRelicSlot.getRelics(co).add(slot);
                                         grid.add(newRelic);
@@ -192,6 +195,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
                         AbstractRelic newRelic = cardSlot.getBuilder(0).create();
+                        newRelic.isSeen = true;
                         grid.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newRelic, cardSlot);
@@ -233,6 +237,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                             .setOnSave(() -> {
                                 slot.commitBuilder();
                                 AbstractRelic newRelic = slot.make();
+                                newRelic.isSeen = true;
                                 currentSlots.put(newRelic, slot);
                                 PCLCustomRelicSlot.getRelics(currentColor).add(slot);
                                 grid.add(newRelic);

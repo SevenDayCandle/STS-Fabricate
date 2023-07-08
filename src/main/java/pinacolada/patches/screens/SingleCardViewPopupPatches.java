@@ -1,6 +1,5 @@
 package pinacolada.patches.screens;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
@@ -10,8 +9,6 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.ui.cardView.PCLSingleCardPopup;
 
 public class SingleCardViewPopupPatches {
 

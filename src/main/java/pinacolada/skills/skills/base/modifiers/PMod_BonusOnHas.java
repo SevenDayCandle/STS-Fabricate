@@ -40,14 +40,14 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
-    }
-
-    @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     abstract public EUIKeywordTooltip getActionTooltip();

@@ -43,16 +43,6 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
-    public String getSubText() {
-        String percentLoss = getAmountRawString() + "%";
-        if (target == PCLCardTarget.Self && !isFromCreature()) {
-            return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
-        }
-        return TEXT.act_zLoses(getTargetString(), getTargetOrdinal(), percentLoss, PGR.core.tooltips.hp.title);
-
-    }
-
-    @Override
     public boolean isDetrimental() {
         return target.targetsSelf() || target.targetsAllies();
     }
@@ -62,6 +52,16 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
         super.useOutsideOfBattle();
         int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
         AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
+    }
+
+    @Override
+    public String getSubText() {
+        String percentLoss = getAmountRawString() + "%";
+        if (target == PCLCardTarget.Self && !isFromCreature()) {
+            return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
+        }
+        return TEXT.act_zLoses(getTargetString(), getTargetOrdinal(), percentLoss, PGR.core.tooltips.hp.title);
+
     }
 
     @Override

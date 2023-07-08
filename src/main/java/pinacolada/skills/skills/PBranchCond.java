@@ -103,11 +103,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public String getSubText() {
-        return this.childEffect != null ? this.childEffect.getSubText() : "";
-    }
-
-    @Override
     public boolean hasChildType(Class<?> childType) {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
     }
@@ -221,6 +216,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    @Override
+    public String getSubText() {
+        return this.childEffect != null ? this.childEffect.getSubText() : "";
+    }
+
     protected String getEffectTexts(boolean addPeriod) {
         switch (effects.size()) {
             case 0:
@@ -245,11 +245,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    @Override
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
-    }
-
     public PBranchCond setEffects(PSkill<?>... effects) {
         return setEffects(Arrays.asList(effects));
     }
@@ -259,6 +254,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         this.effects.addAll(effects);
         setParentsForChildren();
         return this;
+    }
+
+    @Override
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
     }
 
     @Override

@@ -249,6 +249,24 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
+    public PMultiTrait setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    @Override
+    public PMultiTrait setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
+    }
+
+    @Override
     public PMultiTrait setTemporaryExtra(int extra) {
         for (PSkill<?> effect : effects) {
             effect.setTemporaryExtra(extra);
@@ -300,10 +318,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    public List<PTrait<?>> getSubEffects() {
-        return effects;
-    }
-
     public PMultiTrait setEffects(PTrait<?>... effects) {
         return setEffects(Arrays.asList(effects));
     }
@@ -314,6 +328,10 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         setParentsForChildren();
 
         return this;
+    }
+
+    public List<PTrait<?>> getSubEffects() {
+        return effects;
     }
 
     @Override
@@ -374,23 +392,5 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public String getSubSampleText() {
         return null;
-    }
-
-    @Override
-    public PMultiTrait setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiTrait setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
-        return this;
     }
 }

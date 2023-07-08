@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -35,7 +34,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     protected static final float TIP_RENDER_X = 0.75f * Settings.WIDTH;
     protected static final float DESC_LINE_SPACING = 30.0F * Settings.scale;
     protected static final float DESC_LINE_WIDTH = 418.0F * Settings.scale;
-    protected static final float IMAGE_Y = (float)Settings.HEIGHT / 2.0F - 64.0F + 76.0F * Settings.scale;
+    protected static final float IMAGE_Y = (float) Settings.HEIGHT / 2.0F - 64.0F + 76.0F * Settings.scale;
     public static final float POPUP_TOOLTIP_Y_BASE = Settings.HEIGHT * 0.85f;
     protected final ArrayList<EUITooltip> tooltips = new ArrayList<>();
     protected final EUIHitbox popupHb;
@@ -56,14 +55,14 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     public PCLSingleItemPopup(EUIHitbox popupHb) {
         this.isActive = false;
         this.popupHb = popupHb;
-        this.popupHb.move((float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F);
+        this.popupHb.move((float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F);
         this.prevButton = new EUIControllerButton(CInputActionSet.pageLeftViewDeck, ImageMaster.POPUP_ARROW, new EUIHitbox(256.0F * Settings.scale, 256.0F * Settings.scale))
                 .setOnClick(() -> openNext(prevItem));
         this.nextButton = new EUIControllerButton(CInputActionSet.pageRightViewExhaust, ImageMaster.POPUP_ARROW, new EUIHitbox(256.0F * Settings.scale, 256.0F * Settings.scale))
                 .setButtonFlip(true, false)
                 .setOnClick(() -> openNext(nextItem));
-        this.prevButton.hb.move((float)Settings.WIDTH / 2.0F - 400.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F);
-        this.nextButton.hb.move((float)Settings.WIDTH / 2.0F + 400.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F);
+        this.prevButton.hb.move((float) Settings.WIDTH / 2.0F - 400.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F);
+        this.nextButton.hb.move((float) Settings.WIDTH / 2.0F + 400.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F);
 
         this.scrollBar = new EUIVerticalScrollBar(new EUIHitbox(EUIGameUtils.screenW(0.96f), EUIGameUtils.screenH(0.15f), EUIGameUtils.screenW(0.026f), EUIGameUtils.screenH(0.7f))
                 .setIsPopupCompatible(true))
@@ -92,6 +91,18 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         this.fadeColor.a = 0.9F;
     }
 
+    protected Iterable<? extends EUITooltip> getTipsForRender(U currentItem) {
+        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+    }
+
+    protected void initializeLabels() {
+        String author = getCredits(currentItem);
+        artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
+
+        ModInfo info = EUIGameUtils.getModInfo(currentItem);
+        whatModLabel.setLabel(info != null ? EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info.Name, w -> "#y" + w) : "");
+    }
+
     protected void initializeTips() {
         tooltips.clear();
         for (EUITooltip tip : getTipsForRender(currentItem)) {
@@ -108,12 +119,9 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         scrollBar.scroll(0, true);
     }
 
-    protected void initializeLabels() {
-        String author = getCredits(currentItem);
-        artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
-
-        ModInfo info = EUIGameUtils.getModInfo(currentItem);
-        whatModLabel.setLabel(info != null ? EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info.Name, w -> "#y" + w) : "");
+    protected void onScroll(float scrollPercentage) {
+        scrollBar.scroll(scrollPercentage, false);
+        popupTooltipYTarget = POPUP_TOOLTIP_Y_BASE + Settings.HEIGHT * 0.1f * tooltips.size() * scrollPercentage;
     }
 
     protected void openImpl(U item, ArrayList<T> group) {
@@ -122,7 +130,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         this.prevItem = null;
         this.nextItem = null;
         if (group != null) {
-            for(int i = 0; i < group.size(); ++i) {
+            for (int i = 0; i < group.size(); ++i) {
                 if (group.get(i) == currentItem) {
                     if (i != 0) {
                         this.prevItem = group.get(i - 1);
@@ -145,11 +153,6 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         initializeLabels();
     }
 
-    protected void onScroll(float scrollPercentage) {
-        scrollBar.scroll(scrollPercentage, false);
-        popupTooltipYTarget = POPUP_TOOLTIP_Y_BASE + Settings.HEIGHT * 0.1f * tooltips.size() * scrollPercentage;
-    }
-
     // Scroll updating should be handled in the individual popup because we may not always want to render/update it
     @Override
     public void renderImpl(SpriteBatch sb) {
@@ -159,15 +162,6 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         artAuthorLabel.renderImpl(sb);
         whatModLabel.renderImpl(sb);
         renderTips(sb);
-    }
-
-    protected void updateFade() {
-        this.fadeTimer -= Gdx.graphics.getDeltaTime();
-        if (this.fadeTimer < 0.0F) {
-            this.fadeTimer = 0.0F;
-        }
-
-        this.fadeColor.a = Interpolation.pow2In.apply(0.9F, 0.0F, this.fadeTimer * 4.0F);
     }
 
     @Override
@@ -200,6 +194,15 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         scrollBar.render(sb);
     }
 
+    protected void updateFade() {
+        this.fadeTimer -= Gdx.graphics.getDeltaTime();
+        if (this.fadeTimer < 0.0F) {
+            this.fadeTimer = 0.0F;
+        }
+
+        this.fadeColor.a = Interpolation.pow2In.apply(0.9F, 0.0F, this.fadeTimer * 4.0F);
+    }
+
     protected void updateInput() {
         if (InputHelper.justClickedLeft) {
             if (!this.popupHb.hovered &&
@@ -223,11 +226,9 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         }
     }
 
-    protected Iterable<? extends EUITooltip> getTipsForRender(U currentItem) {
-        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
-    }
-
     abstract protected String getCredits(U currentItem);
+
     abstract protected boolean isHovered();
+
     abstract protected void openNext(T relic);
 }

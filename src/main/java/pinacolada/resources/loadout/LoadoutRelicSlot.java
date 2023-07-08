@@ -4,10 +4,8 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLRelic;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -85,7 +83,7 @@ public class LoadoutRelicSlot {
     }
 
     public boolean isIDBanned(String id) {
-        PCLAbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        AbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
         return playerData != null && playerData.config.bannedRelics.get().contains(id);
     }
 

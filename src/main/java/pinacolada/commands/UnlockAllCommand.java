@@ -1,18 +1,12 @@
 package pinacolada.commands;
 
 import basemod.devcommands.ConsoleCommand;
-import com.badlogic.gdx.Game;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.screens.compendium.RelicViewScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import extendedui.EUIGameUtils;
-import extendedui.EUIUtils;
 import extendedui.patches.screens.RelicViewScreenPatches;
-import pinacolada.patches.library.RelicLibraryPatches;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 

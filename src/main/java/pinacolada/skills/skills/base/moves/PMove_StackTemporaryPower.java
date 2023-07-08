@@ -38,6 +38,15 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
     }
 
     @Override
+    public void onDrag(AbstractMonster m) {
+        if (m != null) {
+            for (PCLPowerHelper power : fields.powers) {
+                GameUtilities.getIntent(m).addModifier(power.ID, amount);
+            }
+        }
+    }
+
+    @Override
     public String getSubText() {
         String joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerString());
         switch (target) {
@@ -57,15 +66,6 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
             default:
                 return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
                         : TEXT.act_gainAmount(getAmountRawString(), joinedString);
-        }
-    }
-
-    @Override
-    public void onDrag(AbstractMonster m) {
-        if (m != null) {
-            for (PCLPowerHelper power : fields.powers) {
-                GameUtilities.getIntent(m).addModifier(power.ID, amount);
-            }
         }
     }
 

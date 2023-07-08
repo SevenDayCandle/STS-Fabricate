@@ -49,6 +49,11 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     }
 
     @Override
+    public boolean isDetrimental() {
+        return target.targetsSelf();
+    }
+
+    @Override
     public String getSubText() {
         if (target == PCLCardTarget.Self) {
             return TEXT.act_takeDamage(getAmountRawString());
@@ -57,11 +62,6 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
             return TEXT.act_deal(getAmountRawString(), PGR.core.strings.subjects_damage);
         }
         return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetString());
-    }
-
-    @Override
-    public boolean isDetrimental() {
-        return target.targetsSelf();
     }
 
     @Override

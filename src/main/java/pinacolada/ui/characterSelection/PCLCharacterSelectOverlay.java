@@ -32,7 +32,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.interfaces.providers.RunAttributesProvider;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
@@ -55,7 +55,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     protected ArrayList<AbstractRelic> cachedRelics;
     protected CharacterSelectScreen charScreen;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?, ?> data;
+    protected AbstractPlayerData<?, ?> data;
     protected PCLLoadout loadout;
     protected PCLEffect currentDialog;
     protected float textScale;
@@ -144,7 +144,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setOnClick(this::openSeriesSelect);
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
-        for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS) {
+        for (AbstractGlyphBlight glyph : AbstractPlayerData.GLYPHS) {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, glyph.hb.width, glyph.hb.height)));
             xOffset += ROW_OFFSET * 1.7f;
         }
@@ -184,6 +184,19 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    private ArrayList<AbstractRelic> getAllPossibleRelics() {
+        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
+
+        // Get other non base-game relics
+        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
+            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
+                relics.add(r);
+            }
+        }
+
+        return relics;
+    }
+
     protected float getInfoX() {
         return EUIClassUtils.getField(characterOption, "infoX");
     }
@@ -219,19 +232,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                         data.config.bannedRelics.set(effect.bannedRelics);
                     });
         }
-    }
-
-    private ArrayList<AbstractRelic> getAllPossibleRelics() {
-        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
-
-        // Get other non base-game relics
-        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
-            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
-                relics.add(r);
-            }
-        }
-
-        return relics;
     }
 
     private void openResetDialog() {

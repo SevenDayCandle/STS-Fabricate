@@ -32,7 +32,7 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {
+public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
@@ -55,11 +55,11 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
     public final boolean useAugments;
     public PCLLoadout selectedLoadout;
 
-    public PCLAbstractPlayerData(T resources) {
+    public AbstractPlayerData(T resources) {
         this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public PCLAbstractPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
+    public AbstractPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();

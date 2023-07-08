@@ -8,14 +8,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
-import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffect;
-import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 
 import java.util.ArrayList;

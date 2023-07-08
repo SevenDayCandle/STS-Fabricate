@@ -22,6 +22,14 @@ public class CharacterSelectScreenPatches {
         }
     }
 
+    @SpirePatch(clz = CharacterSelectScreen.class, method = "open")
+    public static class CharacterSelectScreen_Open {
+        @SpirePostfixPatch
+        public static void initialize(CharacterSelectScreen __instance) {
+            PGR.charSelectProvider.playEffect = null;
+        }
+    }
+
     @SpirePatch(clz = CharacterSelectScreen.class, method = "update")
     public static class CharacterSelectScreen_Update {
         @SpirePostfixPatch

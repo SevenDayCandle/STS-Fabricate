@@ -3,51 +3,20 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCardData;
-import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelicData;
-import pinacolada.relics.pcl.GenericDice;
-import pinacolada.relics.pcl.HeartShapedBox;
-import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class FakeLoadout extends PCLLoadout {
     public FakeLoadout() {
         super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0, -1, 1);
-    }
-
-    @Override
-    public PCLCardData getSymbolicCard() {
-        return QuestionMark.DATA;
-    }
-
-    @Override
-    public PCLTrophies getTrophies() {
-        return null;
-    }
-
-    @Override
-    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
-        //
-    }
-
-    @Override
-    public void onOpen(CharacterOption option) {
-        AbstractCard.CardColor newColor = option.c.getCardColor();
-        if (newColor != color) {
-            color = newColor;
-            clearPresets();
-        }
     }
 
     @Override
@@ -80,7 +49,7 @@ public class FakeLoadout extends PCLLoadout {
                     case BASIC:
                         if ((c.hasTag(AbstractCard.CardTags.STARTER_STRIKE) || c.hasTag(AbstractCard.CardTags.STARTER_DEFEND))) {
                             break;
-                    }
+                        }
                     case COMMON:
                     case UNCOMMON:
                     case RARE:
@@ -129,6 +98,34 @@ public class FakeLoadout extends PCLLoadout {
         }
     }
 
+    public boolean allowCustoms() {
+        return true;
+    }
+
+    @Override
+    public PCLCardData getSymbolicCard() {
+        return QuestionMark.DATA;
+    }
+
+    @Override
+    public PCLTrophies getTrophies() {
+        return null;
+    }
+
+    @Override
+    public void onOpen(CharacterOption option) {
+        AbstractCard.CardColor newColor = option.c.getCardColor();
+        if (newColor != color) {
+            color = newColor;
+            clearPresets();
+        }
+    }
+
+    @Override
+    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
+        //
+    }
+
     protected void setDefaultCardsForData(PCLLoadoutData data) {
         data.getCardSlot(0).select(0, 4).markAllSeen();
         data.getCardSlot(1).select(0, 4).markAllSeen();
@@ -161,9 +158,5 @@ public class FakeLoadout extends PCLLoadout {
                 return COMMON_LOADOUT_VALUE * 4;
         }
         return COMMON_LOADOUT_VALUE * 5;
-    }
-
-    public boolean allowCustoms() {
-        return true;
     }
 }

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
-import pinacolada.ui.cardReward.CardRewardBundle;
+import pinacolada.ui.cardReward.PCLCardRewardBundle;
 import pinacolada.utilities.GameUtilities;
 
 public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider {
@@ -19,7 +19,7 @@ public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider 
     }
 
     @Override
-    public CardRewardBundle getBundle(AbstractCard card) {
+    public PCLCardRewardBundle getBundle(AbstractCard card) {
         float chance = BASE_CHANCE / (1 + GameUtilities.getMasterDeckCopies(card.cardID).size());
         if (GameUtilities.getRNG().randomBoolean(chance)) {
             int value = GameUtilities.getRNG().random(0, 9);

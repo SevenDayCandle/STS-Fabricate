@@ -42,15 +42,6 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     }
 
     @Override
-    public String getSubText() {
-        if (target == PCLCardTarget.Self && !isFromCreature()) {
-            return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
-        }
-        return TEXT.act_zLoses(getTargetString(), getTargetOrdinal(), getAmountRawString(), PGR.core.tooltips.hp.title);
-
-    }
-
-    @Override
     public boolean isDetrimental() {
         return target.targetsSelf() || target.targetsAllies();
     }
@@ -59,6 +50,15 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, amount));
+    }
+
+    @Override
+    public String getSubText() {
+        if (target == PCLCardTarget.Self && !isFromCreature()) {
+            return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
+        }
+        return TEXT.act_zLoses(getTargetString(), getTargetOrdinal(), getAmountRawString(), PGR.core.tooltips.hp.title);
+
     }
 
     @Override

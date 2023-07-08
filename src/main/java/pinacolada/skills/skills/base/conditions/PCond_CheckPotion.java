@@ -38,13 +38,13 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullPotionString()));
-
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
+    public String getSubText() {
+        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullPotionString()));
+
     }
 }

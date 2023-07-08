@@ -63,19 +63,19 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerRequired(editor);
+    }
+
+    @Override
     public String getSubText() {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
                 fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
                         fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
                                 : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
-        fields.registerRequired(editor);
     }
 
     @Override

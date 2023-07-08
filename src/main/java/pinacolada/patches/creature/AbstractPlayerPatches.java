@@ -4,7 +4,6 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -249,6 +248,11 @@ public class AbstractPlayerPatches {
             p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
         }
 
+        public static ArrayList<String> getCardList(AbstractPlayer p) {
+            ArrayList<String> getCards = AbstractPlayerFields.overrideCards.get(p);
+            return getCards != null ? getCards : p.getStartingDeck();
+        }
+
         @SpireInstrumentPatch
         public static ExprEditor instrument() {
             return new ExprEditor() {
@@ -258,11 +262,6 @@ public class AbstractPlayerPatches {
                     }
                 }
             };
-        }
-
-        public static ArrayList<String> getCardList(AbstractPlayer p) {
-            ArrayList<String> getCards = AbstractPlayerFields.overrideCards.get(p);
-            return getCards != null ? getCards : p.getStartingDeck();
         }
     }
 

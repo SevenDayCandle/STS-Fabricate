@@ -90,11 +90,6 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public String getSubText() {
-        return getBasicAddString();
-    }
-
-    @Override
     public boolean isAffectedByMods() {
         return super.isAffectedByMods() && !fields.not;
     }
@@ -113,6 +108,11 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     public String wrapExtra(int input) {
         return String.valueOf(input);
+    }
+
+    @Override
+    public String getSubText() {
+        return getBasicAddString();
     }
 
     public String getUntilPlayedString() {

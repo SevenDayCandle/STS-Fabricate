@@ -2,10 +2,10 @@ package pinacolada.resources;
 
 import com.megacrit.cardcrawl.localization.UIStrings;
 
-public class PCLStrings {
+public class AbstractStrings {
     protected PCLResources<?, ?, ?, ?> resources;
 
-    public PCLStrings(PCLResources<?, ?, ?, ?> resources) {
+    public AbstractStrings(PCLResources<?, ?, ?, ?> resources) {
         this.resources = resources;
     }
 

@@ -1,6 +1,5 @@
 package pinacolada.skills.fields;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;

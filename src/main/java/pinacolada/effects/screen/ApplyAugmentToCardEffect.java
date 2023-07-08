@@ -1,7 +1,6 @@
 package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;

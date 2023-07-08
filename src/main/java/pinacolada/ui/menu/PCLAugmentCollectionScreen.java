@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.screens.EUIPoolScreen;
@@ -31,6 +30,20 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     public PCLAugmentCollectionScreen() {
         panel = new PCLAugmentList(this::doAction).enableCancel(false);
+    }
+
+    // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
+    public boolean allowOpenDeck() {
+        return curEffect != null;
+    }
+
+    public boolean allowOpenMap() {
+        return curEffect != null;
+    }
+
+    @Override
+    public void openingSettings() {
+        AbstractDungeon.previousScreen = curScreen();
     }
 
     @Override
@@ -88,11 +101,6 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         refreshAugments();
     }
 
-    @Override
-    public void openingSettings() {
-        AbstractDungeon.previousScreen = curScreen();
-    }
-
     public void refreshAugments() {
         panel.clear();
         HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
@@ -104,16 +112,8 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
                 addItem.invoke(augment, amount);
             }
         }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
-    }
-
-    // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
-    public boolean allowOpenDeck() {
-        return curEffect != null;
-    }
-
-    public boolean allowOpenMap() {
-        return curEffect != null;
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {
+        }, false);
     }
 
 

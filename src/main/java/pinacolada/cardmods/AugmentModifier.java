@@ -20,7 +20,6 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 
 @AbstractCardModifier.SaveIgnore

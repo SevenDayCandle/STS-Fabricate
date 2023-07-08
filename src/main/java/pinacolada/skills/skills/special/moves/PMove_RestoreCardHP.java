@@ -32,15 +32,15 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public String wrapExtra(int input) {
+        return String.valueOf(input);
+    }
+
+    @Override
     public String getSubText() {
         return TEXT.act_healOn(getExtraRawString(),
                 useParent ? getInheritedThemString() :
                         fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects_this);
-    }
-
-    @Override
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
     }
 
     @Override

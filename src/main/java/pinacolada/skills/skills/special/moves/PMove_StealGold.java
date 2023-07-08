@@ -36,17 +36,17 @@ public class PMove_StealGold extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetString());
-    }
-
-    @Override
     public PMove_StealGold onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         if (card.tags.contains(AbstractCard.CardTags.HEALING)) {
             card.tags.add(AbstractCard.CardTags.HEALING);
         }
         return this;
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetString());
     }
 
     @Override

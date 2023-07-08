@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -27,7 +26,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -55,7 +54,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected ViewInGameCardPoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?, ?> data;
+    protected AbstractPlayerData<?, ?> data;
     protected int totalCardsCache = 0;
     protected int totalColorlessCache = 0;
     public boolean isScreenDisabled;
@@ -97,7 +96,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f,PGR.core.strings.sui_showCardPool)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
@@ -278,8 +277,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
         else {
             for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
-                for (PCLResources<?,?,?,?> resources : PGR.getRegisteredResources()) {
-                    if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type)  && !resources.filterColorless(c)) {
+                for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
+                    if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type) && !resources.filterColorless(c)) {
                         cards.addToBottom(c.makeCopy());
                     }
                 }
@@ -306,7 +305,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         contextMenu.positionToOpen();
     }
 
-    public void open(CharacterOption characterOption, PCLAbstractPlayerData<?, ?> data, ActionT0 onClose) {
+    public void open(CharacterOption characterOption, AbstractPlayerData<?, ?> data, ActionT0 onClose) {
         super.open();
         this.onClose = onClose;
         this.characterOption = characterOption;

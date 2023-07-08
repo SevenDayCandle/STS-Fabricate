@@ -1,7 +1,6 @@
 package pinacolada.relics;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.helpers.PowerTip;
 import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
@@ -19,6 +18,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
 public class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
@@ -93,6 +93,27 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         return damage;
     }
 
+    @Override
+    public PCLPointerRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            for (PSkill<?> ef : getPowerEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            updateDescription(null);
+        }
+        return this;
+    }
+
+    @Override
+    public void usedUp() {
+        super.usedUp();
+        unsubscribe();
+    }
+
     // Initialize skills here because this gets called in AbstractRelic's constructor
     @Override
     public String getUpdatedDescription() {
@@ -115,7 +136,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             effect.triggerOnObtain();
         }
         if (!usedUp) {
-          subscribe();
+            subscribe();
         }
     }
 
@@ -142,39 +163,28 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         unsubscribe();
     }
 
-    @Override
-    public PCLPointerRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            updateDescription(null);
-        }
-        return this;
+    protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
     }
 
-    @Override
-    public String getID() {
-        return relicId;
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
+        return getSpecialMove(strFunc, onUse, amount, 0);
     }
 
-    @Override
-    public Skills getSkills() {
-        return skills;
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
-    @Override
-    public int timesUpgraded() {
-        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
     }
 
-    @Override
-    public int xValue() {
-        return counter;
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
     @Override
@@ -205,6 +215,26 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
                 triggerCondition = use;
             }
         }
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    }
+
+    @Override
+    public int xValue() {
+        return counter;
+    }
+
+    @Override
+    public String getID() {
+        return relicId;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
     }
 
     protected void unsubscribe() {
@@ -247,40 +277,13 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         if (triggerCondition != null) {
             triggerCondition.refresh(true, true);
         }
+        for (PSkill<?> effect : getEffects()) {
+            effect.resetUses();
+        }
     }
 
     @Override
     public float atDamageModify(float block, AbstractCard c) {
         return atDamageModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
-    }
-
-    @Override
-    public void usedUp() {
-        super.usedUp();
-        unsubscribe();
-    }
-
-    protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
-        return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
-    }
-
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
-        return getSpecialMove(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
-        return new PSpecialSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialPower(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 }

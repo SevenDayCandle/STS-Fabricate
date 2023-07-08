@@ -13,7 +13,10 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.*;
+import pinacolada.skills.skills.PBlockTrait;
+import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
@@ -59,6 +62,11 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
+    public PCardPrimary_GainBlock makeCopy() {
+        return (PCardPrimary_GainBlock) super.makeCopy();
+    }
+
+    @Override
     public String getSubText() {
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
@@ -76,11 +84,6 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, PGR.core.tooltips.block);
         }
         return EUIRM.strings.numNoun(amountString, PGR.core.tooltips.block);
-    }
-
-    @Override
-    public PCardPrimary_GainBlock makeCopy() {
-        return (PCardPrimary_GainBlock) super.makeCopy();
     }
 
     @Override

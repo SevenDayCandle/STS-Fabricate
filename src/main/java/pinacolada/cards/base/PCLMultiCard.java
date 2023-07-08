@@ -24,12 +24,12 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.PCLPreviewList;
+import pinacolada.utilities.CardPreviewList;
 
 import java.util.ArrayList;
 
 public abstract class PCLMultiCard extends PCLCard {
-    protected PCLPreviewList inheritedCards = new PCLPreviewList();
+    protected CardPreviewList inheritedCards = new CardPreviewList();
     protected PCLMultiCardMove multiCardMove;
     protected boolean hasAttackOrSkill;
 
@@ -53,48 +53,6 @@ public abstract class PCLMultiCard extends PCLCard {
     public ArrayList<PSkill<?>> getFullEffects() {
         ArrayList<PSkill<?>> original = getEffects();
         return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
-    }
-
-    public void setup(Object input) {
-        multiCardMove = createMulticardMove();
-        addUseMove(multiCardMove);
-    }
-
-    @Override
-    public void triggerWhenCreated(boolean startOfBattle) {
-        if (inheritedCards.size() < multiCardMove.baseAmount) {
-            while (inheritedCards.size() < multiCardMove.baseAmount) {
-                addInheritedCard(new MysteryCard(false));
-            }
-        }
-        for (AbstractCard card : inheritedCards.getCards()) {
-            if (card instanceof MysteryCard) {
-                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
-                replaceInheritedCard(card, newCard);
-            }
-            card.isLocked = false;
-            card.isSeen = true;
-        }
-
-        refreshProperties();
-
-        super.triggerWhenCreated(startOfBattle);
-    }
-
-    @Override
-    public EUICardPreview getPreview() {
-        EUICardPreview currentPreview;
-        if (EUIHotkeys.cycle.isJustPressed()) {
-            currentPreview = inheritedCards.next(true);
-        }
-        else {
-            currentPreview = inheritedCards.current();
-        }
-
-        if (currentPreview != null) {
-            currentPreview.isMultiPreview = true;
-        }
-        return currentPreview;
     }
 
     @Override
@@ -191,6 +149,48 @@ public abstract class PCLMultiCard extends PCLCard {
         return super.removeAugment(index, save);
     }
 
+    public void setup(Object input) {
+        multiCardMove = createMulticardMove();
+        addUseMove(multiCardMove);
+    }
+
+    @Override
+    public void triggerWhenCreated(boolean startOfBattle) {
+        if (inheritedCards.size() < multiCardMove.baseAmount) {
+            while (inheritedCards.size() < multiCardMove.baseAmount) {
+                addInheritedCard(new MysteryCard(false));
+            }
+        }
+        for (AbstractCard card : inheritedCards.getCards()) {
+            if (card instanceof MysteryCard) {
+                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
+                replaceInheritedCard(card, newCard);
+            }
+            card.isLocked = false;
+            card.isSeen = true;
+        }
+
+        refreshProperties();
+
+        super.triggerWhenCreated(startOfBattle);
+    }
+
+    @Override
+    public EUICardPreview getPreview() {
+        EUICardPreview currentPreview;
+        if (EUIHotkeys.cycle.isJustPressed()) {
+            currentPreview = inheritedCards.next(true);
+        }
+        else {
+            currentPreview = inheritedCards.current();
+        }
+
+        if (currentPreview != null) {
+            currentPreview.isMultiPreview = true;
+        }
+        return currentPreview;
+    }
+
     // TODO make configurable using skill
     protected void addCardProperties(AbstractCard card) {
         if (this.cost == -2 || card.cost == -1) {
@@ -226,7 +226,7 @@ public abstract class PCLMultiCard extends PCLCard {
 
     public ArrayList<AbstractCard> getCards() {
         if (inheritedCards == null) {
-            inheritedCards = new PCLPreviewList();
+            inheritedCards = new CardPreviewList();
         }
         return inheritedCards.getCards();
     }

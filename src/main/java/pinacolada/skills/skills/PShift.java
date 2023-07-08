@@ -31,11 +31,6 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_whenSingle(getDelegateText());
-    }
-
-    @Override
     public String getText(boolean addPeriod) {
         return getCapitalSubText(addPeriod) + (childEffect != null ? (": " + childEffect.getText(addPeriod)) : "");
     }
@@ -47,6 +42,11 @@ public abstract class PShift extends PPrimary<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.cond_whenSingle(getDelegateText());
     }
 
     @Override

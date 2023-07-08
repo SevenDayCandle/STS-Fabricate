@@ -39,14 +39,6 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
-    public String getSubText() {
-        if (isSelfOnlyTarget()) {
-            return TEXT.act_heal(getAmountRawString());
-        }
-        return TEXT.act_healOn(getAmountRawString(), getTargetString());
-    }
-
-    @Override
     public boolean isDetrimental() {
         return target.targetsEnemies();
     }
@@ -60,6 +52,14 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         AbstractDungeon.player.heal(amount);
+    }
+
+    @Override
+    public String getSubText() {
+        if (isSelfOnlyTarget()) {
+            return TEXT.act_heal(getAmountRawString());
+        }
+        return TEXT.act_healOn(getAmountRawString(), getTargetString());
     }
 
     @Override

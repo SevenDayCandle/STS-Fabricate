@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.rooms.MonsterRoom;
 import com.megacrit.cardcrawl.rooms.RestRoom;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
@@ -38,10 +37,10 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
 
     protected AbstractCard.CardRarity getRarity(AbstractCard card) {
         int roll = rng.random(100);
-        if (roll < 1) {
+        if (roll < 2) {
             return AbstractCard.CardRarity.RARE;
         }
-        if (roll < 10) {
+        if (roll < 11) {
             return card.rarity == AbstractCard.CardRarity.RARE ? AbstractCard.CardRarity.RARE : AbstractCard.CardRarity.UNCOMMON;
         }
         if (roll < 25) {

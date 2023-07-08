@@ -46,17 +46,17 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    public String getSubText() {
-        Object tt = fields.getOrbAndOrString();
-        return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
-    }
-
-    @Override
     public PCond_EvokeTo onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         card.showEvokeValue = amount > 0;
         card.showEvokeOrbCount = amount;
         return this;
+    }
+
+    @Override
+    public String getSubText() {
+        Object tt = fields.getOrbAndOrString();
+        return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
     }
 
     @Override

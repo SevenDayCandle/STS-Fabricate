@@ -34,11 +34,6 @@ public class PRoot extends PPrimary<PField_Empty> {
         return EUIRM.strings.ui_na;
     }
 
-    @Override
-    public String getSubText() {
-        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
-    }
-
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
     @Override
@@ -59,6 +54,11 @@ public class PRoot extends PPrimary<PField_Empty> {
         if (childEffect != null) {
             childEffect.use(makeInfo(null), PCLActions.bottom);
         }
+    }
+
+    @Override
+    public String getSubText() {
+        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
     }
 
     @Override

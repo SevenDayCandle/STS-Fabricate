@@ -14,6 +14,13 @@ public class CardmodPatches {
 
     // Skip description additions of tag mods, because PCLCard already handles them
 
+    private static SpireReturn<String> earlyReturn(String rawDescription, AbstractCard card) {
+        if (card instanceof PCLCard) {
+            return SpireReturn.Return(rawDescription);
+        }
+        return SpireReturn.Continue();
+    }
+
     @SpirePatch(clz = EtherealMod.class, method = "modifyDescription", optional = true)
     public static class CardmodPatches_EtherealMod {
 
@@ -75,12 +82,5 @@ public class CardmodPatches {
         public static SpireReturn<String> prefix(Object mod, String rawDescription, AbstractCard card) {
             return earlyReturn(rawDescription, card);
         }
-    }
-
-    private static SpireReturn<String> earlyReturn(String rawDescription, AbstractCard card) {
-        if (card instanceof PCLCard) {
-            return SpireReturn.Return(rawDescription);
-        }
-        return SpireReturn.Continue();
     }
 }

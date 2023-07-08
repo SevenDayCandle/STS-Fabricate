@@ -71,14 +71,6 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public String getSubText() {
-        if (isWhenClause()) {
-            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title));
-        }
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
-    }
-
-    @Override
     public PCond_Cooldown onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         return this;
@@ -93,6 +85,14 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     // No-op to avoid refreshing effects changing amount
     public PCond_Cooldown setTemporaryAmount(int amount) {
         return this;
+    }
+
+    @Override
+    public String getSubText() {
+        if (isWhenClause()) {
+            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title));
+        }
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
     }
 
     @Override

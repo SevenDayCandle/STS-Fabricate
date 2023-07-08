@@ -5,8 +5,6 @@ import com.megacrit.cardcrawl.cards.green.WraithForm;
 import com.megacrit.cardcrawl.cards.purple.DevaForm;
 import com.megacrit.cardcrawl.cards.red.DemonForm;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.BustedCrown;
 import com.megacrit.cardcrawl.relics.SneckoEye;
 import com.megacrit.cardcrawl.relics.UnceasingTop;
@@ -14,8 +12,6 @@ import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 import pinacolada.patches.creature.AbstractPlayerPatches;
 import pinacolada.resources.loadout.FakeLoadout;
-import pinacolada.resources.loadout.LoadoutCardSlot;
-import pinacolada.resources.loadout.LoadoutRelicSlot;
 
 import java.util.*;
 

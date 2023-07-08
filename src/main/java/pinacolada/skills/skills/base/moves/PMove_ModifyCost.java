@@ -41,6 +41,13 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
+    }
+
+    @Override
     public String getSubText() {
         String base = useParent ? TEXT.act_zCosts(getInheritedTheyString(), parent != null ? parent.baseAmount : 1, getAmountRawString()) : super.getSubText();
         if (!fields.forced) {
@@ -50,13 +57,6 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
             base = TEXT.subjects_untilX(base, PGR.core.tooltips.play.past());
         }
         return base;
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
     }
 
     @Override

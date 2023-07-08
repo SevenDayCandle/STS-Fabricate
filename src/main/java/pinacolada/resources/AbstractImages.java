@@ -3,7 +3,7 @@ package pinacolada.resources;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 
-public abstract class PCLImages {
+public abstract class AbstractImages {
     public static final String CHARACTER_PNG = "images/{0}/characters/idle/char.png";
     public static final String SKELETON_ATLAS = "images/{0}/characters/idle/char.atlas";
     public static final String SKELETON_JSON = "images/{0}/characters/idle/char.json";
@@ -79,7 +79,7 @@ public abstract class PCLImages {
 
     public AffinityIcons affinities;
 
-    public PCLImages(String id) {
+    public AbstractImages(String id) {
         initializeCardImages(id);
         initializeCharacterImages(id);
         initializeAffinityTextures(id);

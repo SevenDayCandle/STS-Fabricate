@@ -20,11 +20,10 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
-import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.relics.pcl.Macroscope;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
@@ -45,9 +44,9 @@ public abstract class PCLLoadout {
     public static final int COMMON_LOADOUT_VALUE = 5;
     public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
-    public AbstractCard.CardColor color;
     public final String ID;
     protected String shortDescription = GameUtilities.EMPTY_STRING;
+    public AbstractCard.CardColor color;
     public int preset;
     public int unlockLevel = 0;
     public int maxValue;
@@ -87,7 +86,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseDraw;
         }
@@ -97,19 +96,19 @@ public abstract class PCLLoadout {
                 return info.cardDraw;
             }
         }
-        return PCLAbstractPlayerData.DEFAULT_DRAW;
+        return AbstractPlayerData.DEFAULT_DRAW;
     }
 
     public static int getBaseEnergy(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseEnergy;
         }
-        return PCLAbstractPlayerData.DEFAULT_ENERGY;
+        return AbstractPlayerData.DEFAULT_ENERGY;
     }
 
     public static int getBaseGold(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseGold;
         }
@@ -119,11 +118,11 @@ public abstract class PCLLoadout {
                 return info.gold;
             }
         }
-        return PCLAbstractPlayerData.DEFAULT_GOLD;
+        return AbstractPlayerData.DEFAULT_GOLD;
     }
 
     public static int getBaseHP(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseHP;
         }
@@ -133,11 +132,11 @@ public abstract class PCLLoadout {
                 return info.maxHp;
             }
         }
-        return PCLAbstractPlayerData.DEFAULT_HP;
+        return AbstractPlayerData.DEFAULT_HP;
     }
 
     public static int getBaseOrbs(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseOrbs;
         }
@@ -208,6 +207,10 @@ public abstract class PCLLoadout {
             UnlockTracker.markRelicAsSeen(id);
         }
         res.add(id);
+    }
+
+    public boolean allowCustoms() {
+        return false;
     }
 
     public PCLCard buildCard() {
@@ -380,7 +383,7 @@ public abstract class PCLLoadout {
         return PCLBaseStatEditor.StatType.OrbSlot.getAmount(this, getPreset());
     }
 
-    public PCLAbstractPlayerData<?, ?> getPlayerData() {
+    public AbstractPlayerData<?, ?> getPlayerData() {
         return PGR.getPlayerData(color);
     }
 
@@ -418,7 +421,7 @@ public abstract class PCLLoadout {
 
         if (cards.isEmpty()) {
             EUIUtils.logWarning(this, "Starting loadout was empty");
-            PCLAbstractPlayerData<?, ?> data = getPlayerData();
+            AbstractPlayerData<?, ?> data = getPlayerData();
             if (data != null) {
                 for (int i = 0; i < 2; i++) {
                     for (PCLCardData card : data.getCoreLoadout().strikes) {
@@ -438,7 +441,7 @@ public abstract class PCLLoadout {
     public ArrayList<String> getStartingRelics() {
         final ArrayList<String> res = new ArrayList<>();
 
-        PCLAbstractPlayerData<?, ?> data = getPlayerData();
+        AbstractPlayerData<?, ?> data = getPlayerData();
         if (data != null) {
             List<String> starterRelics = data.getStartingRelics();
             for (String starterRelic : starterRelics) {
@@ -462,7 +465,7 @@ public abstract class PCLLoadout {
     }
 
     public PCLTrophies getTrophies() {
-        PCLAbstractPlayerData<?, ?> data = getPlayerData();
+        AbstractPlayerData<?, ?> data = getPlayerData();
         if (data == null) {
             return null;
         }
@@ -521,9 +524,13 @@ public abstract class PCLLoadout {
         return resources != null && resources.getUnlockLevel() < unlockLevel;
     }
 
+    public void onOpen(CharacterOption option) {
+
+    }
+
     public void onVictory(int ascensionLevel, int trophyLevel, int score) {
         PCLTrophies trophies = getTrophies();
-        PCLAbstractPlayerData<?, ?> data = getPlayerData();
+        AbstractPlayerData<?, ?> data = getPlayerData();
         if (data != null && data.selectedLoadout.ID.equals(ID)) {
             if (trophyLevel >= 2) {
                 trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);
@@ -557,14 +564,6 @@ public abstract class PCLLoadout {
         defends.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
         cardDatas.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
-    }
-
-    public void onOpen(CharacterOption option) {
-
-    }
-
-    public boolean allowCustoms() {
-        return false;
     }
 
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch

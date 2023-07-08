@@ -8,7 +8,7 @@ import extendedui.ui.screens.CustomCardLibraryScreen;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
 
@@ -27,7 +27,7 @@ public class PCLLoadoutsContainer {
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
     public final HashSet<String> bannedColorless = new HashSet<>();
-    private PCLAbstractPlayerData<?, ?> data;
+    private AbstractPlayerData<?, ?> data;
     public int currentCardLimit;
     public PCLCard currentSeriesCard;
 
@@ -79,7 +79,7 @@ public class PCLLoadoutsContainer {
         }
     }
 
-    public void commitChanges(PCLAbstractPlayerData<?, ?> data) {
+    public void commitChanges(AbstractPlayerData<?, ?> data) {
         data.selectedLoadout = find(currentSeriesCard);
         HashSet<String> banned = new HashSet<>(bannedCards);
         banned.addAll(bannedColorless);
@@ -92,7 +92,7 @@ public class PCLLoadoutsContainer {
         EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.config.cardsCount.get());
     }
 
-    public void createCards(PCLAbstractPlayerData<?, ?> data) {
+    public void createCards(AbstractPlayerData<?, ?> data) {
         this.data = data;
         allCards.clear();
         allColorlessCards.clear();

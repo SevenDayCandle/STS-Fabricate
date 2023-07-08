@@ -94,12 +94,12 @@ public class PGR {
         return prefix + ":" + suffix;
     }
 
-    public static AugmentStrings getAugmentStrings(String stringID) {
-        return AugmentStrings.STRINGS.get(stringID);
-    }
-
     public static String getAugmentImage(String id) {
         return getPng(id, "augments");
+    }
+
+    public static AugmentStrings getAugmentStrings(String stringID) {
+        return AugmentStrings.STRINGS.get(stringID);
     }
 
     public static String getBlightImage(String id) {
@@ -160,11 +160,11 @@ public class PGR {
         return getLanguagePack().getOrbString(orbID);
     }
 
-    public static PCLAbstractPlayerData<?, ?> getPlayerData(AbstractCard.CardColor playerClass) {
+    public static AbstractPlayerData<?, ?> getPlayerData(AbstractCard.CardColor playerClass) {
         return getResources(playerClass).data;
     }
 
-    public static PCLAbstractPlayerData<?, ?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
+    public static AbstractPlayerData<?, ?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
         return getResources(playerClass).data;
     }
 
@@ -371,7 +371,7 @@ public class PGR {
 
     public static void postInitialize() {
         registerCommands();
-        PCLAbstractPlayerData.postInitialize();
+        AbstractPlayerData.postInitialize();
         config.load(CardCrawlGame.saveSlot);
         config.initializeOptions();
         initializeUI();

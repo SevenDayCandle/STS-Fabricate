@@ -83,13 +83,13 @@ public class PCLStanceHelper implements TooltipProvider {
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper> {

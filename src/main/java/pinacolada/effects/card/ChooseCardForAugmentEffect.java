@@ -2,13 +2,9 @@ package pinacolada.effects.card;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.effects.PCLEffects;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.resources.PGR;
 
@@ -24,13 +20,13 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
         this.canCancel = true;
     }
 
-    protected boolean forUpgrade() {
-        return true;
+    public void complete() {
+        super.complete();
+        GridCardSelectScreenMultiformPatches.setAugment(null);
     }
 
-    @Override
-    protected ArrayList<AbstractCard> getGroup() {
-        return AbstractDungeon.player.masterDeck.group;
+    protected boolean forUpgrade() {
+        return true;
     }
 
     @Override
@@ -39,9 +35,9 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
         super.openGridScreen(cardGroup);
     }
 
-    public void complete() {
-        super.complete();
-        GridCardSelectScreenMultiformPatches.setAugment(null);
+    @Override
+    protected ArrayList<AbstractCard> getGroup() {
+        return AbstractDungeon.player.masterDeck.group;
     }
 
     public void onCardSelected(AbstractCard c) {

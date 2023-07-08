@@ -44,17 +44,17 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
+    }
+
+    @Override
     public String getSubText() {
         if (isWhenClause()) {
             return getWheneverAreString(PGR.core.tooltips.attack.past());
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
     }
 
     // When the owner receives damage, triggers the effect onto the attacker (info.owner)

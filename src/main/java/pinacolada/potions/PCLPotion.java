@@ -83,38 +83,13 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public String getID() {
-        return ID;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Skills getSkills() {
-        return skills;
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return this.getPotency() - 1;
-    }
-
-    @Override
-    public int xValue() {
-        return this.potency;
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
     }
 
     @Override
     public List<EUIKeywordTooltip> getTips() {
         return tips;
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
     }
 
     public String getUpdatedDescription() {
@@ -203,6 +178,31 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void setup() {
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return this.getPotency() - 1;
+    }
+
+    @Override
+    public int xValue() {
+        return this.potency;
+    }
+
+    @Override
+    public String getID() {
+        return ID;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
     }
 
     @SpireOverride

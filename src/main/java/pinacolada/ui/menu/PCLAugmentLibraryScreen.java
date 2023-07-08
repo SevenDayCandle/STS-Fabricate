@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
-import extendedui.interfaces.markers.CustomFilterModule;
 import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
 import pinacolada.augments.PCLAugmentData;
@@ -22,8 +21,8 @@ import java.util.ArrayList;
 
 public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     public static final ArrayList<CustomPoolModule<PCLAugmentRenderable>> globalModules = new ArrayList<>();
-    public PCLAugmentGrid grid;
     public final MenuCancelButton cancelButton;
+    public PCLAugmentGrid grid;
 
     public PCLAugmentLibraryScreen() {
         grid = (PCLAugmentGrid) new PCLAugmentGrid()
@@ -54,6 +53,20 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     }
 
     @Override
+    public void renderImpl(SpriteBatch sb) {
+        grid.tryRender(sb);
+        cancelButton.render(sb);
+        PGR.augmentHeader.renderImpl(sb);
+        if (!PGR.augmentFilters.isActive) {
+            EUI.openBlightFiltersButton.tryRender(sb);
+            EUIExporter.exportButton.tryRender(sb);
+        }
+        for (CustomPoolModule<AbstractBlight> module : EUI.globalCustomBlightLibraryModules) {
+            module.render(sb);
+        }
+    }
+
+    @Override
     public void updateImpl() {
         super.updateImpl();
         boolean shouldDoStandardUpdate = !PGR.augmentFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
@@ -68,24 +81,10 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
             PGR.augmentHeader.updateImpl();
             EUI.openBlightFiltersButton.tryUpdate();
             EUIExporter.exportButton.tryUpdate();
-            for (CustomPoolModule<AbstractBlight>module : EUI.globalCustomBlightLibraryModules) {
+            for (CustomPoolModule<AbstractBlight> module : EUI.globalCustomBlightLibraryModules) {
                 module.update();
             }
         }
         EUIExporter.exportDropdown.tryUpdate();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        grid.tryRender(sb);
-        cancelButton.render(sb);
-        PGR.augmentHeader.renderImpl(sb);
-        if (!PGR.augmentFilters.isActive) {
-            EUI.openBlightFiltersButton.tryRender(sb);
-            EUIExporter.exportButton.tryRender(sb);
-        }
-        for (CustomPoolModule<AbstractBlight>module : EUI.globalCustomBlightLibraryModules) {
-            module.render(sb);
-        }
     }
 }

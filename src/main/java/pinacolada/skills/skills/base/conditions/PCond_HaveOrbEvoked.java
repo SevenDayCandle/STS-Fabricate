@@ -58,6 +58,11 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
+    }
+
+    @Override
     public String getSubText() {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(PGR.core.tooltips.evoke.title);
@@ -68,11 +73,6 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
         }
         return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt)) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt));
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
     }
 
     @Override

@@ -35,13 +35,13 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     }
 
     @Override
-    public PCLDynamicRelic makeCopy() {
-        return new PCLDynamicRelic(builder);
+    public void setupImages(String path) {
+        // No-op, handle images in setupBuilder
     }
 
     @Override
-    public void setupImages(String path) {
-        // No-op, handle images in setupBuilder
+    public PCLDynamicRelic makeCopy() {
+        return new PCLDynamicRelic(builder);
     }
 
     @Override

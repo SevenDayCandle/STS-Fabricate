@@ -25,6 +25,26 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CardLibraryPatches {
+    protected static SpireReturn<AbstractCard> getActualCard(String key) {
+        if (PGR.isLoaded()) {
+            // Only make replacements in game
+            if (EUIGameUtils.inGame()) {
+                AbstractCard res = getReplacement(key);
+                if (res != null) {
+                    return SpireReturn.Return(res);
+                }
+            }
+
+            // Allow getCard to get custom cards too
+            PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
+            if (slot != null) {
+                return SpireReturn.Return(slot.make(true));
+            }
+        }
+
+        return SpireReturn.Continue();
+    }
+
     /**
      * Directly get a card from the card library, bypassing postfixes attached to getCard
      */
@@ -116,26 +136,6 @@ public class CardLibraryPatches {
         if (c != null) {
             card[0] = c;
         }
-    }
-
-    protected static SpireReturn<AbstractCard> getActualCard(String key) {
-        if (PGR.isLoaded()) {
-            // Only make replacements in game
-            if (EUIGameUtils.inGame()) {
-                AbstractCard res = getReplacement(key);
-                if (res != null) {
-                    return SpireReturn.Return(res);
-                }
-            }
-
-            // Allow getCard to get custom cards too
-            PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
-            if (slot != null) {
-                return SpireReturn.Return(slot.make(true));
-            }
-        }
-
-        return SpireReturn.Continue();
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {String.class})

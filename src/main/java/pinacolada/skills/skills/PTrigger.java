@@ -1,7 +1,7 @@
 package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.EUIUtils;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT0;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
@@ -87,14 +87,6 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
-        if (amount > 0) {
-            return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
-        }
-        return "";
-    }
-
-    @Override
     public String getText(boolean addPeriod) {
         String subText = getCapitalSubText(addPeriod);
         String childText = (childEffect != null ? childEffect.getText(addPeriod) : "");
@@ -105,18 +97,21 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public PTrigger makeCopy() {
         PTrigger copy = (PTrigger) super.makeCopy();
         copy.usesThisTurn = this.usesThisTurn;
+        copy.updateCounter();
         return copy;
     }
 
     public PTrigger setAmount(int amount, int upgrade) {
         super.setAmount(amount, upgrade);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
     public PTrigger setAmount(int amount) {
         super.setAmount(amount);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
@@ -124,6 +119,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public PTrigger setAmountFromCard() {
         super.setAmountFromCard();
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
@@ -140,18 +136,21 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public PTrigger setExtra(int amount, int upgrade) {
         super.setExtra(amount, upgrade);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
     public PTrigger setExtra(int amount) {
         super.setExtra(amount);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
     public PTrigger setTemporaryAmount(int amount) {
         super.setTemporaryAmount(amount);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
@@ -179,13 +178,14 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         if (usesThisTurn != 0) {
-            if (usesThisTurn > 0) {
-                usesThisTurn -= 1;
-            }
             boolean result = super.tryPassParent(source, info);
 
-            if (result && power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
-                power.flash();
+            if (result) {
+                if (usesThisTurn > 0) {
+                    usesThisTurn -= 1;
+                    updateCounter();
+                }
+                flash();
             }
 
             return result;
@@ -198,7 +198,9 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
+                updateCounter();
             }
+            flash();
             this.childEffect.use(info, order);
         }
     }
@@ -208,9 +210,28 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
+                updateCounter();
             }
+            flash();
             this.childEffect.use(info, order, shouldPay);
         }
+    }
+
+    protected void flash() {
+        if (power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
+            power.flash();
+        }
+        if (source instanceof AbstractRelic) {
+            ((AbstractRelic) source).flash();
+        }
+    }
+
+    @Override
+    public String getSubText() {
+        if (amount > 0) {
+            return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+        }
+        return "";
     }
 
     public int getUses() {
@@ -221,17 +242,21 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         if (!fields.not) {
             this.usesThisTurn = this.amount;
         }
+
+        updateCounter();
     }
 
     public PTrigger setUpgrade(int upgrade) {
         super.setUpgrade(upgrade);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
     public PTrigger setUpgradeExtra(int upgrade) {
         super.setUpgradeExtra(upgrade);
         this.usesThisTurn = this.amount;
+        updateCounter();
         return this;
     }
 
@@ -239,7 +264,9 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
+                updateCounter();
             }
+            flash();
             return childAction.invoke();
         }
         return false;
@@ -247,5 +274,11 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     protected boolean triggerOn(FuncT0<Boolean> childAction) {
         return triggerOn(childAction, makeInfo(null));
+    }
+
+    protected void updateCounter() {
+        if (source instanceof AbstractRelic) {
+            ((AbstractRelic) source).counter = this.usesThisTurn;
+        }
     }
 }

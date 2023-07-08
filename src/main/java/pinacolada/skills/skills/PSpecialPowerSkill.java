@@ -55,11 +55,6 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
-    public String getSubText() {
-        return description;
-    }
-
-    @Override
     public String getText(boolean addPeriod) {
         return EUIUtils.format(getSubText(), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
@@ -72,5 +67,10 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         PCLActions.bottom.applyPower(powerFunc.invoke(this, info)).allowNegative(true);
+    }
+
+    @Override
+    public String getSubText() {
+        return description;
     }
 }

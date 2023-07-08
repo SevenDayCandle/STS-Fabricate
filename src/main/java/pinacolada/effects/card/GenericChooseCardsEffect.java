@@ -8,12 +8,10 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon.CurrentScreen;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -101,6 +99,10 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         return PGR.core.strings.grid_chooseCards(cardsToChoose);
     }
 
+    protected void openGridScreen(CardGroup cardGroup) {
+        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
+    }
+
     public void openPanel() {
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         for (AbstractCard card : getGroup()) {
@@ -126,10 +128,6 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
 
         openGridScreen(cardGroup);
-    }
-
-    protected void openGridScreen(CardGroup cardGroup) {
-        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
     }
 
     protected abstract ArrayList<AbstractCard> getGroup();

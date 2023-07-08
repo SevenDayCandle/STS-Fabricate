@@ -38,13 +38,13 @@ public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullRelicString()));
-
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
+    public String getSubText() {
+        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullRelicString()));
+
     }
 }

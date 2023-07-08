@@ -21,7 +21,7 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
 import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.*;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -43,7 +43,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected int preset;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData<?, ?> data;
+    protected AbstractPlayerData<?, ?> data;
     protected PCLCardSlotSelectionEffect cardSelectionEffect;
     protected PCLRelicSlotSelectionEffect relicSelectionEffect;
     protected EUILabel startingDeck;
@@ -312,7 +312,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         contextMenu.tryUpdate();
     }
 
-    public void open(PCLLoadout loadout, PCLAbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
+    public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
         this.loadout = loadout;

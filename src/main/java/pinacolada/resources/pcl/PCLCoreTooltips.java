@@ -19,10 +19,10 @@ import pinacolada.powers.special.ProvokedPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
 import pinacolada.resources.PCLEnum;
-import pinacolada.resources.PCLTooltips;
+import pinacolada.resources.AbstractTooltips;
 import pinacolada.resources.PGR;
 
-public class PCLCoreTooltips extends PCLTooltips {
+public class PCLCoreTooltips extends AbstractTooltips {
     public static final String ICON_AFTER_IMAGE = "afterImage";
     public static final String ICON_ARTIFACT = "artifact";
     public static final String ICON_BLUR = "blur";

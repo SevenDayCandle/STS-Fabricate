@@ -7,6 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
@@ -17,6 +18,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Relic;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -46,10 +48,21 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
 
     protected void createRelic(ActionT1<AbstractRelic> onCreate) {
         if (!fields.relicIDs.isEmpty()) {
-            for (String r : fields.relicIDs) {
-                AbstractRelic relic = RelicLibrary.getRelic(r);
-                if (relic != null) {
-                    onCreate.invoke(relic.makeCopy());
+            if (fields.not) {
+                RandomizedList<String> choices = new RandomizedList<>(fields.relicIDs);
+                for (int i = 0; i < amount; i++) {
+                    AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(PCLRelic.rng, true));
+                    if (relic != null) {
+                        onCreate.invoke(relic.makeCopy());
+                    }
+                }
+            }
+            else {
+                for (String r : fields.relicIDs) {
+                    AbstractRelic relic = RelicLibrary.getRelic(r);
+                    if (relic != null) {
+                        onCreate.invoke(relic.makeCopy());
+                    }
                 }
             }
         }
@@ -92,11 +105,6 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
-    public String getSubText() {
-        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.getFullRelicString());
-    }
-
-    @Override
     public boolean isMetascaling() {
         return true;
     }
@@ -119,9 +127,20 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor, TEXT.cedit_or, null);
+    }
+
+    @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         createRelic(PCLEffects.Queue::obtainRelic);
+    }
+
+    @Override
+    public String getSubText() {
+        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.not ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
     }
 
     @Override

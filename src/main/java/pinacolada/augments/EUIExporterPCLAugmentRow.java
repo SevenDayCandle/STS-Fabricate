@@ -1,14 +1,9 @@
 package pinacolada.augments;
 
-import com.megacrit.cardcrawl.blights.AbstractBlight;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
-import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.exporter.EUIExporter;
-import extendedui.exporter.EUIExporterBlightRow;
 import extendedui.exporter.EUIExporterRow;
-import extendedui.utilities.PotionInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,12 +11,12 @@ import java.util.Collections;
 
 public class EUIExporterPCLAugmentRow extends EUIExporterRow {
     public static final EUIExporter.Exportable<PCLAugmentRenderable> augmentExportable = new EUIExporter.Exportable<>(EUIExporterPCLAugmentRow::exportAugmentCsv, EUIExporterPCLAugmentRow::exportAugmentJson);
-    
+
     public String category;
     public String subCategory;
     public int tier;
     public String description;
-    
+
     public EUIExporterPCLAugmentRow(PCLAugmentRenderable augment) {
         this(augment.augment);
     }

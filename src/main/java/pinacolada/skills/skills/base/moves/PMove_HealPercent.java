@@ -40,15 +40,6 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
-    public String getSubText() {
-        String percentLoss = getAmountRawString() + "%";
-        if (isSelfOnlyTarget()) {
-            return TEXT.act_heal(percentLoss);
-        }
-        return TEXT.act_healOn(percentLoss, getTargetString());
-    }
-
-    @Override
     public boolean isDetrimental() {
         return target.targetsEnemies();
     }
@@ -63,6 +54,15 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
         super.useOutsideOfBattle();
         int heal = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
         AbstractDungeon.player.heal(heal);
+    }
+
+    @Override
+    public String getSubText() {
+        String percentLoss = getAmountRawString() + "%";
+        if (isSelfOnlyTarget()) {
+            return TEXT.act_heal(percentLoss);
+        }
+        return TEXT.act_healOn(percentLoss, getTargetString());
     }
 
     @Override

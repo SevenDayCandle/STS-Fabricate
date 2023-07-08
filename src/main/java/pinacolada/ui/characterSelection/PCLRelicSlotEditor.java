@@ -69,6 +69,9 @@ public class PCLRelicSlotEditor extends EUIBase {
         relicNameText.tryRender(sb);
         if (this.relicImage != null) {
             relicImage.renderCentered(sb);
+            if (relicImage.hb.hovered && relic != null) {
+                relic.renderTip(sb);
+            }
         }
         relicValueText.tryRender(sb);
         changeButton.tryRender(sb);

@@ -1333,6 +1333,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return target == PCLCardTarget.Single || (this.childEffect != null && this.childEffect.requiresTarget());
     }
 
+    public void resetUses() {
+
+    }
+
     public final PSkill<T> scanForTips(String source) {
         tips.clear();
         EUITooltip.scanForTips(source, tips);

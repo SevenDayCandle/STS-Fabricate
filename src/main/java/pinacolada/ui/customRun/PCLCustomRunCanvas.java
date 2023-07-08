@@ -299,13 +299,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
         currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
     }
 
-    public void openRelicPool() {
-        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
-    }
-
     public void openLoadoutEditor() {
         allowLoadoutToggle.toggle(true);
-        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {});
+        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {
+        });
+    }
+
+    public void openRelicPool() {
+        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
     }
 
     protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {

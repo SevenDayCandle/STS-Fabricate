@@ -22,7 +22,7 @@ public class CustomEditorMenuScreenPatches {
 
     public static ArrayList<EUIMainMenuPanelButton> getEditors() {
         ArrayList<EUIMainMenuPanelButton> available = new ArrayList<>();
-        available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuCard.texture(), PGR.core.strings.menu_card, PGR.core.strings.menu_cardDesc, () ->  PGR.customCards.open(null, PCLCustomCardSelectorScreen.currentColor, () -> {
+        available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuCard.texture(), PGR.core.strings.menu_card, PGR.core.strings.menu_cardDesc, () -> PGR.customCards.open(null, PCLCustomCardSelectorScreen.currentColor, () -> {
         })));
         available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_BLUE, PCLCoreImages.Menu.menuRelic.texture(), PGR.core.strings.menu_relic, PGR.core.strings.menu_relicDesc, () -> PGR.customRelics.open(null, PCLCustomRelicSelectorScreen.currentColor, () -> {
         })));

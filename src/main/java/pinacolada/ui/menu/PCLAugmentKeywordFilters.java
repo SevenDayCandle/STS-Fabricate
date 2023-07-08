@@ -118,6 +118,57 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 && EUIUtils.all(getGlobalFilters(), CustomFilterModule::isEmpty);
     }
 
+    public boolean evaluate(PCLAugmentRenderable c) {
+        //Name check
+        if (currentName != null && !currentName.isEmpty()) {
+            String name = getNameForSort(c);
+            if (name == null || !name.toLowerCase().contains(currentName.toLowerCase())) {
+                return false;
+            }
+        }
+
+        //Description check
+        if (currentDescription != null && !currentDescription.isEmpty()) {
+            String desc = getDescriptionForSort(c);
+            if (desc == null || !desc.toLowerCase().contains(currentDescription.toLowerCase())) {
+                return false;
+            }
+        }
+
+        //Origin check
+        if (!evaluateItem(currentOrigins, (opt) -> EUIGameUtils.isObjectFromMod(c, opt))) {
+            return false;
+        }
+
+        //Category check
+        if (!evaluateItem(currentCategories, (opt) -> c.augment.data.category == opt)) {
+            return false;
+        }
+
+        //Category check
+        if (!evaluateItem(currentSubCategories, (opt) -> c.augment.data.categorySub == opt)) {
+            return false;
+        }
+
+        //Category check
+        if (!evaluateItem(currentTiers, (opt) -> c.augment.data.tier == opt)) {
+            return false;
+        }
+
+        //Tooltips check
+        if (!currentFilters.isEmpty() && (!getAllTooltips(c).containsAll(currentFilters))) {
+            return false;
+        }
+
+        //Negate Tooltips check
+        if (!currentNegateFilters.isEmpty() && (EUIUtils.any(getAllTooltips(c), currentNegateFilters::contains))) {
+            return false;
+        }
+
+        //Module check
+        return customModule == null || customModule.isItemValid(c);
+    }
+
     @Override
     public ArrayList<CustomFilterModule<PCLAugmentRenderable>> getGlobalFilters() {
         return globalFilters;
@@ -168,7 +219,7 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 || tierDropdown.areAnyItemsHovered()
                 || nameInput.hb.hovered
                 || descriptionInput.hb.hovered
-                || EUIUtils.any(getGlobalFilters(), CustomFilterModule<PCLAugmentRenderable>::isHovered)
+                || EUIUtils.any(getGlobalFilters(), CustomFilterModule::isHovered)
                 || (customModule != null && customModule.isHovered());
     }
 
@@ -181,57 +232,6 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         nameInput.tryRender(sb);
         descriptionInput.tryRender(sb);
         doForFilters(m -> m.render(sb));
-    }
-
-    public boolean evaluate(PCLAugmentRenderable c) {
-        //Name check
-        if (currentName != null && !currentName.isEmpty()) {
-            String name = getNameForSort(c);
-            if (name == null || !name.toLowerCase().contains(currentName.toLowerCase())) {
-                return false;
-            }
-        }
-
-        //Description check
-        if (currentDescription != null && !currentDescription.isEmpty()) {
-            String desc = getDescriptionForSort(c);
-            if (desc == null || !desc.toLowerCase().contains(currentDescription.toLowerCase())) {
-                return false;
-            }
-        }
-
-        //Origin check
-        if (!evaluateItem(currentOrigins, (opt) -> EUIGameUtils.isObjectFromMod(c, opt))) {
-            return false;
-        }
-
-        //Category check
-        if (!evaluateItem(currentCategories, (opt) -> c.augment.data.category == opt)) {
-            return false;
-        }
-
-        //Category check
-        if (!evaluateItem(currentSubCategories, (opt) -> c.augment.data.categorySub == opt)) {
-            return false;
-        }
-
-        //Category check
-        if (!evaluateItem(currentTiers, (opt) -> c.augment.data.tier == opt)) {
-            return false;
-        }
-
-        //Tooltips check
-        if (!currentFilters.isEmpty() && (!getAllTooltips(c).containsAll(currentFilters))) {
-            return false;
-        }
-
-        //Negate Tooltips check
-        if (!currentNegateFilters.isEmpty() && (EUIUtils.any(getAllTooltips(c), currentNegateFilters::contains))) {
-            return false;
-        }
-
-        //Module check
-        return customModule == null || customModule.isItemValid(c);
     }
 
     public PCLAugmentKeywordFilters initializeForCustomHeader(ItemGroup<PCLAugmentRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {

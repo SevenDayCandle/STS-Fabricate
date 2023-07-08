@@ -91,12 +91,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     @Override
-    public String getSubText() {
-        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
-    }
-
-    @Override
     public PMove_GenerateCard makePreviews(RotatingList<EUICardPreview> previews) {
         fields.makePreviews(previews);
         super.makePreviews(previews);
@@ -108,6 +102,12 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
+    }
+
+    @Override
+    public String getSubText() {
+        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {

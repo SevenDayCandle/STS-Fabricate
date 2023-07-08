@@ -369,6 +369,20 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return added;
     }
 
+    public void doEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            action.invoke(be);
+        }
+    }
+
+    public void doNonPowerEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            if (!(be instanceof SummonOnlyMove)) {
+                action.invoke(be);
+            }
+        }
+    }
+
     public PCardPrimary_GainBlock getCardBlock() {
         return onBlockEffect;
     }
@@ -390,6 +404,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return result;
     }
 
+    public AbstractCreature getSourceCreature() {
+        return owner != null ? owner : player;
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return timesUpgraded;
+    }
+
     public String getID() {
         return cardID;
     }
@@ -400,15 +423,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public Skills getSkills() {
         return skills;
-    }
-
-    public AbstractCreature getSourceCreature() {
-        return owner != null ? owner : player;
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return timesUpgraded;
     }
 
     protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse) {
@@ -546,90 +560,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         for (PSkill<?> ef : getPowerEffects()) {
             ef.displayUpgrades(value);
         }
-    }
-
-    public void fullReset() {
-        this.clearSkills();
-        for (PCLCardTag tag : PCLCardTag.values()) {
-            tag.set(this, 0);
-        }
-        this.onAttackEffect = null;
-        this.onBlockEffect = null;
-
-        setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
-        setup(null);
-        setForm(this.auxiliaryData.form, timesUpgraded);
-        refresh(null);
-    }
-
-    public void loadImage(String path) {
-        Texture t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
-        if (t == null) {
-            path = QuestionMark.DATA.imagePath;
-            t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
-        }
-        assetUrl = path;
-        portraitImg = new ColoredTexture(t, null);
-    }
-
-    public int hitCount() {
-        return hitCount;
-    }
-
-    public int hitCountBase() {
-        return baseHitCount;
-    }
-
-    public int rightCount() {
-        return rightCount;
-    }
-
-    public int rightCountBase() {
-        return baseRightCount;
-    }
-
-    @Override
-    public PCLAttackType attackType() {
-        return attackType;
-    }
-
-    public Texture getPortraitImageTexture() {
-        return portraitImg.texture;
-    }
-
-    public void doEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            action.invoke(be);
-        }
-    }
-
-    public void doNonPowerEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            if (!(be instanceof SummonOnlyMove)) {
-                action.invoke(be);
-            }
-        }
-    }
-
-    @Override
-    public final void renderForPreview(SpriteBatch sb) {
-        render(sb, hovered, false, false);
-    }
-
-    public void setup(Object input) {
-    }
-
-    public void triggerOnPurge() {
-        doEffects(be -> be.triggerOnPurge(this));
-    }
-
-    public void triggerOnReshuffle(CardGroup sourcePile) {
-        doEffects(be -> be.triggerOnReshuffle(this, sourcePile));
-    }
-
-    // Called at the start of a fight, or when a card is created by MakeTempCard.
-    public void triggerWhenCreated(boolean startOfBattle) {
-        doEffects(be -> be.triggerOnCreate(this, startOfBattle));
     }
 
     protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
@@ -1026,67 +956,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return new ColoredString(misc, misc > 0 ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tooltips;
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTipsForRender() {
-        ArrayList<EUIKeywordTooltip> dynamicTooltips = new ArrayList<>();
-        // Only show these tooltips outside of combat
-        if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
-            if (isSoulbound()) {
-                dynamicTooltips.add(PGR.core.tooltips.soulbound);
-            }
-            if (cardData.canToggleFromPopup) {
-                dynamicTooltips.add(PGR.core.tooltips.multiform);
-            }
-            if (isUnique()) {
-                dynamicTooltips.add(PGR.core.tooltips.unique);
-            }
-        }
-
-        // Add appropriate summon timing tooltip
-        if (isSummon()) {
-            if (timing.movesBeforePlayer()) {
-                dynamicTooltips.add(PGR.core.tooltips.turnStart);
-            }
-            else {
-                dynamicTooltips.add(PGR.core.tooltips.turnEnd);
-            }
-        }
-
-        // Add tips from tags
-        for (PCLCardTag tag : PCLCardTag.getAll()) {
-            if (tag.has(this)) {
-                dynamicTooltips.add(tag.getTooltip());
-            }
-        }
-
-        for (EUIKeywordTooltip tip : tooltips) {
-            if (!dynamicTooltips.contains(tip)) {
-                dynamicTooltips.add(tip);
-            }
-        }
-        return dynamicTooltips;
-    }
-
-    @Override
-    public void setIsPreview(boolean value) {
-        isPreview = value;
-    }
-
-    @Override
-    public boolean isPopup() {
-        return isPopup;
-    }
-
-    @Override
-    public EUICardPreview getPreview() {
-        return PCLCardPreviews.getCardPreview(this);
-    }
-
     protected Color getTypeColor() {
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
     }
@@ -1440,12 +1309,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
-    public void triggerOnExhaust() {
-        super.triggerOnExhaust();
-        doEffects(be -> be.triggerOnExhaust(this));
-    }
-
-    @Override
     public void triggerOnOtherCardPlayed(AbstractCard c) {
         super.triggerOnOtherCardPlayed(c);
         doEffects(be -> be.triggerOnOtherCardPlayed(c));
@@ -1463,15 +1326,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnScry(this));
     }
 
-    // Only called if the card is upgraded in battle through an action
-    public void triggerOnUpgrade() {
-        doEffects(be -> be.triggerOnUpgrade(this));
-    }
-
     @Override
     public void onRetained() {
         super.onRetained();
         doEffects(be -> be.triggerOnRetain(this));
+    }
+
+    @Override
+    public void triggerOnExhaust() {
+        super.triggerOnExhaust();
+        doEffects(be -> be.triggerOnExhaust(this));
     }
 
     @Override
@@ -2071,6 +1935,76 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    @Override
+    public final void renderForPreview(SpriteBatch sb) {
+        render(sb, hovered, false, false);
+    }
+
+    public void setup(Object input) {
+    }
+
+    public void triggerOnPurge() {
+        doEffects(be -> be.triggerOnPurge(this));
+    }
+
+    public void triggerOnReshuffle(CardGroup sourcePile) {
+        doEffects(be -> be.triggerOnReshuffle(this, sourcePile));
+    }
+
+    // Called at the start of a fight, or when a card is created by MakeTempCard.
+    public void triggerWhenCreated(boolean startOfBattle) {
+        doEffects(be -> be.triggerOnCreate(this, startOfBattle));
+    }
+
+    public void fullReset() {
+        this.clearSkills();
+        for (PCLCardTag tag : PCLCardTag.values()) {
+            tag.set(this, 0);
+        }
+        this.onAttackEffect = null;
+        this.onBlockEffect = null;
+
+        setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
+        setup(null);
+        setForm(this.auxiliaryData.form, timesUpgraded);
+        refresh(null);
+    }
+
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
+        if (t == null) {
+            path = QuestionMark.DATA.imagePath;
+            t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
+        }
+        assetUrl = path;
+        portraitImg = new ColoredTexture(t, null);
+    }
+
+    public int hitCount() {
+        return hitCount;
+    }
+
+    public int hitCountBase() {
+        return baseHitCount;
+    }
+
+    public int rightCount() {
+        return rightCount;
+    }
+
+    public int rightCountBase() {
+        return baseRightCount;
+    }
+
+    @Override
+    public PCLAttackType attackType() {
+        return attackType;
+    }
+
+    public Texture getPortraitImageTexture() {
+        return portraitImg.texture;
+    }
+
     @SpireOverride
     public void renderGlow(SpriteBatch sb) {
         if (!canRenderGlow()) {
@@ -2334,6 +2268,67 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return this.auxiliaryData.form;
     }
 
+    @Override
+    public void setIsPreview(boolean value) {
+        isPreview = value;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tooltips;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTipsForRender() {
+        ArrayList<EUIKeywordTooltip> dynamicTooltips = new ArrayList<>();
+        // Only show these tooltips outside of combat
+        if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
+            if (isSoulbound()) {
+                dynamicTooltips.add(PGR.core.tooltips.soulbound);
+            }
+            if (cardData.canToggleFromPopup) {
+                dynamicTooltips.add(PGR.core.tooltips.multiform);
+            }
+            if (isUnique()) {
+                dynamicTooltips.add(PGR.core.tooltips.unique);
+            }
+        }
+
+        // Add appropriate summon timing tooltip
+        if (isSummon()) {
+            if (timing.movesBeforePlayer()) {
+                dynamicTooltips.add(PGR.core.tooltips.turnStart);
+            }
+            else {
+                dynamicTooltips.add(PGR.core.tooltips.turnEnd);
+            }
+        }
+
+        // Add tips from tags
+        for (PCLCardTag tag : PCLCardTag.getAll()) {
+            if (tag.has(this)) {
+                dynamicTooltips.add(tag.getTooltip());
+            }
+        }
+
+        for (EUIKeywordTooltip tip : tooltips) {
+            if (!dynamicTooltips.contains(tip)) {
+                dynamicTooltips.add(tip);
+            }
+        }
+        return dynamicTooltips;
+    }
+
+    @Override
+    public boolean isPopup() {
+        return isPopup;
+    }
+
+    @Override
+    public EUICardPreview getPreview() {
+        return PCLCardPreviews.getCardPreview(this);
+    }
+
     public void setMultiDamage(boolean value) {
         this.isMultiDamage = value;
     }
@@ -2456,6 +2451,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         super.stopGlowing();
 
         EUIClassUtils.setField(this, "glowTimer", delay);
+    }
+
+    // Only called if the card is upgraded in battle through an action
+    public void triggerOnUpgrade() {
+        doEffects(be -> be.triggerOnUpgrade(this));
     }
 
     public void triggerWhenKilled(PCLCardAlly ally) {

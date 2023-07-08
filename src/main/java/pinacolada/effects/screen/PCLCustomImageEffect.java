@@ -15,7 +15,6 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
-import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -282,7 +281,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private void selectExistingCards() {
         CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
         group.sortAlphabetically(true);
-        curEffect = (PCLGenericSelectCardEffect) new PCLGenericSelectCardEffect(group)
+        curEffect = new PCLGenericSelectCardEffect(group)
                 .addCallback(card -> {
                             if (card != null) {
                                 // TODO handle EYBCardBase with PCLCard check

@@ -65,6 +65,11 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
+    public String wrapExtra(int input) {
+        return String.valueOf(Math.abs(input));
+    }
+
+    @Override
     public String getSubText() {
         if (fields.forced) {
             String giveString = getNumericalObjectText();
@@ -74,11 +79,6 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
                             TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard, giveString);
         }
         return getBasicGiveString();
-    }
-
-    @Override
-    public String wrapExtra(int input) {
-        return String.valueOf(Math.abs(input));
     }
 
     @Override

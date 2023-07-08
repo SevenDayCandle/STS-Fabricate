@@ -58,7 +58,9 @@ public class PCLAugmentCategorySub {
         return PGR.getAugmentImage(ID);
     }
 
-    public String getName() {return ID;}
+    public String getName() {
+        return ID;
+    }
 
     public Texture getTexture() {
         return EUIRM.getTexture(getImagePath());

@@ -11,11 +11,8 @@ import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.loadout.LoadoutCardSlot;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 

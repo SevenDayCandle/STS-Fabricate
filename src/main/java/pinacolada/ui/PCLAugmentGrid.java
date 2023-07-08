@@ -1,12 +1,10 @@
 package pinacolada.ui;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIItemGrid;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentRenderable;
 
 public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
@@ -25,7 +23,7 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     public PCLAugmentGrid(float horizontalAlignment) {
         this(horizontalAlignment, true);
     }
-    
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);

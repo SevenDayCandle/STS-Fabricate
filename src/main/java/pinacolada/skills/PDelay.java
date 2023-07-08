@@ -50,12 +50,6 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return (amount <= 0 ? TEXT.cond_atEndOfTurn() :
-                amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount));
-    }
-
-    @Override
     public String getText(boolean addPeriod) {
         return getCapitalSubText(addPeriod) + (childEffect != null ? ", " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
     }
@@ -81,6 +75,12 @@ public abstract class PDelay extends PSkill<PField_Empty> {
         if (this.childEffect != null) {
             getDelayUse(info, (i) -> this.childEffect.use(i, order)).start();
         }
+    }
+
+    @Override
+    public String getSubText() {
+        return (amount <= 0 ? TEXT.cond_atEndOfTurn() :
+                amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount));
     }
 
     public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);

@@ -51,6 +51,13 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     }
 
     @Override
+    public String getText(boolean addPeriod) {
+        String subtext = getCapitalSubText(addPeriod);
+        // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
+        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
+    }
+
+    @Override
     public String getSubText() {
         // If this skill is under a PTrigger and this references that same PTrigger, the game will crash from a stack overflow
         // In this instance, we should describe the power itself instead
@@ -83,13 +90,6 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         }
 
         return base;
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        String subtext = getCapitalSubText(addPeriod);
-        // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
-        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
     }
 
     @Override

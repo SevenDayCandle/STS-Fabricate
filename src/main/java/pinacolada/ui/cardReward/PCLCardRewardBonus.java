@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardBonus extends EUIBase {
-    protected final ArrayList<CardRewardBundle> bundles = new ArrayList<>();
+    protected final ArrayList<PCLCardRewardBundle> bundles = new ArrayList<>();
     protected CardRewardBonusProvider lastProvider;
     protected RewardItem rewardItem;
 
@@ -29,7 +29,7 @@ public class PCLCardRewardBonus extends EUIBase {
     // Called when rewards get rerolled through dice
     public void addManual(AbstractCard card) {
         if (lastProvider != null && lastProvider.canActivate(rewardItem)) {
-            CardRewardBundle bundle = lastProvider.getBundle(card);
+            PCLCardRewardBundle bundle = lastProvider.getBundle(card);
             if (bundle != null) {
                 bundles.add(bundle);
             }
@@ -43,7 +43,7 @@ public class PCLCardRewardBonus extends EUIBase {
     }
 
     public void onCardObtained(AbstractCard hoveredCard) {
-        for (CardRewardBundle cardRewardBundle : bundles) {
+        for (PCLCardRewardBundle cardRewardBundle : bundles) {
             if (cardRewardBundle.card == hoveredCard) {
                 cardRewardBundle.acquired();
             }
@@ -80,7 +80,7 @@ public class PCLCardRewardBonus extends EUIBase {
             if (provider.canActivate(rewardItem)) {
                 lastProvider = provider;
                 for (AbstractCard c : cards) {
-                    CardRewardBundle bundle = provider.getBundle(c);
+                    PCLCardRewardBundle bundle = provider.getBundle(c);
                     if (bundle != null && !EUIUtils.any(bundles, b -> b.card == c)) {
                         bundles.add(bundle);
                     }
@@ -100,13 +100,13 @@ public class PCLCardRewardBonus extends EUIBase {
     }
 
     public void renderImpl(SpriteBatch sb) {
-        for (CardRewardBundle cardRewardBundle : bundles) {
+        for (PCLCardRewardBundle cardRewardBundle : bundles) {
             cardRewardBundle.render(sb);
         }
     }
 
     public void updateImpl() {
-        for (CardRewardBundle cardRewardBundle : bundles) {
+        for (PCLCardRewardBundle cardRewardBundle : bundles) {
             cardRewardBundle.update();
         }
     }

@@ -6,7 +6,6 @@ import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.base.traits.PTrait_AttackType;
 
 @VisibleAugment

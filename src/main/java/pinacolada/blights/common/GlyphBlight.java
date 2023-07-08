@@ -11,7 +11,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.cards.pcl.glyphs.Glyph;
-import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
@@ -24,7 +24,7 @@ public class GlyphBlight extends AbstractGlyphBlight {
     public Glyph glyph;
 
     public GlyphBlight() {
-        super(ID, PGR.config.ascensionGlyph0, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
+        super(ID, PGR.config.ascensionGlyph0, AbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, AbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
     public CardGroup createGlyphGroup() {

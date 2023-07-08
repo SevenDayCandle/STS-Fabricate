@@ -50,13 +50,13 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
     }
 
     public String getUpdatedDescription() {

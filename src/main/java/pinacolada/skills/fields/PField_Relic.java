@@ -33,7 +33,8 @@ public class PField_Relic extends PField_Random {
                 .setRelicID(relicIDs)
                 .setColor(colors)
                 .setRarity(rarities)
-                .setRandom(random);
+                .setRandom(random)
+                .setNot(not);
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

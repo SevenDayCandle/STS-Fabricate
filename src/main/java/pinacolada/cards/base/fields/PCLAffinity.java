@@ -280,11 +280,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return EUIRenderHelpers.getCroppedRegion(getIcon(), 10);
     }
 
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
-    }
-
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Red:
@@ -310,6 +305,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
             default:
                 throw new EnumConstantNotPresentException(PCLAffinity.class, this.name());
         }
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
     }
 
     public PCLCardDataAffinity make() {

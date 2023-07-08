@@ -129,11 +129,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public String getSubText() {
-        return null;
-    }
-
-    @Override
     public String getText(int index, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(addPeriod) : "";
     }
@@ -398,6 +393,11 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
+    @Override
+    public String getSubText() {
+        return null;
+    }
+
     public PMultiSkill addEffect(PSkill<?> newEffect) {
         this.effects.add(newEffect);
         setParentsForChildren();
@@ -406,10 +406,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     public PSkill<?> getSubEffect(int index) {
         return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
     }
 
     public PMultiSkill setEffects(PSkill<?>... effects) {
@@ -422,6 +418,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         setParentsForChildren();
 
         return this;
+    }
+
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
     }
 
     public void chooseEffect(PCLUseInfo info, PCLActions order) {

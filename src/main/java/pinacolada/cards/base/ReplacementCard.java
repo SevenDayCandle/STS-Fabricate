@@ -25,9 +25,8 @@ public class ReplacementCard extends PCLDynamicCard {
     }
 
     @Override
-    protected void onUpgrade() {
-        super.onUpgrade();
-        original.upgrade();
+    public ReplacementCard makeCopy() {
+        return new ReplacementCard(builder);
     }
 
     public void setup(Object input) {
@@ -35,8 +34,9 @@ public class ReplacementCard extends PCLDynamicCard {
     }
 
     @Override
-    public ReplacementCard makeCopy() {
-        return new ReplacementCard(builder);
+    protected void onUpgrade() {
+        super.onUpgrade();
+        original.upgrade();
     }
 
     protected void updateOriginal() {

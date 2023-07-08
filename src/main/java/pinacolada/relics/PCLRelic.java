@@ -19,7 +19,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.relics.LizardTail;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -27,15 +26,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -195,7 +192,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     // Relics that are replaced with this one when obtained
-    public String[] getReplacementIDs() {
+    public PCLRelicData[] getReplacementIDs() {
         return null;
     }
 
@@ -204,13 +201,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
     }
 
     public int getValue() {
@@ -247,10 +244,88 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    @Override
+    public void onLoad(PCLCollectibleSaveData data) {
+        if (data != null) {
+            this.auxiliaryData = new PCLCollectibleSaveData(data);
+        }
+    }
+
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
+    }
+
+    public void renderHoverTip(SpriteBatch sb) {
+        if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
+            if (!this.isSeen) {
+                renderUnseenTip();
+            }
+            else {
+                this.renderTip(sb);
+            }
+        }
+    }
+
+    public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
+        sb.setColor(color);
+        sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
+    }
+
+    public void renderUnseenTip() {
+        EUITooltip.queueTooltip(getHiddenTooltip());
+    }
+
+    public boolean setEnabled(boolean value) {
+        super.grayscale = !value;
+        return value;
+    }
+
+    public void setupImages(String imagePath) {
+        loadImage(imagePath);
+    }
+
+    protected void updateFlash() {
+        if (this.flashTimer != 0.0F) {
+            this.flashTimer -= Gdx.graphics.getDeltaTime();
+            if (this.flashTimer < 0.0F) {
+                if (this.pulse) {
+                    this.flashTimer = 1.0F;
+                }
+                else {
+                    this.flashTimer = 0.0F;
+                }
+            }
+        }
+    }
+
+    public PCLRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            updateDescription(null);
+        }
+        return this;
+    }
+
+    @Override
+    public void usedUp() {
+        this.counter = -2; // Lizard's tail
+        this.grayscale = true;
+        this.usedUp = true;
+        this.description = MSG[2];
+        this.initializePCLTips();
+    }
+
+    @Override
     public void obtain() {
-        String[] replacements = getReplacementIDs();
+        PCLRelicData[] replacements = getReplacementIDs();
         if (replacements != null) {
-            Set<String> ids = new HashSet<>(Arrays.asList(replacements));
+            Set<String> ids = new HashSet<>(EUIUtils.map(replacements, r -> r.ID));
             ArrayList<AbstractRelic> relics = player.relics;
             for (int i = 0; i < relics.size(); i++) {
                 if (ids.contains(relics.get(i).relicId)) {
@@ -264,9 +339,26 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         super.obtain();
     }
 
+    // Imitating lizard tail so that used up status can be saved
+    @Override
+    public void setCounter(int setCounter) {
+        if (setCounter == -2) {
+            this.usedUp();
+        }
+        else {
+            super.setCounter(setCounter);
+        }
+    }
+
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = usedUp ? MSG[2] : getUpdatedDescription();
+        PCLRelicData[] replacements = getReplacementIDs();
+        if (replacements != null) {
+            String joinedNames = PCLCoreStrings.joinWithAnd(r -> r.strings.NAME, replacements);
+            String replaceString = PCLCoreStrings.colorString("i", EUIUtils.format(PGR.core.strings.misc_replaces, joinedNames));
+            this.description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, replaceString, this.description);
+        }
         if (this.mainTooltip != null) {
             this.mainTooltip.setDescription(description);
         }
@@ -379,17 +471,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         // No-op, use initializePCLTips() instead
     }
 
-    // Imitating lizard tail so that used up status can be saved
-    @Override
-    public void setCounter(int setCounter) {
-        if (setCounter == -2) {
-            this.usedUp();
-        }
-        else {
-            super.setCounter(setCounter);
-        }
-    }
-
     @Override
     public PCLRelic makeCopy() {
         try {
@@ -402,83 +483,5 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     public boolean canSpawn() {
         return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
-    }
-
-    @Override
-    public PCLCollectibleSaveData onSave() {
-        return auxiliaryData;
-    }
-
-    @Override
-    public void onLoad(PCLCollectibleSaveData data) {
-        if (data != null) {
-            this.auxiliaryData = new PCLCollectibleSaveData(data);
-        }
-    }
-
-    @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
-    }
-
-    @Override
-    public void usedUp() {
-        this.counter = -2; // Lizard's tail
-        this.grayscale = true;
-        this.usedUp = true;
-        this.description = MSG[2];
-        this.initializePCLTips();
-    }
-
-    public void renderHoverTip(SpriteBatch sb) {
-        if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
-            if (!this.isSeen) {
-                renderUnseenTip();
-            }
-            else {
-                this.renderTip(sb);
-            }
-        }
-    }
-
-    public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
-        sb.setColor(color);
-        sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
-    }
-
-    public void renderUnseenTip() {
-        EUITooltip.queueTooltip(getHiddenTooltip());
-    }
-
-    public boolean setEnabled(boolean value) {
-        super.grayscale = !value;
-        return value;
-    }
-
-    public void setupImages(String imagePath) {
-        loadImage(imagePath);
-    }
-
-    protected void updateFlash() {
-        if (this.flashTimer != 0.0F) {
-            this.flashTimer -= Gdx.graphics.getDeltaTime();
-            if (this.flashTimer < 0.0F) {
-                if (this.pulse) {
-                    this.flashTimer = 1.0F;
-                }
-                else {
-                    this.flashTimer = 0.0F;
-                }
-            }
-        }
-    }
-
-    public PCLRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            updateDescription(null);
-        }
-        return this;
     }
 }

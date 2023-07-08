@@ -55,6 +55,17 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
+    public boolean isMetascaling() {
+        return true;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()));
+    }
+
+    @Override
     public String getSubText() {
         if (useParent) {
             return TEXT.act_removeFrom(TEXT.subjects_themX, TEXT.cpile_deck);
@@ -65,17 +76,6 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
         String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)));
         return fields.groupTypes.size() == 1 && fields.groupTypes.get(0) == PCLCardGroupHelper.MasterDeck ? TEXT.act_removeFrom(cString, TEXT.cpile_deck) :
                 TEXT.act_removeInPlace(cString, fields.getGroupString(), TEXT.cpile_deck);
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()));
     }
 
     @Override

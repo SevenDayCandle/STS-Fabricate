@@ -42,21 +42,6 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         fields.setCardGroup(groups);
     }
 
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        for (PCLCardGroupHelper group : fields.groupTypes) {
-            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        return capital(childEffect == null ? getSubText() : TEXT.cond_xToY(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
-    }
-
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
@@ -95,6 +80,21 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                         onFail.invoke(info);
                     }
                 });
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
+        return capital(childEffect == null ? getSubText() : TEXT.cond_xToY(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        for (PCLCardGroupHelper group : fields.groupTypes) {
+            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
