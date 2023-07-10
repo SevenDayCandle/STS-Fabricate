@@ -81,6 +81,11 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
     }
 
+    @Override
+    public String wrapAmount(int input) {
+        return input >= 0 && fields.not ? "+" + input : String.valueOf(input);
+    }
+
     public String getSubSampleText() {
         return getSubText();
     }

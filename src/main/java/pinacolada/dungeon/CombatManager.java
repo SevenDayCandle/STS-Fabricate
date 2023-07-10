@@ -28,7 +28,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.patches.game.CardGlowBorderPatches;
 import extendedui.ui.EUIBase;
 import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
@@ -293,7 +292,6 @@ public class CombatManager {
             event.clear();
         }
 
-        CardGlowBorderPatches.overrideColor = null;
         dodgeChance = 0;
         AMPLIFIER_BONUSES.clear();
         EFFECT_BONUSES.clear();
@@ -329,7 +327,6 @@ public class CombatManager {
         semiLimitedData.clear();
         turnData.clear();
 
-        CardGlowBorderPatches.overrideColor = null;
         PURGED_CARDS.clear();
     }
 
@@ -676,9 +673,6 @@ public class CombatManager {
     }
 
     public static void onExhaust(AbstractCard card) {
-        card.targetDrawScale = 0.75F;
-        card.setAngle(0.0F);
-        card.lighten(false);
         card.clearPowers();
 
         subscriberDo(OnCardExhaustedSubscriber.class, s -> s.onCardExhausted(card));

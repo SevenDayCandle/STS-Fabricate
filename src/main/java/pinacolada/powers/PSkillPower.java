@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
@@ -45,7 +46,7 @@ public class PSkillPower extends PCLPower {
                 this.ID = createPowerID(effect);
                 if (effectCopy.sourceCard instanceof EditorCard) {
                     // Vanilla rendering cannot render generated region48 properly
-                    if (PGR.config.vanillaPowerRender.get()) {
+                    if (!EUIConfiguration.useEUITooltips.get()) {
                         this.img = PCLCoreImages.CardAffinity.unknown.texture();
                     }
                     else {

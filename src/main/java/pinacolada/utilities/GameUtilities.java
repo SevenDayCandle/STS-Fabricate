@@ -1478,15 +1478,6 @@ public class GameUtilities {
                 || CombatManager.getTurnData(relicID, false);
     }
 
-    public static void highlightMatchingCards(PCLAffinity affinity) {
-        for (AbstractCard c : AbstractDungeon.player.hand.group) {
-            final PCLCard temp = EUIUtils.safeCast(c, PCLCard.class);
-            if (temp == null || (temp.affinities.getLevel(affinity) == 0)) {
-                c.transparency = 0.35f;
-            }
-        }
-    }
-
     public static boolean inBattle() {
         return inBattle(false);
     }

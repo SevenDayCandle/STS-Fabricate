@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUITooltip;
 import javassist.CtBehavior;
 import pinacolada.characters.CreatureAnimationInfo;
@@ -12,20 +13,6 @@ import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.resources.PGR;
 
 public class AbstractMonsterPatches {
-    @SpirePatch(clz = AbstractMonster.class, method = "renderTip", paramtypez = {SpriteBatch.class})
-    public static class AbstractMonster_RenderTip {
-        @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(AbstractMonster __instance, SpriteBatch sb) {
-            if (!PGR.config.vanillaPowerRender.get()) {
-                if (__instance.reticleAlpha == 0) {
-                    EUITooltip.queueTooltips(__instance);
-                }
-                return SpireReturn.Return();
-            }
-
-            return SpireReturn.Continue();
-        }
-    }
 
     @SpirePatch(clz = AbstractMonster.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {String.class, String.class, int.class, float.class, float.class, float.class, float.class, String.class, float.class, float.class, boolean.class})
     public static class AbstractMonster_Ctor {

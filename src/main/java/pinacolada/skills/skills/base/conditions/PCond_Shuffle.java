@@ -47,6 +47,6 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
 
     @Override
     public void onShuffle(boolean triggerRelics) {
-        tryPassParent(this, makeInfo(null));
+        useFromTrigger(makeInfo(null));
     }
 }

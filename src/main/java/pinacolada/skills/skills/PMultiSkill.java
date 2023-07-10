@@ -1,16 +1,22 @@
 package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.ChoiceCard;
+import pinacolada.cards.base.ChoiceCardData;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.PCLUseInfo;
@@ -21,6 +27,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -428,6 +435,18 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (choiceCard == null) {
             choiceCard = new QuestionMark();
+            if (source instanceof AbstractRelic) {
+                choiceCard.name = choiceCard.originalName = GameUtilities.getRelicName((AbstractRelic) source);
+            }
+            else if (source instanceof AbstractPotion) {
+                choiceCard.name = choiceCard.originalName = ((AbstractPotion) source).name;
+            }
+            else if (source instanceof AbstractBlight) {
+                choiceCard.name = choiceCard.originalName = ((AbstractBlight) source).name;
+            }
+            else {
+                choiceCard.name = choiceCard.originalName = getSourceCreature().name;
+            }
         }
 
         order.tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);

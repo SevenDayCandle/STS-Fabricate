@@ -276,6 +276,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return triggerOn(childAction, makeInfo(null));
     }
 
+    @Override
+    public void triggerOnStartOfBattleForRelic() {
+        super.triggerOnStartOfBattleForRelic();
+        resetUses();
+    }
+
     protected void updateCounter() {
         if (source instanceof AbstractRelic) {
             ((AbstractRelic) source).counter = this.usesThisTurn;

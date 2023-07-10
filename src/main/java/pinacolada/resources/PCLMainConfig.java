@@ -60,7 +60,6 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String TOUR_RELICPRIMARY = PCLMainConfig.createFullID("TourRelicPrimary");
     private static final String TOUR_SERIESSELECT = PCLMainConfig.createFullID("TourSeriesSelect");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
-    private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
     private static ExtraModSettingsPanel.Category pclCategory;
     private HashSet<String> tips = null;
@@ -79,7 +78,6 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
-    public STSConfigItem<Boolean> vanillaPowerRender = new STSConfigItem<Boolean>(VANILLA_POWER_RENDER, false);
     public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(TOUR_CARDATTRIBUTE, false);
     public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(TOUR_CARDPRIMARY, false);
     public STSConfigItem<Boolean> tourCharSelect = new STSConfigItem<Boolean>(TOUR_CHARSELECT, false);
@@ -151,7 +149,6 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
         yPos = addToggle(0, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
-        yPos = addToggle(0, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
         yPos = addToggle(0, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
         yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
@@ -199,7 +196,6 @@ public class PCLMainConfig extends AbstractConfig {
         showFormulaDisplay.addConfig(config);
         showIrrelevantProperties.addConfig(config);
         vanillaLibraryScreen.addConfig(config);
-        vanillaPowerRender.addConfig(config);
         lastCSVPath.addConfig(config);
         lastImagePath.addConfig(config);
         lastSeed.addConfig(config);

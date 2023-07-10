@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.text.EUISmartText;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -256,7 +257,7 @@ public interface PointerProvider {
                 case '}':
                 case '[':
                 case ']':
-                    if (PGR.config.vanillaPowerRender.get()) {
+                    if (!EUIConfiguration.useEUITooltips.get()) {
                         continue;
                     }
                 default:

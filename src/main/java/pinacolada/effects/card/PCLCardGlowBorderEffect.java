@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import extendedui.patches.game.CardGlowBorderPatches;
 import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.GameUtilities;
 
@@ -31,9 +30,6 @@ public class PCLCardGlowBorderEffect extends PCLEffect {
         this.duration = 1.2F;
         if (GameUtilities.inBattle(false)) {
             this.color = gColor.cpy();
-        }
-        else if (CardGlowBorderPatches.overrideColor != null) {
-            this.color = CardGlowBorderPatches.overrideColor.cpy();
         }
         else {
             this.color = FALLBACK_COLOR;

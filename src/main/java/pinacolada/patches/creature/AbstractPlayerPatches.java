@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUITooltip;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
@@ -140,21 +141,6 @@ public class AbstractPlayerPatches {
         @SpirePrefixPatch
         public static void method(AbstractPlayer __instance) {
             CombatManager.onStartup();
-        }
-    }
-
-    @SpirePatch(clz = AbstractPlayer.class, method = "renderPowerTips", paramtypez = {SpriteBatch.class})
-    public static class AbstractPlayer_RenderPowerTips {
-        @SpirePrefixPatch
-        public static SpireReturn prefix(AbstractPlayer __instance, SpriteBatch sb) {
-            if (!PGR.config.vanillaPowerRender.get()) {
-                if (EUITooltip.canRenderTooltips()) {
-                    EUITooltip.queueTooltips(__instance);
-                }
-                return SpireReturn.Return();
-            }
-
-            return SpireReturn.Continue();
         }
     }
 

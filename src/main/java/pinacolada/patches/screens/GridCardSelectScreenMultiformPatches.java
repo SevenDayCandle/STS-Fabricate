@@ -44,12 +44,14 @@ public class GridCardSelectScreenMultiformPatches {
     protected static boolean waitingForBranchUpgradeSelection = false;
     protected static int branchUpgradeForm = 0;
     protected static int minIndex = 0;
-    protected static int maxIndex = DEFAULT_MAX;    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+    protected static int maxIndex = DEFAULT_MAX;
+    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
             .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
             .setOnClick(GridCardSelectScreenMultiformPatches::subtractIndex);
-    public static PCLAugment augment;    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
             .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
             .setOnClick(GridCardSelectScreenMultiformPatches::addIndex);
+    public static PCLAugment augment;
 
     protected static void addIndex() {
         if (maxIndex < cardList.size() - 1) {

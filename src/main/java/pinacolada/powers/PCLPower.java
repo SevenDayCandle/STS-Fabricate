@@ -22,6 +22,7 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -377,7 +378,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected void setupStrings(PCLRelic relic) {
         this.ID = deriveID(relic.relicId);
         // Vanilla rendering cannot render generated region48 properly
-        if (PGR.config.vanillaPowerRender.get()) {
+        if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
         }
         else {
@@ -392,7 +393,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected void setupStrings(PCLCardData cardData) {
         this.ID = deriveID(cardData.ID);
         // Vanilla rendering cannot render generated region48 properly
-        if (PGR.config.vanillaPowerRender.get()) {
+        if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
         }
         else {
