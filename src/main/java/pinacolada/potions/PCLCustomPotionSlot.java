@@ -213,8 +213,8 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomPotionSlot.class, "Saved Custom Potion: " + filePath);
-        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
+        if (PGR.debugPotions != null) {
+            PGR.debugPotions.refresh();
         }
     }
 

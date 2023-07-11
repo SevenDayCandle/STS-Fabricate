@@ -31,12 +31,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger(PSkillData<PField_Not> data, PCLCardTarget target, int maxUses) {
         super(data, target, maxUses);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
     }
 
     public PTrigger(PSkillData<PField_Not> data, PSkillSaveData content) {
         super(data, content);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
     }
 
     public static PTrigger combatEnd(PSkill<?>... effects) {
@@ -103,14 +103,14 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger setAmount(int amount, int upgrade) {
         super.setAmount(amount, upgrade);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
 
     public PTrigger setAmount(int amount) {
         super.setAmount(amount);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
@@ -118,7 +118,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     @Override
     public PTrigger setAmountFromCard() {
         super.setAmountFromCard();
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
@@ -135,21 +135,21 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger setExtra(int amount, int upgrade) {
         super.setExtra(amount, upgrade);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
 
     public PTrigger setExtra(int amount) {
         super.setExtra(amount);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
 
     public PTrigger setTemporaryAmount(int amount) {
         super.setTemporaryAmount(amount);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
@@ -240,7 +240,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public void resetUses() {
         if (!fields.not) {
-            this.usesThisTurn = this.amount;
+            updateUsesAmount();
         }
 
         updateCounter();
@@ -248,14 +248,14 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger setUpgrade(int upgrade) {
         super.setUpgrade(upgrade);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
 
     public PTrigger setUpgradeExtra(int upgrade) {
         super.setUpgradeExtra(upgrade);
-        this.usesThisTurn = this.amount;
+        updateUsesAmount();
         updateCounter();
         return this;
     }
@@ -286,5 +286,10 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         if (source instanceof AbstractRelic) {
             ((AbstractRelic) source).counter = this.usesThisTurn;
         }
+    }
+    
+    // When initialized, treat 0 like -1
+    protected void updateUsesAmount() {
+        usesThisTurn = this.amount > 0 ? this.amount : -1;
     }
 }

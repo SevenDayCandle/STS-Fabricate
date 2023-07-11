@@ -171,7 +171,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             loadFolder(provider.getCardFolder());
         }
         if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
+            PGR.debugCards.refresh();
         }
     }
 
@@ -269,7 +269,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
         if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
+            PGR.debugCards.refresh();
         }
     }
 

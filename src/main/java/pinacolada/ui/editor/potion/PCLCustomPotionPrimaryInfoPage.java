@@ -88,7 +88,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
-                    effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
+                    effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setHeaderSpacing(1.1f)
@@ -112,7 +112,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         rarityDropdown = new EUIDropdown<AbstractPotion.PotionRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForPotionRarity)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setRarity(rarities.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setRarity(rarities.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -122,7 +122,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setSize(types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setSize(types.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.potion_size)
@@ -133,7 +133,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setEffect(types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setEffect(types.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.potion_visualEffect)
@@ -142,26 +142,26 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(EUIRM.strings.potion_visualEffect, PGR.core.strings.cetut_potionEffect);
         liquidColorEditor = new PCLCustomColorEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_liquidColor,
                 this::openColorEditor, color -> {
-            effect.modifyAllBuilders(e -> e.setLiquidColor(color));
+            effect.modifyAllBuilders((e, i) -> e.setLiquidColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_liquidColor, PGR.core.strings.cetut_potionColor);
         hybridColorEditor = new PCLCustomColorEditor(new EUIHitbox(liquidColorEditor.hb.x + liquidColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_hybridColor,
                 this::openColorEditor, color -> {
-            effect.modifyAllBuilders(e -> e.setHybridColor(color));
+            effect.modifyAllBuilders((e, i) -> e.setHybridColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_hybridColor, PGR.core.strings.cetut_potionColor);
         spotsColorEditor = new PCLCustomColorEditor(new EUIHitbox(hybridColorEditor.hb.x + hybridColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_spotsColor,
                 this::openColorEditor, color -> {
-            effect.modifyAllBuilders(e -> e.setSpotsColor(color));
+            effect.modifyAllBuilders((e, i) -> e.setSpotsColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_spotsColor, PGR.core.strings.cetut_potionColor);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
+                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
         branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
+                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
@@ -261,7 +261,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         }
         else {
             idWarning.setActive(false);
-            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.modifyAllBuilders((e, i) -> e.setID(fullID));
             effect.saveButton.setInteractable(true);
         }
     }

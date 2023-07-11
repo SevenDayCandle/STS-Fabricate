@@ -26,6 +26,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCollectibleSaveData;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -102,8 +103,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
         this.targetRequired = isThrown;
         initializeTips();
-
-        // TODO create sacred bark hook for effect upgrades
     }
 
     protected void initializeTips() {
@@ -273,5 +272,9 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
-
+    public PCLPotion setForm(int form) {
+        this.auxiliaryData.form = form;
+        initializeTips();
+        return this;
+    }
 }

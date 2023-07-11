@@ -30,11 +30,33 @@ public class BaseModPatches {
     @SpirePatch(cls = "basemod.BaseModImGuiUI", method = "potionSearchTab", optional = true)
     public static class BaseModPatches_PotionSearchTab {
 
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix() {
+            if (PGR.debugPotions != null) {
+                PGR.debugPotions.render();
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
+        }
+
         @SpirePostfixPatch
         public static void postfix() {
             if (PGR.debugAugments != null) {
                 PGR.debugAugments.render();
             }
+        }
+    }
+
+    @SpirePatch(cls = "basemod.BaseModImGuiUI", method = "relicSearchTab", optional = true)
+    public static class BaseModPatches_RelicSearchTab {
+
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix() {
+            if (PGR.debugRelics != null) {
+                PGR.debugRelics.render();
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 

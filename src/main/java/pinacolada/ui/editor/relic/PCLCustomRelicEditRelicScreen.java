@@ -152,7 +152,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     public void setLoadedImage(Texture texture) {
         loadedImage = texture;
-        modifyAllBuilders(e -> e
+        modifyAllBuilders((e, i) -> e
                 .setImagePath(currentSlot.getImagePath())
                 .setImage(texture));
     }

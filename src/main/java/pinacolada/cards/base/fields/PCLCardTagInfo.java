@@ -66,17 +66,17 @@ public class PCLCardTagInfo implements Serializable, TooltipProvider {
 
     public void set(int form, int v) {
         if (form >= value.length) {
-            value = Arrays.copyOf(value, form);
+            value = Arrays.copyOf(value, form + 1);
         }
         value[form] = v;
     }
 
     public void setUpgrade(int form, int v) {
         if (upgrades == null) {
-            upgrades = new Integer[form];
+            upgrades = new Integer[form + 1];
         }
         else if (form >= upgrades.length) {
-            value = Arrays.copyOf(upgrades, form);
+            upgrades = Arrays.copyOf(upgrades, form + 1);
         }
         upgrades[form] = v;
     }

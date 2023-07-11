@@ -39,6 +39,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String ENABLE_CUSTOM_EVENTS = PCLMainConfig.createFullID("EnableCustomEvents");
     private static final String ENABLE_CUSTOM_POTIONS = PCLMainConfig.createFullID("EnableCustomPotions");
     private static final String ENABLE_CUSTOM_RELICS = PCLMainConfig.createFullID("EnableCustomRelics");
+    private static final String FABRICATE_POPUP = PCLMainConfig.createFullID("FabricatePopup");
     private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
     private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
@@ -70,6 +71,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
     public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
     public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
+    public STSConfigItem<Boolean> fabricatePopup = new STSConfigItem<Boolean>(FABRICATE_POPUP, false);
     public STSConfigItem<Boolean> lowVRAM = new STSConfigItem<Boolean>(LOW_VRAM, false);
     public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
     public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(REMOVE_LINE_BREAKS, false);
@@ -154,6 +156,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         yPos = addToggle(0, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
+        yPos = addToggle(0, fabricatePopup, PGR.core.strings.options_fabricatePopup, yPos, PGR.core.strings.optionDesc_fabricatePopup);
         yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
@@ -167,6 +170,7 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        makeModToggle(fabricatePopup, PGR.core.strings.options_fabricatePopup, PGR.core.strings.optionDesc_fabricatePopup);
 
         EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
@@ -190,6 +194,7 @@ public class PCLMainConfig extends AbstractConfig {
         enableCustomEvents.addConfig(config);
         enableCustomPotions.addConfig(config);
         enableCustomRelics.addConfig(config);
+        fabricatePopup.addConfig(config);
         lowVRAM.addConfig(config);
         removeLineBreaks.addConfig(config);
         showEstimatedDamage.addConfig(config);

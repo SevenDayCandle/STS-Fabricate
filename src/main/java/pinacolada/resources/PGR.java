@@ -46,6 +46,8 @@ import pinacolada.ui.combat.PCLCombatScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
+import pinacolada.ui.debug.PCLDebugPotionPanel;
+import pinacolada.ui.debug.PCLDebugRelicPanel;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
@@ -88,6 +90,8 @@ public class PGR {
     public static PCLSingleRelicPopup relicPopup;
     public static PCLDebugAugmentPanel debugAugments;
     public static PCLDebugCardPanel debugCards;
+    public static PCLDebugPotionPanel debugPotions;
+    public static PCLDebugRelicPanel debugRelics;
     public static EUIImage blackScreen;
 
     public static String createID(String prefix, String suffix) {
@@ -258,6 +262,8 @@ public class PGR {
         try {
             PGR.debugAugments = new PCLDebugAugmentPanel();
             PGR.debugCards = new PCLDebugCardPanel();
+            PGR.debugPotions = new PCLDebugPotionPanel();
+            PGR.debugRelics = new PCLDebugRelicPanel();
         }
         catch (Error | Exception e) {
             e.printStackTrace();

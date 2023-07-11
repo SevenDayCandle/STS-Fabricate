@@ -12,12 +12,6 @@ import pinacolada.utilities.GameUtilities;
 
 // Use canPlayTwice for all powers that play cards twice
 public class PowerDuplicationPatches {
-    // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
-    public static void doEdit(javassist.expr.FieldAccess m) throws CannotCompileException {
-        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse") && m.isReader()) {
-            m.replace("{ $_ = pinacolada.patches.power.PowerDuplicationPatches.patch($0); }");
-        }
-    }
 
     // Needs to be negated because these purgeOnUse checks were already negated
     public static boolean patch(AbstractCard card) {
@@ -25,36 +19,17 @@ public class PowerDuplicationPatches {
     }
 
     @SpirePatch(clz = DuplicationPower.class, method = "onUseCard")
+    @SpirePatch(clz = EchoPower.class, method = "onUseCard")
+    @SpirePatch(clz = DoubleTapPower.class, method = "onUseCard")
     public static class DuplicationPatches_DuplicationPower {
         @SpireInstrumentPatch
         public static ExprEditor instrument() {
             return new ExprEditor() {
+                // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
                 public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    doEdit(m);
-                }
-            };
-        }
-    }
-
-    @SpirePatch(clz = EchoPower.class, method = "onUseCard")
-    public static class DuplicationPatches_EchoPower {
-        @SpireInstrumentPatch
-        public static ExprEditor instrument() {
-            return new ExprEditor() {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    doEdit(m);
-                }
-            };
-        }
-    }
-
-    @SpirePatch(clz = DoubleTapPower.class, method = "onUseCard")
-    public static class DuplicationPatches_DoubleTapPower {
-        @SpireInstrumentPatch
-        public static ExprEditor instrument() {
-            return new ExprEditor() {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    doEdit(m);
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse") && m.isReader()) {
+                        m.replace("{ $_ = pinacolada.patches.power.PowerDuplicationPatches.patch($0); }");
+                    }
                 }
             };
         }

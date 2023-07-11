@@ -109,22 +109,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }
@@ -136,22 +136,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }

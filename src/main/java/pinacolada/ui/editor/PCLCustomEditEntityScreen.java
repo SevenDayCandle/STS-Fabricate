@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -135,10 +136,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         page.refresh();
     }
 
-    public void modifyAllBuilders(ActionT1<U> updateFunc) {
+    public void modifyAllBuilders(ActionT2<U, Integer> updateFunc) {
         prevBuilders = EUIUtils.map(tempBuilders, EditorMaker::makeCopy);
-        for (U b : tempBuilders) {
-            updateFunc.invoke(b);
+        for (int i = 0; i < tempBuilders.size(); i++) {
+            updateFunc.invoke(tempBuilders.get(i), i);
         }
         rebuildItem();
     }

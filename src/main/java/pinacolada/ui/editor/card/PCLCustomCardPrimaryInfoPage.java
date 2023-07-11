@@ -88,7 +88,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
-                    effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
+                    effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setHeaderSpacing(1.1f)
@@ -112,7 +112,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForRarity)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setRarityType(rarities.get(0), e.cardType));
+                        effect.modifyAllBuilders((e, i) -> e.setRarityType(rarities.get(0), e.cardType));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -123,7 +123,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
                         // Pages need to refresh because changing card type affects available skill options or attributes
-                        effect.modifyAllBuilders(e -> e.setRarityType(e.cardRarity, types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setRarityType(e.cardRarity, types.get(0)));
                         effect.refreshPages();
                     }
                 })
@@ -133,7 +133,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
         flagsDropdown = new EUISearchableDropdown<CardFlag>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders(e -> e.setFlags(selectedSeries));
+                    effect.modifyAllBuilders((e, i) -> e.setFlags(selectedSeries));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
@@ -143,7 +143,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
                 .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
+                    effect.modifyAllBuilders((e, i) -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
                 .setCanAutosizeButton(true)
@@ -151,31 +151,31 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.sui_seriesUI, PGR.core.strings.cetut_attrAffinity);
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
+                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
         maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxCopies, (val) -> effect.modifyAllBuilders(e -> e.setMaxCopies(val)))
+                , PGR.core.strings.cedit_maxCopies, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxCopies(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies)
                 .setHasInfinite(true, true);
         branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
+                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
         uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
-                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
+                .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
         soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setText(PGR.core.tooltips.soulbound.title)
-                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
+                .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setRemovableFromDeck(!val);
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
@@ -291,7 +291,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         }
         else {
             idWarning.setActive(false);
-            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.modifyAllBuilders((e, i) -> e.setID(fullID));
             effect.saveButton.setInteractable(true);
         }
     }

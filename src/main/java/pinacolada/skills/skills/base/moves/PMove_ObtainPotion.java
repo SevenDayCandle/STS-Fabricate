@@ -44,7 +44,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
         fields.potionIDs.addAll(Arrays.asList(potions));
     }
 
-    protected void createRelic(ActionT1<AbstractPotion> onCreate) {
+    protected void createPotion(ActionT1<AbstractPotion> onCreate) {
         if (!fields.potionIDs.isEmpty()) {
             for (String r : fields.potionIDs) {
                 AbstractPotion potion = PotionHelper.getPotion(r);
@@ -125,7 +125,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-        createRelic((p) -> AbstractDungeon.player.obtainPotion(p));
+        createPotion((p) -> AbstractDungeon.player.obtainPotion(p));
     }
 
     @Override
@@ -135,7 +135,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        createRelic(order::obtainPotion);
+        createPotion(order::obtainPotion);
         super.use(info, order);
     }
 }

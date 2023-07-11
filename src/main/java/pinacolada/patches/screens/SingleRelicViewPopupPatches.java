@@ -7,6 +7,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleRelicViewPopup;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 
@@ -16,11 +17,9 @@ public class SingleRelicViewPopupPatches {
     @SpirePatch(clz = SingleRelicViewPopup.class, method = "open", paramtypez = {AbstractRelic.class})
     public static class SingleRelicViewPopup_Open {
         @SpirePrefixPatch
-        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, AbstractRelic card) {
-            PCLRelic c = EUIUtils.safeCast(card, PCLRelic.class);
-            if (c != null) {
-                PGR.relicPopup.open(c, null);
-
+        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, AbstractRelic relic) {
+            if (PGR.config.fabricatePopup.get() || relic instanceof PCLRelic) {
+                PGR.relicPopup.open(relic, null);
                 return SpireReturn.Return(null);
             }
 
@@ -31,11 +30,9 @@ public class SingleRelicViewPopupPatches {
     @SpirePatch(clz = SingleRelicViewPopup.class, method = "open", paramtypez = {AbstractRelic.class, ArrayList.class})
     public static class SingleRelicViewPopup_Open2 {
         @SpirePrefixPatch
-        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, AbstractRelic card, ArrayList<AbstractRelic> group) {
-            PCLRelic c = EUIUtils.safeCast(card, PCLRelic.class);
-            if (c != null) {
-                PGR.relicPopup.open(c, group);
-
+        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, AbstractRelic relic, ArrayList<AbstractRelic> group) {
+            if (PGR.config.fabricatePopup.get() || relic instanceof PCLRelic) {
+                PGR.relicPopup.open(relic, group);
                 return SpireReturn.Return(null);
             }
 

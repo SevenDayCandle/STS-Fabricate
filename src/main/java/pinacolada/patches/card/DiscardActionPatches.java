@@ -15,18 +15,13 @@ import pinacolada.dungeon.CombatManager;
 
 public class DiscardActionPatches {
 
+    @SpirePatch(clz = DiscardAction.class, method = "update")
     @SpirePatch(clz = HandDiscard.class, method = "execute")
+    @SpirePatch(clz = GamblingChipAction.class, method = "update")
+    @SpirePatch(clz = ScrapeFollowUpAction.class, method = "update")
     public static class HandDiscard_Execute {
         @SpireInsertPatch(localvars = {"c"}, locator = Locator.class)
-        public static void insertPre(HandDiscard __instance, AbstractCard c) {
-            CombatManager.onCardDiscarded(c);
-        }
-    }
-
-    @SpirePatch(clz = DiscardAction.class, method = "update")
-    public static class DiscardAction_Update {
-        @SpireInsertPatch(localvars = {"c"}, locator = Locator.class)
-        public static void insertPre(DiscardAction __instance, AbstractCard c) {
+        public static void insertPre(Object __instance, AbstractCard c) {
             CombatManager.onCardDiscarded(c);
         }
     }
@@ -36,22 +31,6 @@ public class DiscardActionPatches {
         @SpireInsertPatch(localvars = {"targetCard"}, locator = Locator.class)
         public static void insertPre(DiscardSpecificCardAction __instance, AbstractCard targetCard) {
             CombatManager.onCardDiscarded(targetCard);
-        }
-    }
-
-    @SpirePatch(clz = GamblingChipAction.class, method = "update")
-    public static class GamblingChipAction_Update {
-        @SpireInsertPatch(localvars = {"c"}, locator = Locator.class)
-        public static void insertPre(GamblingChipAction __instance, AbstractCard c) {
-            CombatManager.onCardDiscarded(c);
-        }
-    }
-
-    @SpirePatch(clz = ScrapeFollowUpAction.class, method = "update")
-    public static class ScrapeFollowUpAction_Update {
-        @SpireInsertPatch(localvars = {"c"}, locator = Locator.class)
-        public static void insertPre(ScrapeFollowUpAction __instance, AbstractCard c) {
-            CombatManager.onCardDiscarded(c);
         }
     }
 

@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
 public class PCLDebugCardPanel {
     protected static final String ALL = "Any";
     protected static final String BASE_GAME = "Base";
-    protected ArrayList<AbstractCard> originalSortedCards = new ArrayList<>();
-    protected ArrayList<AbstractCard> sortedCards = originalSortedCards;
+    protected ArrayList<AbstractCard> originalSorted = new ArrayList<>();
+    protected ArrayList<AbstractCard> sorted = originalSorted;
     protected ArrayList<String> sortedModIDs = new ArrayList<>();
-    protected ImGuiTextFilter cardFilter = new ImGuiTextFilter();
+    protected ImGuiTextFilter filter = new ImGuiTextFilter();
     protected DEUITabItem cards = new DEUITabItem("Cards");
     protected DEUICombo<String> modList = new DEUICombo<String>("##modid", sortedModIDs, p -> p);
     protected DEUIFilteredSuffixListBox<AbstractCard> cardList = new DEUIFilteredSuffixListBox<AbstractCard>("##all cards",
-            sortedCards, p -> p.cardID, p -> p.name, this::passes);
+            sorted, p -> p.cardID, p -> p.name, this::passes);
     protected DEUIIntInput cardCount = new DEUIIntInput("Count", 1, 1, Integer.MAX_VALUE);
     protected DEUIIntInput upgradeCount = new DEUIIntInput("Upgrades", 0, 0, Integer.MAX_VALUE);
     protected DEUIIntInput formCount = new DEUIIntInput("Form", 0, 0, Integer.MAX_VALUE);
@@ -35,11 +35,11 @@ public class PCLDebugCardPanel {
     protected DEUIButton addToDeck = new DEUIButton("Add to deck");
 
     public PCLDebugCardPanel() {
-        originalSortedCards.addAll(CardLibrary.getAllCards());
-        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
-        originalSortedCards.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
+        originalSorted.addAll(CardLibrary.getAllCards());
+        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
+        originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
         sortedModIDs.add(ALL);
-        sortedModIDs.addAll(originalSortedCards.stream()
+        sortedModIDs.addAll(originalSorted.stream()
                 .map(c -> getModID(c.cardID))
                 .distinct()
                 .collect(Collectors.toList()));
@@ -80,14 +80,14 @@ public class PCLDebugCardPanel {
 
     private boolean passes(AbstractCard card) {
         String mod = modList.get();
-        return (cardFilter.passFilter(card.cardID) || cardFilter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card.cardID).equals(mod));
+        return (filter.passFilter(card.cardID) || filter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card.cardID).equals(mod));
     }
 
-    public void refreshCards() {
-        originalSortedCards.clear();
-        originalSortedCards.addAll(CardLibrary.getAllCards());
-        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
-        originalSortedCards.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
+    public void refresh() {
+        originalSorted.clear();
+        originalSorted.addAll(CardLibrary.getAllCards());
+        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
+        originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
     }
 
     public void render() {
@@ -95,7 +95,7 @@ public class PCLDebugCardPanel {
             DEUIUtils.withWidth(90, () -> modList.renderInline());
             DEUIUtils.withFullWidth(() ->
             {
-                cardFilter.draw("##");
+                filter.draw("##");
                 cardList.render();
             });
             DEUIUtils.withWidth(90, () ->

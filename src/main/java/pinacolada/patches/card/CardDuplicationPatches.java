@@ -33,53 +33,17 @@ public class CardDuplicationPatches {
     }
 
     @SpirePatch(clz = DollysMirror.class, method = "onEquip")
-    public static class CardDuplicationPatches_DollysMirror_OnEquip {
-        @SpirePostfixPatch
-        public static void postfix(DollysMirror __instance) {
-            afterUse();
-        }
-
-        @SpirePrefixPatch
-        public static void prefix(DollysMirror __instance) {
-            beforeUse();
-        }
-    }
-
     @SpirePatch(clz = Duplicator.class, method = "use")
-    public static class CardDuplicationPatches_Duplicator_Use {
-        @SpirePostfixPatch
-        public static void postfix(Duplicator __instance) {
-            afterUse();
-        }
-
-        @SpirePrefixPatch
-        public static void prefix(Duplicator __instance) {
-            beforeUse();
-        }
-    }
-
-    @SpirePatch(clz = WeMeetAgain.class, method = SpirePatch.CONSTRUCTOR)
-    public static class CardRemovalPatches_WeMeetAgain_Ctor {
-        @SpirePostfixPatch
-        public static void postfix(WeMeetAgain __instance) {
-            afterUse();
-        }
-
-        @SpirePrefixPatch
-        public static void prefix(WeMeetAgain __instance) {
-            beforeUse();
-        }
-    }
-
     @SpirePatch(clz = Falling.class, method = SpirePatch.CONSTRUCTOR)
-    public static class CardRemovalPatches_FallingCtor {
+    @SpirePatch(clz = WeMeetAgain.class, method = SpirePatch.CONSTRUCTOR)
+    public static class CardDuplicationPatches_Do {
         @SpirePostfixPatch
-        public static void postfix(Falling __instance) {
+        public static void postfix(Object __instance) {
             afterUse();
         }
 
         @SpirePrefixPatch
-        public static void prefix(Falling __instance) {
+        public static void prefix(Object __instance) {
             beforeUse();
         }
     }

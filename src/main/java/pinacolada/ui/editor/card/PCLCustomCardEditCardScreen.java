@@ -134,6 +134,8 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
 
     protected void rebuildItem() {
         previewCard = getBuilder().createImplWithForms(false);
+        previewCard.setForm(currentBuilder, 0);
+
         if (SingleCardViewPopup.isViewingUpgrade) {
             //previewCard.upgrade();
             previewCard.displayUpgrades();
@@ -174,7 +176,7 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
 
     public void setLoadedImage(Texture texture) {
         loadedImage = texture;
-        modifyAllBuilders(e -> e
+        modifyAllBuilders((e, i) -> e
                 .setImagePath(currentSlot.getImagePath())
                 .setImage(new ColoredTexture(texture)));
     }

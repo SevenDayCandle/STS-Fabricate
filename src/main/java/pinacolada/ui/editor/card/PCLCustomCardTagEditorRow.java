@@ -85,8 +85,8 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
     }
 
     public void forceRefresh() {
-        displayValue.forceSetValue(item.get(0), false);
-        displayValue2.forceSetValue(item.getUpgrade(0), false);
+        displayValue.forceSetValue(item.get(form), false);
+        displayValue2.forceSetValue(item.getUpgrade(form), false);
     }
 
     public int getValue() {
@@ -115,6 +115,11 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
             displayValue2.tryRender(sb);
             displayValue.tryRender(sb);
         }
+    }
+
+    public PCLCustomCardTagEditorRow setForm(int form) {
+        this.form = form;
+        return this;
     }
 
     protected boolean tryHover(boolean isSelected) {

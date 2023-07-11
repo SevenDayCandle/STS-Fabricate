@@ -209,8 +209,8 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomRelicSlot.class, "Saved Custom Relic: " + filePath);
-        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
+        if (PGR.debugRelics != null) {
+            PGR.debugRelics.refresh();
         }
     }
 

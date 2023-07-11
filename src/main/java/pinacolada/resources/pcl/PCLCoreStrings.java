@@ -339,7 +339,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String options_enableCustomEvents = options.TEXT[11];
     public final String options_lowVRAM = options.TEXT[12];
     public final String options_madnessReplacements = options.TEXT[13];
-    public final String options_vanillaPowerRender = options.TEXT[14];
+    public final String options_fabricatePopup = options.TEXT[14];
     public final String options_alwaysPCLCard = options.TEXT[15];
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
@@ -353,7 +353,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String optionDesc_onlyNewRuns = optionDesc.TEXT[8];
     public final String optionDesc_lowVRAM = optionDesc.TEXT[9];
     public final String optionDesc_madnessReplacements = optionDesc.TEXT[10];
-    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[11];
+    public final String optionDesc_fabricatePopup = optionDesc.TEXT[11];
     public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[12];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];

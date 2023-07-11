@@ -4,6 +4,7 @@ import pinacolada.resources.PCLResources;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 public class PCLGenericData<T> {
     public final PCLResources<?, ?, ?, ?> resources;
@@ -15,6 +16,14 @@ public class PCLGenericData<T> {
         this.ID = id;
         this.invokeClass = invokeClass;
         this.resources = resources;
+    }
+
+    protected static Integer[] expandArray(Integer[] input, int targetSize) {
+        Integer[] newArray = Arrays.copyOf(input, targetSize);
+        for (int j = input.length; j < newArray.length; j++) {
+            newArray[j] = input[input.length - 1];
+        }
+        return newArray;
     }
 
     public T create() {

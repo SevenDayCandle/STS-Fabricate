@@ -83,7 +83,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
-                    effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
+                    effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setHeaderSpacing(1.1f)
@@ -107,7 +107,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         tierDropdown = new EUIDropdown<AbstractRelic.RelicTier>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForRelicTier)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setTier(rarities.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setTier(rarities.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -117,7 +117,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setSfx(types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setSfx(types.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.relic_landingSound)
@@ -125,12 +125,12 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setItems(AbstractRelic.LandingSound.values())
                 .setTooltip(EUIRM.strings.relic_landingSound, PGR.core.strings.cetut_landingSound);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
+                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
         branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
+                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
@@ -213,7 +213,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         }
         else {
             idWarning.setActive(false);
-            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.modifyAllBuilders((e, i) -> e.setID(fullID));
             effect.saveButton.setInteractable(true);
         }
     }

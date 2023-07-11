@@ -484,4 +484,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public boolean canSpawn() {
         return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
     }
+
+    public PCLRelic setForm(int form) {
+        this.auxiliaryData.form = form;
+        initializePCLTips();
+        return this;
+    }
 }

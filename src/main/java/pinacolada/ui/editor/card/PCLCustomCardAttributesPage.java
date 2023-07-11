@@ -70,7 +70,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
 
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
-                .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
+                .setOnChange(tags -> screen.modifyAllBuilders((e, i) -> e.setTags(tags)))
                 .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIcon() + " " + item.tag.getTooltip().title, true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
@@ -116,37 +116,37 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         costEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , CardLibSortHeader.TEXT[3], (val, upVal) -> screen.modifyBuilder(e -> e.setCosts(val).setCostUpgrades(upVal)))
+                , CardLibSortHeader.TEXT[3], (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setCostsForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(-2, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         damageEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_damage, (val, upVal) -> screen.modifyBuilder(e -> e.setDamage(val, upVal, e.hitCount, e.hitCountUpgrade)))
+                , PGR.core.strings.cedit_damage, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setDamageForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         blockEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_block, (val, upVal) -> screen.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
+                , PGR.core.strings.cedit_block, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setBlockForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), (val, upVal) -> screen.modifyBuilder(e -> e.setHitCount(val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyBuilder(e -> e.setRightCount(val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setRightCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.tooltips.counter.title, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
+                , PGR.core.tooltips.counter.title, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.tooltips.counter.makeCopy());
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))
+                , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHpForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.tooltips.hp.makeCopy());
         magicNumberEditor.tooltip.setChildren(upgradeLabel.tooltip);
@@ -211,15 +211,16 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     @Override
     public void refresh() {
         PCLDynamicCardData builder = screen.getBuilder();
+        int form = screen.currentBuilder;
         boolean isSummon = builder.cardType == PCLEnum.CardType.SUMMON;
 
-        costEditor.setValue(builder.getCost(0), builder.getCostUpgrade(0));
-        damageEditor.setValue(builder.getDamage(0), builder.getDamageUpgrade(0));
-        blockEditor.setValue(builder.getBlock(0), builder.getBlockUpgrade(0));
-        hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
-        rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));
-        magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0));
-        hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
+        costEditor.setValue(builder.getCost(form), builder.getCostUpgrade(form));
+        damageEditor.setValue(builder.getDamage(form), builder.getDamageUpgrade(form));
+        blockEditor.setValue(builder.getBlock(form), builder.getBlockUpgrade(form));
+        hitCountEditor.setValue(builder.getHitCount(form), builder.getHitCountUpgrade(form));
+        rightCountEditor.setValue(builder.getRightCount(form), builder.getRightCountUpgrade(form));
+        magicNumberEditor.setValue(builder.getMagicNumber(form), builder.getMagicNumberUpgrade(form));
+        hpEditor.setValue(builder.getHp(form), builder.getHpUpgrade(form)).setActive(isSummon);
 
         targetDropdown.setSelection(builder.cardTarget, false);
         timingDropdown.setSelection(builder.timing, false).setActive(isSummon);
@@ -230,20 +231,20 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
             PCLCardTagInfo info = infos.get(i);
             if (builder.tags.containsKey(info.tag)) {
                 PCLCardTagInfo other = builder.tags.get(info.tag);
-                Integer start = other.get(0);
-                Integer upgrade = other.getUpgrade(0);
+                Integer start = other.get(form);
+                Integer upgrade = other.getUpgrade(form);
                 if (upgrade == null) {
                     upgrade = start;
                 }
-                info.set(0, start);
-                info.setUpgrade(0, upgrade);
+                info.set(form, start);
+                info.setUpgrade(form, upgrade);
                 selection.add(i);
             }
         }
         tagsDropdown.setSelectionIndices(selection, false);
         for (EUIDropdownRow<?> row : tagsDropdown.rows) {
             if (row instanceof PCLCustomCardTagEditorRow) {
-                ((PCLCustomCardTagEditorRow) row).forceRefresh();
+                ((PCLCustomCardTagEditorRow) row).setForm(form).forceRefresh();
             }
         }
 

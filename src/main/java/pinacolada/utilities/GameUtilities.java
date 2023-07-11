@@ -1478,6 +1478,18 @@ public class GameUtilities {
                 || CombatManager.getTurnData(relicID, false);
     }
 
+    public static void highlightMatchingCards(PCLAffinity affinity) {
+        highlightMatchingCards(c -> hasAffinity(c, affinity));
+    }
+
+    public static void highlightMatchingCards(FuncT1<Boolean, AbstractCard> cardFunc) {
+        for (AbstractCard c : AbstractDungeon.player.hand.group) {
+            if (!cardFunc.invoke(c)) {
+                c.transparency = 0.35f;
+            }
+        }
+    }
+
     public static boolean inBattle() {
         return inBattle(false);
     }
@@ -1531,8 +1543,9 @@ public class GameUtilities {
         return getActingColor() == co;
     }
 
+    // Move intent is the source of truth; the actual intent might not be set in time for start of turn effects
     public static boolean isAttacking(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && isAttacking(((AbstractMonster) monster).intent);
+        return monster instanceof AbstractMonster && (isAttacking(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
     }
 
     public static boolean isAttacking(AbstractMonster.Intent intent) {
@@ -1540,21 +1553,13 @@ public class GameUtilities {
                 intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.ATTACK);
     }
 
-    public static boolean isAttacking(AbstractMonster monster) {
-        return isAttacking(monster.intent);
-    }
-
     public static boolean isBuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && isBuffing(((AbstractMonster) monster).intent);
+        return monster instanceof AbstractMonster && (isBuffing(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
     }
 
     public static boolean isBuffing(AbstractMonster.Intent intent) {
         return (intent == AbstractMonster.Intent.BUFF || intent == AbstractMonster.Intent.ATTACK_BUFF ||
                 intent == AbstractMonster.Intent.DEFEND_BUFF);
-    }
-
-    public static boolean isBuffing(AbstractMonster monster) {
-        return isBuffing(monster.intent);
     }
 
     public static boolean isCardLocked(String id) {
@@ -1590,7 +1595,7 @@ public class GameUtilities {
     }
 
     public static boolean isDebuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && isDebuffing(((AbstractMonster) monster).intent);
+        return monster instanceof AbstractMonster && (isDebuffing(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
     }
 
     public static boolean isDebuffing(AbstractMonster.Intent intent) {
@@ -1598,21 +1603,13 @@ public class GameUtilities {
                 intent == AbstractMonster.Intent.DEFEND_DEBUFF || intent == AbstractMonster.Intent.STRONG_DEBUFF);
     }
 
-    public static boolean isDebuffing(AbstractMonster monster) {
-        return isDebuffing(monster.intent);
-    }
-
     public static boolean isDefending(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && isDefending(((AbstractMonster) monster).intent);
+        return monster instanceof AbstractMonster && (isDefending(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
     }
 
     public static boolean isDefending(AbstractMonster.Intent intent) {
         return (intent == AbstractMonster.Intent.DEFEND_DEBUFF || intent == AbstractMonster.Intent.DEFEND_BUFF ||
                 intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.DEFEND);
-    }
-
-    public static boolean isDefending(AbstractMonster monster) {
-        return isDefending(monster.intent);
     }
 
     public static boolean isEnemy(AbstractCreature c) {
