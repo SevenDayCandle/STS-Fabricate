@@ -21,7 +21,7 @@ public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider 
     @Override
     public PCLCardRewardBundle getBundle(AbstractCard card) {
         float chance = BASE_CHANCE / (1 + GameUtilities.getMasterDeckCopies(card.cardID).size());
-        if (GameUtilities.getRNG().randomBoolean(chance)) {
+        if (GameUtilities.chance(chance)) {
             int value = GameUtilities.getRNG().random(0, 9);
             switch (value) {
                 case 1:

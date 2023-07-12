@@ -38,7 +38,8 @@ public class PCLCardTagInfo implements Serializable, TooltipProvider {
     }
 
     public Integer get(int form) {
-        return safeIndex(value, form);
+        Integer result = safeIndex(value, form);
+        return result != null ? result : 0;
     }
 
     public List<EUIKeywordTooltip> getTips() {

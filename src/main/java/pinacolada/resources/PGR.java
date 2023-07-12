@@ -173,7 +173,7 @@ public class PGR {
     }
 
     public static String getPng(String id, String subFolder) {
-        String[] s = id.split(Pattern.quote(":"), 2);
+        String[] s = EUI.splitID(id);
         return IMAGES_FOLDER + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
     }
 

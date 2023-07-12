@@ -88,7 +88,6 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class PCLCard extends AbstractCard implements KeywordProvider, EditorCard, OnAddToDeckListener, CustomSavable<PCLCardSaveData> {
-    protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
     protected static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);

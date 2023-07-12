@@ -26,7 +26,7 @@ public class WordToken extends PCLTextToken {
         if (prev instanceof ModifierSplitToken) {
             modToken = ((ModifierSplitToken) prev).previous;
             if (modToken != null) {
-                word = modToken.rawText + prev.rawText + word;
+                word = modToken.rawText + prev.rawText + word.replace("_", " "); // Stslib keywords use underscores for spaces
             }
         }
         EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(word.toLowerCase());
@@ -37,6 +37,7 @@ public class WordToken extends PCLTextToken {
         return tip;
     }
 
+    // Certain characters may take up more space on the card than other characters
     protected static boolean isLonger(Character character) {
         return character == '%';
     }

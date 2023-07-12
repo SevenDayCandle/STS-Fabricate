@@ -100,7 +100,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
 
         ModInfo info = EUIGameUtils.getModInfo(currentItem);
-        whatModLabel.setLabel(info != null ? EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info.Name, w -> "#y" + w) : "");
+        whatModLabel.setLabel(EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info != null ? info.Name : EUIRM.strings.ui_basegame, w -> "#y" + w));
     }
 
     protected void initializeTips() {

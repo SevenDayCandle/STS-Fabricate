@@ -451,7 +451,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
         stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
-        cards = initializeSearchable(getAvailableCards(), c -> c.name, PGR.core.strings.subjects_card);
+        cards = initializeSearchable(getAvailableCards(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_card));
         relics = initializeSearchable(getAvailableRelics(), GameUtilities::getRelicName, StringUtils.capitalize(PGR.core.strings.subjects_relic));
         potions = initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion));
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);

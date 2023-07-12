@@ -127,10 +127,6 @@ public class CardLibraryPatches {
         return card;
     }
 
-    public static String[] splitCardID(String cardID) {
-        return cardID.split(Pattern.quote(":"), 2);
-    }
-
     public static void tryReplace(AbstractCard[] card) {
         AbstractCard c = getReplacement(card[0]);
         if (c != null) {

@@ -62,7 +62,7 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         AbstractRoom curRoom = GameUtilities.getCurrentRoom();
-        if (curRoom instanceof MonsterRoom || (curRoom != null && curRoom.rewardAllowed)) {
+        if (curRoom instanceof MonsterRoom && curRoom.rewardAllowed) {
             RewardItem r = new RewardItem();
             String name = getName();
             if (!StringUtils.isEmpty(name)) {

@@ -7,6 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.text.EUISmartText;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
@@ -137,6 +138,7 @@ public interface PointerProvider {
             return "";
         }
         StringBuilder sb = new StringBuilder();
+        StringBuilder sub;
         for (int i = 0; i < baseString.length(); i++) {
             char c = baseString.charAt(i);
             switch (c) {
@@ -163,7 +165,7 @@ public interface PointerProvider {
                     }
                     break;
                 case '$':
-                    StringBuilder sub = new StringBuilder();
+                    sub = new StringBuilder();
                     while (i + 1 < baseString.length()) {
                         i += 1;
                         c = baseString.charAt(i);
@@ -186,9 +188,24 @@ public interface PointerProvider {
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
                     break;
+                case '[':
+                    sub = new StringBuilder();
+                    while (i + 1 < baseString.length()) {
+                        i += 1;
+                        c = baseString.charAt(i);
+                        if (c == ']') {
+                            break;
+                        }
+                        else {
+                            sub.append(c);
+                        }
+                    }
+                    String key = sub.toString();
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(key);
+                    sb.append(tip != null ? tip.title : key);
+                    break;
                 case '{':
                 case '}':
-                case '[':
                 case ']':
                     continue;
                 default:
@@ -253,9 +270,30 @@ public interface PointerProvider {
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
                     break;
+                case '[':
+                    if (!EUIConfiguration.useEUITooltips.get())
+                    {
+                        sub = new StringBuilder();
+                        while (i + 1 < baseString.length()) {
+                            i += 1;
+                            c = baseString.charAt(i);
+                            if (c == ']') {
+                                break;
+                            }
+                            else {
+                                sub.append(c);
+                            }
+                        }
+                        String key = sub.toString();
+                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(key);
+                        sb.append(tip != null ? tip.title : key);
+                    }
+                    else {
+                        sb.append(c);
+                    }
+                    break;
                 case '{':
                 case '}':
-                case '[':
                 case ']':
                     if (!EUIConfiguration.useEUITooltips.get()) {
                         continue;

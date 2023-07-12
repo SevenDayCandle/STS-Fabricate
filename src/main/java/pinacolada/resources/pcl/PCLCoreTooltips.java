@@ -242,8 +242,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
         EUIKeywordTooltip.registerID(PCLAffinity.Star.getAffinitySymbol(), multicolor);
         EUIKeywordTooltip.registerID(PCLAffinity.General.getAffinitySymbol(), affinityGeneral);
         EUIKeywordTooltip.registerID(PCLAffinity.Unknown.getAffinitySymbol(), affinityUnknown);
-        EUIKeywordTooltip.registerID("NTB", nextTurnBlock);
-        EUIKeywordTooltip.registerID("NTD", nextTurnDraw);
         EUIKeywordTooltip.registerID("THP", tempHP);
         EUIKeywordTooltip.registerID("Gold", gold);
     }

@@ -60,6 +60,19 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     }
 
     @Override
+    public boolean shouldReject(PCLCustomEffectHologram hologram) {
+        if (controller.type == NodeType.Branchcond) {
+            switch (hologram.type) {
+                case Delay:
+                case Branchcond:
+                case Trait:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void startEdit() {
     }
 }
