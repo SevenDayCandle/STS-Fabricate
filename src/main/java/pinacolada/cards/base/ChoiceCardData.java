@@ -95,6 +95,10 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
             setText("", "", "");
         }
 
+        if (imagePath == null) {
+            imagePath = QuestionMark.DATA.imagePath;
+        }
+
         return new ChoiceCard<T>(this);
     }
 

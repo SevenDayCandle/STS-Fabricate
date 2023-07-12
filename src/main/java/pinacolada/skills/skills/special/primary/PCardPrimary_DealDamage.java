@@ -87,6 +87,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_deal(TEXT.subjects_x, PGR.core.strings.subjects_damage);
+    }
+
+    @Override
     public PCardPrimary_DealDamage makeCopy() {
         return (PCardPrimary_DealDamage) super.makeCopy();
     }

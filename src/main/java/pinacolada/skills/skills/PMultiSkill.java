@@ -13,10 +13,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.ChoiceCard;
-import pinacolada.cards.base.ChoiceCardData;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.PCLUseInfo;
@@ -433,23 +430,29 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     public void chooseEffect(PCLUseInfo info, PCLActions order) {
         PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        PCLCardData cardData;
         if (choiceCard == null) {
-            choiceCard = new QuestionMark();
+            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
+                    .showTypeText(false);
+
             if (source instanceof AbstractRelic) {
-                choiceCard.name = choiceCard.originalName = GameUtilities.getRelicName((AbstractRelic) source);
+                cardData.strings.NAME = GameUtilities.getRelicName((AbstractRelic) source);
             }
             else if (source instanceof AbstractPotion) {
-                choiceCard.name = choiceCard.originalName = ((AbstractPotion) source).name;
+                cardData.strings.NAME = ((AbstractPotion) source).name;
             }
             else if (source instanceof AbstractBlight) {
-                choiceCard.name = choiceCard.originalName = ((AbstractBlight) source).name;
+                cardData.strings.NAME = ((AbstractBlight) source).name;
             }
             else {
-                choiceCard.name = choiceCard.originalName = getSourceCreature().name;
+                cardData.strings.NAME = getSourceCreature().name;
             }
         }
+        else {
+            cardData = choiceCard.cardData;
+        }
 
-        order.tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
+        order.tryChooseSkill(cardData, amount, info.source, info.target, effects);
     }
 
     public PMultiSkill setGenerated(boolean val) {

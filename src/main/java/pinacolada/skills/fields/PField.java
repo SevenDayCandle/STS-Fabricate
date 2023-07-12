@@ -119,7 +119,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getStanceString(ArrayList<PCLStanceHelper> stances) {
-        return PCLCoreStrings.joinWithOr(stance -> "{" + (stance.affinity != null ? stance.tooltip.title.replace(stance.affinity.getPowerSymbol(), stance.affinity.getFormattedPowerSymbol()) : stance.tooltip.title) + "}", stances);
+        return PCLCoreStrings.joinWithOr(stance -> "{" + stance.tooltip.title + "}", stances);
     }
 
     public static String getTagAndOrString(ArrayList<PCLCardTag> tags, boolean or) {

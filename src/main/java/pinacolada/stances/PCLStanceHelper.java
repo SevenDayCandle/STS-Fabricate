@@ -29,7 +29,7 @@ public class PCLStanceHelper implements TooltipProvider {
     public static final PCLStanceHelper WrathStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.WrathStance.STANCE_ID, PGR.core.tooltips.wrath, PCLAffinity.General, com.megacrit.cardcrawl.stances.WrathStance::new);
     protected final FuncT0<AbstractStance> constructor;
     public final EUIKeywordTooltip tooltip;
-    public final PCLAffinity affinity;
+    public final PCLAffinity affinity; // Needed for Animator support in the future
     public final String ID;
     public final AbstractCard.CardColor[] allowedColors;
 

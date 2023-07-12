@@ -13,7 +13,7 @@ import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
 public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureDamage.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureDamage.class, PField_Not.class);
 
     public PMod_PerCreatureDamage(PSkillSaveData content) {
         super(DATA, content);

@@ -17,6 +17,7 @@ import java.util.Map;
 public class SymbolToken extends PCLTextToken {
     private static final Map<String, SymbolToken> tokenCache = new HashMap<>();
 
+    // TODO remove
     static {
         tokenCache.put("E", new SymbolToken("[E]")); // Energy
         tokenCache.put(PCLAffinity.Red.getPowerSymbol(), new SymbolToken(PCLAffinity.Red.getFormattedPowerSymbol()));
