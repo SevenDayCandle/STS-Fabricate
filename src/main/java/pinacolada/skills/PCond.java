@@ -338,16 +338,19 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return GameUtilities.inBattle() && conditionMetCache ? Settings.GREEN_TEXT_COLOR : null;
     }
 
+    @Override
     public int getQualifierRange() {
         return 1;
     }
 
+    @Override
     public String getQualifierText(int i) {
         return "";
     }
 
+    @Override
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
-        return EUIUtils.arrayList(checkCondition(info, true, null) ? 1 : 0);
+        return EUIUtils.arrayList(checkCondition(info, true, null) ? 0 : 1);
     }
 
     @Override
@@ -359,6 +362,11 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
             return getConditionRawString(addPeriod) + COMMA_SEPARATOR + childEffect.getText(false) + PCLCoreStrings.period(addPeriod);
         }
         return getConditionRawString(addPeriod) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public boolean hasChildWarning() {
+        return childEffect == null && !((this.parent instanceof PBranchCond && this.parent.childEffect == this) || (this.parent instanceof PMultiCond && this.parent.childEffect != this));
     }
 
     @Override

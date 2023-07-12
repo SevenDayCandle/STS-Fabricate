@@ -17,6 +17,7 @@ import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.EUIFontHelper;
@@ -469,7 +470,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(Collection<T> items, String title) {
         EUISearchableDropdown<T> dropdown = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
-                .setLabelFunctionForOption(item -> item.getTooltip().getTitleOrIconForced() + " " + item.getTooltip().title, true)
+                .setLabelFunctionForOption(item -> {
+                    EUITooltip tip = item.getTooltip();
+                    return tip instanceof EUIKeywordTooltip && ((EUIKeywordTooltip) tip).icon != null ? tip.getTitleOrIconForced() + " " + tip.title : tip.title;
+                }, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)

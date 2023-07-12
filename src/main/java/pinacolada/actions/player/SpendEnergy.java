@@ -31,7 +31,7 @@ public class SpendEnergy extends PCLConditionalAction<Integer, Integer> {
             }
         }
 
-        completeImpl();
+        complete(null);
     }
 
     public SpendEnergy setCondition(FuncT1<Boolean, Integer> condition) {

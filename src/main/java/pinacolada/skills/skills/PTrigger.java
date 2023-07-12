@@ -167,7 +167,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
             setExtra(rootExtra + other.rootExtra);
         }
         setAmountFromCard();
-        resetUses();
+        forceResetUses();
 
         // Only update child effects if uses per turn is infinite
         if (rootAmount <= 0 && this.childEffect != null && other.getChild() != null) {
@@ -226,6 +226,11 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         }
     }
 
+    public void forceResetUses() {
+        updateUsesAmount();
+        updateCounter();
+    }
+
     @Override
     public String getSubText() {
         if (amount > 0) {
@@ -240,10 +245,8 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public void resetUses() {
         if (!fields.not) {
-            updateUsesAmount();
+            forceResetUses();
         }
-
-        updateCounter();
     }
 
     public PTrigger setUpgrade(int upgrade) {
@@ -279,7 +282,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     @Override
     public void triggerOnStartOfBattleForRelic() {
         super.triggerOnStartOfBattleForRelic();
-        resetUses();
+        forceResetUses();
     }
 
     protected void updateCounter() {

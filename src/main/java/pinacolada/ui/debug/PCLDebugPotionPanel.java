@@ -1,5 +1,6 @@
 package pinacolada.ui.debug;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -10,8 +11,10 @@ import extendedui.patches.screens.PotionViewScreenPatches;
 import extendedui.patches.screens.RelicViewScreenPatches;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.PCLEffects;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.potions.PCLPotion;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
@@ -35,20 +38,15 @@ public class PCLDebugPotionPanel {
     protected DEUIButton obtain = new DEUIButton("Obtain");
 
     public PCLDebugPotionPanel() {
-        originalSorted.addAll(GameUtilities.getPotions(null));
-        originalSorted.addAll(EUIUtils.map(PCLCustomPotionSlot.getPotions(null), PCLCustomPotionSlot::make));
-        originalSorted.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
-        sortedModIDs.add(PCLDebugCardPanel.ALL);
-        sortedModIDs.addAll(originalSorted.stream()
-                .map(c -> getModID(c.ID))
-                .distinct()
-                .collect(Collectors.toList()));
-        modList.set(PCLDebugCardPanel.ALL);
+        regenerate();
     }
 
-    private static String getModID(String cardID) {
-        int idx = cardID.indexOf(':');
-        return idx < 0 ? PCLDebugCardPanel.BASE_GAME : cardID.substring(0, idx);
+    private static String getModID(AbstractPotion c) {
+        if (c instanceof PCLDynamicPotion) {
+            return PCLDebugCardPanel.CUSTOM;
+        }
+        int idx = c.ID.indexOf(':');
+        return idx < 0 ? PCLDebugCardPanel.BASE_GAME : c.ID.substring(0, idx);
     }
 
     private void obtain() {
@@ -73,14 +71,25 @@ public class PCLDebugPotionPanel {
 
     private boolean passes(AbstractPotion potion) {
         String mod = modList.get();
-        return (filter.passFilter(potion.ID) || filter.passFilter(potion.name)) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(potion.ID).equals(mod));
+        return (filter.passFilter(potion.ID) || filter.passFilter(potion.name)) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(potion).equals(mod));
     }
 
     public void refresh() {
         originalSorted.clear();
+        sortedModIDs.clear();
+        regenerate();
+    }
+
+    protected void regenerate() {
         originalSorted.addAll(GameUtilities.getPotions(null));
         originalSorted.addAll(EUIUtils.map(PCLCustomPotionSlot.getPotions(null), PCLCustomPotionSlot::make));
         originalSorted.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+        sortedModIDs.add(PCLDebugCardPanel.ALL);
+        sortedModIDs.addAll(originalSorted.stream()
+                .map(PCLDebugPotionPanel::getModID)
+                .distinct()
+                .collect(Collectors.toList()));
+        modList.set(PCLDebugCardPanel.ALL);
     }
 
     public void render() {

@@ -137,9 +137,9 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getCardFolder());
         }
-/*        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
-        }*/
+        if (PGR.debugRelics != null) {
+            PGR.debugRelics.refresh();
+        }
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {

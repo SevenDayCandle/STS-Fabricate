@@ -583,7 +583,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getConditionRawString(boolean addPeriod) {
-        return EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer());
+        return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(addPeriod);
     }
 
     public final List<PCLCardSelection> getEligibleOrigins() {
@@ -1065,6 +1065,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     // Necessary because we need to pass in class names, which are not reified
     public boolean hasChildType(Class<?> childType) {
         return childType.isInstance(childEffect) || (childEffect != null && childEffect.hasChildType(childType));
+    }
+
+    public boolean hasChildWarning() {
+        return false;
     }
 
     // Necessary because we need to pass in class names, which are not reified

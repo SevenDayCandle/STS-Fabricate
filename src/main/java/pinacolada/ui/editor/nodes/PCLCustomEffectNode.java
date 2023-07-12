@@ -61,7 +61,7 @@ public class PCLCustomEffectNode extends EUIButton {
         this.skill = skill;
         this.warningImage = new EUIImage(EUIRM.images.warning.texture(), new RelativeHitbox(hb, 48, 48, hb.width * -0.2f, hb.height * 0.4f));
         this.warningImage.setActive(false);
-        this.deleteButton = new EUIButton(EUIRM.images.x.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
+        this.deleteButton = new EUIButton(EUIRM.images.xButton.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
         this.deleteButton.setOnClick(() -> {
             if (canRemove()) {
                 deleteSelf();
@@ -153,7 +153,8 @@ public class PCLCustomEffectNode extends EUIButton {
         if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill))) {
             sj.add(PGR.core.strings.cetut_primaryWarning);
         }
-        if ((skill instanceof PCond || skill instanceof PMod || skill instanceof PDelay) && skill.getChild() == null) {
+
+        if (skill != null && skill.hasChildWarning()) {
             sj.add(PGR.core.strings.cetut_childWarning);
         }
 
@@ -216,7 +217,7 @@ public class PCLCustomEffectNode extends EUIButton {
             child.updateImpl();
         }
         if (dragging && !hb.hovered && hologram == null) {
-            hologram = PCLCustomEffectHologram.queue(this.background, this::onHologramRelease);
+            hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
         }
         if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
             PCLCustomEffectHologram.setHighlighted(this);
@@ -281,6 +282,10 @@ public class PCLCustomEffectNode extends EUIButton {
         else if (this.skill instanceof PPrimary) {
             this.editor.rootEffect = (PPrimary<?>) this.skill;
         }
+    }
+
+    public boolean shouldReject(PCLCustomEffectHologram current) {
+        return false;
     }
 
     public void startEdit() {

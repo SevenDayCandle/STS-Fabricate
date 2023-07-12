@@ -40,7 +40,7 @@ public class PSkillPower extends PCLPower {
             PTrigger effectCopy = effect.makeCopy();
             this.ptriggers.add(effectCopy);
             effectCopy.power = this;
-            effectCopy.resetUses();
+            effectCopy.forceResetUses();
 
             if (this.powerStrings.NAME == null) {
                 this.ID = createPowerID(effect);

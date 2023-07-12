@@ -58,7 +58,7 @@ public class PCLCardSlotEditor extends EUIBase {
         addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setTooltip(PGR.core.strings.loadout_add, "")
                 .setClickDelay(0.02f);
-        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))

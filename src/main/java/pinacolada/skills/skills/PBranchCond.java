@@ -108,6 +108,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public boolean hasChildWarning() {
+        return childEffect == null || effects.isEmpty();
+    }
+
+    @Override
     public boolean isBlank() {
         return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
     }
@@ -218,18 +223,18 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
 
     @Override
     public String getSubText() {
-        return this.childEffect != null ? this.childEffect.getSubText() : "";
+        return this.childEffect != null ? this.childEffect.getSubText() : EUIUtils.EMPTY_STRING;
     }
 
     protected String getEffectTexts(boolean addPeriod) {
         switch (effects.size()) {
             case 0:
-                return getSubText();
+                return EUIUtils.EMPTY_STRING;
             case 1:
-                return super.getText(addPeriod);
+                return this.effects.get(0).getText(addPeriod);
             case 2:
                 if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
+                    return getCapitalSubText(addPeriod) + COLON_SEPARATOR + this.effects.get(0).getText(addPeriod) + " " +
                             StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
                 }
             default:
@@ -306,8 +311,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect instanceof PActiveCond) {
-            ((PActiveCond<?>) childEffect).useImpl(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)), (i) -> {
-            });
+            ((PActiveCond<?>) childEffect).useImpl(info, order,
+                    (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)),
+                    (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)));
         }
         else if (childEffect instanceof PCallbackMove) {
             ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)));

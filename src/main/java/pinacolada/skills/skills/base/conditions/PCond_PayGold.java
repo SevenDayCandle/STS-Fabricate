@@ -48,8 +48,13 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return order.callback(new GainGoldAction(-amount), action -> {
-            onComplete.invoke(info);
+        return order.callback(new GainGoldAction(-amount), () -> {
+            if (conditionMetCache) {
+                onComplete.invoke(info);
+            }
+            else {
+                onFail.invoke(info);
+            }
         });
     }
 }

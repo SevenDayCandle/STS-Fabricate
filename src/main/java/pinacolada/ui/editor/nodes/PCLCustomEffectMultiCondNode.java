@@ -5,6 +5,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
+import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 
 import java.util.List;
@@ -43,6 +44,11 @@ public class PCLCustomEffectMultiCondNode extends PCLCustomEffectMultiNode {
         }
         child.parent = this;
         return this.child;
+    }
+
+    @Override
+    public boolean shouldReject(PCLCustomEffectHologram hologram) {
+        return type == NodeType.Multicond && hologram.type != NodeType.Cond && hologram.type != NodeType.Multicond;
     }
 
 }

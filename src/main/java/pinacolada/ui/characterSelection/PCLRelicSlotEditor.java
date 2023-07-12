@@ -47,7 +47,7 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
-        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + 12, 48, 48))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + 12, 48, 48))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicNameText.hb.y + 12, 48, 48))

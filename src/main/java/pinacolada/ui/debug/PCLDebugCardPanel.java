@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.PCLEffects;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class PCLDebugCardPanel {
     protected static final String ALL = "Any";
     protected static final String BASE_GAME = "Base";
+    protected static final String CUSTOM = "Custom";
     protected ArrayList<AbstractCard> originalSorted = new ArrayList<>();
     protected ArrayList<AbstractCard> sorted = originalSorted;
     protected ArrayList<String> sortedModIDs = new ArrayList<>();
@@ -35,20 +37,15 @@ public class PCLDebugCardPanel {
     protected DEUIButton addToDeck = new DEUIButton("Add to deck");
 
     public PCLDebugCardPanel() {
-        originalSorted.addAll(CardLibrary.getAllCards());
-        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
-        originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
-        sortedModIDs.add(ALL);
-        sortedModIDs.addAll(originalSorted.stream()
-                .map(c -> getModID(c.cardID))
-                .distinct()
-                .collect(Collectors.toList()));
-        modList.set(ALL);
+        regenerate();
     }
 
-    private static String getModID(String cardID) {
-        int idx = cardID.indexOf(':');
-        return idx < 0 ? BASE_GAME : cardID.substring(0, idx);
+    private static String getModID(AbstractCard c) {
+        if (c instanceof PCLDynamicCard) {
+            return CUSTOM;
+        }
+        int idx = c.cardID.indexOf(':');
+        return idx < 0 ? BASE_GAME : c.cardID.substring(0, idx);
     }
 
     private void addToDeck() {
@@ -80,14 +77,25 @@ public class PCLDebugCardPanel {
 
     private boolean passes(AbstractCard card) {
         String mod = modList.get();
-        return (filter.passFilter(card.cardID) || filter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card.cardID).equals(mod));
+        return (filter.passFilter(card.cardID) || filter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card).equals(mod));
     }
 
     public void refresh() {
         originalSorted.clear();
+        sortedModIDs.clear();
+        regenerate();
+    }
+
+    protected void regenerate() {
         originalSorted.addAll(CardLibrary.getAllCards());
         originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
         originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
+        sortedModIDs.add(ALL);
+        sortedModIDs.addAll(originalSorted.stream()
+                .map(PCLDebugCardPanel::getModID)
+                .distinct()
+                .collect(Collectors.toList()));
+        modList.set(ALL);
     }
 
     public void render() {

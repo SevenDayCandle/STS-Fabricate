@@ -62,8 +62,13 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         AbstractCreature sourceCreature = getSourceCreature();
-        return order.callback(new SequentialAction(EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, sourceCreature, power, -amount))), action -> {
-            onComplete.invoke(info);
+        return order.callback(new SequentialAction(EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, sourceCreature, power, -amount))), () -> {
+            if (conditionMetCache) {
+                onComplete.invoke(info);
+            }
+            else {
+                onFail.invoke(info);
+            }
         });
     }
 }

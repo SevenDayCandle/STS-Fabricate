@@ -141,9 +141,9 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getCardFolder());
         }
-/*        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
-        }*/
+        if (PGR.debugPotions != null) {
+            PGR.debugPotions.refresh();
+        }
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {

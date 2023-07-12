@@ -48,6 +48,14 @@ public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return order.spendEnergy(amount, false).addCallback(() -> onComplete.invoke(info));
+        return order.spendEnergy(amount, false)
+                .addCallback(res -> {
+                    if (res != null) {
+                        onComplete.invoke(info);
+                    }
+                    else {
+                        onFail.invoke(info);
+                    }
+                });
     }
 }

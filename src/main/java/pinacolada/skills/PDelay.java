@@ -55,6 +55,11 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
+    public boolean hasChildWarning() {
+        return childEffect == null;
+    }
+
+    @Override
     public PDelay setTemporaryAmount(int amount) {
         if (this.childEffect != null) {
             this.childEffect.setTemporaryAmount(amount);

@@ -404,6 +404,11 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public boolean hasChildWarning() {
+        return childEffect == null;
+    }
+
+    @Override
     public void onDrag(AbstractMonster m) {
         updateChildAmount(makeInfo(m));
     }

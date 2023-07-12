@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.EUIUtils;
@@ -17,6 +18,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffects;
 import pinacolada.patches.library.RelicLibraryPatches;
+import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.relics.PCLPointerRelic;
@@ -40,20 +42,15 @@ public class PCLDebugRelicPanel {
     protected DEUIButton obtain = new DEUIButton("Obtain");
 
     public PCLDebugRelicPanel() {
-        originalSorted.addAll(RelicViewScreenPatches.getAllReics());
-        originalSorted.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(null), PCLCustomRelicSlot::make));
-        originalSorted.sort((a, b) -> StringUtils.compare(a.relicId, b.relicId));
-        sortedModIDs.add(PCLDebugCardPanel.ALL);
-        sortedModIDs.addAll(originalSorted.stream()
-                .map(c -> getModID(c.relicId))
-                .distinct()
-                .collect(Collectors.toList()));
-        modList.set(PCLDebugCardPanel.ALL);
+        regenerate();
     }
 
-    private static String getModID(String cardID) {
-        int idx = cardID.indexOf(':');
-        return idx < 0 ? PCLDebugCardPanel.BASE_GAME : cardID.substring(0, idx);
+    private static String getModID(AbstractRelic c) {
+        if (c instanceof PCLDynamicRelic) {
+            return PCLDebugCardPanel.CUSTOM;
+        }
+        int idx = c.relicId.indexOf(':');
+        return idx < 0 ? PCLDebugCardPanel.BASE_GAME : c.relicId.substring(0, idx);
     }
 
     private void obtain() {
@@ -76,14 +73,25 @@ public class PCLDebugRelicPanel {
 
     private boolean passes(AbstractRelic relic) {
         String mod = modList.get();
-        return (filter.passFilter(relic.relicId) || filter.passFilter(GameUtilities.getRelicName(relic))) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(relic.relicId).equals(mod));
+        return (filter.passFilter(relic.relicId) || filter.passFilter(GameUtilities.getRelicName(relic))) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(relic).equals(mod));
     }
 
     public void refresh() {
         originalSorted.clear();
+        sortedModIDs.clear();
+        regenerate();
+    }
+
+    protected void regenerate() {
         originalSorted.addAll(RelicViewScreenPatches.getAllReics());
         originalSorted.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(null), PCLCustomRelicSlot::make));
         originalSorted.sort((a, b) -> StringUtils.compare(a.relicId, b.relicId));
+        sortedModIDs.add(PCLDebugCardPanel.ALL);
+        sortedModIDs.addAll(originalSorted.stream()
+                .map(PCLDebugRelicPanel::getModID)
+                .distinct()
+                .collect(Collectors.toList()));
+        modList.set(PCLDebugCardPanel.ALL);
     }
 
     public void render() {

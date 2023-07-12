@@ -68,7 +68,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
     }
 
     protected void startHologram(EUIButton button, PCLCustomEffectNode.NodeType type) {
-        PCLCustomEffectHologram.queue(button.background, (h) -> this.onHologramRelease(h, type));
+        PCLCustomEffectHologram.queue(button.background, type, (h) -> this.onHologramRelease(h, type));
     }
 
 }

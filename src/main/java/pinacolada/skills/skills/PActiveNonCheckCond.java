@@ -8,6 +8,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
+import java.util.ArrayList;
+
 // Active cond whose text should not be highlighted
 public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<T> {
     public PActiveNonCheckCond(PSkillData<T> data, PSkillSaveData content) {
@@ -35,5 +37,16 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return true;
+    }
+
+    // Qualifiers are dependent on the outcome of the action
+    @Override
+    public String getQualifierText(int i) {
+        return fields.getQualifierText(i);
+    }
+
+    @Override
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return fields.getQualifiers(info);
     }
 }
