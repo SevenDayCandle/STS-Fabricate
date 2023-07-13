@@ -33,7 +33,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info.source.gold >= amount;
+        return info != null && info.source.gold >= amount;
     }
 
     @Override

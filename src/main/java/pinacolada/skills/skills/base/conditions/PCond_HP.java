@@ -12,8 +12,7 @@ import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
 public class PCond_HP extends PPassiveCond<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)
-            .selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class);
 
     public PCond_HP(PSkillSaveData content) {
         super(DATA, content);

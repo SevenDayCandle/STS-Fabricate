@@ -79,6 +79,11 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return PCLPotionData.registerTemplate(new PCLPotionData(type, resources));
     }
 
+    @Override
+    public boolean canUse() {
+        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null)) && super.canUse();
+    }
+
     public boolean canUpgrade() {
         return auxiliaryData.timesUpgraded < potionData.maxUpgradeLevel || potionData.maxUpgradeLevel < 0;
     }

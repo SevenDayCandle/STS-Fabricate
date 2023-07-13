@@ -7,6 +7,10 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.fields.PField;
+import pinacolada.ui.editor.PCLCustomPowerEffectPage;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
 
 import java.util.*;
 
@@ -20,6 +24,7 @@ public class PSkillData<T extends PField> {
     public final ArrayList<PCLCardGroupHelper> groups = new ArrayList<>();
     public final ArrayList<PCLCardSelection> origins = new ArrayList<>();
     public final ArrayList<PCLCardTarget> targets = new ArrayList<>();
+    public final ArrayList<SourceType> sourceTypes = new ArrayList<>();
     public int minAmount;
     public int maxAmount;
     public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
@@ -76,6 +81,11 @@ public class PSkillData<T extends PField> {
         return this;
     }
 
+    public PSkillData<T> setClasses(PCLCardGroupHelper... groups) {
+        this.groups.addAll(Arrays.asList(groups));
+        return this;
+    }
+
     public PSkillData<T> setColors(AbstractCard.CardColor... colors) {
         this.colors.addAll(Arrays.asList(colors));
         return this;
@@ -107,8 +117,31 @@ public class PSkillData<T extends PField> {
         return this;
     }
 
+    public PSkillData<T> setSourceTypes(SourceType... targets) {
+        this.sourceTypes.addAll(Arrays.asList(targets));
+        return this;
+    }
+
     public PSkillData<T> setTargets(PCLCardTarget... targets) {
         this.targets.addAll(Arrays.asList(targets));
         return this;
+    }
+
+    public enum SourceType {
+        Card,
+        Collectible,
+        Power;
+
+        public boolean isSourceAllowed(PCLCustomEffectNode node) {
+            switch (this) {
+                case Card:
+                    return node.editor.screen instanceof PCLCustomCardEditCardScreen;
+                case Collectible:
+                    return !(node.editor.screen instanceof PCLCustomCardEditCardScreen);
+                case Power:
+                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditRelicScreen;
+            }
+            return true;
+        }
     }
 }

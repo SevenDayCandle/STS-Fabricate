@@ -546,6 +546,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return setForm(form, timesUpgraded);
     }
 
+    protected Texture createPopupTexture() {
+        return EUIRM.createTexture(Gdx.files.internal(assetUrl), true, false);
+    }
+
     public void displayUpgradesForSkills(boolean value) {
         if (onAttackEffect != null) {
             onAttackEffect.displayUpgrades(value);
@@ -1441,9 +1445,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public final void loadSingleCardView() {
-        if (PGR.config.lowVRAM.get() || portraitImg.getWidth() < 400) { // Half-size portraits are 250, but they won't be reloaded until game reset
+        if (PGR.config.lowVRAM.get() || portraitImg.getWidth() < 400) { // Half-size portraits are 250, but they won't be reloaded until game reset. Also, replacement cards will have smaller portraits
             portraitImgBackup = portraitImg;
-            portraitImg = new ColoredTexture(EUIRM.createTexture(Gdx.files.internal(assetUrl), true, false));
+            portraitImg = new ColoredTexture(createPopupTexture());
         }
     }
 

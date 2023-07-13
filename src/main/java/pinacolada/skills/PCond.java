@@ -54,6 +54,26 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckBlock(target, amount);
     }
 
+    public static PCond_CheckCreature checkCreature(PCLCardTarget target, int amount) {
+        return new PCond_CheckCreature(target, amount);
+    }
+
+    public static PCond_CheckDistinctPower checkDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+        return new PCond_CheckDistinctPower(target, amount, powers);
+    }
+
+    public static PCond_CheckDistinctPower checkDistinctPowerAoe(int amount, PCLPowerHelper... powers) {
+        return new PCond_CheckDistinctPower(PCLCardTarget.AllEnemy, amount, powers);
+    }
+
+    public static PCond_CheckDistinctPower checkDistinctPowerSelf(int amount, PCLPowerHelper... powers) {
+        return new PCond_CheckDistinctPower(PCLCardTarget.Self, amount, powers);
+    }
+
+    public static PCond_CheckDistinctPower checkDistinctPowerSingle(int amount, PCLPowerHelper... powers) {
+        return new PCond_CheckDistinctPower(PCLCardTarget.Single, amount, powers);
+    }
+
     public static PCond_CheckEnergy checkEnergy(int amount) {
         return new PCond_CheckEnergy(amount);
     }

@@ -1,8 +1,15 @@
 package pinacolada.cards.base;
 
+import basemod.abstracts.CustomCard;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
@@ -22,6 +29,24 @@ public class ReplacementCard extends PCLDynamicCard {
         this.builder = builder;
         // Intentionally bypassing getCard to avoid the original itself being replaced
         this.original = CardLibraryPatches.getDirectCard(builder.originalID).makeStatEquivalentCopy();
+    }
+
+    // Base game pop up textures are loaded from CustomCard
+    // ImageMaster is fine here because we'll be disposing this texture once the popup is destroyed
+    @Override
+    protected Texture createPopupTexture() {
+        if (original instanceof CustomCard) {
+            return CustomCard.getPortraitImage((CustomCard) original);
+        }
+        if (!Settings.PLAYTESTER_ART_MODE && !UnlockTracker.betaCardPref.getBoolean(original.cardID, false)) {
+            Texture texture = ImageMaster.loadImage("images/1024Portraits/" + original.assetUrl + ".png");
+            if (texture == null) {
+                texture = ImageMaster.loadImage("images/1024PortraitsBeta/" + original.assetUrl + ".png");
+            }
+            return texture;
+        } else {
+            return ImageMaster.loadImage("images/1024PortraitsBeta/" + original.assetUrl + ".png");
+        }
     }
 
     @Override

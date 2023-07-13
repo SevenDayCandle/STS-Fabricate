@@ -1,28 +1,29 @@
 package pinacolada.skills.skills.base.traits;
 
-import extendedui.EUIRM;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDamageTrait;
 
 @VisibleSkill
-public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
+public class PTrait_TakeDamageMultiplier extends PTrait<PField_Empty> {
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_TakeDamageMultiplier.class, PField_Empty.class)
+            .setSourceTypes(PSkillData.SourceType.Power);
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_Damage.class, PField_Empty.class)
-            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
-
-    public PTrait_DamageMultiplier() {
+    public PTrait_TakeDamageMultiplier() {
         this(1);
     }
 
-    public PTrait_DamageMultiplier(int amount) {
+    public PTrait_TakeDamageMultiplier(int amount) {
         super(DATA, amount);
     }
 
-    public PTrait_DamageMultiplier(PSkillSaveData content) {
+    public PTrait_TakeDamageMultiplier(PSkillSaveData content) {
         super(DATA, content);
     }
 
@@ -31,11 +32,13 @@ public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_take(getSampleAmount(), getSubSampleText());
+    }
+
+    @Override
     public String getSubText() {
-        if (isVerbose()) {
-            return TEXT.act_deal(getAmountRawString() + "%", getSubDescText());
-        }
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getSubDescText());
+        return TEXT.act_takeDamage(getAmountRawString() + "%");
     }
 
     @Override
@@ -50,11 +53,11 @@ public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
 
     @Override
     public boolean isDetrimental() {
-        return amount < 0;
+        return amount > 0;
     }
 
     @Override
-    public float modifyDamage(PCLUseInfo info, float amount) {
+    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
         return amount * (1 + (this.amount / 100f));
     }
 }

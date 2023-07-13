@@ -62,17 +62,25 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         AbstractRoom curRoom = GameUtilities.getCurrentRoom();
-        if (curRoom instanceof MonsterRoom && curRoom.rewardAllowed) {
-            RewardItem r = new RewardItem();
-            String name = getName();
-            if (!StringUtils.isEmpty(name)) {
-                r.text = name;
+        // If the action is not an "choose x of y" option, add the cards directly into the player's deck
+        if (isOutOf()) {
+            if (curRoom instanceof MonsterRoom && curRoom.rewardAllowed) {
+                RewardItem r = new RewardItem();
+                String name = getName();
+                if (!StringUtils.isEmpty(name)) {
+                    r.text = name;
+                }
+                r.cards = getBaseCards(null);
+                curRoom.addCardReward(r);
             }
-            r.cards = getBaseCards(null);
-            curRoom.addCardReward(r);
+            else {
+                PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
+            }
         }
         else {
-            PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
+            for (AbstractCard c : getBaseCards(null)) {
+                PCLEffects.Queue.showAndObtain(c);
+            }
         }
     }
 }

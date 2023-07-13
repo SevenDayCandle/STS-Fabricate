@@ -30,7 +30,7 @@ public class PCond_IsBuffing extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (target == PCLCardTarget.Single) {
+        if (target == PCLCardTarget.Single && info != null) {
             return fields.not ^ (GameUtilities.isBuffing(info.target));
         }
         return fields.not ^ EUIUtils.any(GameUtilities.getIntents(), i -> fields.not ^ GameUtilities.isBuffing(i.intent));

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -27,6 +28,11 @@ public class PMod_PerDamage extends PMod_Per<PField_Not> {
     @Override
     public int getMultiplier(PCLUseInfo info) {
         return (sourceCard != null ? sourceCard.damage / PGR.dungeon.getDivisor() : 0);
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(TEXT.subjects_card, TEXT.subjects_damage);
     }
 
     @Override

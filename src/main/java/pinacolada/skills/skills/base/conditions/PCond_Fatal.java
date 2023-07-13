@@ -20,8 +20,7 @@ import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber {
-    public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1)
-            .selfTarget();
+    public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1);
 
     public PCond_Fatal() {
         super(DATA, PCLCardTarget.None, 0);

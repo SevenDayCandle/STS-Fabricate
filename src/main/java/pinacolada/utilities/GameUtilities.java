@@ -1545,7 +1545,7 @@ public class GameUtilities {
 
     // Move intent is the source of truth; the actual intent might not be set in time for start of turn effects
     public static boolean isAttacking(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isAttacking(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
+        return monster instanceof AbstractMonster && (isAttacking(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
     }
 
     public static boolean isAttacking(AbstractMonster.Intent intent) {
@@ -1554,7 +1554,7 @@ public class GameUtilities {
     }
 
     public static boolean isBuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isBuffing(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
+        return monster instanceof AbstractMonster && (isBuffing(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
     }
 
     public static boolean isBuffing(AbstractMonster.Intent intent) {
@@ -1595,7 +1595,7 @@ public class GameUtilities {
     }
 
     public static boolean isDebuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isDebuffing(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
+        return monster instanceof AbstractMonster && (isDebuffing(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
     }
 
     public static boolean isDebuffing(AbstractMonster.Intent intent) {
@@ -1604,7 +1604,7 @@ public class GameUtilities {
     }
 
     public static boolean isDefending(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isDefending(PCLIntentInfo.get((AbstractMonster) monster).move.intent));
+        return monster instanceof AbstractMonster && (isDefending(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
     }
 
     public static boolean isDefending(AbstractMonster.Intent intent) {

@@ -85,10 +85,6 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         super.renderImpl(sb);
     }
 
-    public boolean shouldReject(PCLCustomEffectHologram current) {
-        return false;
-    }
-
     @Override
     public void updateImpl() {
         super.updateImpl();

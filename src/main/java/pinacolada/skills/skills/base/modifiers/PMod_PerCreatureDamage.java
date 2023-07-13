@@ -33,7 +33,7 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.title, TEXT.subjects_damage);
+        return EUIRM.strings.adjNoun(TEXT.subjects_target, TEXT.subjects_damage);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubText() {
-        return getTargetOnString(getSubSampleText());
+        return getTargetOnString(TEXT.subjects_damage);
     }
 }

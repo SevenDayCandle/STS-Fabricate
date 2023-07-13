@@ -209,6 +209,10 @@ public class PCLIntentInfo {
         }
     }
 
+    public AbstractMonster.Intent getMoveIntent() {
+        return move != null ? move.intent : intent;
+    }
+
     public boolean isAttacking() {
         return isAttacking;
     }

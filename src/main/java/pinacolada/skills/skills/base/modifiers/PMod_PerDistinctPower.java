@@ -42,31 +42,32 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
+            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText()));
         }
-        return TEXT.cond_perDistinct(childText,
+        return TEXT.cond_xPerY(childText,
                 this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
+        return TEXT.cond_xPerY(TEXT.subjects_x, getSubSampleText());
     }
 
     @Override
     public String getSubSampleText() {
-        return TEXT.cedit_powers;
+        return TEXT.subjects_distinct(TEXT.cedit_powers);
     }
 
     @Override
     public int getMultiplier(PCLUseInfo info) {
+        AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return fields.powers.isEmpty() ?
-                sumTargets(info, t -> EUIUtils.count(t.powers, fields.debuff ? po -> po.type == AbstractPower.PowerType.DEBUFF : po -> po.type == AbstractPower.PowerType.BUFF)) :
+                sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == targetType)) :
                 sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override
     public String getSubText() {
-        return getTargetOnString(fields.getPowerSubjectString());
+        return TEXT.subjects_distinct(getTargetOnString(fields.getPowerSubjectString()));
     }
 }

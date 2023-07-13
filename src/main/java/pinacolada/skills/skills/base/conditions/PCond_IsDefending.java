@@ -30,7 +30,7 @@ public class PCond_IsDefending extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (target == PCLCardTarget.Single) {
+        if (target == PCLCardTarget.Single && info != null) {
             return fields.not ^ (GameUtilities.isDefending(info.target));
         }
         return fields.not ^ EUIUtils.any(GameUtilities.getIntents(), i -> fields.not ^ GameUtilities.isDefending(i.intent));

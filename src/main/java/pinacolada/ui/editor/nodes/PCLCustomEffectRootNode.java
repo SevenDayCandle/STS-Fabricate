@@ -8,6 +8,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PRoot;
+import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.card.PCLCustomAttackEffectPage;
@@ -29,14 +30,24 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
     }
 
     // For root nodes, we should show triggers while underneath a power or relic
-    public List<PSkill> getEffects() {
+    public List<PSkill<?>> getEffects() {
         if (effects == null) {
+            effects = new ArrayList<>();
             NodeType targetType =
                     editor instanceof PCLCustomAttackEffectPage ? NodeType.Attack :
                             editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
                                     editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
-            effects = EUIUtils.map(targetType.getSkills(editor.screen.getBuilder().getCardColor()),
-                    bc -> bc.scanForTips(bc.getSampleText(editor.rootEffect)));
+            for (PSkill<?> sk : targetType.getSkills(editor.screen.getBuilder().getCardColor())) {
+                if (!EUIUtils.any(sk.data.sourceTypes, s -> !s.isSourceAllowed(this))) {
+                    if (skill != null && sk.effectID.equals(skill.effectID)) {
+                        effects.add(skill);
+                    }
+                    else {
+                        sk.scanForTips(sk.getSampleText(editor.rootEffect));
+                        effects.add(sk);
+                    }
+                }
+            }
         }
         return effects;
     }
@@ -67,5 +78,10 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
             editor.fullRebuild();
             editor.startEdit(editor.root);
         }
+    }
+
+    // On power pages, we should not be able to put in anything unless we have a primary set
+    public boolean shouldReject(PCLCustomEffectHologram current) {
+        return editor instanceof PCLCustomPowerEffectPage;
     }
 }

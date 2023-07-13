@@ -5,6 +5,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.delay.PDelay_EndOfTurnFirst;
@@ -50,6 +51,11 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return getTiming().getTitle();
+    }
+
+    @Override
     public String getText(boolean addPeriod) {
         return getCapitalSubText(addPeriod) + (childEffect != null ? ", " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
     }
@@ -84,9 +90,11 @@ public abstract class PDelay extends PSkill<PField_Empty> {
 
     @Override
     public String getSubText() {
-        return (amount <= 0 ? TEXT.cond_atEndOfTurn() :
-                amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount));
+        return (amount <= 0 ? getTiming().getDesc() :
+                (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)) + COMMA_SEPARATOR + getTiming().getDesc());
     }
 
     public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);
+
+    public abstract DelayTiming getTiming();
 }

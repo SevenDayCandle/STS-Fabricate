@@ -8,6 +8,18 @@ public enum DelayTiming {
     StartOfTurnFirst,
     StartOfTurnLast;
 
+    public String getDesc() {
+        switch (this) {
+            case EndOfTurnFirst:
+            case EndOfTurnLast:
+                return PGR.core.strings.cond_atEndOfTurn();
+            case StartOfTurnFirst:
+            case StartOfTurnLast:
+                return PGR.core.strings.cond_atStartOfTurn();
+        }
+        return null;
+    }
+
     public String getTitle() {
         switch (this) {
             case EndOfTurnFirst:

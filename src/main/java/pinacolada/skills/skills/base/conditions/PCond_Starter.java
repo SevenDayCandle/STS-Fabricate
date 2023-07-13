@@ -26,7 +26,7 @@ public class PCond_Starter extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.not ^ info.isStarter;
+        return info != null && (fields.not ^ info.isStarter);
     }
 
     @Override

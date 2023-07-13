@@ -9,7 +9,8 @@ import pinacolada.skills.skills.PDamageTrait;
 
 @VisibleSkill
 public class PTrait_HitCount extends PDamageTrait<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_HitCount.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_HitCount.class, PField_Empty.class)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_HitCount() {
         this(1);

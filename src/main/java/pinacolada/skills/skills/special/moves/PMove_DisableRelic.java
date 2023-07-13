@@ -18,6 +18,7 @@ import java.util.List;
 
 public class PMove_DisableRelic extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_DisableRelic.class, PField_Empty.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Collectible)
             .selfTarget()
             .pclOnly();
 

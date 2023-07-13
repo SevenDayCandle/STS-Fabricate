@@ -11,7 +11,8 @@ import pinacolada.skills.skills.PBlockTrait;
 @VisibleSkill
 public class PTrait_Block extends PBlockTrait<PField_Empty> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_Block.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_Block.class, PField_Empty.class)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_Block() {
         this(1);

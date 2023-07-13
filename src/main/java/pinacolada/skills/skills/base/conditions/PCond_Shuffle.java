@@ -37,7 +37,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
     }
 
     @Override

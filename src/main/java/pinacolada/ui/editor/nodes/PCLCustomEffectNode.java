@@ -23,6 +23,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
 import pinacolada.skills.skills.*;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.skills.skills.special.primary.PRoot;
@@ -30,6 +31,7 @@ import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -38,7 +40,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public static final float SIZE_Y = scale(60);
     public static final float DISTANCE_Y = scale(-100);
     private boolean dragging;
-    protected List<PSkill> effects;
+    protected List<PSkill<?>> effects;
     protected PCLCustomEffectHologram hologram;
     public PSkill<?> skill;
     public PCLCustomEffectPage editor;
@@ -138,11 +140,20 @@ public class PCLCustomEffectNode extends EUIButton {
         skill.setChild((PSkill<?>) null);
     }
 
-    @SuppressWarnings("rawtypes")
-    public List<PSkill> getEffects() {
+    public List<PSkill<?>> getEffects() {
         if (effects == null) {
-            effects = EUIUtils.map(type.getSkills(editor.screen.getBuilder().getCardColor()),
-                    bc -> skill != null && bc.effectID.equals(skill.effectID) ? skill : bc.scanForTips(bc.getSampleText(editor.rootEffect)));
+            effects = new ArrayList<>();
+            for (PSkill<?> sk : type.getSkills(editor.screen.getBuilder().getCardColor())) {
+                if (!EUIUtils.any(sk.data.sourceTypes, s -> !s.isSourceAllowed(this))) {
+                    if (skill != null && sk.effectID.equals(skill.effectID)) {
+                        effects.add(skill);
+                    }
+                    else {
+                        sk.scanForTips(sk.getSampleText(editor.rootEffect));
+                        effects.add(sk);
+                    }
+                }
+            }
         }
         return effects;
     }
@@ -285,6 +296,22 @@ public class PCLCustomEffectNode extends EUIButton {
     }
 
     public boolean shouldReject(PCLCustomEffectHologram current) {
+        switch (type) {
+            case Trigger:
+                if (skill instanceof PTrigger_When) {
+                    switch (current.type) {
+                        case Cond:
+                        case Multicond:
+                        case Branchcond:
+                            return false;
+                        default:
+                            return true;
+                    }
+                }
+                return false;
+            case Multicond:
+                return current.type != NodeType.Cond;
+        }
         return false;
     }
 
