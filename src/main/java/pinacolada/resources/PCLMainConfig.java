@@ -15,7 +15,7 @@ import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardPreviews;
+import extendedui.ui.tooltips.EUIPreview;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;
@@ -230,7 +230,7 @@ public class PCLMainConfig extends AbstractConfig {
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions
     private void updateCardDescriptions() {
-        PCLCardPreviews.invalidate();
+        EUIPreview.invalidate();
         for (AbstractCard c : CardLibrary.getAllCards()) {
             if (c instanceof PCLCard) {
                 c.initializeDescription();

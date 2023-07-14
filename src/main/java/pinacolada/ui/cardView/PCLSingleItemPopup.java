@@ -21,6 +21,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +50,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     protected T prevItem;
     protected T nextItem;
     protected Color fadeColor = Color.BLACK.cpy();
-    protected EUICardPreview preview;
+    protected EUIPreview preview;
     protected float fadeTimer = 0.0F;
 
     public PCLSingleItemPopup(EUIHitbox popupHb) {

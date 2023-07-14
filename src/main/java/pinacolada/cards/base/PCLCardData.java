@@ -67,7 +67,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLLoadout loadout;
     public boolean canToggleFromAlternateForm = false;
     public boolean canToggleFromPopup = false;
-    public boolean canToggleOnUpgrade = false;
+    public boolean canToggleOnUpgrade = true;
     public boolean obtainableInCombat = true;
     public boolean removableFromDeck = true;
     public boolean unique = false;

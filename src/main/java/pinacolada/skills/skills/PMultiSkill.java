@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -179,7 +179,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return copy;
     }
 
-    public PMultiSkill makePreviews(RotatingList<EUICardPreview> previews) {
+    public PMultiSkill makePreviews(RotatingList<EUIPreview> previews) {
         for (PSkill<?> effect : effects) {
             effect.makePreviews(previews);
         }

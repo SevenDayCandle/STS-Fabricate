@@ -14,7 +14,7 @@ public class CardPreviewList extends RotatingList<EUICardPreview> {
     }
 
     public void add(AbstractCard card) {
-        add(EUICardPreview.generatePreviewCard(card));
+        add(new EUICardPreview(card));
     }
 
     public AbstractCard getCard(int index) {
@@ -41,7 +41,7 @@ public class CardPreviewList extends RotatingList<EUICardPreview> {
     }
 
     public EUICardPreview set(int index, AbstractCard card) {
-        return set(index, EUICardPreview.generatePreviewCard(card));
+        return set(index, new EUICardPreview(card));
     }
 
     public EUICardPreview set(int index, EUICardPreview card) {

@@ -35,11 +35,13 @@ import com.megacrit.cardcrawl.powers.LockOnPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
+import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.*;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.*;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -58,6 +60,7 @@ import pinacolada.effects.card.PCLCardGlowBorderEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
@@ -571,6 +574,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             addPowerMove(effect);
         }
         return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
+    }
+
+    public void fillPreviews(RotatingList<EUIPreview> list) {
+        PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
 
     @Deprecated
@@ -2328,8 +2335,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
-    public EUICardPreview getPreview() {
-        return PCLCardPreviews.getCardPreview(this);
+    public EUIPreview getPreview() {
+        return EUIPreview.getPreview(this);
     }
 
     public void setMultiDamage(boolean value) {

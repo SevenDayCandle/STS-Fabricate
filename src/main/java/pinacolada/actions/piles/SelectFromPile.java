@@ -185,7 +185,6 @@ public class SelectFromPile extends CardFilterAction {
             getCardSubset(temp, newMerged.group, maxChoicesOrigin, maxChoices);
             GridCardSelectScreenHelper.clear(false);
             GridCardSelectScreenHelper.addGroup(newMerged);
-            mergedGroup = GridCardSelectScreenHelper.getCardGroup();
         }
 
         if (origin != null) {

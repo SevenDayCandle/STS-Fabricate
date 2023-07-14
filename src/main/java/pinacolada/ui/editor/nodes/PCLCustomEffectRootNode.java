@@ -72,9 +72,9 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
     }
 
     public void startEdit() {
-        ArrayList<? extends PPrimary> effects = EUIUtils.mapAsNonnull(getEffects(), s -> EUIUtils.safeCast(s, PPrimary.class));
-        if (effects.size() > 0) {
-            replaceSkill(effects.get(0));
+        PSkill<?> first = EUIUtils.find(getEffects(), s -> s instanceof PPrimary);
+        if (first != null) {
+            replaceSkill(first);
             editor.fullRebuild();
             editor.startEdit(editor.root);
         }

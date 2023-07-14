@@ -6,8 +6,13 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.text.EUISmartText;
+import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUIPreview;
+import extendedui.utilities.RotatingList;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
@@ -27,6 +32,41 @@ import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public interface PointerProvider {
+    public static <T extends PointerProvider & KeywordProvider> void fillPreviewsForKeywordProvider(T provider, RotatingList<EUIPreview> list) {
+        for (PSkill<?> effect : provider.getEffects()) {
+            if (effect == null) {
+                continue;
+            }
+            effect.makePreviews(list);
+        }
+        for (PSkill<?> effect : provider.getPowerEffects()) {
+            if (effect == null) {
+                continue;
+            }
+            effect.makePreviews(list);
+        }
+        for (EUIKeywordTooltip tip : provider.getTips()) {
+            EUICardPreview preview = tip.createPreview();
+            if (preview != null && !EUIUtils.any(list, p -> p.matches(preview.defaultPreview.cardID))) {
+                list.add(preview);
+            }
+        }
+
+        for (EUIPreview preview : list) {
+            if (preview instanceof EUICardPreview) {
+                PCLCard defaultPreview = PCLCard.cast(((EUICardPreview) preview).defaultPreview);
+                PCLCard upgradedPreview = PCLCard.cast(((EUICardPreview) preview).upgradedPreview);
+
+                if (defaultPreview != null && defaultPreview.affinities != null) {
+                    defaultPreview.affinities.updateSortedList();
+                }
+                if (upgradedPreview != null && upgradedPreview.affinities != null) {
+                    upgradedPreview.affinities.updateSortedList();
+                }
+            }
+        }
+    }
+
     default PTrigger addPowerMove(PTrigger effect) {
         PTrigger added = (PTrigger) effect.setSource(this);
         getPowerEffects().add(added);

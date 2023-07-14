@@ -3,6 +3,8 @@ package pinacolada.skills.fields;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.ui.tooltips.EUIPreview;
+import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -162,6 +164,10 @@ public abstract class PField implements Serializable {
 
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
         return new ArrayList<>();
+    }
+
+    public void makePreviews(RotatingList<EUIPreview> previews) {
+
     }
 
     public PField setSkill(PSkill<?> skill) {

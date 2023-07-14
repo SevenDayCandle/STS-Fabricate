@@ -7,6 +7,7 @@ import basemod.helpers.RelicType;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -256,7 +257,7 @@ public class PGR {
         PGR.augmentFilters = new PCLAugmentKeywordFilters();
         PGR.augmentHeader = new PCLAugmentSortHeader(null);
         PGR.augmentLibrary = new PCLAugmentLibraryScreen();
-        PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
+        PGR.blackScreen = new EUIImage(ImageMaster.WHITE_SQUARE_IMG, new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
                 .setColor(0, 0, 0, 0.8f);
         try {

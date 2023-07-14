@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -145,7 +145,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return EUIUtils.any(effects, PSkill::isDetrimental);
     }
 
-    public PMultiTrait makePreviews(RotatingList<EUICardPreview> previews) {
+    public PMultiTrait makePreviews(RotatingList<EUIPreview> previews) {
         for (PSkill<?> effect : effects) {
             effect.makePreviews(previews);
         }

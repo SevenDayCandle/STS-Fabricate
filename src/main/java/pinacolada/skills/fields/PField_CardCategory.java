@@ -10,6 +10,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.RotatingList;
@@ -279,11 +280,11 @@ public class PField_CardCategory extends PField_CardGeneric {
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
     }
 
-    public void makePreviews(RotatingList<EUICardPreview> previews) {
+    public void makePreviews(RotatingList<EUIPreview> previews) {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);
-            if (c != null && !EUIUtils.any(previews, p -> p.defaultPreview.cardID.equals(c.cardID))) {
-                previews.add(EUICardPreview.generatePreviewCard(c.makeCopy()));
+            if (c != null && !EUIUtils.any(previews, p -> p.matches(c.cardID))) {
+                previews.add(new EUICardPreview(c.makeCopy()));
             }
         }
     }

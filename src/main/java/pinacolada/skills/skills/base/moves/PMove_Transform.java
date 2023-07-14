@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
-import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
@@ -69,13 +69,6 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.transform;
-    }
-
-    @Override
-    public PMove_Transform makePreviews(RotatingList<EUICardPreview> previews) {
-        fields.makePreviews(previews);
-        super.makePreviews(previews);
-        return this;
     }
 
     private void transformImpl(AbstractCard c) {

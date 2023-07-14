@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -158,7 +158,7 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public PMultiCond makePreviews(RotatingList<EUICardPreview> previews) {
+    public PMultiCond makePreviews(RotatingList<EUIPreview> previews) {
         for (PSkill<?> effect : effects) {
             effect.makePreviews(previews);
         }

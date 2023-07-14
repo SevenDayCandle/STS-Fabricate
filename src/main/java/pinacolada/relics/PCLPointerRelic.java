@@ -5,7 +5,9 @@ import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -90,6 +92,10 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
             }
         }
         return damage;
+    }
+
+    public void fillPreviews(RotatingList<EUIPreview> list) {
+        PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
 
     @Override

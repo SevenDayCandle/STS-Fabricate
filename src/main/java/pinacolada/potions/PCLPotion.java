@@ -19,7 +19,9 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -85,6 +87,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     public boolean canUpgrade() {
         return auxiliaryData.timesUpgraded < potionData.maxUpgradeLevel || potionData.maxUpgradeLevel < 0;
+    }
+
+    public void fillPreviews(RotatingList<EUIPreview> list) {
+        PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
 
     @Override

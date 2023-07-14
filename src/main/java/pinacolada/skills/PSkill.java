@@ -19,8 +19,8 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUISmartText;
-import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.RotatingList;
@@ -1202,7 +1202,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public PSkill<T> makePreviews(RotatingList<EUICardPreview> previews) {
+    public PSkill<T> makePreviews(RotatingList<EUIPreview> previews) {
+        fields.makePreviews(previews);
         if (this.childEffect != null) {
             this.childEffect.makePreviews(previews);
         }

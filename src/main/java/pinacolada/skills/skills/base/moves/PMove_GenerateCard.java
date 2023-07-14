@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
@@ -88,13 +88,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
-    }
-
-    @Override
-    public PMove_GenerateCard makePreviews(RotatingList<EUICardPreview> previews) {
-        fields.makePreviews(previews);
-        super.makePreviews(previews);
-        return this;
     }
 
     @Override

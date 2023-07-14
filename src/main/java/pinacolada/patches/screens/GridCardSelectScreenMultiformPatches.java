@@ -355,7 +355,7 @@ public class GridCardSelectScreenMultiformPatches {
                     cardList.add(base.makeSetAugmentPreview(augment));
                     selectPCLCardUpgrade((PCLCard) cardList.get(0));
                 }
-                else if (base.cardData.canToggleOnUpgrade) {
+                else if (base.cardData.maxForms > 1 && base.cardData.canToggleOnUpgrade) {
                     /* Find the minimum possible upgrade form M at your current upgrade level and form
                         Let B = branch factor, U = current upgrade, F = current form
                         Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
