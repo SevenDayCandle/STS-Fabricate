@@ -37,8 +37,8 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
 
     @Override
     public void onStartOfTurnPostDraw() {
-        useFromTrigger(makeInfo(null));
+        useFromTrigger(generateInfo(null));
     }
 }

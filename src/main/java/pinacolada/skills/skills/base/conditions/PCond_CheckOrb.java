@@ -39,7 +39,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
@@ -58,7 +58,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     @Override
     public void onOrbPassiveEffect(AbstractOrb orb) {
         if (fields.getOrbFilter().invoke(orb)) {
-            useFromTrigger(makeInfo(null).setData(orb));
+            useFromTrigger(generateInfo(null).setData(orb));
         }
     }
 }

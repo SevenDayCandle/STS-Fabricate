@@ -34,7 +34,7 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_heal(TEXT.subjects_x);
     }
 

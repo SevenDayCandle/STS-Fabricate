@@ -34,7 +34,7 @@ public class PTrigger_Passive extends PTrigger {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_passive();
     }
 

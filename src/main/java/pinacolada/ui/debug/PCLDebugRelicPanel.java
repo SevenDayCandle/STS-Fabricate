@@ -1,27 +1,14 @@
 package pinacolada.ui.debug;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.EUIUtils;
 import extendedui.debug.*;
 import extendedui.patches.screens.RelicViewScreenPatches;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.effects.PCLEffects;
-import pinacolada.patches.library.RelicLibraryPatches;
-import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelic;
-import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelic;
 import pinacolada.utilities.GameUtilities;
 
@@ -36,7 +23,7 @@ public class PCLDebugRelicPanel {
     protected DEUITabItem relics = new DEUITabItem("Relics");
     protected DEUICombo<String> modList = new DEUICombo<String>("##modid", sortedModIDs, p -> p);
     protected DEUIFilteredSuffixListBox<AbstractRelic> cardList = new DEUIFilteredSuffixListBox<AbstractRelic>("##all relics",
-            sorted, p -> p.relicId, GameUtilities::getRelicName, this::passes);
+            sorted, p -> p.relicId, relic -> relic.name, this::passes);
     protected DEUIIntInput upgradeCount = new DEUIIntInput("Upgrades", 0, 0, Integer.MAX_VALUE);
     protected DEUIIntInput formCount = new DEUIIntInput("Form", 0, 0, Integer.MAX_VALUE);
     protected DEUIButton obtain = new DEUIButton("Obtain");
@@ -73,7 +60,7 @@ public class PCLDebugRelicPanel {
 
     private boolean passes(AbstractRelic relic) {
         String mod = modList.get();
-        return (filter.passFilter(relic.relicId) || filter.passFilter(GameUtilities.getRelicName(relic))) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(relic).equals(mod));
+        return (filter.passFilter(relic.relicId) || filter.passFilter(relic.name)) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(relic).equals(mod));
     }
 
     public void refresh() {

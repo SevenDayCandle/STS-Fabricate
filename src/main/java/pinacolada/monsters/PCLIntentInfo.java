@@ -30,7 +30,6 @@ public class PCLIntentInfo {
     public static AbstractMonster currentEnemy;
     public final AbstractMonster enemy;
     public final HashMap<String, Integer> modifiers = new HashMap<>();
-    protected ArrayList<AbstractPower> powers = new ArrayList<>();
     public AbstractMonster.Intent intent;
     public EnemyMoveInfo move;
     public boolean isAttacking;

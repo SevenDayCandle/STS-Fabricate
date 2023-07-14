@@ -36,7 +36,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_applyAmountX(TEXT.subjects_x, TEXT.cedit_powers);
     }
 

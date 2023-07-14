@@ -48,7 +48,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_pay(TEXT.subjects_x, TEXT.cedit_powers);
     }
 

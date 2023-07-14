@@ -46,7 +46,7 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_xPerYZ(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.channel.past());
     }
 

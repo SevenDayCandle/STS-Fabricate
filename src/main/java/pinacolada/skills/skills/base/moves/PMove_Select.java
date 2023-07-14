@@ -58,7 +58,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
 

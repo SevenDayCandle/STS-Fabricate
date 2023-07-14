@@ -49,7 +49,7 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_xPerY(TEXT.subjects_x, getSubSampleText());
     }
 

@@ -70,7 +70,7 @@ public class LoadoutRelicSlot {
         }
         relics.sort((a, b) -> {
             if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(GameUtilities.getRelicName(a.relic), GameUtilities.getRelicName(b.relic));
+                return StringUtils.compare(a.relic.name, b.relic.name);
             }
             return a.estimatedValue - b.estimatedValue;
         });

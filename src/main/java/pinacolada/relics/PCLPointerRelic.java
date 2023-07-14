@@ -18,10 +18,9 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
-public class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
+public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
     public Skills skills;
     public PCLClickableUse triggerCondition;
 
@@ -40,7 +39,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     public float atBlockModify(float block, AbstractCard c) {
-        return atBlockModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
+        return atBlockModify(CombatManager.playerSystem.getInfo(c, player, player), block, c);
     }
 
     public float atDamageModify(PCLUseInfo info, float damage, AbstractCard c) {
@@ -91,6 +90,11 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             }
         }
         return damage;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -284,6 +288,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
 
     @Override
     public float atDamageModify(float block, AbstractCard c) {
-        return atDamageModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
+        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block, c);
     }
 }

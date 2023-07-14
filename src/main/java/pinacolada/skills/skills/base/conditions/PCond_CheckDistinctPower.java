@@ -1,20 +1,17 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.subjects_distinct(TEXT.cedit_powers));
     }
 

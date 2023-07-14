@@ -528,8 +528,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
     }
 
-    public boolean isUnderWhen(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When && !(parent instanceof PCond);
+    public boolean isUnderWhen(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return callingSkill instanceof PTrigger_When && !(parentSkill instanceof PCond);
     }
 
     /*

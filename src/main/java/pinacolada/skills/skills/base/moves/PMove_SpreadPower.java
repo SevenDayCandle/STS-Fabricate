@@ -39,7 +39,7 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return PGR.core.tooltips.spread.title;
     }
 

@@ -33,7 +33,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.tempHP.title);
     }
 

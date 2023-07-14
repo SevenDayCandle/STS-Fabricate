@@ -33,7 +33,7 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_xIfY(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
     }
 

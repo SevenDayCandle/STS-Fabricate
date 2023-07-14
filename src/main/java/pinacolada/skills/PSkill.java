@@ -263,7 +263,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return null;
                 })
                 .stream()
-                .sorted((a, b) -> StringUtils.compareIgnoreCase(a.getSampleText(null), b.getSampleText(null)))
+                .sorted((a, b) -> StringUtils.compareIgnoreCase(a.getSampleText(null, null), b.getSampleText(null, null)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -718,6 +718,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    public PCLUseInfo generateInfo(AbstractCreature target) {
+        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
+    }
+
+    public PCLUseInfo getInfo(AbstractCreature target) {
+        return CombatManager.playerSystem.getInfo(sourceCard, getSourceCreature(), target);
+    }
+
     public final String getInheritedThemString() {
         return parent != null ? parent.getParentThemString() : this.getParentThemString();
     }
@@ -812,7 +820,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return getSubText();
     }
 
@@ -1192,10 +1200,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 }
             }
         }
-    }
-
-    public PCLUseInfo makeInfo(AbstractCreature target) {
-        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
     }
 
     public PSkill<T> makePreviews(RotatingList<EUICardPreview> previews) {

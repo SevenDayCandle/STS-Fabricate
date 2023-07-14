@@ -45,7 +45,7 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_enterStance(TEXT.subjects_x);
     }
 

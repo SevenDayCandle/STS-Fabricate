@@ -33,7 +33,7 @@ public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.subjects_relic);
     }
 

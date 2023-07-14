@@ -17,7 +17,7 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
     }
 

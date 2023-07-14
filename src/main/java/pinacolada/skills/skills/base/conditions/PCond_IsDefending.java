@@ -37,8 +37,8 @@ public class PCond_IsDefending extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.block.present()) : TEXT.cond_xIsY(TEXT.subjects_target, PGR.core.tooltips.block.progressive());
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.block.present()) : TEXT.cond_xIsY(TEXT.subjects_target, PGR.core.tooltips.block.progressive());
     }
 
     @Override

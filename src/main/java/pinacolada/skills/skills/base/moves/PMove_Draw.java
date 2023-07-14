@@ -33,7 +33,7 @@ public class PMove_Draw extends PCallbackMove<PField_CardCategory> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_draw(TEXT.subjects_x);
     }
 

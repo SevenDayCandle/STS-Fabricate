@@ -84,7 +84,7 @@ public class MysteryCard extends PCLCard {
                         break;
                 }
             }
-            return EUIUtils.filter(pool, this::checkCondition);
+            return EUIUtils.filterInPlace(pool, this::checkCondition);
         }
 
         @Override

@@ -40,8 +40,8 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_wheneverYou(TEXT.act_enterStance(PGR.core.tooltips.stance.title)) : PGR.core.tooltips.stance.title;
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_wheneverYou(TEXT.act_enterStance(PGR.core.tooltips.stance.title)) : PGR.core.tooltips.stance.title;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     @Override
     public void onStanceChanged(AbstractStance oldStance, AbstractStance newStance) {
         if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(newStance.ID))) {
-            useFromTrigger(makeInfo(null));
+            useFromTrigger(generateInfo(null));
         }
     }
 }

@@ -45,8 +45,14 @@ public class PCLPlayerSystem extends EUIBase {
         getActiveMeter().flashAffinity(target);
     }
 
+    /* Creates a NEW info object. To be used when executing infos in effects to ensure that data is not interfered with during the action execution process */
     public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
         return getActiveMeter().generateInfo(card, source, target);
+    }
+
+    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
+    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
+        return getActiveMeter().getInfo(card, source, target);
     }
 
     public PCLPlayerMeter getActiveMeter() {

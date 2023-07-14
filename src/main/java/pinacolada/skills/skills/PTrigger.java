@@ -276,7 +276,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     protected boolean triggerOn(FuncT0<Boolean> childAction) {
-        return triggerOn(childAction, makeInfo(null));
+        return triggerOn(childAction, getInfo(null));
     }
 
     @Override

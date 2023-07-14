@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -80,11 +79,11 @@ public class PSkillPower extends PCLPower {
     }
 
     public float atDamageGive(float block, DamageInfo.DamageType type, AbstractCard c) {
-        return atDamageGive(CombatManager.playerSystem.generateInfo(c, owner, owner), block, type, c);
+        return atDamageGive(CombatManager.playerSystem.getInfo(c, owner, owner), block, type, c);
     }
 
     public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
-        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
             damage = effect.modifyDamageIncoming(info, damage, type);
@@ -94,12 +93,12 @@ public class PSkillPower extends PCLPower {
 
     // Update this power's effects whenever you play a card
     public void onAfterUseCard(AbstractCard card, UseCardAction act) {
-        refreshTriggers(CombatManager.playerSystem.generateInfo(card, owner, owner));
+        refreshTriggers(CombatManager.playerSystem.getInfo(card, owner, owner));
         super.onAfterUseCard(card, act);
     }
 
     public float modifyBlock(float block, AbstractCard c) {
-        return modifyBlock(CombatManager.playerSystem.generateInfo(c, owner, owner), block, c);
+        return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
     }
 
     public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {

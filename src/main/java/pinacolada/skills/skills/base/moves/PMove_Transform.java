@@ -50,7 +50,7 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
     }
 

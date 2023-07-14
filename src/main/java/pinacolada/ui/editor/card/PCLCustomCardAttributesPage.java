@@ -187,7 +187,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
             return PCLCardTarget.getAll();
         }
-        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
+        return EUIUtils.filterInPlace(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
     }
 
     @Override

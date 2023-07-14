@@ -54,7 +54,7 @@ public class PCond_PayLevel extends PActiveCond<PField_Affinity> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.level.title);
     }
 

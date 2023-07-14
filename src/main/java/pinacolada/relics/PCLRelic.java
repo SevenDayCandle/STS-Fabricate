@@ -159,7 +159,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
 
-    public String getName() {
+    // RelicData will be null while super is being called
+    public String getNameFromData() {
         String name = relicData.strings.NAME;
         if (auxiliaryData.timesUpgraded > 0) {
             StringBuilder sb = new StringBuilder(name);
@@ -224,7 +225,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
 
         ModInfo info = EUIGameUtils.getModInfo(this);
-        mainTooltip = info != null ? new EUIKeywordTooltip(getName(), description, info.ID) : new EUIKeywordTooltip(getName(), description);
+        mainTooltip = info != null ? new EUIKeywordTooltip(getNameFromData(), description, info.ID) : new EUIKeywordTooltip(getNameFromData(), description);
         tips.add(mainTooltip);
         EUITooltip.scanForTips(description, tips);
     }
@@ -352,6 +353,9 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
+        if (relicData != null) {
+            ReflectionHacks.setPrivateFinal(this, AbstractRelic.class, "name", getNameFromData());
+        }
         this.description = usedUp ? MSG[2] : getUpdatedDescription();
         PCLRelicData[] replacements = getReplacementIDs();
         if (replacements != null) {
@@ -360,7 +364,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
             this.description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, replaceString, this.description);
         }
         if (this.mainTooltip != null) {
-            this.mainTooltip.setDescription(description);
+            this.mainTooltip.setTitle(name).setDescription(description);
         }
     }
 

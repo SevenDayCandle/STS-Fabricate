@@ -31,8 +31,8 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill);
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill, parentSkill);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
-        useFromTrigger(makeInfo(monster));
+        useFromTrigger(generateInfo(monster));
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

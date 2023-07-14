@@ -37,7 +37,7 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_ifX(EUIRM.strings.verbNoun(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard));
     }
 

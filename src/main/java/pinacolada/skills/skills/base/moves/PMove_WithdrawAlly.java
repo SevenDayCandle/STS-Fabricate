@@ -40,7 +40,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_withdraw(PGR.core.tooltips.summon.title);
     }
 

@@ -24,7 +24,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,7 +123,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return null;
     }
 
@@ -436,7 +435,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
                     .showTypeText(false);
 
             if (source instanceof AbstractRelic) {
-                cardData.strings.NAME = GameUtilities.getRelicName((AbstractRelic) source);
+                cardData.strings.NAME = ((AbstractRelic) source).name;
             }
             else if (source instanceof AbstractPotion) {
                 cardData.strings.NAME = ((AbstractPotion) source).name;

@@ -39,8 +39,8 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.past()) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.past()) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
     }
 
     @Override
@@ -60,8 +60,9 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     // When the owner receives damage, triggers the effect onto the attacker (info.owner)
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
-        if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver).contains(receiver)) {
-            useFromTrigger(makeInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
+        PCLUseInfo pInfo = generateInfo(info.owner);
+        if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver, pInfo.targetList).contains(receiver)) {
+            useFromTrigger(pInfo, isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 }

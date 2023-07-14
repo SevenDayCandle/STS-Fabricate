@@ -306,7 +306,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     }
 
     public AbstractCard getRandomCardFromPool(CardGroup pool, FuncT1<Boolean, AbstractCard> filterFunc, Random rng) {
-        ArrayList<AbstractCard> choices = EUIUtils.filter(pool.group, filterFunc::invoke);
+        ArrayList<AbstractCard> choices = EUIUtils.filter(pool.group, filterFunc);
         return rng != null ? GameUtilities.getRandomElement(choices, rng) : GameUtilities.getTrulyRandomElement(choices);
     }
 

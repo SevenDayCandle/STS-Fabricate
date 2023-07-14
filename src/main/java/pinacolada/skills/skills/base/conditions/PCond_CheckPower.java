@@ -53,8 +53,8 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override
@@ -74,10 +74,11 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
+        PCLUseInfo info = generateInfo(t);
         // For single target powers, the power target needs to match the owner of this skill
         if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t).contains(t)))) {
-            useFromTrigger(makeInfo(t).setData(power));
+                : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t, info.targetList).contains(t)))) {
+            useFromTrigger(info.setData(power));
         }
     }
 }

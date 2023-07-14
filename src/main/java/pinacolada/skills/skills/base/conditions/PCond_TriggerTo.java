@@ -40,7 +40,7 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_trigger(TEXT.subjects_x);
     }
 

@@ -7,7 +7,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
@@ -100,7 +99,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_obtain(TEXT.subjects_relic);
     }
 
@@ -118,7 +117,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                 for (String r : fields.relicIDs) {
                     AbstractRelic relic = RelicLibrary.getRelic(r);
                     if (relic != null) {
-                        tips.add(new EUIKeywordTooltip(GameUtilities.getRelicName(relic), relic.description));
+                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
                     }
                 }
             }

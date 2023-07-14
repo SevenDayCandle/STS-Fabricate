@@ -40,8 +40,8 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : TEXT.cond_xIsY(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : TEXT.cond_xIsY(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
     }
 
     @Override
@@ -55,8 +55,9 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     // When the owner attacks, triggers the effect on the target
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner).contains(info.owner)) {
-            useFromTrigger(makeInfo(receiver));
+        PCLUseInfo pInfo = generateInfo(receiver);
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner, pInfo.targetList).contains(info.owner)) {
+            useFromTrigger(pInfo);
         }
     }
 }

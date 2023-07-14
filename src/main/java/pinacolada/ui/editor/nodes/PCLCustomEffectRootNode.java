@@ -43,7 +43,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
                         effects.add(skill);
                     }
                     else {
-                        sk.scanForTips(sk.getSampleText(editor.rootEffect));
+                        sk.scanForTips(sk.getSampleText(editor.rootEffect, parent != null ? parent.skill : null));
                         effects.add(sk);
                     }
                 }
@@ -67,7 +67,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
     }
 
     public void refresh() {
-        setText(skill.getSampleText(null));
+        setText(skill.getSampleText(null, null));
         this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
     }
 

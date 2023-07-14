@@ -149,7 +149,7 @@ public class PCLCustomEffectNode extends EUIButton {
                         effects.add(skill);
                     }
                     else {
-                        sk.scanForTips(sk.getSampleText(editor.rootEffect));
+                        sk.scanForTips(sk.getSampleText(editor.rootEffect, parent != null ? parent.skill : null));
                         effects.add(sk);
                     }
                 }
@@ -265,7 +265,7 @@ public class PCLCustomEffectNode extends EUIButton {
     }
 
     public void refresh() {
-        String text = skill.getSampleText(null);
+        String text = skill.getSampleText(null, null);
         if (text != null) {
             setTextAndAlign(StringUtils.capitalize(text), 0.4f, 0.4f);
         }

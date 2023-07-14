@@ -8,7 +8,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PDamageTrait;
 
 @VisibleSkill
 public class PTrait_TakeDamage extends PTrait<PField_Empty> {
@@ -28,7 +27,7 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_take(getSampleAmount(), getSubSampleText());
     }
 

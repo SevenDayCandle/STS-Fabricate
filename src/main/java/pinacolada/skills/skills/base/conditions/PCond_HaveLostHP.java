@@ -38,7 +38,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_ifX(TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title));
     }
 
@@ -59,7 +59,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
         if (amount > 0) {
-            useFromTrigger(makeInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
+            useFromTrigger(generateInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
         return amount;
     }

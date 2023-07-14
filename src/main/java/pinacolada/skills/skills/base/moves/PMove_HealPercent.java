@@ -35,7 +35,7 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_heal(TEXT.subjects_x + "%");
     }
 

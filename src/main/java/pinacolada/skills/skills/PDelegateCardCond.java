@@ -47,8 +47,8 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override
@@ -71,13 +71,13 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     public void triggerOnCard(AbstractCard c) {
         if (fields.getFullCardFilter().invoke(c)) {
-            useFromTrigger(makeInfo(null).setData(Collections.singletonList(c)));
+            useFromTrigger(generateInfo(null).setData(Collections.singletonList(c)));
         }
     }
 
     public void triggerOnCard(AbstractCard c, AbstractCreature target) {
         if (fields.getFullCardFilter().invoke(c)) {
-            useFromTrigger(makeInfo(target).setData(Collections.singletonList(c)));
+            useFromTrigger(generateInfo(target).setData(Collections.singletonList(c)));
         }
     }
 

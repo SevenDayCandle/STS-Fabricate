@@ -67,6 +67,7 @@ public class AbstractPlayerPatches {
 
     @SpirePatch(clz = AbstractPlayer.class, method = "channelOrb")
     public static class AbstractPlayer_ChannelOrb {
+        // TODO use something other than rloc, or remove this since we aren't even using it anymore
         @SpireInsertPatch(rloc = 7)
         public static void insert(AbstractPlayer __instance, @ByRef AbstractOrb[] orbToSet) {
             AbstractOrb orb = orbToSet[0];

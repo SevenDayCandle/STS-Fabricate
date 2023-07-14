@@ -63,7 +63,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     private PSkill<?> lastEffect;
     private float additionalHeight;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
-    protected EUISearchableDropdown<PSkill> effects;
+    protected EUISearchableDropdown<PSkill<?>> effects;
     protected EUIDropdown<PCLAffinity> affinities;
     protected EUIDropdown<PCLCardTarget> targets;
     protected EUIDropdown<AbstractCard.CardColor> colors;
@@ -215,7 +215,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (availableCards == null) {
             AbstractCard.CardColor cardColor = getColor();
             availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
-                    EUIUtils.filter(CardLibrary.getAllCards(),
+                    EUIUtils.filterInPlace(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
             availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
             if (cardColor != AbstractCard.CardColor.COLORLESS) {
@@ -244,7 +244,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
                 availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
             }
-            availableRelics.sort((a, b) -> StringUtils.compare(GameUtilities.getRelicName(a), GameUtilities.getRelicName(b)));
+            availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availableRelics;
     }
@@ -398,10 +398,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(items);
     }
 
-    @SuppressWarnings("rawtypes")
     protected void initializeSelectors() {
         final AbstractCard.CardColor cardColor = getColor();
-        effects = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect)))
+        effects = (EUISearchableDropdown<PSkill<?>>) new EUISearchableDropdown<PSkill<?>>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect, node.parent != null ? node.parent.skill : null)))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty()) {
                         node.replaceSkill(effects.get(0));
@@ -413,6 +412,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
+        effects.sortByLabel();
         effects.setActive(effects.size() > 1);
         valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
                 , EUIRM.strings.ui_amount, (val, upVal) -> {
@@ -452,7 +452,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cards = initializeSearchable(getAvailableCards(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_card));
-        relics = initializeSearchable(getAvailableRelics(), GameUtilities::getRelicName, StringUtils.capitalize(PGR.core.strings.subjects_relic));
+        relics = initializeSearchable(getAvailableRelics(), relic -> relic.name, StringUtils.capitalize(PGR.core.strings.subjects_relic));
         potions = initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion));
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);

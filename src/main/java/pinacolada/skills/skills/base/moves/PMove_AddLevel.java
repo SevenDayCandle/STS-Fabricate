@@ -30,7 +30,7 @@ public class PMove_AddLevel extends PMove<PField_Affinity> {
 
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_gain(PGR.core.tooltips.level);
     }
 

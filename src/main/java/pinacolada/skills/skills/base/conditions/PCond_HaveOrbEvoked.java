@@ -53,8 +53,8 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_wheneverYou(TEXT.act_evoke(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_wheneverYou(TEXT.act_evoke(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     @Override
     public void onEvokeOrb(AbstractOrb orb) {
         if (fields.getOrbFilter().invoke(orb)) {
-            useFromTrigger(makeInfo(null).setData(orb));
+            useFromTrigger(generateInfo(null).setData(orb));
         }
     }
 

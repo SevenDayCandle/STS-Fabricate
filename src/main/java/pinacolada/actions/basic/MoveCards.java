@@ -41,7 +41,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
 
     @Override
     protected void firstUpdate() {
-        ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter::invoke) : new ArrayList<>(sourcePile.group);
+        ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter) : new ArrayList<>(sourcePile.group);
 
         int max = amount;
         if (amount == -1 || temp.size() < amount) {

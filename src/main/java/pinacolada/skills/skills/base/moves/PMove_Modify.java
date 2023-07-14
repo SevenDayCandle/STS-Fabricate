@@ -85,7 +85,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
     }
 

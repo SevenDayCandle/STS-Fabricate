@@ -63,7 +63,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_levelItem(TEXT.subjects_x, PGR.core.tooltips.affinityGeneral.title);
     }
 
@@ -81,7 +81,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
     @Override
     public void onIntensify(PCLAffinity aff) {
         if (fields.affinities.isEmpty() || fields.affinities.contains(aff)) {
-            useFromTrigger(makeInfo(null).setData(aff));
+            useFromTrigger(generateInfo(null).setData(aff));
         }
     }
 }

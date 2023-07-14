@@ -32,7 +32,7 @@ public class PTrait_Cost extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_costs("+X");
     }
 

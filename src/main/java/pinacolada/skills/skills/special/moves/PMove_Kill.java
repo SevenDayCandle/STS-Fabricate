@@ -27,7 +27,7 @@ public class PMove_Kill extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_kill(TEXT.subjects_x);
     }
 

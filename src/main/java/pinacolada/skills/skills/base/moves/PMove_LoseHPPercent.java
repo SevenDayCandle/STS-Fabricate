@@ -38,7 +38,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_loseAmount(TEXT.subjects_x + "%", PGR.core.tooltips.hp.title);
     }
 

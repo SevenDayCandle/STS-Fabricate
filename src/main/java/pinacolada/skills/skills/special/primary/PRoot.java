@@ -30,7 +30,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> caller) {
+    public String getSampleText(PSkill<?> caller, PSkill<?> parentSkill) {
         return EUIRM.strings.ui_na;
     }
 
@@ -52,7 +52,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public void triggerOnStartOfBattleForRelic() {
         if (childEffect != null) {
-            childEffect.use(makeInfo(null), PCLActions.bottom);
+            childEffect.use(generateInfo(null), PCLActions.bottom);
         }
     }
 

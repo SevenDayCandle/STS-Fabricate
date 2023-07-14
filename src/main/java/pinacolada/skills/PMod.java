@@ -410,7 +410,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     @Override
     public void onDrag(AbstractMonster m) {
-        updateChildAmount(makeInfo(m));
+        updateChildAmount(getInfo(m));
     }
 
     @Override

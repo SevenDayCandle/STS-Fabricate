@@ -51,7 +51,7 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return getTiming().getTitle();
     }
 

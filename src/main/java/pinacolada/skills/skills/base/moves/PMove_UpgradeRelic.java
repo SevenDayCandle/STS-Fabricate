@@ -18,7 +18,6 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Relic;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,7 +56,7 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_upgrade(TEXT.subjects_relic);
     }
 
@@ -75,7 +74,7 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
                 for (String r : fields.relicIDs) {
                     AbstractRelic relic = RelicLibrary.getRelic(r);
                     if (relic != null) {
-                        tips.add(new EUIKeywordTooltip(GameUtilities.getRelicName(relic), relic.description));
+                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
                     }
                 }
             }

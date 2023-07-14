@@ -33,7 +33,7 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.subjects_potion);
     }
 

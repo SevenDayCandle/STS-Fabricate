@@ -31,7 +31,7 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(TEXT.cedit_repeat, TEXT.subjects_x);
     }
 

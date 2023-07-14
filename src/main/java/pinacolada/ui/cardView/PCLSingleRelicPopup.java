@@ -17,7 +17,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -104,7 +103,7 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
         if (!current.isSeen) {
             return TEXT[9];
         }
-        return GameUtilities.getRelicName(current);
+        return current.name;
     }
 
     protected String getRelicRarity(AbstractRelic current) {

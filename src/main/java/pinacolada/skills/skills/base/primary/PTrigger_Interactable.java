@@ -37,7 +37,7 @@ public class PTrigger_Interactable extends PTrigger {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return PGR.core.tooltips.interactable.title;
     }
 

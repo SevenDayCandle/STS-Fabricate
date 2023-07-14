@@ -41,7 +41,7 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_generic2(PGR.core.tooltips.chance.title, "X%");
     }
 

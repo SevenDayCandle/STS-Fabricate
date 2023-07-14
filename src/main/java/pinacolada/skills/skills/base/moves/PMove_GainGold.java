@@ -31,7 +31,7 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 

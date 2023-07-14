@@ -36,7 +36,7 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_atEndOfCombat();
     }
 

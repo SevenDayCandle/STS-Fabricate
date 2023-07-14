@@ -17,7 +17,6 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotEditor extends EUIBase {
@@ -133,7 +132,7 @@ public class PCLRelicSlotEditor extends EUIBase {
 
         this.slot = slot;
         this.relic = slot.getRelic();
-        this.relicNameText.setLabel(relic != null ? GameUtilities.getRelicName(relic) : "").setActive(true);
+        this.relicNameText.setLabel(relic != null ? relic.name : "").setActive(true);
         this.relicValueText.setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();

@@ -45,8 +45,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public static final TargetFilter T_SingleAlly = new TargetFilter(PGR.core.strings.ctype_singleAlly);
     public static final TargetFilter T_Team = new TargetFilter(PGR.core.strings.ctype_team);
 
-    public static AbstractCreature source;
-    public static AbstractCreature target;
     public final AbstractCard.CardTarget cardTarget;
 
     PCLCardTarget(AbstractCard.CardTarget cardTarget) {
@@ -57,50 +55,56 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
     }
 
-    public static ArrayList<AbstractCreature> getPlayerTeam() {
-        final ArrayList<AbstractCreature> targets = new ArrayList<AbstractCreature>(GameUtilities.getSummons(true));
+    public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets) {
+        GameUtilities.fillWithSummons(true, targets);
         targets.add(AbstractDungeon.player);
-        return targets;
     }
 
-    public static ArrayList<AbstractCreature> getRandomTargets(List<? extends AbstractCreature> source, int autoAmount) {
-        final RandomizedList<AbstractCreature> list = new RandomizedList<>(source);
-        final ArrayList<AbstractCreature> targets = new ArrayList<>();
-        while (list.size() > 0 && targets.size() < autoAmount) {
-            targets.add(list.retrieve(GameUtilities.getRNG()));
+    public static void popRandomTargets(RandomizedList<? extends AbstractCreature> source, int allowedSize) {
+        while (source.size() > allowedSize) {
+            source.retrieve(GameUtilities.getRNG());
         }
-        return targets;
     }
 
     public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> tFunc) {
-        ArrayList<? extends AbstractCreature> targets = getTargetsForEvaluation(source, target);
-        ArrayList<AbstractCreature> evaluatedTargets = getEvaluatedTargets(targets, tFunc);
-        info.setData(evaluatedTargets);
+        fillTargetsForEvaluation(info.source, info.target, info.targetList);
+        int prevSize = info.targetList.size();
+        EUIUtils.filterInPlace(info.targetList, tFunc);
+        info.setData(info.targetList);
         switch (this) {
             case AllAlly:
             case All:
             case AllEnemy:
-                return targets.size() == evaluatedTargets.size();
+                return info.targetList.size() == prevSize;
         }
-        return evaluatedTargets.size() > 0;
+        return info.targetList.size() > 0;
     }
 
-    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, FuncT1<Boolean, AbstractCreature> tFunc) {
-        return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
-    }
-
-    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, FuncT1<Boolean, AbstractCreature> tFunc) {
+    public final void fillTargetsForEvaluation(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
+        sourceList.clear();
         switch (this) {
-            case AllAlly:
-            case All:
-            case AllEnemy:
-                return EUIUtils.all(targets, tFunc);
+            case RandomAlly:
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                else {
+                    GameUtilities.fillWithSummons(true, sourceList);
+                }
+                break;
+            case RandomEnemy:
+                if (GameUtilities.isEnemy(source)) {
+                    fillWithPlayerTeam(sourceList);
+                }
+                else {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                break;
+            case Any:
+                GameUtilities.fillWithAllCharacters(true, sourceList);
+                break;
+            default:
+                getTargets(source, target, sourceList, 1);
         }
-        return EUIUtils.any(targets, tFunc);
-    }
-
-    public final ArrayList<AbstractCreature> getEvaluatedTargets(Iterable<? extends AbstractCreature> targets, FuncT1<Boolean, AbstractCreature> tFunc) {
-        return EUIUtils.filter(targets, tFunc);
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
@@ -163,88 +167,118 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return TargetFilter.None;
     }
 
-    public final ArrayList<? extends AbstractCreature> getTargets(PCLUseInfo info) {
+    public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info) {
         if (this == UseParent) {
             List<? extends AbstractCreature> inherited = info.getDataAsList(AbstractCreature.class);
             if (inherited != null) {
                 return new ArrayList<>(inherited);
             }
         }
-        return getTargets(info.source, info.target, 1);
+        return getTargets(info.source, info.target, info.targetList, 1);
     }
 
-    public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
-        return getTargets(source, target, 1);
+    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
+        return getTargets(source, target, new RandomizedList<>(),1);
     }
 
-    public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
+    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
+        return getTargets(source, target, sourceList,1);
+    }
+
+    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList, int autoAmount) {
+        sourceList.clear();
         switch (this) {
             case None: {
-                return EUIUtils.arrayList(AbstractDungeon.player);
+                sourceList.add(AbstractDungeon.player);
+                break;
             }
             case Single:
             case SingleAlly: {
                 if (target != null) {
-                    return EUIUtils.arrayList(target);
+                    sourceList.add(target);
                 }
-                return EUIUtils.arrayList();
+                break;
+            }
+            case SelfAllEnemy: {
+                sourceList.add(source);
             }
             case AllEnemy: {
-                return GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true);
+                if (GameUtilities.isEnemy(source)) {
+                    fillWithPlayerTeam(sourceList);
+                }
+                else {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                break;
             }
             case Self: {
-                return EUIUtils.arrayList(source);
+                sourceList.add(source);
+                break;
             }
             case Any: {
                 if (target != null) {
-                    return EUIUtils.arrayList(target);
+                    sourceList.add(target);
                 }
                 else {
-                    return getRandomTargets(GameUtilities.getAllCharacters(true), autoAmount);
+                    GameUtilities.fillWithAllCharacters(true, sourceList);
+                    popRandomTargets(sourceList, autoAmount);
                 }
+                break;
             }
             case RandomEnemy: {
-                return getRandomTargets(GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true), autoAmount);
+                if (GameUtilities.isEnemy(source)) {
+                    fillWithPlayerTeam(sourceList);
+                }
+                else {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                popRandomTargets(sourceList, autoAmount);
+                break;
             }
             case All: {
-                return GameUtilities.getAllCharacters(true);
+                GameUtilities.fillWithAllCharacters(true, sourceList);
+                break;
             }
             case AllAlly: {
-                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true);
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                else {
+                    GameUtilities.fillWithSummons(true, sourceList);
+                }
+                break;
             }
             case Team: {
-                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : getPlayerTeam();
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                else {
+                    fillWithPlayerTeam(sourceList);
+                }
+                break;
             }
             case RandomAlly: {
-                return getRandomTargets(GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true), autoAmount);
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                }
+                else {
+                    GameUtilities.fillWithSummons(true, sourceList);
+                }
+                popRandomTargets(sourceList, autoAmount);
             }
             case SelfSingle:
             case SelfSingleAlly: {
                 if (target != null) {
-                    return EUIUtils.arrayList(source, target);
+                    sourceList.addAll(source, target);
                 }
-                return EUIUtils.arrayList(source);
-            }
-            case SelfAllEnemy: {
-                ArrayList<AbstractCreature> base = EUIUtils.arrayList(source);
-                base.addAll(GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true));
-                return base;
+                else {
+                    sourceList.add(source);
+                }
+                break;
             }
         }
 
-        return new ArrayList<>();
-    }
-
-    public final ArrayList<? extends AbstractCreature> getTargetsForEvaluation(AbstractCreature source, AbstractCreature target) {
-        switch (this) {
-            case RandomAlly:
-                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true);
-            case RandomEnemy:
-                return GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true);
-            case Any:
-                return GameUtilities.getAllCharacters(true);
-        }
-        return getTargets(source, target);
+        return sourceList;
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are

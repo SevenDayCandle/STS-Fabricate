@@ -32,8 +32,8 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill);
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill, parentSkill);
     }
 
     @Override
@@ -61,8 +61,9 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     // When the owner deals unblocked damage, triggers the effect on the target
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
-        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner)) {
-            useFromTrigger(makeInfo(t), isFromCreature() ? PCLActions.bottom : PCLActions.top);
+        PCLUseInfo pInfo = generateInfo(t);
+        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t, pInfo.targetList).contains(info.owner)) {
+            useFromTrigger(pInfo, isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 

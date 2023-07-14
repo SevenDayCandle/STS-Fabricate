@@ -86,7 +86,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
 

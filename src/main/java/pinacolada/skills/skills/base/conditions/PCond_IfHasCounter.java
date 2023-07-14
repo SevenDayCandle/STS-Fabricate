@@ -37,7 +37,7 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_ifX(PGR.core.tooltips.counter.title);
     }
 

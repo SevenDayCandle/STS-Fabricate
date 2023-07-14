@@ -257,6 +257,57 @@ public class GameUtilities {
         return retVal;
     }
 
+    public static void fillWithAllCharacters(boolean aliveOnly, ArrayList<AbstractCreature> characters) {
+        final AbstractRoom room = getCurrentRoom();
+        if (room != null && room.monsters != null) {
+            for (AbstractMonster m : room.monsters.monsters) {
+                if (!aliveOnly || !isDeadOrEscaped(m)) {
+                    characters.add(m);
+                }
+            }
+        }
+
+        for (PCLCardAlly summon : CombatManager.summons.summons) {
+            if (!aliveOnly || summon.hasCard()) {
+                characters.add(summon);
+            }
+        }
+
+        if (!aliveOnly || !isDeadOrEscaped(player)) {
+            characters.add(player);
+        }
+    }
+
+    public static void fillWithEnemies(boolean aliveOnly, ArrayList<? super AbstractMonster> monsters) {
+        final AbstractRoom room = getCurrentRoom();
+
+        if (room != null && room.monsters != null) {
+            if (!aliveOnly) {
+                monsters.addAll(room.monsters.monsters);
+            }
+
+            for (AbstractMonster m : room.monsters.monsters) {
+                if (!isDeadOrEscaped(m)) {
+                    monsters.add(m);
+                }
+            }
+        }
+    }
+
+    public static void fillWithSummons(Boolean isAlive, ArrayList<? super PCLCardAlly> monsters) {
+        if (isAlive == null) {
+            monsters.addAll(CombatManager.summons.summons);
+            return;
+        }
+
+        for (PCLCardAlly m : CombatManager.summons.summons) {
+            if (!m.hasCard() ^ isAlive) {
+                monsters.add(m);
+            }
+        }
+    }
+
+
     public static CardGroup findCardGroup(AbstractCard card, boolean includeLimbo) {
         if (player.hand.contains(card)) {
             return player.hand;
@@ -312,26 +363,8 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractCreature> getAllCharacters(boolean aliveOnly) {
-        final AbstractRoom room = getCurrentRoom();
         final ArrayList<AbstractCreature> characters = new ArrayList<>();
-        if (room != null && room.monsters != null) {
-            for (AbstractMonster m : room.monsters.monsters) {
-                if (!aliveOnly || !isDeadOrEscaped(m)) {
-                    characters.add(m);
-                }
-            }
-        }
-
-        for (PCLCardAlly summon : CombatManager.summons.summons) {
-            if (!aliveOnly || summon.hasCard()) {
-                characters.add(summon);
-            }
-        }
-
-        if (!aliveOnly || !isDeadOrEscaped(player)) {
-            characters.add(player);
-        }
-
+        fillWithAllCharacters(aliveOnly, characters);
         return characters;
     }
 
@@ -742,22 +775,9 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractMonster> getEnemies(boolean aliveOnly) {
-        final AbstractRoom room = getCurrentRoom();
-        final ArrayList<AbstractMonster> monsters = new ArrayList<>();
-
-        if (room != null && room.monsters != null) {
-            if (!aliveOnly) {
-                return room.monsters.monsters;
-            }
-
-            for (AbstractMonster m : room.monsters.monsters) {
-                if (!isDeadOrEscaped(m)) {
-                    monsters.add(m);
-                }
-            }
-        }
-
-        return monsters;
+        final ArrayList<AbstractMonster> mo = new ArrayList<>();
+        fillWithEnemies(aliveOnly, mo);
+        return mo;
     }
 
     public static AbstractOrb getFirstOrb(String orbID) {
@@ -1190,11 +1210,6 @@ public class GameUtilities {
         return player != null ? player.relics.size() : 0;
     }
 
-    // PCLRelic may have modified names
-    public static String getRelicName(AbstractRelic relic) {
-        return relic instanceof PCLRelic ? ((PCLRelic) relic).getName() : relic.name;
-    }
-
     public static String getRelicNameForID(String relicID) {
         if (relicID != null) {
             // NOT using RelicLibrary.getRelic as the replacement patching on that method may cause text glitches or infinite loops in this method
@@ -1288,17 +1303,8 @@ public class GameUtilities {
     }
 
     public static ArrayList<PCLCardAlly> getSummons(Boolean isAlive) {
-        if (isAlive == null) {
-            return CombatManager.summons.summons;
-        }
-
         final ArrayList<PCLCardAlly> monsters = new ArrayList<>();
-        for (PCLCardAlly m : CombatManager.summons.summons) {
-            if (!m.hasCard() ^ isAlive) {
-                monsters.add(m);
-            }
-        }
-
+        fillWithSummons(isAlive, monsters);
         return monsters;
     }
 

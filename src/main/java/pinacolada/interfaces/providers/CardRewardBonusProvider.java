@@ -29,7 +29,7 @@ public interface CardRewardBonusProvider {
     static PCLCardRewardBundle getRelicBundle(AbstractCard card, AbstractRelic relic) {
         return new PCLCardRewardBundle(card, (__) -> GameUtilities.obtainRelicFromEvent(relic))
                 .setIcon(relic.img, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
-                .setText(GameUtilities.getRelicName(relic), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
+                .setText(relic.name, Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     static void receiveGold(PCLCardRewardBundle bundle) {

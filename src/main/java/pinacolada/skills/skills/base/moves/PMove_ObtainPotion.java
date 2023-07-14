@@ -96,7 +96,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_obtain(TEXT.subjects_potion);
     }
 

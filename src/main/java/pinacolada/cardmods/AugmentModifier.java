@@ -50,7 +50,7 @@ public class AugmentModifier extends AbstractCardModifier {
 
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {
         if (info == null) {
-            info = CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, target);
+            info = CombatManager.playerSystem.getInfo(card, AbstractDungeon.player, target);
         }
         return info;
     }

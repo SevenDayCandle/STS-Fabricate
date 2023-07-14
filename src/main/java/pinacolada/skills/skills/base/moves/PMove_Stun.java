@@ -31,7 +31,7 @@ public class PMove_Stun extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_stun(TEXT.subjects_x);
     }
 

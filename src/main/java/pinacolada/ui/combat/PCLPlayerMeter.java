@@ -28,6 +28,7 @@ import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider {
     protected EUIButton infoIcon;
+    protected PCLUseInfo info;
     protected String id;
     protected int currentScore;
     protected int highestScore;
@@ -78,8 +79,20 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public void flashAffinity(PCLAffinity affinity) {
     }
 
+    /* Creates a NEW info object. To be used when executing infos in effects to ensure that data is not interfered with during the action execution process */
     public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
         return new PCLUseInfo(card, source, target);
+    }
+
+    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
+    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
+        if (info == null) {
+            info = generateInfo(card, source, target);
+        }
+        else {
+            info.set(card, source, target);
+        }
+        return info;
     }
 
     public PCLAffinity get(int target) {

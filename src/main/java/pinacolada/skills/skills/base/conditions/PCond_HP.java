@@ -36,7 +36,7 @@ public class PCond_HP extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_generic2(PGR.core.tooltips.hp.title, TEXT.subjects_x);
     }
 

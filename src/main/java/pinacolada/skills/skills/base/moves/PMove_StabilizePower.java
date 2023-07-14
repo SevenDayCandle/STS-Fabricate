@@ -39,7 +39,7 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return PGR.core.tooltips.stabilize.title;
     }
 

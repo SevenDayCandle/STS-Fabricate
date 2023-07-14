@@ -121,7 +121,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
     }
 

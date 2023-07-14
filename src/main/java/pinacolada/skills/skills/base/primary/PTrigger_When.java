@@ -24,7 +24,7 @@ public class PTrigger_When extends PTrigger {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return capital(TEXT.cond_whenSingle(TEXT.subjects_x), true);
     }
 

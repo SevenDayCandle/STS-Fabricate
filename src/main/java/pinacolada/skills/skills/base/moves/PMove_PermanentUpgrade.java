@@ -37,7 +37,7 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> im
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.subjects_permanentlyX(TEXT.act_upgrade(TEXT.subjects_x));
     }
 

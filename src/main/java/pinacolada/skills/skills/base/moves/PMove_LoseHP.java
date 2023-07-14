@@ -37,7 +37,7 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title);
     }
 
