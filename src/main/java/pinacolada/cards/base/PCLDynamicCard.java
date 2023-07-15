@@ -166,6 +166,21 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     @Override
+    public TextureAtlas.AtlasRegion getBorderTexture() {
+        if (GameUtilities.isPCLOnlyCardColor(builder.cardColor)) {
+            return super.getBorderTexture();
+        }
+        switch (this.type) {
+            case ATTACK:
+                return ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
+            case POWER:
+                return ImageMaster.CARD_POWER_BG_SILHOUETTE;
+            default:
+                return ImageMaster.CARD_SKILL_BG_SILHOUETTE;
+        }
+    }
+
+    @Override
     protected Texture getCardBackground() {
         return customBg != null ? isPopup ? customBgLarge : customBg : super.getCardBackground();
     }

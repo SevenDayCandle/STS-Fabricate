@@ -9,8 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.evacipated.cardcrawl.mod.stslib.blockmods.AbstractBlockModifier;
+import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.SoulboundField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
@@ -18,7 +23,9 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.cards.blue.GeneticAlgorithm;
 import com.megacrit.cardcrawl.cards.green.Tactician;
+import com.megacrit.cardcrawl.cards.status.Burn;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -35,10 +42,8 @@ import com.megacrit.cardcrawl.powers.LockOnPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
-import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.*;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUIPreview;
@@ -56,7 +61,6 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.card.PCLCardGlowBorderEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -86,7 +90,6 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,7 +110,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
     public static Random rng = null;
-    protected final transient ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
+    protected final transient float[] fakeGlowList = new float[4];
     public final Skills skills = new Skills();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final ArrayList<PCLAugment> augments = new ArrayList<>();
@@ -116,6 +119,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public final PCLCardText cardText;
     private ColoredTexture portraitImgBackup;
     protected transient ArrayList<PCLCardAffinity> previousAffinities;
+    protected transient int glowIndex = 0;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
     public ColoredString bottomText;
@@ -146,6 +150,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public transient AbstractCreature owner;
     public transient PCLCard parent;
     public transient PowerFormulaDisplay formulaDisplay;
+    public transient float glowScaleMult = 1f;
 
     protected PCLCard(PCLCardData cardData) {
         this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
@@ -620,6 +625,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return new ColoredString(baseBlock, Settings.CREAM_COLOR);
     }
 
+    public TextureAtlas.AtlasRegion getBorderTexture() {
+        return ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
+    }
+
     public ColoredString getBottomText() {
         String loadoutName = cardData.getLoadoutName();
         return (loadoutName == null || loadoutName.isEmpty()) ? null : new ColoredString(loadoutName, Settings.CREAM_COLOR);
@@ -1017,7 +1026,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return -1;
     }
 
-    // When resetting the description, we should also reset the name because card modifiers may modify it
+
     @Override
     public void initializeDescription() {
         if (cardText != null) {
@@ -1084,12 +1093,30 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.initializeTitle();
     }
 
+    // Custom implementation to avoid unnecessary text re-initializations
     @Override
     public PCLCard makeStatEquivalentCopy() {
-        PCLCard copy = (PCLCard) super.makeStatEquivalentCopy();
+        PCLCard copy = cardData.create(auxiliaryData.form, timesUpgraded);
         copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
-        copy.changeForm(auxiliaryData.form, timesUpgraded);
 
+        copy.name = this.name;
+        copy.target = this.target;
+        copy.upgraded = this.upgraded;
+        copy.timesUpgraded = this.timesUpgraded;
+        copy.baseDamage = this.baseDamage;
+        copy.baseBlock = this.baseBlock;
+        copy.baseMagicNumber = this.baseMagicNumber;
+        copy.cost = this.cost;
+        copy.costForTurn = this.costForTurn;
+        copy.isCostModified = this.isCostModified;
+        copy.isCostModifiedForTurn = this.isCostModifiedForTurn;
+        copy.inBottleLightning = this.inBottleLightning;
+        copy.inBottleFlame = this.inBottleFlame;
+        copy.inBottleTornado = this.inBottleTornado;
+        copy.isSeen = this.isSeen;
+        copy.isLocked = this.isLocked;
+        copy.misc = this.misc;
+        copy.freeToPlayOnce = this.freeToPlayOnce;
         copy.exhaustOnUseOnce = exhaustOnUseOnce;
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             tag.set(copy, tag.getInt(this));
@@ -1119,6 +1146,22 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         for (PCLAugment augment : getAugments()) {
             copy.addAugment(augment.makeCopy());
+        }
+
+        // Only copy modifiers if they exist, to avoid unnecessary text re-initialization
+        if (!CardModifierManager.modifiers(this).isEmpty()) {
+            CardModifierManager.copyModifiers(this, copy, false, true, false);
+        }
+
+        for (AbstractBlockModifier mod : BlockModifierManager.modifiers(this)) {
+            if (!mod.isInherent()) {
+                BlockModifierManager.addModifier(copy, mod);
+            }
+        }
+        for (AbstractDamageModifier mod : DamageModifierManager.modifiers(this)) {
+            if (!mod.isInherent()) {
+                DamageModifierManager.addModifier(copy, mod);
+            }
         }
 
         copy.initializeDescription();
@@ -1405,8 +1448,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
-    public AbstractCard makeCopy() {
-        return cardData.create(auxiliaryData.form, timesUpgraded);
+    public PCLCard makeCopy() {
+        return cardData.create(0, 0);
     }
 
     public void initializeName() {
@@ -2024,14 +2067,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         renderGlowManual(sb);
     }
 
+    protected void renderGlowEffect(SpriteBatch sb, float duration, float scaleMult) {
+        TextureAtlas.AtlasRegion img = getBorderTexture();
+        float iScale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F * scaleMult, 1.0F - duration)) * drawScale * Settings.scale;
+        glowColor.a = duration / 2.0F;
+        sb.setColor(glowColor);
+        sb.draw(img, current_x + img.offsetX -  img.originalWidth / 2.0F, current_y + img.offsetY - img.originalHeight / 2.0F, img.originalWidth / 2.0F - img.offsetX, img.originalHeight / 2.0F - img.offsetY, img.packedWidth, img.packedHeight, iScale, iScale, angle);
+    }
+
     public void renderGlowManual(SpriteBatch sb) {
         renderMainBorder(sb);
 
-        for (PCLCardGlowBorderEffect glowBorder : glowList) {
-            glowBorder.render(sb);
+        for (float i : fakeGlowList) {
+            if (i > 0) {
+                renderGlowEffect(sb, i, glowScaleMult);
+            }
         }
 
-        sb.setBlendFunction(770, 771);
+        sb.setBlendFunction(EUIRenderHelpers.BlendingMode.Normal.srcFunc, EUIRenderHelpers.BlendingMode.Normal.dstFunc);
     }
 
     @SpireOverride
@@ -2067,20 +2120,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             return;
         }
 
-        final TextureAtlas.AtlasRegion img;
-        switch (this.type) {
-            case ATTACK:
-                img = ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
-                break;
-
-            case POWER:
-                img = ImageMaster.CARD_POWER_BG_SILHOUETTE;
-                break;
-
-            default:
-                img = ImageMaster.CARD_SKILL_BG_SILHOUETTE;
-                break;
-        }
+        final TextureAtlas.AtlasRegion img = getBorderTexture();
 
         if (GameUtilities.inBattle(false)) {
             sb.setColor(this.glowColor);
@@ -2334,11 +2374,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return isPopup;
     }
 
-    @Override
-    public EUIPreview getPreview() {
-        return EUIPreview.getPreview(this);
-    }
-
     public void setMultiDamage(boolean value) {
         this.isMultiDamage = value;
     }
@@ -2578,31 +2613,23 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    // Instead of actually adding glow effects, which CRASH OUTSIDE OF COMBAT, cycle an integer to render the glows manually
     @SpireOverride
     public void updateGlow() {
-        updateGlow(1f);
-    }
-
-    // Use PCLCardGlowBorderEffect instead of the base glow effect, which will allow glows to be used outside of runs
-    public void updateGlow(float mult) {
-        float newValue = ReflectionHacks.getPrivate(this, AbstractCard.class, "glowTimer");
+        float delta = Gdx.graphics.getDeltaTime();
         if (this.isGlowing) {
-            newValue -= Gdx.graphics.getDeltaTime();
+            float newValue = ReflectionHacks.getPrivate(this, AbstractCard.class, "glowTimer");
+            newValue -= delta;
             if (newValue < 0.0F) {
-                glowList.add(new PCLCardGlowBorderEffect(this, this.glowColor, mult));
+                fakeGlowList[glowIndex] = 1.2f;
+                glowIndex = (glowIndex + 1) % fakeGlowList.length;
                 newValue = 0.5F;
             }
             ReflectionHacks.setPrivate(this, AbstractCard.class, "glowTimer", newValue);
         }
 
-        Iterator<PCLCardGlowBorderEffect> i = this.glowList.iterator();
-
-        while (i.hasNext()) {
-            PCLCardGlowBorderEffect e = i.next();
-            e.update();
-            if (e.isDone) {
-                i.remove();
-            }
+        for (int i = 0; i < fakeGlowList.length; i++) {
+            fakeGlowList[i] -= delta;
         }
     }
 

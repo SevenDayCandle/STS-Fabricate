@@ -36,6 +36,7 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
         return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
     }
 
+    @Override
     protected void postInitialize() {
         tooltips.initializeIcons();
     }

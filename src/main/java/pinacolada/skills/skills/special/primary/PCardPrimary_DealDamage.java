@@ -256,14 +256,14 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         if (pCard != null) {
             switch (target) {
                 case All:
-                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                case Team:
-                    order.dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                case AllAlly:
-                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
-                    break;
                 case AllEnemy:
                     order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    break;
+                case Team:
+                    order.dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    break;
+                case AllAlly:
+                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
                     break;
                 default:
                     order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));

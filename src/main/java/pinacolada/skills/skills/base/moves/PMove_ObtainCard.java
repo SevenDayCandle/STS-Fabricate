@@ -15,6 +15,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsToObtainEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -46,6 +47,11 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.obtain;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_obtain(TEXT.subjects_card);
     }
 
     @Override

@@ -233,7 +233,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     protected void postInitialize() {
         tooltips.initializeIcons();
         data.initialize();
-        PotionPoolPatches.initialize();
     }
 
     @Override

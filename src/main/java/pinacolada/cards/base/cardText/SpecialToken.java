@@ -46,10 +46,7 @@ public abstract class SpecialToken extends PCLTextToken {
 
                         if (tooltip != null) {
                             parser.addTooltip(tooltip);
-                        }
-
-                        if (word.startsWith("~")) {
-                            internalParser.initialize(parser.card, word.substring(1));
+                            internalParser.initialize(parser.card, tooltip.title);
                         }
                         else {
                             internalParser.initialize(parser.card, word);

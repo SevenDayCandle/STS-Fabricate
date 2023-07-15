@@ -221,6 +221,7 @@ public abstract class PCLLoadout {
         }
 
         PCLDynamicCardData cd = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
+                .setColor(color)
                 .showTypeText(false)
                 .setMaxUpgrades(0));
         if (!isLocked()) {

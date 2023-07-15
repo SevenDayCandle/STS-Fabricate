@@ -32,6 +32,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
+import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
@@ -379,6 +380,7 @@ public class PGR {
     public static void postInitialize() {
         registerCommands();
         AbstractPlayerData.postInitialize();
+        PotionPoolPatches.initialize();
         config.load(CardCrawlGame.saveSlot);
         config.initializeOptions();
         initializeUI();

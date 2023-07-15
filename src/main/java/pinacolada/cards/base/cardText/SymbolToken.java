@@ -83,12 +83,12 @@ public class SymbolToken extends PCLTextToken {
 
     @Override
     public int getCharCount() {
-        return (EUIConfiguration.enableDescriptionIcons.get()) && tooltip != null && tooltip.icon != null  ? 1 : rawText.length();
+        return (EUIConfiguration.enableDescriptionIcons.get()) && tooltip != null ? 1 : rawText.length();
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return EUIConfiguration.enableDescriptionIcons.get() && tooltip != null && tooltip.icon != null ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
+        return EUIConfiguration.enableDescriptionIcons.get() && tooltip != null ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
     }
 
     @Override

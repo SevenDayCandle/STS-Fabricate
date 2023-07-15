@@ -109,6 +109,7 @@ public class PCLCardAlly extends PCLCardCreature {
             this.name = creatureData.strings.NAME;
             this.hideHealthBar();
             this.animation = emptyAnimation;
+            this.card.glowScaleMult = 1f;
             this.card = null;
             return releasedCard;
         }
@@ -198,10 +199,11 @@ public class PCLCardAlly extends PCLCardCreature {
         super.renderAnimation(sb, color);
         if (card != null) {
             float actualTransparency = card.transparency;
+            card.glowScaleMult = 1.5f;
             card.transparency = hbAlpha;
             card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
-            card.updateGlow(1.5f);
+            card.updateGlow();
             card.renderGlowManual(sb);
             card.renderOuterGlow(sb);
             card.renderImage(sb, false, true);

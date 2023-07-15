@@ -285,10 +285,11 @@ public class GameUtilities {
             if (!aliveOnly) {
                 monsters.addAll(room.monsters.monsters);
             }
-
-            for (AbstractMonster m : room.monsters.monsters) {
-                if (!isDeadOrEscaped(m)) {
-                    monsters.add(m);
+            else {
+                for (AbstractMonster m : room.monsters.monsters) {
+                    if (!isDeadOrEscaped(m)) {
+                        monsters.add(m);
+                    }
                 }
             }
         }
