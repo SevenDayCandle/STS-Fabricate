@@ -19,6 +19,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -54,6 +55,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public PCLRelic(PCLRelicData data) {
         super(data.ID, "", data.tier, data.sfx);
         this.relicData = data;
+        preSetup(data);
         initializePCLTips();
         setupImages(data.imagePath);
     }
@@ -223,7 +225,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         else {
             tips.clear();
         }
-
+        updateDescription(null);
         ModInfo info = EUIGameUtils.getModInfo(this);
         mainTooltip = info != null ? new EUIKeywordTooltip(getNameFromData(), description, info.ID) : new EUIKeywordTooltip(getNameFromData(), description);
         tips.add(mainTooltip);
@@ -308,6 +310,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public PCLRelic upgrade() {
         if (this.canUpgrade()) {
             auxiliaryData.timesUpgraded += 1;
+            updateName();
             updateDescription(null);
         }
         return this;
@@ -322,22 +325,79 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         this.initializePCLTips();
     }
 
-    @Override
-    public void obtain() {
+    protected void forceObtain(AbstractPlayer p, int slot, boolean callOnEquip) {
+        if (slot >= p.relics.size()) {
+            p.relics.add(this);
+        } else {
+            p.relics.set(slot, this);
+        }
+
+        this.isDone = true;
+        this.isObtained = true;
+        this.currentX = 64.0F * Settings.scale + (float)slot * PAD_X;
+        this.currentY = (float)Settings.HEIGHT - 102.0F * Settings.scale; // We will never be on mobile lol
+        this.targetX = this.currentX;
+        this.targetY = this.currentY;
+        this.hb.move(this.currentX, this.currentY);
+        if (callOnEquip) {
+            this.onEquip();
+            this.relicTip();
+        }
+
+        UnlockTracker.markRelicAsSeen(this.relicId);
+        this.getDescriptionImpl();
+        if (AbstractDungeon.topPanel != null) {
+            AbstractDungeon.topPanel.adjustRelicHbs();
+        }
+    }
+
+    protected void onStack(AbstractRelic other) {
+        upgrade();
+    }
+
+    protected boolean tryRetain(boolean callOnEquip) {
         PCLRelicData[] replacements = getReplacementIDs();
         if (replacements != null) {
             Set<String> ids = new HashSet<>(EUIUtils.map(replacements, r -> r.ID));
             ArrayList<AbstractRelic> relics = player.relics;
             for (int i = 0; i < relics.size(); i++) {
-                if (ids.contains(relics.get(i).relicId)) {
-                    instantObtain(player, i, true);
-                    setCounter(relics.get(i).counter);
-                    return;
+                AbstractRelic old = relics.get(i);
+                if (ids.contains(old.relicId)) {
+                    forceObtain(player, i, callOnEquip);
+                    setCounter(old.counter);
+                    return false;
+                }
+                else if (old instanceof PCLRelic && relicId.equals(old.relicId) && ((PCLRelic) old).relicData.unique) {
+                    ((PCLRelic) old).onStack(this);
+                    this.discarded = true;
+                    this.isDone = true;
+                    this.isObtained = true;
+                    return false;
                 }
             }
         }
+        return true;
+    }
 
-        super.obtain();
+    @Override
+    public void instantObtain() {
+        if (tryRetain(true)) {
+            super.instantObtain();
+        }
+    }
+
+    @Override
+    public void instantObtain(AbstractPlayer p, int slot, boolean callOnEquip) {
+        if (tryRetain(callOnEquip)) {
+            super.instantObtain(p, slot, callOnEquip);
+        }
+    }
+
+    @Override
+    public void obtain() {
+        if (tryRetain(true)) {
+            super.obtain();
+        }
     }
 
     // Imitating lizard tail so that used up status can be saved
@@ -353,10 +413,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
-        if (relicData != null) {
-            ReflectionHacks.setPrivateFinal(this, AbstractRelic.class, "name", getNameFromData());
-        }
-        this.description = usedUp ? MSG[2] : getUpdatedDescription();
+        this.description = usedUp ? MSG[2] : getDescriptionImpl();
         PCLRelicData[] replacements = getReplacementIDs();
         if (replacements != null) {
             String joinedNames = PCLCoreStrings.joinWithAnd(r -> r.strings.NAME, replacements);
@@ -368,8 +425,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
     }
 
-    @Override
-    public String getUpdatedDescription() {
+    // Deliberately avoid getUpdatedDescrption because this gets called in the constructor before we can set up skills or data
+    public String getDescriptionImpl() {
         return formatDescription(0, getValue());
     }
 
@@ -489,9 +546,17 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
     }
 
+    protected void preSetup(PCLRelicData data) {
+
+    }
+
     public PCLRelic setForm(int form) {
         this.auxiliaryData.form = form;
         initializePCLTips();
         return this;
+    }
+
+    public void updateName() {
+        ReflectionHacks.setPrivateFinal(this, AbstractRelic.class, "name", getNameFromData());
     }
 }

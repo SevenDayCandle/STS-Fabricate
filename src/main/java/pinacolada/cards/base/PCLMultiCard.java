@@ -19,6 +19,7 @@ import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -205,6 +206,10 @@ public abstract class PCLMultiCard extends PCLCard {
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             tag.set(this, tag.getInt(card));
         }
+
+        if (card.type == PCLEnum.CardType.SUMMON) {
+            updateHeal(card.baseHeal + baseHeal);
+        }
     }
 
     public void addInheritedCard(AbstractCard card) {
@@ -245,7 +250,10 @@ public abstract class PCLMultiCard extends PCLCard {
 
     // TODO make configurable using skill
     protected void refreshCardType(AbstractCard card) {
-        if (card.type == CardType.ATTACK) {
+        if (card.type == PCLEnum.CardType.SUMMON) {
+            setCardType(PCLEnum.CardType.SUMMON);
+        }
+        else if (card.type == CardType.ATTACK) {
             if (this.type == CardType.POWER) {
                 PCLCardTag.Purge.set(this, 1);
             }
@@ -278,6 +286,7 @@ public abstract class PCLMultiCard extends PCLCard {
         for (AbstractCard card : inheritedCards.getCards()) {
             addCardProperties(card);
         }
+        updateHeal(0);
         initializeDescription();
     }
 

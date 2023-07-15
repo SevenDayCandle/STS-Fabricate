@@ -124,19 +124,15 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         unsubscribe();
     }
 
-    // Initialize skills here because this gets called in AbstractRelic's constructor
     @Override
-    public String getUpdatedDescription() {
-        if (skills == null) {
-            skills = new Skills();
-            setup();
-        }
-        try {
-            return StringUtils.capitalize(getEffectPowerTextStrings());
-        }
-        catch (Exception e) {
-            return "";
-        }
+    protected void preSetup(PCLRelicData data) {
+        skills = new Skills();
+        setup();
+    }
+
+    @Override
+    public String getDescriptionImpl() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
     }
 
     @Override

@@ -44,11 +44,6 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         if (isWhenClause()) {
             return getWheneverAreString(PGR.core.tooltips.attack.past());

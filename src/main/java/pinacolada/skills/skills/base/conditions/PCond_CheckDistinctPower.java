@@ -51,11 +51,6 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> {
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         return getTargetHasString(fields.getThresholdRawString(TEXT.subjects_distinct(fields.getPowerSubjectString())));
     }

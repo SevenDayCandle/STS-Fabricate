@@ -13,7 +13,8 @@ import pinacolada.utilities.GameUtilities;
 @VisibleRelic
 public class Macroscope extends PCLRelic {
     public static final PCLRelicData DATA = register(Macroscope.class)
-            .setTier(RelicTier.SPECIAL);
+            .setTier(RelicTier.SPECIAL)
+            .setUnique(true);
     public static final int MULTIPLIER = 10;
 
     public Macroscope() {
@@ -21,7 +22,7 @@ public class Macroscope extends PCLRelic {
     }
 
     @Override
-    public String getUpdatedDescription() {
+    public String getDescriptionImpl() {
         return formatDescription(0, MULTIPLIER);
     }
 

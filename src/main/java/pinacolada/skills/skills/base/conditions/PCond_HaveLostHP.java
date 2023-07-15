@@ -43,11 +43,6 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title));

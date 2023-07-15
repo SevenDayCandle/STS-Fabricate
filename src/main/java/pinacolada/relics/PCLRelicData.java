@@ -31,6 +31,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
     public Integer[] counter = array(0);
     public Integer[] counterUpgrade = array(0);
+    public boolean unique = false;
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;
     public int branchFactor = 0;
@@ -143,6 +144,12 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
+    public PCLRelicData setUnique(boolean unique) {
+        this.unique = unique;
+
+        return this;
+    }
+
     public PCLRelicData setMaxForms(int maxForms) {
         this.maxForms = maxForms;
 
@@ -153,6 +160,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         this.maxUpgradeLevel = MathUtils.clamp(maxUpgradeLevel, -1, Integer.MAX_VALUE);
 
         return this;
+    }
+
+    public PCLRelicData setMaxUpgrades(int maxUpgradeLevel, boolean levelOnStack) {
+        setMaxUpgrades(maxUpgradeLevel);
+        return setUnique(levelOnStack);
     }
 
     public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {

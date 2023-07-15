@@ -89,6 +89,11 @@ public abstract class ListSelection<Item> {
         }
 
         @Override
+        public boolean equals(Object o) {
+            return this.getClass().equals(o.getClass()) && shift == ((First<?>) o).shift;
+        }
+
+        @Override
         public T get(List<T> list, int index, boolean remove) {
             T card = null;
             int position = index + shift;
@@ -118,6 +123,11 @@ public abstract class ListSelection<Item> {
         }
 
         @Override
+        public boolean equals(Object o) {
+            return this.getClass().equals(o.getClass()) && shift == ((Last<?>) o).shift;
+        }
+
+        @Override
         public T get(List<T> list, int index, boolean remove) {
             T card = null;
             int position = list.size() - 1 - index - shift;
@@ -144,6 +154,11 @@ public abstract class ListSelection<Item> {
         @Override
         public void add(List<T> list, T item, int index) {
             list.add(getRandomIndex(list.size() - 1), item);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return this.getClass().equals(o.getClass());
         }
 
         @Override

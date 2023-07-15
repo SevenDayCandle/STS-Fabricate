@@ -58,11 +58,6 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         String baseString = fields.getThresholdRawString(fields.getPowerSubjectString());
         if (isWhenClause()) {

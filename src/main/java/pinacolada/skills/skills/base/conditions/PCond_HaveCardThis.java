@@ -42,11 +42,6 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         // TODO proper grammar formattting for "Do X Y times" format
         String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard) :

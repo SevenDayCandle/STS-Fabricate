@@ -38,11 +38,6 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         String baseString = fields.getThresholdRawString(PGR.core.tooltips.gold.toString());
         if (isWhenClause()) {

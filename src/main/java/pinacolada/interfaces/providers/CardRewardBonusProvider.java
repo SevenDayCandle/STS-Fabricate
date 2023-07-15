@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import pinacolada.effects.PCLEffects;
@@ -26,6 +27,12 @@ public interface CardRewardBonusProvider {
                 .setText(PGR.core.strings.rewards_maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
+    static PCLCardRewardBundle getPotionBundle(AbstractCard card, AbstractPotion potion) {
+        return new PCLCardRewardBundle(card, (__) -> CardRewardBonusProvider.receivePotion(potion))
+                .setIcon(ImageMaster.POTION_S_CONTAINER, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setText(potion.name, Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
+    }
+
     static PCLCardRewardBundle getRelicBundle(AbstractCard card, AbstractRelic relic) {
         return new PCLCardRewardBundle(card, (__) -> GameUtilities.obtainRelicFromEvent(relic))
                 .setIcon(relic.img, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
@@ -39,6 +46,10 @@ public interface CardRewardBonusProvider {
 
     static void receiveMaxHP(PCLCardRewardBundle bundle) {
         AbstractDungeon.player.increaseMaxHp(bundle.amount, true);
+    }
+
+    static void receivePotion(AbstractPotion potion) {
+        AbstractDungeon.player.obtainPotion(potion);
     }
 
     static void receiveUpgrade(PCLCardRewardBundle bundle) {

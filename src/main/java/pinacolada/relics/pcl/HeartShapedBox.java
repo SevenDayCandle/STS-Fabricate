@@ -1,15 +1,18 @@
 package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.ui.cardReward.PCLCardRewardBundle;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleRelic
 public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider {
     public static final PCLRelicData DATA = registerTemplate(HeartShapedBox.class)
-            .setTier(RelicTier.SPECIAL);
+            .setTier(RelicTier.SPECIAL)
+            .setUnique(true);
     public static final float BASE_CHANCE = 0.3f;
     public static final int BASE_GOLD = 10;
     public static final int BASE_HP = 1;

@@ -58,11 +58,6 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(PGR.core.tooltips.channel.title);

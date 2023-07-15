@@ -2,6 +2,7 @@ package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.RestRoom;
@@ -15,7 +16,8 @@ import pinacolada.utilities.GameUtilities;
 @VisibleRelic
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
-            .setProps(RelicTier.STARTER, LandingSound.SOLID);
+            .setProps(RelicTier.STARTER, LandingSound.SOLID)
+            .setUnique(true);
     public static final int BONUS_PER_CARDS = 25;
 
     public GenericDice() {
@@ -54,7 +56,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     }
 
     @Override
-    public String getUpdatedDescription() {
+    public String getDescriptionImpl() {
         return formatDescription(0, BONUS_PER_CARDS);
     }
 
@@ -62,7 +64,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public void onEquip() {
         super.onEquip();
 
-        setCounter(0);
+        setCounter(Math.max(0, counter) + getBonus());
     }
 
     @Override
@@ -73,5 +75,10 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
             setCounter(counter + getBonus());
             flash();
         }
+    }
+
+    @Override
+    protected void onStack(AbstractRelic other) {
+        setCounter(counter + getBonus());
     }
 }

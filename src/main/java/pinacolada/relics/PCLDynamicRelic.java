@@ -1,6 +1,8 @@
 package pinacolada.relics;
 
+import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Texture;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
@@ -13,7 +15,6 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
 
     public PCLDynamicRelic(PCLDynamicRelicData data) {
         super(data);
-        setupBuilder(data);
     }
 
     // Use descriptions from the relicData because DESCRIPTIONS in AbstractRelic will contain the wrong value
@@ -55,19 +56,21 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         setupMoves(builder);
     }
 
-    public void setupBuilder(PCLDynamicRelicData builder) {
-        this.builder = builder;
+    @Override
+    protected void preSetup(PCLRelicData builder) {
+        super.preSetup(builder);
 
-        if (builder.portraitImage != null) {
-            this.outlineImg = this.img = builder.portraitImage;
+        this.builder = (PCLDynamicRelicData) builder; // Should always be PCLDynamicRelicData
+
+        if (this.builder.portraitImage != null) {
+            this.outlineImg = this.img = this.builder.portraitImage;
         }
         else {
             loadImage(builder.imagePath);
         }
 
-        setupMoves(builder);
-        initializePCLTips();
-        updateDescription(null);
+        setupMoves(this.builder);
+        updateName();
     }
 
     public void setupMoves(PCLDynamicRelicData builder) {

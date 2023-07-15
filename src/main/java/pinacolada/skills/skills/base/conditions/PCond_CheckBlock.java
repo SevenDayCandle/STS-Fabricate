@@ -40,11 +40,6 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValString(input);
-    }
-
-    @Override
     public String getSubText() {
         String baseString = fields.getThresholdRawString(PGR.core.tooltips.block.toString());
         if (isWhenClause()) {

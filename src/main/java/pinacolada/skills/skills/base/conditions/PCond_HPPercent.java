@@ -42,12 +42,7 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return fields.getThresholdValPercentString(input);
-    }
-
-    @Override
     public String getSubText() {
-        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
+        return getTargetHasString(fields.getThresholdPercentRawString(PGR.core.tooltips.hp.title));
     }
 }

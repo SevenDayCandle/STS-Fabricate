@@ -125,7 +125,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         previewRelic.currentX = previewRelic.targetX = CARD_X;
         previewRelic.currentY = previewRelic.targetY = RELIC_Y;
         previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
-        previewDescription.setLabel(previewRelic.getUpdatedDescription());
+        previewDescription.setLabel(previewRelic.getDescriptionImpl());
     }
 
     protected void complete() {
