@@ -1055,7 +1055,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getXRawString() {
-        return EUIUtils.format(BOUND_FORMAT, "F" + getCardPointer());
+        return source != null ? EUIUtils.format(BOUND_FORMAT, "F" + getCardPointer()) : "";
     }
 
     public String getXString() {

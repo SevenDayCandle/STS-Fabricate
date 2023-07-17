@@ -10,7 +10,7 @@ import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
 public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureBlock.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureBlock.class, PField_Not.class);
 
     public PMod_PerCreatureBlock(PSkillSaveData content) {
         super(DATA, content);

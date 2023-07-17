@@ -13,7 +13,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
 
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerUnblockedDamage.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerUnblockedDamage.class, PField_Not.class);
 
     public PMod_PerUnblockedDamage() {
         this(1);
@@ -44,6 +44,6 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubText() {
-        return TEXT.subjects_unblocked(TEXT.subjects_damage);
+        return getTargetOnString(TEXT.subjects_unblocked(TEXT.subjects_damage));
     }
 }
