@@ -65,7 +65,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info);
+                updateChildAmount(info, true);
                 GameUtilities.useXCostEnergy(sourceCard);
                 this.childEffect.use(info, order);
             }
@@ -76,7 +76,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info);
+                updateChildAmount(info, true);
                 GameUtilities.useXCostEnergy(sourceCard);
                 this.childEffect.use(info, order, shouldPay);
             }
@@ -84,7 +84,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
     }
 }

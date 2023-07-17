@@ -44,7 +44,7 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
     }
 }

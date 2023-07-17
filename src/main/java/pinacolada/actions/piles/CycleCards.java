@@ -3,8 +3,8 @@ package pinacolada.actions.piles;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class CycleCards extends DiscardFromPile {
         super(sourceName, amount, AbstractDungeon.player.hand);
     }
 
-    public CycleCards(String sourceName, int amount, ListSelection<AbstractCard> origin) {
+    public CycleCards(String sourceName, int amount, PCLCardSelection origin) {
         super(sourceName, amount, origin, AbstractDungeon.player.hand);
     }
 

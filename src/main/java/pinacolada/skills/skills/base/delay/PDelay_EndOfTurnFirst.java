@@ -4,7 +4,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PDelay;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.delay.DelayTiming;

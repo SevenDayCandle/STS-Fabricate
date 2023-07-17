@@ -410,12 +410,12 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     @Override
     public void onDrag(AbstractMonster m) {
-        updateChildAmount(getInfo(m));
+        updateChildAmount(getInfo(m), false);
     }
 
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet) {
-        updateChildAmount(info);
+        updateChildAmount(info, false);
     }
 
     @Override
@@ -446,7 +446,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info);
+                updateChildAmount(info, true);
                 this.childEffect.use(info, order);
             }
         });
@@ -456,13 +456,13 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info);
+                updateChildAmount(info, true);
                 this.childEffect.use(info, order, shouldPay);
             }
         });
     }
 
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return 0;
     }
 
@@ -479,29 +479,29 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return false;
     }
 
-    public final int updateAmount(PSkill<?> be, PCLUseInfo info) {
-        cachedValue = getModifiedAmount(be, info);
+    public final int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        cachedValue = getModifiedAmount(be, info, isUsing);
         if (extra > 0) {
             cachedValue = Math.min(extra, cachedValue);
         }
         return cachedValue;
     }
 
-    protected void updateChildAmount(PCLUseInfo info) {
+    protected void updateChildAmount(PCLUseInfo info, boolean isUsing) {
         if (this.childEffect != null) {
             if (this.childEffect instanceof PMultiBase) {
                 for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects()) {
                     if (ce.isAffectedByMods()) {
-                        ce.setTemporaryAmount(updateAmount(ce, info));
+                        ce.setTemporaryAmount(updateAmount(ce, info, isUsing));
                     }
                 }
             }
             // PDelays should be ignored. PMods will directly affect their children instead
             else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null && this.childEffect.childEffect.isAffectedByMods()) {
-                this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info));
+                this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info, isUsing));
             }
             else if (this.childEffect.isAffectedByMods()) {
-                this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info));
+                this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info, isUsing));
             }
         }
     }

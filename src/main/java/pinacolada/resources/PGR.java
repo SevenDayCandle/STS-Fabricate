@@ -14,7 +14,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIImage;
@@ -58,7 +57,6 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 import static pinacolada.utilities.GameUtilities.screenH;
 import static pinacolada.utilities.GameUtilities.screenW;

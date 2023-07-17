@@ -9,6 +9,7 @@ import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.actions.piles.UpgradeFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsToUpgradeEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -17,7 +18,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
 public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> implements OutOfCombatMove {
@@ -47,7 +47,7 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> im
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> (SelectFromPile) new UpgradeFromPile(s, c, i, o, g).isPermanent(true).isCancellable(false);
     }
 

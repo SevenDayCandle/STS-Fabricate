@@ -57,7 +57,7 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         List<AbstractOrb> orbs = fields.random ? AbstractDungeon.actionManager.orbsChanneledThisCombat : AbstractDungeon.actionManager.orbsChanneledThisTurn;
         return (fields.orbs.isEmpty() ? orbs.size() :
                 EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));

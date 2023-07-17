@@ -50,11 +50,6 @@ public class PCLPlayerSystem extends EUIBase {
         return getActiveMeter().generateInfo(card, source, target);
     }
 
-    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
-    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        return getActiveMeter().getInfo(card, source, target);
-    }
-
     public PCLPlayerMeter getActiveMeter() {
         if (player != null) {
             return meters.getOrDefault(player.chosenClass, fakeMeter);
@@ -72,6 +67,11 @@ public class PCLPlayerSystem extends EUIBase {
 
     public Color getGlowColor(AbstractCard c) {
         return getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
+    }
+
+    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
+    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
+        return getActiveMeter().getInfo(card, source, target);
     }
 
     public PCLCard getLastCardPlayed() {

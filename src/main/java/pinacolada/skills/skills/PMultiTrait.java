@@ -340,11 +340,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public String getSubText() {
-        return null;
-    }
-
-    @Override
     public PMultiTrait makeCopy() {
         PMultiTrait copy = (PMultiTrait) super.makeCopy();
         for (PTrait<?> effect : effects) {
@@ -382,6 +377,11 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
             effect.setTemporaryAmount(amount);
         }
         return this;
+    }
+
+    @Override
+    public String getSubText() {
+        return null;
     }
 
     @Override

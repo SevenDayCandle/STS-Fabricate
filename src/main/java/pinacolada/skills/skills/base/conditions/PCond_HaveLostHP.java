@@ -54,7 +54,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
         if (amount > 0) {
-            useFromTrigger(generateInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
+            useFromTrigger(generateInfo(info.owner).setData(amount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
         return amount;
     }

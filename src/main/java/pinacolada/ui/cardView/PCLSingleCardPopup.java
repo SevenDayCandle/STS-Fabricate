@@ -171,6 +171,11 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.currentForm = 0;
     }
 
+    @Override
+    protected Iterable<? extends EUITooltip> getTipsForRender(PCLCard currentItem) {
+        return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+    }
+
     protected void initializeLabels() {
         PCLCardData cardData = currentItem != null ? currentItem.cardData : null;
         if (cardData != null) {
@@ -296,11 +301,6 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         else {
             super.renderTips(sb);
         }
-    }
-
-    @Override
-    protected Iterable<? extends EUITooltip> getTipsForRender(PCLCard currentItem) {
-        return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
     }
 
     @Override

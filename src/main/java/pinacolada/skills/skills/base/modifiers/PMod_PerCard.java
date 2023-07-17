@@ -39,7 +39,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
                 c -> fields.getFullCardFilter().invoke(c))
         );

@@ -14,8 +14,8 @@ import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
-import pinacolada.cards.base.PCLCard;
 import extendedui.ui.tooltips.EUIPreview;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;

@@ -144,12 +144,6 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
-    public PCLRelicData setUnique(boolean unique) {
-        this.unique = unique;
-
-        return this;
-    }
-
     public PCLRelicData setMaxForms(int maxForms) {
         this.maxForms = maxForms;
 
@@ -180,6 +174,12 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public PCLRelicData setTier(AbstractRelic.RelicTier tier) {
         this.tier = tier;
+        return this;
+    }
+
+    public PCLRelicData setUnique(boolean unique) {
+        this.unique = unique;
+
         return this;
     }
 }

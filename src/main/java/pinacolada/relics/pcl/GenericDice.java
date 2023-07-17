@@ -56,18 +56,6 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     }
 
     @Override
-    public String getDescriptionImpl() {
-        return formatDescription(0, BONUS_PER_CARDS);
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        setCounter(Math.max(0, counter) + getBonus());
-    }
-
-    @Override
     public void onEnterRoom(AbstractRoom room) {
         super.onEnterRoom(room);
 
@@ -80,5 +68,17 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     @Override
     protected void onStack(AbstractRelic other) {
         setCounter(counter + getBonus());
+    }
+
+    @Override
+    public String getDescriptionImpl() {
+        return formatDescription(0, BONUS_PER_CARDS);
+    }
+
+    @Override
+    public void onEquip() {
+        super.onEquip();
+
+        setCounter(Math.max(0, counter) + getBonus());
     }
 }

@@ -1,4 +1,4 @@
-package pinacolada.actions.basic;
+package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -8,7 +8,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -16,8 +15,8 @@ import java.util.ArrayList;
 public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected FuncT1<Boolean, AbstractCard> filter;
-    protected ListSelection<AbstractCard> destination;
-    protected ListSelection<AbstractCard> origin;
+    protected PCLCardSelection destination = PCLCardSelection.Manual;
+    protected PCLCardSelection origin = PCLCardSelection.Top;
     protected CardGroup targetPile;
     protected CardGroup sourcePile;
     protected boolean showEffect = true;
@@ -31,8 +30,8 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     public MoveCards(CardGroup targetPile, CardGroup sourcePile, int amount) {
         super(ActionType.CARD_MANIPULATION);
 
-        this.destination = null;
-        this.origin = PCLCardSelection.Top.toSelection();
+        this.destination = PCLCardSelection.Manual;
+        this.origin = PCLCardSelection.Top;
         this.targetPile = targetPile;
         this.sourcePile = sourcePile;
 
@@ -48,25 +47,20 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
             max = temp.size();
         }
 
-        boolean remove = origin.mode.isRandom();
         for (int i = 0; i < max; i++) {
-            final AbstractCard card = origin.get(temp, i, remove);
+            final AbstractCard card = origin.get(temp, i);
             if (card != null) {
-                moveCard(card);
+                selectedCards.add(card);
+                PCLActions.top.moveCard(card, sourcePile, targetPile)
+                        .showEffect(showEffect, realtime, effectDuration)
+                        .setDestination(destination);
             }
         }
 
         complete(selectedCards);
     }
 
-    private void moveCard(AbstractCard card) {
-        selectedCards.add(card);
-        PCLActions.top.moveCard(card, sourcePile, targetPile)
-                .showEffect(showEffect, realtime, effectDuration)
-                .setDestination(destination);
-    }
-
-    public MoveCards setDestination(ListSelection<AbstractCard> destination) {
+    public MoveCards setDestination(PCLCardSelection destination) {
         this.destination = destination;
 
         return this;
@@ -78,8 +72,8 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
         return this;
     }
 
-    public MoveCards setOrigin(ListSelection<AbstractCard> origin) {
-        this.origin = (origin != null ? origin : PCLCardSelection.Top.toSelection());
+    public MoveCards setOrigin(PCLCardSelection origin) {
+        this.origin = (origin != null ? origin : PCLCardSelection.Top);
 
         return this;
     }

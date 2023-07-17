@@ -109,7 +109,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     @Override
     public boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m) {
         if (cooldown.canActivate()) {
-            useFromTrigger(generateInfo(m));
+            useFromTrigger(generateInfo(m).setData(cooldown));
         }
         return true;
     }

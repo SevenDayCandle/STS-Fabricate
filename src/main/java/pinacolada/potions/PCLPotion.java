@@ -80,11 +80,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return PCLPotionData.registerTemplate(new PCLPotionData(type, resources));
     }
 
-    @Override
-    public boolean canUse() {
-        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null)) && super.canUse();
-    }
-
     public boolean canUpgrade() {
         return auxiliaryData.timesUpgraded < potionData.maxUpgradeLevel || potionData.maxUpgradeLevel < 0;
     }
@@ -186,6 +181,12 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
+    public PCLPotion setForm(int form) {
+        this.auxiliaryData.form = form;
+        initializeTips();
+        return this;
+    }
+
     public void setup() {
     }
 
@@ -240,6 +241,11 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
+    @Override
+    public boolean canUse() {
+        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null)) && super.canUse();
+    }
+
     public void update() {
         super.update();
         if (this.hb.justHovered) {
@@ -280,11 +286,5 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         catch (Exception e) {
             return null;
         }
-    }
-
-    public PCLPotion setForm(int form) {
-        this.auxiliaryData.form = form;
-        initializeTips();
-        return this;
     }
 }

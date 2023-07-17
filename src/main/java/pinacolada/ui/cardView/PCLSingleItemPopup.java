@@ -20,7 +20,6 @@ import extendedui.ui.controls.EUIControllerButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;

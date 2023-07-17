@@ -5,9 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -205,7 +203,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         int itemsToGet = isOutOf() ? amount : choice.group.size();
 
         order.selectFromPile(getName(), itemsToGet, choice)
-                .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
+                .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin), !fields.not)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {
                         performAction(info, order, c);

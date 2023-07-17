@@ -36,8 +36,8 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return be.baseAmount * getMultiplier(info);
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return be.baseAmount * getMultiplier(info, isUsing);
     }
 
     public String getConditionText(String childText) {
@@ -59,7 +59,7 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return fields.powers.isEmpty() ?
                 sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == targetType)) :

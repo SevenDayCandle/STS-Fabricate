@@ -28,14 +28,14 @@ public class PDelay_StartOfTurn extends PDelay {
     }
 
     @Override
-    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction) {
-        return DelayUse.turnStart(amount, info, childAction);
-    }
-
-    @Override
     public String getSubText() {
         return (amount <= 0 ? getTiming().getDesc() :
                 (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)));
+    }
+
+    @Override
+    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction) {
+        return DelayUse.turnStart(amount, info, childAction);
     }
 
     @Override

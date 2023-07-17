@@ -1,7 +1,6 @@
 package pinacolada.cards.base;
 
 import basemod.abstracts.CustomCard;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -9,7 +8,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
@@ -44,9 +42,16 @@ public class ReplacementCard extends PCLDynamicCard {
                 texture = ImageMaster.loadImage("images/1024PortraitsBeta/" + original.assetUrl + ".png");
             }
             return texture;
-        } else {
+        }
+        else {
             return ImageMaster.loadImage("images/1024PortraitsBeta/" + original.assetUrl + ".png");
         }
+    }
+
+    @Override
+    protected void onUpgrade() {
+        super.onUpgrade();
+        original.upgrade();
     }
 
     @Override
@@ -56,12 +61,6 @@ public class ReplacementCard extends PCLDynamicCard {
 
     public void setup(Object input) {
         addUseMove(new ReplacementMove(builder, this));
-    }
-
-    @Override
-    protected void onUpgrade() {
-        super.onUpgrade();
-        original.upgrade();
     }
 
     protected void updateOriginal() {

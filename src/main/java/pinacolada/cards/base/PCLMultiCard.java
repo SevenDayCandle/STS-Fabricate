@@ -24,8 +24,8 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PCustomCond;
-import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.CardPreviewList;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -176,22 +176,6 @@ public abstract class PCLMultiCard extends PCLCard {
         super.triggerWhenCreated(startOfBattle);
     }
 
-    @Override
-    public EUICardPreview getPreview() {
-        EUICardPreview currentPreview;
-        if (EUIHotkeys.cycle.isJustPressed()) {
-            currentPreview = inheritedCards.next(true);
-        }
-        else {
-            currentPreview = inheritedCards.current();
-        }
-
-        if (currentPreview != null) {
-            currentPreview.isMultiPreview = true;
-        }
-        return currentPreview;
-    }
-
     // TODO make configurable using skill
     protected void addCardProperties(AbstractCard card) {
         if (this.cost == -2 || card.cost == -1) {
@@ -244,36 +228,54 @@ public abstract class PCLMultiCard extends PCLCard {
         return multiCardMove;
     }
 
+    @Override
+    public EUICardPreview getPreview() {
+        EUICardPreview currentPreview;
+        if (EUIHotkeys.cycle.isJustPressed()) {
+            currentPreview = inheritedCards.next(true);
+        }
+        else {
+            currentPreview = inheritedCards.current();
+        }
+
+        if (currentPreview != null) {
+            currentPreview.isMultiPreview = true;
+        }
+        return currentPreview;
+    }
+
     public void onCardsRemoved() {
 
     }
 
     // TODO make configurable using skill
     protected void refreshCardType(AbstractCard card) {
-        if (card.type == PCLEnum.CardType.SUMMON) {
-            setCardType(PCLEnum.CardType.SUMMON);
-        }
-        else if (card.type == CardType.ATTACK) {
-            if (this.type == CardType.POWER) {
-                PCLCardTag.Purge.set(this, 1);
+        if (type != PCLEnum.CardType.SUMMON) {
+            if (card.type == PCLEnum.CardType.SUMMON) {
+                setCardType(PCLEnum.CardType.SUMMON);
             }
-            hasAttackOrSkill = true;
-            setCardType(CardType.ATTACK);
-        }
-        else if (card.type == CardType.POWER) {
-            if (hasAttackOrSkill) {
-                PCLCardTag.Purge.set(this, 1);
+            else if (card.type == CardType.ATTACK) {
+                if (this.type == CardType.POWER) {
+                    PCLCardTag.Purge.set(this, 1);
+                }
+                hasAttackOrSkill = true;
+                setCardType(CardType.ATTACK);
             }
-            else if (this.type == CardType.SKILL) {
-                setCardType(CardType.POWER);
+            else if (card.type == CardType.POWER) {
+                if (hasAttackOrSkill) {
+                    PCLCardTag.Purge.set(this, 1);
+                }
+                else if (this.type == CardType.SKILL) {
+                    setCardType(CardType.POWER);
+                }
             }
-        }
-        else if (card.type == CardType.SKILL) {
-            if (this.type == CardType.POWER) {
-                PCLCardTag.Purge.set(this, 1);
-                setCardType(CardType.SKILL);
+            else if (card.type == CardType.SKILL) {
+                if (this.type == CardType.POWER) {
+                    PCLCardTag.Purge.set(this, 1);
+                    setCardType(CardType.SKILL);
+                }
+                hasAttackOrSkill = true;
             }
-            hasAttackOrSkill = true;
         }
     }
 

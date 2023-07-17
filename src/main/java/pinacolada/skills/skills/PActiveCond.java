@@ -1,7 +1,5 @@
 package pinacolada.skills.skills;
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.utility.LoseBlockAction;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -11,8 +9,6 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
-
-import java.util.ArrayList;
 
 // Conds where the use check must happen in the use action
 public abstract class PActiveCond<T extends PField> extends PCond<T> {
@@ -43,7 +39,8 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {});
+            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
+            });
         }
     }
 

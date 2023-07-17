@@ -63,7 +63,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
         PCLUseInfo pInfo = generateInfo(t);
         if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t, pInfo.targetList).contains(info.owner)) {
-            useFromTrigger(pInfo, isFromCreature() ? PCLActions.bottom : PCLActions.top);
+            useFromTrigger(pInfo.setData(damageAmount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 

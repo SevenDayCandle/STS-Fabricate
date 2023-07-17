@@ -23,9 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.blue.GeneticAlgorithm;
 import com.megacrit.cardcrawl.cards.green.Tactician;
-import com.megacrit.cardcrawl.cards.status.Burn;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -45,8 +43,8 @@ import extendedui.*;
 import extendedui.interfaces.delegates.*;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUIPreview;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.*;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -573,16 +571,21 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    public void fillPreviews(RotatingList<EUIPreview> list) {
+        PointerProvider.fillPreviewsForKeywordProvider(this, list);
+    }
+
+    @Override
+    public boolean isPopup() {
+        return isPopup;
+    }
+
     protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
         Integer[] powerIndexes = EUIUtils.range(getPowerEffects().size(), getPowerEffects().size() + effects.length - 1);
         for (PTrigger effect : effects) {
             addPowerMove(effect);
         }
         return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
-    }
-
-    public void fillPreviews(RotatingList<EUIPreview> list) {
-        PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
 
     @Deprecated
@@ -1025,7 +1028,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public int getXValue() {
         return -1;
     }
-
 
     @Override
     public void initializeDescription() {
@@ -2072,7 +2074,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float iScale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F * scaleMult, 1.0F - duration)) * drawScale * Settings.scale;
         glowColor.a = duration / 2.0F;
         sb.setColor(glowColor);
-        sb.draw(img, current_x + img.offsetX -  img.originalWidth / 2.0F, current_y + img.offsetY - img.originalHeight / 2.0F, img.originalWidth / 2.0F - img.offsetX, img.originalHeight / 2.0F - img.offsetY, img.packedWidth, img.packedHeight, iScale, iScale, angle);
+        sb.draw(img, current_x + img.offsetX - img.originalWidth / 2.0F, current_y + img.offsetY - img.originalHeight / 2.0F, img.originalWidth / 2.0F - img.offsetX, img.originalHeight / 2.0F - img.offsetY, img.packedWidth, img.packedHeight, iScale, iScale, angle);
     }
 
     public void renderGlowManual(SpriteBatch sb) {
@@ -2367,11 +2369,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
         }
         return dynamicTooltips;
-    }
-
-    @Override
-    public boolean isPopup() {
-        return isPopup;
     }
 
     public void setMultiDamage(boolean value) {

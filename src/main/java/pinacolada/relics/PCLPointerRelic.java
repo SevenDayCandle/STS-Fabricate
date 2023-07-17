@@ -94,13 +94,15 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return damage;
     }
 
-    public void fillPreviews(RotatingList<EUIPreview> list) {
-        PointerProvider.fillPreviewsForKeywordProvider(this, list);
+    @Override
+    public String getDescriptionImpl() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
     }
 
     @Override
-    public String getName() {
-        return name;
+    protected void preSetup(PCLRelicData data) {
+        skills = new Skills();
+        setup();
     }
 
     @Override
@@ -122,17 +124,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     public void usedUp() {
         super.usedUp();
         unsubscribe();
-    }
-
-    @Override
-    protected void preSetup(PCLRelicData data) {
-        skills = new Skills();
-        setup();
-    }
-
-    @Override
-    public String getDescriptionImpl() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
     }
 
     @Override
@@ -169,6 +160,15 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         unsubscribe();
     }
 
+    public void fillPreviews(RotatingList<EUIPreview> list) {
+        PointerProvider.fillPreviewsForKeywordProvider(this, list);
+    }
+
+    @Override
+    public EUITooltip getTooltip() {
+        return super.getTooltip();
+    }
+
     protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
     }
@@ -191,11 +191,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
         return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
-    }
-
-    @Override
-    public EUITooltip getTooltip() {
-        return super.getTooltip();
     }
 
     public void refresh(PCLUseInfo info) {
@@ -236,6 +231,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     @Override
     public String getID() {
         return relicId;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -19,11 +19,11 @@ public class PlayFromPile extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
-    public PlayFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public PlayFromPile(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         this(sourceName, null, amount, origin, groups);
     }
 
-    public PlayFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public PlayFromPile(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 

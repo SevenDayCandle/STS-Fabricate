@@ -9,6 +9,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class PCLUseInfo {
@@ -43,32 +44,6 @@ public class PCLUseInfo {
         this.data = other.data;
     }
 
-    public PCLUseInfo set(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        this.card = card;
-        this.source = source;
-        this.target = target;
-        this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
-        this.currentAffinity = CombatManager.playerSystem.getActiveMeter().getCurrentAffinity();
-        this.enemies.clear();
-        GameUtilities.fillWithEnemies(true, this.enemies);
-        if (card != null) {
-            this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);
-            this.canActivateLimited = CombatManager.canActivateLimited(card.cardID);
-            this.isStarter = GameUtilities.isStarter(card);
-        }
-        else {
-            this.canActivateSemiLimited = false;
-            this.canActivateLimited = false;
-            this.isStarter = false;
-        }
-        this.data = null;
-        return this;
-    }
-
-    public PCLUseInfo makeCopy() {
-        return new PCLUseInfo(this);
-    }
-
     public <T> T getData(Class<T> dataClass) {
         return EUIUtils.safeCast(data, dataClass);
     }
@@ -93,8 +68,46 @@ public class PCLUseInfo {
         return previousCard != null ? previousCard.cardID : "";
     }
 
+    public PCLUseInfo makeCopy() {
+        return new PCLUseInfo(this);
+    }
+
+    public PCLUseInfo set(AbstractCard card, AbstractCreature source, AbstractCreature target) {
+        this.card = card;
+        this.source = source;
+        this.target = target;
+        this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
+        this.currentAffinity = CombatManager.playerSystem.getActiveMeter().getCurrentAffinity();
+        this.enemies.clear();
+        GameUtilities.fillWithEnemies(true, this.enemies);
+        if (card != null) {
+            this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);
+            this.canActivateLimited = CombatManager.canActivateLimited(card.cardID);
+            this.isStarter = GameUtilities.isStarter(card);
+        }
+        else {
+            this.canActivateSemiLimited = false;
+            this.canActivateLimited = false;
+            this.isStarter = false;
+        }
+        this.data = null;
+        return this;
+    }
+
     public PCLUseInfo setData(Object data) {
         this.data = data;
+        return this;
+    }
+
+    public PCLUseInfo setTargetList(AbstractCreature... creatures) {
+        targetList.clear();
+        targetList.addAll(creatures);
+        return this;
+    }
+
+    public PCLUseInfo setTargetList(Collection<? extends AbstractCreature> creatures) {
+        targetList.clear();
+        targetList.addAll(creatures);
         return this;
     }
 

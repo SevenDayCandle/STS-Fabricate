@@ -22,7 +22,6 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
     protected ArrayList<ChoiceCardData<T>> choices = new ArrayList<>();
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
-    protected ListSelection<AbstractCard> origin;
+    protected PCLCardSelection origin;
     protected int cost;
     protected boolean hideTopPanel;
     protected boolean canPlayerCancel;
@@ -169,13 +168,12 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
             return;
         }
 
-        if (origin != null) {
+        if (origin != PCLCardSelection.Manual) {
             List<AbstractCard> temp = new ArrayList<>(group.group);
 
-            boolean remove = origin.mode.isRandom();
             int max = Math.min(temp.size(), amount);
             for (int i = 0; i < max; i++) {
-                final ChoiceCard<T> card = (ChoiceCard<T>) origin.get(temp, i, remove);
+                final ChoiceCard<T> card = (ChoiceCard<T>) origin.get(temp, i);
                 if (card != null) {
                     selectedCards.add(card);
                 }
@@ -268,10 +266,10 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
     }
 
     public TryChooseChoice<T> setOptions(boolean isRandom, boolean anyNumber) {
-        return setOptions(isRandom ? PCLCardSelection.Random.toSelection() : null, anyNumber);
+        return setOptions(isRandom ? PCLCardSelection.Random : PCLCardSelection.Manual, anyNumber);
     }
 
-    public TryChooseChoice<T> setOptions(ListSelection<AbstractCard> origin, boolean anyNumber) {
+    public TryChooseChoice<T> setOptions(PCLCardSelection origin, boolean anyNumber) {
         this.anyNumber = anyNumber;
         this.origin = origin;
 

@@ -68,12 +68,12 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return amount;
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order) {
-        for (int i = 0; i < getModifiedAmount(this.childEffect, info); i++) {
+        for (int i = 0; i < getModifiedAmount(this.childEffect, info, true); i++) {
             childEffect.use(info, order);
         }
     }

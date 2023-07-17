@@ -12,6 +12,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -23,7 +24,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveMod;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,14 +104,14 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 .addCallback(cards -> {
                     if (this.childEffect != null) {
                         info.setData(cards);
-                        updateChildAmount(info);
+                        updateChildAmount(info, true);
                         this.childEffect.use(info, order);
                     }
                 });
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
         return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
@@ -127,7 +127,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return fields.forced || isChildEffectUsingParent();
     }
 
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();
 
     public abstract EUIKeywordTooltip getActionTooltip();
 }

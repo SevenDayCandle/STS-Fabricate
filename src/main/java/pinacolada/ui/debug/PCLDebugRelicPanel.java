@@ -40,13 +40,6 @@ public class PCLDebugRelicPanel {
         return idx < 0 ? PCLDebugCardPanel.BASE_GAME : c.relicId.substring(0, idx);
     }
 
-    private void obtain() {
-        AbstractRelic chosen = cardList.get();
-        if (chosen != null) {
-            GameUtilities.obtainRelicFromEvent(getCopy(chosen));
-        }
-    }
-
     private AbstractRelic getCopy(AbstractRelic chosen) {
         AbstractRelic copy = chosen.makeCopy();
         if (copy instanceof PCLRelic) {
@@ -56,6 +49,13 @@ public class PCLDebugRelicPanel {
             }
         }
         return copy;
+    }
+
+    private void obtain() {
+        AbstractRelic chosen = cardList.get();
+        if (chosen != null) {
+            GameUtilities.obtainRelicFromEvent(getCopy(chosen));
+        }
     }
 
     private boolean passes(AbstractRelic relic) {

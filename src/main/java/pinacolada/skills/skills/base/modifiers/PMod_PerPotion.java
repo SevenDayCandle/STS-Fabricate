@@ -42,7 +42,7 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return (EUIUtils.count(AbstractDungeon.player.potions, r -> fields.getFullPotionFilter().invoke(r)));
     }
 }

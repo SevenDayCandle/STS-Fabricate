@@ -64,6 +64,10 @@
 		"DESCRIPTION": "Activate an effect with a certain probability.",
 		"NAME": "Chance"
 	},
+	"Choked":	{
+		"DESCRIPTION": "Lose HP whenever a card is played.",
+		"NAME": "Choked"
+	},
 	"Confused":	{
 		"DESCRIPTION": "Randomize the cost of cards drawn.",
 		"NAME": "Confused"
@@ -141,6 +145,10 @@
 	"Energized":	{
 		"DESCRIPTION": "Gain [E] at the start of next turn.",
 		"NAME": "Energized"
+	},
+	"Entangled":	{
+		"DESCRIPTION": "You may not play any Attacks this turn.",
+		"NAME": "Entangled"
 	},
 	"Envenom":	{
 		"DESCRIPTION": "Whenever an attack deals unblocked damage, apply [Poison].",

@@ -56,7 +56,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     @Override
     public void onStanceChanged(AbstractStance oldStance, AbstractStance newStance) {
         if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(newStance.ID))) {
-            useFromTrigger(generateInfo(null));
+            useFromTrigger(generateInfo(null).setData(newStance));
         }
     }
 }

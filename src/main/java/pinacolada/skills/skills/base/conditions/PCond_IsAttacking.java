@@ -57,7 +57,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
         PCLUseInfo pInfo = generateInfo(receiver);
         if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner, pInfo.targetList).contains(info.owner)) {
-            useFromTrigger(pInfo);
+            useFromTrigger(pInfo.setData(damageAmount));
         }
     }
 }

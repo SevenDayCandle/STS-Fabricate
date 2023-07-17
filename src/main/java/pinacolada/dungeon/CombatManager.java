@@ -809,10 +809,6 @@ public class CombatManager {
         return playerSystem.onCardModified(card, abstractCardModifier);
     }
 
-    public static AbstractOrb onTryChannelOrb(AbstractOrb orb) {
-        return subscriberInout(OnTryChannelOrbSubscriber.class, orb, OnTryChannelOrbSubscriber::onTryChannelOrb);
-    }
-
     public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost) {
         // Hardcoded base game logic
         if (p.hasPower(CorruptionPower.POWER_ID) && card.type == AbstractCard.CardType.SKILL) {

@@ -42,7 +42,7 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return (EUIUtils.count(AbstractDungeon.player.relics, r -> fields.getFullRelicFilter().invoke(r)));
     }
 }

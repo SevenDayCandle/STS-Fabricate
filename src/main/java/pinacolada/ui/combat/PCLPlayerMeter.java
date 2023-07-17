@@ -84,17 +84,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return new PCLUseInfo(card, source, target);
     }
 
-    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
-    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        if (info == null) {
-            info = generateInfo(card, source, target);
-        }
-        else {
-            info.set(card, source, target);
-        }
-        return info;
-    }
-
     public PCLAffinity get(int target) {
         return PCLAffinity.General;
     }
@@ -117,6 +106,17 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public EUITooltip getTooltip() {
         return null;
+    }
+
+    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
+    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
+        if (info == null) {
+            info = generateInfo(card, source, target);
+        }
+        else {
+            info.set(card, source, target);
+        }
+        return info;
     }
 
     public int getLevel(PCLAffinity affinity) {

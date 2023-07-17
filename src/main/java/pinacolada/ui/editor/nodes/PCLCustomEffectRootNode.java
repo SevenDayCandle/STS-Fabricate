@@ -38,7 +38,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
                             editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
                                     editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
             for (PSkill<?> sk : targetType.getSkills(editor.screen.getBuilder().getCardColor())) {
-                if (!EUIUtils.any(sk.data.sourceTypes, s -> !s.isSourceAllowed(this))) {
+                if (sk.data.sourceTypes.isEmpty() || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
                     if (skill != null && sk.effectID.equals(skill.effectID)) {
                         effects.add(skill);
                     }
@@ -71,6 +71,11 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
         this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
     }
 
+    // On power pages, we should not be able to put in anything unless we have a primary set
+    public boolean shouldReject(PCLCustomEffectHologram current) {
+        return editor instanceof PCLCustomPowerEffectPage;
+    }
+
     public void startEdit() {
         PSkill<?> first = EUIUtils.find(getEffects(), s -> s instanceof PPrimary);
         if (first != null) {
@@ -78,10 +83,5 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
             editor.fullRebuild();
             editor.startEdit(editor.root);
         }
-    }
-
-    // On power pages, we should not be able to put in anything unless we have a primary set
-    public boolean shouldReject(PCLCustomEffectHologram current) {
-        return editor instanceof PCLCustomPowerEffectPage;
     }
 }

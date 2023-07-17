@@ -27,7 +27,7 @@ public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         int total = 0;
         PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
         if (damageEff != null && damageEff.target != null && damageEff.extra > 0) {

@@ -1,4 +1,4 @@
-package pinacolada.actions.basic;
+package pinacolada.actions.cards;
 
 import basemod.BaseMod;
 import com.badlogic.gdx.math.Vector2;
@@ -11,18 +11,15 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT3;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
-
-import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class MoveCard extends PCLAction<AbstractCard> {
@@ -30,7 +27,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
     public static final float DEFAULT_CARD_X_RIGHT = Settings.WIDTH * 0.65f;
     public static final float DEFAULT_CARD_Y = Settings.HEIGHT * 0.5f;
 
-    protected pinacolada.utilities.ListSelection<AbstractCard> destination;
+    protected PCLCardSelection destination = PCLCardSelection.Manual;
     protected CardGroup targetPile;
     protected CardGroup sourcePile;
     protected boolean showEffect = true;
@@ -46,7 +43,6 @@ public class MoveCard extends PCLAction<AbstractCard> {
         this.card = card;
         this.sourcePile = sourcePile;
         this.targetPile = targetPile;
-        this.destination = null;
 
         initialize(1);
     }
@@ -56,7 +52,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         super.complete(result);
 
         // Change card spot based on destination
-        if (destination != null && targetPile.group.remove(card)) {
+        if (destination != PCLCardSelection.Manual && targetPile.group.remove(card)) {
             destination.add(targetPile.group, card, 0);
         }
     }
@@ -284,13 +280,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         return this;
     }
 
-    public MoveCard setDestination(ActionT3<List<AbstractCard>, AbstractCard, Integer> addCard) {
-        this.destination = ListSelection.special(addCard, null);
-
-        return this;
-    }
-
-    public MoveCard setDestination(pinacolada.utilities.ListSelection<AbstractCard> destination) {
+    public MoveCard setDestination(PCLCardSelection destination) {
         this.destination = destination;
 
         return this;

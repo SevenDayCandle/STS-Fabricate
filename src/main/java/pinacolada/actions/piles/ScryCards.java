@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class ScryCards extends DiscardFromPile {
     public ScryCards(String sourceName, int amount) {
         super(sourceName, amount, AbstractDungeon.player.drawPile);
-        setMaxChoices(amount, PCLCardSelection.Top.toSelection());
+        setMaxChoices(amount, PCLCardSelection.Top);
 
         initialize(amount);
     }

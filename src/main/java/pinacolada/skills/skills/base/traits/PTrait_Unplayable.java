@@ -42,13 +42,13 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return PGR.core.tooltips.unplayable.title;
+    public void use(PCLUseInfo info, PCLActions order) {
+
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-
+    public String getSubText() {
+        return PGR.core.tooltips.unplayable.title;
     }
 
     @Override

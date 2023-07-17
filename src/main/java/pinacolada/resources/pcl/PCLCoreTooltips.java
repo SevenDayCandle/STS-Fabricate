@@ -18,8 +18,8 @@ import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.powers.special.ProvokedPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.AbstractTooltips;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
 public class PCLCoreTooltips extends AbstractTooltips {
@@ -27,10 +27,12 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public static final String ICON_ARTIFACT = "artifact";
     public static final String ICON_BLUR = "blur";
     public static final String ICON_BUFFER = "buffer";
+    public static final String ICON_CHOKED = "choke";
     public static final String ICON_CONFUSION = "confusion";
     public static final String ICON_CONSTRICTED = "constricted";
     public static final String ICON_CURLUP = "closeUp";
     public static final String ICON_DEXTERITY = "dexterity";
+    public static final String ICON_ENTANGLE = "entangle";
     public static final String ICON_ENVENOM = "envenom";
     public static final String ICON_EQUILIBRIUM = "retain";
     public static final String ICON_FLIGHT = "flight";
@@ -117,6 +119,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip calm = EUIKeywordTooltip.findByID("Calm");
     public EUIKeywordTooltip chance = EUIKeywordTooltip.findByID("Chance");
     public EUIKeywordTooltip channel = EUIKeywordTooltip.findByID("Channel");
+    public EUIKeywordTooltip choked = EUIKeywordTooltip.findByID("Choked");
     public EUIKeywordTooltip confused = EUIKeywordTooltip.findByID("Confused");
     public EUIKeywordTooltip constricted = EUIKeywordTooltip.findByID("Constricted");
     public EUIKeywordTooltip cooldown = EUIKeywordTooltip.findByID("Cooldown");
@@ -131,6 +134,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip dexterity = EUIKeywordTooltip.findByID("Dexterity");
     public EUIKeywordTooltip divinity = EUIKeywordTooltip.findByID("Enlightenment");
     public EUIKeywordTooltip energized = EUIKeywordTooltip.findByID("Energized");
+    public EUIKeywordTooltip entangled = EUIKeywordTooltip.findByID("Entangled");
     public EUIKeywordTooltip envenom = EUIKeywordTooltip.findByID("Envenom");
     public EUIKeywordTooltip ephemeral = EUIKeywordTooltip.findByID("Ephemeral");
     public EUIKeywordTooltip equilibrium = EUIKeywordTooltip.findByID("Equilibrium");
@@ -304,10 +308,12 @@ public class PCLCoreTooltips extends AbstractTooltips {
         artifact.setIconFromPowerRegion(ICON_ARTIFACT);
         blur.setIconFromPowerRegion(ICON_BLUR);
         buffer.setIconFromPowerRegion(ICON_BUFFER);
+        choked.setIconFromPowerRegion(ICON_CHOKED);
         confused.setIconFromPowerRegion(ICON_CONFUSION);
         constricted.setIconFromPowerRegion(ICON_CONSTRICTED);
         curlUp.setIconFromPowerRegion(ICON_CURLUP);
         dexterity.setIconFromPowerRegion(ICON_DEXTERITY);
+        entangled.setIconFromPowerRegion(ICON_ENTANGLE);
         envenom.setIconFromPowerRegion(ICON_ENVENOM);
         equilibrium.setIconFromPowerRegion(ICON_EQUILIBRIUM);
         flight.setIconFromPowerRegion(ICON_FLIGHT);

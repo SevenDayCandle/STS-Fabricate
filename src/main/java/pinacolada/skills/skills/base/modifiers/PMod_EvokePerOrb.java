@@ -64,12 +64,12 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
-        updateChildAmount(info);
+        updateChildAmount(info, true);
         order.evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
                 .addCallback((orbs) -> {
                     info.setData(orbs);

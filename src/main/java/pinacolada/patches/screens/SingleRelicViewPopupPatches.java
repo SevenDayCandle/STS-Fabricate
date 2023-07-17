@@ -6,8 +6,6 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleRelicViewPopup;
-import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 

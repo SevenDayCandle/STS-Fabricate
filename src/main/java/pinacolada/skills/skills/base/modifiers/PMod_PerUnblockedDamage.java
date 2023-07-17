@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -27,8 +28,13 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        // Source of truth should be the last taken damage obtained from the effects above this
+        if (isUsing) {
+            return sumTargets(info, t -> t.lastDamageTaken) / PGR.dungeon.getDivisor();
+        }
 
+        // Otherwise, estimate from the damage effect
         PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
         if (damageEff != null && damageEff.target != null) {
             return sumTargets(info, t -> damageEff.extra * GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false)) / PGR.dungeon.getDivisor();

@@ -14,7 +14,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +40,7 @@ public class PField_CardGeneric extends PField_Not {
         setForced(other.forced);
     }
 
-    public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+    public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices) {
         return createAction(action, info, subchoices, true);
     }
 
@@ -49,32 +48,32 @@ public class PField_CardGeneric extends PField_Not {
      * Generates a generic SelectFromPile action on the groups specified by this effect.
      * If the skill's BASE amount is 0 or less, we will go for ALL cards in hand (skills that had their amounts set to 0 by mods still act on 0 cards)
      */
-    public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
+    public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
         CardGroup[] g = getCardGroup(info, allowSelf);
         int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
 
 
         // Set automatic selection when self targeting, or if the action is forced and we must select every available card
         if ((!skill.useParent && groupTypes.isEmpty()) || (forced && skill.baseAmount <= 0)) {
-            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random.toSelection(), g)
-                    .setDestination(destination.toSelection());
+            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random, g)
+                    .setDestination(destination);
         }
         else if (subchoices > 0 && subchoices <= choiceSize) {
-            ListSelection<AbstractCard> selection = origin.toSelection();
-            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual.toSelection(), g)
-                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random.toSelection())
-                    .setDestination(destination.toSelection());
+            PCLCardSelection selection = origin;
+            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual, g)
+                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random)
+                    .setDestination(destination);
         }
 
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g)
-                .setDestination(destination.toSelection());
+        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin, g)
+                .setDestination(destination);
     }
 
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices) {
         return createAction(action, info, subchoices);
     }
 
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
         return createAction(action, info, subchoices, allowSelf);
     }
 
@@ -149,7 +148,7 @@ public class PField_CardGeneric extends PField_Not {
         return getFullCardString();
     }
 
-    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, PCLActions order, int subchoices) {
+    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, PCLActions order, int subchoices) {
         if (!skill.useParent && groupTypes.isEmpty() && skill.sourceCard != null) {
             return PCLActions.last.add(createFilteredAction(action, info, subchoices));
         }

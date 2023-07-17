@@ -17,7 +17,6 @@ import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +28,9 @@ public class SelectFromPile extends CardFilterAction {
     protected final CardGroup fakeHandGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
     protected final CardGroup[] groups;
 
-    protected ListSelection<AbstractCard> origin;
-    protected ListSelection<AbstractCard> destination;
-    protected ListSelection<AbstractCard> maxChoicesOrigin;
+    protected PCLCardSelection origin = PCLCardSelection.Manual;
+    protected PCLCardSelection destination = PCLCardSelection.Manual;
+    protected PCLCardSelection maxChoicesOrigin = PCLCardSelection.Manual;
     protected int maxChoices;
     protected boolean hideTopPanel;
     protected boolean canPlayerCancel;
@@ -48,10 +47,10 @@ public class SelectFromPile extends CardFilterAction {
     }
 
     public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, CardGroup... groups) {
-        this(type, sourceName, target, amount, null, groups);
+        this(type, sourceName, target, amount, PCLCardSelection.Manual, groups);
     }
 
-    public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(type);
 
         this.groups = groups;
@@ -62,7 +61,7 @@ public class SelectFromPile extends CardFilterAction {
         initialize(player, target, amount, sourceName);
     }
 
-    public SelectFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public SelectFromPile(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         this(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
     }
 
@@ -70,7 +69,7 @@ public class SelectFromPile extends CardFilterAction {
         this(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
-    public SelectFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public SelectFromPile(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         this(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 
@@ -179,17 +178,17 @@ public class SelectFromPile extends CardFilterAction {
             return;
         }
 
-        if (maxChoicesOrigin != null) {
+        if (maxChoicesOrigin != PCLCardSelection.Manual) {
             List<AbstractCard> temp = new ArrayList<>(mergedGroup.group);
             CardGroup newMerged = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-            getCardSubset(temp, newMerged.group, maxChoicesOrigin, maxChoices);
+            fillCardSubset(temp, newMerged.group, maxChoicesOrigin, maxChoices);
             GridCardSelectScreenHelper.clear(false);
             GridCardSelectScreenHelper.addGroup(newMerged);
         }
 
-        if (origin != null) {
+        if (origin != PCLCardSelection.Manual) {
             List<AbstractCard> temp = new ArrayList<>(mergedGroup.group);
-            getCardSubset(temp, selectedCards, origin, amount);
+            fillCardSubset(temp, selectedCards, origin, amount);
             selected = true;
             GridCardSelectScreenHelper.clear(true);
             complete(selectedCards);
@@ -247,11 +246,10 @@ public class SelectFromPile extends CardFilterAction {
         return PGR.core.tooltips.select.title;
     }
 
-    protected void getCardSubset(List<AbstractCard> source, List<AbstractCard> dest, ListSelection<AbstractCard> o, int count) {
-        boolean remove = o.mode.isRandom();
+    protected void fillCardSubset(List<AbstractCard> source, List<AbstractCard> dest, PCLCardSelection o, int count) {
         int max = Math.min(source.size(), count);
         for (int i = 0; i < max; i++) {
-            final AbstractCard card = o.get(source, i, remove);
+            final AbstractCard card = o.get(source, i);
             if (card != null) {
                 dest.add(card);
             }
@@ -277,22 +275,16 @@ public class SelectFromPile extends CardFilterAction {
     }
 
     public SelectFromPile setDestination(PCLCardSelection destination) {
-        this.destination = destination.toSelection();
-
-        return this;
-    }
-
-    public SelectFromPile setDestination(ListSelection<AbstractCard> destination) {
         this.destination = destination;
 
         return this;
     }
 
     public SelectFromPile setMaxChoices(Integer maxChoices) {
-        return setMaxChoices(maxChoices, PCLCardSelection.Random.toSelection());
+        return setMaxChoices(maxChoices, PCLCardSelection.Random);
     }
 
-    public SelectFromPile setMaxChoices(Integer maxChoices, ListSelection<AbstractCard> origin) {
+    public SelectFromPile setMaxChoices(Integer maxChoices, PCLCardSelection origin) {
         this.maxChoices = maxChoices;
         this.maxChoicesOrigin = origin;
 
@@ -311,11 +303,11 @@ public class SelectFromPile extends CardFilterAction {
         return this;
     }
 
-    public SelectFromPile setOptions(ListSelection<AbstractCard> origin, boolean anyNumber) {
+    public SelectFromPile setOptions(PCLCardSelection origin, boolean anyNumber) {
         return setOptions(origin, anyNumber, false, false, false);
     }
 
-    public SelectFromPile setOptions(ListSelection<AbstractCard> origin, boolean anyNumber, boolean forTransform, boolean forUpgrade, boolean forPurge) {
+    public SelectFromPile setOptions(PCLCardSelection origin, boolean anyNumber, boolean forTransform, boolean forUpgrade, boolean forPurge) {
         this.anyNumber = anyNumber;
         this.origin = origin;
         this.forTransform = forTransform;
@@ -326,12 +318,6 @@ public class SelectFromPile extends CardFilterAction {
     }
 
     public SelectFromPile setOrigin(PCLCardSelection origin) {
-        this.origin = origin.toSelection();
-
-        return this;
-    }
-
-    public SelectFromPile setOrigin(ListSelection<AbstractCard> origin) {
         this.origin = origin;
 
         return this;

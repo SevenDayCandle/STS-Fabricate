@@ -75,6 +75,20 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return PSkill.chain(this, effects);
     }
 
+    protected void flash() {
+        if (power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
+            power.flash();
+        }
+        if (source instanceof AbstractRelic) {
+            ((AbstractRelic) source).flash();
+        }
+    }
+
+    public void forceResetUses() {
+        updateUsesAmount();
+        updateCounter();
+    }
+
     @Override
     public String getHeaderTextForAmount() {
         return PGR.core.strings.combat_uses;
@@ -99,6 +113,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         copy.usesThisTurn = this.usesThisTurn;
         copy.updateCounter();
         return copy;
+    }
+
+    public void resetUses() {
+        if (!fields.not) {
+            forceResetUses();
+        }
     }
 
     public PTrigger setAmount(int amount, int upgrade) {
@@ -176,6 +196,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return this;
     }
 
+    @Override
+    public void triggerOnStartOfBattleForRelic() {
+        super.triggerOnStartOfBattleForRelic();
+        forceResetUses();
+    }
+
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         if (usesThisTurn != 0) {
             boolean result = super.tryPassParent(source, info);
@@ -217,20 +243,6 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         }
     }
 
-    protected void flash() {
-        if (power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
-            power.flash();
-        }
-        if (source instanceof AbstractRelic) {
-            ((AbstractRelic) source).flash();
-        }
-    }
-
-    public void forceResetUses() {
-        updateUsesAmount();
-        updateCounter();
-    }
-
     @Override
     public String getSubText() {
         if (amount > 0) {
@@ -241,12 +253,6 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public int getUses() {
         return this.usesThisTurn;
-    }
-
-    public void resetUses() {
-        if (!fields.not) {
-            forceResetUses();
-        }
     }
 
     public PTrigger setUpgrade(int upgrade) {
@@ -279,18 +285,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return triggerOn(childAction, getInfo(null));
     }
 
-    @Override
-    public void triggerOnStartOfBattleForRelic() {
-        super.triggerOnStartOfBattleForRelic();
-        forceResetUses();
-    }
-
     protected void updateCounter() {
         if (source instanceof AbstractRelic) {
             ((AbstractRelic) source).counter = this.usesThisTurn;
         }
     }
-    
+
     // When initialized, treat 0 like -1
     protected void updateUsesAmount() {
         usesThisTurn = this.amount > 0 ? this.amount : -1;

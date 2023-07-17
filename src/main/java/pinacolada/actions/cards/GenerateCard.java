@@ -15,8 +15,8 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.effects.PCLEffects;
-import pinacolada.utilities.ListSelection;
 
 // Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLAction<AbstractCard> {
@@ -25,7 +25,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
     protected boolean upgrade;
     protected boolean makeCopy;
     protected boolean cancelIfFull;
-    protected ListSelection<AbstractCard> destination;
+    protected PCLCardSelection destination;
     protected AbstractCard actualCard;
 
     public GenerateCard(AbstractCard card, CardGroup group) {
@@ -165,7 +165,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         return this;
     }
 
-    public GenerateCard setDestination(ListSelection<AbstractCard> destination) {
+    public GenerateCard setDestination(PCLCardSelection destination) {
         this.destination = destination;
 
         return this;

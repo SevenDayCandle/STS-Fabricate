@@ -8,7 +8,6 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PRoot;
-import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 

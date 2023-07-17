@@ -58,8 +58,8 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return fields.not ? (be.baseAmount + (getMultiplier(info, isUsing) * amount)) : be.baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
     }
 
     public String getConditionText(String childText) {
@@ -90,5 +90,5 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return getSubText();
     }
 
-    public abstract int getMultiplier(PCLUseInfo info);
+    public abstract int getMultiplier(PCLUseInfo info, boolean isUsing);
 }

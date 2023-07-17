@@ -4,11 +4,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class RemoveFromPile extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public RemoveFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public RemoveFromPile(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
         forPurge = true;
     }
@@ -27,7 +27,7 @@ public class RemoveFromPile extends SelectFromPile {
         forPurge = true;
     }
 
-    public RemoveFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public RemoveFromPile(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
         forPurge = true;
     }

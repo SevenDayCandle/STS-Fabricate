@@ -12,6 +12,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -20,7 +21,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveNonCheckCond;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -65,6 +65,21 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
     }
 
+    @Override
+    public String getText(boolean addPeriod) {
+        return capital(childEffect == null ? getSubText() : TEXT.cond_xToY(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        for (PCLCardGroupHelper group : fields.groupTypes) {
+            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
         return fields.getQualifiers(info);
     }
@@ -82,22 +97,7 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                 });
     }
 
-    @Override
-    public String getText(boolean addPeriod) {
-        return capital(childEffect == null ? getSubText() : TEXT.cond_xToY(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        for (PCLCardGroupHelper group : fields.groupTypes) {
-            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();
 
     public abstract EUITooltip getActionTooltip();
 }

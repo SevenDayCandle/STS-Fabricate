@@ -22,7 +22,6 @@ import pinacolada.utilities.RandomizedList;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class CardLibraryPatches {
     protected static SpireReturn<AbstractCard> getActualCard(String key) {

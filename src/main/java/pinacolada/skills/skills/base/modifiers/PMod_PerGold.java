@@ -24,7 +24,7 @@ public class PMod_PerGold extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return sumTargets(info, t -> t.gold);
     }
 

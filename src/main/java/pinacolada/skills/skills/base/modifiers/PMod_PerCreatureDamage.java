@@ -6,7 +6,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLIntentInfo;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -37,7 +36,7 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return sumTargets(info, t -> t instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) t).getDamage(true) : 0);
     }
 

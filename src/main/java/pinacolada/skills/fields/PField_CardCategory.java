@@ -24,7 +24,6 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,11 +71,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         return this;
     }
 
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices) {
         return super.createFilteredAction(action, info, subchoices).setFilter(getFullCardFilter());
     }
 
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
         return super.createFilteredAction(action, info, subchoices, allowSelf).setFilter(getFullCardFilter());
     }
 
@@ -273,13 +272,6 @@ public class PField_CardCategory extends PField_CardGeneric {
         return indexes;
     }
 
-    public String makeFullString(EUITooltip tooltip) {
-        String tooltipTitle = tooltip.title;
-        return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
-                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
-    }
-
     public void makePreviews(RotatingList<EUIPreview> previews) {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);
@@ -287,6 +279,13 @@ public class PField_CardCategory extends PField_CardGeneric {
                 previews.add(new EUICardPreview(c.makeCopy()));
             }
         }
+    }
+
+    public String makeFullString(EUITooltip tooltip) {
+        String tooltipTitle = tooltip.title;
+        return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
+                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
+                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
     }
 
     public PField_CardCategory setAffinity(Collection<PCLAffinity> affinities) {

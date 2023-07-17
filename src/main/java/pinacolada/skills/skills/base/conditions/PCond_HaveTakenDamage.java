@@ -57,7 +57,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
         PCLUseInfo pInfo = generateInfo(info.owner);
         if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver, pInfo.targetList).contains(receiver)) {
-            useFromTrigger(pInfo, isFromCreature() ? PCLActions.bottom : PCLActions.top);
+            useFromTrigger(pInfo.setData(damageAmount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 }

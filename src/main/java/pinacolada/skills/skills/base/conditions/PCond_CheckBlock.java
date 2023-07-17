@@ -53,7 +53,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     public int onBlockGained(AbstractCreature t, int block) {
         PCLUseInfo info = generateInfo(t);
         if (target.getTargets(getOwnerCreature(), t, info.targetList).contains(t) && fields.doesValueMatchThreshold(block, amount)) {
-            useFromTrigger(info);
+            useFromTrigger(info.setData(block));
         }
         return block;
     }

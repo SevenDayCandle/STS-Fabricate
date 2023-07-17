@@ -2,7 +2,10 @@ package pinacolada.cards.base.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.ListSelection;
+import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum PCLCardSelection {
     Manual,
@@ -25,16 +28,76 @@ public enum PCLCardSelection {
         return "";
     }
 
-    public ListSelection<AbstractCard> toSelection() {
+    public <T> void add(List<T> list, T item, int index) {
         switch (this) {
             case Top:
-                return ListSelection.last(0);
+                addLast(list, item, index);
+                break;
             case Bottom:
-                return ListSelection.first(0);
+                addFirst(list, item, index);
+                break;
             case Random:
-                return ListSelection.random(null);
-            default:
-                return null;
+                addRandom(list, item);
         }
     }
+
+    public <T> T get(List<T> list, int index) {
+        switch (this) {
+            case Top:
+                return getLast(list, index);
+            case Bottom:
+                return getFirst(list, index);
+            case Random:
+                return getRandom(list, index);
+        }
+        return null;
+    }
+
+    public static <T> void addFirst(List<T> list, T item, int index) {
+        list.add(Math.max(0, Math.min(list.size(), index)), item);
+    }
+
+    public static <T> void addLast(List<T> list, T item, int index) {
+        list.add(Math.max(0, Math.min(list.size(), list.size() - index)), item);
+    }
+
+    public static <T> void addRandom(List<T> list, T item) {
+        if (list.size() > 0) {
+            list.add(GameUtilities.getRNG().random(list.size()), item);
+        }
+        else {
+            list.add(item);
+        }
+    }
+
+    public static <T> T getFirst(List<T> list, int index) {
+        T card = null;
+        if (index >= 0 && index < list.size()) {
+            card = list.get(index);
+        }
+
+        return card;
+    }
+
+    public static <T> T getLast(List<T> list, int index) {
+        T card = null;
+        int position = list.size() - 1 - index;
+        if (position >= 0 && position < list.size()) {
+            card = list.get(position);
+        }
+
+        return card;
+    }
+
+    public static <T> T getRandom(List<T> list, int index) {
+        T card = null;
+        if (list.size() > 0) {
+            int position = GameUtilities.getRNG().random(list.size() - 1);
+            card = list.get(position);
+            list.remove(position);
+        }
+
+        return card;
+    }
+
 }

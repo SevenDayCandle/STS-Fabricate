@@ -36,16 +36,16 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     }
 
     @Override
-    public String getSubText() {
-        return hasParentType(PTrigger.class) ? getSubDescText() :
-                fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
-    }
-
-    @Override
     public PTrait_CardTarget makeCopy() {
         PTrait_CardTarget other = (PTrait_CardTarget) super.makeCopy();
         other.newTarget = this.newTarget;
         return other;
+    }
+
+    @Override
+    public String getSubText() {
+        return hasParentType(PTrigger.class) ? getSubDescText() :
+                fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
     }
 
     @Override

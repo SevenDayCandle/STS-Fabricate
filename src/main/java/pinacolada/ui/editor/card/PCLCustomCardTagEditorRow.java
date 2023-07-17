@@ -117,11 +117,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         }
     }
 
-    public PCLCustomCardTagEditorRow setForm(int form) {
-        this.form = form;
-        return this;
-    }
-
     protected boolean tryHover(boolean isSelected) {
         if (!isComponentHovered() && this.hb.hovered) {
             this.label.setColor(Settings.GREEN_TEXT_COLOR);
@@ -166,6 +161,11 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
             return false;
         }
         return tryHover(isSelected);
+    }
+
+    public PCLCustomCardTagEditorRow setForm(int form) {
+        this.form = form;
+        return this;
     }
 
     public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {

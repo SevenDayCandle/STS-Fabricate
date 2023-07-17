@@ -5,11 +5,11 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class UpgradeFromPile extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public UpgradeFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public UpgradeFromPile(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
     }
 
@@ -28,7 +28,7 @@ public class UpgradeFromPile extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
-    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 

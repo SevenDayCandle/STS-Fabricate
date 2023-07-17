@@ -35,7 +35,7 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return sumTargets(info, t -> MathUtils.ceil(t.currentHealth * 100f / t.maxHealth));
     }
 

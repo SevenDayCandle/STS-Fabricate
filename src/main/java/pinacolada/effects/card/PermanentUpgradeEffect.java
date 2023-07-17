@@ -7,15 +7,15 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
 public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> {
     private FuncT1<Boolean, AbstractCard> filter;
-    private ListSelection<AbstractCard> selection;
+    private PCLCardSelection selection;
     private AbstractCard card;
 
     public PermanentUpgradeEffect() {
@@ -32,11 +32,15 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
         }
 
         if (upgradableCards.size() > 0) {
-            if (selection == null) {
-                selection = ListSelection.random(AbstractDungeon.miscRng);
+            if (selection == null || selection == PCLCardSelection.Manual) {
+                selection = PCLCardSelection.Random;
             }
 
-            card = selection.get(upgradableCards, 1, false);
+            card = selection.get(upgradableCards, 0);
+            if (card == null) {
+                complete();
+                return;
+            }
             card.upgrade();
             AbstractDungeon.player.bottledCardUpgradeCheck(card);
 
@@ -69,7 +73,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
         return this;
     }
 
-    public PermanentUpgradeEffect setSelection(ListSelection<AbstractCard> selection) {
+    public PermanentUpgradeEffect setSelection(PCLCardSelection selection) {
         this.selection = selection;
 
         return this;

@@ -26,13 +26,13 @@ public class PMod_PerDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return (sourceCard != null ? sourceCard.damage / PGR.dungeon.getDivisor() : 0);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(TEXT.subjects_card, TEXT.subjects_damage);
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(TEXT.subjects_card, TEXT.subjects_damage);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return (sourceCard != null ? sourceCard.damage / PGR.dungeon.getDivisor() : 0);
     }
 
     @Override

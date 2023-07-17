@@ -1,13 +1,11 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUIRelicPreview;
 import extendedui.utilities.RotatingList;
@@ -23,6 +21,13 @@ public class PField_Relic extends PField_Random {
     public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();
     public ArrayList<AbstractRelic.RelicTier> rarities = new ArrayList<>();
     public ArrayList<String> relicIDs = new ArrayList<>();
+
+    public static AbstractRelic getRelic(String id) {
+        if (id != null) {
+            return RelicLibrary.getRelic(id);
+        }
+        return null;
+    }
 
     @Override
     public boolean equals(PField other) {
@@ -41,13 +46,6 @@ public class PField_Relic extends PField_Random {
                 .setRarity(rarities)
                 .setRandom(random)
                 .setNot(not);
-    }
-
-    public static AbstractRelic getRelic(String id) {
-        if (id != null) {
-            return RelicLibrary.getRelic(id);
-        }
-        return null;
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
@@ -98,15 +96,6 @@ public class PField_Relic extends PField_Random {
         return getRelicXString(PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 
-    public void makePreviews(RotatingList<EUIPreview> previews) {
-        for (String cd : relicIDs) {
-            AbstractRelic c = getRelic(cd);
-            if (c != null && !EUIUtils.any(previews, p -> p.matches(c.relicId))) {
-                previews.add(new EUIRelicPreview(c.makeCopy()));
-            }
-        }
-    }
-
     public final String getRelicXString(FuncT1<String, ArrayList<String>> joinFunc, FuncT1<String, String> pluralFunc) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (!colors.isEmpty()) {
@@ -118,6 +107,15 @@ public class PField_Relic extends PField_Random {
         stringsToJoin.add(pluralFunc.invoke(PSkill.TEXT.subjects_relicN));
 
         return EUIUtils.joinStrings(" ", stringsToJoin);
+    }
+
+    public void makePreviews(RotatingList<EUIPreview> previews) {
+        for (String cd : relicIDs) {
+            AbstractRelic c = getRelic(cd);
+            if (c != null && !EUIUtils.any(previews, p -> p.matches(c.relicId))) {
+                previews.add(new EUIRelicPreview(c.makeCopy()));
+            }
+        }
     }
 
     public PField_Relic setColor(Collection<AbstractCard.CardColor> types) {

@@ -1,7 +1,6 @@
 package pinacolada.patches.creature;
 
 import basemod.ReflectionHacks;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -13,8 +12,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIConfiguration;
-import extendedui.ui.tooltips.EUITooltip;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -23,7 +20,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
-import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -67,17 +63,9 @@ public class AbstractPlayerPatches {
 
     @SpirePatch(clz = AbstractPlayer.class, method = "channelOrb")
     public static class AbstractPlayer_ChannelOrb {
-        // TODO use something other than rloc, or remove this since we aren't even using it anymore
-        @SpireInsertPatch(rloc = 7)
-        public static void insert(AbstractPlayer __instance, @ByRef AbstractOrb[] orbToSet) {
-            AbstractOrb orb = orbToSet[0];
-
-            // Replace the orb to be channeled according to any effects
-            orbToSet[0] = CombatManager.onTryChannelOrb(orb);
-        }
 
         @SpireInsertPatch(locator = Locator.class)
-        public static void insert2(AbstractPlayer __instance, @ByRef AbstractOrb[] orbToSet) {
+        public static void insert(AbstractPlayer __instance, @ByRef AbstractOrb[] orbToSet) {
             CombatManager.onChannel(orbToSet[0]);
         }
 

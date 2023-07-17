@@ -51,13 +51,13 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         this.cardTarget = cardTarget;
     }
 
-    public static List<PCLCardTarget> getAll() {
-        return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
-    }
-
     public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets) {
         GameUtilities.fillWithSummons(true, targets);
         targets.add(AbstractDungeon.player);
+    }
+
+    public static List<PCLCardTarget> getAll() {
+        return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
     }
 
     public static void popRandomTargets(RandomizedList<? extends AbstractCreature> source, int allowedSize) {
@@ -70,7 +70,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         fillTargetsForEvaluation(info.source, info.target, info.targetList);
         int prevSize = info.targetList.size();
         EUIUtils.filterInPlace(info.targetList, tFunc);
-        info.setData(info.targetList);
         switch (this) {
             case AllAlly:
             case All:
@@ -168,24 +167,21 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     }
 
     public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info) {
-        if (this == UseParent) {
-            List<? extends AbstractCreature> inherited = info.getDataAsList(AbstractCreature.class);
-            if (inherited != null) {
-                return new ArrayList<>(inherited);
-            }
-        }
         return getTargets(info.source, info.target, info.targetList, 1);
     }
 
     public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
-        return getTargets(source, target, new RandomizedList<>(),1);
+        return getTargets(source, target, new RandomizedList<>(), 1);
     }
 
     public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
-        return getTargets(source, target, sourceList,1);
+        return getTargets(source, target, sourceList, 1);
     }
 
     public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList, int autoAmount) {
+        if (this == UseParent) {
+            return sourceList;
+        }
         sourceList.clear();
         switch (this) {
             case None: {

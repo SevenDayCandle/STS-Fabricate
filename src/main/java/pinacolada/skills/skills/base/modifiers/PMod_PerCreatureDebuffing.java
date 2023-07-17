@@ -37,7 +37,7 @@ public class PMod_PerCreatureDebuffing extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return EUIUtils.count(getTargetList(info), GameUtilities::isDebuffing);
     }
 

@@ -51,7 +51,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info) {
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return EUIUtils.count(fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn(),
                 c -> fields.getFullCardFilter().invoke(c));
     }

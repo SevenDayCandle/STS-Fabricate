@@ -44,7 +44,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return be.baseAmount + (meetsCondition(info) ? amount : 0);
     }
 

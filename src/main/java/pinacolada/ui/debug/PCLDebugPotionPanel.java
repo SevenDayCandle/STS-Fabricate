@@ -1,23 +1,14 @@
 package pinacolada.ui.debug;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.EUIUtils;
 import extendedui.debug.*;
-import extendedui.patches.screens.PotionViewScreenPatches;
-import extendedui.patches.screens.RelicViewScreenPatches;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLDynamicCard;
-import pinacolada.effects.PCLEffects;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.potions.PCLPotion;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLRelic;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -49,15 +40,6 @@ public class PCLDebugPotionPanel {
         return idx < 0 ? PCLDebugCardPanel.BASE_GAME : c.ID.substring(0, idx);
     }
 
-    private void obtain() {
-        AbstractPotion chosen = cardList.get();
-        if (chosen != null && AbstractDungeon.player != null) {
-            for (int i = 0; i < count.get(); i++) {
-                AbstractDungeon.player.obtainPotion(getCopy(chosen));
-            }
-        }
-    }
-
     private AbstractPotion getCopy(AbstractPotion chosen) {
         AbstractPotion copy = chosen.makeCopy();
         if (copy instanceof PCLPotion) {
@@ -67,6 +49,15 @@ public class PCLDebugPotionPanel {
             }
         }
         return copy;
+    }
+
+    private void obtain() {
+        AbstractPotion chosen = cardList.get();
+        if (chosen != null && AbstractDungeon.player != null) {
+            for (int i = 0; i < count.get(); i++) {
+                AbstractDungeon.player.obtainPotion(getCopy(chosen));
+            }
+        }
     }
 
     private boolean passes(AbstractPotion potion) {

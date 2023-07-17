@@ -45,13 +45,9 @@ public class GridCardSelectScreenMultiformPatches {
     protected static int branchUpgradeForm = 0;
     protected static int minIndex = 0;
     protected static int maxIndex = DEFAULT_MAX;
-    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+    public static PCLAugment augment;    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
             .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
             .setOnClick(GridCardSelectScreenMultiformPatches::subtractIndex);
-    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
-            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
-            .setOnClick(GridCardSelectScreenMultiformPatches::addIndex);
-    public static PCLAugment augment;
 
     protected static void addIndex() {
         if (maxIndex < cardList.size() - 1) {
@@ -59,7 +55,9 @@ public class GridCardSelectScreenMultiformPatches {
             maxIndex += 1;
             refreshButtons();
         }
-    }
+    }    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
+            .setOnClick(GridCardSelectScreenMultiformPatches::addIndex);
 
     /**
      * Number of possible forms with branch factor b and upgrading from upgrade level u can be expressed as geometric sum with a = 1
@@ -410,6 +408,8 @@ public class GridCardSelectScreenMultiformPatches {
             }
         }
     }
+
+
 
 
 

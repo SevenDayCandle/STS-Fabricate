@@ -19,7 +19,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PCallbackMove;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.utilities.ListSelection;
 
 public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallbackMove<T> {
     public PMove_Select(PSkillData<T> data, PSkillSaveData content) {
@@ -90,7 +89,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
                 });
     }
 
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();
 
     public abstract EUITooltip getActionTooltip();
 

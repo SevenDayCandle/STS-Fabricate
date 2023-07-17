@@ -3,9 +3,9 @@ package pinacolada.actions.piles;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class RetainCards extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public RetainCards(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public RetainCards(String sourceName, int amount,  PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
     }
 
@@ -23,7 +23,7 @@ public class RetainCards extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
-    public RetainCards(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public RetainCards(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 

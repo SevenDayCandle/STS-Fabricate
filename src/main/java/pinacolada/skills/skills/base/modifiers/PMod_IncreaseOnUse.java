@@ -64,7 +64,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return amount;
     }
 

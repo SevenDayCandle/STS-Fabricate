@@ -1,8 +1,6 @@
 package pinacolada.relics;
 
-import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Texture;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
@@ -51,12 +49,6 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        setupMoves(builder);
-    }
-
-    @Override
     protected void preSetup(PCLRelicData builder) {
         super.preSetup(builder);
 
@@ -71,6 +63,12 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
 
         setupMoves(this.builder);
         updateName();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        setupMoves(builder);
     }
 
     public void setupMoves(PCLDynamicRelicData builder) {

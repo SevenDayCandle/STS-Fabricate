@@ -14,9 +14,9 @@ public class PCLDebugAugmentPanel {
     protected static final String BASE_GAME = "Base";
     protected ArrayList<PCLAugmentData> originalSortedAugments = new ArrayList<>();
     protected ArrayList<PCLAugmentData> sortedAugments = originalSortedAugments;
-    protected ImGuiTextFilter augmentFilter = new ImGuiTextFilter();
     protected DEUIFilteredSuffixListBox<PCLAugmentData> augmentList = new DEUIFilteredSuffixListBox<PCLAugmentData>("##all augments",
             sortedAugments, p -> p.ID, p -> p.strings.NAME, this::passes);
+    protected ImGuiTextFilter augmentFilter = new ImGuiTextFilter();
     protected DEUITabItem augments = new DEUITabItem("Augments");
     protected DEUIIntInput augmentCount = new DEUIIntInput("Count", 1, 1, Integer.MAX_VALUE);
     protected DEUIButton obtain = new DEUIButton("Obtain");

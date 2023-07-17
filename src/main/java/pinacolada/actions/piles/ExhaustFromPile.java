@@ -3,8 +3,8 @@ package pinacolada.actions.piles;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class ExhaustFromPile extends SelectFromPile {
         super(ActionType.EXHAUST, sourceName, null, amount, groups);
     }
 
-    public ExhaustFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public ExhaustFromPile(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.EXHAUST, sourceName, null, amount, origin, groups);
     }
 
@@ -21,7 +21,7 @@ public class ExhaustFromPile extends SelectFromPile {
         super(ActionType.EXHAUST, sourceName, target, amount, groups);
     }
 
-    public ExhaustFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
+    public ExhaustFromPile(String sourceName, AbstractCreature target, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.EXHAUST, sourceName, target, amount, origin, groups);
     }
 

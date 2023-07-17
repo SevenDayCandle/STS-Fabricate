@@ -46,16 +46,6 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_atEndOfCombat();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        fields.setupEditor(editor);
-    }
-
-    @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
         return skill instanceof PMultiBase ||
                 skill instanceof PPassiveCond ||
@@ -68,5 +58,15 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
         if (this.childEffect != null) {
             this.childEffect.useOutsideOfBattle();
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.cond_atEndOfCombat();
     }
 }

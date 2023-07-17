@@ -415,6 +415,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return info != null && target.evaluateTargets(info, evalFunc);
     }
 
+    public PCLUseInfo generateInfo(AbstractCreature target) {
+        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
+    }
+
     public final int getAmountBaseFromCard() {
         PCLCardValueSource amountSource = getAmountSource();
         if (this.sourceCard != null && amountSource != null) {
@@ -716,10 +720,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             return this.parent.getHighestParent();
         }
         return this;
-    }
-
-    public PCLUseInfo generateInfo(AbstractCreature target) {
-        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
     }
 
     public PCLUseInfo getInfo(AbstractCreature target) {

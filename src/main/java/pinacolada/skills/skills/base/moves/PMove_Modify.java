@@ -124,7 +124,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         boolean selectAll = baseExtra <= 0 || useParent;
         order.selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(this::canCardPass)
-                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.forced)
+                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin), !fields.forced)
                 .addCallback(cards -> cardAction(cards, order));
         super.use(info, order);
     }

@@ -32,7 +32,7 @@ import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public interface PointerProvider {
-    public static <T extends PointerProvider & KeywordProvider> void fillPreviewsForKeywordProvider(T provider, RotatingList<EUIPreview> list) {
+    static <T extends PointerProvider & KeywordProvider> void fillPreviewsForKeywordProvider(T provider, RotatingList<EUIPreview> list) {
         for (PSkill<?> effect : provider.getEffects()) {
             if (effect == null) {
                 continue;
@@ -311,8 +311,7 @@ public interface PointerProvider {
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
                     break;
                 case '[':
-                    if (!EUIConfiguration.useEUITooltips.get())
-                    {
+                    if (!EUIConfiguration.useEUITooltips.get()) {
                         sub = new StringBuilder();
                         while (i + 1 < baseString.length()) {
                             i += 1;

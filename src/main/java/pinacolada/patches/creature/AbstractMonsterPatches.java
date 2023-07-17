@@ -1,16 +1,12 @@
 package pinacolada.patches.creature;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.configuration.EUIConfiguration;
-import extendedui.ui.tooltips.EUITooltip;
 import javassist.CtBehavior;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
-import pinacolada.resources.PGR;
 
 public class AbstractMonsterPatches {
 
