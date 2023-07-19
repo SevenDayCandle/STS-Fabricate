@@ -44,11 +44,11 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isSelfOnlyTarget()) {
             return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.block) : TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
         }
-        return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.block);
+        return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), PGR.core.tooltips.block);
     }
 
     @Override

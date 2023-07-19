@@ -1,9 +1,9 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -42,8 +42,12 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
         return 0;
     }
 
+    public String getSubSampleText() {
+        return TEXT.subjects_unblocked(TEXT.subjects_damage);
+    }
+
     @Override
-    public String getSubText() {
-        return getTargetOnString(TEXT.subjects_unblocked(TEXT.subjects_damage));
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetOnStringPerspective(perspective, TEXT.subjects_unblocked(TEXT.subjects_damage));
     }
 }

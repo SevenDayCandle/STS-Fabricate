@@ -88,7 +88,7 @@ public class MysteryCard extends PCLCard {
         }
 
         @Override
-        public String getSubText() {
+        public String getSubText(PCLCardTarget perspective) {
             return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, PCLCoreStrings.joinWithOr(EUIUtils.map(fields.rarities, EUIGameUtils::textForRarity)));
         }
 

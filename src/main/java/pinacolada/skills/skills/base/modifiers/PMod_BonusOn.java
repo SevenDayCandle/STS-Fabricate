@@ -39,8 +39,8 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_xIfY(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getConditionText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -48,13 +48,13 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         return be.baseAmount + (meetsCondition(info) ? amount : 0);
     }
 
-    public String getConditionText() {
-        return getSubText();
+    public String getConditionText(PCLCardTarget perspective) {
+        return TEXT.cond_bonusIf(getAmountRawString(), getSubText(perspective));
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_xIfY(TEXT.subjects_x, getSubText());
+        return TEXT.cond_bonusIf(TEXT.subjects_x, getSubText(PCLCardTarget.Self));
     }
 
     public abstract boolean meetsCondition(PCLUseInfo info);

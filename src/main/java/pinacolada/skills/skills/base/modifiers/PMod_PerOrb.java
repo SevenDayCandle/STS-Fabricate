@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
@@ -29,7 +30,7 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
     }
 

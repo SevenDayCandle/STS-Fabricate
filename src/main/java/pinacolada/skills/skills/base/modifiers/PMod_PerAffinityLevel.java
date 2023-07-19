@@ -4,6 +4,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -41,7 +42,7 @@ public class PMod_PerAffinityLevel extends PMod_Per<PField_Affinity> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return EUIRM.strings.adjNoun(fields.getAffinityAndOrString(), PGR.core.tooltips.level.title);
     }
 }

@@ -42,7 +42,7 @@ public class PCond_IsDefending extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetIsString(fields.not ? TEXT.cond_not(PGR.core.tooltips.block.progressive()) : PGR.core.tooltips.block.progressive());
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetIsString(getTargetForPerspective(perspective), fields.not ? TEXT.cond_not(PGR.core.tooltips.block.progressive()) : PGR.core.tooltips.block.progressive());
     }
 }

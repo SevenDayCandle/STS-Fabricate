@@ -58,7 +58,7 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(PGR.core.tooltips.evoke.title);
         }

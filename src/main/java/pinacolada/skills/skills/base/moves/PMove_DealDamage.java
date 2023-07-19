@@ -54,14 +54,14 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     }
 
     @Override
-    public String getSubText() {
-        if (target == PCLCardTarget.Self) {
+    public String getSubText(PCLCardTarget perspective) {
+        if (target == PCLCardTarget.Self && perspective == PCLCardTarget.Self) {
             return TEXT.act_takeDamage(getAmountRawString());
         }
         if (target == PCLCardTarget.Single) {
             return TEXT.act_deal(getAmountRawString(), PGR.core.strings.subjects_damage);
         }
-        return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetString());
+        return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetStringPerspective(perspective));
     }
 
     @Override

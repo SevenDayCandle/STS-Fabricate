@@ -30,7 +30,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public String getConditionText(String childText) {
+    public String getConditionText(PCLCardTarget perspective, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText, TEXT.cond_xPerIn(getAmountRawString(), fields.getFullCardStringSingular(), fields.getGroupString()));
         }
@@ -46,7 +46,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.subjects_card;
     }
 }

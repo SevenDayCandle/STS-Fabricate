@@ -44,9 +44,9 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return getWheneverAreString(PGR.core.tooltips.attack.past());
+            return getWheneverAreString(PGR.core.tooltips.attack.past(), perspective);
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);

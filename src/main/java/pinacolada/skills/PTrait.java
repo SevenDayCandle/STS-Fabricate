@@ -109,6 +109,14 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return (PTrait_Tag) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
     }
 
+    public static PTrait_TakeDamage takeDamage(int amount) {
+        return new PTrait_TakeDamage(amount);
+    }
+
+    public static PTrait_TakeDamageMultiplier takeDamageMultiplier(int amount) {
+        return new PTrait_TakeDamageMultiplier(amount);
+    }
+
     public static PTrait_Unplayable unplayable() {
         return new PTrait_Unplayable();
     }
@@ -189,7 +197,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
     }
 

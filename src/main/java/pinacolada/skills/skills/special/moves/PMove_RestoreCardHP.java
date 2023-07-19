@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -16,6 +17,10 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
 
     public PMove_RestoreCardHP() {
         this(1, 1);
+    }
+
+    public PMove_RestoreCardHP(int amount) {
+        this(amount, 1);
     }
 
     public PMove_RestoreCardHP(int amount, int block) {
@@ -32,13 +37,13 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String wrapExtra(int input) {
+    public String wrapAmount(int input) {
         return String.valueOf(input);
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_healOn(getExtraRawString(),
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_healOn(getAmountRawString(),
                 useParent ? getInheritedThemString() :
                         fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects_this);
     }
@@ -50,7 +55,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public String getObjectText() {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.hp);
+        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -25,7 +26,7 @@ public class PMod_BonusOnStarter extends PMod_BonusOn<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return PGR.core.tooltips.starter.title;
     }
 

@@ -38,7 +38,7 @@ public class PCond_CheckCreature extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String baseString = fields.getThresholdRawString(TEXT.subjects_character);
         return TEXT.cond_thereIs(getAmountRawString(), baseString);
     }

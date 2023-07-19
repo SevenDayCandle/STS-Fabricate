@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT5;
@@ -10,6 +9,7 @@ import pinacolada.actions.piles.UpgradeFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsToUpgradeEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -42,8 +42,8 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> im
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.subjects_permanentlyX(super.getSubText());
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.subjects_permanentlyX(super.getSubText(perspective));
     }
 
     @Override

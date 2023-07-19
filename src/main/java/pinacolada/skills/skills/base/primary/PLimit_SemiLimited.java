@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -33,7 +34,7 @@ public class PLimit_SemiLimited extends PLimit {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return PGR.core.tooltips.semiLimited.title;
     }
 }

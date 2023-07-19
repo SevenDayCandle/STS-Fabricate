@@ -46,7 +46,7 @@ public class PMod_PerPower extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetOnString(fields.getPowerSubjectString());
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetOnStringPerspective(perspective, fields.getPowerSubjectString());
     }
 }

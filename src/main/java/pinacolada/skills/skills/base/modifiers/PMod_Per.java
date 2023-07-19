@@ -51,10 +51,10 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
-        String childText = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
+        String childText = childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "";
+        return getConditionText(perspective, childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -62,12 +62,12 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return fields.not ? (be.baseAmount + (getMultiplier(info, isUsing) * amount)) : be.baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
     }
 
-    public String getConditionText(String childText) {
+    public String getConditionText(PCLCardTarget perspective, String childText) {
         if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText()));
+            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective)));
         }
         return TEXT.cond_xPerY(childText,
-                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
+                this.amount <= 1 ? getSubText(perspective) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective)));
     }
 
     @Override
@@ -87,7 +87,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     public String getSubSampleText() {
-        return getSubText();
+        return getSubText(PCLCardTarget.Self);
     }
 
     public abstract int getMultiplier(PCLUseInfo info, boolean isUsing);

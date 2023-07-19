@@ -34,17 +34,17 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_xIfY(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
+        return TEXT.cond_bonusIf(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_xIfY(fields.getGroupString(), getConditionText());
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.cond_bonusIf(fields.getGroupString(), getConditionText());
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

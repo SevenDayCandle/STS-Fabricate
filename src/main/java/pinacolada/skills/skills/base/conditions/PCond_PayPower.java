@@ -53,7 +53,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return capital(TEXT.act_pay(getAmountRawString(), fields.powers.isEmpty()
                 ? plural(PGR.core.tooltips.debuff) :
                 fields.getPowerAndString()), true);

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
@@ -50,7 +51,7 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (fields.stances.isEmpty()) {
             return TEXT.act_exitStance();
         }

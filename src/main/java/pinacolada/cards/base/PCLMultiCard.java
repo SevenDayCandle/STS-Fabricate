@@ -14,6 +14,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.fields.PCLCardSaveData;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
@@ -360,9 +361,9 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public String getSubText() {
+        public String getSubText(PCLCardTarget perspective) {
             return multicard.getCards().size() > 0 ?
-                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText();
+                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText(perspective);
         }
 
         protected void useImpl(PCLUseInfo info, PCLActions order) {

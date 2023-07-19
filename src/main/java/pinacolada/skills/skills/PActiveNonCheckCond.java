@@ -40,8 +40,8 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
     }
 
     // Actual use check is handled in use action. This passes to allow the use effect to run

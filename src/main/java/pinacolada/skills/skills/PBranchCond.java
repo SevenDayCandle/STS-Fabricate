@@ -217,27 +217,27 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public String getSubText() {
-        return this.childEffect != null ? this.childEffect.getSubText() : EUIUtils.EMPTY_STRING;
+    public String getSubText(PCLCardTarget perspective) {
+        return this.childEffect != null ? this.childEffect.getSubText(perspective) : EUIUtils.EMPTY_STRING;
     }
 
-    protected String getEffectTexts(boolean addPeriod) {
+    protected String getEffectTexts(PCLCardTarget perspective, boolean addPeriod) {
         switch (effects.size()) {
             case 0:
                 return EUIUtils.EMPTY_STRING;
             case 1:
-                return this.effects.get(0).getText(addPeriod);
+                return this.effects.get(0).getText(perspective, addPeriod);
             case 2:
                 if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(addPeriod) + COLON_SEPARATOR + this.effects.get(0).getText(addPeriod) + " " +
-                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
+                    return getCapitalSubText(perspective, addPeriod) + COLON_SEPARATOR + this.effects.get(0).getText(perspective, addPeriod) + " " +
+                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, addPeriod)));
                 }
             default:
                 ArrayList<String> effectTexts = new ArrayList<>();
                 for (int i = 0; i < effects.size(); i++) {
-                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(addPeriod));
+                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(perspective, addPeriod));
                 }
-                return getSubText() + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
+                return getSubText(perspective) + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
         }
     }
 
@@ -262,11 +262,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         if (this.childEffect != null) {
-            return getEffectTexts(addPeriod);
+            return getEffectTexts(perspective, addPeriod);
         }
-        return getSubText();
+        return getSubText(perspective);
     }
 
     @Override

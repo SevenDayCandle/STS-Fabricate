@@ -55,7 +55,7 @@ import static pinacolada.ui.editor.PCLCustomEffectPage.*;
 
 public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.4f;
-    public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
+    public static final float MAIN_OFFSET = MENU_WIDTH * 3.16f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
     protected static ArrayList<AbstractPotion> availablePotions;
@@ -93,7 +93,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.editor = editor;
         this.node = node;
         this.hb = hb;
-        this.backdrop = new EUIBorderedImage(EUIRM.images.greySquare.texture(), new EUIHitbox(hb.x - scale(85), hb.y, CUTOFF * 1.3f, MAIN_OFFSET * 2));
+        this.backdrop = new EUIBorderedImage(EUIRM.images.greySquare.texture(), new EUIHitbox(hb.x - scale(85), hb.y, CUTOFF * 1.3f, MAIN_OFFSET));
         this.backdrop.setColor(Color.GRAY);
         initializeSelectors();
         refresh();
@@ -414,7 +414,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(node.getEffects());
         effects.sortByLabel();
         effects.setActive(effects.size() > 1);
-        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
+        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.2f : 0, OFFSET_AMOUNT)
                 , EUIRM.strings.ui_amount, (val, upVal) -> {
             if (node.skill != null) {
                 changeAmountForSkill(node.skill, val, upVal);
@@ -422,7 +422,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
-        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET * 1.3f : MAIN_OFFSET * 0.3f, OFFSET_AMOUNT)
+        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.7f : MENU_WIDTH * 0.5f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
                 changeExtraForSkill(node.skill, val, upVal);

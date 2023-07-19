@@ -35,7 +35,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
     protected ArrayList<ChoiceCardData<T>> choices = new ArrayList<>();
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
-    protected PCLCardSelection origin;
+    protected PCLCardSelection origin = PCLCardSelection.Manual;
     protected int cost;
     protected boolean hideTopPanel;
     protected boolean canPlayerCancel;

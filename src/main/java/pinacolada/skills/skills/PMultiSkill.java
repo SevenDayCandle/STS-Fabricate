@@ -134,15 +134,15 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public String getText(int index, boolean addPeriod) {
-        return effects.size() > index ? effects.get(index).getText(addPeriod) : "";
+    public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
+        return effects.size() > index ? effects.get(index).getText(perspective, addPeriod) : "";
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + COLON_SEPARATOR +
-                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, addPeriod))), true)) :
-                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, addPeriod)) + PCLCoreStrings.period(addPeriod);
+                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, addPeriod))), true)) :
+                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -399,7 +399,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return null;
     }
 

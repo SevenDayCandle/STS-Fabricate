@@ -44,18 +44,18 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         if (fields.not) {
             return useParent ? TEXT.act_setOf(giveString, getInheritedThemString(), getAmountRawString()) :
                     fields.hasGroups() ?
-                            TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                            TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
                             TEXT.act_setOf(giveString, TEXT.subjects_thisCard, getAmountRawString());
         }
         if (amount >= 0) {
             return useParent ? TEXT.act_increasePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
                     fields.hasGroups() ?
-                            TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                            TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
                             TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
         }
         return useParent ? TEXT.act_reducePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
                 fields.hasGroups() ?
-                        TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                        TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
                         TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
     }
 
@@ -67,7 +67,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         if (amount >= 0) {
             return useParent ? TEXT.act_giveTarget(getInheritedThemString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
+                            TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), giveString) :
                             TEXT.act_giveTarget(TEXT.subjects_this, giveString);
         }
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedThemString()) :
@@ -111,7 +111,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return getBasicAddString();
     }
 

@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkillData;
@@ -59,7 +60,7 @@ public class PCustomMod extends PMod<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
     }
 }

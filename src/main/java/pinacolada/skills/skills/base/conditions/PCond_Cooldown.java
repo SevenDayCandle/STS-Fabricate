@@ -88,16 +88,17 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title));
+            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
         }
         return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return getConditionRawString(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
+        return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
     }
 
     // Must return true when using or cooldown will not progress in a multicond

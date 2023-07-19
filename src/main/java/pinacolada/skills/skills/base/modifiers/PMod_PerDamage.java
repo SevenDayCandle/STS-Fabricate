@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -36,7 +37,7 @@ public class PMod_PerDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.subjects_damage;
     }
 }

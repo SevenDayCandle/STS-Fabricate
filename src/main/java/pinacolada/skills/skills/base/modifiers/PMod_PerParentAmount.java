@@ -4,13 +4,12 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMod_PerParentAmount extends PMod_Per<PField_Not> {
@@ -47,7 +46,7 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.subjects_amount;
     }
 

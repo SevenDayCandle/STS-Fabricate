@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -37,7 +38,7 @@ public class PTrait_Cost extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.act_costs(getAmountRawString());
     }
 

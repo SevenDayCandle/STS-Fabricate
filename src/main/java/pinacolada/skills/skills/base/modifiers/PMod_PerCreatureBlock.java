@@ -30,7 +30,7 @@ public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubSampleText() {
-        return PGR.core.tooltips.block.getTitleOrIcon();
+        return PGR.core.tooltips.block.title;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetOnString(getSubSampleText());
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetOnStringPerspective(perspective, PGR.core.tooltips.block.getTitleOrIcon());
     }
 }

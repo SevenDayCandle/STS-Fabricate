@@ -78,10 +78,27 @@ public class PSkillPower extends PCLPower {
         return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
     }
 
-    public float atDamageGive(float block, DamageInfo.DamageType type, AbstractCard c) {
-        return atDamageGive(CombatManager.playerSystem.getInfo(c, owner, owner), block, type, c);
+    @Override
+    public float atDamageGive(float damage, DamageInfo.DamageType type) {
+        return atDamageGive(CombatManager.playerSystem.getInfo(null, owner, owner), damage, type, null);
     }
 
+    @Override
+    public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard c) {
+        return atDamageGive(CombatManager.playerSystem.getInfo(c, owner, owner), damage, type, c);
+    }
+
+    @Override
+    public float atDamageReceive(float damage, DamageInfo.DamageType type) {
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifyDamageIncoming(info, damage, type);
+        }
+        return super.atDamageReceive(damage, type);
+    }
+
+    @Override
     public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
@@ -92,15 +109,18 @@ public class PSkillPower extends PCLPower {
     }
 
     // Update this power's effects whenever you play a card
+    @Override
     public void onAfterUseCard(AbstractCard card, UseCardAction act) {
         refreshTriggers(CombatManager.playerSystem.getInfo(card, owner, owner));
         super.onAfterUseCard(card, act);
     }
 
+    @Override
     public float modifyBlock(float block, AbstractCard c) {
         return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
     }
 
+    @Override
     public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {

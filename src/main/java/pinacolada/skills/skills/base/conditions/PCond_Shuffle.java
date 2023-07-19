@@ -41,7 +41,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck);
     }
 

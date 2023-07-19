@@ -44,9 +44,9 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String powerString = fields.getPowerSubjectString();
-        String mainString = TEXT.act_stabilize(powerString, getTargetString());
+        String mainString = TEXT.act_stabilize(powerString, getTargetStringPerspective(perspective));
         if (amount != 1) {
             mainString = (TEXT.cond_forTurns(getAmountRawString()) + ", " + mainString);
         }

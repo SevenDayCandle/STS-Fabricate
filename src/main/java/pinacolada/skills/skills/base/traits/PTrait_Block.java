@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.traits;
 
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -27,11 +28,11 @@ public class PTrait_Block extends PBlockTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isVerbose()) {
             return TEXT.act_gainAmount(getAmountRawString(), getSubDescText());
         }
-        return super.getSubText();
+        return super.getSubText(perspective);
     }
 
     @Override

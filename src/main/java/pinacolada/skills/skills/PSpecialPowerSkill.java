@@ -4,6 +4,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.powers.PCLPower;
@@ -55,8 +56,8 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return EUIUtils.format(getSubText(), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return EUIUtils.format(getSubText(perspective), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return description;
     }
 }

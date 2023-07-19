@@ -44,7 +44,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(PGR.core.tooltips.trigger.title);
         }
@@ -52,7 +52,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
         }
-        return getTargetHasString(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
+        return getTargetHasStringPerspective(perspective, amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
     }
 
     @Override

@@ -283,6 +283,10 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerOrb(amount, orbs);
     }
 
+    public static PMod_PerParentAmount perParentAmount() {
+        return new PMod_PerParentAmount();
+    }
+
     public static PMod_PerPower perPower(PCLPowerHelper... powers) {
         return perPower(1, powers);
     }
@@ -392,9 +396,9 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        String subText = extra > 0 ? getSubText() + " (" + TEXT.subjects_max(extra) + ")" : getSubText();
-        return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String subText = extra > 0 ? getSubText(perspective) + " (" + TEXT.subjects_max(extra) + ")" : getSubText(perspective);
+        return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "",
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 

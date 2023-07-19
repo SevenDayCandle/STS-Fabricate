@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT5;
@@ -36,9 +35,9 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (fields.destination == PCLCardSelection.Manual) {
-            return super.getSubText();
+            return super.getSubText(perspective);
         }
         String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
         return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)

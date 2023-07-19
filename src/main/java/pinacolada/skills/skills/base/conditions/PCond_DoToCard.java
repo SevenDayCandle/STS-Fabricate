@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
@@ -59,15 +58,15 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return capital(childEffect == null ? getSubText() : TEXT.cond_xToY(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return capital(childEffect == null ? getSubText(perspective) : TEXT.cond_xToY(getSubText(perspective), childEffect.getText(perspective, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

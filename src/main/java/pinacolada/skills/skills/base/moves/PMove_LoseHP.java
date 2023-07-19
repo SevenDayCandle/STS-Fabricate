@@ -53,11 +53,12 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     }
 
     @Override
-    public String getSubText() {
-        if (target == PCLCardTarget.Self && !isFromCreature()) {
+    public String getSubText(PCLCardTarget perspective) {
+        if (target == PCLCardTarget.Self && !isFromCreature() && perspective == PCLCardTarget.Self) {
             return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
         }
-        return TEXT.act_zLoses(getTargetString(), getTargetOrdinal(), getAmountRawString(), PGR.core.tooltips.hp.title);
+        PCLCardTarget proper = getTargetForPerspective(perspective);
+        return TEXT.act_zLoses(getTargetSubjectString(proper), getTargetOrdinal(proper), getAmountRawString(), PGR.core.tooltips.hp.title);
 
     }
 

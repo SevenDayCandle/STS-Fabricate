@@ -960,6 +960,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
 
     // Condition functions
+    public final String cond_bonusIf(Object desc6, Object desc7) {
+        return EUIRM.strings.generic2(desc6, cond_ifX(desc7));
+    }
     public final String cond_ifTargetIs(Object target, Object subject) {
         return cond_ifX(cond_xIsY(target, subject));
     }
@@ -1072,41 +1075,38 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_xAndY(Object subject, Object target) {
         return condFmt(30, subject, target);
     }
-    public final String cond_xIfY(Object desc6, Object desc7) {
-        return condFmt(31, desc6, desc7);
+    public final String cond_xIsY(Object desc5, Object desc6) {
+        return condFmt(31, desc5, desc6);
     }
-    public final String cond_xIsY(Object desc6, Object desc7) {
-        return condFmt(32, desc6, desc7);
-    }
-    public final String cond_xOrY(Object desc6, Object desc7) {
-        return condFmt(33, desc6, desc7);
+    public final String cond_xOrY(Object desc5, Object desc6) {
+        return condFmt(32, desc5, desc6);
     }
     public final String cond_xPerY(Object subject, Object per) {
-        return condFmt(34, subject, per);
+        return condFmt(33, subject, per);
     }
-    public final String cond_xPerYZ(Object desc6, Object desc7, Object desc8) {
-        return condFmt(35, desc6, desc7, desc8);
+    public final String cond_xPerYZ(Object desc5, Object desc6, Object desc7) {
+        return condFmt(34, desc5, desc6, desc7);
     }
-    public final String cond_xPerIn(Object desc6, Object desc7, Object desc8) {
-        return condFmt(36, desc6, desc7, desc8);
+    public final String cond_xPerIn(Object desc5, Object desc6, Object desc7) {
+        return condFmt(35, desc5, desc6, desc7);
     }
-    public final String cond_timesPerCombat(Object desc5) {
-        return condFmt(37, desc5);
+    public final String cond_timesPerCombat(Object desc4) {
+        return condFmt(36, desc4);
     }
-    public final String cond_timesPerTurn(Object desc5) {
-        return condFmt(38, desc5);
+    public final String cond_timesPerTurn(Object desc4) {
+        return condFmt(37, desc4);
     }
-    public final String cond_xToY(Object desc5, Object desc6) {
-        return condFmt(39, desc5, desc6);
+    public final String cond_xToY(Object desc4, Object desc5) {
+        return condFmt(38, desc4, desc5);
     }
-    public final String cond_xThenY(Object desc5, Object desc6) {
-        return condFmt(40, desc5, desc6);
+    public final String cond_xThenY(Object desc4, Object desc5) {
+        return condFmt(39, desc4, desc5);
     }
-    public final String cond_xConditional(Object desc5, Object desc6) {
-        return condFmt(41, desc5, desc6);
+    public final String cond_xConditional(Object desc4, Object desc5) {
+        return condFmt(40, desc4, desc5);
     }
     public final String cond_passive() {
-        return condFmt(42);
+        return condFmt(41);
     }
 
     public final String csel_obtainBronzeAtAscension(int ascension) {

@@ -40,13 +40,13 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String baseString = fields.getThresholdRawString(PGR.core.tooltips.block.toString());
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_gain(baseString));
+            return getWheneverString(TEXT.act_gain(baseString), perspective);
         }
 
-        return getTargetHasString(baseString);
+        return getTargetHasStringPerspective(perspective, baseString);
     }
 
     @Override

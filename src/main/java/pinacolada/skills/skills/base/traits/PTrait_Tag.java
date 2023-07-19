@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.traits;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -41,7 +42,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String tagAmount = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getSubDescText()) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, getSubDescText()) : getSubDescText();
         return hasParentType(PTrigger.class) ? tagAmount :
                 fields.random ? TEXT.act_remove(tagAmount) : TEXT.act_has(tagAmount);

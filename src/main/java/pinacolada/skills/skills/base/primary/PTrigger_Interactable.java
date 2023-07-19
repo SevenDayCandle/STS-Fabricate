@@ -47,8 +47,8 @@ public class PTrigger_Interactable extends PTrigger {
     }
 
     @Override
-    public String getSubText() {
-        String sub = amount > 1 || fields.not ? super.getSubText() : "";
+    public String getSubText(PCLCardTarget perspective) {
+        String sub = amount > 1 || fields.not ? super.getSubText(perspective) : "";
         String main = source instanceof AbstractRelic ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         return sub.isEmpty() ? main : sub + COMMA_SEPARATOR + main;
     }

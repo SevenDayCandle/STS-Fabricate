@@ -39,8 +39,8 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
 
 
     @Override
-    public String getSubText() {
-        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullPotionString()));
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetHasStringPerspective(perspective, EUIRM.strings.numNoun(getAmountRawString(), fields.getFullPotionString()));
 
     }
 }

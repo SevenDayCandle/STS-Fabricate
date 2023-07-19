@@ -97,7 +97,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip reshuffle = EUIKeywordTooltip.findByID("Reshuffle").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip select = EUIKeywordTooltip.findByID("Select").setCanAdd(false).canHighlight(false).canFilter(false);
     public EUIKeywordTooltip skill = EUIKeywordTooltip.findByID("Skill").setCanAdd(false).canHighlight(false);
-    public EUIKeywordTooltip spread = EUIKeywordTooltip.findByID("Spread").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip status = EUIKeywordTooltip.findByID("Status").setCanAdd(false);
     public EUIKeywordTooltip upgrade = EUIKeywordTooltip.findByID("Upgrade").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip woundCard = EUIKeywordTooltip.findByID("Wound").setPreviewFunc(() -> makePreview(Wound.ID)).setCanAdd(false);
@@ -204,6 +203,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip slow = EUIKeywordTooltip.findByID("Slow");
     public EUIKeywordTooltip sorcery = EUIKeywordTooltip.findByID("Sorcery");
     public EUIKeywordTooltip soulbound = EUIKeywordTooltip.findByID("Soulbound");
+    public EUIKeywordTooltip spread = EUIKeywordTooltip.findByID("Spread");
     public EUIKeywordTooltip stabilize = EUIKeywordTooltip.findByID("Stabilize");
     public EUIKeywordTooltip stance = EUIKeywordTooltip.findByID("Stance");
     public EUIKeywordTooltip starter = EUIKeywordTooltip.findByID("Starter");

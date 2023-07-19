@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -27,7 +28,7 @@ public class PMove_Shuffle extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.subjects_shuffleYourDeck;
     }
 

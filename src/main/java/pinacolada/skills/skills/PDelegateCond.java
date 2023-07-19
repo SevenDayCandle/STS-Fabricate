@@ -28,14 +28,14 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         if (childEffect != null) {
             if (childEffect instanceof PCond && !isWhenClause()) {
-                return PCLCoreStrings.joinWithAnd(getCapitalSubText(addPeriod), childEffect.getText(false)) + PCLCoreStrings.period(addPeriod);
+                return PCLCoreStrings.joinWithAnd(getCapitalSubText(perspective, addPeriod), childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod);
             }
-            return getCapitalSubText(addPeriod) + COMMA_SEPARATOR + childEffect.getText(false) + PCLCoreStrings.period(addPeriod);
+            return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
         }
-        return getCapitalSubText(addPeriod) + PCLCoreStrings.period(addPeriod);
+        return getCapitalSubText(perspective, addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

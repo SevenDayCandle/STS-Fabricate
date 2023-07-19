@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -31,14 +32,14 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return PGR.core.tooltips.stance.title;
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         String base = fields.getAnyStanceString();
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_xIfY(getAmountRawString(), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", TEXT.cond_bonusIf(getAmountRawString(), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

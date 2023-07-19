@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -36,7 +37,7 @@ public class PTrait_TakeDamageMultiplier extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.act_takeDamage(getAmountRawString() + "%");
     }
 

@@ -42,7 +42,7 @@ public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.energy), true);
     }
 

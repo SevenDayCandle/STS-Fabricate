@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -47,8 +48,8 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public String getSubText() {
-        String base = super.getSubText();
+    public String getSubText(PCLCardTarget perspective) {
+        String base = super.getSubText(perspective);
         if (!fields.forced) {
             base = TEXT.subjects_thisTurn(base);
         }

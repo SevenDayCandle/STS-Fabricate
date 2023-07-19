@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -62,7 +63,7 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(true);
+        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(PCLCardTarget.Self, true);
     }
 
     @Override

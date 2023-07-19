@@ -27,7 +27,7 @@ public abstract class PFacetCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return isWhenClause() || isPassiveClause() ? TEXT.act_zHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return isWhenClause() || isPassiveClause() ? TEXT.act_zHas(getSubText(perspective), childEffect != null ? childEffect.getText(perspective, addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(perspective, addPeriod);
     }
 }

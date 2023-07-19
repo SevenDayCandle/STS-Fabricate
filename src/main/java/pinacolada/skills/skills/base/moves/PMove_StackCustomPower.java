@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIUtils;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -51,14 +52,14 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        String subtext = getCapitalSubText(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String subtext = getCapitalSubText(perspective, addPeriod);
         // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
-        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
+        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(perspective, addPeriod) : "");
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         // If this skill is under a PTrigger and this references that same PTrigger, the game will crash from a stack overflow
         // In this instance, we should describe the power itself instead
         ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
@@ -84,9 +85,10 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
             return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_this);
         }
 
-        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
+        // Perpsective of self depends on the target this is applied to
+        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, true);
         if (baseAmount > 0) {
-            return (TEXT.cond_forTurns(getAmountRawString()) + ", " + base);
+            return (TEXT.cond_forTurns(getAmountRawString()) + ", " + StringUtils.uncapitalize(base));
         }
 
         return base;

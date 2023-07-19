@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.evacipated.cardcrawl.mod.stslib.actions.common.StunMonsterAction;
 import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
 import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -36,8 +37,8 @@ public class PMove_Stun extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return target == PCLCardTarget.None ? TEXT.act_skipTurn() : TEXT.act_stun(getTargetString());
+    public String getSubText(PCLCardTarget perspective) {
+        return target == PCLCardTarget.None ? TEXT.act_skipTurn() : TEXT.act_stun(getTargetStringPerspective(perspective));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class PMove_Stun extends PMove<PField_Empty> {
             // This power cannot be applied to players
             for (AbstractCreature c : getTargetList(info)) {
                 if (c instanceof AbstractMonster) {
-                    order.applyPower(info.source, new StunMonsterPower((AbstractMonster) c, amount));
+                    order.add(new StunMonsterAction((AbstractMonster) c, info.source, amount));
                 }
             }
         }

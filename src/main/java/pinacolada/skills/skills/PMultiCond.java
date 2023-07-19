@@ -122,8 +122,8 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public String getText(int index, boolean addPeriod) {
-        return effects.size() > index ? effects.get(index).getText(index, addPeriod) : getText(addPeriod);
+    public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
+        return effects.size() > index ? effects.get(index).getText(index, perspective, addPeriod) : getText(perspective, addPeriod);
     }
 
     @Override
@@ -340,14 +340,14 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public String getSubText() {
-        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true));
+    public String getSubText(PCLCardTarget perspective) {
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true));
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
-                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
+                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override

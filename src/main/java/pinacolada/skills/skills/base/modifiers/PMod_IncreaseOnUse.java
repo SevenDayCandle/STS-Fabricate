@@ -41,8 +41,8 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
     }
 }

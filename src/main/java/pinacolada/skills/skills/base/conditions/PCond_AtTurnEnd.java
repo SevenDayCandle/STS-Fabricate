@@ -42,7 +42,7 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return isWhenClause() ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
     }
 

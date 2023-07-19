@@ -42,7 +42,7 @@ public class PCond_IsDebuffing extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetIsString(fields.not ? TEXT.cond_not(PGR.core.tooltips.debuff.progressive()) : PGR.core.tooltips.debuff.progressive());
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetIsString(getTargetForPerspective(perspective), fields.not ? TEXT.cond_not(PGR.core.tooltips.debuff.progressive()) : PGR.core.tooltips.debuff.progressive());
     }
 }

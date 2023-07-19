@@ -117,7 +117,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
         // TODO dynamically check if a child effect overrides modifyHitCount
@@ -135,7 +135,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             if (target == PCLCardTarget.Single) {
                 return TEXT.act_deal(amountString, attackString);
             }
-            return TEXT.act_dealTo(amountString, attackString, getTargetString());
+            return TEXT.act_dealTo(amountString, attackString, getTargetString(PCLCardTarget.Self)); // Ignore perspective because this comes from the card
         }
 
         String targetShortString = target.getShortString();

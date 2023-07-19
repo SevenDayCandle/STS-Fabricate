@@ -38,7 +38,7 @@ public class PMod_PerCreature extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         switch (target) {
             case AllAlly:
             case RandomAlly:

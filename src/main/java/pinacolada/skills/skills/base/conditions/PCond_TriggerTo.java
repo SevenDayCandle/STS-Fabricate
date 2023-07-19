@@ -45,7 +45,7 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         Object tt = fields.getOrbOrString();
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));

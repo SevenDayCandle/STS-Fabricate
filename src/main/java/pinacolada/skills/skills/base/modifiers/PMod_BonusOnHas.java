@@ -4,8 +4,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -27,7 +29,17 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
-    public String getConditionText() {
+    public String getConditionText(PCLCardTarget perspective) {
+        return EUIRM.strings.generic2(getAmountRawString(), getSubText(perspective));
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.cond_bonusIf(TEXT.subjects_x, PCLCoreStrings.past(getActionTooltip()));
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
         return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString())));
     }
@@ -43,11 +55,6 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-    }
-
-    @Override
-    public String getSubText() {
-        return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     abstract public EUIKeywordTooltip getActionTooltip();

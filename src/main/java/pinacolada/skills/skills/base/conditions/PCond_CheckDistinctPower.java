@@ -51,7 +51,7 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetHasString(fields.getThresholdRawString(TEXT.subjects_distinct(fields.getPowerSubjectString())));
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(TEXT.subjects_distinct(fields.getPowerSubjectString())));
     }
 }

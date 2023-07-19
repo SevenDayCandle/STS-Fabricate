@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnAllyTriggerSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
@@ -26,11 +27,11 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
             return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
-        return super.getSubText();
+        return super.getSubText(perspective);
     }
 
     @Override

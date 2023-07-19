@@ -80,7 +80,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
     }
 
@@ -91,10 +91,10 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
-                (isChildEffectUsingParent() ? childEffect.getText(addPeriod) :
-                        (TEXT.cond_xPerY(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), getActionPast())) + PCLCoreStrings.period(addPeriod))
+                (isChildEffectUsingParent() ? childEffect.getText(perspective, addPeriod) :
+                        (TEXT.cond_xPerY(capital(childEffect.getText(perspective, false), addPeriod), EUIRM.strings.nounVerb(getSubText(perspective), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
     }
 

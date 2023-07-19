@@ -30,7 +30,7 @@ public class PMove_DisableRelic extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.act_disable(TEXT.subjects_this);
     }
 

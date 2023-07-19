@@ -45,8 +45,8 @@ public class PMove_StealGold extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetString());
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetStringPerspective(perspective));
     }
 
     @Override

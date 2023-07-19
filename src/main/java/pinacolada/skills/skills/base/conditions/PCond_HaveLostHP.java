@@ -43,9 +43,9 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title));
+            return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title), perspective);
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);

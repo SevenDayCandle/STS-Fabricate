@@ -16,6 +16,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_CombatEnd;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -39,36 +40,40 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         updateUsesAmount();
     }
 
-    public static PTrigger combatEnd(PSkill<?>... effects) {
+    public static PTrigger_CombatEnd combatEnd(PSkill<?>... effects) {
         return chain(new PTrigger_CombatEnd(), effects);
     }
 
-    public static PTrigger interactAny(PSkill<?>... effects) {
-        return chain(new PTrigger_Interactable(), effects).setAmount(-1);
+    public static PTrigger_Interactable interactAny(PSkill<?>... effects) {
+        return (PTrigger_Interactable) chain(new PTrigger_Interactable(), effects).setAmount(-1);
     }
 
-    public static PTrigger interactable(PSkill<?>... effects) {
+    public static PTrigger_Interactable interactable(PSkill<?>... effects) {
         return chain(new PTrigger_Interactable(), effects);
     }
 
-    public static PTrigger interactable(int amount, PSkill<?>... effects) {
+    public static PTrigger_Interactable interactable(int amount, PSkill<?>... effects) {
         return chain(new PTrigger_Interactable(amount), effects);
     }
 
-    public static PTrigger interactablePerCombat(int amount, PSkill<?>... effects) {
-        return chain((PTrigger) new PTrigger_Interactable(amount).edit(f -> f.setNot(true)), effects);
+    public static PTrigger_Interactable interactablePerCombat(int amount, PSkill<?>... effects) {
+        return chain((PTrigger_Interactable) new PTrigger_Interactable(amount).edit(f -> f.setNot(true)), effects);
     }
 
-    public static PTrigger when(PSkill<?>... effects) {
+    public static PTrigger_Passive passive(PSkill<?>... effects) {
+        return chain(new PTrigger_Passive(), effects);
+    }
+
+    public static PTrigger_When when(PSkill<?>... effects) {
         return chain(new PTrigger_When(), effects);
     }
 
-    public static PTrigger when(int perTurn, PSkill<?>... effects) {
-        return chain(new PTrigger_When().setAmount(perTurn), effects);
+    public static PTrigger_When when(int perTurn, PSkill<?>... effects) {
+        return (PTrigger_When) chain(new PTrigger_When().setAmount(perTurn), effects);
     }
 
-    public static PTrigger whenPerCombat(int perTurn, PSkill<?>... effects) {
-        return chain((PTrigger) new PTrigger_When().setAmount(perTurn).edit(f -> f.setNot(true)), effects);
+    public static PTrigger_When whenPerCombat(int perTurn, PSkill<?>... effects) {
+        return chain((PTrigger_When) new PTrigger_When().setAmount(perTurn).edit(f -> f.setNot(true)), effects);
     }
 
     public PTrigger chain(PSkill<?>... effects) {
@@ -101,9 +106,9 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        String subText = getCapitalSubText(addPeriod);
-        String childText = (childEffect != null ? childEffect.getText(addPeriod) : "");
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String subText = getCapitalSubText(perspective, addPeriod);
+        String childText = (childEffect != null ? childEffect.getText(perspective, addPeriod) : "");
         return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + StringUtils.capitalize(childText);
     }
 
@@ -244,7 +249,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (amount > 0) {
             return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
         }

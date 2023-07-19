@@ -42,7 +42,7 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         // TODO proper grammar formattting for "Do X Y times" format
         String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard);

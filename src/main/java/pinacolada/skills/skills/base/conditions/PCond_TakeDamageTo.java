@@ -42,7 +42,7 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return fields.not ? TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title) : TEXT.act_takeDamage(getAmountRawString());
     }
 

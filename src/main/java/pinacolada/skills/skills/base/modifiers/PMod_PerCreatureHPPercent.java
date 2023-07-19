@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -36,11 +37,11 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return sumTargets(info, t -> MathUtils.ceil(t.currentHealth * 100f / t.maxHealth));
+        return sumTargets(info, t -> MathUtils.ceil((t.currentHealth + TempHPField.tempHp.get(t)) * 100f / t.maxHealth));
     }
 
     @Override
-    public String getSubText() {
-        return getTargetOnString(getSubSampleText());
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetOnStringPerspective(perspective, getSubSampleText());
     }
 }

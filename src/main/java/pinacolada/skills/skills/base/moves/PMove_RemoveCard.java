@@ -66,7 +66,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (useParent) {
             return TEXT.act_removeFrom(TEXT.subjects_themX, TEXT.cpile_deck);
         }

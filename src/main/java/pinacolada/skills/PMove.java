@@ -152,6 +152,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_DealDamage(amount, attackEffect);
     }
 
+    public static PMove_DealDamage dealDamage(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target) {
+        return new PMove_DealDamage(amount, attackEffect, target);
+    }
+
     public static PMove_DealDamage dealDamageToAll(int amount) {
         return dealDamageToAll(amount, AbstractGameAction.AttackEffect.NONE);
     }
@@ -410,6 +414,14 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_ModifyTag(amount, extra, tag);
     }
 
+    public static PMove_ObtainCard obtainCard(String... cardData) {
+        return (PMove_ObtainCard) new PMove_ObtainCard(1, cardData).edit(f -> f.setCardGroup(PCLCardGroupHelper.Hand));
+    }
+
+    public static PMove_ObtainCard obtainCard(int copies, String... cardData) {
+        return (PMove_ObtainCard) new PMove_ObtainCard(copies, cardData).edit(f -> f.setCardGroup(PCLCardGroupHelper.Hand));
+    }
+
     public static PMove_Play play(int copies, PCLCardTarget target, PCLCardGroupHelper... g) {
         return new PMove_Play(copies, target, g);
     }
@@ -494,6 +506,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
 
     public static PMove_Transform selfTransform(PCLCardData cardData) {
         return new PMove_Transform(cardData.ID);
+    }
+
+    public static PMove_SpreadPower spreadPower(PCLCardTarget target, PCLPowerHelper... helpers) {
+        return new PMove_SpreadPower(target, helpers);
     }
 
     public static PMove_StabilizePower stabilize(PCLCardTarget target, PCLPowerHelper... helpers) {

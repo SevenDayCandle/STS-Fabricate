@@ -47,7 +47,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerString());
         switch (target) {
             case RandomEnemy:
@@ -55,13 +55,13 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
             case AllEnemy:
             case All:
             case Team:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature()) {
-                    return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                    return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
                 }
             default:
                 return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)

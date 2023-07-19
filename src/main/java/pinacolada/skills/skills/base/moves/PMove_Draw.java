@@ -38,7 +38,7 @@ public class PMove_Draw extends PCallbackMove<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
     }
 

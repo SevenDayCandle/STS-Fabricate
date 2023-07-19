@@ -59,7 +59,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(getDelegateText());
         }

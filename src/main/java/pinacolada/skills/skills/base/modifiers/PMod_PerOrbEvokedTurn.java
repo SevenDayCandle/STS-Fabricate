@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
@@ -36,7 +37,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getConditionText(String childText) {
+    public String getConditionText(PCLCardTarget perspective, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
                     fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
@@ -64,7 +65,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return PGR.core.tooltips.orb.title;
     }
 }

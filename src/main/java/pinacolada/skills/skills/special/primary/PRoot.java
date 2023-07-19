@@ -5,6 +5,7 @@ import extendedui.EUIRM;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -37,11 +38,11 @@ public class PRoot extends PPrimary<PField_Empty> {
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
         if (source instanceof AbstractRelic) {
-            return getCapitalSubText(addPeriod) + (childEffect != null ? COLON_SEPARATOR + StringUtils.capitalize(childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
+            return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? COLON_SEPARATOR + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
-        return childEffect != null ? childEffect.getText(addPeriod) : "";
+        return childEffect != null ? childEffect.getText(perspective, addPeriod) : "";
     }
 
     @Override
@@ -57,7 +58,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
     }
 

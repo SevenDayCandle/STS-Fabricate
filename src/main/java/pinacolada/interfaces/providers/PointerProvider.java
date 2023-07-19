@@ -13,6 +13,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
@@ -187,7 +188,7 @@ public interface PointerProvider {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
-                            sb.append(makeExportString(move.getCapitalSubText(capital)));
+                            sb.append(makeExportString(move.getCapitalSubText(PCLCardTarget.Self, capital)));
                         }
                         i += 3;
                     }
@@ -269,7 +270,7 @@ public interface PointerProvider {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
-                            sb.append(makePowerString(move.getCapitalSubText(capital)));
+                            sb.append(makePowerString(move.getCapitalSubText(PCLCardTarget.Self, capital)));
                         }
                         i += 3;
                     }

@@ -96,7 +96,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
         return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }

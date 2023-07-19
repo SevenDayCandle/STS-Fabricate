@@ -42,7 +42,7 @@ public class PMod_PerCreatureAttacking extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
     }
 }

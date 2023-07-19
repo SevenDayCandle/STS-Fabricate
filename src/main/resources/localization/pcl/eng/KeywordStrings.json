@@ -444,7 +444,7 @@
 		"NAME": "Soulbound"
 	},
 	"Spread":	{
-		"DESCRIPTION": "Spread a target's power to ALL other enemies.",
+		"DESCRIPTION": "Spread a target's power to its allies.",
 		"NAME": "Spread",
 		"PRESENT": "Spreads"
 	},

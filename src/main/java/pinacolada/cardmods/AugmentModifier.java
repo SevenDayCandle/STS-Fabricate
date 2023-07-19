@@ -14,6 +14,7 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -72,7 +73,7 @@ public class AugmentModifier extends AbstractCardModifier {
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return augment.skill instanceof PTrait ? rawDescription : rawDescription + EUIUtils.SPLIT_LINE + augment.skill.getText(true);
+        return augment.skill instanceof PTrait ? rawDescription : rawDescription + EUIUtils.SPLIT_LINE + augment.skill.getText(PCLCardTarget.Self, true);
     }
 
     @Override

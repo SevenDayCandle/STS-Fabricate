@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -55,8 +56,8 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return EUIUtils.format(getSubText(), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return EUIUtils.format(getSubText(perspective), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     // Assume that special card skill powers are always beneficial to the player (i.e. they are debuffs on enemies and buffs on you/allies)
@@ -76,7 +77,7 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return description;
     }
 }

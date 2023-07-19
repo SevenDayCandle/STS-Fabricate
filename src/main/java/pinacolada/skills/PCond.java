@@ -214,6 +214,18 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_IsAttacking(target);
     }
 
+    public static PCond_IsBuffing isBuffing(PCLCardTarget target) {
+        return new PCond_IsBuffing(target);
+    }
+
+    public static PCond_IsDebuffing isDebuffing(PCLCardTarget target) {
+        return new PCond_IsDebuffing(target);
+    }
+
+    public static PCond_IsDefending isDefending(PCLCardTarget target) {
+        return new PCond_IsDefending(target);
+    }
+
     public static PCond_OnAllyTrigger onAllyTrigger() {
         return new PCond_OnAllyTrigger();
     }
@@ -282,6 +294,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_OnWithdraw();
     }
 
+    public static PCond_PayBlock payBlock(int amount) {
+        return new PCond_PayBlock(amount);
+    }
+
     public static PCond_PayEnergy payEnergy(int amount) {
         return new PCond_PayEnergy(amount);
     }
@@ -342,6 +358,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_UnblockedDamage();
     }
 
+    public static PCond_UnblockedDamage unblockedDamage(PCLCardTarget target) {
+        return new PCond_UnblockedDamage(target);
+    }
+
     @Override
     public boolean canPlay(PCLUseInfo info) {
         return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info);
@@ -374,14 +394,15 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
         if (childEffect != null) {
             if (childEffect instanceof PCond && !isWhenClause()) {
-                return PCLCoreStrings.joinWithAnd(getConditionRawString(addPeriod), childEffect.getText(false)) + PCLCoreStrings.period(addPeriod);
+                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod);
             }
-            return getConditionRawString(addPeriod) + COMMA_SEPARATOR + childEffect.getText(false) + PCLCoreStrings.period(addPeriod);
+            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
         }
-        return getConditionRawString(addPeriod) + PCLCoreStrings.period(addPeriod);
+        return condString + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

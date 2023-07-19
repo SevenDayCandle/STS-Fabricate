@@ -7,6 +7,7 @@ import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredString;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkill;
 
 import static pinacolada.skills.PSkill.CAPITAL_CHAR;
@@ -36,7 +37,7 @@ public class ConditionToken extends PCLTextToken {
             boolean capital = parser.nextCharacter(1) == CAPITAL_CHAR;
 
             if (move != null) {
-                String subText = move.getCapitalSubText(capital);
+                String subText = move.getCapitalSubText(PCLCardTarget.Self, capital);
                 if (subText != null) {
                     internalParser.initialize(parser.card, subText);
                     for (PCLTextToken token : internalParser.getTokens()) {

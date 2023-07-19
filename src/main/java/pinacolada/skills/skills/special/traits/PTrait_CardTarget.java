@@ -43,7 +43,7 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return hasParentType(PTrigger.class) ? getSubDescText() :
                 fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
     }

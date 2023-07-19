@@ -38,8 +38,8 @@ public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
     }
 
     @Override
-    public String getSubText() {
-        return getTargetHasString(EUIRM.strings.numNoun(getAmountRawString(), fields.getFullRelicString()));
+    public String getSubText(PCLCardTarget perspective) {
+        return getTargetHasStringPerspective(perspective, EUIRM.strings.numNoun(getAmountRawString(), fields.getFullRelicString()));
 
     }
 }

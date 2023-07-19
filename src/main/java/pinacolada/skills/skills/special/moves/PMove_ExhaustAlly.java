@@ -42,8 +42,8 @@ public class PMove_ExhaustAlly extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_exhaust(getTargetString());
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_exhaust(getTargetStringPerspective(perspective));
     }
 
     @Override

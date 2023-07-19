@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnStanceChangedSubscriber;
 import pinacolada.resources.PGR;
@@ -45,7 +46,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String base = fields.getAnyStanceString();
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_enterStance(base));

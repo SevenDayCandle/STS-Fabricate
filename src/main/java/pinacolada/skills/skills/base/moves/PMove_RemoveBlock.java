@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.common.RemoveAllBlockAction;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -39,13 +40,15 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetString());
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetStringPerspective(perspective));
     }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.add(new RemoveAllBlockAction(info.target, info.source));
+        for (AbstractCreature c : getTargetList(info)) {
+            order.add(new RemoveAllBlockAction(c, info.source));
+        }
         super.use(info, order);
     }
 }

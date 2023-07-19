@@ -1,6 +1,7 @@
 package pinacolada.skills.skills;
 
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -31,8 +32,8 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? (": " + childEffect.getText(addPeriod)) : "");
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? (": " + childEffect.getText(perspective, addPeriod)) : "");
     }
 
     // Should not activate effects when played normally in battle
@@ -45,7 +46,7 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return TEXT.cond_whenSingle(getDelegateText());
     }
 

@@ -35,7 +35,7 @@ public class PMove_AddLevel extends PMove<PField_Affinity> {
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String base = TEXT.act_giveTargetAmount(fields.getAffinityChoiceString(), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), plural(PGR.core.tooltips.level));
         return fields.random ? TEXT.subjects_randomly(base) : base;
     }

@@ -27,6 +27,10 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
         super(DATA, PCLCardTarget.None, 0);
     }
 
+    public PCond_UnblockedDamage(PCLCardTarget target) {
+        super(DATA, target, 0);
+    }
+
     public PCond_UnblockedDamage(PSkillSaveData content) {
         super(DATA, content);
     }
@@ -37,10 +41,10 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         String baseString = TEXT.subjects_unblocked(TEXT.subjects_damage);
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString));
+            return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString), perspective);
         }
 
         switch (target) {

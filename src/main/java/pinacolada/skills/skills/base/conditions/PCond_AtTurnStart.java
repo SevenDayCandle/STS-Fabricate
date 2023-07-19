@@ -42,7 +42,7 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
     }
 
     @Override
-    public String getSubText() {
+    public String getSubText(PCLCardTarget perspective) {
         return isWhenClause() ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 

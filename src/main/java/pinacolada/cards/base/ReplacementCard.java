@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.skills.skills.PCustomCond;
@@ -101,7 +102,7 @@ public class ReplacementCard extends PCLDynamicCard {
         }
 
         @Override
-        public String getSubText() {
+        public String getSubText(PCLCardTarget perspective) {
             return card.original.rawDescription;
         }
 
