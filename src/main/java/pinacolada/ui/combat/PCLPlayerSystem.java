@@ -137,7 +137,7 @@ public class PCLPlayerSystem extends EUIBase {
 
     public int modifyOrbOutput(float initial, AbstractCreature target, AbstractOrb orb) {
         if (GameUtilities.getPowerAmount(target, com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID) > 0) {
-            initial *= PCLLockOnPower.getOrbMultiplier();
+            initial *= PCLLockOnPower.getOrbMultiplier(target.isPlayer);
         }
 
         for (PCLPlayerMeter meter : getMeters()) {

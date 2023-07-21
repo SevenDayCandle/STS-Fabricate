@@ -445,38 +445,6 @@ public class GameUtilities {
         return cards;
     }
 
-    public static AbstractCard getAnyColorRewardCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
-        return getAnyColorRewardCard(rarity, type, false, false);
-    }
-
-    public static AbstractCard getAnyColorRewardCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowOtherRarities, boolean allowHealing) {
-        ArrayList<AbstractCard> available = getAnyColorRewardCards(rarity, type, allowHealing);
-        if (!available.isEmpty()) {
-            return getRandomElement(available);
-        }
-        else if (allowOtherRarities && rarity != null) {
-            EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
-            int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
-            return getAnyColorRewardCard(nextRarityIndex > 1 ? PCLDungeon.poolOrdering[nextRarityIndex] : null, type, allowOtherRarities, allowHealing);
-        }
-        else {
-            return null;
-        }
-    }
-
-    public static ArrayList<AbstractCard> getAnyColorRewardCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing) {
-        ArrayList<AbstractCard> available = new ArrayList<>();
-        for (AbstractCard c : EUIGameUtils.getEveryColorCardForPoolDisplay()) {
-            if ((allowHealing || GameUtilities.isObtainableInCombat(c)) &&
-                    (rarity == null || c.rarity == rarity) &&
-                    ((type == null || c.type == type))) {
-                available.add(c);
-            }
-        }
-
-        return available;
-    }
-
     public static int getAscensionLevel() {
         return AbstractDungeon.isAscensionMode ? Math.max(0, Math.min(20, AbstractDungeon.ascensionLevel)) : 0;
     }
@@ -1702,6 +1670,7 @@ public class GameUtilities {
         return PlatedArmorPower.POWER_ID.equals(p.ID) || MetallicizePower.POWER_ID.equals(p.ID);
     }
 
+    // TODO use this in summon targeting checks
     public static boolean isPriorityTarget(AbstractCreature c) {
         return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }

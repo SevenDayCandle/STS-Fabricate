@@ -54,8 +54,9 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
 
         PCLCard returnedCard = this.ally.card;
         // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
+        // Also, do not clear powers in this withdraw call, in case we want to retain powers on the card
         if (returnedCard != null) {
-            CombatManager.summons.withdraw(ally).addCallback(this::initializeAlly);
+            CombatManager.summons.withdraw(ally).setClearPowers(false).addCallback(this::initializeAlly);
         }
         else {
             initializeAlly();

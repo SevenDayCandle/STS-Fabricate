@@ -24,6 +24,8 @@ import pinacolada.skills.Skills;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
+
 import static pinacolada.utilities.GameUtilities.scale;
 
 public abstract class PCLCardCreature extends PCLSkillCreature {
@@ -119,7 +121,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         return card != null;
     }
 
-    public void initializeForCard(PCLCard card, boolean clearPowers, boolean delayForTurn) {
+    public void initializeForCard(PCLCard card, boolean retainPowers, boolean delayForTurn) {
         card.owner = this;
         this.card = card;
         this.preview = new EUICardPreview(card, false);
@@ -133,21 +135,25 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         this.unhover();
         card.stopFlash();
 
-        if (clearPowers) {
+        if (retainPowers) {
+            ArrayList<AbstractPower> newPowers = new ArrayList<>();
+            for (AbstractPower p : powers) {
+                if (p instanceof PSkillPower || p instanceof PSpecialCardPower) {
+                    p.onRemove();
+                }
+                else {
+                    newPowers.add(p);
+                }
+            }
+            this.powers = newPowers;
+        }
+        else {
             for (AbstractPower po : powers) {
                 po.onRemove();
             }
             this.powers.clear();
             this.currentBlock = 0;
             TempHPField.tempHp.set(this, 0);
-        }
-        else {
-            for (AbstractPower p : powers) {
-                if (p instanceof PSkillPower || p instanceof PSpecialCardPower) {
-                    p.onRemove();
-                }
-            }
-            this.powers.removeIf(p -> p instanceof PSkillPower || p instanceof PSpecialCardPower);
         }
 
         for (PSkill<?> s : card.getFullEffects()) {

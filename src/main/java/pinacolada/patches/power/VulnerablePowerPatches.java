@@ -14,12 +14,14 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 // Copied and modified from STS-AnimatorMod
 public class VulnerablePowerPatches {
+    public static int BASE_POWER = 50;
+
     public static float estimateDamage(AbstractPower power) {
         if (GameUtilities.inGame()) {
             float estimate = power.atDamageReceive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
             return estimate - PCLPower.DUMMY_MULT;
         }
-        return PCLPower.DUMMY_MULT;
+        return BASE_POWER;
     }
 
     @SpirePatch(clz = VulnerablePower.class, method = "updateDescription")

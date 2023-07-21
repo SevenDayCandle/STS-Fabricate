@@ -5,6 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
@@ -12,12 +13,14 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class WeakPowerPatches {
-    public static float estimateDamage(WeakPower power) {
+    public static int BASE_POWER = 25;
+
+    public static float estimateDamage(AbstractPower power) {
         if (GameUtilities.inGame()) {
             float estimate = power.atDamageGive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
             return PCLPower.DUMMY_MULT - estimate;
         }
-        return PCLPower.DUMMY_MULT;
+        return BASE_POWER;
     }
 
     @SpirePatch(clz = WeakPower.class, method = "updateDescription")

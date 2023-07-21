@@ -12,12 +12,14 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class FrailPowerPatches {
+    public static int BASE_POWER = 25;
+
     public static float estimateDamage(AbstractPower power) {
         if (GameUtilities.inGame()) {
             float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
             return PCLPower.DUMMY_MULT - estimate;
         }
-        return PCLPower.DUMMY_MULT;
+        return BASE_POWER;
     }
 
     @SpirePatch(clz = FrailPower.class, method = "updateDescription")

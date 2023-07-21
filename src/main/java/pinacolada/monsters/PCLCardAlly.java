@@ -67,7 +67,10 @@ public class PCLCardAlly extends PCLCardCreature {
 
     @Override
     public void die(boolean triggerRelics) {
-        PCLCard releasedCard = releaseCard();
+        for (AbstractPower po : powers) {
+            po.onDeath();
+        }
+        PCLCard releasedCard = releaseCard(true);
         if (releasedCard != null) {
             PCLEffects.Queue.callback(() -> {
                 PCLSFX.play(PCLSFX.CARD_EXHAUST, 0.2F);
@@ -75,11 +78,6 @@ public class PCLCardAlly extends PCLCardCreature {
                     AbstractDungeon.effectsQueue.add(new ExhaustBlurEffect(this.hb.cX, this.hb.cY));
                 }
             });
-
-            for (AbstractPower po : powers) {
-                po.onDeath();
-            }
-            this.powers.clear();
 
             if (triggerRelics) {
                 for (AbstractRelic relic : AbstractDungeon.player.relics) {
@@ -101,11 +99,16 @@ public class PCLCardAlly extends PCLCardCreature {
         this.currentHealth = 1;
     }
 
-    public PCLCard releaseCard() {
+    public PCLCard releaseCard(boolean clearPowers) {
         PCLCard releasedCard = this.card;
         if (releasedCard != null) {
+            if (clearPowers) {
+                for (AbstractPower po : powers) {
+                    po.onRemove();
+                }
+                this.powers.clear();
+            }
             releasedCard.owner = null;
-            this.powers.clear();
             this.name = creatureData.strings.NAME;
             this.hideHealthBar();
             this.animation = emptyAnimation;
@@ -181,8 +184,8 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
-    public void initializeForCard(PCLCard card, boolean clearPowers, boolean delayForTurn) {
-        super.initializeForCard(card, clearPowers, delayForTurn);
+    public void initializeForCard(PCLCard card, boolean retainPowers, boolean delayForTurn) {
+        super.initializeForCard(card, retainPowers, delayForTurn);
 
         FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
         PCLAllyAnimation anim = null;

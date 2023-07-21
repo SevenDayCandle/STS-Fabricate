@@ -11,7 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.text.EUISmartText;
-import extendedui.ui.GridCardSelectScreenHelper;
+import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -25,9 +25,7 @@ import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class SelectFromPile extends CardFilterAction {
-    protected final CardGroup fakeHandGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
     protected final CardGroup[] groups;
-
     protected PCLCardSelection origin = PCLCardSelection.Manual;
     protected PCLCardSelection destination = PCLCardSelection.Manual;
     protected PCLCardSelection maxChoicesOrigin = PCLCardSelection.Manual;
@@ -136,6 +134,7 @@ public class SelectFromPile extends CardFilterAction {
         GridCardSelectScreenHelper.setCondition(condition);
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
+        AbstractDungeon.player.hand.stopGlowing();
 
         for (CardGroup group : groups) {
             CardGroup temp = new CardGroup(group.type);
@@ -145,36 +144,23 @@ public class SelectFromPile extends CardFilterAction {
                 }
             }
 
-            if (temp.type == CardGroup.CardGroupType.HAND && origin == null && maxChoicesOrigin == null) {
-                fakeHandGroup.group.addAll(temp.group);
-
-                for (AbstractCard c : temp.group) {
-                    player.hand.removeCard(c);
-                    c.stopGlowing();
+            if (temp.type == CardGroup.CardGroupType.DRAW_PILE && origin == PCLCardSelection.Manual && maxChoicesOrigin == PCLCardSelection.Manual) {
+                if (GameUtilities.hasRelicEffect(FrozenEye.ID)) {
+                    Collections.reverse(temp.group);
                 }
-
-                GridCardSelectScreenHelper.addGroup(fakeHandGroup);
-            }
-            else {
-                if (temp.type == CardGroup.CardGroupType.DRAW_PILE && origin == null && maxChoicesOrigin == null) {
-                    if (GameUtilities.hasRelicEffect(FrozenEye.ID)) {
-                        Collections.reverse(temp.group);
-                    }
-                    else {
-                        temp.sortAlphabetically(true);
-                        temp.sortByRarityPlusStatusCardType(true);
-                    }
+                else {
+                    temp.sortAlphabetically(true);
+                    temp.sortByRarityPlusStatusCardType(true);
                 }
-
-                GridCardSelectScreenHelper.addGroup(temp);
             }
+
+            GridCardSelectScreenHelper.addGroup(temp);
         }
 
         CardGroup mergedGroup = GridCardSelectScreenHelper.getCardGroup();
         if (mergedGroup.isEmpty()) {
-            player.hand.group.addAll(fakeHandGroup.group);
             GridCardSelectScreenHelper.clear(true);
-            complete(new ArrayList<>());
+            complete(selectedCards);
             return;
         }
 
@@ -218,7 +204,6 @@ public class SelectFromPile extends CardFilterAction {
             selectedCards.addAll(AbstractDungeon.gridSelectScreen.selectedCards);
             selected = true;
 
-            player.hand.group.addAll(fakeHandGroup.group);
             AbstractDungeon.gridSelectScreen.selectedCards.clear();
             GridCardSelectScreenHelper.clear(true);
         }
@@ -232,7 +217,6 @@ public class SelectFromPile extends CardFilterAction {
 
         if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
         {
-            player.hand.group.addAll(fakeHandGroup.group);
             complete(new ArrayList<>());
         }
     }

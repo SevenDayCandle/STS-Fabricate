@@ -64,7 +64,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
+import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.relics.PCLRelic;
@@ -325,8 +325,18 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return onAttackEffect;
     }
 
+    protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx, Color color) {
+        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx, color);
+        return onAttackEffect;
+    }
+
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx) {
         onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
+        return onAttackEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx, Color color) {
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx, color);
         return onAttackEffect;
     }
 
@@ -1048,12 +1058,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public void upgrade() {
-        int prevTimesUpgraded = timesUpgraded;
-        if (tryUpgrade()) {
-            changeForm(auxiliaryData.form, prevTimesUpgraded, timesUpgraded);
-
+        if (canUpgrade()) {
+            changeForm(auxiliaryData.form, timesUpgraded, timesUpgraded + 1);
             onUpgrade();
-
             affinities.applyUpgrades(cardData.affinities, auxiliaryData.form);
         }
     }
@@ -1092,7 +1099,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         ++this.timesUpgraded;
         this.upgraded = true;
         this.initializeName();
-        this.initializeTitle();
     }
 
     // Custom implementation to avoid unnecessary text re-initializations
@@ -1211,7 +1217,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         // For selecting separate forms on the upgrade screen
         if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID && AbstractDungeon.gridSelectScreen.forUpgrade && hb.hovered && InputHelper.justClickedLeft) {
-            GridCardSelectScreenMultiformPatches.selectPCLCardUpgrade(this);
+            GridCardSelectScreenPatches.selectPCLCardUpgrade(this);
         }
     }
 
@@ -1456,6 +1462,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public void initializeName() {
         name = getUpgradeName();
+        initializeTitle();
     }
 
     public boolean isAoE() {
@@ -1763,7 +1770,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                         float oldDamage = tempDamage;
                         // Lock-on calculations are hardcoded in AbstractOrb so we are falling back on PCLLockOn's multiplier for now
                         if (LockOnPower.POWER_ID.equals(p.ID)) {
-                            tempDamage *= PCLLockOnPower.getOrbMultiplier();
+                            tempDamage *= PCLLockOnPower.getOrbMultiplier(enemy.isPlayer);
                         }
                         else if (p instanceof PCLPower) {
                             for (int i = 0; i < applyCount; i++) {
@@ -2297,6 +2304,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected int setForm(Integer form, int timesUpgraded) {
+        this.timesUpgraded = timesUpgraded;
+        this.upgraded = this.timesUpgraded > 0;
+
         int oldForm = this.auxiliaryData.form;
         this.auxiliaryData.form = (form == null) ? 0 : MathUtils.clamp(form, 0, this.getMaxForms() - 1);
         cardData.invokeTags(this, this.auxiliaryData.form);
@@ -2568,20 +2578,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, Color color, float scale) {
         if (texture != null) {
             PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), color, transparency, scale);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    protected boolean tryUpgrade() {
-        if (this.canUpgrade()) {
-            this.timesUpgraded += 1;
-            this.upgraded = true;
-
-            initializeTitle();
-            initializeDescription();
 
             return true;
         }

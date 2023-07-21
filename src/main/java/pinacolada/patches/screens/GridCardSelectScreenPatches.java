@@ -19,18 +19,27 @@ import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import javassist.CannotCompileException;
-import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.ui.combat.GridCardSelectScreenHelper;
+import javassist.CtBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GridCardSelectScreenMultiformPatches {
+public class GridCardSelectScreenPatches {
+
     protected static final float ICON_SIZE = 64f * Settings.scale;
+    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
+            .setOnClick(GridCardSelectScreenPatches::addIndex);
+    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
+            .setOnClick(GridCardSelectScreenPatches::subtractIndex);
     protected static final int DEFAULT_MAX = 3;
+    protected static int maxIndex = DEFAULT_MAX;
     protected static final float[] Y_POSITIONS_2 = new float[]{
             Settings.HEIGHT * 0.75F - 50.0F * Settings.scale,
             Settings.HEIGHT * 0.25F + 50.0F * Settings.scale
@@ -44,10 +53,7 @@ public class GridCardSelectScreenMultiformPatches {
     protected static boolean waitingForBranchUpgradeSelection = false;
     protected static int branchUpgradeForm = 0;
     protected static int minIndex = 0;
-    protected static int maxIndex = DEFAULT_MAX;
-    public static PCLAugment augment;    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
-            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
-            .setOnClick(GridCardSelectScreenMultiformPatches::subtractIndex);
+    public static PCLAugment augment;
 
     protected static void addIndex() {
         if (maxIndex < cardList.size() - 1) {
@@ -55,9 +61,7 @@ public class GridCardSelectScreenMultiformPatches {
             maxIndex += 1;
             refreshButtons();
         }
-    }    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
-            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
-            .setOnClick(GridCardSelectScreenMultiformPatches::addIndex);
+    }
 
     /**
      * Number of possible forms with branch factor b and upgrading from upgrade level u can be expressed as geometric sum with a = 1
@@ -118,7 +122,40 @@ public class GridCardSelectScreenMultiformPatches {
         }
     }
 
-    // TODO add patch for conditionals
+    @SpirePatch(clz = GridCardSelectScreen.class, method = "calculateScrollBounds")
+    public static class GridCardSelectScreen_CalculateScrollBounds {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix(GridCardSelectScreen __instance) {
+            if (GridCardSelectScreenHelper.calculateScrollBounds(__instance)) {
+                return SpireReturn.Return(null);
+            }
+            else {
+                return SpireReturn.Continue();
+            }
+        }
+    }
+
+    @SpirePatch(clz = GridCardSelectScreen.class, method = "callOnOpen")
+    public static class GridCardSelectScreen_CallOnOpen {
+        @SpirePostfixPatch
+        public static void postfix(GridCardSelectScreen __instance) {
+            GridCardSelectScreenHelper.open(__instance);
+        }
+    }
+
+    @SpirePatch(clz = GridCardSelectScreen.class, method = "updateCardPositionsAndHoverLogic")
+    public static class GridCardSelectScreen_UpdateCardPositionsAndHoverLogic {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix(GridCardSelectScreen __instance) {
+            if (GridCardSelectScreenHelper.updateCardPositionAndHover(__instance)) {
+                return SpireReturn.Return(null);
+            }
+            else {
+                return SpireReturn.Continue();
+            }
+        }
+    }
+
     @SpirePatch(
             clz = GridCardSelectScreen.class,
             method = "update"
@@ -128,10 +165,10 @@ public class GridCardSelectScreenMultiformPatches {
         }
 
         @SpireInsertPatch(
-                locator = Locator1.class
+                locator = Locator.class
         )
         public static void insert(GridCardSelectScreen __instance) {
-            AbstractCard hoveredCard = GridCardSelectScreenMultiformPatches.getHoveredCard();
+            AbstractCard hoveredCard = getHoveredCard();
             if (hoveredCard instanceof PCLCard) {
                 ((PCLCard) hoveredCard).changeForm(branchUpgradeForm, hoveredCard.timesUpgraded);
                 branchUpgradeForm = 0;
@@ -140,8 +177,29 @@ public class GridCardSelectScreenMultiformPatches {
 
         }
 
-        private static class Locator1 extends SpireInsertLocator {
-            private Locator1() {
+        @SpireInsertPatch(
+                locator = Locator2.class
+        )
+        public static void insert2(GridCardSelectScreen __instance) {
+            if (__instance.anyNumber) {
+                __instance.confirmButton.isDisabled = !GridCardSelectScreenHelper.isConditionMet();
+            }
+        }
+
+        @SpireInsertPatch(
+                locator = Locator3.class
+        )
+        public static void insert3(GridCardSelectScreen __instance) {
+            GridCardSelectScreenHelper.invokeOnClick(__instance);
+        }
+
+        @SpirePostfixPatch
+        public static void postfix(GridCardSelectScreen __instance) {
+            GridCardSelectScreenHelper.updateDynamicString();
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            private Locator() {
             }
 
             public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
@@ -149,6 +207,42 @@ public class GridCardSelectScreenMultiformPatches {
                 int[] found = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
                 return new int[]{found[found.length - 1]};
             }
+        }
+
+        private static class Locator2 extends SpireInsertLocator {
+            private Locator2() {
+            }
+
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(GridSelectConfirmButton.class, "update");
+                int[] found = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{found[found.length - 1]};
+            }
+        }
+
+        private static class Locator3 extends SpireInsertLocator {
+            private Locator3() {
+            }
+
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(ArrayList.class, "contains");
+                int[] found = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{found[0] - 1};
+            }
+        }
+    }
+
+    @SpirePatch(
+            clz = GridCardSelectScreen.class,
+            method = "render"
+    )
+    public static class GridRender {
+        public GridRender() {
+        }
+
+        @SpirePostfixPatch
+        public static void postfix(GridCardSelectScreen __instance, SpriteBatch sb) {
+            GridCardSelectScreenHelper.renderDynamicString(sb);
         }
     }
 
@@ -252,7 +346,7 @@ public class GridCardSelectScreenMultiformPatches {
             return new ExprEditor() {
                 public void edit(MethodCall m) throws CannotCompileException {
                     if (m.getMethodName().equals("renderArrows")) {
-                        m.replace("$_ = $proceed($$);if (" + GridCardSelectScreenMultiformPatches.RenderBranchingUpgrade.class.getName() + ".render(this, sb).isPresent()) {return;}");
+                        m.replace("$_ = $proceed($$);if (" + RenderBranchingUpgrade.class.getName() + ".render(this, sb).isPresent()) {return;}");
                     }
 
                 }
@@ -260,7 +354,7 @@ public class GridCardSelectScreenMultiformPatches {
         }
 
         public static SpireReturn<Void> render(GridCardSelectScreen __instance, SpriteBatch sb) {
-            AbstractCard c = GridCardSelectScreenMultiformPatches.getHoveredCard();
+            AbstractCard c = getHoveredCard();
             if (__instance.forUpgrade && c != null && !cardList.isEmpty()) {
                 c.current_x = c.target_x = (float) Settings.WIDTH * 0.36F;
                 c.current_y = c.target_y = (float) Settings.HEIGHT / 2.0F;
@@ -342,11 +436,11 @@ public class GridCardSelectScreenMultiformPatches {
         }
 
         @SpireInsertPatch(
-                locator = GridCardSelectScreenMultiformPatches.GetBranchingUpgrade.Locator.class
+                locator = GetBranchingUpgrade.Locator.class
         )
         public static void insert(GridCardSelectScreen __instance) {
             cardList.clear();
-            AbstractCard c = GridCardSelectScreenMultiformPatches.getHoveredCard();
+            AbstractCard c = getHoveredCard();
             PCLCard base = EUIUtils.safeCast(c, PCLCard.class);
             if (base != null) {
                 if (augment != null) {
@@ -408,10 +502,4 @@ public class GridCardSelectScreenMultiformPatches {
             }
         }
     }
-
-
-
-
-
-
 }

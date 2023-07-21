@@ -62,6 +62,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected Random rng;
     protected String startingLoadout;
     protected transient AbstractPlayerData<?, ?> data;
+    protected transient ArrayList<AbstractCard> anyColorCards;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
@@ -122,8 +123,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     public void addRelic(String relicID, AbstractRelic.RelicTier tier) {
         if (!AbstractDungeon.player.hasRelic(relicID)) {
-            final ArrayList<String> pool = GameUtilities.getRelicPool(tier);
-            if (pool != null && pool.size() > 0 && !pool.contains(relicID)) {
+            ArrayList<String> pool = GameUtilities.getRelicPool(tier);
+            if (pool == null) {
+                pool = AbstractDungeon.shopRelicPool;
+            }
+            if (pool.size() > 0 && !pool.contains(relicID)) {
                 Random rng = AbstractDungeon.relicRng;
                 if (rng == null) {
                     rng = PGR.dungeon.getRNG();
@@ -166,7 +170,15 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 {
                     if (!bannedCards.contains(card.cardID)) {
                         if (GameUtilities.isColorlessCardColor(card.color)) {
-                            return !data.resources.containsColorless(card);
+                            if (data.resources.containsColorless(card)) {
+                                for (PCLLoadout loadout : data.loadouts.values()) {
+                                    if (loadout.isCardFromLoadout(card.cardID) && loadout.isLocked()) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                            return true;
                         }
                         else if (card.color != data.resources.cardColor || loadouts.isEmpty()) {
                             return false;
@@ -228,6 +240,42 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             EUIUtils.logInfo(this, "Starting Series: " + loadout.getName() + ", Preset: " + loadout.preset);
             EUIUtils.logInfo(this, "Loadout ID: " + startingLoadout + ", Banned Cards: " + bannedCards.size());
         }
+    }
+
+    public AbstractCard getAnyColorRewardCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
+        return getAnyColorRewardCard(rarity, type, false, false);
+    }
+
+    public AbstractCard getAnyColorRewardCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowOtherRarities, boolean allowHealing) {
+        ArrayList<AbstractCard> available = getAnyColorRewardCards(rarity, type, allowHealing);
+        if (!available.isEmpty()) {
+            return GameUtilities.getRandomElement(available);
+        }
+        else if (allowOtherRarities && rarity != null) {
+            EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
+            int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
+            return getAnyColorRewardCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, type, allowOtherRarities, allowHealing);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public ArrayList<AbstractCard> getAnyColorRewardCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing) {
+        if (anyColorCards == null) {
+            anyColorCards = new ArrayList<>();
+            for (AbstractCard c : EUIGameUtils.getEveryColorCardForPoolDisplay()) {
+                // Prevent replaced cards from appearing in rewards
+                if ((data == null ? PGR.core : data.resources).getReplacement(c.cardID) == null &&
+                        (allowHealing || GameUtilities.isObtainableInCombat(c)) &&
+                        (rarity == null || c.rarity == rarity) &&
+                        ((type == null || c.type == type))) {
+                    anyColorCards.add(c);
+                }
+            }
+        }
+
+        return anyColorCards;
     }
 
     public int getAugmentTotal() {
@@ -672,6 +720,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (pool != null) {
             pool.remove(relicID);
         }
+        else {
+            for (ArrayList<String> list : EUIGameUtils.getGameRelicPools()) {
+                list.remove(relicID);
+            }
+        }
     }
 
     public void reset() {
@@ -687,6 +740,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         startingLoadout = loadout.ID;
         loadoutIDs.clear();
         valueDivisor = 1;
+        anyColorCards = null;
 
         validate();
     }

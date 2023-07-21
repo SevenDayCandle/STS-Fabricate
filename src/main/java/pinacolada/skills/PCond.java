@@ -302,6 +302,14 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_PayEnergy(amount);
     }
 
+    public static PCond_PayPower payPower(int amount, PCLPowerHelper... h) {
+        return new PCond_PayPower(amount, h);
+    }
+
+    public static PCond_PayPower payPower(PCLCardTarget target, int amount, PCLPowerHelper... h) {
+        return new PCond_PayPower(target, amount, h);
+    }
+
     public static PCond_PileHas pileHas(int amount, PCLCardGroupHelper... h) {
         return new PCond_PileHas(amount, h);
     }

@@ -1,6 +1,8 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
@@ -19,10 +21,11 @@ import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PActiveCond;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
+
 @VisibleSkill
 public class PCond_PayPower extends PActiveCond<PField_Power> {
-    public static final PSkillData<PField_Power> DATA = register(PCond_PayPower.class, PField_Power.class)
-            .selfTarget();
+    public static final PSkillData<PField_Power> DATA = register(PCond_PayPower.class, PField_Power.class);
 
     public PCond_PayPower(PSkillSaveData content) {
         super(DATA, content);
@@ -33,18 +36,21 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     public PCond_PayPower(int amount, PCLPowerHelper... powers) {
-        super(DATA, PCLCardTarget.None, amount);
+        this(PCLCardTarget.None, amount, powers);
+    }
+
+    public PCond_PayPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+        super(DATA, target, amount);
         fields.setPower(powers);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        for (PCLPowerHelper power : fields.powers) {
-            if (GameUtilities.getPowerAmount(power.ID) < amount) {
-                return false;
-            }
-        }
-        return true;
+        return evaluateTargets(info, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)));
+    }
+
+    private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
+        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID));
     }
 
     @Override
@@ -54,15 +60,17 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return capital(TEXT.act_pay(getAmountRawString(), fields.powers.isEmpty()
-                ? plural(PGR.core.tooltips.debuff) :
-                fields.getPowerAndString()), true);
+        String joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerAndString();
+        return capital(target == PCLCardTarget.Self ? TEXT.act_pay(getAmountRawString(), joinedString) : TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)), true);
     }
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         AbstractCreature sourceCreature = getSourceCreature();
-        return order.callback(new SequentialAction(EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, sourceCreature, power, -amount))), () -> {
+        ArrayList<AbstractGameAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
+                EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, t, power, -amount))));
+
+        return order.callback(new SequentialAction(actions), () -> {
             if (conditionMetCache) {
                 onComplete.invoke(info);
             }

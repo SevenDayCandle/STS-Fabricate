@@ -164,24 +164,16 @@ public final class PCLActions {
         return add(new AddAffinityLevel(affinity, amount));
     }
 
-    public AddPowerEffectBonus addPowerEffectBonus(String powerID, CombatManager.Type effectType, int amount) {
-        return add(new AddPowerEffectBonus(powerID, effectType, amount));
-    }
-
-    public AddPowerEffectBonus addPowerEffectBonus(AbstractPower power, CombatManager.Type effectType, int amount) {
-        return add(new AddPowerEffectBonus(power, effectType, amount));
+    public AddPowerEffectBonus addPowerEffectBonus(String powerID, int amount, boolean forPlayer) {
+        return add(new AddPowerEffectBonus(powerID, amount, forPlayer));
     }
 
     public AddPowerEffectBonus addPowerEffectEnemyBonus(String powerID, int amount) {
-        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.Effect, amount));
-    }
-
-    public AddPowerEffectBonus addPowerEffectPassiveDamageBonus(String powerID, int amount) {
-        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.PassiveDamage, amount));
+        return addPowerEffectBonus(powerID, amount, false);
     }
 
     public AddPowerEffectBonus addPowerEffectPlayerBonus(String powerID, int amount) {
-        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.PlayerEffect, amount));
+        return addPowerEffectBonus(powerID, amount, true);
     }
 
     public ApplyOrReducePowerAction applyPower(AbstractPower power) {

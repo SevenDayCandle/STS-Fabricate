@@ -16,6 +16,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -194,7 +195,7 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetAnyColorCard {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardType type, AbstractCard.CardRarity rarity) {
-            return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, type, true, false));
+            return SpireReturn.Return(PGR.dungeon.getAnyColorRewardCard(rarity, type, true, false));
         }
     }
 
@@ -202,7 +203,7 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetAnyColorCard2 {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
-            return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, null, true, true));
+            return SpireReturn.Return(PGR.dungeon.getAnyColorRewardCard(rarity, null, true, true));
         }
     }
 }

@@ -42,7 +42,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (PCLPowerHelper power : fields.powers) {
-            order.addPowerEffectEnemyBonus(power.ID, amount);
+            order.addPowerEffectBonus(power.ID, amount, !power.isDebuff);
         }
         super.use(info, order);
     }

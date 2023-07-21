@@ -7,7 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.random.Random;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.Circlet;
+import com.megacrit.cardcrawl.relics.MarkOfPain;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -160,6 +164,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         }
     }
 
+    public String[] getAdditionalRelicIDs() {return null;}
+
     public PCLEffect getCharSelectScreenAnimation() {
         return null;
     }
@@ -298,6 +304,16 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     }
 
     public void updateRelicsForDungeon() {
+        String[] additional = getAdditionalRelicIDs();
+        if (additional != null) {
+            for (String id : additional) {
+                AbstractRelic r = RelicLibrary.getRelic(id);
+                // Circlet means that the relic didn't exist
+                if (!(r instanceof Circlet)) {
+                    PGR.dungeon.addRelic(id, r.tier);
+                }
+            }
+        }
     }
 
     public abstract List<PCLLoadout> getAvailableLoadouts();

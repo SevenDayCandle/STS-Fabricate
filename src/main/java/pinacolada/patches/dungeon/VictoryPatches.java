@@ -31,11 +31,6 @@ public class VictoryPatches {
         return new GameOverStat(PGR.core.strings.csel_ascensionGlyph, null, String.valueOf(glyphBonus));
     }
 
-/*    private static GameOverStat getBonusScore()
-    {
-        return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.dungeon.getHighestScore()));
-    }*/
-
     @SpirePatch(clz = VictoryRoom.class, method = "onPlayerEntry")
     public static class VictoryRoomPatches_onEnterRoom {
         @SpirePrefixPatch
@@ -73,14 +68,4 @@ public class VictoryPatches {
             return __result + glyphBonus;
         }
     }
-
-/*   @SpirePatch(clz = GameOverScreen.class, method = "checkScoreBonus", paramtypez = {boolean.class})
-    public static class GameOverScreenPatches_checkScoreBonus
-    {
-        @SpireInsertPatch(rloc = 1, localvars = {"points"})
-        public static void Method(boolean isVictory, @ByRef int[] points)
-        {
-            points[0] += PGR.PCL.Dungeon.GetLongestMatchCombo();
-        }
-   }*/
 }

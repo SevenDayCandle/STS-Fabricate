@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -184,8 +185,16 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
-    private ArrayList<AbstractRelic> getAllPossibleRelics() {
+    private ArrayList<AbstractRelic> getAvailableRelics() {
         ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
+
+        // Get additional relics that this character can use
+        String[] additional = data.getAdditionalRelicIDs();
+        if (additional != null) {
+            for (String id : additional) {
+                relics.add(RelicLibrary.getRelic(id));
+            }
+        }
 
         // Get other non base-game relics
         for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
@@ -193,6 +202,8 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 relics.add(r);
             }
         }
+
+        relics.removeIf(r -> UnlockTracker.isRelicLocked(r.relicId));
 
         return relics;
     }
@@ -227,7 +238,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     private void openRelicsDialog() {
         if (data != null) {
-            currentDialog = new ViewInGameRelicPoolEffect(getAllPossibleRelics(), new HashSet<>(data.config.bannedRelics.get()))
+            currentDialog = new ViewInGameRelicPoolEffect(getAvailableRelics(), new HashSet<>(data.config.bannedRelics.get()))
                     .addCallback((effect) -> {
                         data.config.bannedRelics.set(effect.bannedRelics);
                     });

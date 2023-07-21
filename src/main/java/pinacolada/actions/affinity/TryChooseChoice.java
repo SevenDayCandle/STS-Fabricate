@@ -10,7 +10,7 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.ui.GridCardSelectScreenHelper;
+import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.ChoiceCard;

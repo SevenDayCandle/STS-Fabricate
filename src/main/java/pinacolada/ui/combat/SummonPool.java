@@ -160,7 +160,7 @@ public class SummonPool extends EUIBase {
     public void onBattleEnd() {
         // TODO end of battle checks for cards
         for (PCLCardAlly ally : summons) {
-            ally.releaseCard();
+            ally.releaseCard(true);
         }
     }
 

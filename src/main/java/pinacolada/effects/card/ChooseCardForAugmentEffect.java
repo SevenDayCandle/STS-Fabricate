@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
+import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
 
     public void complete() {
         super.complete();
-        GridCardSelectScreenMultiformPatches.setAugment(null);
+        GridCardSelectScreenPatches.setAugment(null);
     }
 
     protected boolean forUpgrade() {
@@ -31,7 +31,7 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
 
     @Override
     protected void openGridScreen(CardGroup cardGroup) {
-        GridCardSelectScreenMultiformPatches.setAugment(augment);
+        GridCardSelectScreenPatches.setAugment(augment);
         super.openGridScreen(cardGroup);
     }
 

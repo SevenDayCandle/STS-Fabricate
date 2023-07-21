@@ -7,14 +7,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
 
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
-    protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();
-    protected FuncT1<Boolean, AbstractCard> filter;
+public class MoveCards extends CardFilterAction {
     protected PCLCardSelection destination = PCLCardSelection.Manual;
     protected PCLCardSelection origin = PCLCardSelection.Top;
     protected CardGroup targetPile;
@@ -67,7 +66,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     }
 
     public MoveCards setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = filter;
+        super.setFilter(filter);
 
         return this;
     }

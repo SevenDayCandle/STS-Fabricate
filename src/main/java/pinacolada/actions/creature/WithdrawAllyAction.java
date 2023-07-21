@@ -17,6 +17,7 @@ import java.util.Collection;
 public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
     public int triggerTimes = 2;
+    public boolean clearPowers = true;
     public boolean showEffect = true;
     public CardGroup destination = AbstractDungeon.player.discardPile;
 
@@ -55,7 +56,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     }
 
     protected void releaseCard(PCLCardAlly ally) {
-        PCLCard returnedCard = ally.releaseCard();
+        PCLCard returnedCard = ally.releaseCard(clearPowers);
         if (returnedCard != null) {
             PCLActions.top.makeCard(returnedCard, destination)
                     .setDuration(startDuration, isRealtime)
@@ -69,11 +70,15 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
         CombatManager.onAllyWithdraw(returnedCard, ally);
     }
 
+    public WithdrawAllyAction setClearPowers(boolean clearPowers) {
+        this.clearPowers = clearPowers;
+        return this;
+    }
+
     public WithdrawAllyAction setDestination(CardGroup destination) {
         this.destination = destination;
         return this;
     }
-
 
     public WithdrawAllyAction setTriggerTimes(int showEffect) {
         this.triggerTimes = showEffect;

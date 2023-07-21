@@ -29,7 +29,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
-import extendedui.ui.GridCardSelectScreenHelper;
+import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
@@ -78,9 +78,7 @@ public class CombatManager {
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
     private static final HashMap<Class<? extends PCLCombatSubscriber>, ConcurrentLinkedQueue<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
-    private static final HashMap<String, Float> AMPLIFIER_BONUSES = new HashMap<>();
     private static final HashMap<String, Float> EFFECT_BONUSES = new HashMap<>();
-    private static final HashMap<String, Float> PASSIVE_DAMAGE_BONUSES = new HashMap<>();
     private static final HashMap<String, Float> PLAYER_EFFECT_BONUSES = new HashMap<>();
     private static final Map<Integer, ArrayList<AbstractCard>> cardsPlayedThisCombat = new HashMap<>();
     private static final Map<String, Integer> limitedData = new HashMap<>();
@@ -104,13 +102,11 @@ public class CombatManager {
     public static int energySuspended;
     public static int maxHPSinceLastTurn;
 
-    public static void addAmplifierBonus(String powerID, int multiplier) {
-        addBonus(powerID, Type.Amplifier, multiplier);
-    }
+    public static void addBonus(String powerID, float multiplier, boolean forPlayer) {
+        multiplier = CombatManager.onGainTriggerablePowerBonus(powerID, multiplier, forPlayer);
 
-    public static void addBonus(String powerID, Type effectType, float multiplier) {
-        multiplier = CombatManager.onGainTriggerablePowerBonus(powerID, effectType, multiplier);
-        getEffectBonusMapForType(effectType).merge(powerID, multiplier, Float::sum);
+        HashMap<String, Float> bonusMap = forPlayer ? PLAYER_EFFECT_BONUSES : EFFECT_BONUSES;
+        bonusMap.merge(powerID, multiplier, Float::sum);
 
         if (GameUtilities.inBattle()) {
 
@@ -130,15 +126,11 @@ public class CombatManager {
     }
 
     public static void addEffectBonus(String powerID, float multiplier) {
-        addBonus(powerID, Type.Effect, multiplier);
-    }
-
-    public static void addPassiveDamageBonus(String powerID, float multiplier) {
-        addBonus(powerID, Type.PassiveDamage, multiplier);
+        addBonus(powerID, multiplier, false);
     }
 
     public static void addPlayerEffectBonus(String powerID, float multiplier) {
-        addBonus(powerID, Type.PlayerEffect, multiplier);
+        addBonus(powerID, multiplier, true);
     }
 
     public static void atEndOfTurn(boolean isPlayer) {
@@ -293,9 +285,7 @@ public class CombatManager {
         }
 
         dodgeChance = 0;
-        AMPLIFIER_BONUSES.clear();
         EFFECT_BONUSES.clear();
-        PASSIVE_DAMAGE_BONUSES.clear();
         PLAYER_EFFECT_BONUSES.clear();
         PGR.combatScreen.formulaDisplay.initialize();
         DrawPileCardPreview.reset();
@@ -330,28 +320,12 @@ public class CombatManager {
         PURGED_CARDS.clear();
     }
 
-    public static Set<Map.Entry<String, Float>> getAllAmplifierBonuses() {
-        return AMPLIFIER_BONUSES.entrySet();
-    }
-
     public static Set<Map.Entry<String, Float>> getAllEffectBonuses() {
         return EFFECT_BONUSES.entrySet();
     }
 
-    public static Set<Map.Entry<String, Float>> getAllPassiveDamageBonuses() {
-        return PASSIVE_DAMAGE_BONUSES.entrySet();
-    }
-
     public static Set<Map.Entry<String, Float>> getAllPlayerEffectBonuses() {
         return PLAYER_EFFECT_BONUSES.entrySet();
-    }
-
-    public static float getAmplifierBonus(String powerID) {
-        return AMPLIFIER_BONUSES.getOrDefault(powerID, 0f);
-    }
-
-    public static float getBonus(String powerID, Type effectType) {
-        return getEffectBonusMapForType(effectType).getOrDefault(powerID, 0f);
     }
 
     public static <T> T getCombatData(String key, T defaultData) {
@@ -365,6 +339,10 @@ public class CombatManager {
         return defaultData;
     }
 
+    public static float getBonus(String powerID, boolean forPlayer) {
+        return forPlayer ? getPlayerEffectBonus(powerID) : getEffectBonus(powerID);
+    }
+
     public static float getEffectBonus(String powerID) {
         return EFFECT_BONUSES.getOrDefault(powerID, 0f);
     }
@@ -373,26 +351,8 @@ public class CombatManager {
         return (GameUtilities.isPlayer(po.owner)) ? (CombatManager.getPlayerEffectBonus(po.ID)) : (CombatManager.getEffectBonus(po.ID));
     }
 
-    public static HashMap<String, Float> getEffectBonusMapForType(Type effectType) {
-        switch (effectType) {
-            case Amplifier:
-                return AMPLIFIER_BONUSES;
-            case Effect:
-                return EFFECT_BONUSES;
-            case PlayerEffect:
-                return PLAYER_EFFECT_BONUSES;
-            case PassiveDamage:
-                return PASSIVE_DAMAGE_BONUSES;
-        }
-        throw new RuntimeException("Unsupported Effect Bonus type.");
-    }
-
     private static List<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber) {
         return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
-    }
-
-    public static float getPassiveDamageBonus(String powerID) {
-        return PASSIVE_DAMAGE_BONUSES.getOrDefault(powerID, 0f);
     }
 
     public static float getPlayerEffectBonus(String powerID) {
@@ -685,8 +645,8 @@ public class CombatManager {
         return subscriberInout(OnGainTempHPSubscriber.class, amount, OnGainTempHPSubscriber::onGainTempHP);
     }
 
-    public static float onGainTriggerablePowerBonus(String powerID, Type gainType, float amount) {
-        return subscriberInout(OnGainPowerBonusSubscriber.class, amount, (s, d) -> s.onGainPowerBonus(powerID, gainType, d));
+    public static float onGainTriggerablePowerBonus(String powerID, float amount, boolean forPlayer) {
+        return subscriberInout(OnGainPowerBonusSubscriber.class, amount, (s, d) -> s.onGainPowerBonus(powerID, d, forPlayer));
     }
 
     public static void onGameStart() {
@@ -1088,12 +1048,5 @@ public class CombatManager {
         expectedDamage = GameUtilities.getHealthBarAmount(player, expectedDamage, true, true);
 
         estimatedDamages = summons.estimateDamage(expectedDamage);
-    }
-
-    public enum Type {
-        Amplifier,
-        Effect,
-        PassiveDamage,
-        PlayerEffect
     }
 }

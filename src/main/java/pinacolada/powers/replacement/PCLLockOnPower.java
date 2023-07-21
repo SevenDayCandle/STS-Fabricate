@@ -20,17 +20,17 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
         initialize(amount, PowerType.DEBUFF, true);
     }
 
-    public static float getOrbMultiplier() {
-        return 1 + (getOrbMultiplierForDescription() / 100f);
+    public static float getOrbMultiplier(boolean isPlayer) {
+        return 1 + (getOrbMultiplierForDescription(isPlayer) / 100f);
     }
 
-    public static float getOrbMultiplierForDescription() {
-        return BASE + (CombatManager.getEffectBonus(POWER_ID));
+    public static float getOrbMultiplierForDescription(boolean isPlayer) {
+        return BASE + (CombatManager.getBonus(POWER_ID, isPlayer));
     }
 
     @Override
     public String getUpdatedDescription() {
-        return formatDescription(0, PCLRenderHelpers.decimalFormat(getOrbMultiplierForDescription()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
+        return formatDescription(0, PCLRenderHelpers.decimalFormat(getOrbMultiplierForDescription(owner.isPlayer)), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
 
     @Override
     public float onOrbApplyLockOn(AbstractCreature target, float dmg) {
-        return dmg * getOrbMultiplier();
+        return dmg * getOrbMultiplier(owner.isPlayer);
     }
 }

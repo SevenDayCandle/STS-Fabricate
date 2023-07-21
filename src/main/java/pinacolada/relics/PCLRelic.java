@@ -51,7 +51,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public static AbstractPlayer player;
     public static Random rng;
     public final PCLRelicData relicData;
-    public ArrayList<EUIKeywordTooltip> tips;
+    public ArrayList<EUIKeywordTooltip> euiTips;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
@@ -170,7 +170,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
 
         UnlockTracker.markRelicAsSeen(this.relicId);
-        this.getDescriptionImpl();
+        updateDescription(null);
         if (AbstractDungeon.topPanel != null) {
             AbstractDungeon.topPanel.adjustRelicHbs();
         }
@@ -241,12 +241,12 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
+        return euiTips.subList(1, euiTips.size());
     }
 
     @Override
     public List<EUIKeywordTooltip> getTips() {
-        return tips;
+        return euiTips;
     }
 
     public int getValue() {
@@ -255,17 +255,17 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     // Initialize later to ensure relicData is set
     public void initializePCLTips() {
-        if (tips == null) {
-            tips = new ArrayList<>();
+        if (euiTips == null) {
+            euiTips = new ArrayList<>();
         }
         else {
-            tips.clear();
+            euiTips.clear();
         }
         updateDescription(null);
         ModInfo info = EUIGameUtils.getModInfo(this);
         mainTooltip = info != null ? new EUIKeywordTooltip(getNameFromData(), description, info.ID) : new EUIKeywordTooltip(getNameFromData(), description);
-        tips.add(mainTooltip);
-        EUITooltip.scanForTips(description, tips);
+        euiTips.add(mainTooltip);
+        EUITooltip.scanForTips(description, euiTips);
     }
 
     public boolean isEnabled() {
@@ -538,7 +538,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public void renderBossTip(SpriteBatch sb) {
-        EUITooltip.queueTooltips(tips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
+        EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
     }
 
     @Override
@@ -548,7 +548,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     protected void initializeTips() {
-        // No-op, use initializePCLTips() instead
+        // Unused, use euitips instead
+        tips.clear();
     }
 
     @Override
