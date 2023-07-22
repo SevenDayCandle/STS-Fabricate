@@ -6,30 +6,30 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 
 // Copied and modified from STS-AnimatorMod
 public class TemporaryBlockModifier extends AbstractCardModifier {
-    protected boolean removeOnPlay;
     protected boolean temporary;
+    protected boolean untilPlayed;
     public int change;
 
     public TemporaryBlockModifier(int change) {
         this(change, false, false);
     }
 
-    public TemporaryBlockModifier(int change, boolean removeOnPlay, boolean temporary) {
+    public TemporaryBlockModifier(int change, boolean temporary, boolean untilPlayed) {
         this.change = change;
-        this.removeOnPlay = removeOnPlay;
         this.temporary = temporary;
+        this.untilPlayed = untilPlayed;
     }
 
-    public static TemporaryBlockModifier apply(AbstractCard c, int change, boolean removeOnPlay, boolean temporary) {
+    public static TemporaryBlockModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
         TemporaryBlockModifier mod = get(c);
         if (mod == null) {
-            mod = new TemporaryBlockModifier(change, removeOnPlay, temporary);
+            mod = new TemporaryBlockModifier(change, temporary, untilPlayed);
             CardModifierManager.addModifier(c, mod);
         }
         else {
             mod.change += change;
-            mod.removeOnPlay = mod.removeOnPlay & removeOnPlay;
             mod.temporary = mod.temporary & temporary;
+            mod.untilPlayed = mod.untilPlayed & untilPlayed;
         }
         return mod;
     }
@@ -45,9 +45,10 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
 
     @Override
     public boolean removeOnCardPlayed(AbstractCard card) {
-        return removeOnPlay;
+        return untilPlayed;
     }
 
+    @Override
     public boolean removeAtEndOfTurn(AbstractCard card) {
         return temporary;
     }
@@ -58,6 +59,6 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new TemporaryBlockModifier(change, removeOnPlay, temporary);
+        return new TemporaryBlockModifier(change, temporary, untilPlayed);
     }
 }

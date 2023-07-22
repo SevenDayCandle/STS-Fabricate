@@ -29,6 +29,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
+import pinacolada.patches.card.AbstractCardPatches;
 import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;

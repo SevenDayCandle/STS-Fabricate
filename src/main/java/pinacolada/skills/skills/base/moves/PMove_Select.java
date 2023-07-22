@@ -88,6 +88,12 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
                 });
     }
 
+    public PMove_Select<T> useParentForce() {
+        fields.setForced(true);
+        useParent(true);
+        return this;
+    }
+
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();
 
     public abstract EUITooltip getActionTooltip();

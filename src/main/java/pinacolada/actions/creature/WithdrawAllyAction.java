@@ -1,15 +1,19 @@
 package pinacolada.actions.creature;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
+import pinacolada.effects.card.ShowCardAfterWithdrawEffect;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,9 +62,10 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     protected void releaseCard(PCLCardAlly ally) {
         PCLCard returnedCard = ally.releaseCard(clearPowers);
         if (returnedCard != null) {
-            PCLActions.top.makeCard(returnedCard, destination)
-                    .setDuration(startDuration, isRealtime)
-                    .addCallback(returnedCard::unfadeOut);
+            PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard));
+            returnedCard.unhover();
+            returnedCard.untip();
+            returnedCard.unfadeOut();
         }
 
         if (showEffect) {

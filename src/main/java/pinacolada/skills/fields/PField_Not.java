@@ -40,11 +40,11 @@ public class PField_Not extends PField {
         if (amount == 1 && !not) {
             return subject;
         }
-        String base = EUIRM.strings.numNoun(valueStr, subject);
         if (not) {
+            String base = EUIRM.strings.numNoun(valueStr, subject);
             return amount != 0 ? TEXT.subjects_xOrLess(base) : base;
         }
-        return base + "+";
+        return EUIRM.strings.numNoun(valueStr + "+", subject);
     }
 
     public void registerNotBoolean(PCLCustomEffectEditingPane editor) {

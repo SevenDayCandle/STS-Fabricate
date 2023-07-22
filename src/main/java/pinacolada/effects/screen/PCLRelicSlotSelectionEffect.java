@@ -15,6 +15,7 @@ import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffect;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
+import pinacolada.ui.characterSelection.PCLRelicSlotEditor;
 
 import java.util.ArrayList;
 
@@ -27,14 +28,14 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-    private final LoadoutRelicSlot slot;
+    private final PCLRelicSlotEditor slot;
     private EUIRelicGrid grid;
     private AbstractRelic selectedRelic;
 
-    public PCLRelicSlotSelectionEffect(LoadoutRelicSlot slot) {
+    public PCLRelicSlotSelectionEffect(PCLRelicSlotEditor slot) {
         super(0.7f, true);
 
-        this.selectedRelic = slot.getRelic();
+        this.selectedRelic = slot.slot.getRelic();
         this.slot = slot;
         ArrayList<LoadoutRelicSlot.Item> cards = slot.getSelectableRelics();
         if (cards.isEmpty()) {
@@ -58,8 +59,8 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     protected void complete() {
         super.complete();
 
-        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.getRelic().relicId)) {
-            slot.select(selectedRelic);
+        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.slot.getRelic().relicId)) {
+            slot.slot.select(selectedRelic);
         }
     }
 
@@ -97,7 +98,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             selectedRelic.stopPulse();
 
             if (selectedRelic == relic.relic) {
-                slot.select((AbstractRelic) null);
+                slot.slot.select((AbstractRelic) null);
                 selectedRelic = null;
                 complete();
                 return;
@@ -106,13 +107,13 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
 
         selectedRelic = relic.relic;
         CardCrawlGame.sound.play("CARD_SELECT");
-        slot.select(relic.relic);
+        slot.slot.select(relic.relic);
         relic.relic.beginLongPulse();
         complete();
     }
 
     private void onRelicRender(SpriteBatch sb, RelicInfo relic) {
-        for (LoadoutRelicSlot.Item item : slot.relics) {
+        for (LoadoutRelicSlot.Item item : slot.slot.relics) {
             if (item.relic.relicId.equals(relic.relic.relicId)) {
                 cardValue_text
                         .setLabel(item.estimatedValue)

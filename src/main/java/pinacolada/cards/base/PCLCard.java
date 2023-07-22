@@ -148,7 +148,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public transient AbstractCreature owner;
     public transient PCLCard parent;
     public transient PowerFormulaDisplay formulaDisplay;
-    public transient float glowScaleMult = 1f;
 
     protected PCLCard(PCLCardData cardData) {
         this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
@@ -382,20 +381,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         PSkill<?> added = PSkill.chain(primary, effects).setSource(this).onAddToCard(this);
         getEffects().add(added);
         return added;
-    }
-
-    public void doEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            action.invoke(be);
-        }
-    }
-
-    public void doNonPowerEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            if (!(be instanceof SummonOnlyMove)) {
-                action.invoke(be);
-            }
-        }
     }
 
     public PCardPrimary_GainBlock getCardBlock() {
@@ -2073,7 +2058,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             return;
         }
 
-        renderGlowManual(sb);
+        renderGlowManual(sb, 1f);
     }
 
     protected void renderGlowEffect(SpriteBatch sb, float duration, float scaleMult) {
@@ -2084,7 +2069,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         sb.draw(img, current_x + img.offsetX - img.originalWidth / 2.0F, current_y + img.offsetY - img.originalHeight / 2.0F, img.originalWidth / 2.0F - img.offsetX, img.originalHeight / 2.0F - img.offsetY, img.packedWidth, img.packedHeight, iScale, iScale, angle);
     }
 
-    public void renderGlowManual(SpriteBatch sb) {
+    public void renderGlowManual(SpriteBatch sb, float glowScaleMult) {
         renderMainBorder(sb);
 
         for (float i : fakeGlowList) {

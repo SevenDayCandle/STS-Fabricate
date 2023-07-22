@@ -5,6 +5,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
@@ -13,7 +14,7 @@ public class Metamorphosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/metamorphosis";
     public static final PCLCardData DATA = registerTemplate(Metamorphosis.class, com.megacrit.cardcrawl.cards.colorless.Metamorphosis.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setSkill(2, CardRarity.RARE)
+            .setSkill(2, CardRarity.RARE, PCLCardTarget.None)
             .setTags(PCLCardTag.Exhaust)
             .setAffinities(PCLAffinity.Blue)
             .setColorless();

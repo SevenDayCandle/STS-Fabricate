@@ -509,20 +509,20 @@ public final class PCLActions {
         return add(new ModifyAllInstances(uuid));
     }
 
-    public ModifyBlock modifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
-        return add(new ModifyBlock(card, costChange, permanent, relative, forTurn));
+    public ModifyBlock modifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        return add(new ModifyBlock(card, costChange, permanent, relative, untilPlayed));
     }
 
     public ModifyCardHP modifyCardHp(AbstractCard card, int costChange, boolean permanent, boolean relative) {
         return add(new ModifyCardHP(card, costChange, permanent, relative));
     }
 
-    public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
-        return add(new ModifyCost(card, costChange, permanent, relative, forTurn));
+    public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        return add(new ModifyCost(card, costChange, permanent, relative, untilPlayed));
     }
 
-    public ModifyDamage modifyDamage(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
-        return add(new ModifyDamage(card, costChange, permanent, relative, forTurn));
+    public ModifyDamage modifyDamage(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        return add(new ModifyDamage(card, costChange, permanent, relative, untilPlayed));
     }
 
     public ModifyMagicNumber modifyMagicNumber(AbstractCard card, int costChange, boolean permanent, boolean relative) {

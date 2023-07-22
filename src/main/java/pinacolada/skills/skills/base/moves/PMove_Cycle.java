@@ -27,6 +27,10 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
         this(1, PCLCardGroupHelper.Hand);
     }
 
+    public PMove_Cycle(int amount) {
+        this(amount, PCLCardGroupHelper.Hand);
+    }
+
     public PMove_Cycle(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }

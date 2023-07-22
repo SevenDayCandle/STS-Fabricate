@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class EffekseerEFK {
     private static final Map<String, EffekseerEFK> ALL = new HashMap<>();
 
-    public static final EffekseerEFK BLOW01 = new EffekseerEFK("effects/Blow01.efk");
+    //public static final EffekseerEFK BLOW01 = new EffekseerEFK("effects/Blow01.efk"); //TODO rebuild so this doesn't crash the game
     public static final EffekseerEFK BLOW02 = new EffekseerEFK("effects/Blow02.efk");
     public static final EffekseerEFK BLOW03 = new EffekseerEFK("effects/Blow03.efk");
     public static final EffekseerEFK BLOW04 = new EffekseerEFK("effects/Blow04.efk");

@@ -42,6 +42,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
@@ -203,7 +204,8 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             }
         }
 
-        relics.removeIf(r -> UnlockTracker.isRelicLocked(r.relicId));
+        List<String> startingRelics = data.getStartingRelics();
+        relics.removeIf(r -> UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId));
 
         return relics;
     }

@@ -20,6 +20,7 @@ import pinacolada.actions.PCLConditionalAction;
 import pinacolada.actions.utility.DelayAllActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
+import pinacolada.patches.card.AbstractCardPatches;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
@@ -31,6 +32,7 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
 
     protected CardGroup sourcePile;
     protected int sourcePileIndex;
+    protected boolean force = true;
     protected boolean purge;
     protected boolean exhaust;
     protected boolean spendEnergy;
@@ -122,6 +124,8 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
                 card.ignoreEnergyOnUse = false;
             }
 
+            AbstractCardPatches.forcePlay = force;
+
             if (canUse()) {
                 queueCardItem(enemy);
                 return;
@@ -145,6 +149,7 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
                 PCLEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
             }
 
+            AbstractCardPatches.forcePlay = false;
             card.freeToPlayOnce = false;
         }
     }

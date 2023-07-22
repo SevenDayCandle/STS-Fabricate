@@ -43,11 +43,6 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return getBasicGiveString();
-    }
-
-    @Override
     public ActionT1<AbstractCard> getAction(PCLActions order) {
         return (c) -> {
             for (PCLCardTag tag : fields.addTags) {

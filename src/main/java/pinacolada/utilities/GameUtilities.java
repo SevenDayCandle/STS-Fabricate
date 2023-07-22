@@ -72,7 +72,6 @@ import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
@@ -1764,9 +1763,9 @@ public class GameUtilities {
         }
     }
 
-    public static void modifyBlock(AbstractCard card, int amount, boolean removeOnPlay, boolean temporary) {
-        if (temporary || removeOnPlay) {
-            TemporaryBlockModifier.apply(card, amount, removeOnPlay, temporary);
+    public static void modifyBlock(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryBlockModifier.apply(card, amount, temporary, untilPlayed);
         }
         else {
             card.baseBlock = card.block = Math.max(0, amount);
@@ -1811,9 +1810,9 @@ public class GameUtilities {
         card.isCostModifiedForTurn = (card.cost != card.costForTurn);
     }
 
-    public static void modifyDamage(AbstractCard card, int amount, boolean removeOnPlay, boolean temporary) {
-        if (temporary || removeOnPlay) {
-            TemporaryDamageModifier.apply(card, amount, removeOnPlay, temporary);
+    public static void modifyDamage(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryDamageModifier.apply(card, amount, temporary, untilPlayed);
         }
         else {
             card.baseDamage = card.damage = Math.max(0, amount);

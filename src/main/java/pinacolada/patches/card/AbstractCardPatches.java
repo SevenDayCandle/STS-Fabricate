@@ -2,12 +2,15 @@ package pinacolada.patches.card;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -16,6 +19,8 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 
 public class AbstractCardPatches {
+    public static boolean forcePlay;
+
     @SpirePatch(clz = AbstractCard.class, method = "applyPowersToBlock")
     public static class AbstractCard_ApplyPowersToBlock {
         @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
@@ -48,6 +53,19 @@ public class AbstractCardPatches {
             method = "hasEnoughEnergy"
     )
     public static class AbstractCard_HasEnoughEnergy {
+
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(GameActionManager.class.getName()) && m.getFieldName().equals("turnHasEnded")) {
+                        m.replace("{ $_ = !(pinacolada.patches.card.AbstractCardPatches.forcePlay) && $proceed($$); }");
+                    }
+                }
+            };
+        }
+
         @SpireInsertPatch(
                 locator = Locator.class
         )

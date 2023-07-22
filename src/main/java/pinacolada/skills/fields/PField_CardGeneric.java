@@ -53,20 +53,20 @@ public class PField_CardGeneric extends PField_Not {
         int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
 
 
-        // Set automatic selection when self targeting, or if the action is forced and we must select every available card
-        if ((!skill.useParent && groupTypes.isEmpty()) || (forced && skill.baseAmount <= 0)) {
+        // Set automatic selection when self targeting, using parent, or if the action is forced and we must select every available card
+        if ((!skill.useParent && groupTypes.isEmpty()) || (forced && (skill.useParent || skill.baseAmount <= 0))) {
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random, g)
                     .setDestination(destination);
         }
         else if (subchoices > 0 && subchoices <= choiceSize) {
-            PCLCardSelection selection = origin;
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual, g)
-                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random)
+                    .setMaxChoices(choiceSize, origin)
                     .setDestination(destination);
         }
 
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin, g)
-                .setDestination(destination);
+                .setDestination(destination)
+                .showEffect(origin != PCLCardSelection.Manual, false);
     }
 
     public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices) {

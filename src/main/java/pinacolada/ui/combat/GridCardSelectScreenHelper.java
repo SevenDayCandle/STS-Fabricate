@@ -89,11 +89,6 @@ public class GridCardSelectScreenHelper {
             clear(false);
         }
         else {
-            if (cardGroups.size() == 1) {
-                EUIClassUtils.setField(selectScreen, "targetGroup", cardGroups.get(0));
-                clear(false);
-            }
-
             enabled = false;
         }
     }

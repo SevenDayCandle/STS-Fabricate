@@ -8,6 +8,7 @@ import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
 public class CostUntilPlayedModifier extends AbstractCardModifier implements OnCardResetSubscriber {
+    protected AbstractCard card;
     protected int previousAmount;
     protected boolean temporary;
     public int change;
@@ -46,21 +47,26 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
         }
 
         final int currentCost = (card.costForTurn - previousAmount);
-        int modifier = change;
+        previousAmount = change;
 
-        previousAmount = modifier;
-
-        final int newCost = currentCost + modifier;
-        GameUtilities.modifyCostForTurn(card, Math.max(0, newCost), false);
+        final int newCost = currentCost + change;
+        GameUtilities.modifyCostForCombat(card, Math.max(0, newCost), false);
 
         if (newCost < 0) {
             previousAmount -= newCost;
         }
     }
 
+    public void unapply(AbstractCard card) {
+        GameUtilities.modifyCostForCombat(card, Math.max(0, card.cost - change), false);
+        card.resetAttributes();
+    }
+
     @Override
     public void onCardReset(AbstractCard card) {
-        apply(card);
+        if (card == this.card) {
+            apply(card);
+        }
     }
 
     public boolean removeOnCardPlayed(AbstractCard card) {
@@ -74,13 +80,15 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
     @Override
     public void onInitialApplication(AbstractCard card) {
         subscribeToAll();
+        this.card = card;
         apply(card);
     }
 
     @Override
     public void onRemove(AbstractCard card) {
         unsubscribeFromAll();
-        card.resetAttributes();
+        this.card = null;
+        unapply(card);
     }
 
     @Override

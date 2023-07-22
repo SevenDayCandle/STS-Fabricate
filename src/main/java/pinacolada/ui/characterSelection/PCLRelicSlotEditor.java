@@ -13,10 +13,14 @@ import extendedui.ui.controls.EUIRelic;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
+
+import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotEditor extends EUIBase {
@@ -56,6 +60,35 @@ public class PCLRelicSlotEditor extends EUIBase {
         setSlot(null);
     }
 
+    public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
+        final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
+        for (LoadoutRelicSlot.Item item : this.slot.relics) {
+            // Customs should not be treated as locked in this effect
+            boolean add = !slot.isIDBanned(item.relic.relicId) && (!item.isLocked() || PCLCustomRelicSlot.get(item.relic.relicId) != null);
+            if (add) {
+                // Custom relics may incorrectly be marked as not seen
+                item.relic.isSeen = true;
+                for (PCLRelicSlotEditor slot : loadoutEditor.relicsEditors) {
+                    if (slot.slot != this.slot && slot.slot.getRelic() == item.relic) {
+                        add = false;
+                    }
+                }
+            }
+
+            if (add) {
+                relics.add(item);
+            }
+        }
+        relics.sort((a, b) -> {
+            if (a.estimatedValue == b.estimatedValue) {
+                return StringUtils.compare(a.relic.name, b.relic.name);
+            }
+            return a.estimatedValue - b.estimatedValue;
+        });
+
+        return relics;
+    }
+
     public void refreshValues() {
         int value = slot == null ? 0 : slot.getEstimatedValue();
         relicValueText.setLabel(value)
@@ -91,7 +124,7 @@ public class PCLRelicSlotEditor extends EUIBase {
 
             if (relicNameText.hb.clicked) {
                 relicNameText.hb.clicked = false;
-                loadoutEditor.trySelectRelic(this.slot);
+                loadoutEditor.trySelectRelic(this);
                 return;
             }
 
@@ -140,7 +173,7 @@ public class PCLRelicSlotEditor extends EUIBase {
             this.relicImage = null;
             refreshValues();
         }).setInteractable(slot.canRemove()).setActive(relic != null);
-        this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this.slot)).setActive(change);
+        this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this)).setActive(change);
         if (relic != null) {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING / 2, relicValueText.hb.y, relic.hb.width, relic.hb.height));
             if (relic instanceof PCLRelic) {

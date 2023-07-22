@@ -7,11 +7,13 @@ import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.common.GainGoldAction;
 import com.megacrit.cardcrawl.actions.common.HealAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import javassist.CtBehavior;
 import pinacolada.actions.PCLAction;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.patches.card.AbstractCardPatches;
 
 import java.util.ArrayList;
 
@@ -59,10 +61,25 @@ public class GameActionManagerPatches {
             }
         }
 
+        @SpireInsertPatch(
+                locator = Locator.class
+        )
+        public static void insert2(GameActionManager __instance) {
+            AbstractCardPatches.forcePlay = false;
+        }
+
         private static class Locator extends SpireInsertLocator {
             @Override
             public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
                 Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractMonster.class, "applyTurnPowers");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
+        }
+
+        private static class Locator2 extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractCard.class, "energyOnUse");
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
         }

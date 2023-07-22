@@ -95,35 +95,6 @@ public class LoadoutCardSlot {
         return amount * (selected == null ? 0 : selected.estimatedValue);
     }
 
-    public ArrayList<LoadoutCardSlot.Item> getSelectableCards() {
-        final ArrayList<LoadoutCardSlot.Item> cards = new ArrayList<>();
-        for (Item item : this.cards) {
-            // Custom cards should not be treated as locked in this effect
-            boolean add = !isIDBanned(item.ID) && (!item.isLocked() || PCLCustomCardSlot.get(item.ID) != null);
-            if (add) {
-                for (LoadoutCardSlot slot : container.cardSlots) {
-                    if (slot != this && item.ID.equals(slot.getSelectedID())) {
-                        add = false;
-                    }
-                }
-            }
-
-
-            if (add) {
-                cards.add(item);
-            }
-        }
-
-        cards.sort((a, b) -> {
-            if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(a.getCard(false).name, b.getCard(false).name);
-            }
-            return a.estimatedValue - b.estimatedValue;
-        });
-
-        return cards;
-    }
-
     public String getSelectedID() {
         return selected != null ? selected.ID : null;
     }

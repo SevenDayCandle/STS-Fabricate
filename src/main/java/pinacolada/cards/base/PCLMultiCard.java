@@ -10,6 +10,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.CostFilter;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
@@ -24,6 +25,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.CardPreviewList;
 import pinacolada.utilities.GameUtilities;
@@ -160,7 +162,7 @@ public abstract class PCLMultiCard extends PCLCard {
     public void triggerWhenCreated(boolean startOfBattle) {
         if (inheritedCards.size() < multiCardMove.baseAmount) {
             while (inheritedCards.size() < multiCardMove.baseAmount) {
-                addInheritedCard(new MysteryCard(false));
+                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
             }
         }
         for (AbstractCard card : inheritedCards.getCards()) {
@@ -316,9 +318,15 @@ public abstract class PCLMultiCard extends PCLCard {
         refreshProperties();
     }
 
-    protected abstract PCLMultiCardMove createMulticardMove();
+    public PField_CardCategory createFilterFields() {
+        return new PField_CardCategory();
+    }
 
-    public abstract boolean acceptCard(AbstractCard c);
+    public PField_CardCategory createMysteryFilterFields() {
+        return createFilterFields().setCost(CostFilter.Cost0);
+    }
+
+    protected abstract PCLMultiCardMove createMulticardMove();
 
     public static class PCLMultiCardMove extends PCustomCond {
         protected PCLMultiCard multicard;

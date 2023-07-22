@@ -61,9 +61,9 @@
 								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"},
 								"pcl:MysteryCard": {
 												"EXTENDED_DESCRIPTION": [
-																"At the start of combat: Transforms into a random {0}-Cost {1} card",
-																"At the start of combat: Transforms into a random Upgraded {0}-Cost {1} card",
-																"Select this to fill this slot with a random 0-Cost Common card that changes every combat instead of removing a card from your deck"
+																"At the start of combat: Transforms into a random {0}",
+																"At the start of combat: Transforms into a random upgraded {0}",
+																"Select this to fill this slot with a random {0} that changes every combat instead of removing a card from your deck"
 												],
 												"NAME": "? ? ?"
 								},

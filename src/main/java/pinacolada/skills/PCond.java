@@ -38,6 +38,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         super(data);
     }
 
+    public PCond(PSkillData<T> data, T fields) {
+        super(data, fields);
+    }
+
     public PCond(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }

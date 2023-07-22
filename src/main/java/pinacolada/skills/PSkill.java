@@ -112,9 +112,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         this(data, PCLCardTarget.None, 1, -1);
     }
 
+    public PSkill(PSkillData<T> data, T fields) {
+        this(data, fields, PCLCardTarget.None, 1, -1);
+    }
+
     public PSkill(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
+        this(data, data.instantiateField(), target, amount, extra);
+    }
+
+    public PSkill(PSkillData<T> data, T fields, PCLCardTarget target, int amount, int extra) {
         this.data = data;
-        this.fields = this.data.instantiateField();
+        this.fields = fields;
         if (this.fields != null) {
             this.fields.skill = this;
         }
@@ -1179,8 +1187,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         if (copy != null) {
             copy.effectID = effectID;
             copy.target = target;
-            copy.rootAmount = copy.baseAmount = copy.amount = amount;
-            copy.rootExtra = copy.baseExtra = copy.extra = extra;
+            copy.rootAmount = rootAmount;
+            copy.baseAmount = baseAmount;
+            copy.amount = amount;
+            copy.rootExtra = rootExtra;
+            copy.baseExtra = baseExtra;
+            copy.extra = extra;
             copy.upgrade = upgrade.clone();
             copy.upgradeExtra = upgradeExtra.clone();
             copy.fields = (T) fields.makeCopy();

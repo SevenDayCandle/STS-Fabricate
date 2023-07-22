@@ -137,11 +137,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_Cycle cycle(int amount) {
-        return new PMove_Cycle(amount);
+        return new PMove_Cycle(amount, PCLCardGroupHelper.Hand);
     }
 
     public static PMove_Cycle cycleRandom(int amount) {
-        return (PMove_Cycle) new PMove_Cycle(amount).edit(PField_CardGeneric::setRandom);
+        return (PMove_Cycle) new PMove_Cycle(amount, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMove_DealDamage dealDamage(int amount) {
@@ -564,6 +564,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     public static PMove_Upgrade upgrade(int amount, AbstractCard.CardType... t) {
         return (PMove_Upgrade) new PMove_Upgrade(amount, PCLCardGroupHelper.Hand)
                 .edit(f -> f.setType(t));
+    }
+
+    public static PMove_WithdrawAlly withdrawAlly() {
+        return new PMove_WithdrawAlly(2);
     }
 
     public static PMove_WithdrawAlly withdrawAlly(int amount) {

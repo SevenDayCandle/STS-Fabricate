@@ -90,6 +90,11 @@ public interface PointerProvider {
         getSkills().clear();
     }
 
+    default void doAll(ActionT1<PSkill<?>> action) {
+        doEffects(action);
+        doPowers(action);
+    }
+
     default void doEffects(ActionT1<PSkill<?>> action) {
         for (PSkill<?> be : getFullEffects()) {
             action.invoke(be);
@@ -101,6 +106,12 @@ public interface PointerProvider {
             if (!(be instanceof SummonOnlyMove)) {
                 action.invoke(be);
             }
+        }
+    }
+
+    default void doPowers(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getPowerEffects()) {
+            action.invoke(be);
         }
     }
 

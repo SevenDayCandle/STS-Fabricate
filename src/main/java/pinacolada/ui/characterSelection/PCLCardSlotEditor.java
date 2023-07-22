@@ -11,9 +11,13 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
+
+import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase {
@@ -69,6 +73,35 @@ public class PCLCardSlotEditor extends EUIBase {
         setSlot(null);
     }
 
+    public ArrayList<LoadoutCardSlot.Item> getSelectableCards() {
+        final ArrayList<LoadoutCardSlot.Item> cards = new ArrayList<>();
+        for (LoadoutCardSlot.Item item : this.slot.cards) {
+            // Custom cards should not be treated as locked in this effect
+            boolean add = !slot.isIDBanned(item.ID) && (!item.isLocked() || PCLCustomCardSlot.get(item.ID) != null);
+            if (add) {
+                for (PCLCardSlotEditor slot : loadoutEditor.slotsEditors) {
+                    if (slot.slot != this.slot && item.ID.equals(slot.slot.getSelectedID()) && slot.slot.amount > 0) {
+                        add = false;
+                        break;
+                    }
+                }
+            }
+
+            if (add) {
+                cards.add(item);
+            }
+        }
+
+        cards.sort((a, b) -> {
+            if (a.estimatedValue == b.estimatedValue) {
+                return StringUtils.compare(a.getCard(false).name, b.getCard(false).name);
+            }
+            return a.estimatedValue - b.estimatedValue;
+        });
+
+        return cards;
+    }
+
     public void refreshValues() {
         int value = slot == null ? 0 : slot.getEstimatedValue();
         cardvalueText.setLabel(value)
@@ -106,7 +139,7 @@ public class PCLCardSlotEditor extends EUIBase {
 
             if (cardnameText.hb.clicked) {
                 cardnameText.hb.clicked = false;
-                loadoutEditor.trySelectCard(this.slot);
+                loadoutEditor.trySelectCard(this);
                 return;
             }
 
@@ -181,7 +214,7 @@ public class PCLCardSlotEditor extends EUIBase {
             this.cardnameText.setLabel("");
             refreshValues();
         }).setInteractable(slot.canRemove()).setActive(true);
-        this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this.slot)).setInteractable(change).setActive(true);
+        this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this)).setInteractable(change).setActive(true);
         this.nameColor = card != null && slot.isIDBanned(card.cardID) ? Settings.RED_TEXT_COLOR : Settings.GOLD_COLOR;
         cardamountText.setFontColor(this.nameColor == Settings.RED_TEXT_COLOR ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
 

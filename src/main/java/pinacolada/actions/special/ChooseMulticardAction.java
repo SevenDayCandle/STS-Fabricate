@@ -4,6 +4,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLMultiCard;
@@ -15,12 +17,14 @@ import java.util.ArrayList;
 
 public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
     private final PCLMultiCard multicard;
+    private final PField_CardCategory filterFields;
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
 
     public ChooseMulticardAction(PCLMultiCard multicard) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);
 
         this.multicard = multicard;
+        this.filterFields = this.multicard.createFilterFields();
         initialize(multicard.getMultiCardMove().baseAmount);
     }
 
@@ -31,7 +35,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
         CardGroup cardGroupPlaceholder = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
 
         for (int i = 0; i < amount; i++) {
-            MysteryCard placeholder = new MysteryCard(true);
+            MysteryCard placeholder = new MysteryCard(true, this.multicard.createMysteryFilterFields());
             placeholder.isSeen = true;
             cardGroupPlaceholder.addToBottom(placeholder);
         }
@@ -39,8 +43,9 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
 
 
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.MASTER_DECK);
+        FuncT1<Boolean, AbstractCard> filter = filterFields.getFullCardFilter();
         for (AbstractCard c : player.masterDeck.getPurgeableCards().group) {
-            if (!isBanned(c) && multicard.acceptCard(c)) {
+            if (!isBanned(c) && filter.invoke(c)) {
                 cardGroup.addToBottom(c);
             }
         }

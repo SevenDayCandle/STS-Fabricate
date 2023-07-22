@@ -27,6 +27,10 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         this(cardData, 0, 1, 0);
     }
 
+    public PCustomCond(PCLCardData cardData, PField_CardCategory fields) {
+        this(cardData, fields, 0, 1, 0);
+    }
+
     public PCustomCond(PCLCardData cardData, int index, int amount, int extra) {
         super(DATA);
         setAmount(amount);
@@ -36,8 +40,21 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         this.descIndex = index;
     }
 
+    public PCustomCond(PCLCardData cardData, PField_CardCategory fields, int index, int amount, int extra) {
+        super(DATA, fields);
+        setAmount(amount);
+        setExtra(extra);
+        this.effectID = PGR.core.createID(this.getClass().getSimpleName());
+        this.cardData = cardData;
+        this.descIndex = index;
+    }
+
     public PCustomCond(PCLCardData cardData, int index) {
         this(cardData, index, 1, 0);
+    }
+
+    public PCustomCond(PCLCardData cardData, PField_CardCategory fields, int index) {
+        this(cardData, fields, index, 1, 0);
     }
 
     public PCustomCond(PCLCardData cardData, int index, int amount) {

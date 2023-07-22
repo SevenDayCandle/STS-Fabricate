@@ -13,6 +13,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.resources.loadout.LoadoutCardSlot;
+import pinacolada.ui.characterSelection.PCLCardSlotEditor;
 
 import java.util.ArrayList;
 
@@ -25,15 +26,15 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-    private final LoadoutCardSlot slot;
+    private final PCLCardSlotEditor slot;
     private final boolean draggingScreen = false;
     private AbstractCard selectedCard;
     private EUICardGrid grid;
 
-    public PCLCardSlotSelectionEffect(LoadoutCardSlot slot) {
+    public PCLCardSlotSelectionEffect(PCLCardSlotEditor slot) {
         super(0.7f, true);
 
-        this.selectedCard = slot.getCard(false);
+        this.selectedCard = slot.slot.getCard(false);
         this.slot = slot;
         ArrayList<LoadoutCardSlot.Item> cards = slot.getSelectableCards();
 
@@ -60,8 +61,8 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
     protected void complete() {
         super.complete();
 
-        if (selectedCard != null && !selectedCard.cardID.equals(slot.getSelectedID())) {
-            slot.select(selectedCard.cardID, 1);
+        if (selectedCard != null && !selectedCard.cardID.equals(slot.slot.getSelectedID())) {
+            slot.slot.select(selectedCard.cardID, 1);
         }
     }
 
@@ -82,13 +83,13 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
     private void onCardClicked(AbstractCard card) {
         selectedCard = card;
         CardCrawlGame.sound.play("CARD_SELECT");
-        slot.select(card.cardID, 1);
+        slot.slot.select(card.cardID, 1);
         card.beginGlowing();
         complete();
     }
 
     private void onCardRender(SpriteBatch sb, AbstractCard card) {
-        for (LoadoutCardSlot.Item item : slot.cards) {
+        for (LoadoutCardSlot.Item item : slot.slot.cards) {
             if (item.ID.equals(card.cardID)) {
                 cardValue_text
                         .setLabel(item.estimatedValue)

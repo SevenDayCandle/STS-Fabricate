@@ -29,7 +29,6 @@ public class ModifyCost extends ModifyCard {
 
         if (untilPlayed) {
             CostUntilPlayedModifier.apply(card, getActualChange(card), !permanent);
-
         }
         else {
             if (permanent) {

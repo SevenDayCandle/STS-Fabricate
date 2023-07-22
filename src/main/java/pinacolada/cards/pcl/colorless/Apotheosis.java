@@ -25,6 +25,6 @@ public class Apotheosis extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.upgrade(0, PCLCardGroupHelper.Hand, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.DrawPile));
+        addUseMove(PMove.upgrade(0, PCLCardGroupHelper.Hand, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.DrawPile).edit(f -> f.setForced(true)));
     }
 }

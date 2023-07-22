@@ -112,7 +112,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return getBasicAddString();
+        return getBasicGiveString();
     }
 
     public String getUntilPlayedString() {
@@ -127,6 +127,12 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
                 .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin), !fields.forced)
                 .addCallback(cards -> cardAction(cards, order));
         super.use(info, order);
+    }
+
+    public PMove_Modify<T> useParentForce() {
+        fields.setForced(true);
+        useParent(true);
+        return this;
     }
 
     public abstract ActionT1<AbstractCard> getAction(PCLActions order);

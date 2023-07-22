@@ -8,30 +8,30 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 // Copied and modified from STS-AnimatorMod
 public class TemporaryDamageModifier extends AbstractCardModifier {
-    protected boolean removeOnPlay;
     protected boolean temporary;
+    protected boolean untilPlayed;
     public int change;
 
     public TemporaryDamageModifier(int change) {
         this(change, false, false);
     }
 
-    public TemporaryDamageModifier(int change, boolean removeOnPlay, boolean temporary) {
+    public TemporaryDamageModifier(int change, boolean temporary, boolean untilPlayed) {
         this.change = change;
-        this.removeOnPlay = removeOnPlay;
         this.temporary = temporary;
+        this.untilPlayed = untilPlayed;
     }
 
-    public static TemporaryDamageModifier apply(AbstractCard c, int change, boolean removeOnPlay, boolean temporary) {
+    public static TemporaryDamageModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
         TemporaryDamageModifier mod = get(c);
         if (mod == null) {
-            mod = new TemporaryDamageModifier(change, removeOnPlay, temporary);
+            mod = new TemporaryDamageModifier(change, temporary, untilPlayed);
             CardModifierManager.addModifier(c, mod);
         }
         else {
             mod.change += change;
-            mod.removeOnPlay = mod.removeOnPlay & removeOnPlay;
             mod.temporary = mod.temporary & temporary;
+            mod.untilPlayed = mod.untilPlayed & untilPlayed;
         }
         return mod;
     }
@@ -47,9 +47,10 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
 
     @Override
     public boolean removeOnCardPlayed(AbstractCard card) {
-        return removeOnPlay;
+        return untilPlayed;
     }
 
+    @Override
     public boolean removeAtEndOfTurn(AbstractCard card) {
         return temporary;
     }
@@ -60,6 +61,6 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new TemporaryDamageModifier(change, removeOnPlay, temporary);
+        return new TemporaryDamageModifier(change, temporary, untilPlayed);
     }
 }

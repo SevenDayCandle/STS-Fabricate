@@ -17,6 +17,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -30,6 +31,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.misc.PCLCollectibleSaveData;
+import pinacolada.patches.dungeon.RewardItemPatches;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -43,10 +45,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.megacrit.cardcrawl.rewards.RewardItem.TEXT;
 import static pinacolada.cards.base.PCLCard.CHAR_OFFSET;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
     protected static EUITooltip hiddenTooltip;
+    protected static EUITooltip sapphireTooltip;
 
     public static AbstractPlayer player;
     public static Random rng;
@@ -76,6 +80,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
             hiddenTooltip = new EUITooltip(LABEL[1], MSG[1]);
         }
         return hiddenTooltip;
+    }
+
+    public static EUITooltip getSapphireTooltip() {
+        if (sapphireTooltip == null) {
+            sapphireTooltip = new EUITooltip(TEXT[7], TEXT[8] + FontHelper.colorString(TEXT[6] + TEXT[9], "y"));
+        }
+        return sapphireTooltip;
     }
 
     protected static PCLRelicData register(Class<? extends PCLRelic> type) {
@@ -543,6 +554,11 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public void renderTip(SpriteBatch sb) {
+        if (RewardItemPatches.isRenderingForSapphire) {
+            EUITooltip.queueTooltips(mainTooltip, getSapphireTooltip());
+            RewardItemPatches.isRenderingForSapphire = false;
+            return;
+        }
         EUITooltip.queueTooltips(this);
     }
 

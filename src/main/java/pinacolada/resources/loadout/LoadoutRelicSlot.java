@@ -49,35 +49,6 @@ public class LoadoutRelicSlot {
         return selected != null ? selected.relic : null;
     }
 
-    public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
-        final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
-        for (Item item : this.relics) {
-            // Customs should not be treated as locked in this effect
-            boolean add = !isIDBanned(item.relic.relicId) && (!item.isLocked() || PCLCustomRelicSlot.get(item.relic.relicId) != null);
-            if (add) {
-                // Custom relics may incorrectly be marked as not seen
-                item.relic.isSeen = true;
-                for (LoadoutRelicSlot slot : container.relicSlots) {
-                    if (slot != this && slot.getRelic() == item.relic) {
-                        add = false;
-                    }
-                }
-            }
-
-            if (add) {
-                relics.add(item);
-            }
-        }
-        relics.sort((a, b) -> {
-            if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(a.relic.name, b.relic.name);
-            }
-            return a.estimatedValue - b.estimatedValue;
-        });
-
-        return relics;
-    }
-
     public int getSlotIndex() {
         return container.relicSlots.indexOf(this);
     }

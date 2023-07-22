@@ -1,9 +1,11 @@
 package pinacolada.monsters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -112,7 +114,6 @@ public class PCLCardAlly extends PCLCardCreature {
             this.name = creatureData.strings.NAME;
             this.hideHealthBar();
             this.animation = emptyAnimation;
-            this.card.glowScaleMult = 1f;
             this.card = null;
             return releasedCard;
         }
@@ -202,12 +203,13 @@ public class PCLCardAlly extends PCLCardCreature {
         super.renderAnimation(sb, color);
         if (card != null) {
             float actualTransparency = card.transparency;
-            card.glowScaleMult = 1.5f;
             card.transparency = hbAlpha;
             card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
-            card.updateGlow();
-            card.renderGlowManual(sb);
+            if (!hasTakenTurn) {
+                card.updateGlow();
+                card.renderGlowManual(sb, 2.5f);
+            }
             card.renderOuterGlow(sb);
             card.renderImage(sb, false, true);
             card.transparency = actualTransparency;
@@ -277,5 +279,20 @@ public class PCLCardAlly extends PCLCardCreature {
                 }
             });
         }
+    }
+
+    @Override
+    protected void updateFastAttackAnimation() {
+        this.animationTimer -= Gdx.graphics.getDeltaTime();
+
+        if (this.animationTimer > 0.5F) {
+            this.animX = Interpolation.pow3In.apply(0.0F, 60.0F * Settings.scale, (1.0F - this.animationTimer) * 2.0F);
+        } else if (this.animationTimer < 0.0F) {
+            this.animationTimer = 0.0F;
+            this.animX = 0.0F;
+        } else {
+            this.animX = Interpolation.fade.apply(0.0F, 60.0F * Settings.scale, this.animationTimer * 2.0F);
+        }
+
     }
 }

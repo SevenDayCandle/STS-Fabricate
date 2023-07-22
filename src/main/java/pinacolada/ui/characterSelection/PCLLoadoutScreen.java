@@ -430,12 +430,12 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         SingleCardViewPopup.isViewingUpgrade = value;
     }
 
-    public void trySelectCard(LoadoutCardSlot cardSlot) {
+    public void trySelectCard(PCLCardSlotEditor cardSlot) {
         cardSelectionEffect = new PCLCardSlotSelectionEffect(cardSlot);
         setSlotsActive(false);
     }
 
-    public void trySelectRelic(LoadoutRelicSlot relicSlot) {
+    public void trySelectRelic(PCLRelicSlotEditor relicSlot) {
         relicSelectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
         setSlotsActive(false);
     }

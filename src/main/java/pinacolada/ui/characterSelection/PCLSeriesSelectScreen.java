@@ -300,9 +300,10 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void onCardRightClicked(AbstractCard card) {
         selectedCard = EUIUtils.safeCast(card, PCLCard.class);
         PCLLoadout c = container.find(selectedCard);
-
-        contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
-        contextMenu.positionToOpen();
+        if (!c.isLocked()) {
+            contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
+            contextMenu.positionToOpen();
+        }
     }
 
     public void open(CharacterOption characterOption, AbstractPlayerData<?, ?> data, ActionT0 onClose) {
