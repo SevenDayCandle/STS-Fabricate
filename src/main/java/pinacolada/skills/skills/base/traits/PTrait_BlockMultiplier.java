@@ -56,7 +56,7 @@ public class PTrait_BlockMultiplier extends PBlockTrait<PField_Empty> {
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount) {
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
         return amount * (1f + (this.amount / 100f));
     }
 }

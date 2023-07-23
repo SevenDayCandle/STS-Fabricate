@@ -17,6 +17,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -44,7 +45,15 @@ public class PowerFormulaRow extends EUIHoverable {
     }
 
     protected void addAffinity(PCLAffinity af, float input, float result) {
-        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
+        addGeneric(af.getIcon(), input, result);
+    }
+
+    protected void addGeneric(float input, float result) {
+        addGeneric(PCLCoreImages.CardAffinity.unknown.texture(), input, result);
+    }
+
+    protected void addGeneric(Texture texture, float input, float result) {
+        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, texture, result).setMultiplier(result / input));
         resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1), resultHb.height * -0.5f);
     }
 

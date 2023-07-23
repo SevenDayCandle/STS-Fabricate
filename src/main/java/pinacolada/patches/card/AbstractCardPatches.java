@@ -1,9 +1,11 @@
 package pinacolada.patches.card;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -17,6 +19,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 public class AbstractCardPatches {
     public static boolean forcePlay;
@@ -38,6 +41,67 @@ public class AbstractCardPatches {
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }
+    }
+
+    @SpirePatch(clz = AbstractCard.class, method = "calculateCardDamage")
+    public static class PlayerDamageGivePatches {
+
+        @SpireInsertPatch(locator = MonsterDamageReceiveLocator.class, localvars = "tmp")
+        public static void singleReceive(AbstractCard __instance, AbstractMonster mo, @ByRef float[] tmp) {
+            tmp[0] = CombatManager.onModifyDamageReceiveFirst(tmp[0], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), mo, __instance);
+        }
+
+        @SpireInsertPatch(locator = MonsterMultiDamageReceiveLocator.class, localvars = {"tmp","i"})
+        public static void multiReceive(AbstractCard __instance, AbstractMonster mo, float[] tmp, int i) {
+            tmp[i] = CombatManager.onModifyDamageReceiveFirst(tmp[i], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), AbstractDungeon.getMonsters().monsters.get(i), __instance);
+        }
+
+        @SpireInsertPatch(locator = MonsterDamageFinalReceiveLocator.class, localvars = "tmp")
+        public static void singleFinalReceive(AbstractCard __instance, AbstractMonster mo, @ByRef float[] tmp) {
+            tmp[0] = CombatManager.onModifyDamageReceiveLast(tmp[0], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), mo, __instance);
+        }
+
+        @SpireInsertPatch(locator = MonsterMultiDamageFinalReceiveLocator.class, localvars = {"tmp","i"})
+        public static void multiFinalReceive(AbstractCard __instance, AbstractMonster mo, float[] tmp, int i) {
+            tmp[i] = CombatManager.onModifyDamageReceiveLast(tmp[i], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), AbstractDungeon.getMonsters().monsters.get(i), __instance);
+        }
+
+        private static class MonsterDamageReceiveLocator extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
+                int[] tmp = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{tmp[0]};
+            }
+        }
+
+        private static class MonsterDamageFinalReceiveLocator extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
+                int[] tmp = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{tmp[1]};
+            }
+        }
+
+        private static class MonsterMultiDamageReceiveLocator extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
+                int[] tmp = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{tmp[2]};
+            }
+        }
+
+        private static class MonsterMultiDamageFinalReceiveLocator extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
+                int[] tmp = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+                return new int[]{tmp[3]};
+            }
+        }
+
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "canUse")

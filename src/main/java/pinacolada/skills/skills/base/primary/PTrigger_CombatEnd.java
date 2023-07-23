@@ -8,6 +8,7 @@ import pinacolada.interfaces.subscribers.OnBattleEndSubscriber;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
@@ -16,7 +17,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscriber {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_CombatEnd.class, PField_Not.class, 0, 0)
+    public static final PSkillData<PField_CardGeneric> DATA = register(PTrigger_CombatEnd.class, PField_CardGeneric.class, 0, 0)
             .selfTarget();
 
     public PTrigger_CombatEnd() {

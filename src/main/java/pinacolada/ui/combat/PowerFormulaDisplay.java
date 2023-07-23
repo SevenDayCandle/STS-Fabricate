@@ -1,5 +1,6 @@
 package pinacolada.ui.combat;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -50,6 +51,18 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         }
     }
 
+    public void addAttackGeneric(float input, float result) {
+        if (input != result) {
+            attack.addGeneric(input, result);
+        }
+    }
+
+    public void addAttackGeneric(Texture tex, float input, float result) {
+        if (input != result) {
+            attack.addGeneric(tex, input, result);
+        }
+    }
+
     public void addAttackPower(AbstractPower po, float input, float result) {
         if (input != result) {
             attack.addPower(po, input, result);
@@ -59,6 +72,18 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     public void addDefendAffinity(PCLAffinity po, float input, float result) {
         if (input != result) {
             defend.addAffinity(po, input, result);
+        }
+    }
+
+    public void addDefendGeneric(float input, float result) {
+        if (input != result) {
+            defend.addGeneric(input, result);
+        }
+    }
+
+    public void addDefendGeneric(Texture tex, float input, float result) {
+        if (input != result) {
+            defend.addGeneric(tex, input, result);
         }
     }
 

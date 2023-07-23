@@ -49,7 +49,7 @@ public class PTrait_Damage extends PDamageTrait<PField_Empty> {
     }
 
     @Override
-    public float modifyDamage(PCLUseInfo info, float amount) {
+    public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         return amount + this.amount;
     }
 }

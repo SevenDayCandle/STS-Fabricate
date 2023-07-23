@@ -119,31 +119,47 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return counter;
     }
 
-    public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
-        return atBlockModify(block, c);
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        return atBlockLastModify(block, info.card);
+    }
+
+    public float atBlockLastModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atBlockModify(PCLUseInfo info, float block) {
+        return atBlockModify(block, info.card);
     }
 
     public float atBlockModify(float block, AbstractCard c) {
         return block;
     }
 
-    public float atDamageModify(PCLUseInfo info, float block, AbstractCard c) {
-        return atDamageModify(block, c);
+    public float atDamageLastModify(PCLUseInfo info, float block) {
+        return atDamageLastModify(block, info.card);
     }
 
-    public float atHealModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atDamageLastModify(float block, AbstractCard c) {
         return block;
     }
 
-    public float atHitCountModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atDamageModify(PCLUseInfo info, float block) {
+        return atDamageModify(block, info.card);
+    }
+
+    public float atHealModify(PCLUseInfo info, float block) {
         return block;
     }
 
-    public float atRightCountModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atHitCountModify(PCLUseInfo info, float block) {
         return block;
     }
 
-    public float atSkillBonusModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atRightCountModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atSkillBonusModify(PCLUseInfo info, float block) {
         return block;
     }
 

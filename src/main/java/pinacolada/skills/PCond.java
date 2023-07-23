@@ -13,6 +13,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -118,6 +119,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (PCond_CycleTo) new PCond_CycleTo(amount).edit(PField_CardGeneric::setRandom);
     }
 
+    public static PCond_CheckDamage damage(PCLCardTarget target, int amount) {
+        return new PCond_CheckDamage(target, amount);
+    }
+
     public static PCond_DiscardTo discard(int amount) {
         return new PCond_DiscardTo(amount, PCLCardGroupHelper.Hand);
     }
@@ -214,20 +219,20 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_HPPercent(target, amount);
     }
 
-    public static PCond_IsAttacking isAttacking(PCLCardTarget target) {
-        return new PCond_IsAttacking(target);
+    public static PCond_Intent isAttacking(PCLCardTarget target) {
+        return new PCond_Intent(target, PCLIntentType.Attack);
     }
 
-    public static PCond_IsBuffing isBuffing(PCLCardTarget target) {
-        return new PCond_IsBuffing(target);
+    public static PCond_Intent isBuffing(PCLCardTarget target) {
+        return new PCond_Intent(target, PCLIntentType.Buff);
     }
 
-    public static PCond_IsDebuffing isDebuffing(PCLCardTarget target) {
-        return new PCond_IsDebuffing(target);
+    public static PCond_Intent isDebuffing(PCLCardTarget target) {
+        return new PCond_Intent(target, PCLIntentType.Debuff);
     }
 
-    public static PCond_IsDefending isDefending(PCLCardTarget target) {
-        return new PCond_IsDefending(target);
+    public static PCond_Intent isDefending(PCLCardTarget target) {
+        return new PCond_Intent(target, PCLIntentType.Defend);
     }
 
     public static PCond_OnAllyTrigger onAllyTrigger() {
@@ -423,25 +428,49 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount) {
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
-            return this.childEffect.modifyBlock(info, amount);
+            return this.childEffect.modifyBlockFirst(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamage(PCLUseInfo info, float amount) {
+    public float modifyBlockLast(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
-            return this.childEffect.modifyDamage(info, amount);
+            return this.childEffect.modifyBlockLast(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+    public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
-            return this.childEffect.modifyDamageIncoming(info, amount, type);
+            return this.childEffect.modifyDamageGiveFirst(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+            return this.childEffect.modifyDamageGiveLast(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+            return this.childEffect.modifyDamageReceiveFirst(info, amount, type);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+            return this.childEffect.modifyDamageReceiveLast(info, amount, type);
         }
         return amount;
     }

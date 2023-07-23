@@ -10,6 +10,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
@@ -74,6 +75,10 @@ public abstract class PField implements Serializable {
 
     public static String getGroupString(List<PCLCardGroupHelper> groups) {
         return groups.size() >= 3 ? PGR.core.strings.subjects_anyPile() : PCLCoreStrings.joinWithOr(g -> g.name, groups);
+    }
+
+    public static String getIntentString(ArrayList<PCLIntentType> intents) {
+        return PCLCoreStrings.joinWithOr(PCLIntentType::getActionString, intents);
     }
 
     public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value) {

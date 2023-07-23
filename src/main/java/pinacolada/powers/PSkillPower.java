@@ -14,17 +14,19 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PSkillPower extends PCLPower {
+public class PSkillPower extends PCLPower implements TriggerConnection {
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
     public PSkillPower(AbstractCreature owner, int turns, PTrigger... effects) {
@@ -38,7 +40,7 @@ public class PSkillPower extends PCLPower {
         for (PTrigger effect : effects) {
             PTrigger effectCopy = effect.makeCopy();
             this.ptriggers.add(effectCopy);
-            effectCopy.power = this;
+            effectCopy.controller = this;
             effectCopy.forceResetUses();
 
             if (this.powerStrings.NAME == null) {
@@ -79,52 +81,19 @@ public class PSkillPower extends PCLPower {
     }
 
     @Override
-    public float atDamageGive(float damage, DamageInfo.DamageType type) {
-        return atDamageGive(CombatManager.playerSystem.getInfo(null, owner, owner), damage, type, null);
-    }
-
-    @Override
-    public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard c) {
-        return atDamageGive(CombatManager.playerSystem.getInfo(c, owner, owner), damage, type, c);
-    }
-
-    @Override
-    public float atDamageReceive(float damage, DamageInfo.DamageType type) {
-        PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
+    public float atDamageFinalGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
-            damage = effect.modifyDamageIncoming(info, damage, type);
+            damage = effect.modifyDamageGiveLast(info, damage);
         }
-        return super.atDamageReceive(damage, type);
-    }
-
-    @Override
-    public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
-        PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
-        refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
-            damage = effect.modifyDamageIncoming(info, damage, type);
-        }
-        return super.atDamageReceive(damage, type, card);
-    }
-
-    // Update this power's effects whenever you play a card
-    @Override
-    public void onAfterUseCard(AbstractCard card, UseCardAction act) {
-        refreshTriggers(CombatManager.playerSystem.getInfo(card, owner, owner));
-        super.onAfterUseCard(card, act);
-    }
-
-    @Override
-    public float modifyBlock(float block, AbstractCard c) {
-        return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
+        return damage;
     }
 
     @Override
     public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
-            damage = effect.modifyDamage(info, damage);
+            damage = effect.modifyDamageGiveFirst(info, damage);
         }
         return damage;
     }
@@ -154,7 +123,7 @@ public class PSkillPower extends PCLPower {
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
-            block = effect.modifyBlock(info, block);
+            block = effect.modifyBlockFirst(info, block);
         }
         return block;
     }
@@ -226,6 +195,100 @@ public class PSkillPower extends PCLPower {
         }
     }
 
+    @Override
+    public float atDamageGive(float damage, DamageInfo.DamageType type) {
+        return atDamageGive(CombatManager.playerSystem.getInfo(null, owner, owner), damage, type, null);
+    }
+
+    @Override
+    public float atDamageFinalGive(float damage, DamageInfo.DamageType type) {
+        return atDamageFinalGive(CombatManager.playerSystem.getInfo(null, owner, owner), damage, type, null);
+    }
+
+    @Override
+    public float atDamageFinalReceive(float damage, DamageInfo.DamageType type) {
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifyDamageReceiveLast(info, damage, type);
+        }
+        return super.atDamageFinalReceive(damage, type);
+    }
+
+    @Override
+    public float atDamageReceive(float damage, DamageInfo.DamageType type) {
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifyDamageReceiveFirst(info, damage, type);
+        }
+        return super.atDamageReceive(damage, type);
+    }
+
+    @Override
+    public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard c) {
+        return atDamageGive(CombatManager.playerSystem.getInfo(c, owner, owner), damage, type, c);
+    }
+
+    @Override
+    public float atDamageFinalGive(float damage, DamageInfo.DamageType type, AbstractCard c) {
+        return atDamageFinalGive(CombatManager.playerSystem.getInfo(c, owner, owner), damage, type, c);
+    }
+
+    @Override
+    public float atDamageFinalReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifyDamageReceiveLast(info, damage, type);
+        }
+        return super.atDamageFinalReceive(damage, type, card);
+    }
+
+    @Override
+    public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifyDamageReceiveFirst(info, damage, type);
+        }
+        return super.atDamageReceive(damage, type, card);
+    }
+
+    // Update this power's effects whenever you play a card
+    @Override
+    public void onAfterUseCard(AbstractCard card, UseCardAction act) {
+        refreshTriggers(CombatManager.playerSystem.getInfo(card, owner, owner));
+        super.onAfterUseCard(card, act);
+    }
+
+    @Override
+    public float modifyBlock(float block, AbstractCard c) {
+        return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
+    }
+
+    @Override
+    public float modifyBlockLast(float block) {
+        return modifyBlockLast(CombatManager.playerSystem.getInfo(null, owner, owner), block, null);
+    }
+
+    @Override
+    public boolean canActivate(PTrigger trigger) {
+        return !GameUtilities.isDeadOrEscaped(owner);
+    }
+
+    @Override
+    public AbstractCreature getOwner() {
+        return owner;
+    }
+
+    @Override
+    public void onActivate() {
+        if (!GameUtilities.isDeadOrEscaped(owner)) {
+            flash();
+        }
+    }
+
     public PowerType getPowerType() {
         for (PTrigger trigger : ptriggers) {
             if (trigger.isDetrimental()) {
@@ -237,6 +300,14 @@ public class PSkillPower extends PCLPower {
 
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount) {
         return new PSkillPower(m, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
+    }
+
+    public float modifyBlockLast(PCLUseInfo info, float block, AbstractCard c) {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            block = effect.modifyBlockLast(info, block);
+        }
+        return block;
     }
 
     public void refreshTriggers(PCLUseInfo info) {

@@ -61,7 +61,6 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
@@ -274,6 +273,18 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    public void addAttackDisplay(Texture tex, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseDamage > 0) {
+            formulaDisplay.addAttackGeneric(tex, oldDamage, tempDamage);
+        }
+    }
+
+    public void addAttackDisplay(float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseDamage > 0) {
+            formulaDisplay.addAttackGeneric(oldDamage, tempDamage);
+        }
+    }
+
     public void addAttackResult(float oldDamage, float tempDamage) {
         if (formulaDisplay != null && baseDamage > 0) {
             formulaDisplay.setAttackResult(oldDamage, tempDamage);
@@ -348,6 +359,18 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public void addDefendDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
         if (formulaDisplay != null && baseBlock > 0) {
             formulaDisplay.addDefendAffinity(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addDefendDisplay(Texture p, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseBlock > 0) {
+            formulaDisplay.addDefendGeneric(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addDefendDisplay(float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseBlock > 0) {
+            formulaDisplay.addDefendGeneric(oldDamage, tempDamage);
         }
     }
 
@@ -1527,14 +1550,28 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     protected float modifyBlock(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyBlock(info, amount);
+            amount = be.modifyBlockFirst(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyBlockLast(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyBlockLast(info, amount);
         }
         return amount;
     }
 
     protected float modifyDamage(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyDamage(info, amount);
+            amount = be.modifyDamageGiveFirst(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyDamageLast(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyDamageGiveLast(info, amount);
         }
         return amount;
     }
@@ -1667,6 +1704,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float tempRightCount = baseRightCount;
         tempDamage = modifyDamage(info, tempDamage);
         tempBlock = modifyBlock(info, tempBlock);
+        float oldBlock = tempBlock;
+        float oldDamage = tempDamage;
 
         AbstractCreature owner = getSourceCreature();
         if (owner != null) {
@@ -1674,17 +1713,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
             if (owner instanceof AbstractPlayer) {
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
-                    tempDamage = r.atDamageModify(tempDamage, this);
+                    oldBlock = tempBlock;
+                    oldDamage = tempDamage;
                     if (r instanceof PCLRelic) {
-                        tempBlock = ((PCLRelic) r).atBlockModify(tempBlock, this);
+                        tempDamage = ((PCLRelic) r).atDamageModify(info, tempDamage);
+                        tempBlock = ((PCLRelic) r).atBlockModify(info, tempBlock);
                     }
+                    else {
+                        tempDamage = r.atDamageModify(tempDamage, this);
+                    }
+                    addAttackDisplay(r.img, oldDamage, tempDamage);
+                    addDefendDisplay(r.img, oldBlock, tempBlock);
                 }
 
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
                     if (r instanceof PCLRelic) {
-                        effectBonus = ((PCLRelic) r).atSkillBonusModify(info, effectBonus, this);
-                        tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount, this);
-                        tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount, this);
+                        effectBonus = ((PCLRelic) r).atSkillBonusModify(info, effectBonus);
+                        tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount);
+                        tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount);
                     }
                 }
             }
@@ -1702,8 +1748,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
             if (attackType.useFocus) {
                 for (AbstractPower p : owner.powers) {
-                    float oldBlock = tempBlock;
-                    float oldDamage = tempDamage;
+                    oldBlock = tempBlock;
+                    oldDamage = tempDamage;
                     tempBlock = p.modifyBlock(tempBlock, this);
                     if (FocusPower.POWER_ID.equals(p.ID)) {
                         tempDamage += p.amount;
@@ -1717,8 +1763,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
             else {
                 for (AbstractPower p : owner.powers) {
-                    float oldBlock = tempBlock;
-                    float oldDamage = tempDamage;
+                    oldBlock = tempBlock;
+                    oldDamage = tempDamage;
 
                     if (p instanceof PCLPower) {
                         tempBlock = ((PCLPower) p).modifyBlock(info, tempBlock, this);
@@ -1741,6 +1787,29 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
             tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this, this, enemy);
 
+            oldBlock = tempBlock;
+            oldDamage = tempDamage;
+            tempDamage = modifyDamageLast(info, tempDamage);
+            tempBlock = modifyBlockLast(info, tempBlock);
+            addAttackDisplay(oldDamage, tempDamage);
+            addDefendDisplay(oldBlock, tempBlock);
+
+            if (owner instanceof AbstractPlayer) {
+                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
+                    if (r instanceof PCLRelic) {
+                        tempDamage = ((PCLRelic) r).atDamageLastModify(info, tempDamage);
+                        tempBlock = ((PCLRelic) r).atBlockLastModify(info, tempBlock);
+                    }
+                }
+            }
+
+            oldBlock = tempBlock;
+            oldDamage = tempDamage;
+            tempBlock = CardModifierManager.onModifyBlockFinal(tempBlock, this);
+            tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, asEnemy);
+            addAttackDisplay(oldDamage, tempDamage);
+            addDefendDisplay(oldBlock, tempBlock);
+
             for (AbstractPower p : owner.powers) {
                 tempBlock = p.modifyBlockLast(tempBlock);
             }
@@ -1750,9 +1819,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                     tempDamage *= 2f * applyCount;
                 }
 
+                oldDamage = tempDamage;
+                tempDamage = CombatManager.onModifyDamageReceiveFirst(tempDamage, damageTypeForTurn, getSourceCreature(), enemy, this);
+                addAttackDisplay(oldDamage, tempDamage);
+
                 if (attackType.useFocus) {
                     for (AbstractPower p : enemy.powers) {
-                        float oldDamage = tempDamage;
+                        oldDamage = tempDamage;
                         // Lock-on calculations are hardcoded in AbstractOrb so we are falling back on PCLLockOn's multiplier for now
                         if (LockOnPower.POWER_ID.equals(p.ID)) {
                             tempDamage *= PCLLockOnPower.getOrbMultiplier(enemy.isPlayer);
@@ -1767,7 +1840,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 }
                 else {
                     for (AbstractPower p : enemy.powers) {
-                        float oldDamage = tempDamage;
+                        oldDamage = tempDamage;
                         for (int i = 0; i < applyCount; i++) {
                             tempDamage = p.atDamageReceive(tempDamage, damageTypeForTurn, this);
                         }
@@ -1782,25 +1855,29 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
 
             for (AbstractPower p : owner.powers) {
-                float oldDamage = tempDamage;
+                oldDamage = tempDamage;
                 for (int i = 0; i < applyCount; i++) {
                     tempDamage = p.atDamageFinalGive(tempDamage, damageTypeForTurn, this);
                 }
                 addAttackDisplay(p, oldDamage, tempDamage);
             }
 
-            tempBlock = CardModifierManager.onModifyBlockFinal(tempBlock, this);
-            tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, asEnemy);
-
             if (applyEnemyPowers) {
+
+                oldDamage = tempDamage;
+                tempDamage = CombatManager.onModifyDamageReceiveLast(tempDamage, damageTypeForTurn, getSourceCreature(), enemy, this);
+                addAttackDisplay(oldDamage, tempDamage);
+
                 for (AbstractPower p : enemy.powers) {
-                    float oldDamage = tempDamage;
+                    oldDamage = tempDamage;
                     for (int i = 0; i < applyCount; i++) {
                         tempDamage = p.atDamageFinalReceive(tempDamage, damageTypeForTurn, this);
                     }
                     addAttackDisplay(p, oldDamage, tempDamage);
                 }
+                oldDamage = tempDamage;
                 tempDamage = CombatManager.onDamageOverride(enemy, damageTypeForTurn, tempDamage, this);
+                addAttackDisplay(oldDamage, tempDamage);
             }
         }
 

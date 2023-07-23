@@ -861,7 +861,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getTargetIsString(PCLCardTarget target, String subject) {
-        return TEXT.cond_ifX(TEXT.cond_xIsY(getTargetSubjectString(target), subject));
+        return TEXT.cond_ifX(TEXT.cond_xIsY(getTargetSubjectString(target), getTargetOrdinal(target), subject));
     }
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
@@ -954,6 +954,26 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 }
             default:
                 return TEXT.subjects_you;
+        }
+    }
+
+    public final String getTargetStringSingular() {
+        return getTargetStringSingular(target);
+    }
+
+    public final String getTargetStringSingular(PCLCardTarget target) {
+        switch (target) {
+            case AllAlly:
+            case RandomAlly:
+            case SingleAlly:
+            case Team:
+                return TEXT.subjects_ally;
+            case AllEnemy:
+            case RandomEnemy:
+            case Single:
+                return TEXT.subjects_enemy;
+            default:
+                return TEXT.subjects_character;
         }
     }
 
@@ -1220,16 +1240,28 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public float modifyBlock(PCLUseInfo info, float amount) {
-        return this.childEffect != null ? this.childEffect.modifyBlock(info, amount) : amount;
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
+        return this.childEffect != null ? this.childEffect.modifyBlockFirst(info, amount) : amount;
     }
 
-    public float modifyDamage(PCLUseInfo info, float amount) {
-        return this.childEffect != null ? this.childEffect.modifyDamage(info, amount) : amount;
+    public float modifyBlockLast(PCLUseInfo info, float amount) {
+        return this.childEffect != null ? this.childEffect.modifyBlockLast(info, amount) : amount;
     }
 
-    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        return this.childEffect != null ? this.childEffect.modifyDamageIncoming(info, amount, type) : amount;
+    public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
+        return this.childEffect != null ? this.childEffect.modifyDamageGiveFirst(info, amount) : amount;
+    }
+
+    public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
+        return this.childEffect != null ? this.childEffect.modifyDamageGiveLast(info, amount) : amount;
+    }
+
+    public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        return this.childEffect != null ? this.childEffect.modifyDamageReceiveFirst(info, amount, type) : amount;
+    }
+
+    public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        return this.childEffect != null ? this.childEffect.modifyDamageReceiveLast(info, amount, type) : amount;
     }
 
     public float modifyHeal(PCLUseInfo info, float amount) {

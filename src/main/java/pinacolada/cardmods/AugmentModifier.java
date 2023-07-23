@@ -60,15 +60,25 @@ public class AugmentModifier extends AbstractCardModifier {
         return augment.skill;
     }
 
-    @Override
-    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return augment.skill.modifyDamage(getInfo(card, target), damage);
-    }
-
     // Generate infos manually because we cannot attach the augment.skill to the card if it is not an EditorCard
     @Override
     public float modifyBlock(float block, AbstractCard card) {
-        return augment.skill.modifyBlock(getInfo(card, null), block);
+        return augment.skill.modifyBlockFirst(getInfo(card, null), block);
+    }
+
+    @Override
+    public float modifyBlockFinal(float block, AbstractCard card) {
+        return augment.skill.modifyBlockLast(getInfo(card, null), block);
+    }
+
+    @Override
+    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return augment.skill.modifyDamageGiveFirst(getInfo(card, target), damage);
+    }
+
+    @Override
+    public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return augment.skill.modifyDamageGiveLast(getInfo(card, target), damage);
     }
 
     @Override

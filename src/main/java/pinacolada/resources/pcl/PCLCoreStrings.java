@@ -439,38 +439,39 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_fromX = subjects.TEXT[30];
     public final String subjects_hits = subjects.TEXT[31];
     public final String subjects_inX = subjects.TEXT[32];
-    public final String subjects_ofX = subjects.TEXT[33];
-    public final String subjects_permanentlyX = subjects.TEXT[34];
-    public final String subjects_playingXWithY = subjects.TEXT[35];
-    public final String subjects_potion = subjects.TEXT[36];
-    public final String subjects_randomX = subjects.TEXT[37];
-    public final String subjects_randomlyX = subjects.TEXT[38];
-    public final String subjects_relic = subjects.TEXT[39];
-    public final String subjects_shuffleYourDeck = subjects.TEXT[40];
-    public final String subjects_bottomOfX = subjects.TEXT[41];
-    public final String subjects_leftmostX = subjects.TEXT[42];
-    public final String subjects_rightmostX = subjects.TEXT[43];
-    public final String subjects_target = subjects.TEXT[44];
-    public final String subjects_topOfX = subjects.TEXT[45];
-    public final String subjects_theirX = subjects.TEXT[46];
-    public final String subjects_themX = subjects.TEXT[47];
-    public final String subjects_theyX = subjects.TEXT[48];
-    public final String subjects_thisCard = subjects.TEXT[49];
-    public final String subjects_this = subjects.TEXT[50];
-    public final String subjects_unblockedX = subjects.TEXT[51];
-    public final String subjects_x = subjects.TEXT[52];
-    public final String subjects_you = subjects.TEXT[53];
-    public final String subjects_yourFirstX = subjects.TEXT[54];
-    public final String subjects_yourX = subjects.TEXT[55];
-    public final String subjects_xOfY = subjects.TEXT[56];
-    public final String subjects_xOnY = subjects.TEXT[57];
-    public final String subjects_xOrLessY = subjects.TEXT[58];
-    public final String subjects_xThisCombat = subjects.TEXT[59];
-    public final String subjects_xThisTurn = subjects.TEXT[60];
-    public final String subjects_xTimes = subjects.TEXT[61];
-    public final String subjects_xUntilY = subjects.TEXT[62];
-    public final String subjects_xWithY = subjects.TEXT[63];
-    public final String subjects_xCost = subjects.TEXT[64];
+    public final String subjects_intent = subjects.TEXT[33];
+    public final String subjects_ofX = subjects.TEXT[34];
+    public final String subjects_permanentlyX = subjects.TEXT[35];
+    public final String subjects_playingXWithY = subjects.TEXT[36];
+    public final String subjects_potion = subjects.TEXT[37];
+    public final String subjects_randomX = subjects.TEXT[38];
+    public final String subjects_randomlyX = subjects.TEXT[39];
+    public final String subjects_relic = subjects.TEXT[40];
+    public final String subjects_shuffleYourDeck = subjects.TEXT[41];
+    public final String subjects_bottomOfX = subjects.TEXT[42];
+    public final String subjects_leftmostX = subjects.TEXT[43];
+    public final String subjects_rightmostX = subjects.TEXT[44];
+    public final String subjects_target = subjects.TEXT[45];
+    public final String subjects_topOfX = subjects.TEXT[46];
+    public final String subjects_theirX = subjects.TEXT[47];
+    public final String subjects_themX = subjects.TEXT[48];
+    public final String subjects_theyX = subjects.TEXT[49];
+    public final String subjects_thisCard = subjects.TEXT[50];
+    public final String subjects_this = subjects.TEXT[51];
+    public final String subjects_unblockedX = subjects.TEXT[52];
+    public final String subjects_x = subjects.TEXT[53];
+    public final String subjects_you = subjects.TEXT[54];
+    public final String subjects_yourFirstX = subjects.TEXT[55];
+    public final String subjects_yourX = subjects.TEXT[56];
+    public final String subjects_xOfY = subjects.TEXT[57];
+    public final String subjects_xOnY = subjects.TEXT[58];
+    public final String subjects_xOrLessY = subjects.TEXT[59];
+    public final String subjects_xThisCombat = subjects.TEXT[60];
+    public final String subjects_xThisTurn = subjects.TEXT[61];
+    public final String subjects_xTimes = subjects.TEXT[62];
+    public final String subjects_xUntilY = subjects.TEXT[63];
+    public final String subjects_xWithY = subjects.TEXT[64];
+    public final String subjects_xCost = subjects.TEXT[65];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -963,8 +964,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_bonusIf(Object desc6, Object desc7) {
         return EUIRM.strings.generic2(desc6, cond_ifX(desc7));
     }
-    public final String cond_ifTargetIs(Object target, Object subject) {
-        return cond_ifX(cond_xIsY(target, subject));
+    public final String cond_ifTargetIs(Object target, Object ordinal, Object subject) {
+        return cond_ifX(cond_xIsY(target, ordinal, subject));
     }
     public final String cond_ifYouDidThisCombat(Object verb, Object obj) {
         return subjects_thisCombat(cond_ifTargetDidX(subjects_you, verb, obj));
@@ -1069,44 +1070,47 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_whenAObjectIsOn(Object target, Object desc6, Object place) {
         return condFmt(28, target, desc6, place);
     }
-    public final String cond_xActive(Object subject) {
+    public final String cond_whileIn(Object subject) {
         return condFmt(29, subject);
     }
+    public final String cond_xActive(Object subject) {
+        return condFmt(30, subject);
+    }
     public final String cond_xAndY(Object subject, Object target) {
-        return condFmt(30, subject, target);
+        return condFmt(31, subject, target);
     }
-    public final String cond_xIsY(Object desc5, Object desc6) {
-        return condFmt(31, desc5, desc6);
+    public final String cond_xIsY(Object desc6, Object ordinal, Object desc7) {
+        return condFmt(32, desc6, ordinal, desc7);
     }
-    public final String cond_xOrY(Object desc5, Object desc6) {
-        return condFmt(32, desc5, desc6);
+    public final String cond_xOrY(Object desc6, Object desc7) {
+        return condFmt(33, desc6, desc7);
     }
     public final String cond_xPerY(Object subject, Object per) {
-        return condFmt(33, subject, per);
+        return condFmt(34, subject, per);
     }
-    public final String cond_xPerYZ(Object desc5, Object desc6, Object desc7) {
-        return condFmt(34, desc5, desc6, desc7);
+    public final String cond_xPerYZ(Object desc6, Object desc7, Object desc8) {
+        return condFmt(35, desc6, desc7, desc8);
     }
-    public final String cond_xPerIn(Object desc5, Object desc6, Object desc7) {
-        return condFmt(35, desc5, desc6, desc7);
+    public final String cond_xPerIn(Object desc6, Object desc7, Object desc8) {
+        return condFmt(36, desc6, desc7, desc8);
     }
-    public final String cond_timesPerCombat(Object desc4) {
-        return condFmt(36, desc4);
+    public final String cond_timesPerCombat(Object desc5) {
+        return condFmt(37, desc5);
     }
-    public final String cond_timesPerTurn(Object desc4) {
-        return condFmt(37, desc4);
+    public final String cond_timesPerTurn(Object desc5) {
+        return condFmt(38, desc5);
     }
-    public final String cond_xToY(Object desc4, Object desc5) {
-        return condFmt(38, desc4, desc5);
+    public final String cond_xToY(Object desc5, Object desc6) {
+        return condFmt(39, desc5, desc6);
     }
-    public final String cond_xThenY(Object desc4, Object desc5) {
-        return condFmt(39, desc4, desc5);
+    public final String cond_xThenY(Object desc5, Object desc6) {
+        return condFmt(40, desc5, desc6);
     }
-    public final String cond_xConditional(Object desc4, Object desc5) {
-        return condFmt(40, desc4, desc5);
+    public final String cond_xConditional(Object desc5, Object desc6) {
+        return condFmt(41, desc5, desc6);
     }
     public final String cond_passive() {
-        return condFmt(41);
+        return condFmt(42);
     }
 
     public final String csel_obtainBronzeAtAscension(int ascension) {

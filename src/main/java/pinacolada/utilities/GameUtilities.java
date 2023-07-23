@@ -493,6 +493,10 @@ public class GameUtilities {
         return "";
     }
 
+    public static AbstractCreature getCardOwner(AbstractCard card) {
+        return card instanceof PCLCard ? ((PCLCard) card).getSourceCreature() : player;
+    }
+
     public static CardGroup getCardPool(AbstractCard.CardRarity rarity) {
         if (rarity == null) {
             return AbstractDungeon.colorlessCardPool;

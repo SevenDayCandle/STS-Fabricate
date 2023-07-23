@@ -137,6 +137,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip envenom = EUIKeywordTooltip.findByID("Envenom");
     public EUIKeywordTooltip ephemeral = EUIKeywordTooltip.findByID("Ephemeral");
     public EUIKeywordTooltip equilibrium = EUIKeywordTooltip.findByID("Equilibrium");
+    public EUIKeywordTooltip escape = EUIKeywordTooltip.findByID("Escape");
     public EUIKeywordTooltip ethereal = EUIKeywordTooltip.findByID("~Ethereal");
     public EUIKeywordTooltip evoke = EUIKeywordTooltip.findByID("Evoke");
     public EUIKeywordTooltip exhaust = EUIKeywordTooltip.findByID("Exhaust");

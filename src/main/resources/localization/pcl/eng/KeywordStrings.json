@@ -146,6 +146,13 @@
 		"DESCRIPTION": "Gain [E] at the start of next turn.",
 		"NAME": "Energized"
 	},
+	"Escape":	{
+		"DESCRIPTION": "Skip the current battle. Receive no rewards.",
+		"NAME": "Escape",
+		"PAST": "escaped",
+		"PRESENT": "escapes",
+		"PROGRESSIVE": "escaping"
+	},
 	"Entangled":	{
 		"DESCRIPTION": "You may not play any Attacks this turn.",
 		"NAME": "Entangled"
@@ -473,7 +480,8 @@
 		"DESCRIPTION": "Cannot act.",
 		"NAME": "Stun",
 		"PAST": "stunned",
-		"PRESENT": "stuns"
+		"PRESENT": "stuns",
+		"PROGRESSIVE": "stunning"
 	},
 	"Summon":	{
 		"DESCRIPTION": "#ySummon cards act every turn and intercept unblocked damage.",

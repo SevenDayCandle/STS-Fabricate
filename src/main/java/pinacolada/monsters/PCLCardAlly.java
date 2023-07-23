@@ -206,10 +206,8 @@ public class PCLCardAlly extends PCLCardCreature {
             card.transparency = hbAlpha;
             card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
-            if (!hasTakenTurn) {
-                card.updateGlow();
-                card.renderGlowManual(sb, 2.5f);
-            }
+            card.updateGlow();
+            card.renderGlowManual(sb, !hasTakenTurn ? 2.3f : 1f);
             card.renderOuterGlow(sb);
             card.renderImage(sb, false, true);
             card.transparency = actualTransparency;
@@ -261,9 +259,8 @@ public class PCLCardAlly extends PCLCardCreature {
 
     protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY) {
         boolean dim = shouldDim();
-        Color iconColor = dim ? TAKEN_TURN_COLOR : Color.WHITE;
-        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, iconColor, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, Settings.CREAM_COLOR);
+        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? TAKEN_TURN_COLOR : Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, dim ? TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
         return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 

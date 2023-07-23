@@ -205,6 +205,22 @@ public class CardGroupPatches {
         }
     }
 
+    @SpirePatch(clz = CardGroup.class, method = "moveToBottomOfDeck")
+    public static class CardGroupPatches_MoveToBottomOfDeck {
+        @SpirePrefixPatch
+        public static void prefix(CardGroup __instance, AbstractCard card) {
+            CombatManager.onCardReshuffled(card, __instance);
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "moveToDeck")
+    public static class CardGroupPatches_MoveToDrawPile {
+        @SpirePrefixPatch
+        public static void prefix(CardGroup __instance, AbstractCard card, boolean randomSpot) {
+            CombatManager.onCardReshuffled(card, __instance);
+        }
+    }
+
     @SpirePatch(clz = CardGroup.class, method = "moveToExhaustPile")
     public static class CardGroupPatches_MoveToExhaustPile {
         @SpirePrefixPatch

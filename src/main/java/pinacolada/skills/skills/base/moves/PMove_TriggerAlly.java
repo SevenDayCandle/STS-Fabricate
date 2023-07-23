@@ -45,7 +45,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
     public String getSubText(PCLCardTarget perspective) {
         // If the card with this skill can target both enemies and allies, we need to make it clear that triggering can only happen on allies
         if ((target == PCLCardTarget.Single || target == PCLCardTarget.SingleAlly) && sourceCard instanceof PCLCard && ((PCLCard) sourceCard).pclTarget.targetsSingle()) {
-            return TEXT.cond_ifTargetIs(TEXT.subjects_target, PGR.core.tooltips.summon.title) + ", " + (amount == 1 ? TEXT.act_trigger(TEXT.subjects_them(1)) : TEXT.act_triggerXTimes(TEXT.subjects_them(1), getAmountRawString()));
+            return TEXT.cond_ifTargetIs(TEXT.subjects_target, getTargetOrdinal(target), PGR.core.tooltips.summon.title) + ", " + (amount == 1 ? TEXT.act_trigger(TEXT.subjects_them(1)) : TEXT.act_triggerXTimes(TEXT.subjects_them(1), getAmountRawString()));
         }
         return amount == 1 ? TEXT.act_trigger(getTargetStringPerspective(perspective)) : TEXT.act_triggerXTimes(getTargetStringPerspective(perspective), getAmountRawString());
     }

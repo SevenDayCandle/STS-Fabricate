@@ -1,41 +1,50 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT0;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.CardTriggerConnection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PSkillPower;
+import pinacolada.interfaces.markers.TriggerConnection;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_CombatEnd;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectPage;
+import pinacolada.ui.editor.PCLCustomPowerEffectPage;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class PTrigger extends PPrimary<PField_Not> {
+// TODO add support for usage directly on cards while in hand
+public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public static final int TRIGGER_PRIORITY = 0;
     protected int usesThisTurn;
-    public PSkillPower power;
+    public TriggerConnection controller;
 
-    public PTrigger(PSkillData<PField_Not> data) {
+    public PTrigger(PSkillData<PField_CardGeneric> data) {
         this(data, PCLCardTarget.None, -1);
     }
 
-    public PTrigger(PSkillData<PField_Not> data, PCLCardTarget target, int maxUses) {
+    public PTrigger(PSkillData<PField_CardGeneric> data, PCLCardTarget target, int maxUses) {
         super(data, target, maxUses);
         updateUsesAmount();
     }
 
-    public PTrigger(PSkillData<PField_Not> data, PSkillSaveData content) {
+    public PTrigger(PSkillData<PField_CardGeneric> data, PSkillSaveData content) {
         super(data, content);
         updateUsesAmount();
     }
@@ -81,8 +90,8 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     protected void flash() {
-        if (power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
-            power.flash();
+        if (controller != null) {
+            controller.onActivate();
         }
         if (source instanceof AbstractRelic) {
             ((AbstractRelic) source).flash();
@@ -102,7 +111,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     // When attached to a power, get the power this is attached to
     @Override
     public AbstractCreature getOwnerCreature() {
-        return power != null ? power.owner : super.getOwnerCreature();
+        return controller != null ? controller.getOwner() : super.getOwnerCreature();
     }
 
     @Override
@@ -182,6 +191,9 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_combat, null);
+        if (!(editor.editor instanceof PCLCustomPowerEffectPage) && editor.editor.screen instanceof PCLCustomCardEditCardScreen) {
+            editor.registerPile(fields.groupTypes);
+        }
     }
 
     public PTrigger stack(PSkill<?> other) {
@@ -202,12 +214,23 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
+    public void triggerOnCreate(AbstractCard c, boolean startOfBattle) {
+        super.triggerOnCreate(c, startOfBattle);
+        CardTriggerConnection ct = new CardTriggerConnection(this, c);
+        ct.initialize();
+        controller = ct;
+    }
+
+    @Override
     public void triggerOnStartOfBattleForRelic() {
         super.triggerOnStartOfBattleForRelic();
         forceResetUses();
     }
 
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        if (controller != null && !controller.canActivate(this)) {
+            return false;
+        }
         if (usesThisTurn != 0) {
             boolean result = super.tryPassParent(source, info);
 
@@ -250,10 +273,15 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (amount > 0) {
-            return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+        String base = null;
+        if (sourceCard instanceof PointerProvider && ((PointerProvider) sourceCard).getEffects().contains(this)) {
+            base = TEXT.cond_whileIn(fields.getGroupString());
         }
-        return "";
+        String amountStr = null;
+        if (amount > 0) {
+            amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+        }
+        return base != null && amountStr != null ? amountStr + COMMA_SEPARATOR + base : base != null ? base : amountStr != null ? amountStr : "";
     }
 
     public int getUses() {

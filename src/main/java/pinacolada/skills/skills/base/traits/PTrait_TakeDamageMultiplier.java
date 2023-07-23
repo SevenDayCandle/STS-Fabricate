@@ -57,7 +57,7 @@ public class PTrait_TakeDamageMultiplier extends PTrait<PField_Empty> {
     }
 
     @Override
-    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+    public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
         return amount * (1 + (this.amount / 100f));
     }
 }

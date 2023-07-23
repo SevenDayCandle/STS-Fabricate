@@ -39,18 +39,6 @@ public class PMod_PerCreature extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        switch (target) {
-            case AllAlly:
-            case RandomAlly:
-            case SingleAlly:
-            case Team:
-                return TEXT.subjects_ally;
-            case AllEnemy:
-            case RandomEnemy:
-            case Single:
-                return TEXT.subjects_enemy;
-            default:
-                return TEXT.subjects_character;
-        }
+        return getTargetStringSingular();
     }
 }

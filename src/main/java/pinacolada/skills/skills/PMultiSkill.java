@@ -190,25 +190,49 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount) {
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
-            amount = be.modifyBlock(info, amount);
+            amount = be.modifyBlockFirst(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamage(PCLUseInfo info, float amount) {
+    public float modifyBlockLast(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
-            amount = be.modifyDamage(info, amount);
+            amount = be.modifyBlockLast(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+    public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
-            amount = be.modifyDamageIncoming(info, amount, type);
+            amount = be.modifyDamageGiveFirst(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyDamageGiveLast(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyDamageReceiveFirst(info, amount, type);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyDamageReceiveLast(info, amount, type);
         }
         return amount;
     }

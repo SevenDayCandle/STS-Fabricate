@@ -188,7 +188,6 @@ public class MoveCard extends PCLAction<AbstractCard> {
 
     protected void moveToDrawPile(AbstractCard card) {
         sourcePile.moveToDeck(card, true);
-        CombatManager.onCardReshuffled(card, sourcePile);
     }
 
     protected void moveToExhaustPile() {

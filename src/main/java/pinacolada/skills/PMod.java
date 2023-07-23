@@ -219,8 +219,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerCreature(target, amount);
     }
 
-    public static PMod_PerCreatureAttacking perCreatureAttacking(int amount) {
-        return new PMod_PerCreatureAttacking(amount);
+    public static PMod_PerCreatureIntent perCreatureAttacking(int amount) {
+        return new PMod_PerCreatureIntent(amount);
     }
 
     public static PMod_PerCreatureBlock perCreatureBlock(int amount) {

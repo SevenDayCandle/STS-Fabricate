@@ -51,7 +51,7 @@ public class PTrait_Block extends PBlockTrait<PField_Empty> {
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount) {
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
         return amount + this.amount;
     }
 }

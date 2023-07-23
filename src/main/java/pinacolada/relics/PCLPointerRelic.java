@@ -30,31 +30,67 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         super(data);
     }
 
-    public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
+    @Override
+    public float atBlockLastModify(PCLUseInfo info, float block) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
-                block = effect.modifyBlock(info, block);
+                block = effect.modifyBlockLast(info, block);
             }
         }
         return block;
     }
 
-    public float atBlockModify(float block, AbstractCard c) {
-        return atBlockModify(CombatManager.playerSystem.getInfo(c, player, player), block, c);
+    @Override
+    public float atBlockLastModify(float block, AbstractCard c) {
+        return atBlockLastModify(CombatManager.playerSystem.getInfo(c, player, player), block);
     }
 
-    public float atDamageModify(PCLUseInfo info, float damage, AbstractCard c) {
+    @Override
+    public float atBlockModify(PCLUseInfo info, float block) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
-                damage = effect.modifyDamage(info, damage);
+                block = effect.modifyBlockFirst(info, block);
+            }
+        }
+        return block;
+    }
+
+    @Override
+    public float atBlockModify(float block, AbstractCard c) {
+        return atBlockModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+    }
+
+    @Override
+    public float atDamageLastModify(PCLUseInfo info, float damage) {
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyDamageGiveLast(info, damage);
             }
         }
         return damage;
     }
 
-    public float atHealModify(PCLUseInfo info, float damage, AbstractCard c) {
+    @Override
+    public float atDamageLastModify(float block, AbstractCard c) {
+        return atDamageLastModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+    }
+
+    @Override
+    public float atDamageModify(PCLUseInfo info, float damage) {
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                damage = effect.modifyDamageGiveFirst(info, damage);
+            }
+        }
+        return damage;
+    }
+
+    @Override
+    public float atHealModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
@@ -64,7 +100,8 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return damage;
     }
 
-    public float atHitCountModify(PCLUseInfo info, float damage, AbstractCard c) {
+    @Override
+    public float atHitCountModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
@@ -74,7 +111,8 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return damage;
     }
 
-    public float atRightCountModify(PCLUseInfo info, float damage, AbstractCard c) {
+    @Override
+    public float atRightCountModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
@@ -84,7 +122,8 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return damage;
     }
 
-    public float atSkillBonusModify(PCLUseInfo info, float damage, AbstractCard c) {
+    @Override
+    public float atSkillBonusModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
             for (PSkill<?> effect : getEffects()) {
@@ -290,6 +329,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public float atDamageModify(float block, AbstractCard c) {
-        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block, c);
+        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block);
     }
 }

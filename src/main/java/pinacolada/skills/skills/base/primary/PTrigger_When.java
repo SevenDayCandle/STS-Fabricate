@@ -7,12 +7,13 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PTrigger_When extends PTrigger {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, -1, DEFAULT_MAX)
+    public static final PSkillData<PField_CardGeneric> DATA = register(PTrigger_When.class, PField_CardGeneric.class, -1, DEFAULT_MAX)
             .selfTarget();
 
     public PTrigger_When() {

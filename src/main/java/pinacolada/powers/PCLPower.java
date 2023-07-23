@@ -122,6 +122,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return base + "Power";
     }
 
+    public float atDamageFinalGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
+        return atDamageFinalGive(block, type, c);
+    }
+
     public float atDamageGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
         return atDamageGive(block, type, c);
     }

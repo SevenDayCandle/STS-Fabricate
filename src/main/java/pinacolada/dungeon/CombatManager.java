@@ -29,7 +29,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
-import pinacolada.patches.card.AbstractCardPatches;
 import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
@@ -524,9 +523,6 @@ public class CombatManager {
     }
 
     public static void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination) {
-        for (OnCardMovedSubscriber s : getSubscriberGroup(OnCardMovedSubscriber.class)) {
-            s.onCardMoved(card, source, destination);
-        }
         PCLActions.last.callback(() -> {
             controlPile.refreshCards();
             DrawPileCardPreview.refreshAll();
@@ -685,6 +681,30 @@ public class CombatManager {
 
     public static void onIncreaseAffinityLevel(PCLAffinity affinity) {
         subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
+    }
+
+    public static float onModifyBlockFirst(float amount, AbstractCard card) {
+        return subscriberInout(OnModifyBlockFirstSubscriber.class, amount, (s, d) -> s.onModifyBlockFirst(d, card));
+    }
+
+    public static float onModifyBlockLast(float amount, AbstractCard card) {
+        return subscriberInout(OnModifyBlockLastSubscriber.class, amount, (s, d) -> s.onModifyBlockLast(d, card));
+    }
+
+    public static float onModifyDamageGiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
+        return subscriberInout(OnModifyDamageGiveFirstSubscriber.class, amount, (s, d) -> s.onModifyDamageGiveFirst(d, type, source, target, card));
+    }
+
+    public static float onModifyDamageGiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
+        return subscriberInout(OnModifyDamageGiveLastSubscriber.class, amount, (s, d) -> s.onModifyDamageGiveLast(d, type, source, target, card));
+    }
+
+    public static float onModifyDamageReceiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
+        return subscriberInout(OnModifyDamageReceiveFirstSubscriber.class, amount, (s, d) -> s.onModifyDamageReceiveFirst(d, type, source, target, card));
+    }
+
+    public static float onModifyDamageReceiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
+        return subscriberInout(OnModifyDamageReceiveLastSubscriber.class, amount, (s, d) -> s.onModifyDamageReceiveLast(d, type, source, target, card));
     }
 
     public static float onModifySkillBonus(float amount, AbstractCard card) {

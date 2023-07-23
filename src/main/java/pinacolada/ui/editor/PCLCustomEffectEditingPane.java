@@ -31,6 +31,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -64,24 +65,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     private float additionalHeight;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill<?>> effects;
-    protected EUIDropdown<PCLAffinity> affinities;
     protected EUIDropdown<PCLCardTarget> targets;
-    protected EUIDropdown<AbstractCard.CardColor> colors;
-    protected EUIDropdown<AbstractCard.CardRarity> rarities;
-    protected EUIDropdown<AbstractPotion.PotionRarity> potionRarities;
-    protected EUIDropdown<AbstractPotion.PotionSize> potionSizes;
-    protected EUIDropdown<AbstractRelic.RelicTier> tiers;
-    protected EUIDropdown<AbstractCard.CardType> types;
-    protected EUIDropdown<CostFilter> costs;
     protected EUIDropdown<PCLCardGroupHelper> piles;
     protected EUIDropdown<PCLCardSelection> origins;
-    protected EUISearchableDropdown<PCLPowerHelper> powers;
-    protected EUISearchableDropdown<PCLOrbHelper> orbs;
-    protected EUISearchableDropdown<PCLStanceHelper> stances;
-    protected EUISearchableDropdown<PCLCardTag> tags;
-    protected EUISearchableDropdown<AbstractCard> cards;
-    protected EUISearchableDropdown<AbstractPotion> potions;
-    protected EUISearchableDropdown<AbstractRelic> relics;
     protected PCLCustomUpgradableEditor valueEditor;
     protected PCLCustomUpgradableEditor extraEditor;
     protected EUIImage backdrop;
@@ -446,22 +432,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
         origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false);
         piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true);
-        affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
-        powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
-        orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
-        stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
-        tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
-        cards = initializeSearchable(getAvailableCards(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_card));
-        relics = initializeSearchable(getAvailableRelics(), relic -> relic.name, StringUtils.capitalize(PGR.core.strings.subjects_relic));
-        potions = initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion));
-        colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
-        rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
-        potionRarities = initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]);
-        potionSizes = initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size);
-        potionSizes.sortByLabel();
-        tiers = initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]);
-        types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);
-        costs = initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]);
     }
 
     public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(T[] items, String title) {
@@ -502,7 +472,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerAffinity(List<PCLAffinity> items) {
-        registerDropdown(affinities, items);
+        registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), PGR.core.strings.sui_affinities), items);
     }
 
     public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial) {
@@ -527,7 +497,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerCard(List<String> cardIDs) {
-        registerDropdown(cards,
+        registerDropdown(initializeSearchable(getAvailableCards(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_card)),
                 cards -> {
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
@@ -538,7 +508,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerCard(List<String> cardIDs, ActionT1<List<AbstractCard>> onChangeImpl) {
-        registerDropdown(cards,
+        registerDropdown(initializeSearchable(getAvailableCards(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_card)),
                 onChangeImpl,
                 cardIDs,
                 card -> card.cardID
@@ -546,11 +516,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerColor(List<AbstractCard.CardColor> items) {
-        registerDropdown(colors, items);
+        registerDropdown(initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors), items);
     }
 
     public void registerCost(List<CostFilter> items) {
-        registerDropdown(costs, items);
+        registerDropdown(initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]), items);
     }
 
     public <U, V> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, Collection<V> items, FuncT1<V, U> convertFunc) {
@@ -634,8 +604,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return registerDropdown(dropdown, onChangeImpl, selectedItems);
     }
 
+    public void registerIntent(List<PCLIntentType> items) {
+        registerDropdown(initializeSearchable(PCLIntentType.sorted(), PCLIntentType::getHeaderString, StringUtils.capitalize(PGR.core.strings.subjects_intent)), items);
+    }
+
     public void registerOrb(List<PCLOrbHelper> items) {
-        registerDropdown(orbs, items);
+        registerDropdown(initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title), items);
     }
 
     public void registerOrigin(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl) {
@@ -647,7 +621,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPotion(List<String> potionIDs) {
-        registerDropdown(potions,
+        registerDropdown(initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion)),
                 relics -> {
                     potionIDs.clear();
                     potionIDs.addAll(EUIUtils.mapAsNonnull(relics, t -> t.ID));
@@ -658,7 +632,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerPotion(List<String> potionIDs, ActionT1<List<AbstractPotion>> onChangeImpl) {
-        registerDropdown(potions,
+        registerDropdown(initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion)),
                 onChangeImpl,
                 potionIDs,
                 potion -> potion.ID
@@ -666,23 +640,23 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPotionRarity(List<AbstractPotion.PotionRarity> items) {
-        registerDropdown(potionRarities, items);
+        registerDropdown(initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]), items);
     }
 
     public void registerPotionSize(List<AbstractPotion.PotionSize> items) {
-        registerDropdown(potionSizes, items);
+        registerDropdown(initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size), items);
     }
 
     public void registerPower(List<PCLPowerHelper> items) {
-        registerDropdown(powers, items);
+        registerDropdown(initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers), items);
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {
-        registerDropdown(rarities, items);
+        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]), items);
     }
 
     public void registerRelic(List<String> relicIDs) {
-        registerDropdown(relics,
+        registerDropdown(initializeSearchable(getAvailableRelics(), relic -> relic.name, StringUtils.capitalize(PGR.core.strings.subjects_relic)),
                 relics -> {
                     relicIDs.clear();
                     relicIDs.addAll(EUIUtils.mapAsNonnull(relics, t -> t.relicId));
@@ -693,7 +667,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerRelic(List<String> relicIDs, ActionT1<List<AbstractRelic>> onChangeImpl) {
-        registerDropdown(relics,
+        registerDropdown(initializeSearchable(getAvailableRelics(), relic -> relic.name, StringUtils.capitalize(PGR.core.strings.subjects_relic)),
                 onChangeImpl,
                 relicIDs,
                 relic -> relic.relicId
@@ -701,19 +675,19 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerRelicRarity(List<AbstractRelic.RelicTier> items) {
-        registerDropdown(tiers, items);
+        registerDropdown(initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]), items);
     }
 
     public void registerStance(List<PCLStanceHelper> items) {
-        registerDropdown(stances, items);
+        registerDropdown(initializeSmartSearchable(PCLStanceHelper.getAll(getColor()), PGR.core.tooltips.stance.title), items);
     }
 
     public void registerTag(List<PCLCardTag> items) {
-        registerDropdown(tags, items);
+        registerDropdown(initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags), items);
     }
 
     public void registerType(List<AbstractCard.CardType> items) {
-        registerDropdown(types, items);
+        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(getColor()), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]), items);
     }
 
     @Override

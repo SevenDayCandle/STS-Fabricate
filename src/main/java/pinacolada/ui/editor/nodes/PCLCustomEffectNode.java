@@ -449,7 +449,7 @@ public class PCLCustomEffectNode extends EUIButton {
         public List<? extends PSkill> getSkills(AbstractCard.CardColor color) {
             switch (this) {
                 case Limit:
-                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PLimit.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PLimit.class, PShift.class));
+                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PLimit.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PLimit.class, PTrigger.class, PShift.class));
                 case Trigger:
                     return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
             }
@@ -516,6 +516,7 @@ public class PCLCustomEffectNode extends EUIButton {
         public boolean matchesNode(PSkill<?> skill) {
             switch (this) {
                 case Limit:
+                    return getSkillClass().isInstance(skill) || skill instanceof PShift || skill instanceof PTrigger;
                 case Trigger:
                     return getSkillClass().isInstance(skill) || skill instanceof PShift;
             }
