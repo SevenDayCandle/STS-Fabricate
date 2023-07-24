@@ -96,6 +96,7 @@ public class CombatManager {
     private static int turnCount = 0;
     public static AbstractRoom room;
     public static UUID battleID;
+    public static boolean haveScried;
     public static boolean isPlayerTurn;
     public static int blockRetained;
     public static int dodgeChance;
@@ -149,6 +150,7 @@ public class CombatManager {
         unplayableCards.clear();
         orbsEvokedThisTurn.clear();
         turnCount += 1;
+        haveScried = false;
 
         playerSystem.setLastCardPlayed(null);
     }
@@ -299,6 +301,7 @@ public class CombatManager {
         battleID = null;
         estimatedDamages = null;
 
+        haveScried = false;
         shouldRefreshHand = false;
         turnCount = 0;
         cardsDrawnThisTurn = 0;
@@ -488,10 +491,6 @@ public class CombatManager {
         }
     }
 
-    public static void onBeforeLoseBlock(AbstractCreature creature, int amount, boolean noAnimation) {
-        subscriberDo(OnBeforeLoseBlockSubscriber.class, s -> s.onBeforeLoseBlock(creature, amount, noAnimation));
-    }
-
     public static void onBlockBroken(AbstractCreature creature) {
         subscriberDo(OnBlockBrokenSubscriber.class, s -> s.onBlockBroken(creature));
     }
@@ -568,6 +567,9 @@ public class CombatManager {
     }
 
     public static void onCardScry(AbstractCard card) {
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).triggerOnScryThatDoesntLoopOnEnd();
+        }
         subscriberDo(OnCardScrySubscriber.class, s -> s.onScry(card));
     }
 
@@ -761,6 +763,11 @@ public class CombatManager {
                 ((OnRelicObtainedListener) r).onRelicObtained(relic);
             }
         }
+    }
+
+    public static void onScryAction(AbstractGameAction action) {
+        haveScried = true;
+        subscriberDo(OnScryActionSubscriber.class, s -> s.onScryAction(action));
     }
 
     public static void onShuffle(boolean triggerRelics) {

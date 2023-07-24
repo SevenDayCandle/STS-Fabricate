@@ -134,7 +134,7 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     public boolean canPlayCard(AbstractCard card) {
-        return augment.skill.canPlay(getInfo(card, null));
+        return augment.skill.canPlay(getInfo(card, null), null);
     }
 
     @Override

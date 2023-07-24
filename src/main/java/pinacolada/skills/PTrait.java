@@ -8,7 +8,10 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.skills.base.conditions.PCond_IfHasProperty;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
@@ -198,7 +201,11 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
+        String base = EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PCond_IfHasProperty.class)) {
+            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), base);
+        }
+        return base;
     }
 
     abstract public String getSubDescText();

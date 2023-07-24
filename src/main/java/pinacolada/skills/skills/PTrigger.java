@@ -191,9 +191,6 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_combat, null);
-        if (!(editor.editor instanceof PCLCustomPowerEffectPage) && editor.editor.screen instanceof PCLCustomCardEditCardScreen) {
-            editor.registerPile(fields.groupTypes);
-        }
     }
 
     public PTrigger stack(PSkill<?> other) {
@@ -216,9 +213,11 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     @Override
     public void triggerOnCreate(AbstractCard c, boolean startOfBattle) {
         super.triggerOnCreate(c, startOfBattle);
-        CardTriggerConnection ct = new CardTriggerConnection(this, c);
-        ct.initialize();
-        controller = ct;
+        if (controller == null) {
+            CardTriggerConnection ct = new CardTriggerConnection(this, c);
+            ct.initialize();
+            controller = ct;
+        }
     }
 
     @Override

@@ -402,8 +402,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public boolean canPlay(PCLUseInfo info) {
-        return this.childEffect == null || this.childEffect.canPlay(info);
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
+        return this.childEffect == null || this.childEffect.canPlay(info, triggerSource);
     }
 
     public void displayUpgrades(boolean value) {

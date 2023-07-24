@@ -24,7 +24,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info) {
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
         return true;
     }
 

@@ -40,6 +40,7 @@ import pinacolada.actions.cards.*;
 import pinacolada.actions.creature.*;
 import pinacolada.actions.orbs.ChannelOrb;
 import pinacolada.actions.orbs.EvokeOrb;
+import pinacolada.actions.orbs.RemoveOrb;
 import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.piles.*;
 import pinacolada.actions.player.SpendEnergy;
@@ -618,6 +619,18 @@ public final class PCLActions {
 
     public PurgeFromPile purgeFromPile(String sourceName, int amount, CardGroup... groups) {
         return add(new PurgeFromPile(sourceName, amount, groups));
+    }
+
+    public RemoveOrb removeOrb(int times) {
+        return add(new RemoveOrb(times));
+    }
+
+    public RemoveOrb removeOrb(int times, boolean random) {
+        return add(new RemoveOrb(times, random));
+    }
+
+    public RemoveOrb evokeOrb(AbstractOrb orb) {
+        return add(new RemoveOrb(orb));
     }
 
     public RemoveSpecificPowerAction removePower(AbstractCreature source, AbstractPower power) {

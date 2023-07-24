@@ -40,12 +40,4 @@ public class AbstractCreaturePatches {
             CombatManager.onBlockBroken(__instance);
         }
     }
-
-    @SpirePatch(clz = AbstractCreature.class, method = "loseBlock", paramtypez = {int.class, boolean.class})
-    public static class AbstractCreaturePatches_LoseBlock {
-        @SpirePrefixPatch
-        public static void method(AbstractCreature __instance, int amount, boolean noAnimation) {
-            CombatManager.onBeforeLoseBlock(__instance, amount, noAnimation);
-        }
-    }
 }

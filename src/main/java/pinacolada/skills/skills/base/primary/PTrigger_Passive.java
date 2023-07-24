@@ -9,6 +9,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
@@ -48,6 +49,7 @@ public class PTrigger_Passive extends PTrigger {
     public boolean isSkillAllowed(PSkill<?> skill) {
         return skill instanceof PMultiBase ||
                 skill instanceof PPassiveCond ||
+                skill instanceof PFacetCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PTrait;
     }

@@ -184,6 +184,10 @@ public abstract class PCLCharacter extends CustomPlayer {
 
     // Intentionally avoid calling loadAnimation to avoid registering animations
     protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
+        if (this.atlas != null) {
+            this.atlas.dispose();
+        }
+
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
         SkeletonJson json = new SkeletonJson(this.atlas);
         json.setScale(Settings.renderScale * scale);
@@ -204,6 +208,10 @@ public abstract class PCLCharacter extends CustomPlayer {
 
     public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale) {
         try {
+            if (this.img != null) {
+                this.img.dispose();
+                this.img = null;
+            }
             this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
             tryFindAnimations(idleStr, hitStr);
             AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
@@ -276,7 +284,7 @@ public abstract class PCLCharacter extends CustomPlayer {
                     CardCrawlGame.psb.end();
                     sb.begin();
                 }
-                else {
+                else if (this.img != null) {
                     sb.setColor(Color.WHITE);
                     sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
                 }
@@ -322,7 +330,13 @@ public abstract class PCLCharacter extends CustomPlayer {
         else {
             String imgUrl = CreatureAnimationInfo.getImageForID(creatureID);
             if (imgUrl != null) {
-                this.img = ImageMaster.loadImage(imgUrl);
+                if (this.img != null) {
+                    this.img.dispose();
+                }
+                this.img = ImageMaster.loadImage(imgUrl); // Do not cache monster images
+                if (this.atlas != null) {
+                    this.atlas.dispose();
+                }
                 this.atlas = null;
             }
             else {

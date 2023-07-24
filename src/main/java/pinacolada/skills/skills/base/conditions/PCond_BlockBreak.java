@@ -10,6 +10,8 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnAttackSubscriber;
+import pinacolada.interfaces.subscribers.OnBlockBrokenSubscriber;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -17,21 +19,23 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 @VisibleSkill
-public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> implements OnAttackSubscriber {
-    public static final PSkillData<PField_Not> DATA = register(PCond_UnblockedDamage.class, PField_Not.class, 1, 1);
+public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements OnBlockBrokenSubscriber {
+    public static final PSkillData<PField_Not> DATA = register(PCond_BlockBreak.class, PField_Not.class, 1, 1);
 
-    public PCond_UnblockedDamage() {
+    public PCond_BlockBreak() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_UnblockedDamage(PCLCardTarget target) {
+    public PCond_BlockBreak(PCLCardTarget target) {
         super(DATA, target, 0);
     }
 
-    public PCond_UnblockedDamage(PSkillSaveData content) {
+    public PCond_BlockBreak(PSkillSaveData content) {
         super(DATA, content);
     }
 
@@ -42,28 +46,29 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String baseString = TEXT.subjects_unblocked(TEXT.subjects_damage);
+        // TODO proper grammar for other sources
+        String baseString = TEXT.act_breakXonY(PGR.core.tooltips.block.title, getTargetStringPerspective(perspective));
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString), perspective);
+            return TEXT.cond_wheneverYou(baseString);
         }
 
-        return TEXT.cond_ifTargetTook(getTargetSubjectString(target), baseString);
+        return TEXT.cond_ifXDid(TEXT.subjects_you, baseString);
     }
 
-    // When the owner deals unblocked damage, triggers the effect on the target
+    // When the target loses its block, trigger the effect on the target
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
-        PCLUseInfo pInfo = generateInfo(t);
-        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t, pInfo.targetList).contains(info.owner)) {
-            useFromTrigger(pInfo.setData(damageAmount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
+    public void onBlockBroken(AbstractCreature creature) {
+        PCLUseInfo pInfo = generateInfo(creature);
+        if (target.getTargets(getOwnerCreature(), creature, pInfo.targetList).contains(creature)) {
+            useFromTrigger(pInfo);
         }
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        // Checks to see if any of the targets' health is decreased after this card is used
-        HashMap<? extends AbstractCreature, Integer> healthMap = EUIUtils.hashMap(getTargetList(info), c -> c.currentHealth);
-        return PCLActions.last.callback(healthMap, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+        // Checks to see if any of the targets had block before this effect
+        ArrayList<AbstractCreature> creaturesWithBlock = EUIUtils.filter(getTargetList(info), c -> c.currentBlock > 0);
+        return PCLActions.last.callback(creaturesWithBlock, (targets, __) -> {
+            if (targets.size() > 0 && EUIUtils.any(targets, t -> t.currentBlock <= 0) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);
             }
             else {

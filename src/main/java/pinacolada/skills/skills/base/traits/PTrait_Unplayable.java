@@ -28,8 +28,8 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info) {
-        return info == null || info.card != sourceCard;
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
+        return triggerSource == null && info.card != sourceCard;
     }
 
     @Override

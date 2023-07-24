@@ -4,7 +4,9 @@ import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -13,7 +15,9 @@ import pinacolada.interfaces.subscribers.*;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
-public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber, OnModifyBlockLastSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber, OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber {
+public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber,
+                                              OnModifyBlockLastSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber,
+                                              OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
     public final AbstractCard card;
 
@@ -31,6 +35,14 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
     }
 
     @Override
+    public boolean canUse(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse) {
+        if (canActivate(trigger)) {
+            canUse = trigger.canPlay(trigger.getInfo(null), trigger);
+        }
+        return canUse;
+    }
+
+    @Override
     public AbstractCreature getOwner() {
         return GameUtilities.getCardOwner(card);
     }
@@ -42,7 +54,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyBlockFirst(float amount, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyBlockFirst(trigger.getInfo(null), amount);
         }
         return amount;
@@ -50,7 +62,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyBlockLast(float amount, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyBlockLast(trigger.getInfo(null), amount);
         }
         return amount;
@@ -58,7 +70,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyDamageGiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyDamageGiveFirst(trigger.getInfo(target), amount);
         }
         return amount;
@@ -66,7 +78,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyDamageGiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyDamageGiveLast(trigger.getInfo(target), amount);
         }
         return amount;
@@ -74,7 +86,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyDamageReceiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyDamageReceiveFirst(trigger.getInfo(target), amount, type);
         }
         return amount;
@@ -82,7 +94,7 @@ public class CardTriggerConnection implements TriggerConnection, OnPhaseChangedS
 
     @Override
     public float onModifyDamageReceiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
-        if (this.card == card) {
+        if (canActivate(trigger)) {
             amount = trigger.modifyDamageReceiveLast(trigger.getInfo(target), amount, type);
         }
         return amount;

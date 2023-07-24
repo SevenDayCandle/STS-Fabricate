@@ -3,6 +3,7 @@ package pinacolada.actions.piles;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
@@ -19,6 +20,7 @@ public class ScryCards extends DiscardFromPile {
 
     @Override
     protected void complete(ArrayList<AbstractCard> result) {
+        CombatManager.onScryAction(this);
         for (AbstractPower p : player.powers) {
             p.onScry();
         }

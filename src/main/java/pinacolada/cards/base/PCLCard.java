@@ -1390,8 +1390,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
-    public void triggerOnScry() {
-        super.triggerOnScry();
+    public final void triggerOnScry() {
+        // Use triggerOnScryThatDoesntLoopOnEnd instead
+    }
+
+    // Because the actual trigger on scry LOOPS UNTIL THE ACTION IS DONE WTF
+    public void triggerOnScryThatDoesntLoopOnEnd() {
         doEffects(be -> be.triggerOnScry(this));
     }
 
@@ -1480,7 +1484,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected boolean isEffectPlayable(AbstractMonster m) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(this, getSourceCreature(), m);
         for (PSkill<?> be : getFullEffects()) {
-            if (!be.canPlay(info)) {
+            if (!be.canPlay(info, null)) {
                 return false;
             }
         }

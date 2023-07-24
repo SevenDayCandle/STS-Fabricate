@@ -69,10 +69,10 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info) {
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
         boolean canPlay = true;
         for (PSkill<?> be : effects) {
-            canPlay = canPlay & be.canPlay(info);
+            canPlay = canPlay & be.canPlay(info, triggerSource);
         }
         return canPlay;
     }

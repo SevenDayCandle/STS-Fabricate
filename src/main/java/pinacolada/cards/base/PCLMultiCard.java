@@ -337,7 +337,7 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public boolean canPlay(PCLUseInfo info) {
+        public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
             return EUIUtils.find(multicard.getCards(), card -> !card.cardPlayable(GameUtilities.asMonster(info.target))) == null;
         }
 

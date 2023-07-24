@@ -14,6 +14,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
 
@@ -87,7 +88,7 @@ public class ReplacementCard extends PCLDynamicCard {
         }
 
         @Override
-        public boolean canPlay(PCLUseInfo info) {
+        public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
             return card.original.cardPlayable(GameUtilities.asMonster(info.target));
         }
 

@@ -28,7 +28,7 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
     // This should not activate the child effect when played normally
 
     @Override
-    public boolean canPlay(PCLUseInfo info) {
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
         return true;
     }
 

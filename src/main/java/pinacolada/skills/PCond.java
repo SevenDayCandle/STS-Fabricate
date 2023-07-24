@@ -380,8 +380,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info) {
-        return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info);
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
+        return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info, triggerSource);
     }
 
     @Override
