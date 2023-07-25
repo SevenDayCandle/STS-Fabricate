@@ -24,45 +24,6 @@ import pinacolada.resources.PCLEnum;
 import java.util.ArrayList;
 
 public class AbstractPlayerPatches {
-    public static AbstractMonster fakeTarget;
-    protected static ArrayList<AbstractMonster> targetsCache;
-
-    // TODO support for Friendly Minions
-    protected static void replaceTargets(AbstractPlayer player) {
-        final PCLCard card = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
-        if (card != null && (card.pclTarget.targetsAllies() || card.type == PCLEnum.CardType.SUMMON)) {
-            final MonsterGroup group = AbstractDungeon.getCurrRoom().monsters;
-            final ArrayList<AbstractMonster> summons = CombatManager.summons.getSummons(card.type != PCLEnum.CardType.SUMMON);
-            if (card.type != PCLEnum.CardType.SUMMON && card.pclTarget.targetsEnemies()) {
-                summons.addAll(group.monsters);
-            }
-            if (summons.size() > 0) {
-                targetsCache = group.monsters;
-                group.monsters = summons;
-
-                // Summons should always target an available slot, regardless of whether it is occupied or not
-                if (card.type == PCLEnum.CardType.SUMMON) {
-                    card.target = AbstractCard.CardTarget.ENEMY;
-                    PCLCardAlly.emptyAnimation.highlight();
-                }
-                // For cards that can also target yourself, assume you are targeting yourself if the player is hovered
-                else {
-                    PCLCardAlly.emptyAnimation.unhighlight();
-                    if (card.pclTarget.targetsSelf() && player.hb.hovered) {
-                        card.target = AbstractCard.CardTarget.SELF;
-                        fakeTarget = summons.get(0);
-                    }
-                    else {
-                        card.target = card.pclTarget.cardTarget;
-                    }
-                }
-                return;
-            }
-        }
-        PCLCardAlly.emptyAnimation.unhighlight();
-        targetsCache = null;
-    }
-
     @SpirePatch(clz = AbstractPlayer.class, method = "channelOrb")
     public static class AbstractPlayer_ChannelOrb {
 
@@ -183,56 +144,6 @@ public class AbstractPlayerPatches {
                 Matcher matcher = new Matcher.FieldAccessMatcher(AbstractPlayer.class, "lastDamageTaken");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
-        }
-    }
-
-    @SpirePatch(clz = AbstractPlayer.class, method = "clickAndDragCards")
-    public static class AbstractPlayer_ClickAndDragCards {
-        @SpirePostfixPatch
-        public static void Postfix(AbstractPlayer __instance) {
-            if (targetsCache != null) {
-                AbstractDungeon.getCurrRoom().monsters.monsters = targetsCache;
-                targetsCache = null;
-                fakeTarget = null;
-            }
-        }
-
-        @SpirePrefixPatch
-        public static void Prefix(AbstractPlayer __instance) {
-            replaceTargets(__instance);
-        }
-    }
-
-    @SpirePatch(clz = AbstractPlayer.class, method = "updateSingleTargetInput")
-    public static class AbstractPlayer_UpdateSingleTargetInput {
-        @SpirePostfixPatch
-        public static void Postfix(AbstractPlayer __instance) {
-            if (targetsCache != null) {
-                AbstractDungeon.getCurrRoom().monsters.monsters = targetsCache;
-                targetsCache = null;
-                fakeTarget = null;
-            }
-        }
-
-        @SpirePrefixPatch
-        public static void Prefix(AbstractPlayer __instance) {
-            replaceTargets(__instance);
-        }
-
-        @SpireInstrumentPatch
-        public static ExprEditor instrument() {
-            return new ExprEditor() {
-                int counter = 0;
-
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    if (m.getClassName().equals(AbstractPlayer.class.getName()) && m.getFieldName().equals("hoveredMonster") && m.isReader()) {
-                        if (counter % 2 == 0) {
-                            m.replace("{ $_ = pinacolada.patches.creature.AbstractPlayerPatches.fakeTarget != null ? pinacolada.patches.creature.AbstractPlayerPatches.fakeTarget : $proceed($$); }");
-                        }
-                        counter += 1;
-                    }
-                }
-            };
         }
     }
 

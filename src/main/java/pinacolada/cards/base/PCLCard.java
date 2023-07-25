@@ -17,10 +17,12 @@ import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
 import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier;
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.SoulboundField;
+import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.green.Tactician;
@@ -55,6 +57,7 @@ import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
@@ -149,7 +152,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
 
     protected PCLCard(PCLCardData cardData) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, 0, 0, null);
     }
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input) {
@@ -171,15 +174,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected PCLCard(PCLCardData cardData, Object input) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, 0, 0, input);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, null);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded, Object input) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, input);
     }
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target) {
@@ -1210,7 +1213,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
-        PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, CustomTargeting.getCardTarget(this));
         onUse(info);
     }
 
@@ -1413,12 +1416,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public void applyPowers() {
-        if (isMultiDamage) {
-            calculateCardDamage(null);
-        }
-        else {
-            refresh(null);
-        }
+        calculateCardDamage(null);
     }
 
     @Override
@@ -1429,6 +1427,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         calculateCardDamage(mo);
     }
 
+    // TODO only update when necessary (i.e. when phase or target changes)
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
         if (isMultiDamage) {
@@ -1694,7 +1693,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractCreature enemy) {
-        PCLUseInfo info = CombatManager.playerSystem.getInfo(this, getSourceCreature(), enemy);
+        AbstractCreature owner = getSourceCreature();
+        PCLUseInfo info = CombatManager.playerSystem.getInfo(this, owner, enemy);
         // We use magicNumber for the counter mechanic; effects have their amounts determined separately
         // Thus, we instead funnel onModifyBaseMagic into a separate addition to apply to our effects
         float effectBonus = CardModifierManager.onModifyBaseMagic(CombatManager.onModifySkillBonus(0, this), this);
@@ -1711,8 +1711,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float oldBlock = tempBlock;
         float oldDamage = tempDamage;
 
-        AbstractCreature owner = getSourceCreature();
-        if (owner != null) {
+        // Do not update damage display for summons in your hand
+        if (owner != null && (type != PCLEnum.CardType.SUMMON || owner != player)) {
             int applyCount = attackType == PCLAttackType.Brutal ? 2 : 1;
 
             if (owner instanceof AbstractPlayer) {
@@ -2497,7 +2497,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public void setTarget(PCLCardTarget attackTarget) {
         this.pclTarget = attackTarget;
-        this.target = attackTarget.cardTarget;
     }
 
     public void setTiming(DelayTiming timing) {

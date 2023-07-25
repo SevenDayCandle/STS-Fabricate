@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -42,7 +43,7 @@ public class PCond_Intent extends PPassiveCond<PField_Intent> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.subjects_intent;
+        return TEXT.cond_ifX(TEXT.subjects_intent);
     }
 
     @Override

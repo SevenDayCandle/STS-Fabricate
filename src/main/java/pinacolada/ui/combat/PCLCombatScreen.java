@@ -2,6 +2,7 @@ package pinacolada.ui.combat;
 
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -51,16 +52,23 @@ public class PCLCombatScreen extends EUIBase {
         }
 
         boolean draggingCard = false;
-        AbstractCreature target = ReflectionHacks.getPrivate(player, AbstractPlayer.class, "hoveredMonster");
+        AbstractCreature target = null;
         PCLCard hoveredCard = null;
         if (player.hoveredCard != null) {
             hoveredCard = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
             if (player.isDraggingCard || player.inSingleTargetMode) {
                 draggingCard = true;
             }
-            if (target == null && draggingCard && player.hoveredCard.target == AbstractCard.CardTarget.SELF) {
-                target = player;
+            CombatManager.targeting.setTargeting(hoveredCard);
+            if (hoveredCard != null) {
+                target = CombatManager.targeting.getHovered();
             }
+            else {
+                target = ReflectionHacks.getPrivate(player, AbstractPlayer.class, "hoveredMonster");
+            }
+        }
+        else {
+            CombatManager.targeting.setTargeting(null);
         }
 
         AbstractCreature originalTarget = target;
@@ -70,10 +78,9 @@ public class PCLCombatScreen extends EUIBase {
         if (player.hoveredCard == null || player.hoveredCard.type == PCLEnum.CardType.SUMMON) {
             for (PCLCardAlly summon : CombatManager.summons.summons) {
                 if (summon.isHovered()) {
-                    originalTarget = target;
-                    originalCard = hoveredCard;
                     hoveredCard = summon.card;
                     target = summon.target;
+                    break;
                 }
             }
         }

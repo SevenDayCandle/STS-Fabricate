@@ -70,6 +70,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
     public void update() {
         super.update();
         if (card != null) {
+            this.card.refresh(target);
             this.card.currentHealth = this.currentHealth;
             if (this.animation instanceof PCLAllyAnimation) {
                 ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);

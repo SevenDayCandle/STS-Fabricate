@@ -20,21 +20,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum PCLCardTarget implements Comparable<PCLCardTarget> {
-    None(AbstractCard.CardTarget.NONE),
-    All(AbstractCard.CardTarget.ALL),
-    AllAlly(AbstractCard.CardTarget.ALL_ENEMY),
-    AllEnemy(AbstractCard.CardTarget.ALL_ENEMY),
-    Any(AbstractCard.CardTarget.ENEMY),
-    RandomAlly(AbstractCard.CardTarget.ALL_ENEMY),
-    RandomEnemy(AbstractCard.CardTarget.ALL_ENEMY),
-    Self(AbstractCard.CardTarget.SELF),
-    SelfAllEnemy(AbstractCard.CardTarget.ALL),
-    SelfSingle(AbstractCard.CardTarget.SELF_AND_ENEMY),
-    SelfSingleAlly(AbstractCard.CardTarget.SELF_AND_ENEMY),
-    Single(AbstractCard.CardTarget.ENEMY),
-    SingleAlly(AbstractCard.CardTarget.ENEMY),
-    Team(AbstractCard.CardTarget.SELF),
-    UseParent(AbstractCard.CardTarget.NONE);
+    None,
+    All,
+    AllAlly,
+    AllEnemy,
+    Any,
+    RandomAlly,
+    RandomEnemy,
+    Self,
+    SelfAllEnemy,
+    SelfSingle,
+    SelfSingleAlly,
+    Single,
+    SingleAlly,
+    Team,
+    UseParent;
 
     public static final TargetFilter T_AllAlly = new TargetFilter(PGR.core.strings.ctype_allAlly);
     public static final TargetFilter T_RandomAlly = new TargetFilter(PGR.core.strings.ctype_randomAlly);
@@ -44,12 +44,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public static final TargetFilter T_SelfSingleAlly = new TargetFilter(PGR.core.strings.ctype_selfSingleAlly);
     public static final TargetFilter T_SingleAlly = new TargetFilter(PGR.core.strings.ctype_singleAlly);
     public static final TargetFilter T_Team = new TargetFilter(PGR.core.strings.ctype_team);
-
-    public final AbstractCard.CardTarget cardTarget;
-
-    PCLCardTarget(AbstractCard.CardTarget cardTarget) {
-        this.cardTarget = cardTarget;
-    }
 
     public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets) {
         GameUtilities.fillWithSummons(true, targets);

@@ -4,6 +4,7 @@ import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
@@ -86,6 +87,7 @@ public class CombatManager {
     private static final Map<String, Object> combatData = new HashMap<>();
     private static final Map<String, Object> turnData = new HashMap<>();
     public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
+    public static final CardTargetingManager targeting = new CardTargetingManager();
     public static final ControllableCardPile controlPile = new ControllableCardPile();
     public static final PCLPlayerSystem playerSystem = new PCLPlayerSystem();
     public static final SummonPool summons = new SummonPool();
@@ -825,9 +827,9 @@ public class CombatManager {
             pclCard.unfadeOut();
             pclCard.lighten(true);
 
-            // The target may have been overwritten with a null value
-            pclCard.calculateCardDamage(m);
-            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, m);
+            AbstractCreature target = CustomTargeting.getCardTarget(pclCard);
+            pclCard.calculateCardDamage(EUIUtils.safeCast(target, AbstractMonster.class));
+            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, target);
 
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
                 summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));

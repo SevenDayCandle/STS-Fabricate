@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -37,7 +38,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     public PCLDynamicCard(PCLDynamicCardData builder, boolean shouldFindForms, boolean shouldSetTextures) {
         super(builder, builder.ID, builder.imagePath,
-                builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
+                builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, 0, 0, new BuilderInfo(builder, shouldFindForms));
         assignActualColor();
         if (shouldSetTextures) {
             initializeTextures();

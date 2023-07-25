@@ -4,6 +4,7 @@ import basemod.BaseMod;
 import basemod.ReflectionHacks;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.RelicType;
+import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -23,9 +24,11 @@ import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.commands.*;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
@@ -389,6 +392,7 @@ public class PGR {
         CardFlag.postInitialize();
         reloadCustoms();
         CountingPanel.register(new PCLAffinityPanelFilter());
+        CustomTargeting.registerCustomTargeting(CardTargetingManager.PCL, CombatManager.targeting);
     }
 
     public static void registerCommands() {
