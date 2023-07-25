@@ -24,7 +24,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     All(AbstractCard.CardTarget.ALL),
     AllAlly(AbstractCard.CardTarget.ALL_ENEMY),
     AllEnemy(AbstractCard.CardTarget.ALL_ENEMY),
-    Any(AbstractCard.CardTarget.SELF_AND_ENEMY),
+    Any(AbstractCard.CardTarget.ENEMY),
     RandomAlly(AbstractCard.CardTarget.ALL_ENEMY),
     RandomEnemy(AbstractCard.CardTarget.ALL_ENEMY),
     Self(AbstractCard.CardTarget.SELF),
@@ -323,6 +323,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case All:
             case RandomAlly:
             case SelfSingleAlly:
+            case Any:
                 return true;
         }
         return false;
@@ -336,6 +337,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case RandomEnemy:
             case SelfAllEnemy:
             case SelfSingle:
+            case Any:
                 return true;
         }
         return false;
@@ -382,6 +384,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case SingleAlly:
             case SelfSingle:
             case SelfSingleAlly:
+            case Any:
                 return true;
         }
         return false;

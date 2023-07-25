@@ -135,7 +135,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         CUSTOM_RELICS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getCardFolder());
+            loadFolder(provider.getFolder());
         }
         if (PGR.debugRelics != null) {
             PGR.debugRelics.refresh();

@@ -24,6 +24,7 @@ import pinacolada.resources.PCLEnum;
 import java.util.ArrayList;
 
 public class AbstractPlayerPatches {
+    public static AbstractMonster fakeTarget;
     protected static ArrayList<AbstractMonster> targetsCache;
 
     // TODO support for Friendly Minions
@@ -44,11 +45,12 @@ public class AbstractPlayerPatches {
                     card.target = AbstractCard.CardTarget.ENEMY;
                     PCLCardAlly.emptyAnimation.highlight();
                 }
-                // For cards that can also target yourself, assume you are targeting yourself if nothing else is hovered
+                // For cards that can also target yourself, assume you are targeting yourself if the player is hovered
                 else {
                     PCLCardAlly.emptyAnimation.unhighlight();
-                    if (card.pclTarget.targetsSelf() && !EUIUtils.any(group.monsters, g -> g.hb.hovered)) {
+                    if (card.pclTarget.targetsSelf() && player.hb.hovered) {
                         card.target = AbstractCard.CardTarget.SELF;
+                        fakeTarget = summons.get(0);
                     }
                     else {
                         card.target = card.pclTarget.cardTarget;
@@ -191,6 +193,7 @@ public class AbstractPlayerPatches {
             if (targetsCache != null) {
                 AbstractDungeon.getCurrRoom().monsters.monsters = targetsCache;
                 targetsCache = null;
+                fakeTarget = null;
             }
         }
 
@@ -207,12 +210,29 @@ public class AbstractPlayerPatches {
             if (targetsCache != null) {
                 AbstractDungeon.getCurrRoom().monsters.monsters = targetsCache;
                 targetsCache = null;
+                fakeTarget = null;
             }
         }
 
         @SpirePrefixPatch
         public static void Prefix(AbstractPlayer __instance) {
             replaceTargets(__instance);
+        }
+
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                int counter = 0;
+
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractPlayer.class.getName()) && m.getFieldName().equals("hoveredMonster") && m.isReader()) {
+                        if (counter % 2 == 0) {
+                            m.replace("{ $_ = pinacolada.patches.creature.AbstractPlayerPatches.fakeTarget != null ? pinacolada.patches.creature.AbstractPlayerPatches.fakeTarget : $proceed($$); }");
+                        }
+                        counter += 1;
+                    }
+                }
+            };
         }
     }
 

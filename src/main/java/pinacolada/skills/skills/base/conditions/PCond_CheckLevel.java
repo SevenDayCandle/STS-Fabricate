@@ -43,7 +43,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
         return fields.getQualifierText(i);
     }
 
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
         return fields.getQualifiers(info);
     }
 

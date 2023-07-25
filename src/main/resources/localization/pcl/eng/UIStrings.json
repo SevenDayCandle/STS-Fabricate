@@ -135,7 +135,10 @@
 												"Tint Color",
 												"Enable Tint",
 												"If enabled, alters the color of the saved image",
-												"Repeat"
+												"Repeat",
+												"New Loadout",
+												"Rename Loadout",
+												"Delete Loadout"
 								]
 				},
 				"pcl:CardEditorTutorial": {

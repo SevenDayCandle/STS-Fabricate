@@ -41,7 +41,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill, parentSkill);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_breakXonY(PGR.core.tooltips.block.title, TEXT.subjects_x)) : TEXT.act_breakXonY(PGR.core.tooltips.block.title, TEXT.subjects_x);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
         // Checks to see if any of the targets had block before this effect
         ArrayList<AbstractCreature> creaturesWithBlock = EUIUtils.filter(getTargetList(info), c -> c.currentBlock > 0);
         return PCLActions.last.callback(creaturesWithBlock, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, t -> t.currentBlock <= 0) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+            if (EUIUtils.any(targets, t -> t.currentBlock <= 0) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);
             }
             else {

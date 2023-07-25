@@ -37,6 +37,7 @@ public class PCLCoreImages extends AbstractImages {
 
         public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/menu/AugmentPanel.png");
         public static final TextureCache check = new TextureCache("images/pcl/ui/menu/Check.png");
+        public static final TextureCache delete = new TextureCache("images/pcl/ui/menu/Delete.png");
         public static final TextureCache edit = new TextureCache("images/pcl/ui/menu/Edit.png");
         public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/menu/EditorPrimary.png");
         public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/menu/EditorAttribute.png");
@@ -58,10 +59,7 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache nodeSquare = new TextureCache("images/pcl/ui/menu/NodeSquare.png");
         public static final TextureCache nodeSquare2 = new TextureCache("images/pcl/ui/menu/NodeSquare2.png");
         public static final TextureCache nodeTriangle = new TextureCache("images/pcl/ui/menu/NodeTriangle.png");
-        public static final TextureCache randomize = new TextureCache("images/pcl/ui/menu/Randomize.png");
-        public static final TextureCache seriesSelect = new TextureCache("images/pcl/ui/menu/SeriesSelect.png");
         public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/menu/SquaredButton_EmptyCenter.png");
-        public static final TextureCache swapCards = new TextureCache("images/pcl/ui/menu/SwapCards.png");
     }
 
     public static class CardUI {

@@ -406,7 +406,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
         return EUIUtils.arrayList(checkCondition(info, true, null) ? 0 : 1);
     }
 

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PCond;
@@ -35,8 +36,8 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
     }
 
     @Override
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
-        return fields.getQualifiers(info);
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
+        return EUIUtils.arrayList(conditionPassed ? 0 : 1);
     }
 
     @Override

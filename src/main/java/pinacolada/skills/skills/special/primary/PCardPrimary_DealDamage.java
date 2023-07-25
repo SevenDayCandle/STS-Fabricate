@@ -135,7 +135,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             if (target == PCLCardTarget.Single) {
                 return TEXT.act_deal(amountString, attackString);
             }
-            return TEXT.act_dealTo(amountString, attackString, getTargetString(PCLCardTarget.Self)); // Ignore perspective because this comes from the card
+            return TEXT.act_dealTo(amountString, attackString, getTargetStringPerspective(perspective));
         }
 
         String targetShortString = target.getShortString();

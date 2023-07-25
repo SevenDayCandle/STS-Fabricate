@@ -139,7 +139,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         CUSTOM_POTIONS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getCardFolder());
+            loadFolder(provider.getFolder());
         }
         if (PGR.debugPotions != null) {
             PGR.debugPotions.refresh();

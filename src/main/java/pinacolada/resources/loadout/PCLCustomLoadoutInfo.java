@@ -1,11 +1,13 @@
 package pinacolada.resources.loadout;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
+import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomLoadable;
 
 import java.util.ArrayList;
@@ -14,41 +16,54 @@ import java.util.HashMap;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
 public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
+    private static final HashMap<String, PCLCustomLoadoutInfo> CUSTOM_LOADOUTS = new HashMap<>();
+    private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     private static final TypeToken<PCLCustomLoadoutInfo> TTOKEN = new TypeToken<PCLCustomLoadoutInfo>() {
     };
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomLoadoutInfo>> CUSTOM_LOADOUTS = new HashMap<>();
     public static final String SUBFOLDER = "loadout";
     protected transient String filePath;
-    protected transient String imagePath;
-    public String ID;
     public String languageStrings;
     public String colorString;
     public int unlockLevel;
     public transient AbstractCard.CardColor color = AbstractCard.CardColor.COLORLESS;
+    public transient PCLCustomLoadout loadout;
 
-    public PCLCustomLoadoutInfo(AbstractCard.CardColor color) {
-        ID = makeNewID(color);
+    public PCLCustomLoadoutInfo(String id, String languageStrings, AbstractCard.CardColor color) {
+        ID = id;
         filePath = makeFilePath();
-        imagePath = makeImagePath();
+        this.languageStrings = languageStrings;
         this.color = color;
+        linkLoadout();
     }
 
-    public static String getBaseIDPrefix(AbstractCard.CardColor color) {
-        return getBaseIDPrefix(SUBFOLDER, color);
+    /**
+     * Subscribe a provider that provides a folder to load custom loadouts from whenever the cards are reloaded
+     */
+    public static void addProvider(CustomFileProvider provider) {
+        PROVIDERS.add(provider);
+    }
+
+    public static PCLCustomLoadoutInfo get(String id) {
+        return CUSTOM_LOADOUTS.get(id);
     }
 
     public static ArrayList<PCLCustomLoadoutInfo> getLoadouts(AbstractCard.CardColor color) {
         if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_LOADOUTS.values());
+            return new ArrayList<>(CUSTOM_LOADOUTS.values());
         }
-        if (!CUSTOM_LOADOUTS.containsKey(color)) {
-            CUSTOM_LOADOUTS.put(color, new ArrayList<>());
-        }
-        return CUSTOM_LOADOUTS.get(color);
+        return EUIUtils.filter(CUSTOM_LOADOUTS.values(), l -> l.color == color);
     }
 
-    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
-        return isIDDuplicate(input, getLoadouts(color));
+    public static void initialize() {
+        CUSTOM_LOADOUTS.clear();
+        loadFolder(getCustomFolder(SUBFOLDER));
+        for (CustomFileProvider provider : PROVIDERS) {
+            loadFolder(provider.getFolder());
+        }
+    }
+
+    public static boolean isIDDuplicate(String input) {
+        return isIDDuplicate(input, CUSTOM_LOADOUTS.values());
     }
 
     private static void loadFolder(FileHandle folder) {
@@ -63,7 +78,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
             String jsonString = f.readString();
             PCLCustomLoadoutInfo slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setup(path);
-            getLoadouts(slot.color).add(slot);
+            CUSTOM_LOADOUTS.put(slot.ID, slot);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -71,8 +86,30 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
         }
     }
 
-    protected static String makeNewID(AbstractCard.CardColor color) {
-        return makeNewID(getBaseIDPrefix(color), getLoadouts(color));
+    public static String makeNewID(AbstractCard.CardColor color) {
+        return makeNewID(StringUtils.lowerCase(String.valueOf(color)), CUSTOM_LOADOUTS.values());
+    }
+
+    public static void register(PCLCustomLoadoutInfo loadout) {
+        CUSTOM_LOADOUTS.put(loadout.ID, loadout);
+    }
+
+    public void commit() {
+        colorString = String.valueOf(color);
+
+        String newFilePath = makeFilePath();
+        // If the file path has changed and the original file exists, we should move the file and its image
+        FileHandle writer = Gdx.files.local(filePath);
+        if (writer.exists() && !newFilePath.equals(filePath)) {
+            writer.moveTo(Gdx.files.local(newFilePath));
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Loadout: " + filePath + ", New: " + newFilePath);
+        }
+        writer = Gdx.files.local(newFilePath);
+
+        filePath = newFilePath;
+
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Loadout: " + filePath);
     }
 
     @Override
@@ -80,9 +117,20 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
         return SUBFOLDER;
     }
 
+    protected void linkLoadout() {
+        loadout = new PCLCustomLoadout(this);
+    }
+
     public void setup(String fp) {
         color = AbstractCard.CardColor.valueOf(colorString);
         filePath = fp;
+        linkLoadout();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Loadout: " + fp);
+    }
+
+    public void wipe() {
+        FileHandle writer = Gdx.files.local(filePath);
+        writer.delete();
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Loadout: " + filePath);
     }
 }

@@ -168,7 +168,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         migrateLegacyFiles();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getCardFolder());
+            loadFolder(provider.getFolder());
         }
         if (PGR.debugCards != null) {
             PGR.debugCards.refresh();

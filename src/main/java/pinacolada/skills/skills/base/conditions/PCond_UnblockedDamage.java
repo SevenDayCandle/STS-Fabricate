@@ -63,7 +63,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
         // Checks to see if any of the targets' health is decreased after this card is used
         HashMap<? extends AbstractCreature, Integer> healthMap = EUIUtils.hashMap(getTargetList(info), c -> c.currentHealth);
         return PCLActions.last.callback(healthMap, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+            if (EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);
             }
             else {

@@ -14,18 +14,26 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.tags.CardFlag;
+import pinacolada.effects.screen.PCLCustomColorPickerEffect;
+import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
+import pinacolada.effects.screen.PCLCustomLoadoutEditEffect;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLCustomLoadout;
+import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
+import pinacolada.ui.customRun.PCLCustomLoadoutDialog;
+import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.utilities.GameUtilities;
@@ -42,6 +50,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     public static final float MENU_HEIGHT = scale(40);
     public static final float SPACING_WIDTH = screenW(0.02f);
     protected PCLCustomCardEditCardScreen effect;
+    protected EUIButton addLoadoutButton;
+    protected EUIButton editLoadoutButton;
+    protected EUIButton deleteLoadoutButton;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
@@ -84,7 +95,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cedit_idSuffixWarning);
         idWarning.setActive(false);
 
-        // TODO allow editing name for only the current form
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
@@ -143,12 +153,24 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
                 .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders((e, i) -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
+                    setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null);
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
                 .setTooltip(PGR.core.strings.sui_seriesUI, PGR.core.strings.cetut_attrAffinity);
+        addLoadoutButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.88f, MENU_HEIGHT * 0.88f))
+                .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_newLoadout, null))
+                .setClickDelay(0.02f)
+                .setTooltip(PGR.core.strings.cedit_newLoadout, "");
+        editLoadoutButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.88f, MENU_HEIGHT * 0.88f))
+                .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_renameLoadout, EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
+                .setClickDelay(0.02f)
+                .setTooltip(PGR.core.strings.cedit_renameLoadout, "");
+        deleteLoadoutButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.88f, MENU_HEIGHT * 0.88f))
+                .setOnClick(() -> this.openLoadoutDelete(EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
+                .setClickDelay(0.02f)
+                .setTooltip(PGR.core.strings.cedit_deleteLoadout, "");
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val)))
@@ -180,10 +202,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
 
-        loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
-        loadoutDropdown
-                .setActive(loadoutDropdown.size() > 0);
-
+        editLoadoutButton.setActive(false);
+        deleteLoadoutButton.setActive(false);
+        refreshLoadoutItems();
         refresh();
     }
 
@@ -224,6 +245,26 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    protected void openLoadoutCreator(String title, PCLCustomLoadout loadout) {
+        effect.currentDialog = new PCLCustomLoadoutEditEffect(title, loadout)
+                .addCallback(this::registerLoadout);
+    }
+
+    protected void openLoadoutDelete(PCLCustomLoadout loadout) {
+        if (loadout != null) {
+            effect.currentDialog = new PCLCustomDeletionConfirmationEffect<>(loadout)
+                    .addCallback((v) -> {
+                        if (v != null) {
+                            if (effect.getBuilder().loadout == loadout) {
+                                setLoadout(null);
+                            }
+                            v.info.wipe();
+                            refreshLoadoutItems();
+                        }
+                    });
+        }
+    }
+
     @Override
     public void refresh() {
         idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
@@ -239,6 +280,43 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
 
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
+    }
+
+    protected void refreshLoadoutItems() {
+        loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
+        loadoutDropdown.sortByLabel();
+        loadoutDropdown
+                .setActive(loadoutDropdown.size() > 0);
+        addLoadoutButton.setPosition(loadoutDropdown.getClearButtonHitbox().cX + loadoutDropdown.getClearButtonHitbox().width, loadoutDropdown.getClearButtonHitbox().cY)
+                .setActive(loadoutDropdown.isActive);
+        editLoadoutButton.setPosition(addLoadoutButton.hb.cX + addLoadoutButton.hb.width, addLoadoutButton.hb.cY);
+        deleteLoadoutButton.setPosition(editLoadoutButton.hb.cX + editLoadoutButton.hb.width, editLoadoutButton.hb.cY);
+    }
+
+    protected void registerLoadout(PCLCustomLoadoutDialog dialog) {
+        if (dialog != null) {
+            if (dialog.loadout != null) {
+                dialog.loadout.languageMap = dialog.currentLanguageMap;
+                dialog.loadout.refreshStrings();
+                dialog.loadout.commitChanges();
+                effect.rebuildItem();
+                refreshLoadoutItems();
+            }
+            else {
+                PCLCustomLoadoutInfo info = new PCLCustomLoadoutInfo(dialog.currentID, EUIUtils.serialize(dialog.currentLanguageMap), effect.getBuilder().cardColor);
+                PCLCustomLoadoutInfo.register(info);
+                info.commit();
+                refreshLoadoutItems();
+            }
+        }
+    }
+
+    protected void setLoadout(PCLLoadout loadout) {
+        effect.modifyAllBuilders((e, i) -> e.setLoadout(loadout));
+        editLoadoutButton.setActive(loadoutDropdown.isActive && loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     @Override
@@ -250,6 +328,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         raritiesDropdown.tryRender(sb);
         typesDropdown.tryRender(sb);
         loadoutDropdown.tryRender(sb);
+        addLoadoutButton.tryRender(sb);
+        editLoadoutButton.tryRender(sb);
+        deleteLoadoutButton.tryRender(sb);
         flagsDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
@@ -266,6 +347,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         maxUpgrades.tryUpdate();
         maxCopies.tryUpdate();
         loadoutDropdown.tryUpdate();
+        addLoadoutButton.tryUpdate();
+        editLoadoutButton.tryUpdate();
+        deleteLoadoutButton.tryUpdate();
         flagsDropdown.tryUpdate();
         raritiesDropdown.tryUpdate();
         typesDropdown.tryUpdate();

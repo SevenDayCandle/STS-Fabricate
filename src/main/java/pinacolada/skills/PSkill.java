@@ -807,7 +807,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return fields.getQualifierText(i);
     }
 
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
         return fields.getQualifiers(info);
     }
 

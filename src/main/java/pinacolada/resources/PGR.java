@@ -35,6 +35,7 @@ import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
+import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
@@ -421,6 +422,7 @@ public class PGR {
     }
 
     public static void reloadCustoms() {
+        PCLCustomLoadoutInfo.initialize();
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
         PCLCustomPotionSlot.initialize();

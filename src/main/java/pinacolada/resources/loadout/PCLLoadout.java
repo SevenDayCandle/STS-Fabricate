@@ -78,11 +78,24 @@ public abstract class PCLLoadout {
     }
 
     public static PCLLoadout get(String id) {
-        return LOADOUTS.get(id);
+        PCLLoadout loadout = LOADOUTS.get(id);
+        if (loadout == null) {
+            PCLCustomLoadoutInfo info = PCLCustomLoadoutInfo.get(id);
+            if (info != null) {
+                loadout = info.loadout;
+            }
+        }
+        return loadout;
     }
 
     public static ArrayList<PCLLoadout> getAll(AbstractCard.CardColor cardColor) {
-        return EUIUtils.filter(LOADOUTS.values(), l -> l.color == cardColor);
+        ArrayList<PCLLoadout> base = EUIUtils.filter(LOADOUTS.values(), l -> l.color == cardColor);
+        for (PCLCustomLoadoutInfo custom : PCLCustomLoadoutInfo.getLoadouts(cardColor)) {
+            if (custom.loadout != null) {
+                base.add(custom.loadout);
+            }
+        }
+        return base;
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {

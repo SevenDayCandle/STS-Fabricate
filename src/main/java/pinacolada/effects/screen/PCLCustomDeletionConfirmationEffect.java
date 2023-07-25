@@ -6,7 +6,7 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
-public class PCLCustomDeletionConfirmationEffect<T extends PCLCustomEditorLoadable<?, ?>> extends PCLEffectWithCallback<T> {
+public class PCLCustomDeletionConfirmationEffect<T> extends PCLEffectWithCallback<T> {
 
     protected EUIDialogYesNo dialog = new EUIDialogYesNo(PGR.core.strings.cedit_confirmDeletion, PGR.core.strings.cedit_confirmDeletionDesc);
 

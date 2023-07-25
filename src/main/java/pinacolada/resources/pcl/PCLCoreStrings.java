@@ -119,6 +119,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_enableTint = cedit.TEXT[71];
     public final String cedit_tintDesc = cedit.TEXT[72];
     public final String cedit_repeat = cedit.TEXT[73];
+    public final String cedit_newLoadout = cedit.TEXT[74];
+    public final String cedit_renameLoadout = cedit.TEXT[75];
+    public final String cedit_deleteLoadout = cedit.TEXT[76];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -779,7 +782,7 @@ public class PCLCoreStrings extends AbstractStrings {
         return actFmt(3, power);
     }
     public final String act_breakXonY(Object power, Object target) {
-        return actFmt(4, power);
+        return actFmt(4, power, target);
     }
     public final String act_choose(Object amount) {
         return actFmt(5, amount);
@@ -1023,7 +1026,7 @@ public class PCLCoreStrings extends AbstractStrings {
         return condFmt(11, target, subject, desc4);
     }
     public final String cond_ifXDid(Object subject, Object desc) {
-        return condFmt(12, subject);
+        return condFmt(12, subject, desc);
     }
     public final String cond_ifX(Object subject) {
         return condFmt(13, subject);
