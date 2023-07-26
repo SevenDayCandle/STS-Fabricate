@@ -22,6 +22,7 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase {
     protected static final float CARD_SCALE = 0.75f;
+    public static final float BUTTON_SIZE = scale(42);
     public static final float PREVIEW_OFFSET_X = AbstractCard.IMG_WIDTH * 0.6f;
     public static final float PREVIEW_OFFSET_Y = -AbstractCard.IMG_HEIGHT * 0.57f;
     public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
@@ -56,16 +57,17 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
-        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + 12, 48, 48))
+        final float offY = BUTTON_SIZE / 4;
+        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_decrease, "")
                 .setClickDelay(0.02f);
-        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
+        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_add, "")
                 .setClickDelay(0.02f);
-        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
         nameColor = Settings.GOLD_COLOR;

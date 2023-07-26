@@ -20,7 +20,7 @@ public class PCLCustomEffectHologram extends EUIBase {
     public PCLCustomEffectNode.NodeType type;
 
     public PCLCustomEffectHologram(EUIImage image, ActionT1<PCLCustomEffectHologram> onRelease) {
-        this.image = new EUIImage(image);
+        this.image = new EUIImage(image).setScale(1.8f, 1.8f);
         this.onRelease = onRelease;
     }
 

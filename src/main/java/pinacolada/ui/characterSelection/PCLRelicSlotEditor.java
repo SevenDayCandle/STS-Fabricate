@@ -22,11 +22,13 @@ import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 
+import static pinacolada.ui.characterSelection.PCLCardSlotEditor.BUTTON_SIZE;
+import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
+
 // Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotEditor extends EUIBase {
     protected static final float CARD_SCALE = 0.75f;
     public static final float SPACING = 64f * Settings.scale;
-    public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     protected EUITextBox relicNameText;
     protected EUITextBox relicValueText;
     protected EUIButton changeButton;
@@ -50,10 +52,12 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
-        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + 12, 48, 48))
+
+        final float offY = BUTTON_SIZE / 4;
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicNameText.hb.y + 12, 48, 48))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
 
@@ -177,10 +181,10 @@ public class PCLRelicSlotEditor extends EUIBase {
         if (relic != null) {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING / 2, relicValueText.hb.y, relic.hb.width, relic.hb.height));
             if (relic instanceof PCLRelic) {
-                this.relicImage.setScale(0.65f, 0.65f);
+                this.relicImage.setScale(0.7f, 0.7f);
             }
             else {
-                this.relicImage.setScale(1.3f, 1.3f);
+                this.relicImage.setScale(1.4f, 1.4f);
             }
         }
         else {

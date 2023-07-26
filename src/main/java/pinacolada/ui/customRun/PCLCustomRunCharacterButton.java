@@ -20,7 +20,7 @@ public class PCLCustomRunCharacterButton extends EUIButton {
     public boolean glowing;
 
     public PCLCustomRunCharacterButton(PCLCustomRunScreen screen, AbstractPlayer p) {
-        super(p.getCustomModeCharacterButtonImage(), new EUIHitbox(scale(100), scale(100)));
+        super(p.getCustomModeCharacterButtonImage(), new EUIHitbox(scale(128), scale(128)));
         // Textures are dummies; we just need the info
         this.character = new CharacterOption("", p, PCLCoreImages.CardUI.cardBannerL.texture(), PCLCoreImages.CardUI.cardBannerL.texture());
         this.screen = screen;

@@ -122,7 +122,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
 
-        colorButtons = new EUIButtonList(14, screenW(0.09f), screenH(0.95f), EUIButtonList.BUTTON_W, scale(47));
+        colorButtons = new EUIButtonList(14, screenW(0.09f), screenH(0.95f), EUIButtonList.BUTTON_W, EUIButtonList.BUTTON_H);
 
         for (AbstractCard.CardColor color : getAllColors()) {
             makeColorButton(color);
