@@ -21,7 +21,7 @@ public class PMove_Create extends PMove_GenerateCard {
             .selfTarget();
 
     public PMove_Create() {
-        this(1, (String) null);
+        super(DATA, PCLCardTarget.None, 1);
     }
 
     public PMove_Create(int copies, String... cardData) {

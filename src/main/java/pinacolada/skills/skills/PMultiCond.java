@@ -347,7 +347,7 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
-                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override
