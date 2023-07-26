@@ -1,6 +1,7 @@
 package pinacolada.patches.creature;
 
 import basemod.ReflectionHacks;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -168,6 +169,17 @@ public class AbstractPlayerPatches {
                     }
                 }
             };
+        }
+    }
+
+    @SpirePatch(clz = AbstractPlayer.class, method = "renderTargetingUi")
+    public static class AbstractPlayer_RenderTargetingUi {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> method(AbstractPlayer __instance, SpriteBatch s) {
+            if (CombatManager.targeting.shouldHideArrows()) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 

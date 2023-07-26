@@ -577,7 +577,7 @@ public final class PCLActions {
                 .setPurge(true);
     }
 
-    public PlayFromPile playFromPile(String sourceName, int amount, AbstractMonster target, CardGroup... groups) {
+    public PlayFromPile playFromPile(String sourceName, int amount, AbstractCreature target, CardGroup... groups) {
         return add(new PlayFromPile(sourceName, target, amount, groups));
     }
 

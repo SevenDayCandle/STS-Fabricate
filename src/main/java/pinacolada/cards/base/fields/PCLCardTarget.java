@@ -105,9 +105,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case All:
                 return PGR.core.strings.ctype_tagAll;
-            case AllEnemy:
             case AllAlly:
             case Team:
+                return PGR.core.strings.ctype_team;
+            case AllEnemy:
             case SelfAllEnemy:
                 return PGR.core.strings.ctype_tagAoE;
             case RandomEnemy:

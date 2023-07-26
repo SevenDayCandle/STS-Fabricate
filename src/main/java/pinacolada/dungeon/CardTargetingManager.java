@@ -8,9 +8,11 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.GameCursor;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import extendedui.EUIInputManager;
@@ -41,16 +43,20 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
     @Override
     public boolean hasTarget() {
         // Only single targeting requires an actual target
-        return card != null && (hovered != null || (card.type != PCLEnum.CardType.SUMMON && !card.pclTarget.targetsSingle()));
+        return card != null && (hovered != null || isNonTargeting());
+    }
+
+    protected boolean isNonTargeting() {
+        return !card.pclTarget.targetsSingle() && card.type != PCLEnum.CardType.SUMMON;
     }
 
     @Override
     public void renderReticle(SpriteBatch sb) {
         if (card != null) {
-            if (hovered != null && !card.pclTarget.targetsMulti()) {
+            if (hovered != null && (card.type == PCLEnum.CardType.SUMMON || !card.pclTarget.targetsMulti())) {
                 hovered.renderReticle(sb);
             }
-            else if (!card.pclTarget.targetsSingle()) {
+            else if (isNonTargeting()) {
                 if (card.pclTarget.targetsSelf()) {
                     AbstractDungeon.player.renderReticle(sb);
                 }
@@ -83,6 +89,10 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
         }
     }
 
+    public boolean shouldHideArrows() {
+        return card != null && isNonTargeting();
+    }
+
     @Override
     public void updateHovered() {
         hovered = null;
@@ -106,6 +116,14 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
         // Updated hovered even for cards that have multi targeting, because we need the hovered target for on-screen meters
         else {
             PCLCardAlly.emptyAnimation.unhighlight();
+
+            // If the card doesn't show arrows, we need to reset the hidden cursor and draw scale that occurs when entering single target mode normally
+            if (isNonTargeting()) {
+                card.targetDrawScale = 1.0F;
+                card.target_x = InputHelper.mX;
+                card.target_y = InputHelper.mY;
+                GameCursor.hidden = false;
+            }
 
             if (card.pclTarget.targetsAllies()) {
                 for (PCLCardAlly m : CombatManager.summons.summons) {
