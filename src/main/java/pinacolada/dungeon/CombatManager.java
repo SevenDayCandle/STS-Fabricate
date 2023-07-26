@@ -818,10 +818,6 @@ public class CombatManager {
     }
 
     public static boolean onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
-        if (card == null) {
-            throw new RuntimeException("Card played is null");
-        }
-
         PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
         if (pclCard != null) {
             pclCard.unfadeOut();

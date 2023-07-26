@@ -117,13 +117,13 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return null;
     }
 
-    public final AbstractMonster getTarget(AbstractCreature m) {
+    public final AbstractCreature getTarget(AbstractCreature m) {
         return getTarget(AbstractDungeon.player, m);
     }
 
-    public final AbstractMonster getTarget(AbstractCreature p, AbstractCreature m) {
+    public final AbstractCreature getTarget(AbstractCreature p, AbstractCreature m) {
         List<? extends AbstractCreature> mons = getTargets(p, m);
-        return mons.size() > 0 ? EUIUtils.safeCast(mons.get(0), AbstractMonster.class) : null;
+        return mons.size() > 0 ? mons.get(0): null;
     }
 
     public TargetFilter getTargetFilter() {

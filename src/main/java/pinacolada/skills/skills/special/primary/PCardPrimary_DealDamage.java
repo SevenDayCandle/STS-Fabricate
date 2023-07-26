@@ -120,7 +120,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
-        // TODO dynamically check if a child effect overrides modifyHitCount
         String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         // When displayed as text, we can just write normal damage down as "damage"
@@ -254,19 +253,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public void useImpl(PCLUseInfo info, PCLActions order) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (pCard != null) {
-            switch (target) {
-                case All:
-                case AllEnemy:
-                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                    break;
-                case Team:
-                    order.dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                    break;
-                case AllAlly:
-                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
-                    break;
-                default:
-                    order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+            if (target.targetsMulti()) {
+                order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+            }
+            else {
+                order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
             }
         }
     }

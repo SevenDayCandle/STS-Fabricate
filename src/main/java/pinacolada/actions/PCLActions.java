@@ -277,10 +277,6 @@ public final class PCLActions {
         return add(new CycleCards(sourceName, amount));
     }
 
-    public ArrayList<DealDamageToAll> dealCadealCardDamageToAll(PCLCard card, AbstractCreature source, PCLAttackVFX effect) {
-        return dealCardDamageToAll(card, source, effect.key);
-    }
-
     public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, PCLAttackVFX effect) {
         return dealCardDamage(card, source, target, effect.key);
     }
@@ -295,10 +291,14 @@ public final class PCLActions {
         return actions;
     }
 
+    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, PCLAttackVFX effect) {
+        return dealCardDamageToAll(card, source, effect.key);
+    }
+
     public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
         ArrayList<DealDamageToAll> actions = new ArrayList<>();
         for (int i = 0; i < card.hitCount; i++) {
-            actions.add(add(new DealDamageToAll(source, card.multiDamage, card.damageTypeForTurn, effect, false))
+            actions.add(add(new DealDamageToAll(card, source, card.multiDamageCreatures, card.multiDamage, card.damageTypeForTurn, effect, false))
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
         }
 
@@ -325,12 +325,12 @@ public final class PCLActions {
         return applyPower(source, new DelayedDamagePower(target, amount, effect));
     }
 
-    public DealDamageToAll dealDamageToAll(int[] damageMatrix, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
-        return add(new DealDamageToAll(player, damageMatrix, damageType, effect.key, false));
+    public DealDamageToAll dealDamageToAll(AbstractCreature source, ArrayList<AbstractCreature> targets, int[] damageMatrix, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
+        return add(new DealDamageToAll(source, targets, damageMatrix, damageType, effect.key));
     }
 
-    public DealDamageToAll dealDamageToAll(int[] damageMatrix, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect) {
-        return add(new DealDamageToAll(player, damageMatrix, damageType, effect, false));
+    public DealDamageToAll dealDamageToAll(AbstractCreature source, ArrayList<AbstractCreature> targets, int[] damageMatrix, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect) {
+        return add(new DealDamageToAll(source, targets, damageMatrix, damageType, effect));
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect) {

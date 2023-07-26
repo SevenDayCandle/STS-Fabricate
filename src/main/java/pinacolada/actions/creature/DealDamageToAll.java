@@ -1,6 +1,7 @@
 package pinacolada.actions.creature;
 
 import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
@@ -20,32 +21,37 @@ import java.util.function.BiConsumer;
 
 // Copied and modified from STS-AnimatorMod
 public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
-    protected final ArrayList<AbstractCreature> targets = new ArrayList<>();
     public final int[] damage;
     protected AbstractOrb orb;
+    protected ArrayList<AbstractCreature> targets;
     protected BiConsumer<AbstractCreature, Boolean> onDamageEffect;
     protected boolean applyPowers;
     protected boolean applyPowerRemovalMultiplier;
     protected boolean bypassBlock;
     protected boolean bypassThorns;
     protected boolean isFast;
-    protected boolean targetAllies;
 
     protected Color vfxColor = null;
     protected Color enemyTint = null;
     protected float pitchMin = 0.95f;
     protected float pitchMax = 1.05f;
 
-    public DealDamageToAll(AbstractCreature source, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect) {
-        this(source, amount, damageType, attackEffect, false);
+    public DealDamageToAll(AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect) {
+        this(null, source, targets, amount, damageType, attackEffect, false);
     }
 
-    public DealDamageToAll(AbstractCreature source, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect, boolean isFast) {
+    public DealDamageToAll(AbstractCard card, AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect) {
+        this(card, source, targets, amount, damageType, attackEffect, false);
+    }
+
+    public DealDamageToAll(AbstractCard card, AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect, boolean isFast) {
         super(ActionType.DAMAGE, isFast ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
         this.attackEffect = attackEffect;
+        this.card = card;
         this.damageType = damageType;
         this.damage = amount;
+        this.targets = targets;
 
         initialize(source, null, amount[0]);
     }
@@ -59,8 +65,7 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     protected void firstUpdate() {
         boolean mute = pitchMin == 0;
         PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
-        int i = 0;
-        for (AbstractMonster enemy : getTargets()) {
+        for (AbstractCreature enemy : targets) {
             if (!GameUtilities.isDeadOrEscaped(enemy)) {
                 if (attackVFX != null) {
                     if (mute) {
@@ -77,8 +82,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
 
                 mute = true;
             }
-
-            i += 1;
         }
 
         if (attackVFX != null) {
@@ -94,7 +97,7 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
             }
 
             int i = 0;
-            for (AbstractMonster enemy : getTargets()) {
+            for (AbstractCreature enemy : targets) {
                 if (!GameUtilities.isDeadOrEscaped(enemy)) {
                     final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
                     if (orb != null) {
@@ -105,7 +108,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
                     }
                     DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
                     DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
-                    targets.add(enemy);
                 }
 
                 i += 1;
@@ -121,10 +123,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
 
             complete(targets);
         }
-    }
-
-    protected ArrayList<? extends AbstractMonster> getTargets() {
-        return targetAllies ? GameUtilities.getSummons(null) : GameUtilities.getEnemies(false);
     }
 
     public DealDamageToAll setDamageEffect(EffekseerEFK effekseerKey) {
@@ -176,12 +174,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     public DealDamageToAll setVFXColor(Color color, Color enemyTint) {
         this.vfxColor = color.cpy();
         this.enemyTint = enemyTint.cpy();
-
-        return this;
-    }
-
-    public DealDamageToAll targetAllies(boolean val) {
-        this.targetAllies = val;
 
         return this;
     }

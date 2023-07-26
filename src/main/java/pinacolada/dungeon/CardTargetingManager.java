@@ -46,26 +46,28 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
 
     @Override
     public void renderReticle(SpriteBatch sb) {
-        if (hovered != null) {
-            hovered.renderReticle(sb);
-        }
-        else if (card != null && !card.pclTarget.targetsSingle()) {
-            if (card.pclTarget.targetsSelf()) {
-                AbstractDungeon.player.renderReticle(sb);
+        if (card != null) {
+            if (hovered != null && !card.pclTarget.targetsMulti()) {
+                hovered.renderReticle(sb);
             }
-            if (card.pclTarget.targetsAllies()) {
-                for (PCLCardAlly m : CombatManager.summons.summons) {
-                    if (m.hasCard()) {
-                        m.renderReticle(sb);
+            else if (!card.pclTarget.targetsSingle()) {
+                if (card.pclTarget.targetsSelf()) {
+                    AbstractDungeon.player.renderReticle(sb);
+                }
+                if (card.pclTarget.targetsAllies()) {
+                    for (PCLCardAlly m : CombatManager.summons.summons) {
+                        if (m.hasCard()) {
+                            m.renderReticle(sb);
+                        }
                     }
                 }
-            }
-            if (card.pclTarget.targetsEnemies()) {
-                final AbstractRoom room = GameUtilities.getCurrentRoom();
-                if (room != null) {
-                    for (AbstractMonster m : room.monsters.monsters) {
-                        if (!GameUtilities.isDeadOrEscaped(m)) {
-                            m.renderReticle(sb);
+                if (card.pclTarget.targetsEnemies()) {
+                    final AbstractRoom room = GameUtilities.getCurrentRoom();
+                    if (room != null) {
+                        for (AbstractMonster m : room.monsters.monsters) {
+                            if (!GameUtilities.isDeadOrEscaped(m)) {
+                                m.renderReticle(sb);
+                            }
                         }
                     }
                 }

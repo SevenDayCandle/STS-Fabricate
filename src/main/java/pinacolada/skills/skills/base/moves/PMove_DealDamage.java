@@ -2,6 +2,10 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -13,6 +17,9 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @VisibleSkill
 public class PMove_DealDamage extends PMove<PField_Attack> {
@@ -55,7 +62,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (target == PCLCardTarget.Self && perspective == PCLCardTarget.Self) {
+        if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && perspective == PCLCardTarget.Self)) {
             return TEXT.act_takeDamage(getAmountRawString());
         }
         if (target == PCLCardTarget.Single) {
@@ -67,12 +74,19 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (target.targetsMulti()) {
-            int[] damage = DamageInfo.createDamageMatrix(amount, true, false);
-            order.dealDamageToAll(damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
+            ArrayList<AbstractCreature> targets = target.getTargets(info);
+            int[] damage = getDamageMatrix(targets);
+            order.dealDamageToAll(getSourceCreature(), targets, damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else {
-            order.dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : target.getTarget(info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
+            order.dealDamage(getSourceCreature(), target.getTarget(info.source, info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self && target != PCLCardTarget.None);
         }
         super.use(info, order);
+    }
+
+    protected int[] getDamageMatrix(ArrayList<AbstractCreature> targets) {
+        int[] damage = new int[targets.size()];
+        Arrays.fill(damage, amount);
+        return damage;
     }
 }

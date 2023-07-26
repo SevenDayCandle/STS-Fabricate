@@ -148,6 +148,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public int maxUpgradeLevel;
     public int rightCount = 1;
     public transient AbstractCreature owner;
+    public transient ArrayList<AbstractCreature> multiDamageCreatures;
     public transient PCLCard parent;
     public transient PowerFormulaDisplay formulaDisplay;
 
@@ -1431,12 +1432,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
         if (isMultiDamage) {
-            ArrayList<AbstractMonster> m = GameUtilities.getEnemies(false);
-            multiDamage = new int[m.size()];
+            multiDamageCreatures = pclTarget.getTargets(getSourceCreature(), mo);
+            multiDamage = new int[multiDamageCreatures.size()];
 
             int best = -PSkill.DEFAULT_MAX;
             for (int i = 0; i < multiDamage.length; i++) {
-                refresh(m.get(i));
+                refresh(multiDamageCreatures.get(i));
                 multiDamage[i] = damage;
 
                 if (damage > best) {

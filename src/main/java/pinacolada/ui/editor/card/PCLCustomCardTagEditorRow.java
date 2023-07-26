@@ -20,7 +20,7 @@ import pinacolada.cards.base.fields.PCLCardTagInfo;
 import static pinacolada.ui.editor.card.PCLCustomCardAttributesPage.MENU_HEIGHT;
 
 public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
-    public static final float ICON_SIZE = 22f * Settings.scale;
+    public static final float ICON_SIZE = 24f * Settings.scale;
 
     protected int form;
     protected EUITextBoxNumericalInput displayValue;
@@ -35,7 +35,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
 
         // Tag limits are copied from the extra limits for PSkills
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
-                new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 5.3f, MENU_HEIGHT * 0.25f).setIsPopupCompatible(true).setParentElement(dr))
+                new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 5.2f, MENU_HEIGHT * 0.25f).setIsPopupCompatible(true).setParentElement(dr))
                 .showNegativeAsInfinity(true)
                 .setLimits(item.tag.minValue, item.tag.maxValue)
                 .setOnComplete(v -> {
