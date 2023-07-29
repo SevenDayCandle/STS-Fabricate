@@ -15,6 +15,8 @@ import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class SymbolToken extends PCLTextToken {
+    public static final char TOKEN1 = '[';
+    public static final char TOKEN2 = '†';
     private static final Map<String, SymbolToken> tokenCache = new HashMap<>();
 
     // TODO remove
@@ -42,7 +44,7 @@ public class SymbolToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if ((parser.character == '[' || parser.character == '†') && parser.remaining > 1) {
+        if (parser.remaining > 1) {
             builder.setLength(0);
 
             int i = 1;

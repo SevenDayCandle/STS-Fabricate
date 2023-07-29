@@ -20,6 +20,7 @@ import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
 
 // Copied and modified from STS-AnimatorMod
 public class VariableToken extends PCLTextToken {
+    public static final char TOKEN = '!';
     protected static Class<?> dynaClass;
     protected final DynamicVariable var;
     protected AbstractCardModifier mod;
@@ -33,7 +34,7 @@ public class VariableToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == '!' && parser.remaining > 1) {
+        if (parser.remaining > 1) {
             builder.setLength(0);
             int i = 1;
             while (true) {

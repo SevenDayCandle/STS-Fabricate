@@ -3,9 +3,6 @@ package pinacolada.cards.base.cardText;
 import java.util.HashMap;
 import java.util.Map;
 
-import static pinacolada.cards.base.cardText.ConditionToken.CONDITION_TOKEN;
-import static pinacolada.cards.base.cardText.PointerToken.BOUND_TOKEN;
-
 // Copied and modified from STS-AnimatorMod
 public class PunctuationToken extends PCLTextToken {
     private static final Map<String, PunctuationToken> tokenCache = new HashMap<>();
@@ -15,14 +12,15 @@ public class PunctuationToken extends PCLTextToken {
     }
 
     protected static boolean isValidCharacter(Character character) {
-        if (character == null || Character.isLetterOrDigit(character) || Character.isWhitespace(character)) {
+        if (character == null || Character.isLetterOrDigit(character)) {
             return false;
         }
 
         // Characters used by other tokens are not allowed
         switch (character) {
-            case BOUND_TOKEN:
-            case CONDITION_TOKEN:
+            case ConditionToken.TOKEN:
+            case PointerToken.TOKEN:
+            case NewLineToken.TOKEN:
             case '<':
             case '>':
             case '{':

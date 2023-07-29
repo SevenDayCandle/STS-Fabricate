@@ -11,7 +11,7 @@ import pinacolada.skills.PSkill;
 import java.util.ArrayList;
 
 public class PointerToken extends PCLTextToken {
-    public static final char BOUND_TOKEN = '¦';
+    public static final char TOKEN = '¦';
     public static final String DUMMY = "_.";
     public static final ArrayList<Character> VALID_TOKENS = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class PointerToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == BOUND_TOKEN && parser.isNext(3, BOUND_TOKEN)) {
+        if (parser.isNext(3, TOKEN)) {
             final PointerToken token = tryCreateToken(parser.card, parser.nextCharacter(1), parser.nextCharacter(2));
             if (token != null) {
                 parser.addToken(token);

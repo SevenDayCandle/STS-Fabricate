@@ -14,7 +14,7 @@ import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 
 public class ConditionToken extends PCLTextToken {
     private static final PCLTextParser internalParser = new PCLTextParser(false);
-    public static final char CONDITION_TOKEN = '║';
+    public static final char TOKEN = '║';
     private final PSkill<?> move;
     private final ColoredString coloredString;
     private final Color originalColor;
@@ -32,7 +32,7 @@ public class ConditionToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == CONDITION_TOKEN && parser.isNext(3, CONDITION_TOKEN)) {
+        if (parser.isNext(3, TOKEN)) {
             PSkill<?> move = parser.card != null ? parser.card.getEffectAt(parser.nextCharacter(2)) : null;
             boolean capital = parser.nextCharacter(1) == CAPITAL_CHAR;
 

@@ -69,25 +69,8 @@ public class PCLTextParser {
         int amount = 0;
         while (moveIndex(amount)) {
             this.character = this.text.charAt(characterIndex);
-
-            // The order matters
-            if ((amount = ConditionToken.tryAdd(this)) == 0 // ║0║
-                    && (amount = PointerToken.tryAdd(this)) == 0 // ¦E5¦
-                    && (amount = LogicToken.tryAdd(this)) == 0 // $E5$
-                    && (amount = SymbolToken.tryAdd(this)) == 0 // [E]
-                    && (amount = VariableToken.tryAdd(this)) == 0 // !D!
-                    && (amount = SpecialToken.tryAdd(this)) == 0 // {code}
-                    && (amount = NewLineToken.tryAdd(this)) == 0 // | or NL
-                    && (amount = WhitespaceToken.tryAdd(this)) == 0 //
-                    && (amount = ModifierSplitToken.tryAdd(this)) == 0 //:
-                    && (amount = PunctuationToken.tryAdd(this)) == 0 // .,-.; etc
-                    && (amount = WordToken.tryAdd(this)) == 0)// Letters/Digits
-            {
-                EUIUtils.logError(this, "Error parsing card text, Character: " + character + ", Text: " + this.text);
-                amount = 1;
-            }
+            amount = tryAddToken();
         }
-
     }
 
     protected boolean isNext(int amount, char character) {
@@ -130,6 +113,45 @@ public class PCLTextParser {
             return true;
         }
         return false;
+    }
+
+    protected int tryAddToken() {
+        switch (character) {
+            case ConditionToken.TOKEN:
+                return ConditionToken.tryAdd(this);
+            case PointerToken.TOKEN:
+                return PointerToken.tryAdd(this);
+            case LogicToken.TOKEN:
+                return LogicToken.tryAdd(this);
+            case SymbolToken.TOKEN1:
+            case SymbolToken.TOKEN2:
+                return SymbolToken.tryAdd(this);
+            case VariableToken.TOKEN:
+                return VariableToken.tryAdd(this);
+            case SpecialToken.TOKEN:
+                return SpecialToken.tryAdd(this);
+            case ModifierSplitToken.TOKEN:
+                return ModifierSplitToken.add(this);
+        }
+
+        int amount = NewLineToken.tryAdd(this);
+        if (amount > 0) {
+            return amount;
+        }
+        amount = WhitespaceToken.tryAdd(this);
+        if (amount > 0) {
+            return amount;
+        }
+        amount = PunctuationToken.tryAdd(this);
+        if (amount > 0) {
+            return amount;
+        }
+        amount = WordToken.tryAdd(this);
+        if (amount > 0) {
+            return amount;
+        }
+        EUIUtils.logError(this, "Error parsing card text, Character: " + character + ", Text: " + this.text);
+        return 1;
     }
 
 }

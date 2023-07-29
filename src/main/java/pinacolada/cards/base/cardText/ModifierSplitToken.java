@@ -2,6 +2,7 @@ package pinacolada.cards.base.cardText;
 
 // Copied and modified from STS-AnimatorMod
 public class ModifierSplitToken extends PCLTextToken {
+    public static final char TOKEN = ':';
     public PCLTextToken previous;
 
     protected ModifierSplitToken(String text, PCLTextToken previous) {
@@ -9,17 +10,8 @@ public class ModifierSplitToken extends PCLTextToken {
         this.previous = previous;
     }
 
-    protected static boolean isValidCharacter(Character character) {
-        return character == ':';
-    }
-
-    public static int tryAdd(PCLTextParser parser) {
-        if (isValidCharacter(parser.character)) {
-            parser.addToken(new ModifierSplitToken(parser.character.toString(), parser.previous));
-
-            return 1;
-        }
-
-        return 0;
+    public static int add(PCLTextParser parser) {
+        parser.addToken(new ModifierSplitToken(parser.character.toString(), parser.previous));
+        return 1;
     }
 }

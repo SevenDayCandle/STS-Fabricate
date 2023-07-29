@@ -13,6 +13,8 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.cardText.ConditionToken;
+import pinacolada.cards.base.cardText.PointerToken;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -27,8 +29,6 @@ import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;
 
-import static pinacolada.cards.base.cardText.ConditionToken.CONDITION_TOKEN;
-import static pinacolada.cards.base.cardText.PointerToken.BOUND_TOKEN;
 import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
@@ -194,8 +194,8 @@ public interface PointerProvider {
         for (int i = 0; i < baseString.length(); i++) {
             char c = baseString.charAt(i);
             switch (c) {
-                case CONDITION_TOKEN:
-                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, CONDITION_TOKEN)) {
+                case ConditionToken.TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, ConditionToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
@@ -204,8 +204,8 @@ public interface PointerProvider {
                         i += 3;
                     }
                     break;
-                case BOUND_TOKEN:
-                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                case PointerToken.TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         if (move != null) {
                             String s = move.getExportString(baseString.charAt(i + 1));
@@ -221,7 +221,7 @@ public interface PointerProvider {
                     while (i + 1 < baseString.length()) {
                         i += 1;
                         c = baseString.charAt(i);
-                        if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                        if (c == PointerToken.TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                             PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                             if (move != null) {
                                 String s = move.getAttributeString(baseString.charAt(i + 1));
@@ -276,8 +276,8 @@ public interface PointerProvider {
         for (int i = 0; i < baseString.length(); i++) {
             char c = baseString.charAt(i);
             switch (c) {
-                case CONDITION_TOKEN:
-                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, CONDITION_TOKEN)) {
+                case ConditionToken.TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, ConditionToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
@@ -286,8 +286,8 @@ public interface PointerProvider {
                         i += 3;
                     }
                     break;
-                case BOUND_TOKEN:
-                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                case PointerToken.TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         if (move != null) {
                             String s = move.getAttributeString(baseString.charAt(i + 1));
@@ -303,7 +303,7 @@ public interface PointerProvider {
                     while (i + 1 < baseString.length()) {
                         i += 1;
                         c = baseString.charAt(i);
-                        if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                        if (c == PointerToken.TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                             PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                             if (move != null) {
                                 String s = move.getAttributeString(baseString.charAt(i + 1));

@@ -5,7 +5,7 @@ import extendedui.EUIUtils;
 
 // Copied and modified from STS-AnimatorMod
 public class NewLineToken extends PCLTextToken {
-    public static final char NEWLINE = '|';
+    public static final char TOKEN = '|';
     protected static NewLineToken instance = new NewLineToken();
 
     private NewLineToken() {
@@ -13,7 +13,7 @@ public class NewLineToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == NEWLINE) {
+        if (parser.character == TOKEN) {
             parser.addToken(instance);
             return 1;
         }
