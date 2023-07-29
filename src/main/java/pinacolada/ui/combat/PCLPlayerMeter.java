@@ -20,22 +20,21 @@ import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
-public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider {
+public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     protected EUIButton infoIcon;
     protected PCLUseInfo info;
-    protected String id;
     protected int currentScore;
     protected int highestScore;
+    public final String ID;
 
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
-        this.id = id;
+        this.ID = id;
         infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(25), scale(-40f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> {
@@ -98,14 +97,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public int getHighestScore() {
         return highestScore;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public EUITooltip getTooltip() {
-        return null;
     }
 
     /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */

@@ -1,9 +1,7 @@
 package pinacolada.cards.base.fields;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -45,7 +43,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public static final TargetFilter T_SingleAlly = new TargetFilter(PGR.core.strings.ctype_singleAlly);
     public static final TargetFilter T_Team = new TargetFilter(PGR.core.strings.ctype_team);
 
-    public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets) {
+    public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets, boolean isAlive) {
         GameUtilities.fillWithSummons(true, targets);
         targets.add(AbstractDungeon.player);
     }
@@ -86,7 +84,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 break;
             case RandomEnemy:
                 if (GameUtilities.isEnemy(source)) {
-                    fillWithPlayerTeam(sourceList);
+                    fillWithPlayerTeam(sourceList, true);
                 }
                 else {
                     GameUtilities.fillWithEnemies(true, sourceList);
@@ -195,7 +193,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             }
             case AllEnemy: {
                 if (GameUtilities.isEnemy(source)) {
-                    fillWithPlayerTeam(sourceList);
+                    fillWithPlayerTeam(sourceList, true);
                 }
                 else {
                     GameUtilities.fillWithEnemies(true, sourceList);
@@ -218,7 +216,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             }
             case RandomEnemy: {
                 if (GameUtilities.isEnemy(source)) {
-                    fillWithPlayerTeam(sourceList);
+                    fillWithPlayerTeam(sourceList, true);
                 }
                 else {
                     GameUtilities.fillWithEnemies(true, sourceList);
@@ -244,7 +242,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                     GameUtilities.fillWithEnemies(true, sourceList);
                 }
                 else {
-                    fillWithPlayerTeam(sourceList);
+                    fillWithPlayerTeam(sourceList, true);
                 }
                 break;
             }

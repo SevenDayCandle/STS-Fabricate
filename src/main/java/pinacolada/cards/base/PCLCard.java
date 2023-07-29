@@ -52,6 +52,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cards.CardTriggerConnection;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardFlag;
@@ -149,6 +150,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public int rightCount = 1;
     public transient AbstractCreature owner;
     public transient ArrayList<AbstractCreature> multiDamageCreatures;
+    public transient CardTriggerConnection controller;
     public transient PCLCard parent;
     public transient PowerFormulaDisplay formulaDisplay;
 
@@ -1297,6 +1299,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             if (hb.justHovered) {
                 triggerOnGlowCheck();
             }
+            if (controller != null && hb.hovered && EUIInputManager.rightClick.isJustPressed()) {
+                controller.targetToUse(1);
+            }
         }
     }
 
@@ -2410,6 +2415,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public List<EUIKeywordTooltip> getTipsForRender() {
         ArrayList<EUIKeywordTooltip> dynamicTooltips = new ArrayList<>();
+
+        if (controller != null) {
+            EUIKeywordTooltip tip = controller.getTooltip();
+            if (tip != null) {
+                dynamicTooltips.add(tip);
+            }
+        }
+
         // Only show these tooltips outside of combat
         if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
             if (isSoulbound()) {

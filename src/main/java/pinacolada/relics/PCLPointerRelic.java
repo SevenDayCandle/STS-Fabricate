@@ -134,6 +134,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
+    }
+
+    @Override
     public String getDescriptionImpl() {
         return StringUtils.capitalize(getEffectPowerTextStrings());
     }

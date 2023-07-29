@@ -3,6 +3,7 @@ package pinacolada.interfaces.providers;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.powers.PCLClickableUse;
 
 // Denotes object that can hold a PCLClickableUse, used in onClickableUsed
 public interface ClickableProvider {
@@ -22,6 +23,6 @@ public interface ClickableProvider {
     }
 
     String getID();
-
     EUITooltip getTooltip();
+    PCLClickableUse getClickable();
 }

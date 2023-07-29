@@ -42,19 +42,25 @@ public class GridCardSelectScreenHelper {
     }
 
     public static boolean calculateScrollBounds(GridCardSelectScreen instance) {
-        if (cardGroups.isEmpty()) {
+        if (cardGroups.size() <= 1) {
             return false;
         }
 
         float padY = EUIClassUtils.getField(instance, "padY");
         CardGroup targetCardGroup = EUIClassUtils.getField(instance, "targetGroup");
 
-        float scrollTmp = (mergedGroup.size() + 2.6f * cardGroups.size()) / 5f - 2;
+        int scrollTmp = targetCardGroup.size() / 5 - 2;
         if (targetCardGroup.size() % 5 != 0) {
-            scrollTmp += 1;
+            ++scrollTmp;
+        }
+        float finalScrollTmp = scrollTmp + 1.3f * (cardGroups.size() - 1);
+        if (finalScrollTmp > 0) {
+            EUIClassUtils.setField(instance, "scrollUpperBound", Settings.DEFAULT_SCROLL_LIMIT + scrollTmp * padY);
+        }
+        else {
+            EUIClassUtils.setField(instance, "scrollUpperBound", Settings.DEFAULT_SCROLL_LIMIT);
         }
 
-        EUIClassUtils.setField(instance, "scrollUpperBound", Settings.DEFAULT_SCROLL_LIMIT + scrollTmp * padY);
         EUIClassUtils.setField(instance, "prevDeckSize", targetCardGroup.size());
 
         return true;
@@ -78,6 +84,10 @@ public class GridCardSelectScreenHelper {
         if (onClickCard != null) {
             onClickCard.invoke(mergedGroup, AbstractDungeon.gridSelectScreen.selectedCards, EUIClassUtils.getField(selectScreen, "hoveredCard"));
         }
+    }
+
+    public static boolean isActive() {
+        return AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID && cardGroups.size() > 0;
     }
 
     public static boolean isConditionMet() {

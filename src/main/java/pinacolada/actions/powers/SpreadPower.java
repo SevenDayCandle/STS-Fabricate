@@ -28,15 +28,15 @@ public class SpreadPower extends PCLAction<AbstractPower> {
 
     @Override
     protected void firstUpdate() {
-        final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
+        final ArrayList<? extends AbstractCreature> enemies = !GameUtilities.isEnemy(target) ? GameUtilities.getPlayerTeam(true) : GameUtilities.getEnemies(true);
         final AbstractPower sourcePower = GameUtilities.getPower(target, powerID);
         int sourceAmount = sourcePower != null ? sourcePower.amount : 0;
         int spreadAmount = amount <= 0 ? sourceAmount : Math.min(amount, sourceAmount);
 
         if (spreadAmount > 0) {
-            for (AbstractMonster enemy : enemies) {
+            for (AbstractCreature enemy : enemies) {
                 if (enemy != target) {
-                    PCLActions.top.applyPower(source, enemy, sourcePower, amount);//.showEffect(showEffect, isFast);
+                    PCLActions.top.applyPower(source, enemy, sourcePower, spreadAmount);//.showEffect(showEffect, isFast);
                 }
             }
         }

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.ClickableProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -50,7 +51,7 @@ public class PTrigger_Interactable extends PTrigger {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String sub = amount > 1 || fields.not ? super.getSubText(perspective) : "";
-        String main = source instanceof AbstractRelic ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
+        String main = source != null && source.getEffects().contains(this) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         return sub.isEmpty() ? main : sub + COMMA_SEPARATOR + main;
     }
 }

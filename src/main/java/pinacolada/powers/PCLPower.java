@@ -192,6 +192,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
     }
 
+    @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
+    }
+
     public String getID() {
         return ID;
     }

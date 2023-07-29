@@ -21,7 +21,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     // TODO support for non-PCL cards
 
     public static final float ICON_SIZE = 32f;
-    public static final float OFFSET_MULT_X = 0.3f;
+    public static final float OFFSET_MULT_X = 3.2f;
     public static final float OFFSET_MULT_Y = -4f;
     private final RelativeHitbox attackHb;
     private final RelativeHitbox defendHb;
@@ -40,7 +40,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         attack = new PowerFormulaRow(attackHb, PowerFormulaRow.Type.Attack);
         defend = new PowerFormulaRow(defendHb, PowerFormulaRow.Type.Defend);
         enemyAttack = new PowerFormulaEnemyRow(enemyAttackHb);
-        title = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 1f, -OFFSET_MULT_Y * 0.59f))
+        title = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -OFFSET_MULT_Y * 0.59f))
                 .setAlignment(0.5f, 0.2f)
                 .setLabel("--");
     }

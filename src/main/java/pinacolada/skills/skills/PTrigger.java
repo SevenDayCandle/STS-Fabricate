@@ -29,7 +29,6 @@ import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.utilities.GameUtilities;
 
-// TODO add support for usage directly on cards while in hand
 public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public static final int TRIGGER_PRIORITY = 0;
     protected int usesThisTurn;

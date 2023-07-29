@@ -69,6 +69,7 @@ import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
@@ -1037,6 +1038,12 @@ public class GameUtilities {
 
     public static <T> ArrayList<T> getPlayerRelics(Class<T> relicType) {
         return EUIUtils.mapAsNonnull(player.relics, r -> EUIUtils.safeCast(r, relicType));
+    }
+
+    public static ArrayList<AbstractCreature> getPlayerTeam(boolean isAlive) {
+        ArrayList<AbstractCreature> creatures = new ArrayList<>();
+        PCLCardTarget.fillWithPlayerTeam(creatures, isAlive);
+        return creatures;
     }
 
     public static String getPotionNameForID(String potionID) {

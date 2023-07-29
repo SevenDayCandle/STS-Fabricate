@@ -558,7 +558,7 @@
 		"NAME": "Warding"
 	},
 	"Withdraw":	{
-		"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it once and returns it to your discard pile.",
+		"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it twice and returns it to your discard pile.",
 		"NAME": "Withdraw",
 		"PAST": "withdrawn",
 		"PRESENT": "withdraws",
