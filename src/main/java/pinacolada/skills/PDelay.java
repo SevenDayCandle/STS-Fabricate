@@ -66,6 +66,11 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
+    public boolean isAffectedByMods() {
+        return false;
+    }
+
+    @Override
     public PDelay setTemporaryAmount(int amount) {
         if (this.childEffect != null) {
             this.childEffect.setTemporaryAmount(amount);

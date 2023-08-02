@@ -22,6 +22,7 @@ import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
 public class VariableToken extends PCLTextToken {
     public static final char TOKEN = '!';
     protected static Class<?> dynaClass;
+    protected static Class<?> dynvarCarrierClass;
     protected final DynamicVariable var;
     protected AbstractCardModifier mod;
     protected Method valueFunc;
@@ -127,7 +128,9 @@ public class VariableToken extends PCLTextToken {
         }
         try {
             if (dynaClass.isInstance(var)) {
-                Class<?> dynvarCarrierClass = Class.forName("CardAugments.cardmods.DynvarCarrier");
+                if (dynvarCarrierClass == null) {
+                    dynvarCarrierClass = Class.forName("CardAugments.cardmods.DynvarCarrier");
+                }
                 ArrayList<AbstractCardModifier> mods = CardModifierManager.getModifiers(card, key);
                 if (mods.size() > 0) {
                     mod = mods.get(0);

@@ -441,8 +441,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_exactlyX = subjects.TEXT[29];
     public final String subjects_fromX = subjects.TEXT[30];
     public final String subjects_hits = subjects.TEXT[31];
-    public final String subjects_inX = subjects.TEXT[32];
-    public final String subjects_intent = subjects.TEXT[33];
+    public final String subjects_intent = subjects.TEXT[32];
+    public final String subjects_nonAttack = subjects.TEXT[33];
     public final String subjects_ofX = subjects.TEXT[34];
     public final String subjects_permanentlyX = subjects.TEXT[35];
     public final String subjects_playingXWithY = subjects.TEXT[36];

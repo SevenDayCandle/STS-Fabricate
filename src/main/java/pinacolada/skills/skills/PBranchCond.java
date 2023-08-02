@@ -108,6 +108,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public boolean isAffectedByMods() {
+        return false;
+    }
+
+    @Override
     public boolean isBlank() {
         return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
     }

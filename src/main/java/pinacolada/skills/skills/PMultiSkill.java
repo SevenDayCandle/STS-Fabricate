@@ -161,6 +161,11 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
+    public boolean isAffectedByMods() {
+        return false;
+    }
+
+    @Override
     public boolean isBlank() {
         return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
     }

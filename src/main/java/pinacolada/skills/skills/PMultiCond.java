@@ -142,6 +142,11 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
+    public boolean isAffectedByMods() {
+        return false;
+    }
+
+    @Override
     public boolean isBlank() {
         return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
     }

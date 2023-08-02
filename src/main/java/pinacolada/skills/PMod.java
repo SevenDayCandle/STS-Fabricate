@@ -480,7 +480,9 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         else if (childEffect instanceof PMultiBase<?>) {
             return ((PMultiBase<?>) childEffect).getSubEffects().contains(move);
         }
-        return false;
+        else {
+            return childEffect instanceof PDelay && childEffect.childEffect == move;
+        }
     }
 
     public final int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
