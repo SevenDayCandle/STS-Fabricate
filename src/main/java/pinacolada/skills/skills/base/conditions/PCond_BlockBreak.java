@@ -47,9 +47,9 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
     @Override
     public String getSubText(PCLCardTarget perspective) {
         // TODO proper grammar for other sources
-        String baseString = TEXT.act_breakXonY(PGR.core.tooltips.block.title, getTargetStringPerspective(perspective));
+        String baseString = TEXT.act_breakXonY(PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(baseString);
+            return TEXT.cond_whenMulti(isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you, baseString);
         }
 
         return TEXT.cond_ifXDid(TEXT.subjects_you, baseString);

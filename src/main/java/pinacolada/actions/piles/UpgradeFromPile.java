@@ -4,11 +4,14 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.screens.DiscardPileViewScreen;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
+import pinacolada.effects.card.ChooseCardsForMultiformUpgradeEffect;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -46,33 +49,7 @@ public class UpgradeFromPile extends SelectFromPile {
     @Override
     protected void complete(ArrayList<AbstractCard> result) {
         for (AbstractCard card : result) {
-
-            if (card.canUpgrade()) {
-                card.upgrade();
-                CombatManager.onCardUpgrade(card);
-            }
-
-            for (AbstractCard c : GameUtilities.getAllInBattleInstances(card.uuid)) {
-                if (c != card && c.canUpgrade()) {
-                    c.upgrade();
-                    CombatManager.onCardUpgrade(c);
-                }
-            }
-
-            if (permanent) {
-                final AbstractCard c = GameUtilities.getMasterDeckInstance(card.uuid);
-                if (c != null) {
-                    if (c != card && c.canUpgrade()) {
-                        c.upgrade();
-                    }
-
-                    player.bottledCardUpgradeCheck(c);
-                }
-            }
-
-            final float x = (Settings.WIDTH / 4f) + ((result.size() - 1) * (AbstractCard.IMG_WIDTH * 0.75f));
-            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, Settings.HEIGHT / 2f));
-            PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
+            upgradeCard(card, (Settings.WIDTH / 4f) + ((result.size() - 1) * (AbstractCard.IMG_WIDTH * 0.75f)));
         }
 
         CombatManager.queueRefreshHandLayout();
@@ -84,5 +61,51 @@ public class UpgradeFromPile extends SelectFromPile {
         this.permanent = isPermanent;
 
         return this;
+    }
+
+    protected void upgradeCard(AbstractCard card, float x) {
+        if (card.canUpgrade()) {
+            PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
+            if (pCard != null && pCard.isBranchingUpgrade()) {
+                PCLEffects.Queue.add(new ChooseCardsForMultiformUpgradeEffect(pCard).addCallback(
+                        result -> {
+                            if (result.cards.size() > 0) {
+                                upgradeOtherCopies(card, c -> {
+                                    if (c instanceof PCLCard) {
+                                        ((PCLCard) c).changeForm(pCard.getForm(), pCard.timesUpgraded);
+                                    }
+                                });
+                            }
+                        }
+                ));
+            }
+            else {
+                upgradeOtherCopies(card, AbstractCard::upgrade);
+                card.upgrade();
+                CombatManager.onCardUpgrade(card);
+                PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, Settings.HEIGHT / 2f));
+                PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
+            }
+        }
+    }
+
+    protected void upgradeOtherCopies(AbstractCard card, ActionT1<AbstractCard> upgradeFunc) {
+        for (AbstractCard c : GameUtilities.getAllInBattleInstances(card.uuid)) {
+            if (c != card && c.canUpgrade()) {
+                upgradeFunc.invoke(c);
+                CombatManager.onCardUpgrade(c);
+            }
+        }
+
+        if (permanent) {
+            final AbstractCard c = GameUtilities.getMasterDeckInstance(card.uuid);
+            if (c != null) {
+                if (c != card && c.canUpgrade()) {
+                    upgradeFunc.invoke(c);
+                }
+
+                player.bottledCardUpgradeCheck(c);
+            }
+        }
     }
 }

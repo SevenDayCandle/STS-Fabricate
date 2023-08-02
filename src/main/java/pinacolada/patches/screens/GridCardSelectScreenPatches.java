@@ -27,6 +27,7 @@ import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import javassist.CtBehavior;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GridCardSelectScreenPatches {
@@ -63,9 +64,50 @@ public class GridCardSelectScreenPatches {
         }
     }
 
+    public static void fillCardListWithUpgrades(PCLCard base) {
+        cardList.clear();
+        if (base.cardData.branchFactor <= 0) {
+            for (int i = 0; i < base.getMaxForms(); i++) {
+                cardList.add(base.makeUpgradePreview(i));
+            }
+        }
+        else {
+            int minForm = getFormMin(base);
+
+            for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
+                cardList.add(base.makeUpgradePreview(i));
+            }
+        }
+
+        // If you ran out of forms, do not change the card form
+        if (cardList.size() == 0) {
+            cardList.add(base.makeUpgradePreview(base.getForm()));
+        }
+    }
+
+    public static ArrayList<AbstractCard> getCardList() {
+        return cardList;
+    }
+
+    /* Find the minimum possible upgrade form M at your current upgrade level and form
+    Let B = branch factor, U = current upgrade, F = current form
+    Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
+
+    If B = 0, then this calculation is ignored and all forms are available
+    If B = 1, M = U + 1
+    Else, M = g(B,U + 1) + B * (F - g(B,U))
+
+    See https://en.wikipedia.org/wiki/Geometric_series
+    */
+    public static int getFormMin(PCLCard base) {
+        return base.cardData.branchFactor != 1 ?
+                getFormSum(base.cardData.branchFactor, base.timesUpgraded + 1) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded))
+                : base.timesUpgraded + 1;
+    }
+
     /**
      * Number of possible forms with branch factor b and upgrading from upgrade level u can be expressed as geometric sum with a = 1
-     * Return 0 if u < 0 (because there are no forms before we have upgrades)
+     * Return 1 if u < 0 (because we always start at the first form)
      */
     public static int getFormSum(int b, int u) {
         return u >= 0 ? (int) ((1 - Math.pow(b, u)) / (1 - b)) : 0;
@@ -439,44 +481,16 @@ public class GridCardSelectScreenPatches {
                 locator = GetBranchingUpgrade.Locator.class
         )
         public static void insert(GridCardSelectScreen __instance) {
-            cardList.clear();
             AbstractCard c = getHoveredCard();
             PCLCard base = EUIUtils.safeCast(c, PCLCard.class);
             if (base != null) {
                 if (augment != null) {
+                    cardList.clear();
                     cardList.add(base.makeSetAugmentPreview(augment));
                     selectPCLCardUpgrade((PCLCard) cardList.get(0));
                 }
-                else if (base.cardData.maxForms > 1 && base.cardData.canToggleOnUpgrade) {
-                    /* Find the minimum possible upgrade form M at your current upgrade level and form
-                        Let B = branch factor, U = current upgrade, F = current form
-                        Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
-
-                        If B = 0, then this calculation is ignored and all forms are available
-                        If B = 1, M = U + 1
-                        Else, M = g(B,U) + B * (F - g(B,U - 1))
-
-                        See https://en.wikipedia.org/wiki/Geometric_series
-                    */
-                    if (base.cardData.branchFactor <= 0) {
-                        for (int i = 0; i < base.getMaxForms(); i++) {
-                            cardList.add(base.makeUpgradePreview(i));
-                        }
-                    }
-                    else {
-                        int minForm = base.cardData.branchFactor != 1 ?
-                                getFormSum(base.cardData.branchFactor, base.timesUpgraded) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded - 1))
-                                : base.timesUpgraded + 1;
-
-                        for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
-                            cardList.add(base.makeUpgradePreview(i));
-                        }
-                    }
-
-                    // If you ran out of forms, do not change the card form
-                    if (cardList.size() == 0) {
-                        cardList.add(base.makeUpgradePreview(base.getForm()));
-                    }
+                else if (base.isBranchingUpgrade()) {
+                    fillCardListWithUpgrades(base);
 
                     // If there is only one card, it should be auto-selected
                     if (cardList.size() == 1) {
@@ -489,6 +503,9 @@ public class GridCardSelectScreenPatches {
                 minIndex = 0;
                 maxIndex = DEFAULT_MAX;
                 refreshButtons();
+            }
+            else {
+                cardList.clear();
             }
         }
 

@@ -72,7 +72,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 .setOnCardClick(this::onCardClicked)
                 .setOnCardRightClick(this::onCardRightClicked);
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
-                .setBackground(EUIRM.images.panel.texture(), com.badlogic.gdx.graphics.Color.DARK_GRAY)
+                .setBackground(EUIRM.images.greySquare.texture(), com.badlogic.gdx.graphics.Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f);
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
@@ -116,7 +116,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     }
                 })
                 .setCanAutosizeButton(true);
-        info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2.5f))
+        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2.5f))
                 .setLabel(PGR.core.strings.cetut_selector1)
                 .setAlignment(0.75f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)

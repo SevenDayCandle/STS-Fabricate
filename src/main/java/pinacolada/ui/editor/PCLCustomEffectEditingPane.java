@@ -65,9 +65,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     private float additionalHeight;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill<?>> effects;
-    protected EUIDropdown<PCLCardTarget> targets;
     protected EUIDropdown<PCLCardGroupHelper> piles;
+    protected EUIDropdown<PCLCardSelection> destinations;
     protected EUIDropdown<PCLCardSelection> origins;
+    protected EUIDropdown<PCLCardTarget> targets;
     protected PCLCustomUpgradableEditor valueEditor;
     protected PCLCustomUpgradableEditor extraEditor;
     protected EUIImage backdrop;
@@ -430,6 +431,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
 
+        destinations = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_destinations, false);
         origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false);
         piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true);
     }
@@ -521,6 +523,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerCost(List<CostFilter> items) {
         registerDropdown(initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]), items);
+    }
+
+    public void registerDestination(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl) {
+        registerDropdown(destinations, onChangeImpl, item);
     }
 
     public <U, V> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, Collection<V> items, FuncT1<V, U> convertFunc) {

@@ -68,7 +68,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
                 new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 48f)
                         .setCenter(Settings.WIDTH * 0.116f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f), this);
 
-        previewDescription = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
+        previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f)
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT * 2);
@@ -76,7 +76,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
+                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setToggle(SingleCardViewPopup.isViewingUpgrade)

@@ -1,15 +1,19 @@
 package pinacolada.skills.skills.base.traits;
 
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PFacetCond;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 
 @VisibleSkill
 public class PTrait_Unplayable extends PTrait<PField_Empty> {
@@ -49,11 +53,18 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return PGR.core.tooltips.unplayable.title;
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            if (hasParentType(PFacetCond.class)) {
+                return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+            }
+            return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), PCLCoreStrings.pluralForce(TEXT.subjects_cardN));
+        }
+        return getSubDescText(perspective);
     }
 
+
     @Override
-    public String getSubDescText() {
+    public String getSubDescText(PCLCardTarget perspective) {
         return PGR.core.tooltips.unplayable.title;
     }
 

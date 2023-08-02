@@ -61,7 +61,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
             return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
         }
         PCLCardTarget proper = getTargetForPerspective(perspective);
-        return TEXT.act_zLoses(getTargetSubjectString(proper), getTargetOrdinal(proper), percentLoss, PGR.core.tooltips.hp.title);
+        return TEXT.act_zLoses(getTargetString(proper), getTargetOrdinal(proper), percentLoss, PGR.core.tooltips.hp.title);
 
     }
 

@@ -33,16 +33,8 @@ public class PTrait_BlockMultiplier extends PBlockTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (isVerbose()) {
-            return TEXT.act_gainAmount(getAmountRawString() + "%", getSubDescText());
-        }
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getSubDescText());
-    }
-
-    @Override
-    public String getSubDescText() {
-        return PGR.core.tooltips.block.toString();
+    public String getSubDescText(PCLCardTarget perspective) {
+        return EUIRM.strings.numNoun(getAmountRawString() + "%", PGR.core.tooltips.block);
     }
 
     @Override

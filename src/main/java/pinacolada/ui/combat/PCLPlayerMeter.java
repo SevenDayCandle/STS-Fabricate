@@ -66,7 +66,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     }
 
     public boolean canGlow(AbstractCard c) {
-        return true;
+        return false;
     }
 
     public void disableAffinity(PCLAffinity affinity) {

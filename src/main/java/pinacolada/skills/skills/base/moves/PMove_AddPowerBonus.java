@@ -1,5 +1,8 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.powers.IntangiblePower;
+import com.megacrit.cardcrawl.powers.LockOnPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -43,6 +46,13 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         for (PCLPowerHelper power : fields.powers) {
             order.addPowerEffectBonus(power.ID, amount, !power.isDebuff);
+            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+            if (power == PCLPowerHelper.Intangible) {
+                order.addPowerEffectBonus(IntangiblePower.POWER_ID, amount, !power.isDebuff);
+            }
+            else if (power == PCLPowerHelper.LockOn) {
+                order.addPowerEffectBonus(LockOnPower.POWER_ID, amount, !power.isDebuff);
+            }
         }
         super.use(info, order);
     }

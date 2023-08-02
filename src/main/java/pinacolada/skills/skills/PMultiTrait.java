@@ -409,7 +409,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public String getSubDescText() {
+    public String getSubDescText(PCLCardTarget perspective) {
         return null;
     }
 

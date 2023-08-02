@@ -1,11 +1,13 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
+import extendedui.text.EUISmartText;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -35,6 +37,16 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
+    }
+
+    @Override
+    public String getThemString() {
+        return PCLCoreStrings.pluralForce(TEXT.subjects_themX);
+    }
+
+    @Override
+    public String getTheyString() {
+        return PCLCoreStrings.pluralForce(TEXT.subjects_theyX);
     }
 
     @Override

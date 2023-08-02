@@ -38,7 +38,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
                             editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
                                     editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
             for (PSkill<?> sk : targetType.getSkills(editor.screen.getBuilder().getCardColor())) {
-                if (sk.data.sourceTypes.isEmpty() || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
+                if (sk.data.sourceTypes == null || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
                     if (skill != null && sk.effectID.equals(skill.effectID)) {
                         effects.add(skill);
                     }

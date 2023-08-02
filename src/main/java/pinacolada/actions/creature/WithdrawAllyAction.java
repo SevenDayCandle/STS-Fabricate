@@ -62,7 +62,8 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     protected void releaseCard(PCLCardAlly ally) {
         PCLCard returnedCard = ally.releaseCard(clearPowers);
         if (returnedCard != null) {
-            PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard));
+            PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard.makeStatEquivalentCopy()));
+            destination.addToTop(returnedCard);
             returnedCard.unhover();
             returnedCard.untip();
             returnedCard.unfadeOut();

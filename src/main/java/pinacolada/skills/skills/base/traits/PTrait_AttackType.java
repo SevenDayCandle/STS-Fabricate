@@ -5,11 +5,14 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_AttackType;
+import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 
 @VisibleSkill
 public class PTrait_AttackType extends PTrait<PField_AttackType> {
@@ -38,12 +41,14 @@ public class PTrait_AttackType extends PTrait<PField_AttackType> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return hasParentType(PTrigger.class) ? getSubDescText() :
-                fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        }
+        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
     }
 
     @Override
-    public String getSubDescText() {
+    public String getSubDescText(PCLCardTarget perspective) {
         return fields.attackTypes.size() > 0 ? fields.attackTypes.get(0).getTooltip().getTitleOrIcon() : "";
     }
 

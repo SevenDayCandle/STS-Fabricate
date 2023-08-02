@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
+// TODO define exact valid characters, and limit size to one character
 public class PunctuationToken extends PCLTextToken {
     private static final Map<String, PunctuationToken> tokenCache = new HashMap<>();
 
@@ -12,11 +13,11 @@ public class PunctuationToken extends PCLTextToken {
     }
 
     protected static boolean isValidCharacter(Character character) {
-        if (character == null || Character.isLetterOrDigit(character)) {
+        if (character == null || Character.isLetterOrDigit(character) || Character.isWhitespace(character)) {
             return false;
         }
 
-        // Characters used by other tokens are not allowed
+        // Characters used by other tokens are not allowed, other than exclamation mark
         switch (character) {
             case ConditionToken.TOKEN:
             case PointerToken.TOKEN:

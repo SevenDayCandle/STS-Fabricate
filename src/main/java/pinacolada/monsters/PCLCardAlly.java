@@ -139,7 +139,7 @@ public class PCLCardAlly extends PCLCardCreature {
                 if (card != null) {
                     BitmapFont font = EUIFontHelper.cardDescriptionFontNormal;
                     font.getData().setScale(card.drawScale * 0.9f);
-                    EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.panel.texture(), new Vector2(0, -AbstractCard.RAW_H * 0.65f),
+                    EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.rectangularButton.texture(), new Vector2(0, -AbstractCard.RAW_H * 0.65f),
                             AbstractCard.IMG_WIDTH * 0.6f, font.getLineHeight() * 1.8f, Color.DARK_GRAY, 0.75f, 1);
                     EUIRenderHelpers.writeOnCard(sb, card, font, PGR.core.strings.combat_rightClickRetarget, 0, -AbstractCard.RAW_H * 0.65f, Color.ORANGE);
                     EUIRenderHelpers.resetFont(font);

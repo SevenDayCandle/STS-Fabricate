@@ -259,13 +259,6 @@
 		"DESCRIPTION": "Used by #yPressure #yPoints and custom card effects.",
 		"NAME": "Mark"
 	},
-	"Match":	{
-		"DESCRIPTION": "Whether a card #yMatches or not depends on the current character.",
-		"NAME": "Match",
-		"PAST": "Matched",
-		"PRESENT": "Matches",
-		"PROGRESSIVE": "Matching"
-	},
 	"Max HP":	{
 		"DESCRIPTION": "",
 		"NAME": "Max HP"
@@ -274,24 +267,13 @@
 		"DESCRIPTION": "Gain [Block] at the start of your turn.",
 		"NAME": "Metallicize"
 	},
-	"Mismatch":	{
-		"DESCRIPTION": "A card #yMismatches if it does not have the #yLast #yAffinity, and if neither #yAffinity is [A-Gen].",
-		"NAME": "Mismatch",
-		"PAST": "Mismatched",
-		"PRESENT": "Mismatches",
-		"PROGRESSIVE": "Mismatching"
-	},
 	"Multicolor":	{
-		"DESCRIPTION": "Cards with #yMulticolor always #yMatch. When the #yCurrent #yAffinity is #yMulticolor, all cards with [A-Gen] will #yMatch.",
+		"DESCRIPTION": "Counts as every #yAffinity.",
 		"NAME": "Multicolor"
 	},
 	"Multiform":	{
 		"DESCRIPTION": "You may change this card's form in the pop-up viewer from your master deck outside of combat.",
 		"NAME": "Multiform"
-	},
-	"Neutral Stance":	{
-		"DESCRIPTION": "",
-		"NAME": "Neutral Stance"
 	},
 	"Next Turn Block":	{
 		"DESCRIPTION": "Gain [Block] at the start of next turn.",

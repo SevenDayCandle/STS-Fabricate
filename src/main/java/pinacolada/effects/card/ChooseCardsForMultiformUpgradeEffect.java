@@ -2,35 +2,31 @@ package pinacolada.effects.card;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
+import pinacolada.patches.screens.GridCardSelectScreenPatches;
 
 import java.util.ArrayList;
 
-public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
+public class ChooseCardsForMultiformUpgradeEffect extends GenericChooseCardsEffect {
+    protected final PCLCard card;
 
-    public ChooseCardsToUpgradeEffect(int remove) {
-        this(remove, null);
-    }
-
-    public ChooseCardsToUpgradeEffect(int remove, FuncT1<Boolean, AbstractCard> filter) {
-        super(remove, filter);
+    public ChooseCardsForMultiformUpgradeEffect(PCLCard card) {
+        super(1, null);
+        this.card = card;
     }
 
     @Override
     protected ArrayList<AbstractCard> getGroup() {
-        return AbstractDungeon.player.masterDeck.getUpgradableCards().group;
+        GridCardSelectScreenPatches.fillCardListWithUpgrades(card);
+        return GridCardSelectScreenPatches.getCardList();
     }
 
     public void onCardSelected(AbstractCard c) {
-        if (c instanceof PCLCard && ((PCLCard) c).isBranchingUpgrade()) {
-            PCLEffects.Queue.add(new ChooseCardsForMultiformUpgradeEffect((PCLCard) c));
-        }
-        else {
-            c.upgrade();
+        if (c instanceof PCLCard) {
+            card.changeForm(((PCLCard) c).getForm(), c.timesUpgraded);
             PCLEffects.Queue.add(new UpgradeShineEffect((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f));
             PCLEffects.Queue.showCardBriefly(c.makeStatEquivalentCopy());
         }

@@ -123,6 +123,10 @@ public interface PointerProvider {
         return null;
     }
 
+    default int getCounterValue() {
+        return 1;
+    }
+
     default PSkill<?> getEffect(int index) {
         return index < getEffects().size() ? getEffects().get(index) : null;
     }
@@ -183,6 +187,10 @@ public interface PointerProvider {
 
     default AbstractCreature getSourceCreature() {
         return AbstractDungeon.player;
+    }
+
+    default int getXValue() {
+        return 1;
     }
 
     default String makeExportString(String baseString) {
@@ -368,10 +376,6 @@ public interface PointerProvider {
         }
         getEffects().remove(index);
         return toRemove;
-    }
-
-    default int xValue() {
-        return 1;
     }
 
     String getID();

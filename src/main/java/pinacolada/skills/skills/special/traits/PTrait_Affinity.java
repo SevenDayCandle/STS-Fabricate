@@ -3,11 +3,15 @@ package pinacolada.skills.skills.special.traits;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Affinity;
+import pinacolada.skills.skills.PFacetCond;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.utilities.GameUtilities;
 
 // Only used for augments
@@ -43,7 +47,15 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     }
 
     @Override
-    public String getSubDescText() {
+    public String getSubText(PCLCardTarget perspective) {
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        }
+        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
+    }
+
+    @Override
+    public String getSubDescText(PCLCardTarget perspective) {
         return fields.getAffinityAndString();
     }
 

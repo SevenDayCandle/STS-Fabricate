@@ -7,11 +7,11 @@ import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class SpecialToken extends PCLTextToken {
+public abstract class HighlightToken extends PCLTextToken {
     public static final char TOKEN = '{';
     private static final PCLTextParser internalParser = new PCLTextParser(true);
 
-    private SpecialToken() {
+    private HighlightToken() {
         super(null, null);
     }
 
@@ -21,13 +21,13 @@ public abstract class SpecialToken extends PCLTextToken {
 
             int index = 1;
             int indentation = 0;
-            int skip = 1;
             Color color = Settings.GOLD_COLOR;
             Character next = parser.nextCharacter(index);
             while (next != null) {
                 switch (next) {
                     case '#':
                         color = null;
+                        break;
                     case '{':
                         indentation += 1;
                         break;
@@ -63,12 +63,12 @@ public abstract class SpecialToken extends PCLTextToken {
                             parser.addToken(token);
                         }
 
-                        return index + skip;
+                        return index + 1;
                     case ':':
                         if (color == null) {
                             final String cString = builder.toString();
                             color = EUISmartText.getColor(cString);
-                            skip += cString.length();
+                            builder.setLength(0);
                             break;
                         }
                     default:
@@ -77,7 +77,7 @@ public abstract class SpecialToken extends PCLTextToken {
                 index += 1;
                 next = parser.nextCharacter(index);
             }
-            return skip;
+            return 1;
         }
 
         return 0;

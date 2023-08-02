@@ -50,7 +50,7 @@ public class VariableToken extends PCLTextToken {
                         parser.addToken(token);
                     }
                     else {
-                        EUIUtils.logError(parser.card, "Unknown variable type: [" + key + "], Raw text is: " + parser.text);
+                        EUIUtils.logError(parser.card, "Unknown variable type: !" + key + "!, Raw text is: " + parser.text);
                     }
 
                     return i + 1;
@@ -112,16 +112,18 @@ public class VariableToken extends PCLTextToken {
     }
 
     protected void setDynamics(String key, AbstractCard card) {
-        if (dynaClass == null && Loader.isModLoaded("CardAugments")) {
-            try {
-                dynaClass = Class.forName("CardAugments.dynvars.DynamicDynamicVariableManager");
+        if (dynaClass == null) {
+            if (Loader.isModLoaded("CardAugments")) {
+                try {
+                    dynaClass = Class.forName("CardAugments.dynvars.DynamicDynamicVariableManager");
+                }
+                catch (Exception ignored) {
+                    dynaClass = this.getClass();
+                }
             }
-            catch (Exception ignored) {
+            else {
                 dynaClass = this.getClass();
             }
-        }
-        else {
-            dynaClass = this.getClass();
         }
         try {
             if (dynaClass.isInstance(var)) {

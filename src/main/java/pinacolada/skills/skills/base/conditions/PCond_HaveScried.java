@@ -1,8 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.GameActionManager;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
@@ -32,13 +30,16 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && (fields.not ^ CombatManager.haveScried);
+        return info != null && (fields.not ^ CombatManager.scriesThisTurn >= amount);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(PGR.core.tooltips.scry.title);
+        }
+        if (baseAmount > 1) {
+            return TEXT.act_genericTimes(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getAmountRawString());
         }
         return TEXT.cond_ifYouDidThisTurn(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN));
     }

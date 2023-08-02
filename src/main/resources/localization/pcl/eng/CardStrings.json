@@ -1,10 +1,10 @@
 {
 				"COLORLESS":	{
 								"pcl:Apotheosis": {"NAME": "Apotheosis"},
-								"pcl:CalculatedGamble": {"NAME": "Calculated Gamble"},
 								"pcl:Chrysalis": {"NAME": "Chrysalis"},
 								"pcl:DarkShackles": {"NAME": "Dark Shackles"},
 								"pcl:DeepBreath": {"NAME": "Deep Breath"},
+								"pcl:Forethought": {"NAME": "Forethought"},
 								"pcl:Insight": {"NAME": "Insight"},
 								"pcl:Madness": {"NAME": "Madness"},
 								"pcl:Magnetism": {"NAME": "Magnetism"},
@@ -22,12 +22,13 @@
 								"pcl:Curse_Decay": {"NAME": "Decay"},
 								"pcl:Curse_Doubt": {"NAME": "Doubt"},
 								"pcl:Curse_Injury": {"NAME": "Injury"},
+								"pcl:Curse_Necronomicurse": {"NAME": "Necronomicurse"},
 								"pcl:Curse_Normality": {
-												"EXTENDED_DESCRIPTION": ["While in hand: Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
 												"NAME": "Normality"
 								},
 								"pcl:Curse_Pain": {"NAME": "Pain"},
 								"pcl:Curse_Parasite": {"NAME": "Parasite"},
+								"pcl:Curse_Pride": {"NAME": "Pride"},
 								"pcl:Curse_Regret": {"NAME": "Regret"},
 								"pcl:Curse_Shame": {"NAME": "Shame"},
 								"pcl:Curse_Writhe": {"NAME": "Writhe"}

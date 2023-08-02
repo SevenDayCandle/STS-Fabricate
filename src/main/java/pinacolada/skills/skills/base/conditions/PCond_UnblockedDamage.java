@@ -47,7 +47,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
             return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString), perspective);
         }
 
-        return TEXT.cond_ifTargetTook(getTargetSubjectString(target), baseString);
+        return TEXT.cond_ifTargetTook(getTargetSubjectStringPerspective(perspective), baseString);
     }
 
     // When the owner deals unblocked damage, triggers the effect on the target

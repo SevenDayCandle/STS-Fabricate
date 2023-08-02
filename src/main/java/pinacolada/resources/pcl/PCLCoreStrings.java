@@ -108,7 +108,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_random = cedit.TEXT[60];
     public final String cedit_required = cedit.TEXT[61];
     public final String cedit_origins = cedit.TEXT[62];
-    public final String cedit_enable = cedit.TEXT[63];
+    public final String cedit_destinations = cedit.TEXT[63];
     public final String cedit_pile = cedit.TEXT[64];
     public final String cedit_combat = cedit.TEXT[65];
     public final String cedit_exact = cedit.TEXT[66];
@@ -907,8 +907,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_use(Object target) {
         return actFmt(45, target);
     }
-    public final String act_youCannotGain(Object target) {
-        return actFmt(46, target);
+    public final String act_zCannot(Object target, Object action, Object object) {
+        return actFmt(46, target, action, object);
     }
     public final String act_zCosts(Object object, Object ordinal, Object amount) {
         return actFmt(47, object, ordinal, amount);

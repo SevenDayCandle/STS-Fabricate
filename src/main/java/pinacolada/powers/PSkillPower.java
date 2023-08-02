@@ -263,6 +263,16 @@ public class PSkillPower extends PCLPower implements TriggerConnection {
     }
 
     @Override
+    public float modifyBlock(float block, AbstractCard c) {
+        return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
+    }
+
+    @Override
+    public float modifyBlockLast(float block) {
+        return modifyBlockLast(CombatManager.playerSystem.getInfo(null, owner, owner), block, null);
+    }
+
+    @Override
     public boolean canPlayCard(AbstractCard card) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
@@ -271,16 +281,6 @@ public class PSkillPower extends PCLPower implements TriggerConnection {
             canPlay = canPlay & effect.canPlay(info, effect);
         }
         return canPlay;
-    }
-
-    @Override
-    public float modifyBlock(float block, AbstractCard c) {
-        return modifyBlock(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
-    }
-
-    @Override
-    public float modifyBlockLast(float block) {
-        return modifyBlockLast(CombatManager.playerSystem.getInfo(null, owner, owner), block, null);
     }
 
     @Override

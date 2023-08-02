@@ -99,7 +99,7 @@ public class SymbolToken extends PCLTextToken {
         float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;
         float partial = size / 12f;
 
-        if (tooltip.icon != null && EUIConfiguration.enableDescriptionIcons.get()) {
+        if (tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get() || tooltip.forceIcon)) {
             float iconW = size * tooltip.iconmultiW;
             float iconH = size * tooltip.iconmultiH;
             float diff = partial / tooltip.iconmultiW;

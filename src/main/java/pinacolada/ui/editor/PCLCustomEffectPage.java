@@ -52,7 +52,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
         this.buttonsPane = new PCLCustomEffectSelectorPane(this);
-        this.info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.23f), screenH(0.11f), screenW(0.54f), screenH(0.15f)))
+        this.info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.23f), screenH(0.11f), screenW(0.54f), screenH(0.15f)))
                 .setLabel(PGR.core.strings.cetut_nodeTutorial)
                 .setAlignment(0.75f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)

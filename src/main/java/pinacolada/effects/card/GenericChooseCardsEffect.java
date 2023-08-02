@@ -107,7 +107,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         for (AbstractCard card : getGroup()) {
             if (filter == null || filter.invoke(card)) {
-                cardGroup.addToBottom(card);
+                cardGroup.addToTop(card);
             }
         }
 

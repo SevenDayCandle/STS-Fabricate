@@ -403,7 +403,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public int getXValue(AbstractCard card) {
+    public int getXValue() {
         return cachedValue;
     }
 

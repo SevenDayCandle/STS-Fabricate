@@ -15,7 +15,7 @@ public class PCLCardRewardInfo extends EUIBase {
 
     public PCLCardRewardInfo() {
         upgradeToggle = new EUIToggle(new EUIHitbox(scale(256), scale(48f)))
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
+                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setPosition(screenW(0.9f), screenH(0.65f))
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])

@@ -43,9 +43,12 @@ public class PCLCustomFormEditor extends EUIBase {
                         setValue(types.get(0));
                     }
                 })
-                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 0.9f)
-                .setCanAutosize(true, true)
-                .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
+                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 0.9f);
+        formValues.setLabelFunctionForButton((items, strFunc) -> {
+                    return items.size() > 0 ? strFunc.invoke(items.get(0)) + "/" + (formValues.size() - 1) : String.valueOf(formValues.size());
+                }, false)
+                .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1))
+                .setCanAutosize(true, true);
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))
                 .setOnClick(this::decrease);
 

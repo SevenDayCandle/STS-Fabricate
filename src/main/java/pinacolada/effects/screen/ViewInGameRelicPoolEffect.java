@@ -109,7 +109,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
                 .setColor(Color.ROYAL);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height * 3, buttonWidth, buttonHeight))
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
+                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);

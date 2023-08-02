@@ -60,7 +60,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
-        final Texture panelTexture = EUIRM.images.panel.texture();
+        final Texture panelTexture = EUIRM.images.rectangularButton.texture();
         final FuncT1<Float, Float> getY = (delta) -> screenH(0.95f) - screenH(0.07f * delta);
         final float buttonHeight = screenH(0.05f);
         final float buttonWidth = screenW(0.18f);

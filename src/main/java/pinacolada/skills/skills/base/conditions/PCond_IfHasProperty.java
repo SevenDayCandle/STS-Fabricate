@@ -51,7 +51,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (info != null) {
+        if (info != null && info.card != null) {
             return fields.getFullCardFilter().invoke(info.card);
         }
         return false;

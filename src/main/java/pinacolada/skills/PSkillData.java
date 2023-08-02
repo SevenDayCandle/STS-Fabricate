@@ -21,10 +21,11 @@ public class PSkillData<T extends PField> {
     public final Class<? extends PSkill<T>> effectClass;
     public final Class<T> fieldType;
     public final Set<AbstractCard.CardColor> colors;
-    public final ArrayList<PCLCardGroupHelper> groups = new ArrayList<>();
-    public final ArrayList<PCLCardSelection> origins = new ArrayList<>();
-    public final ArrayList<PCLCardTarget> targets = new ArrayList<>();
-    public final ArrayList<SourceType> sourceTypes = new ArrayList<>();
+    public ArrayList<PCLCardGroupHelper> groups;
+    public ArrayList<PCLCardSelection> destinations;
+    public ArrayList<PCLCardSelection> origins;
+    public ArrayList<PCLCardTarget> targets;
+    public ArrayList<SourceType> sourceTypes;
     public int minAmount;
     public int maxAmount;
     public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
@@ -71,6 +72,7 @@ public class PSkillData<T extends PField> {
     }
 
     public PSkillData<T> selfTarget() {
+        this.targets = new ArrayList<>();
         targets.add(PCLCardTarget.Self);
         return this;
     }
@@ -81,13 +83,14 @@ public class PSkillData<T extends PField> {
         return this;
     }
 
-    public PSkillData<T> setClasses(PCLCardGroupHelper... groups) {
-        this.groups.addAll(Arrays.asList(groups));
+    public PSkillData<T> setColors(AbstractCard.CardColor... colors) {
+        this.colors.addAll(Arrays.asList(colors));
         return this;
     }
 
-    public PSkillData<T> setColors(AbstractCard.CardColor... colors) {
-        this.colors.addAll(Arrays.asList(colors));
+    public PSkillData<T> setDestinations(PCLCardSelection... groups) {
+        this.destinations = new ArrayList<>();
+        this.destinations.addAll(Arrays.asList(groups));
         return this;
     }
 
@@ -103,26 +106,31 @@ public class PSkillData<T extends PField> {
     }
 
     public PSkillData<T> setGroups(Collection<PCLCardGroupHelper> groups) {
+        this.groups = new ArrayList<>();
         this.groups.addAll(groups);
         return this;
     }
 
     public PSkillData<T> setGroups(PCLCardGroupHelper... groups) {
+        this.groups = new ArrayList<>();
         this.groups.addAll(Arrays.asList(groups));
         return this;
     }
 
     public PSkillData<T> setOrigins(PCLCardSelection... groups) {
+        this.origins = new ArrayList<>();
         this.origins.addAll(Arrays.asList(groups));
         return this;
     }
 
     public PSkillData<T> setSourceTypes(SourceType... targets) {
+        this.sourceTypes = new ArrayList<>();
         this.sourceTypes.addAll(Arrays.asList(targets));
         return this;
     }
 
     public PSkillData<T> setTargets(PCLCardTarget... targets) {
+        this.targets = new ArrayList<>();
         this.targets.addAll(Arrays.asList(targets));
         return this;
     }

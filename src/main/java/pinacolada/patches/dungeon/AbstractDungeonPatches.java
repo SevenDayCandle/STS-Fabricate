@@ -31,9 +31,9 @@ public class AbstractDungeonPatches {
     public static boolean filterCardGroupForValid;
 
     // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-    protected static AbstractCard tryReturnCard(AbstractCard card) {
+    protected static AbstractCard tryReturnCard(AbstractCard card, Object object) {
         if (card == null) {
-            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card from specified rarity");
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified filters: " + String.valueOf(object));
             return new QuestionMark();
         }
         return card;
@@ -119,7 +119,7 @@ public class AbstractDungeonPatches {
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found);
+            return tryReturnCard(found, null);
         }
 
         @SpirePrefixPatch
@@ -131,9 +131,9 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards {
         @SpirePostfixPatch
-        public static AbstractCard postfix(AbstractCard found) {
+        public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found);
+            return tryReturnCard(found, rarity);
         }
 
         @SpirePrefixPatch
@@ -145,9 +145,9 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class, Random.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards2 {
         @SpirePostfixPatch
-        public static AbstractCard postfix(AbstractCard found) {
+        public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity, Random rng) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found);
+            return tryReturnCard(found, rarity);
         }
 
         @SpirePrefixPatch
@@ -159,9 +159,9 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardWithoutRng", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetCardWithoutRng {
         @SpirePostfixPatch
-        public static AbstractCard postfix(AbstractCard found) {
+        public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found);
+            return tryReturnCard(found, rarity);
         }
 
         @SpirePrefixPatch

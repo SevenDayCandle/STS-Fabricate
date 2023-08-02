@@ -276,6 +276,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return euiTips;
     }
 
+    // Don't use this, use getDescriptionImpl instead which is run after the constructor
+    @Deprecated
+    @Override
+    public final String getUpdatedDescription() {
+        return super.getUpdatedDescription();
+    }
+
     public int getValue() {
         return counter;
     }

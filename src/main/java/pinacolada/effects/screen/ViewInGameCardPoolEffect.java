@@ -90,7 +90,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setColor(Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f, true);
 
-        instructions = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.6f, buttonWidth, Settings.HEIGHT * 0.18f))
+        instructions = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.6f, buttonWidth, Settings.HEIGHT * 0.18f))
                 .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
@@ -112,7 +112,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setColor(Color.ROYAL);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height * 3, buttonWidth, buttonHeight))
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
+                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);

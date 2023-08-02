@@ -144,7 +144,7 @@ public class PCLCustomEffectNode extends EUIButton {
         if (effects == null) {
             effects = new ArrayList<>();
             for (PSkill<?> sk : type.getSkills(editor.screen.getBuilder().getCardColor())) {
-                if (sk.data.sourceTypes.isEmpty() || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
+                if (sk.data.sourceTypes == null || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
                     if (skill != null && sk.effectID.equals(skill.effectID)) {
                         effects.add(skill);
                     }

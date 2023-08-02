@@ -98,12 +98,12 @@ public class CombatManager {
     private static int turnCount = 0;
     public static AbstractRoom room;
     public static UUID battleID;
-    public static boolean haveScried;
     public static boolean isPlayerTurn;
     public static int blockRetained;
     public static int dodgeChance;
     public static int energySuspended;
     public static int maxHPSinceLastTurn;
+    public static int scriesThisTurn;
 
     public static void addBonus(String powerID, float multiplier, boolean forPlayer) {
         multiplier = CombatManager.onGainTriggerablePowerBonus(powerID, multiplier, forPlayer);
@@ -152,7 +152,7 @@ public class CombatManager {
         unplayableCards.clear();
         orbsEvokedThisTurn.clear();
         turnCount += 1;
-        haveScried = false;
+        scriesThisTurn = 0;
 
         playerSystem.setLastCardPlayed(null);
     }
@@ -303,8 +303,8 @@ public class CombatManager {
         battleID = null;
         estimatedDamages = null;
 
-        haveScried = false;
         shouldRefreshHand = false;
+        scriesThisTurn = 0;
         turnCount = 0;
         cardsDrawnThisTurn = 0;
         orbsEvokedThisCombat.clear();
@@ -578,6 +578,7 @@ public class CombatManager {
     public static void onCardUpgrade(AbstractCard card) {
         if (card instanceof PCLCard) {
             ((PCLCard) card).triggerOnUpgrade();
+
         }
 
         for (SkillModifier wrapper : SkillModifier.getAll(card)) {
@@ -768,7 +769,7 @@ public class CombatManager {
     }
 
     public static void onScryAction(AbstractGameAction action) {
-        haveScried = true;
+        scriesThisTurn += 1;
         subscriberDo(OnScryActionSubscriber.class, s -> s.onScryAction(action));
     }
 

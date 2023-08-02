@@ -268,7 +268,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public int xValue() {
+    public int getXValue() {
         return counter;
     }
 

@@ -157,7 +157,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 })
                 .setTooltip(PGR.core.strings.misc_customLoadout, PGR.core.strings.misc_customLoadoutDesc);
 
-        seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panel.texture(),
+        seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.greySquare.texture(),
                 new EUIHitbox(scale(280), scale(48)))
                 .setOnComplete(screen::setSeed)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[7])

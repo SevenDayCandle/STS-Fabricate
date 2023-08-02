@@ -58,7 +58,7 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
             return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
         }
         PCLCardTarget proper = getTargetForPerspective(perspective);
-        return TEXT.act_zLoses(getTargetSubjectString(proper), getTargetOrdinal(proper), getAmountRawString(), PGR.core.tooltips.hp.title);
+        return TEXT.act_zLoses(getTargetString(proper), getTargetOrdinal(proper), getAmountRawString(), PGR.core.tooltips.hp.title);
 
     }
 

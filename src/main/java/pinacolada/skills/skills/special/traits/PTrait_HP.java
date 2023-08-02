@@ -1,5 +1,7 @@
 package pinacolada.skills.skills.special.traits;
 
+import extendedui.EUIRM;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -23,8 +25,8 @@ public class PTrait_HP extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubDescText() {
-        return PGR.core.tooltips.hp.title;
+    public String getSubDescText(PCLCardTarget perspective) {
+        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
@@ -41,14 +42,18 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
                 complete();
                 return;
             }
-            card.upgrade();
+            if (card instanceof PCLCard && ((PCLCard) card).isBranchingUpgrade()) {
+                PCLEffects.Queue.add(new ChooseCardsForMultiformUpgradeEffect((PCLCard) card));
+            }
+            else {
+                card.upgrade();
+                final float x = Settings.WIDTH * (0.4f + (0.1f * EUIUtils.count(AbstractDungeon.topLevelEffects, e -> e instanceof PermanentUpgradeEffect)));
+                final float y = Settings.HEIGHT * 0.5f;
+
+                PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x + AbstractCard.IMG_WIDTH * 0.5f + 20f * Settings.scale, y);
+                PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, y));
+            }
             AbstractDungeon.player.bottledCardUpgradeCheck(card);
-
-            final float x = Settings.WIDTH * (0.4f + (0.1f * EUIUtils.count(AbstractDungeon.topLevelEffects, e -> e instanceof PermanentUpgradeEffect)));
-            final float y = Settings.HEIGHT * 0.5f;
-
-            PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x + AbstractCard.IMG_WIDTH * 0.5f + 20f * Settings.scale, y);
-            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, y));
         }
     }
 

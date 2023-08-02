@@ -128,8 +128,8 @@ public class PCLTextParser {
                 return SymbolToken.tryAdd(this);
             case VariableToken.TOKEN:
                 return VariableToken.tryAdd(this);
-            case SpecialToken.TOKEN:
-                return SpecialToken.tryAdd(this);
+            case HighlightToken.TOKEN:
+                return HighlightToken.tryAdd(this);
             case ModifierSplitToken.TOKEN:
                 return ModifierSplitToken.add(this);
         }

@@ -1,7 +1,6 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
@@ -10,13 +9,12 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
-import pinacolada.skills.skills.base.conditions.PCond_IfHasProperty;
+import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
 import pinacolada.skills.skills.special.traits.PTrait_HP;
-import pinacolada.skills.skills.special.traits.PTrait_Priority;
 
 public abstract class PTrait<T extends PField> extends PSkill<T> {
     protected boolean conditionMetCache;
@@ -84,10 +82,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     public static PTrait_HP hp(int amount) {
         return new PTrait_HP(amount);
-    }
-
-    public static PTrait_Priority priority(int amount) {
-        return new PTrait_Priority(amount);
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType) {
@@ -191,7 +185,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-
     }
 
     @Override
@@ -201,14 +194,16 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String base = EUIRM.strings.numNoun(getAmountRawString(), getSubDescText());
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PCond_IfHasProperty.class)) {
-            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), base);
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
         }
-        return base;
+        if (isVerbose()) {
+            return TEXT.act_has(getSubDescText(perspective));
+        }
+        return getSubDescText(perspective);
     }
 
-    abstract public String getSubDescText();
+    abstract public String getSubDescText(PCLCardTarget perspective);
 
     abstract public String getSubSampleText();
 

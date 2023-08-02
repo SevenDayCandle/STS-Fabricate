@@ -26,7 +26,7 @@ import java.util.HashMap;
 public class SummonPool extends EUIBase {
     public static int BASE_TRIGGER = 2;
     public static int BASE_LIMIT = 3;
-    public static float OFFSET = scale(120);
+    public static float OFFSET = scale(160);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public int triggerTimes = BASE_TRIGGER;
@@ -158,7 +158,6 @@ public class SummonPool extends EUIBase {
     }
 
     public void onBattleEnd() {
-        // TODO end of battle checks for cards
         for (PCLCardAlly ally : summons) {
             ally.releaseCard(true);
         }

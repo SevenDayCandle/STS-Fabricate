@@ -235,6 +235,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> d.isColorCompatible(co) && EUIUtils.any(targetClasses, targetClass -> targetClass.isAssignableFrom(d.effectClass)));
     }
 
+    public static List<PCLCardSelection> getEligibleDestinations(PSkill<?> e) {
+        return e != null ? e.getEligibleDestinations() : new ArrayList<>();
+    }
+
     public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(Class<U> targetClass) {
         return getEligibleEffects(targetClass, getEligibleClasses(targetClass));
     }
@@ -444,7 +448,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 case RightCount:
                     return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
             }
         }
         return amount;
@@ -468,7 +472,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     case RightCount:
                         return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
                 }
             }
 
@@ -476,7 +480,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
         if (source != null) {
             if (amountSource == PCLCardValueSource.XValue) {
-                return source.xValue();
+                return source.getXValue();
             }
             return rootAmount + source.timesUpgraded() * getUpgrade();
         }
@@ -507,7 +511,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case EFFECT_CHAR:
                 return amount;
             case XVALUE_CHAR:
-                return getXValue(sourceCard);
+                return getXValue();
             case EXTRA_CHAR:
                 return extra;
             default:
@@ -598,16 +602,20 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, addPeriod);
     }
 
+    public final List<PCLCardSelection> getEligibleDestinations() {
+        return data != null && data.destinations != null ? data.destinations : Arrays.asList(PCLCardSelection.values());
+    }
+
     public final List<PCLCardSelection> getEligibleOrigins() {
-        return data != null && !data.origins.isEmpty() ? data.origins : Arrays.asList(PCLCardSelection.values());
+        return data != null && data.origins != null ? data.origins : Arrays.asList(PCLCardSelection.values());
     }
 
     public final List<PCLCardGroupHelper> getEligiblePiles() {
-        return data != null && !data.groups.isEmpty() ? data.groups : PCLCardGroupHelper.getStandard();
+        return data != null && data.groups != null ? data.groups : PCLCardGroupHelper.getStandard();
     }
 
     public final List<PCLCardTarget> getEligibleTargets() {
-        return data != null && !data.targets.isEmpty() ? data.targets : PCLCardTarget.getAll();
+        return data != null && data.targets != null ? data.targets : PCLCardTarget.getAll();
     }
 
     public String getExportString(char attributeID) {
@@ -667,7 +675,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 case RightCount:
                     return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
             }
         }
         return extra;
@@ -691,14 +699,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     case RightCount:
                         return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
                 }
             }
 
             return rootExtra + sourceCard.timesUpgraded * getUpgradeExtra();
         }
         if (source != null && extraSource == PCLCardValueSource.XValue) {
-            return source.xValue();
+            return source.getXValue();
         }
         return rootExtra;
     }
@@ -735,11 +743,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getInheritedThemString() {
-        return parent != null ? parent.getParentThemString() : this.getParentThemString();
+        return parent != null ? (parent.useParent ? parent.getInheritedThemString() : parent.getThemString()) : this.getThemString();
     }
 
     public final String getInheritedTheyString() {
-        return parent != null ? parent.getParentTheyString() : this.getParentTheyString();
+        return parent != null ? (parent.useParent ? parent.getInheritedTheyString() : parent.getTheyString()) : this.getTheyString();
     }
 
     public AbstractMonster.Intent getIntent() {
@@ -782,14 +790,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final PSkill<?> getParent() {
         return parent;
-    }
-
-    public String getParentThemString() {
-        return EUISmartText.parseLogicString(TEXT.subjects_them(amount));
-    }
-
-    public String getParentTheyString() {
-        return EUISmartText.parseLogicString(TEXT.subjects_they(amount));
     }
 
     public String getPowerText() {
@@ -1027,6 +1027,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public String getTargetSubjectStringPerspective(PCLCardTarget target) {
+        return getTargetSubjectString(getTargetForPerspective(target));
+    }
+
     public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
         return childEffect != null ? childEffect.getText(index, perspective, addPeriod) : getText(perspective, addPeriod);
     }
@@ -1037,6 +1041,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getText() {
         return getText(PCLCardTarget.Self, true);
+    }
+
+    public String getThemString() {
+        return EUISmartText.parseLogicString(TEXT.subjects_them(amount));
+    }
+
+    public String getTheyString() {
+        return EUISmartText.parseLogicString(TEXT.subjects_they(amount));
     }
 
     @Override
@@ -1087,12 +1099,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public String getXString() {
         // Do not show the x value for powers
         if (GameUtilities.inBattle() && sourceCard != null && !hasParentType(PTrigger.class)) {
-            return " (" + getXValue(sourceCard) + ")";
+            return " (" + getXValue() + ")";
         }
         return "";
     }
 
-    public int getXValue(AbstractCard card) {
+    public int getXValue() {
         return amount;
     }
 

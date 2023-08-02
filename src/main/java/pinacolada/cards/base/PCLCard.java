@@ -612,26 +612,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
     }
 
-    @Deprecated
-    public String getAttributeString(char attributeID) {
-        switch (attributeID) {
-            case 'D':
-                return String.valueOf(damage);
-            case 'B':
-                return String.valueOf(block);
-            case 'M':
-                return String.valueOf(magicNumber);
-            case 'S':
-                return String.valueOf(heal);
-            case 'K':
-                return String.valueOf(misc);
-            case 'X':
-                return GameUtilities.inBattle() && player != null ? String.valueOf(getXValue()) : PGR.core.strings.subjects_x;
-            default:
-                return "?";
-        }
-    }
-
     public PCLAugment getAugment(int index) {
         return augments.size() > index ? augments.get(index) : null;
     }
@@ -642,14 +622,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public ArrayList<PCLAugment> getAugments() {
         return EUIUtils.filter(augments, Objects::nonNull);
-    }
-
-    public ColoredString getBlockString() {
-        if (isBlockModified) {
-            return new ColoredString(block, block >= baseBlock ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(baseBlock, Settings.CREAM_COLOR);
     }
 
     public TextureAtlas.AtlasRegion getBorderTexture() {
@@ -736,27 +708,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    public ColoredString getColoredAttributeString(char attributeID) {
-        switch (attributeID) {
-            case 'D':
-                return getDamageString();
-            case 'B':
-                return getBlockString();
-            case 'M':
-                return getMagicNumberString();
-            case 'S':
-                return getHPString();
-            case 'K':
-                return getSpecialVariableString();
-            case 'X':
-                return getXString(false);
-            case 'x':
-                return getXString(true);
-            default:
-                return new ColoredString("?", Settings.RED_TEXT_COLOR);
-        }
-    }
-
     protected ColoredString getCostString() {
         final ColoredString result = new ColoredString();
 
@@ -778,14 +729,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         return result;
-    }
-
-    public ColoredString getDamageString() {
-        if (isDamageModified) {
-            return new ColoredString(damage, damage >= baseDamage * PGR.dungeon.getDivisor() ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(baseDamage, Settings.CREAM_COLOR);
     }
 
     protected boolean getDarken() {
@@ -824,10 +767,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public ColoredString getHPString() {
         return new ColoredString(currentHealth, currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
-    public ColoredString getMagicNumberString() {
-        return new ColoredString(String.valueOf(magicNumber), Settings.CREAM_COLOR);
     }
 
     public int getMaxForms() {
@@ -998,10 +937,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
-    public ColoredString getSpecialVariableString() {
-        return new ColoredString(misc, misc > 0 ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
     protected Color getTypeColor() {
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
     }
@@ -1015,7 +950,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
-    // E.g. Form 0 -> +A, Form 1 -> +B, etc.
     protected String getUpgradeName() {
         // In case cardData is somehow null, return a generic name
         String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : originalName;
@@ -1029,8 +963,23 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
             // Do not show appended characters for non-multiform or linear upgrade path cards
             if (cardData != null && this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-                sb.append(appendix);
+                // For branch factors of 2 or more, show the "path" that was taken
+                if (this.cardData.branchFactor > 1) {
+                    int minForm = auxiliaryData.form;
+                    StringBuilder sb2 = new StringBuilder();
+                    while (minForm > 0) {
+                        int eval = minForm - 1;
+                        char appendix = (char) ((eval % this.cardData.branchFactor) + CHAR_OFFSET);
+                        sb2.append(appendix);
+                        minForm = eval / this.cardData.branchFactor;
+                    }
+                    sb2.reverse();
+                    sb.append(sb2);
+                }
+                else {
+                    char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+                    sb.append(appendix);
+                }
             }
             name = sb.toString();
         }
@@ -1038,19 +987,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return CardModifierManager.onRenderTitle(this, name);
     }
 
-    public ColoredString getXString(boolean onlyInBattle) {
-        if (GameUtilities.inBattle() && player != null) {
-            int value = getXValue();
-            if (value >= 0) {
-                return new ColoredString(onlyInBattle ? " (" + value + ")" : value, Settings.GREEN_TEXT_COLOR);
-            }
-        }
-
-        return new ColoredString(onlyInBattle ? "" : "X", Settings.CREAM_COLOR);
-    }
-
+    @Override
     public int getXValue() {
-        return -1;
+        return misc;
     }
 
     @Override
@@ -1060,6 +999,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    // Don't use this, use initializeDescription instead
+    @Deprecated
     @Override
     public final void initializeDescriptionCN() {
         initializeDescription();
@@ -1214,6 +1155,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return CombatManager.canPlayCard(this, p, m, init);
     }
 
+    // Should not be used directly unless called through a method that does not know that this is a PCLCard
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, CustomTargeting.getCardTarget(this));
@@ -1398,6 +1340,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnDiscard(this));
     }
 
+    @Deprecated
     @Override
     public final void triggerOnScry() {
         // Use triggerOnScryThatDoesntLoopOnEnd instead
@@ -1484,6 +1427,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public boolean isAoE() {
         return isMultiDamage;
+    }
+
+    public boolean isBranchingUpgrade() {
+        return cardData.maxForms > 1 && cardData.canToggleOnUpgrade;
     }
 
     protected boolean isEffectPlayable(AbstractMonster m) {
@@ -2040,8 +1987,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    // Don't use this, just use renderDescription instead
+    @Deprecated
     @SpireOverride
-    private void renderDescriptionCN(SpriteBatch sb) { /* Useless */ }
+    private void renderDescriptionCN(SpriteBatch sb) {
+        renderDescription(sb);
+    }
 
     @SpireOverride
     protected void renderEnergy(SpriteBatch sb) {

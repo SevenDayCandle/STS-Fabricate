@@ -11,14 +11,20 @@ import pinacolada.interfaces.providers.PointerProvider;
 
 public interface EditorCard extends PointerProvider, CacheableCard {
 
+    default int getCounterValue() {
+        return ((AbstractCard) this).magicNumber;
+    }
+
+    default int getXValue() {
+        return ((AbstractCard) this).misc;
+    }
+
     default void renderForPreview(SpriteBatch sb) {
-        if (this instanceof AbstractCard) {
-            if (SingleCardViewPopup.isViewingUpgrade) {
-                ((AbstractCard) this).renderUpgradePreview(sb);
-            }
-            else {
-                ((AbstractCard) this).render(sb);
-            }
+        if (SingleCardViewPopup.isViewingUpgrade) {
+            ((AbstractCard) this).renderUpgradePreview(sb);
+        }
+        else {
+            ((AbstractCard) this).render(sb);
         }
     }
 

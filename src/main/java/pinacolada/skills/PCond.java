@@ -585,7 +585,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (parent instanceof PBranchCond && ((PBranchCond) parent).getSubEffects().size() > 2);
     }
 
-    /* Same as above but for passive conditions */
+    /*
+        Returns true if this is the skill that activates on a passive trigger
+        i.e. this is either the first condition underneath a passive trigger, or if this is part of a branching condition that meets the first clause
+    */
     public final boolean isPassiveClause() {
         return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
     }

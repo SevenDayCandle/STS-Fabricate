@@ -196,7 +196,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public int xValue() {
+    public int getXValue() {
         return this.potency;
     }
 

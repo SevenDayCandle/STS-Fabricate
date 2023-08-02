@@ -72,6 +72,8 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").forceIcon(true);
     public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").forceIcon(true);
     public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").forceIcon(true);
+    public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
+
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip buff = EUIKeywordTooltip.findByID("Buff").setCanAdd(false).canHighlight(false);
@@ -167,12 +169,8 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip malleable = EUIKeywordTooltip.findByID("Malleable");
     public EUIKeywordTooltip mantra = EUIKeywordTooltip.findByID("Prayer"); // YES THIS THING IS CALLED PRAYER
     public EUIKeywordTooltip mark = EUIKeywordTooltip.findByID("Mark");
-    // TODO change description depending on the current character
-    public EUIKeywordTooltip match = EUIKeywordTooltip.findByID("Match");
     public EUIKeywordTooltip metallicize = EUIKeywordTooltip.findByID("Metallicize");
-    public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
     public EUIKeywordTooltip multiform = EUIKeywordTooltip.findByID("Multiform");
-    public EUIKeywordTooltip neutralStance = EUIKeywordTooltip.findByID("Neutral Stance");
     public EUIKeywordTooltip nextTurnBlock = EUIKeywordTooltip.findByID("Next Turn Block");
     public EUIKeywordTooltip nextTurnDraw = EUIKeywordTooltip.findByID("Draw Plus");
     public EUIKeywordTooltip nextTurnDrawMinus = EUIKeywordTooltip.findByID("Draw Minus");

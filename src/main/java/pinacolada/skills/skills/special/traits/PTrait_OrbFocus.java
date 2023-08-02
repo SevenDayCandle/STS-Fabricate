@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.special.traits;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -26,7 +27,7 @@ public class PTrait_OrbFocus extends PTrait<PField_Empty> implements OnOrbApplyF
     }
 
     @Override
-    public String getSubDescText() {
+    public String getSubDescText(PCLCardTarget perspective) {
         return PGR.core.tooltips.focus.title;
     }
 
