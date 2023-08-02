@@ -18,6 +18,7 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -29,12 +30,26 @@ import java.util.Map;
 // Copied and modified from STS-AnimatorMod
 public class AbstractDungeonPatches {
     public static boolean filterCardGroupForValid;
+    private static int tempID;
 
-    // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-    protected static AbstractCard tryReturnCard(AbstractCard card, Object object) {
+    // If no suitable card is found, make a replacement because the method will crash if no card is actually found
+    protected static AbstractCard tryReturnCard(AbstractCard card, AbstractCard.CardRarity rarity, Random rng) {
         if (card == null) {
-            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified filters: " + String.valueOf(object));
-            return new QuestionMark();
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity: " + String.valueOf(rarity));
+
+            // First try to find a replacement of another rarity if a rarity was specified
+            if (rarity != null) {
+                card = PGR.dungeon.getRandomCard(PCLDungeon.getNextRarity(rarity), rng, true);
+                if (card != null) {
+                    return card;
+                }
+            }
+
+            // Otherwise, create a dummy card
+            card = new QuestionMark();
+            // Modify ID to avoid infinite loops in AbstractDungeon
+            card.cardID = card.cardID + tempID;
+            tempID += 1;
         }
         return card;
     }
@@ -119,7 +134,7 @@ public class AbstractDungeonPatches {
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found, null);
+            return tryReturnCard(found, null, AbstractDungeon.cardRng);
         }
 
         @SpirePrefixPatch
@@ -133,7 +148,7 @@ public class AbstractDungeonPatches {
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found, rarity);
+            return tryReturnCard(found, rarity, AbstractDungeon.cardRng);
         }
 
         @SpirePrefixPatch
@@ -147,7 +162,7 @@ public class AbstractDungeonPatches {
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity, Random rng) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found, rarity);
+            return tryReturnCard(found, rarity, rng);
         }
 
         @SpirePrefixPatch
@@ -161,7 +176,7 @@ public class AbstractDungeonPatches {
         @SpirePostfixPatch
         public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found, rarity);
+            return tryReturnCard(found, rarity, AbstractDungeon.cardRng);
         }
 
         @SpirePrefixPatch

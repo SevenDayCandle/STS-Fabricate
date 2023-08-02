@@ -49,7 +49,7 @@ public class PCLCustomRunCharacterButton extends EUIButton {
     public void renderCentered(SpriteBatch sb) {
         if (glowing) {
             highlightColor.a = 0.25F + (MathUtils.cosDeg((float) (System.currentTimeMillis() / 4L % 360L)) + 1.25F) / 3.5F;
-            PCLRenderHelpers.drawCentered(sb, highlightColor, ImageMaster.FILTER_GLOW_BG, this.hb.cX, this.hb.cY, this.hb.width, this.hb.height, this.background.scaleX, 0);
+            PCLRenderHelpers.drawCentered(sb, highlightColor, ImageMaster.FILTER_GLOW_BG, this.hb.cX, this.hb.cY, this.hb.width, this.hb.height, 0.8f, 0);
         }
         super.renderCentered(sb);
     }

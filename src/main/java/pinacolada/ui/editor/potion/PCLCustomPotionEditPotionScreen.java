@@ -67,8 +67,7 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
                 .setOnClick(this::editImage);
 
         formEditor = new PCLCustomFormEditor(
-                new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 48f)
-                        .setCenter(Settings.WIDTH * 0.116f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f), this);
+                new EUIHitbox(Settings.WIDTH * 0.04f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f, Settings.scale * 90f, Settings.scale * 48f), this);
 
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
@@ -77,7 +76,7 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         previewDescription.label.setSmartText(true);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
+                .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])

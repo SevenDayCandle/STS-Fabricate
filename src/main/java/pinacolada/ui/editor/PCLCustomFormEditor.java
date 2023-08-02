@@ -19,14 +19,14 @@ public class PCLCustomFormEditor extends EUIBase {
     protected static final float ICON_SIZE = scale(36f);
     protected PCLCustomEditEntityScreen<?, ?> screen;
     protected EUIDropdown<Integer> formValues;
-    public Hitbox hb;
+    public EUIHitbox hb;
     public EUILabel header;
     public EUIButton decreaseButton;
     public EUIButton increaseButton;
     public EUIButton add;
     public EUIButton remove;
 
-    public PCLCustomFormEditor(Hitbox hb, PCLCustomEditEntityScreen<?, ?> screen) {
+    public PCLCustomFormEditor(EUIHitbox hb, PCLCustomEditEntityScreen<?, ?> screen) {
         this.hb = hb;
         this.screen = screen;
 
@@ -37,7 +37,7 @@ public class PCLCustomFormEditor extends EUIBase {
                 .setLabel(PGR.core.strings.cedit_editForm)
                 .setTooltip(PGR.core.strings.cedit_editForm, PGR.core.strings.cetut_primaryForm);
 
-        formValues = new EUIDropdown<Integer>(new EUIHitbox(hb))
+        formValues = new EUIDropdown<Integer>(hb)
                 .setOnChange(types -> {
                     if (types.size() > 0) {
                         setValue(types.get(0));
@@ -47,8 +47,7 @@ public class PCLCustomFormEditor extends EUIBase {
         formValues.setLabelFunctionForButton((items, strFunc) -> {
                     return items.size() > 0 ? strFunc.invoke(items.get(0)) + "/" + (formValues.size() - 1) : String.valueOf(formValues.size());
                 }, false)
-                .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1))
-                .setCanAutosize(true, true);
+                .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))
                 .setOnClick(this::decrease);
 

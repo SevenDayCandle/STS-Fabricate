@@ -19,7 +19,7 @@ import javassist.expr.ExprEditor;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.markers.FabricateItem;
 
-public class STSLibPatches {
+public class CompatibilityPatches {
     @SpirePatch(clz = FlavorText.FlavorIntoCardStrings.class, method = "postfix")
     public static class FlavorIntoCardStrings_Postfix {
         // Custom cards do not have existing flavor text so this call will cause the card to fail to load altogether

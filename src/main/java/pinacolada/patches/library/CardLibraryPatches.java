@@ -158,6 +158,7 @@ public class CardLibraryPatches {
             if (__result instanceof Madness && !Madness.ID.equals(key)) {
                 if (!PGR.config.madnessReplacements.get()) {
                     __result = new QuestionMark();
+                    __result.cardID = key;
                 }
                 __result.name = __result.originalName = key;
                 EUIUtils.logError(CardLibrary.class, "Card not found: " + key);

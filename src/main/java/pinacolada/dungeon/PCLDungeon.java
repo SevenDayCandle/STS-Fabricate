@@ -76,6 +76,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public HashSet<String> bannedRelics = new HashSet<>();
     public transient PCLLoadout loadout;
 
+    public static AbstractCard.CardRarity getNextRarity(AbstractCard.CardRarity rarity) {
+        int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
+        return nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null;
+    }
+
     // When playing as a non-PCL character, remove any colorless cards that should be exclusive to a particular PCL character
     // This includes the example cards from the card editor
     public static boolean isColorlessCardExclusive(AbstractCard card) {
@@ -342,8 +347,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             // Note that the basic and special rarities have no pools so we ignore them
             if (rarity != null) {
                 EUIUtils.logInfo(null, "No cards found for Rarity " + rarity);
-                int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
-                return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, filterFunc, rng, allowOtherRarities);
+                return getRandomCard(getNextRarity(rarity), filterFunc, rng, allowOtherRarities);
             }
         }
         return null;
