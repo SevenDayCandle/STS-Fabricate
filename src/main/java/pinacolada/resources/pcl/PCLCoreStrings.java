@@ -486,17 +486,18 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String tutorial_summonTutorial5 = tutorial.TEXT[7];
     public final String tutorial_summonTutorial6 = tutorial.TEXT[8];
     public final String tutorial_summonTutorial7 = tutorial.TEXT[9];
-    public final String tutorial_augmentTutorial1 = tutorial.TEXT[10];
-    public final String tutorial_augmentTutorial2 = tutorial.TEXT[11];
-    public final String tutorial_augmentTutorial3 = tutorial.TEXT[12];
-    public final String tutorial_augmentTutorial4 = tutorial.TEXT[13];
-    public final String tutorial_augmentTutorial5 = tutorial.TEXT[14];
-    public final String tutorial_augmentTutorial6 = tutorial.TEXT[15];
-    public final String tutorial_tutorialReplay = tutorial.TEXT[16];
-    public final String tutorial_tutorialNextStep = tutorial.TEXT[17];
-    public final String tutorial_tutorialComplete = tutorial.TEXT[18];
-    public final String tutorial_tutorialStepHeader = tutorial.TEXT[19];
-    public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[20];
+    public final String tutorial_summonTutorial8 = tutorial.TEXT[10];
+    public final String tutorial_augmentTutorial1 = tutorial.TEXT[11];
+    public final String tutorial_augmentTutorial2 = tutorial.TEXT[12];
+    public final String tutorial_augmentTutorial3 = tutorial.TEXT[13];
+    public final String tutorial_augmentTutorial4 = tutorial.TEXT[14];
+    public final String tutorial_augmentTutorial5 = tutorial.TEXT[15];
+    public final String tutorial_augmentTutorial6 = tutorial.TEXT[16];
+    public final String tutorial_tutorialReplay = tutorial.TEXT[17];
+    public final String tutorial_tutorialNextStep = tutorial.TEXT[18];
+    public final String tutorial_tutorialComplete = tutorial.TEXT[19];
+    public final String tutorial_tutorialStepHeader = tutorial.TEXT[20];
+    public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[21];
 
     public PCLCoreStrings(PCLResources<?, ?, ?, ?> resources) {
         super(resources);

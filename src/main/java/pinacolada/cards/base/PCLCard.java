@@ -718,7 +718,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
         }
 
-        if (player != null && player.hand.contains(this) && (!this.hasEnoughEnergy() || GameUtilities.isUnplayableThisTurn(this))) {
+        if (player != null && player.hand.contains(this) && (!CombatManager.canPlayCard(this, player, null, hasEnoughEnergy()))) {
             result.color = new Color(1f, 0.3f, 0.3f, transparency);
         }
         else if (isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkill;
 
@@ -24,12 +25,15 @@ public class PointerToken extends PCLTextToken {
     protected final char variableID;
     protected final PSkill<?> move;
     private ColoredString coloredString;
+    private int cachedValue;
 
     private PointerToken(char variableID, PSkill<?> move) {
         super(PCLTextTokenType.Variable, null);
 
         this.variableID = variableID;
         this.move = move;
+        this.coloredString = move.getColoredAttributeString(variableID);
+        this.cachedValue = getMoveAmount();
     }
 
     public static int tryAdd(PCLTextParser parser) {
@@ -53,25 +57,32 @@ public class PointerToken extends PCLTextToken {
         return VALID_TOKENS.contains(c) && move != null ? new PointerToken(c, move) : null;
     }
 
+    // X value will not show text unless in combat, but we need to make sure that it doesn't go over the line
     @Override
     public float getAdditionalWidth(PCLCardText context) {
-        if (move != null && variableID == PSkill.XVALUE_CHAR) {
-            return getWidth(context.font, rawText);
+        if (variableID == PSkill.XVALUE_CHAR && StringUtils.isEmpty(coloredString.text)) {
+            return super.getWidth(context.font, DUMMY);
         }
         return super.getAdditionalWidth(context);
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return super.getWidth(font, coloredString != null ? coloredString.text : DUMMY);
+        return super.getWidth(font, coloredString.text);
     }
 
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
-        if (coloredString == null || EUI.elapsed25()) {
+        int mAmount = getMoveAmount();
+        if (cachedValue != mAmount) {
+            cachedValue = mAmount;
             coloredString = move.getColoredAttributeString(variableID);
         }
 
         super.render(sb, context, coloredString);
+    }
+
+    private int getMoveAmount() {
+        return move.getAttribute(variableID);
     }
 }

@@ -87,11 +87,11 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     }
 
     public void addTutorial(PCLCreatureData data) {
-        PCLTutorialMonster.register(config.seenTutorial, data, p -> p.chosenClass == this.resources.playerClass);
+        PCLTutorialMonster.register(data, () -> config.seenTutorial, p -> p.chosenClass == this.resources.playerClass);
     }
 
     public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
-        PCLTutorialMonster.register(config.seenTutorial, data, canShow);
+        PCLTutorialMonster.register(data, () -> config.seenTutorial, canShow);
     }
 
     protected void addUnlockBundle(PCLLoadout loadout) {

@@ -116,9 +116,9 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     }
                 })
                 .setCanAutosizeButton(true);
-        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2.5f))
+        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2f))
                 .setLabel(PGR.core.strings.cetut_selector2)
-                .setAlignment(0.75f, 0.1f, true)
+                .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
 

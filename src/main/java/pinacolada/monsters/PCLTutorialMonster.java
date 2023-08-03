@@ -37,17 +37,18 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         super(data, offsetX, offsetY);
     }
 
-    public static void register(STSConfigItem<Boolean> config, PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> shouldShow) {
-        tutorials.add(new TutorialInfo(config, data, shouldShow));
+    public static void register(PCLCreatureData data, FuncT0<STSConfigItem<Boolean>> getConfig, FuncT1<Boolean, AbstractPlayer> shouldShow) {
+        tutorials.add(new TutorialInfo(data, getConfig, shouldShow));
         BaseMod.addMonster(data.ID, data::create);
     }
 
     public static MonsterGroup tryStart() {
         for (PCLTutorialMonster.TutorialInfo tutorialInfo : PCLTutorialMonster.tutorials) {
-            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && !tutorialInfo.config.get()) {
+            STSConfigItem<Boolean> config = tutorialInfo.getConfig.invoke();
+            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && !config.get()) {
                 MonsterGroup group = tutorialInfo.data.getEncounter();
                 if (group != null) {
-                    currentConfig = tutorialInfo.config;
+                    currentConfig = config;
                     return group;
                 }
             }
@@ -134,13 +135,13 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
     }
 
     public static class TutorialInfo {
-        public final STSConfigItem<Boolean> config;
         public final PCLCreatureData data;
+        public final FuncT0<STSConfigItem<Boolean>> getConfig;
         public final FuncT1<Boolean, AbstractPlayer> shouldShow;
 
-        public TutorialInfo(STSConfigItem<Boolean> config, PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> shouldShow) {
-            this.config = config;
+        public TutorialInfo(PCLCreatureData data, FuncT0<STSConfigItem<Boolean>> getConfig, FuncT1<Boolean, AbstractPlayer> shouldShow) {
             this.data = data;
+            this.getConfig = getConfig;
             this.shouldShow = shouldShow;
         }
     }
