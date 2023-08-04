@@ -77,7 +77,7 @@ public class PCLPowerHelper implements TooltipProvider {
     public static final PCLPowerHelper Innovation = new PCLPowerHelper(InnovationPower.POWER_ID, PGR.core.tooltips.innovation, InnovationPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Intangible = new PCLPowerHelper(IntangiblePlayerPower.POWER_ID, PGR.core.tooltips.intangible, IntangiblePlayerPower::new, Behavior.TurnBased, false, false, false);
     public static final PCLPowerHelper Invigorated = new PCLPowerHelper(InvigoratedPower.POWER_ID, PGR.core.tooltips.invigorated, InvigoratedPower::new, Behavior.TurnBased, true, false, true);
-    public static final PCLPowerHelper Juggernaut = new PCLPowerHelper(JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut, DemonFormPower::new, Behavior.Permanent, false, false, false);
+    public static final PCLPowerHelper Juggernaut = new PCLPowerHelper(JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut, JuggernautPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Malleable = new PCLPowerHelper(MalleablePower.POWER_ID, PGR.core.tooltips.malleable, MalleablePower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Mantra = new PCLPowerHelper(MantraPower.POWER_ID, PGR.core.tooltips.mantra, MantraPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Metallicize = new PCLPowerHelper(MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize, MetallicizePower::new, Behavior.Permanent, true, false, false);

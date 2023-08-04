@@ -11,8 +11,8 @@ import extendedui.EUI;
 import extendedui.EUIUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.stance.StanceAura;
-import pinacolada.effects.stance.StanceParticleVertical;
+import pinacolada.effects.vfx.StanceAura;
+import pinacolada.effects.vfx.StanceParticleVertical;
 import pinacolada.resources.PGR;
 
 import java.util.Objects;

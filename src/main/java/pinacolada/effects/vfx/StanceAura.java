@@ -1,4 +1,4 @@
-package pinacolada.effects.stance;
+package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

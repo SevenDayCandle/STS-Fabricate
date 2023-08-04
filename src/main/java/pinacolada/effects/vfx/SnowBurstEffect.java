@@ -10,7 +10,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
-
 public class SnowBurstEffect extends PCLEffect {
     private static final TextureCache[] particles = {PCLCoreImages.Effects.frostSnow1, PCLCoreImages.Effects.frostSnow2, PCLCoreImages.Effects.frostSnow3, PCLCoreImages.Effects.frostSnow4};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();

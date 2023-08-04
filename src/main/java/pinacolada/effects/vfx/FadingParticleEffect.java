@@ -10,7 +10,7 @@ import extendedui.utilities.EUIColors;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class FadingParticleEffect extends VisualEffect {
-    protected static final ParticlePool effectPool = new ParticlePool();
+    private static final ParticlePool effectPool = new ParticlePool();
     protected Color targetColor;
     protected PCLRenderHelpers.BlendingMode blendingMode = PCLRenderHelpers.BlendingMode.Normal;
     protected Texture texture;
@@ -29,7 +29,7 @@ public class FadingParticleEffect extends VisualEffect {
     }
 
     public static FadingParticleEffect obtain(Texture texture, float x, float y, float rot, float scale) {
-        return obtain(texture, x, y, rot, scale);
+        return effectPool.obtain(texture, x, y, rot, scale);
     }
 
     protected void complete() {
@@ -84,6 +84,8 @@ public class FadingParticleEffect extends VisualEffect {
         this.rotation = rot;
         this.scale = scale;
         this.alpha = 1.0F;
+        this.duration = startingDuration;
+        this.isDone = false;
     }
 
     public FadingParticleEffect setAcceleration(float aX, float aY) {

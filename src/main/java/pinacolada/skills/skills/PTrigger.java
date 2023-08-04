@@ -245,6 +245,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return false;
     }
 
+    // TODO call through a separate method to avoid being called when played in the hand normally
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (usesThisTurn != 0) {

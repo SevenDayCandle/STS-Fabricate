@@ -27,6 +27,7 @@ import pinacolada.effects.utility.ActionCallbackEffect;
 import pinacolada.effects.utility.EffectCallbackEffect;
 import pinacolada.effects.vfx.EffekseerEffect;
 import pinacolada.effects.vfx.FadingParticleEffect;
+import pinacolada.effects.vfx.TrailingParticleEffect;
 
 import java.util.ArrayList;
 
@@ -193,6 +194,15 @@ public final class PCLEffects {
     public TalkEffect talk(AbstractCreature source, String message, float duration) {
         return add(new TalkEffect(source, message, duration));
     }
+
+    public TrailingParticleEffect trail(Texture texture, ActionT1<TrailingParticleEffect> onTrail, float x, float y) {
+        return add(TrailingParticleEffect.obtain(texture, onTrail, x, y));
+    }
+
+    public TrailingParticleEffect trail(Texture texture, ActionT1<TrailingParticleEffect> onTrail, float x, float y, float rot, float scale) {
+        return add(TrailingParticleEffect.obtain(texture, onTrail, x, y, rot, scale));
+    }
+
 
     public ActionCallbackEffect waitRealtime(float duration) {
         return add(new ActionCallbackEffect(new WaitRealtimeAction(duration)));

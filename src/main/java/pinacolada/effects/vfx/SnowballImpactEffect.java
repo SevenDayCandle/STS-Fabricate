@@ -1,11 +1,16 @@
 package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
+import extendedui.EUIUtils;
+import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class SnowballImpactEffect extends PCLEffect {
+    public static final TextureCache[] images = {PCLCoreImages.Effects.frostSnow1, PCLCoreImages.Effects.frostSnow2, PCLCoreImages.Effects.frostSnow3, PCLCoreImages.Effects.frostSnow4};
     protected int particles = 40;
     protected float x;
     protected float y;
@@ -19,7 +24,13 @@ public class SnowballImpactEffect extends PCLEffect {
     @Override
     protected void firstUpdate() {
         for (int i = 0; i < particles; i++) {
-            PCLEffects.Queue.add(new SnowballParticleEffect(this.x, this.y, color).setDuration(0.75f, isRealtime));
+            PCLEffects.Queue.particle(EUIUtils.random(images).texture(), this.x, this.y)
+                    .setSpeed(random(-650f, 650f) * Settings.scale, random(-650f, 650f) * Settings.scale)
+                    .setRotation(random(-100f, 100f), random(-600f, 600f))
+                    .setScale(random(0.2f, 1.5f) * Settings.scale)
+                    .setFlip(randomBoolean(0.5f), false)
+                    .setColor(color)
+                    .setDuration(0.75f, isRealtime);
             PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
         }
 

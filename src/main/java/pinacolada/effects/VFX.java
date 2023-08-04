@@ -2,6 +2,7 @@ package pinacolada.effects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.cards.blue.MeteorStrike;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -121,10 +122,6 @@ public class VFX {
         return new LaserBeamEffect(cX, cY);
     }
 
-    public static MeteorFallEffect meteorFall(Hitbox hb) {
-        return new MeteorFallEffect(randomX(hb, 0.2f), randomY(hb, 0.2f));
-    }
-
     public static PsychokinesisEffect psychokinesis(Hitbox target) {
         return psychokinesis(target.cX, target.cY);
     }
@@ -139,14 +136,6 @@ public class VFX {
 
     public static float randomY(Hitbox hb, float variance) {
         return hb.cY + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.height));
-    }
-
-    public static RazorWindEffect razorWind(Hitbox source) {
-        return razorWind(source, source, MathUtils.random(1000.0F, 1200.0F), MathUtils.random(-20.0F, 20.0F));
-    }
-
-    public static RazorWindEffect razorWind(Hitbox source, Hitbox target, float horizontalSpeed, float horizontalAcceleration) {
-        return new RazorWindEffect(source.cX, source.cY, randomY(target, 0.33f), horizontalSpeed, horizontalAcceleration);
     }
 
     public static RockBurstEffect rockBurst(Hitbox target, float scale) {

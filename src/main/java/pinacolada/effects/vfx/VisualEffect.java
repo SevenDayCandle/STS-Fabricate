@@ -1,13 +1,14 @@
 package pinacolada.effects.vfx;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIUtils;
+import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class VisualEffect extends PCLEffect {
-    protected float x;
-    protected float y;
     protected float vX;
     protected float vY;
     protected float vRot;
@@ -18,6 +19,9 @@ public class VisualEffect extends PCLEffect {
     protected float aScale;
     protected boolean flipX;
     protected boolean flipY;
+    protected boolean radial;
+    public float x;
+    public float y;
 
     public VisualEffect() {
         this(0, 0);
@@ -28,11 +32,30 @@ public class VisualEffect extends PCLEffect {
     }
 
     public VisualEffect(float x, float y, float rot, float scale) {
-        super(Settings.ACTION_DUR_FAST, false);
+        this(Settings.ACTION_DUR_FAST, x, y, rot, scale);
+    }
+
+    public VisualEffect(float duration, float x, float y, float rot, float scale) {
+        super(duration, false);
         this.x = x;
         this.y = y;
         this.rotation = rot;
         this.scale = scale;
+    }
+
+    public static Texture randomTexture(TextureCache[] caches) {
+        return EUIUtils.random(caches).texture();
+    }
+
+    protected void initialize(float x, float y, float rot, float scale) {
+        this.x = x;
+        this.y = y;
+        this.rotation = rot;
+        this.scale = scale;
+        this.vX = this.vY = this.vRot = this.vScale = this.aX = this.aY = this.aRot = this.aScale = 0;
+        this.flipX = this.flipY = this.radial = false;
+        this.duration = startingDuration;
+        this.isDone = false;
     }
 
     public VisualEffect setAcceleration(float aX, float aY) {
@@ -53,6 +76,11 @@ public class VisualEffect extends PCLEffect {
         this.x = x;
         this.y = y;
 
+        return this;
+    }
+
+    public VisualEffect setRadial(boolean val) {
+        this.radial = val;
         return this;
     }
 
@@ -77,15 +105,15 @@ public class VisualEffect extends PCLEffect {
         return this;
     }
 
-    public VisualEffect setScale(float scale) {
-        this.scale = scale;
+    public VisualEffect setRotationTarget(float startRotation, float target, float speed) {
+        this.rotation = startRotation;
+        this.vRot = (target - startRotation) / speed;
 
         return this;
     }
 
-    public VisualEffect setRotationTarget(float startRotation, float target, float speed) {
-        this.rotation = startRotation;
-        this.vRot = (target - startRotation) / speed;
+    public VisualEffect setScale(float scale) {
+        this.scale = scale;
 
         return this;
     }
@@ -133,8 +161,15 @@ public class VisualEffect extends PCLEffect {
 
     public void updateParameters(float deltaTime) {
         float deltaScale = deltaTime * Settings.scale;
-        this.x += vX * deltaScale;
-        this.y += vY * deltaScale;
+        if (radial) {
+            this.x += vX * deltaScale * MathUtils.cos(rotation);
+            this.y += vY * deltaScale * MathUtils.sin(rotation);
+        }
+        else {
+            this.x += vX * deltaScale;
+            this.y += vY * deltaScale;
+        }
+
         this.rotation += vRot * deltaTime;
         this.scale += vScale * deltaTime;
         this.vX += aX * deltaScale;

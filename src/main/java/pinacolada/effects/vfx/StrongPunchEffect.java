@@ -9,21 +9,15 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.effects.VFX;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class StrongPunchEffect extends PCLEffect {
-    protected float x;
-    protected float y;
-    protected float rotationSpeed = 600f;
+public class StrongPunchEffect extends VisualEffect {
     protected float vfxTimer = 1;
     protected float baseScale;
     protected boolean triggered = false;
 
     public StrongPunchEffect(float x, float y, float baseScale) {
-        super(1f);
-
-        this.x = x;
-        this.y = y;
-        this.scale = this.baseScale = Math.max(baseScale, 1);
-        this.rotation = 300f;
+        super(1f, x, y, 300f, Math.max(baseScale, 1));
+        this.baseScale = this.scale;
+        this.vRot = 600f;
         this.color = Color.WHITE.cpy();
     }
 
@@ -54,7 +48,7 @@ public class StrongPunchEffect extends PCLEffect {
             }
         }
         else {
-            this.rotation += rotationSpeed * deltaTime / duration;
+            this.rotation += vRot * deltaTime / duration;
             this.scale = Interpolation.linear.apply(1, this.baseScale, duration);
         }
 
