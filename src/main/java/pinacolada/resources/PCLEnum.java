@@ -65,7 +65,11 @@ public class PCLEnum {
         @SpireEnum
         public static AbstractGameAction.AttackEffect GUNSHOT;
         @SpireEnum
+        public static AbstractGameAction.AttackEffect HEMOKINESIS;
+        @SpireEnum
         public static AbstractGameAction.AttackEffect ICE;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect IRON;
         @SpireEnum
         public static AbstractGameAction.AttackEffect PUNCH;
         @SpireEnum
@@ -77,9 +81,13 @@ public class PCLEnum {
         @SpireEnum
         public static AbstractGameAction.AttackEffect SPARK;
         @SpireEnum
+        public static AbstractGameAction.AttackEffect VERTICAL_IMPACT;
+        @SpireEnum
         public static AbstractGameAction.AttackEffect WATER;
         @SpireEnum
         public static AbstractGameAction.AttackEffect WAVE;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect WEIGHTY_IMPACT;
         @SpireEnum
         public static AbstractGameAction.AttackEffect WIND;
     }

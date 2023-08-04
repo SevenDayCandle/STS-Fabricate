@@ -15,7 +15,6 @@ public class AnimatedParticleEffect extends VisualEffect {
     protected final int rows;
     protected final int width;
     protected Color targetColor;
-    protected PCLRenderHelpers.BlendingMode blendingMode = PCLRenderHelpers.BlendingMode.Normal;
     protected TextureRegion region;
     protected float alpha;
     protected float colorSpeed = 1;

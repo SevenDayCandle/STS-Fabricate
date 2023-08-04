@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -23,7 +22,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
@@ -192,7 +190,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(EffekseerEFK.efk(effekseerKey, m.hb)).duration * 0.8f;
         return this;
     }
 
@@ -201,12 +199,12 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color, float durationMult) {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(EffekseerEFK.efk(effekseerKey, m.hb).setColor(color)).duration * durationMult;
         return this;
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, float durationMult) {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(EffekseerEFK.efk(effekseerKey, m.hb)).duration * durationMult;
         return this;
     }
 

@@ -12,7 +12,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.VFX;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
@@ -160,7 +159,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     }
 
     public DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
-        this.onDamageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
+        this.onDamageEffect = (s, m) -> EffekseerEFK.efk(effekseerKey, m.hb).duration;
         return this;
     }
 

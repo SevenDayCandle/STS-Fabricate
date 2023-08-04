@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +16,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
@@ -613,7 +611,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public PMove<T> setVFX(EffekseerEFK efk) {
-        this.vfxFunc = (info) -> VFX.eFX(efk, info.source != null ? info.source.hb : AbstractDungeon.player.hb);
+        this.vfxFunc = (info) -> EffekseerEFK.efk(efk, info.source != null ? info.source.hb : AbstractDungeon.player.hb);
         return this;
     }
 

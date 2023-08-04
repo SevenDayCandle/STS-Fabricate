@@ -144,11 +144,11 @@ public final class PCLEffects {
     }
 
     public EffekseerEffect playEFX(EffekseerEFK key, float x, float y) {
-        return add(VFX.eFX(key, x, y));
+        return add(EffekseerEFK.efk(key, x, y));
     }
 
     public EffekseerEffect playEFX(EffekseerEFK key) {
-        return add(VFX.eFX(key));
+        return add(EffekseerEFK.efk(key));
     }
 
     public RemoveRelicEffect removeRelic(AbstractRelic relic) {

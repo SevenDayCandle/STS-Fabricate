@@ -197,10 +197,6 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache electric5 = new TextureCache("images/pcl/effects/Electric5.png");
         public static final TextureCache electric6 = new TextureCache("images/pcl/effects/Electric6.png");
         public static final TextureCache electric7 = new TextureCache("images/pcl/effects/Electric7.png");
-        public static final TextureCache fireBurst = new TextureCache("images/pcl/effects/FireBurst.png");
-        public static final TextureCache fireParticle1 = new TextureCache("images/pcl/effects/FireParticle1.png");
-        public static final TextureCache fireParticle2 = new TextureCache("images/pcl/effects/FireParticle2.png");
-        public static final TextureCache fireParticle3 = new TextureCache("images/pcl/effects/FireParticle3.png");
         public static final TextureCache frostSnow1 = new TextureCache("images/pcl/effects/FrostSnow1.png");
         public static final TextureCache frostSnow2 = new TextureCache("images/pcl/effects/FrostSnow2.png");
         public static final TextureCache frostSnow3 = new TextureCache("images/pcl/effects/FrostSnow3.png");
@@ -210,19 +206,15 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache punch = new TextureCache("images/pcl/effects/Punch.png");
         public static final TextureCache shot = new TextureCache("images/pcl/effects/Shot.png");
         public static final TextureCache slice = new TextureCache("images/pcl/effects/Slice.png");
+        public static final TextureCache smoke1 = new TextureCache("images/pcl/effects/Smoke1.png");
+        public static final TextureCache smoke2 = new TextureCache("images/pcl/effects/Smoke2.png");
+        public static final TextureCache smoke3 = new TextureCache("images/pcl/effects/Smoke3.png");
         public static final TextureCache spark1 = new TextureCache("images/pcl/effects/Spark1.png");
         public static final TextureCache spark2 = new TextureCache("images/pcl/effects/Spark2.png");
-        public static final TextureCache sparkle1 = new TextureCache("images/pcl/effects/Sparkle1.png");
-        public static final TextureCache sparkle2 = new TextureCache("images/pcl/effects/Sparkle2.png");
-        public static final TextureCache sparkle3 = new TextureCache("images/pcl/effects/Sparkle3.png");
-        public static final TextureCache sparkle4 = new TextureCache("images/pcl/effects/Sparkle4.png");
-        public static final TextureCache star = new TextureCache("images/pcl/effects/Star.png");
-        public static final TextureCache star2 = new TextureCache("images/pcl/effects/Star2.png");
         public static final TextureCache waterBubble = new TextureCache("images/pcl/effects/WaterBubble.png");
         public static final TextureCache waterSplash1 = new TextureCache("images/pcl/effects/WaterSplash1.png");
         public static final TextureCache waterSplash2 = new TextureCache("images/pcl/effects/WaterSplash2.png");
         public static final TextureCache waterSplash3 = new TextureCache("images/pcl/effects/WaterSplash3.png");
-        public static final TextureCache whack = new TextureCache("images/pcl/effects/Whack.png");
     }
 
     public static class Tutorial {

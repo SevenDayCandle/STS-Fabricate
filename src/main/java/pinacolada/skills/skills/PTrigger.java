@@ -245,19 +245,12 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return false;
     }
 
-    // TODO call through a separate method to avoid being called when played in the hand normally
+    // Triggers can only activate through subscribers or clickables
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (usesThisTurn != 0) {
-            if (usesThisTurn > 0) {
-                usesThisTurn -= 1;
-                updateCounter();
-            }
-            flash();
-            this.childEffect.use(info, order);
-        }
     }
 
+    // Called when executed through a clickable
     @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (usesThisTurn != 0) {

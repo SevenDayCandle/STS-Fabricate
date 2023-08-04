@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLAction;
@@ -13,7 +12,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.VFX;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -126,7 +124,7 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     }
 
     public DealDamageToAll setDamageEffect(EffekseerEFK effekseerKey) {
-        this.onDamageEffect = (m, __) -> VFX.eFX(effekseerKey, m.hb);
+        this.onDamageEffect = (m, __) -> EffekseerEFK.efk(effekseerKey, m.hb);
         return this;
     }
 

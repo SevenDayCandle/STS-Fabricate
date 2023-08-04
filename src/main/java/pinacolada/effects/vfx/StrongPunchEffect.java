@@ -3,6 +3,10 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.vfx.combat.DamageImpactCurvyEffect;
+import com.megacrit.cardcrawl.vfx.combat.DamageImpactLineEffect;
+import com.megacrit.cardcrawl.vfx.combat.StrikeEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
@@ -17,7 +21,7 @@ public class StrongPunchEffect extends VisualEffect {
     public StrongPunchEffect(float x, float y, float baseScale) {
         super(1f, x, y, 300f, Math.max(baseScale, 1));
         this.baseScale = this.scale;
-        this.vRot = 600f;
+        this.vRot = 800f;
         this.color = Color.WHITE.cpy();
     }
 
@@ -38,7 +42,14 @@ public class StrongPunchEffect extends VisualEffect {
         vfxTimer -= deltaTime / duration;
         if (vfxTimer < 0f) {
             if (!triggered) {
-                PCLEffects.Queue.add(VFX.whack(x, y).setColor(Color.SCARLET)).setScale(2);
+                // TODO use generic render effect
+                int i = 0;
+                for(i = 0; i < 18; ++i) {
+                    PCLEffects.Queue.add(new DamageImpactLineEffect(x, y));
+                }
+                for(i = 0; i < 5; ++i) {
+                    PCLEffects.Queue.add(new DamageImpactCurvyEffect(x, y));
+                }
                 PCLSFX.play(PCLSFX.PCL_PUNCH, 0.7f, 0.8f);
                 triggered = true;
             }
@@ -49,7 +60,7 @@ public class StrongPunchEffect extends VisualEffect {
         }
         else {
             this.rotation += vRot * deltaTime / duration;
-            this.scale = Interpolation.linear.apply(1, this.baseScale, duration);
+            this.scale = Interpolation.linear.apply(0.02f, this.baseScale, duration);
         }
 
         super.updateInternal(deltaTime);

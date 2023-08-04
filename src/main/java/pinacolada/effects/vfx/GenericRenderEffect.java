@@ -4,61 +4,52 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import pinacolada.effects.PCLEffect;
+import com.badlogic.gdx.math.Interpolation;
+import extendedui.utilities.EUIColors;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class GenericRenderEffect extends PCLEffect {
-    private final float x;
-    private final float y;
-    public final TextureRegion image;
-    private boolean flipX;
-    private boolean flipY;
-    private float rotationSpeed;
+public class GenericRenderEffect extends VisualEffect {
+    public TextureRegion region;
+    protected float alpha = 1;
 
     public GenericRenderEffect(Texture texture, float x, float y) {
         this(new TextureRegion(texture), x, y);
     }
 
     public GenericRenderEffect(TextureRegion region, float x, float y) {
-        super(0.6f, true);
-
-        this.image = region;
+        super(0.6f, x, y, 0, 1);
+        this.isRealtime = true;
+        this.region = region;
         this.color = Color.WHITE.cpy();
-        this.scale = 1;
-        this.x = x;
-        this.y = y;
 
-        if (image == null) {
+        if (this.region == null) {
             complete();
         }
     }
 
     @Override
-    protected void firstUpdate() {
-        updateInternal(getDeltaTime());
-    }
-
-    public GenericRenderEffect setRotation(float degrees) {
-        super.setRotation(degrees);
-
-        return this;
-    }
-
-    @Override
     public void render(SpriteBatch sb) {
-        if (this.image != null) {
-            PCLRenderHelpers.drawCentered(sb, color, image, x, y, image.getRegionWidth(), image.getRegionHeight(), scale, rotation, flipX, flipY);
+        if (this.region != null) {
+            PCLRenderHelpers.drawCentered(sb, color, region, x, y, region.getRegionWidth(), region.getRegionHeight(), scale, rotation, flipX, flipY);
         }
     }
 
-    @Override
-    public void dispose() {
-    }
-
-    public GenericRenderEffect flip(boolean horizontally, boolean vertically) {
-        this.flipX = horizontally;
-        this.flipY = vertically;
+    public GenericRenderEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
+        updateParameters(deltaTime);
+
+        final float halfDuration = startingDuration * 0.5f;
+        if (this.duration < halfDuration) {
+            float aMult = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
+            this.color.a = this.color.a * aMult;
+        }
     }
 }

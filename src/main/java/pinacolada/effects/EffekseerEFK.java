@@ -1,8 +1,12 @@
 package pinacolada.effects;
 
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.Hitbox;
 import extendedui.EUIUtils;
 import extendedui.STSEffekseerManager;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.effects.vfx.EffekseerEffect;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -130,6 +134,18 @@ public class EffekseerEFK {
         this.path = path;
         this.ID = id;
         ALL.putIfAbsent(ID, this);
+    }
+
+    public static EffekseerEffect efk(EffekseerEFK key) {
+        return efk(key, Settings.WIDTH * 0.75f, AbstractDungeon.player != null ? AbstractDungeon.player.hb.cY : Settings.HEIGHT * 0.35f);
+    }
+
+    public static EffekseerEffect efk(EffekseerEFK key, float x, float y) {
+        return new EffekseerEffect(key, x, y);
+    }
+
+    public static EffekseerEffect efk(EffekseerEFK key, Hitbox hb) {
+        return efk(key, hb.cX, hb.cY);
     }
 
     public static EffekseerEFK get(String id) {

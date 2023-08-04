@@ -65,8 +65,6 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private TextureRegion insideImageRenderable;
     private TextureRegion outsideImage;
     private PCLEffectWithCallback<?> curEffect;
-    protected float minZoom;
-    protected float maxZoom = 1f;
     protected float scale = 1f;
     protected int targetWidth = CARD_IMG_WIDTH;
     protected int targetHeight = CARD_IMG_HEIGHT;
@@ -357,7 +355,6 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             //hb.SetBounds(texture.getWidth() * Settings.scale * 0.5f, texture.getWidth() * Settings.scale * 1.5f, texture.getWidth() * Settings.scale * -0.5f, texture.getHeight() * Settings.scale);
 
             baseTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
-            minZoom = Math.max(targetWidth / baseTexture.getWidth(), targetHeight / baseTexture.getHeight());
             zoomBar.setActive(true);
             updateZoom(1f);
             instructionsLabel.setLabel(PGR.core.strings.cetut_imageCrop);
@@ -382,7 +379,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void updateZoom(float scrollPercentage) {
         zoomBar.scroll(scrollPercentage, false);
-        scale = MathUtils.lerp(minZoom, maxZoom, scrollPercentage);
+        scale = MathUtils.lerp(0f, 1f, scrollPercentage);
 
         updatePictures();
     }

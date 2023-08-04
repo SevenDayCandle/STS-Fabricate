@@ -14,8 +14,8 @@ public class PsychokinesisEffect extends PCLEffect {
     protected float spreadX = 10f * Settings.scale;
     protected float spreadY = 10f * Settings.scale;
     protected float spreadGrowth = 2.2f * Settings.scale;
-    protected float scaleLower = 0.2f;
-    protected float scaleUpper = 1.35f;
+    protected float scaleLower = 0.4f;
+    protected float scaleUpper = 1.4f;
     protected float scaleGrowth = -0.020f;
     protected float vfxTimer;
     protected float vfxFrequency = 0.04f;
@@ -59,16 +59,15 @@ public class PsychokinesisEffect extends PCLEffect {
         if (vfxTimer < 0f) {
             final float x = this.x + random(-spreadX, spreadX);
             final float y = this.y + random(-spreadY, spreadY);
-            final float scale = random(Math.max(0.05f, this.scaleLower), this.scaleUpper);
+            final float scale = random(scaleLower, this.scaleUpper);
             final Color color = new Color(MathUtils.random(0.8f, 1f), MathUtils.random(0.7f, 1f), 1, 1);
             if (randomBoolean(0.2f)) {
                 PCLEffects.Queue.particle(PCLCoreImages.Effects.circle.texture(), x, y)
                                 .setColor(EUIColors.random(0.83f, 1f, false))
-                                .setScaleTarget(this.scaleLower * 0.05f, scale * 0.3f, 5f)
-                        .setDuration(1.5f, true);
+                                .setScaleTarget(this.scaleLower * 0.05f, scale * 0.2f, 5f);
             }
             else {
-                PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.01f)
+                PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.011f)
                         .setScaleTarget(this.scaleLower * 0.05f, scale, 5f)
                         .setColor(EUIColors.random(0.83f, 1f, false)));
             }
