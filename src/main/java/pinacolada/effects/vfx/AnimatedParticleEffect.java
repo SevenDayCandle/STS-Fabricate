@@ -93,7 +93,7 @@ public class AnimatedParticleEffect extends VisualEffect {
         super.updateInternal(delta);
         updateParameters(delta);
 
-        this.color = EUIColors.lerp(this.color, targetColor, delta * colorSpeed);
+        EUIColors.lerp(this.color, targetColor, delta * colorSpeed);
 
         final float halfDuration = startingDuration * 0.5f;
         if (this.duration < halfDuration) {

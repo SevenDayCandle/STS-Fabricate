@@ -83,6 +83,14 @@ public abstract class PCLEffect extends AbstractGameEffect {
         return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
     }
 
+    protected void initialize() {
+        this.duration = startingDuration;
+        this.isDone = false;
+        this.ticks = 0;
+        this.renderBehind = false;
+        this.isRealtime = false;
+    }
+
     public PCLEffect renderBehind(boolean value) {
         renderBehind = value;
 
@@ -108,16 +116,18 @@ public abstract class PCLEffect extends AbstractGameEffect {
     }
 
     public PCLEffect setColor(Color color) {
-        if (color != null) {
-            if (this.color == null) {
-                this.color = new Color(color.r, color.g, color.b, color.a);
-            }
-            else {
-                this.color.r = color.r;
-                this.color.g = color.g;
-                this.color.b = color.b;
-                this.color.a = color.a;
-            }
+        return color != null ? setColor(color.r, color.g, color.b, color.a) : this;
+    }
+
+    public PCLEffect setColor(Float r, Float g, Float b, Float a) {
+        if (this.color == null) {
+            this.color = new Color(r, g, b, a);
+        }
+        else {
+            this.color.r = r;
+            this.color.g = g;
+            this.color.b = b;
+            this.color.a = a;
         }
 
         return this;

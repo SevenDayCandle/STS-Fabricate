@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
@@ -41,16 +42,26 @@ public class TornadoEffect extends VisualEffect {
         vfxTimer -= deltaTime;
 
         if (vfxTimer < 0f) {
-            final float pX = this.x + random(-spreadX, spreadX);
-            final float pY = this.y + random(-spreadY, spreadY);
+            float pX = this.x + random(-spreadX, spreadX);
+            float pY = this.y + random(-spreadY, spreadY);
             final float speed = random(15f, 39f) * Settings.scale;
             PCLEffects.Queue.trail(randomTexture(IMAGES_WIND), this::onTrail, pX, pY)
+                    .setBlendingMode(EUIRenderHelpers.BlendingMode.Glowing)
                     .setColor(new Color(MathUtils.random(0.9f, 1f), 1f, MathUtils.random(0.9f, 1f), 1))
                     .setSpeed(speed, speed)
                     .setRotation(random(-300f, 300f), random(500f, 800f))
-                    .setScale(random(0.04f, 0.75f))
+                    .setScale(random(0.06f, 0.9f))
                     .setRadial(true)
                     .setDuration(0.75f, true);
+            pX = this.x + random(-spreadX, spreadX);
+            pY = this.y + random(-spreadY, spreadY);
+            PCLEffects.Queue.particle(EUIUtils.random(IMAGES_AIR).texture(), pX, pY)
+                    .setSpeed(random(-300f, 300f), random(-300f, 300f))
+                    .setScale(random(0.04f, 0.6f))
+                    .setColor(new Color(MathUtils.random(0.8f, 1f), 1f, MathUtils.random(0.8f, 1f), 1))
+                    .setBlendingMode(EUIRenderHelpers.BlendingMode.Glowing)
+                    .setOpacity(random(0.3F, 1.0F))
+                    .setRotation(random(-10f, 10f), randomBoolean() ? random(-800f, -500f) : random(500f, 800f));
             vfxTimer = vfxFrequency;
         }
 
@@ -58,7 +69,6 @@ public class TornadoEffect extends VisualEffect {
     }
 
     protected void onTrail(TrailingParticleEffect effect) {
-        PCLEffects.Queue.particle(EUIUtils.random(IMAGES_AIR).texture(), effect.x, effect.y).setSpeed(random(-300f, 300f), random(-300f, 300f));
         PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, Color.LIME.cpy()));
     }
 }

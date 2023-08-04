@@ -5,7 +5,6 @@ import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.esotericsoftware.spine.*;
@@ -35,7 +34,7 @@ import java.util.Map;
 public abstract class PCLCreature extends CustomMonster implements IntentProvider {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
     protected static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 1f);
-    protected static final Color TAKEN_TURN_NUMBER_COLOR = EUIColors.lerp(Color.GRAY, Settings.CREAM_COLOR, 0.75f);
+    protected static final Color TAKEN_TURN_NUMBER_COLOR = EUIColors.lerpNew(Color.GRAY, Settings.CREAM_COLOR, 0.75f);
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;

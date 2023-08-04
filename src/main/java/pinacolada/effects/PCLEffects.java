@@ -196,11 +196,11 @@ public final class PCLEffects {
     }
 
     public TrailingParticleEffect trail(Texture texture, ActionT1<TrailingParticleEffect> onTrail, float x, float y) {
-        return add(TrailingParticleEffect.obtain(texture, onTrail, x, y));
+        return add(TrailingParticleEffect.obtainTrail(texture, onTrail, x, y));
     }
 
     public TrailingParticleEffect trail(Texture texture, ActionT1<TrailingParticleEffect> onTrail, float x, float y, float rot, float scale) {
-        return add(TrailingParticleEffect.obtain(texture, onTrail, x, y, rot, scale));
+        return add(TrailingParticleEffect.obtainTrail(texture, onTrail, x, y, rot, scale));
     }
 
 

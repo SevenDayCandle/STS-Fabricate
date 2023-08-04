@@ -180,7 +180,7 @@ public abstract class PCLOrb extends AbstractOrb {
     @Override
     public void triggerEvokeAnimation() {
         for (int i = 0; i < 4; i++) {
-            PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerp(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
+            PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerpNew(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
         }
     }
 }

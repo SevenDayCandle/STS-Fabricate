@@ -48,14 +48,13 @@ public class VisualEffect extends PCLEffect {
     }
 
     protected void initialize(float x, float y, float rot, float scale) {
+        super.initialize();
         this.x = x;
         this.y = y;
         this.rotation = rot;
         this.scale = scale;
         this.vX = this.vY = this.vRot = this.vScale = this.aX = this.aY = this.aRot = this.aScale = 0;
         this.flipX = this.flipY = this.radial = false;
-        this.duration = startingDuration;
-        this.isDone = false;
     }
 
     public VisualEffect setAcceleration(float aX, float aY) {

@@ -69,7 +69,7 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
                 angle = tmp.nor().angle() + 270f;
             }
 
-            sb.setColor(EUIColors.lerp(c1, c2, divisor));
+            sb.setColor(EUIColors.lerpNew(c1, c2, divisor));
             sb.draw(texture, cur.x - origin, cur.y - origin, origin, origin, texture.getWidth(), texture.getHeight(), scale, scale, angle, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
             scale += scaleGrowth;
         }

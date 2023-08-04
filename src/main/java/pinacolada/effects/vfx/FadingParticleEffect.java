@@ -37,12 +37,6 @@ public class FadingParticleEffect extends VisualEffect {
         free();
     }
 
-    public FadingParticleEffect setColor(Color color) {
-        super.setColor(color);
-        this.targetColor = this.color.cpy();
-        return this;
-    }
-
     @Override
     public void render(SpriteBatch sb) {
         if (blendingMode != PCLRenderHelpers.BlendingMode.Normal) {
@@ -64,7 +58,7 @@ public class FadingParticleEffect extends VisualEffect {
     protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
         updateParameters(deltaTime);
-        this.color = EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
+        EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
 
         final float halfDuration = startingDuration * 0.5f;
         if (this.duration < halfDuration) {
@@ -78,14 +72,13 @@ public class FadingParticleEffect extends VisualEffect {
     }
 
     protected void initialize(Texture texture, float x, float y, float rot, float scale) {
+        super.initialize(x, y, rot, scale);
         this.texture = texture;
-        this.x = x;
-        this.y = y;
-        this.rotation = rot;
-        this.scale = scale;
         this.alpha = 1.0F;
-        this.duration = startingDuration;
-        this.isDone = false;
+        this.colorSpeed = 1f;
+        this.blendingMode = PCLRenderHelpers.BlendingMode.Normal;
+        this.color.set(Color.WHITE);
+        this.targetColor.set(this.color);
     }
 
     public FadingParticleEffect setAcceleration(float aX, float aY) {
@@ -189,9 +182,15 @@ public class FadingParticleEffect extends VisualEffect {
         return this;
     }
 
+    public FadingParticleEffect setColor(Color color) {
+        super.setColor(color);
+        this.targetColor.set(this.color);
+        return this;
+    }
+
     public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
-        super.setColor(new Color(r, g, b, a));
-        this.targetColor = this.color.cpy();
+        super.setColor(r, g, b, a);
+        this.targetColor.set(this.color);
         return this;
     }
 

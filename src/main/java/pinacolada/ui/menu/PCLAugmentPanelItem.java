@@ -26,7 +26,7 @@ import static pinacolada.ui.combat.PCLPlayerMeter.makeTitle;
 
 public class PCLAugmentPanelItem extends PCLTopPanelItem {
     public static final String ID = createFullID(PCLAugmentPanelItem.class);
-    protected Color currentColor = Color.WHITE;
+    protected Color currentColor = Color.WHITE.cpy();
     protected float lerpAmount = 1;
 
     public PCLAugmentPanelItem() {
@@ -35,7 +35,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     }
 
     public void flash() {
-        currentColor = Settings.GREEN_TEXT_COLOR;
+        currentColor.set(Settings.GREEN_TEXT_COLOR);
         lerpAmount = 0;
     }
 
@@ -74,7 +74,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
             onClick();
         }
         if (lerpAmount < 1) {
-            currentColor = EUIColors.lerp(Settings.GREEN_TEXT_COLOR, Color.WHITE, lerpAmount);
+            EUIColors.lerp(currentColor, Settings.GREEN_TEXT_COLOR, Color.WHITE, lerpAmount);
             lerpAmount += Gdx.graphics.getDeltaTime();
         }
     }
