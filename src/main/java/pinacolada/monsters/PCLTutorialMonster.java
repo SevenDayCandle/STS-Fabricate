@@ -93,10 +93,9 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
 
     public void onComplete() {
         PCLSFX.play(PCLSFX.TINGSHA);
-        PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
+        PCLEffects.Queue.particle(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
                 .setTargetPosition(Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.68f)
-                .setDuration(1.8f, true)
-        );
+                .setDuration(1.8f, true);
         if (current < steps.size() - 1) {
             EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
                     PGR.core.strings.tutorial_tutorialStepHeader, PGR.core.strings.tutorial_tutorialNextStep).setCanDismiss(true));

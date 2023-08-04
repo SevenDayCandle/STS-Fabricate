@@ -49,10 +49,10 @@ public class CircularWaveEffect extends PCLEffect {
         vfxTimer -= deltaTime;
 
         if (vfxTimer < 0f) {
-            PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle2.texture(), x, y)
+            PCLEffects.Queue.particle(PCLCoreImages.Effects.circle2.texture(), x, y)
                             .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                             .setColor(color, endColor, 2f)
-                            .setScaleTarget(scaleLower, scaleUpper, 1f))
+                            .setScaleTarget(scaleLower, scaleUpper, 1f)
                     .setDuration(startingDuration * 1.5f, true);
             vfxTimer = vfxFrequency;
         }

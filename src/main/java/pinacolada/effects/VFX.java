@@ -238,7 +238,7 @@ public class VFX {
     }
 
     public static FadingParticleEffect water(float cX, float cY) {
-        return (FadingParticleEffect) new FadingParticleEffect(PCLCoreImages.Effects.waterSplash1.texture(), cX, cY).setColor(Color.WHITE)
+        return (FadingParticleEffect) FadingParticleEffect.obtain(PCLCoreImages.Effects.waterSplash1.texture(), cX, cY).setColor(Color.WHITE)
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setOpacity(MathUtils.random(0.7f, 1f))
                 .setDuration(1.3f, false);
@@ -249,7 +249,7 @@ public class VFX {
     }
 
     public static FadingParticleEffect water2(float cX, float cY) {
-        return (FadingParticleEffect) new FadingParticleEffect(PCLCoreImages.Effects.waterSplash2.texture(), cX, cY).setColor(Color.WHITE)
+        return (FadingParticleEffect) FadingParticleEffect.obtain(PCLCoreImages.Effects.waterSplash2.texture(), cX, cY).setColor(Color.WHITE)
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setOpacity(MathUtils.random(0.7f, 1f))
                 .setDuration(1.3f, false);

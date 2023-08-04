@@ -61,12 +61,12 @@ public class RazorWindEffect extends PCLEffect {
         if (vfxTimer < 0f) {
             PCLEffects.Queue.add(new RazorWindParticleEffect(x, y + (random(-100, 100) * Settings.scale),
                     random(-300f, -50f) * Math.signum(horizontalSpeed), random(-200f, 200f)));
-            PCLEffects.Queue.add(new FadingParticleEffect(image.texture(), x, y)
+            PCLEffects.Queue.particle(image.texture(), x, y)
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                     .setOpacity(0.5f)
                     .setColor(new Color(MathUtils.random(0.8f, 1f), 1f, MathUtils.random(0.8f, 1f), 0.5f))
                     .setRotation(rotation)
-                    .setScale(scale).setRotation(0, random(300f, 400f)));
+                    .setScale(scale).setRotation(0, random(300f, 400f));
             PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));
             vfxTimer = vfxFrequency;
         }

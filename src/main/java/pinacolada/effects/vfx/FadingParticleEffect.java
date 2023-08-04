@@ -5,92 +5,41 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.core.Settings;
-import extendedui.utilities.ColoredTexture;
+import com.badlogic.gdx.utils.Pool;
 import extendedui.utilities.EUIColors;
-import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class FadingParticleEffect extends PCLEffect {
-    protected final ColoredTexture texture;
+public class FadingParticleEffect extends VisualEffect {
+    protected static final ParticlePool effectPool = new ParticlePool();
     protected Color targetColor;
-    protected float colorSpeed = 1;
     protected PCLRenderHelpers.BlendingMode blendingMode = PCLRenderHelpers.BlendingMode.Normal;
-    protected float x;
-    protected float y;
-    protected float rot;
-    protected float scale;
-    protected float vX;
-    protected float vY;
-    protected float vRot;
-    protected float vScale;
-    protected float aX;
-    protected float aY;
-    protected float aRot;
-    protected float aScale;
+    protected Texture texture;
     protected float alpha;
-    protected boolean flipX;
-    protected boolean flipY;
+    protected float colorSpeed = 1;
 
-    public FadingParticleEffect(Texture texture, float x, float y) {
-        this(texture, x, y, 0, 1);
-    }
-
-    public FadingParticleEffect(Texture texture, float x, float y, float rot, float scale) {
-        super(Settings.ACTION_DUR_FAST, false);
+    // Pool only
+    protected FadingParticleEffect() {
+        super();
         this.color = Color.WHITE.cpy();
         this.targetColor = this.color.cpy();
-        this.texture = new ColoredTexture(texture);
-        this.x = x;
-        this.y = y;
-        this.rot = rot;
-        this.scale = scale;
-        this.alpha = 1.0F;
     }
 
-    public FadingParticleEffect setAcceleration(float aX, float aY) {
-        this.aX = aX;
-        this.aY = aY;
-
-        return this;
+    public static FadingParticleEffect obtain(Texture texture, float x, float y) {
+        return obtain(texture, x, y, 0, 1);
     }
 
-    public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
-        this.blendingMode = blendingMode;
-        return this;
+    public static FadingParticleEffect obtain(Texture texture, float x, float y, float rot, float scale) {
+        return obtain(texture, x, y, rot, scale);
     }
 
-    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
-        super.setColor(new Color(r, g, b, a));
-        texture.setColor(r, g, b, a);
-        this.targetColor = this.color.cpy();
-        return this;
-    }
-
-    public FadingParticleEffect setColor(Color color, Color targetColor, float colorSpeed) {
-        setColor(color);
-        texture.setColor(color);
-        this.targetColor = targetColor;
-        this.colorSpeed = colorSpeed;
-        return this;
+    protected void complete() {
+        super.complete();
+        free();
     }
 
     public FadingParticleEffect setColor(Color color) {
         super.setColor(color);
-        texture.setColor(color);
         this.targetColor = this.color.cpy();
-        return this;
-    }
-
-    public FadingParticleEffect setRotation(float startRotation) {
-        this.rot = startRotation;
-
-        return this;
-    }
-
-    public FadingParticleEffect setScale(float scale) {
-        this.scale = scale;
-
         return this;
     }
 
@@ -98,11 +47,11 @@ public class FadingParticleEffect extends PCLEffect {
     public void render(SpriteBatch sb) {
         if (blendingMode != PCLRenderHelpers.BlendingMode.Normal) {
             blendingMode.apply(sb);
-            PCLRenderHelpers.drawCentered(sb, color, texture.texture, x, y, texture.getWidth(), texture.getHeight(), scale, rot, flipX, flipY);
+            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
             PCLRenderHelpers.BlendingMode.Normal.apply(sb);
         }
         else {
-            PCLRenderHelpers.drawCentered(sb, color, texture.texture, x, y, texture.getWidth(), texture.getHeight(), scale, rot, flipX, flipY);
+            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
         }
     }
 
@@ -114,15 +63,7 @@ public class FadingParticleEffect extends PCLEffect {
     @Override
     protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
-        float deltaScale = deltaTime * Settings.scale;
-        this.x += vX * deltaScale;
-        this.y += vY * deltaScale;
-        this.rot += vRot * deltaTime;
-        this.scale += vScale * deltaTime;
-        this.vX += aX * deltaScale;
-        this.vY += aY * deltaScale;
-        this.vRot += aRot * deltaTime;
-        this.vScale += aScale * deltaTime;
+        updateParameters(deltaTime);
         this.color = EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
 
         final float halfDuration = startingDuration * 0.5f;
@@ -132,16 +73,29 @@ public class FadingParticleEffect extends PCLEffect {
         }
     }
 
-    public FadingParticleEffect setFlip(boolean flipX, boolean flipY) {
-        this.flipX = flipX;
-        this.flipY = flipY;
+    protected void free() {
+        effectPool.free(this);
+    }
+
+    protected void initialize(Texture texture, float x, float y, float rot, float scale) {
+        this.texture = texture;
+        this.x = x;
+        this.y = y;
+        this.rotation = rot;
+        this.scale = scale;
+        this.alpha = 1.0F;
+    }
+
+    public FadingParticleEffect setAcceleration(float aX, float aY) {
+        this.aX = aX;
+        this.aY = aY;
 
         return this;
     }
 
-    public FadingParticleEffect setOpacity(float alpha) {
-        this.alpha = alpha;
-        this.color.a = this.alpha;
+    public FadingParticleEffect setFlip(boolean flipX, boolean flipY) {
+        this.flipX = flipX;
+        this.flipY = flipY;
 
         return this;
     }
@@ -154,22 +108,34 @@ public class FadingParticleEffect extends PCLEffect {
     }
 
     public FadingParticleEffect setRotation(float startRotation, float speed) {
-        this.rot = startRotation;
+        this.rotation = startRotation;
         this.vRot = speed;
 
         return this;
     }
 
     public FadingParticleEffect setRotation(float startRotation, float speed, float accel) {
-        this.rot = startRotation;
+        this.rotation = startRotation;
         this.vRot = speed;
         this.aRot = accel;
 
         return this;
     }
 
+    public FadingParticleEffect setRotation(float startRotation) {
+        this.rotation = startRotation;
+
+        return this;
+    }
+
+    public FadingParticleEffect setScale(float scale) {
+        this.scale = scale;
+
+        return this;
+    }
+
     public FadingParticleEffect setRotationTarget(float startRotation, float target, float speed) {
-        this.rot = startRotation;
+        this.rotation = startRotation;
         this.vRot = (target - startRotation) / speed;
 
         return this;
@@ -214,5 +180,48 @@ public class FadingParticleEffect extends PCLEffect {
         this.vY = MathUtils.sin(angle) * speed;
 
         return this;
+    }
+
+    public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
+        this.blendingMode = blendingMode;
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
+        super.setColor(new Color(r, g, b, a));
+        this.targetColor = this.color.cpy();
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Color color, Color targetColor, float colorSpeed) {
+        setColor(color);
+        this.targetColor = targetColor;
+        this.colorSpeed = colorSpeed;
+        return this;
+    }
+
+    public FadingParticleEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
+
+        return this;
+    }
+
+    protected static class ParticlePool extends Pool<FadingParticleEffect> {
+
+        public ParticlePool() {
+            super(60, 4000);
+        }
+
+        @Override
+        protected FadingParticleEffect newObject() {
+            return new FadingParticleEffect();
+        }
+
+        public FadingParticleEffect obtain(Texture texture, float x, float y, float rot, float scale) {
+            FadingParticleEffect particle = obtain();
+            particle.initialize(texture, x, y, rot, scale);
+            return particle;
+        }
     }
 }

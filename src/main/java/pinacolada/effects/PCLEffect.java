@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Pool;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.random.Random;
@@ -15,7 +16,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLEffect extends AbstractGameEffect {
+public abstract class PCLEffect extends AbstractGameEffect implements Pool.Poolable {
     public final static Hitbox SKY_HB_L = new Hitbox(Settings.WIDTH * 0.48f, Settings.HEIGHT * 0.7f, 2, 2);
     public final static Hitbox SKY_HB_R = new Hitbox(Settings.WIDTH * 0.52f, Settings.HEIGHT * 0.7f, 2, 2);
     public final static Hitbox SKY_HB_LOW_L = new Hitbox(Settings.WIDTH * 0.48f, Settings.HEIGHT * 0.5f, 2, 2);
@@ -104,6 +105,12 @@ public abstract class PCLEffect extends AbstractGameEffect {
         sb.setBlendFunction(blendingMode.srcFunc, blendingMode.dstFunc);
         PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.getWidth(), img.getHeight(), scale, rotation, flipX, flipY);
         sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    @Override
+    public void reset() {
+        this.duration = this.startingDuration;
+        isDone = false;
     }
 
     public PCLEffect setColor(Color color) {

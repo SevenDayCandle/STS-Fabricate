@@ -1,6 +1,7 @@
 package pinacolada.effects;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -25,6 +26,7 @@ import pinacolada.effects.player.SpawnRelicEffect;
 import pinacolada.effects.utility.ActionCallbackEffect;
 import pinacolada.effects.utility.EffectCallbackEffect;
 import pinacolada.effects.vfx.EffekseerEffect;
+import pinacolada.effects.vfx.FadingParticleEffect;
 
 import java.util.ArrayList;
 
@@ -130,6 +132,14 @@ public final class PCLEffects {
 
     public ObtainRelicEffect obtainRelic(AbstractRelic relic) {
         return add(new ObtainRelicEffect(relic));
+    }
+
+    public FadingParticleEffect particle(Texture texture, float x, float y) {
+        return add(FadingParticleEffect.obtain(texture, x, y));
+    }
+
+    public FadingParticleEffect particle(Texture texture, float x, float y, float rot, float scale) {
+        return add(FadingParticleEffect.obtain(texture, x, y, rot, scale));
     }
 
     public EffekseerEffect playEFX(EffekseerEFK key, float x, float y) {

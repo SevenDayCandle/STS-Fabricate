@@ -86,12 +86,12 @@ public class HexagonEffect extends PCLEffect {
             color.a = Interpolation.sine.apply(0.8f, 1f, this.flashFrequency);
             vfxTimer -= deltaTime;
             if (vfxTimer < 0f) {
-                PCLEffects.Queue.add(new FadingParticleEffect(this.img, this.x + SIZE * MathUtils.cos(rotation), this.y + SIZE * MathUtils.sin(rotation))
+                PCLEffects.Queue.particle(this.img, this.x + SIZE * MathUtils.cos(rotation), this.y + SIZE * MathUtils.sin(rotation))
                                 .setOpacity(0.75f)
                                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                                 .setColor(this.color.cpy())
                                 .setRotation(36000f, vR)
-                                .setScale(scale * 0.75f, 3f))
+                                .setScale(scale * 0.75f, 3f)
                         .setDuration(1f, true);
                 vfxTimer = vfxFrequency;
             }

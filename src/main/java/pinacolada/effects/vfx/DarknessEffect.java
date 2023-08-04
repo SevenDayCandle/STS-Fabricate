@@ -24,12 +24,12 @@ public class DarknessEffect extends PCLEffect {
     @Override
     protected void updateInternal(float deltaTime) {
         for (int i = images.length - 1; i >= 0; i--) {
-            PCLEffects.Queue.add(new FadingParticleEffect(images[i].texture(), x, y)
+            PCLEffects.Queue.particle(images[i].texture(), x, y)
                     .setColor(new Color(0.47f, 0.35f, 0.6f, 0.3f))
                     .setBlendingMode(i <= 2 ? PCLRenderHelpers.BlendingMode.Glowing : PCLRenderHelpers.BlendingMode.Normal)
                     .setScaleTarget(scale * MathUtils.random(0.1f, i < 2 ? 0.4f : 0.2f), scale * MathUtils.random(1.7f, i < 2 ? 2f : 1.2f), 2.2f)
                     .setRotation(MathUtils.random(-800f, 800f), MathUtils.random(400, 800f) * i % 2 == 0 ? -1 : 1)
-                    .setDuration(MathUtils.random(0.8F, 1.0F), true));
+                    .setDuration(MathUtils.random(0.8F, 1.0F), true);
         }
 
         super.updateInternal(deltaTime);

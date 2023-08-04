@@ -14,14 +14,6 @@ import java.util.ArrayList;
 public class PointerToken extends PCLTextToken {
     public static final char TOKEN = '¦';
     public static final String DUMMY = "_.";
-    public static final ArrayList<Character> VALID_TOKENS = new ArrayList<>();
-
-    static {
-        VALID_TOKENS.add(PSkill.EFFECT_CHAR);
-        VALID_TOKENS.add(PSkill.XVALUE_CHAR);
-        VALID_TOKENS.add(PSkill.EXTRA_CHAR);
-    }
-
     protected final char variableID;
     protected final PSkill<?> move;
     private ColoredString coloredString;
@@ -54,7 +46,7 @@ public class PointerToken extends PCLTextToken {
 
     private static PointerToken tryCreateToken(PCLCard card, Character c, Character i) {
         PSkill<?> move = card != null ? card.getEffectAt(i) : null;
-        return VALID_TOKENS.contains(c) && move != null ? new PointerToken(c, move) : null;
+        return move != null ? new PointerToken(c, move) : null;
     }
 
     // X value will not show text unless in combat, but we need to make sure that it doesn't go over the line
