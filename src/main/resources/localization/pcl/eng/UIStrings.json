@@ -138,7 +138,8 @@
 												"Repeat",
 												"New Loadout",
 												"Rename Loadout",
-												"Delete Loadout"
+												"Delete Loadout",
+												"Invert"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -562,7 +563,7 @@
 												"from {0}",
 												"hits",
 												"intent",
-												"non-Attack",
+												"non-{0}",
 												"of {0}",
 												"permanently {0}",
 												"playing {0} with this in {1}",

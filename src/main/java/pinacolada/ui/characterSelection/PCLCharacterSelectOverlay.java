@@ -205,7 +205,17 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
 
         List<String> startingRelics = data.getStartingRelics();
-        relics.removeIf(r -> UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId));
+        relics.removeIf(r -> {
+            if (UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId)) {
+                return true;
+            }
+            for (PCLLoadout loadout : data.loadouts.values()) {
+                if (loadout.isRelicFromLoadout(r.relicId) && loadout.isLocked()) {
+                    return true;
+                }
+            }
+            return false;
+        });
 
         return relics;
     }

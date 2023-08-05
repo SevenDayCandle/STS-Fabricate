@@ -1077,17 +1077,11 @@ public class GameUtilities {
         return EUIUtils.map(PotionHelper.getPotions(EUIGameUtils.getPlayerClassForCardColor(cardColor), cardColor == null), PotionHelper::getPotion);
     }
 
-    public static <T extends AbstractPower> T getPower(AbstractCreature creature, String powerID) {
+    public static AbstractPower getPower(AbstractCreature creature, String powerID) {
         if (creature != null && creature.powers != null) {
             for (AbstractPower p : creature.powers) {
                 if (p != null && powerID.equals(p.ID)) {
-                    try {
-                        return (T) p;
-                    }
-                    catch (ClassCastException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return p;
                 }
             }
         }
@@ -1116,20 +1110,82 @@ public class GameUtilities {
         return getPowerAmount(AbstractDungeon.player, powerID);
     }
 
-    public static <T extends AbstractPower> ArrayList<T> getPowers(String powerID) {
+    public static int getPowerAmountMatching(AbstractCreature owner, String powerID) {
+        int res = 0;
+        if (owner != null && owner.powers != null) {
+            for (AbstractPower p : owner.powers) {
+                if (p != null && p.ID != null && p.ID.contains(powerID)) {
+                    res += p.canGoNegative ? p.amount : Math.max(1, p.amount);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public static int getPowerAmountMatching(String powerID) {
+        return getPowerAmountMatching(AbstractDungeon.player, powerID);
+    }
+
+    public static ArrayList<AbstractPower> getPowers(String powerID) {
         return getPowers(GameUtilities.getAllCharacters(true), powerID);
     }
 
-    public static <T extends AbstractPower> ArrayList<T> getPowers(List<AbstractCreature> creatures, String powerID) {
-        final ArrayList<T> result = new ArrayList<>();
+    public static ArrayList<AbstractPower> getPowers(List<AbstractCreature> creatures, String powerID) {
+        final ArrayList<AbstractPower> result = new ArrayList<>();
         for (AbstractCreature c : creatures) {
-            final T t = getPower(c, powerID);
+            final AbstractPower t = getPower(c, powerID);
             if (t != null) {
                 result.add(t);
             }
         }
 
         return result;
+    }
+
+    public static <T extends AbstractPower> ArrayList<T> getPowers(Class<T> powerType) {
+        return getPowers(GameUtilities.getAllCharacters(true), powerType);
+    }
+
+    public static <T extends AbstractPower> ArrayList<T> getPowers(List<AbstractCreature> creatures, Class<T> powerType) {
+        final ArrayList<T> result = new ArrayList<>();
+        for (AbstractCreature c : creatures) {
+            final T t = getPower(c, powerType);
+            if (t != null) {
+                result.add(t);
+            }
+        }
+
+        return result;
+    }
+
+    public static ArrayList<AbstractPower> getPowersMatching(String powerID) {
+        return getPowersMatching(GameUtilities.getAllCharacters(true), powerID);
+    }
+
+    public static ArrayList<AbstractPower> getPowersMatching(List<AbstractCreature> creatures, String powerID) {
+        final ArrayList<AbstractPower> result = new ArrayList<>();
+        for (AbstractCreature c : creatures) {
+            getPowerMatchingSingle(result, c, powerID);
+        }
+
+        return result;
+    }
+
+    public static ArrayList<AbstractPower> getPowerMatchingSingle(AbstractCreature creature, String powerID) {
+        return getPowerMatchingSingle(new ArrayList<>(), creature, powerID);
+    }
+
+    public static ArrayList<AbstractPower> getPowerMatchingSingle(ArrayList<AbstractPower> list, AbstractCreature creature, String powerID) {
+        if (creature != null && creature.powers != null) {
+            for (AbstractPower p : creature.powers) {
+                if (p != null && p.ID != null && p.ID.contains(powerID)) {
+                    list.add(p);
+                }
+            }
+        }
+
+        return list;
     }
 
     public static Random getRNG() {
@@ -1615,7 +1671,7 @@ public class GameUtilities {
     }
 
     public static boolean isObtainableInCombat(AbstractCard c) {
-        return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
+        return !c.hasTag(AbstractCard.CardTags.HEALING) && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
     }
 
     protected static boolean isOrbBlockGranting(AbstractOrb o) {

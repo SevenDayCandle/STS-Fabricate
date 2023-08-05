@@ -197,15 +197,28 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     return true;
                 });
             }
+
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> {
+                    if (bannedRelics.contains(relic)) {
+                        return true;
+                    }
+                    for (PCLLoadout loadout : data.loadouts.values()) {
+                        if (loadout.isRelicFromLoadout(relic) && loadout.isLocked()) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
         }
         else {
             for (CardGroup group : groups) {
                 group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
             }
-        }
-
-        for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-            relicPool.removeIf(relic -> bannedRelics.contains(relic));
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> bannedRelics.contains(relic));
+            }
         }
     }
 

@@ -7,9 +7,11 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleRelic;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +33,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
     public Integer[] counter = array(0);
     public Integer[] counterUpgrade = array(0);
+    public PCLLoadout loadout;
     public boolean unique = false;
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;
@@ -140,6 +143,16 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public PCLRelicData setImagePath(String imagePath) {
         this.imagePath = imagePath;
+
+        return this;
+    }
+
+    public PCLRelicData setLoadout(PCLLoadout loadout) {
+        this.loadout = loadout;
+
+        if (this.loadout != null) {
+            this.loadout.relics.add(this);
+        }
 
         return this;
     }

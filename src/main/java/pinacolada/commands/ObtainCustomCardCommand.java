@@ -50,12 +50,7 @@ public class ObtainCustomCardCommand extends ConsoleCommand {
             DevConsole.log("Obtained " + count + (count == 1 ? " copy of " : " copies of ") + tokens[1] + " with " + upgradeCount + " upgrade(s) and form " + form);
 
             for (int i = 0; i < count; ++i) {
-                PCLCard copy = slot.builders.get(form).createImplWithForms(true);
-
-                for (int j = 0; j < upgradeCount; ++j) {
-                    copy.upgrade();
-                }
-
+                PCLCard copy = slot.builders.get(form).createImplWithForms(form, upgradeCount, true);
                 doAction(copy);
             }
         }

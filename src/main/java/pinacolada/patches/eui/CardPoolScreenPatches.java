@@ -6,9 +6,12 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.MasterDeckViewScreen;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.ui.panelitems.CardPoolPanelItem;
 import extendedui.ui.screens.CardPoolScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
@@ -24,34 +27,56 @@ public class CardPoolScreenPatches {
     public static CardPoolScreen.DebugOption editCard = new CardPoolScreen.DebugOption(PGR.core.strings.misc_edit, CardPoolScreenPatches::editCard);
 
     public static void editCard(CardPoolScreen pool, AbstractCard c) {
-        PCLCustomCardSlot cardSlot = PCLCustomCardSlot.get(c.cardID);
-        if (cardSlot != null) {
-            if (EUIGameUtils.inGame()) {
+        if (EUIGameUtils.inGame()) {
+            PCLCustomCardSlot cardSlot = PCLCustomCardSlot.get(c.cardID);
+            if (cardSlot != null) {
                 AbstractDungeon.overlayMenu.cancelButton.hide();
-            }
-            GameUtilities.setTopPanelVisible(false);
-            c.unhover();
-            currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
-                    .setOnSave(() -> {
-                        cardSlot.commitBuilder();
-                        if (c instanceof EditorCard) {
-                            ((EditorCard) c).fullReset();
-                            ((EditorCard) pool.cardGrid.getUpgrade(c)).fullReset();
-                        }
-                        for (AbstractCard ca : GameUtilities.getAllCopies(c.cardID)) {
-                            if (ca instanceof EditorCard) {
-                                ((EditorCard) ca).fullReset();
+                GameUtilities.setTopPanelVisible(false);
+                c.unhover();
+                currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
+                        .setOnSave(() -> {
+                            cardSlot.commitBuilder();
+                            if (c instanceof EditorCard) {
+                                ((EditorCard) c).fullReset();
+                                ((EditorCard) pool.cardGrid.getUpgrade(c)).fullReset();
                             }
-                        }
-                    })
-                    .addCallback(() -> {
-                        GameUtilities.setTopPanelVisible(true);
-                        if (EUIGameUtils.inGame()) {
+                            for (AbstractCard ca : GameUtilities.getAllCopies(c.cardID)) {
+                                if (ca instanceof EditorCard) {
+                                    ((EditorCard) ca).fullReset();
+                                }
+                            }
+                        })
+                        .addCallback(() -> {
+                            GameUtilities.setTopPanelVisible(true);
                             AbstractDungeon.overlayMenu.cancelButton.show(MasterDeckViewScreen.TEXT[1]);
-                        }
-                    });
+                            Settings.hideRelics = true;
+                        });
+            }
         }
+    }
 
+    public static void editFromExternal(PCLCustomCardSlot cardSlot) {
+        if (EUIGameUtils.inGame()) {
+            if (cardSlot != null) {
+                EUI.cardsScreen.openScreen(AbstractDungeon.player, CardPoolPanelItem.getAllCards());
+                AbstractDungeon.overlayMenu.cancelButton.hide();
+                GameUtilities.setTopPanelVisible(false);
+                currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
+                        .setOnSave(() -> {
+                            cardSlot.commitBuilder();
+                            for (AbstractCard ca : GameUtilities.getAllCopies(cardSlot.ID)) {
+                                if (ca instanceof EditorCard) {
+                                    ((EditorCard) ca).fullReset();
+                                }
+                            }
+                        })
+                        .addCallback(() -> {
+                            GameUtilities.setTopPanelVisible(true);
+                            AbstractDungeon.overlayMenu.cancelButton.show(MasterDeckViewScreen.TEXT[1]);
+                            AbstractDungeon.closeCurrentScreen();
+                        });
+            }
+        }
     }
 
     @SpirePatch(clz = CardPoolScreen.class, method = "getOptions")

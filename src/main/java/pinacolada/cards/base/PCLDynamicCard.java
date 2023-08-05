@@ -33,12 +33,12 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     protected PCLDynamicCardData builder;
 
     public PCLDynamicCard(PCLDynamicCardData builder) {
-        this(builder, false, true);
+        this(builder, 0, 0, false, true);
     }
 
-    public PCLDynamicCard(PCLDynamicCardData builder, boolean shouldFindForms, boolean shouldSetTextures) {
+    public PCLDynamicCard(PCLDynamicCardData builder, int form, int timesUpgraded, boolean shouldFindForms, boolean shouldSetTextures) {
         super(builder, builder.ID, builder.imagePath,
-                builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, 0, 0, new BuilderInfo(builder, shouldFindForms));
+                builder.getCost(form), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, new BuilderInfo(builder, shouldFindForms));
         assignActualColor();
         if (shouldSetTextures) {
             initializeTextures();
@@ -261,6 +261,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             if (((BuilderInfo) input).shouldFindForms) {
                 findForms();
             }
+            setupBuilder(this.builder);
         }
     }
 
@@ -270,15 +271,15 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     @Override
-    public int setForm(Integer form, int timesUpgraded) {
-        super.setForm(form, timesUpgraded);
+    protected void onFormChange(Integer form, int timesUpgraded) {
+        PCLDynamicCardData lastBuilder = null;
         if (forms != null && forms.size() > form) {
-            this.builder = forms.get(form);
+            lastBuilder = forms.get(form);
         }
-        if (this.builder != null) {
-            setProperties(this.builder, form, timesUpgraded);
+        if (lastBuilder != null && lastBuilder != this.builder) {
+            this.builder = lastBuilder;
+            setupBuilder(this.builder);
         }
-        return this.auxiliaryData.form;
     }
 
     public void setupImages(String imagePath) {
@@ -460,9 +461,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         return this;
     }
 
-    protected void setProperties(PCLDynamicCardData builder, Integer form, int timesUpgraded) {
-        super.setupProperties(builder, form, timesUpgraded);
-
+    protected void setupBuilder(PCLDynamicCardData builder) {
         this.builder = builder;
         this.showTypeText = builder.showTypeText;
         this.maxUpgradeLevel = builder.maxUpgradeLevel;

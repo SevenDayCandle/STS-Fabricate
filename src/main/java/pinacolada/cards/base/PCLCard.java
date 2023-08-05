@@ -545,11 +545,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         int tempRightCountDiff = rightCount - baseRightCount;
 
         int baseCost = cardData.getCost(this.auxiliaryData.form);
-        int costDiff = cost - (prevUpgrade > 0 ? (baseCost + cardData.getCostUpgrade(this.auxiliaryData.form)) : baseCost);
+        int costDiff = cost - ((baseCost + cardData.getCostUpgrade(this.auxiliaryData.form) * prevUpgrade));
 
 
         form = MathUtils.clamp(form, 0, this.getMaxForms() - 1);
 
+        onFormChange(form, timesUpgraded);
         setNumbers(baseDamageDiff + cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
                 baseBlockDiff + cardData.getBlock(form) + cardData.getBlockUpgrade(form) * timesUpgraded,
                 baseMagicNumberDiff + cardData.getMagicNumber(form) + cardData.getMagicNumberUpgrade(form) * timesUpgraded,
@@ -567,7 +568,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         // Ensure HP is set to the base health
         currentHealth = heal;
 
-        upgradedCost = cost < cardData.getCost(form);
         upgradedDamage = baseDamage > cardData.getDamage(form);
         upgradedBlock = baseBlock > cardData.getBlock(form);
         upgradedMagicNumber = baseMagicNumber > cardData.getMagicNumber(form);
@@ -575,9 +575,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         upgradedHitCount = baseHitCount > cardData.getHitCount(form);
         upgradedRightCount = baseRightCount > cardData.getRightCount(form);
 
-        int newCost = timesUpgraded > 0 ? cardData.getCost(form) + cardData.getCostUpgrade(form) : cardData.getCost(form);
-        upgradedCost = baseCost != newCost;
+        int newCost = cardData.getCost(form) + cardData.getCostUpgrade(form) * timesUpgraded;
         setCost(newCost + costDiff);
+        upgradedCost = cost < cardData.getCost(form);
 
         return setForm(form, timesUpgraded);
     }
@@ -1569,6 +1569,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.onDrag(m));
     }
 
+    protected void onFormChange(Integer form, int timesUpgraded) {
+
+    }
+
     @Override
     public PCLCardSaveData onSave() {
         return auxiliaryData;
@@ -2336,7 +2340,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.timesUpgraded = timesUpgraded;
         this.upgraded = this.timesUpgraded > 0;
 
-        int oldForm = this.auxiliaryData.form;
         this.auxiliaryData.form = (form == null) ? 0 : MathUtils.clamp(form, 0, this.getMaxForms() - 1);
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));

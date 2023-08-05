@@ -20,6 +20,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.relics.pcl.Macroscope;
@@ -55,6 +56,7 @@ public abstract class PCLLoadout {
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
     public ArrayList<PCLCardData> defends = new ArrayList<>();
     public ArrayList<PCLCardData> strikes = new ArrayList<>();
+    public ArrayList<PCLRelicData> relics = new ArrayList<>();
     public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
 
     public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel) {
@@ -241,7 +243,7 @@ public abstract class PCLLoadout {
             cd.setImagePath(data.imagePath);
         }
 
-        PCLDynamicCard card = cd.createImplWithForms(false, false);
+        PCLDynamicCard card = cd.createImplWithForms(0, 0, false, false);
 
         card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();
@@ -536,6 +538,11 @@ public abstract class PCLLoadout {
     public boolean isLocked() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources != null && resources.getUnlockLevel() < unlockLevel;
+    }
+
+    public boolean isRelicFromLoadout(String relicID) {
+        PCLRelicData data = PCLRelicData.getStaticData(relicID);
+        return data != null && data.loadout == this;
     }
 
     public void onOpen(CharacterOption option) {

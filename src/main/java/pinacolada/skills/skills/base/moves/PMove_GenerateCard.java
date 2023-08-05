@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
@@ -181,14 +182,18 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
                 || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
                 || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
-            return GameUtilities.getCardsFromAllColorCombatPool(fields.getFullCardFilter(), limit);
+            return GameUtilities.getCardsFromAllColorCombatPool(getSourceFilter(), limit);
         }
         else if (!fields.rarities.isEmpty() || !fields.types.isEmpty()) {
-            return GameUtilities.getCardsFromFullCombatPool(fields.getFullCardFilter(), limit);
+            return GameUtilities.getCardsFromFullCombatPool(getSourceFilter(), limit);
         }
         else {
-            return GameUtilities.getCardsFromStandardCombatPool(fields.getFullCardFilter(), limit);
+            return GameUtilities.getCardsFromStandardCombatPool(getSourceFilter(), limit);
         }
+    }
+
+    protected FuncT1<Boolean, AbstractCard> getSourceFilter() {
+        return isMetascaling() ? fields.getFullCardFilter() : c -> fields.not ^ fields.getFullCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
     }
 
     protected boolean isOutOf() {

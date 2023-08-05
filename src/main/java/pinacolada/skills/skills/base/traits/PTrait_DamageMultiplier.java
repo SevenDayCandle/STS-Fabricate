@@ -12,7 +12,7 @@ import pinacolada.skills.skills.PDamageTrait;
 @VisibleSkill
 public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_Damage.class, PField_Empty.class)
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_DamageMultiplier.class, PField_Empty.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_DamageMultiplier() {
@@ -27,6 +27,7 @@ public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
         super(DATA, content);
     }
 
+    @Override
     public String getSampleAmount() {
         return "+X%";
     }

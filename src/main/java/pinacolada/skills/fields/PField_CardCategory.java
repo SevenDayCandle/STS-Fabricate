@@ -38,6 +38,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
     public ArrayList<CostFilter> costs = new ArrayList<>();
     public ArrayList<String> cardIDs = new ArrayList<>();
+    public boolean invert;
 
     public PField_CardCategory() {
         super();
@@ -52,6 +53,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         setTag(other.tags);
         setCost(other.costs);
         setCardIDs(other.cardIDs);
+        setInvert(other.invert);
     }
 
     public static AbstractCard getCard(String id) {
@@ -88,7 +90,8 @@ public class PField_CardCategory extends PField_CardGeneric {
                 && rarities.equals(((PField_CardCategory) other).rarities)
                 && types.equals(((PField_CardCategory) other).types)
                 && tags.equals(((PField_CardCategory) other).tags)
-                && costs.equals(((PField_CardCategory) other).costs);
+                && costs.equals(((PField_CardCategory) other).costs)
+                && invert == ((PField_CardCategory) other).invert;
     }
 
     @Override
@@ -107,6 +110,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
         editor.registerCard(cardIDs);
+        editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
     }
 
     public String getFullCardString() {
@@ -118,7 +122,8 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardStringSingular() {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
+        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
+        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
     public String getCardAndString() {
@@ -173,25 +178,28 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardAndString(Object value) {
-        return !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+        String sub =  !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
     public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
-        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+        return !cardIDs.isEmpty() ? c -> invert ^ EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
+                (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
                         && (colors.isEmpty() || colors.contains(c.color))
                         && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                        && (types.isEmpty() || types.contains(c.type)));
+                        && (types.isEmpty() || types.contains(c.type))));
     }
 
     public String getFullCardOrString(Object value) {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
+        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
+        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
     public String getFullSummonStringSingular() {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
+        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
+        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
     public int getQualifierRange() {
@@ -327,6 +335,11 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public PField_CardCategory setCost(CostFilter... types) {
         return setCost(Arrays.asList(types));
+    }
+
+    public PField_CardCategory setInvert(boolean val) {
+        this.invert = val;
+        return this;
     }
 
     public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> types) {

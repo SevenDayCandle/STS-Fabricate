@@ -298,7 +298,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
      * Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc.
      */
     public PCLDynamicCard make(boolean shouldFindForms) {
-        return getBuilder(0).createImplWithForms(shouldFindForms);
+        return getBuilder(0).createImplWithForms(0, 0, shouldFindForms);
     }
 
     // Copy down the properties from all builders into this slot

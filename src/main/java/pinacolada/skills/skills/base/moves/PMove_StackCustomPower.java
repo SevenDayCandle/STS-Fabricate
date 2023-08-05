@@ -48,7 +48,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_applyAmountX(TEXT.subjects_x, TEXT.cedit_custom);
+        return TEXT.act_applyAmountX(TEXT.subjects_x, TEXT.cedit_customPower);
     }
 
     @Override

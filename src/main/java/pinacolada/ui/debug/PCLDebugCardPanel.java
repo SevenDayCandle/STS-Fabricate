@@ -4,7 +4,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.screens.MasterDeckViewScreen;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.debug.*;
 import imgui.ImGuiTextFilter;
@@ -14,6 +16,10 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.patches.eui.CardPoolScreenPatches;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -22,6 +28,7 @@ public class PCLDebugCardPanel {
     protected static final String ALL = "Any";
     protected static final String BASE_GAME = "Base";
     protected static final String CUSTOM = "Custom";
+    protected AbstractCard lastCard;
     protected ArrayList<AbstractCard> originalSorted = new ArrayList<>();
     protected ArrayList<AbstractCard> sorted = originalSorted;
     protected ArrayList<String> sortedModIDs = new ArrayList<>();
@@ -35,6 +42,9 @@ public class PCLDebugCardPanel {
     protected DEUIIntInput formCount = new DEUIIntInput("Form", 0, 0, Integer.MAX_VALUE);
     protected DEUIButton addToHand = new DEUIButton("Add to hand");
     protected DEUIButton addToDeck = new DEUIButton("Add to deck");
+    protected DEUIButton edit = new DEUIButton("Edit");
+    protected PCLCustomCardSlot slot;
+    protected boolean wasCancelOpen;
 
     public PCLDebugCardPanel() {
         regenerate();
@@ -64,6 +74,12 @@ public class PCLDebugCardPanel {
         }
     }
 
+    private void edit() {
+        if (slot != null) {
+            CardPoolScreenPatches.editFromExternal(slot);
+        }
+    }
+
     private AbstractCard getCopy(AbstractCard chosen) {
         AbstractCard copy = chosen.makeCopy();
         if (copy instanceof PCLCard) {
@@ -88,7 +104,7 @@ public class PCLDebugCardPanel {
 
     protected void regenerate() {
         originalSorted.addAll(CardLibrary.getAllCards());
-        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
+        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(0, 0, false)));
         originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
         sortedModIDs.add(ALL);
         sortedModIDs.addAll(originalSorted.stream()
@@ -100,6 +116,12 @@ public class PCLDebugCardPanel {
 
     public void render() {
         cards.render(() -> {
+            AbstractCard c = cardList.get();
+            if (lastCard != c && c != null) {
+                lastCard = c;
+                slot = PCLCustomCardSlot.get(lastCard.cardID);
+            }
+
             DEUIUtils.withWidth(90, () -> modList.renderInline());
             DEUIUtils.withFullWidth(() ->
             {
@@ -112,13 +134,17 @@ public class PCLDebugCardPanel {
                 upgradeCount.renderInline();
                 formCount.render();
             });
-            DEUIUtils.disabledIf(AbstractDungeon.player == null || cardList.get() == null, () ->
+            DEUIUtils.disabledIf(AbstractDungeon.player == null || c == null, () ->
             {
                 addToHand.renderInline(this::addToHand);
             });
-            DEUIUtils.disabledIf(AbstractDungeon.player == null || cardList.get() == null, () ->
+            DEUIUtils.disabledIf(AbstractDungeon.player == null || c == null, () ->
             {
                 addToDeck.render(this::addToDeck);
+            });
+            DEUIUtils.disabledIf(AbstractDungeon.player == null || slot == null, () ->
+            {
+                edit.render(this::edit);
             });
         });
     }

@@ -15,11 +15,12 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PCallbackMove;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.List;
 
-public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<T> {
+public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallbackMove<T> {
     public PMove_Modify(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
@@ -120,13 +121,19 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
+    public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         boolean selectAll = baseExtra <= 0 || useParent;
         order.selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(this::canCardPass)
                 .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin), !fields.forced)
-                .addCallback(cards -> cardAction(cards, order));
-        super.use(info, order);
+                .addCallback(cards -> {
+                    info.setData(cards);
+                    callback.invoke(info);
+                    cardAction(cards, order);
+                    if (this.childEffect != null) {
+                        this.childEffect.use(info, order);
+                    }
+                });
     }
 
     public PMove_Modify<T> useParentForce() {

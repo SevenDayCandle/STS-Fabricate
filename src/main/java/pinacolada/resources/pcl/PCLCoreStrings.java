@@ -83,7 +83,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_addForm = cedit.TEXT[35];
     public final String cedit_removeForm = cedit.TEXT[36];
     public final String cedit_undo = cedit.TEXT[37];
-    public final String cedit_custom = cedit.TEXT[38];
+    public final String cedit_customPower = cedit.TEXT[38];
     public final String cedit_branchUpgrade = cedit.TEXT[39];
     public final String cedit_duplicate = cedit.TEXT[40];
     public final String cedit_delete = cedit.TEXT[41];
@@ -122,6 +122,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_newLoadout = cedit.TEXT[74];
     public final String cedit_renameLoadout = cedit.TEXT[75];
     public final String cedit_deleteLoadout = cedit.TEXT[76];
+    public final String cedit_invert = cedit.TEXT[77];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -442,7 +443,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_fromX = subjects.TEXT[30];
     public final String subjects_hits = subjects.TEXT[31];
     public final String subjects_intent = subjects.TEXT[32];
-    public final String subjects_nonAttack = subjects.TEXT[33];
+    public final String subjects_nonX = subjects.TEXT[33];
     public final String subjects_ofX = subjects.TEXT[34];
     public final String subjects_permanentlyX = subjects.TEXT[35];
     public final String subjects_playingXWithY = subjects.TEXT[36];
@@ -1211,6 +1212,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_min(Object amount) {
         return EUIUtils.format(subjects_minX, amount);
+    }
+    public final String subjects_non(Object place) {
+        return EUIUtils.format(subjects_nonX, place);
     }
     public final String subjects_ofX(Object amount) {
         return EUIUtils.format(subjects_ofX, amount);

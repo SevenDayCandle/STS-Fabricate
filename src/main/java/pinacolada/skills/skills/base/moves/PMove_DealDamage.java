@@ -3,10 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -53,7 +50,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_deal(TEXT.subjects_x, EUIRM.strings.adjNoun(TEXT.subjects_nonAttack, PGR.core.strings.subjects_damage));
+        return TEXT.act_deal(TEXT.subjects_x, EUIRM.strings.adjNoun(TEXT.subjects_non(PGR.core.tooltips.attack.title), PGR.core.strings.subjects_damage));
     }
 
     @Override
