@@ -1,21 +1,12 @@
 package pinacolada.effects.card;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.PetalEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.PCLEffects;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.Iterator;
 
 public class ShowCardAfterWithdrawEffect extends PCLEffect {
     private static final float PADDING = 30.0F * Settings.scale;
@@ -32,8 +23,8 @@ public class ShowCardAfterWithdrawEffect extends PCLEffect {
     }
 
     @Override
-    public void firstUpdate() {
-        super.firstUpdate();
+    public void firstUpdate(float deltaTime) {
+        super.firstUpdate(deltaTime);
         AbstractDungeon.effectsQueue.add(new CardPoofEffect(card.target_x, card.target_y));
         card.beginGlowing();
     }

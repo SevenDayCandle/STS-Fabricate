@@ -12,7 +12,7 @@ public class ObtainRelicEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         GameUtilities.obtainRelicFromEvent(relic);
 
         complete();

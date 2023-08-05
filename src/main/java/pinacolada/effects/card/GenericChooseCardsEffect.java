@@ -38,8 +38,8 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
     }
 
     @Override
-    protected void firstUpdate() {
-        super.firstUpdate();
+    protected void firstUpdate(float deltaTime) {
+        super.firstUpdate(deltaTime);
 
         if (cardsToChoose > 0) {
             openPanel();

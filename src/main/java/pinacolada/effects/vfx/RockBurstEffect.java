@@ -25,7 +25,7 @@ public class RockBurstEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         PCLSFX.play(scale > 1 ? PCLSFX.BLUNT_HEAVY : PCLSFX.BLUNT_FAST, 0.9f, 1.1f);
 
         for (int i = 0; i < PROJECTILES; ++i) {

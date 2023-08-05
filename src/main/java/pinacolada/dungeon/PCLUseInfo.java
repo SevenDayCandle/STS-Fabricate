@@ -2,19 +2,21 @@ package pinacolada.dungeon;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class PCLUseInfo {
-    public final ArrayList<AbstractMonster> enemies;
-    public final RandomizedList<AbstractCreature> targetList = new RandomizedList<>();
+    public final RandomizedList<AbstractCreature> targets;
+    public final RandomizedList<AbstractCreature> tempTargets = new RandomizedList<>();
     public AbstractCreature source;
     public AbstractCreature target;
     public AbstractCard card;
@@ -26,7 +28,7 @@ public class PCLUseInfo {
     public Object data;
 
     public PCLUseInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        this.enemies = new ArrayList<>();
+        this.targets = new RandomizedList<>();
 
         set(card, source, target);
     }
@@ -37,11 +39,38 @@ public class PCLUseInfo {
         this.target = other.target;
         this.previousCard = other.previousCard;
         this.currentAffinity = other.currentAffinity;
-        this.enemies = new ArrayList<>(other.enemies);
+        this.targets = new RandomizedList<>(other.targets);
         this.canActivateSemiLimited = other.canActivateSemiLimited;
         this.canActivateLimited = other.canActivateLimited;
         this.isStarter = other.isStarter;
         this.data = other.data;
+    }
+
+    protected void fillWithTargets() {
+        this.targets.clear();
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).pclTarget.getTargets(source, target, targets);
+        }
+        else if (card != null) {
+            switch (card.target) {
+                case ALL:
+                    GameUtilities.fillWithAllCharacters(true, targets);
+                    break;
+                case ALL_ENEMY:
+                    GameUtilities.fillWithEnemies(true, targets);
+                    break;
+                case ENEMY:
+                    targets.add(target);
+                    break;
+                case SELF_AND_ENEMY:
+                    targets.add(target);
+                case SELF:
+                case NONE:
+                    targets.add(AbstractDungeon.player);
+            }
+        }
+
+        setTempTargets(targets);
     }
 
     public <T> T getData(Class<T> dataClass) {
@@ -78,8 +107,7 @@ public class PCLUseInfo {
         this.target = target;
         this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
         this.currentAffinity = CombatManager.playerSystem.getActiveMeter().getCurrentAffinity();
-        this.enemies.clear();
-        GameUtilities.fillWithEnemies(true, this.enemies);
+        fillWithTargets();
         if (card != null) {
             this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);
             this.canActivateLimited = CombatManager.canActivateLimited(card.cardID);
@@ -99,15 +127,15 @@ public class PCLUseInfo {
         return this;
     }
 
-    public PCLUseInfo setTargetList(AbstractCreature... creatures) {
-        targetList.clear();
-        targetList.addAll(creatures);
+    public PCLUseInfo setTempTargets(AbstractCreature... creatures) {
+        tempTargets.clear();
+        tempTargets.addAll(creatures);
         return this;
     }
 
-    public PCLUseInfo setTargetList(Collection<? extends AbstractCreature> creatures) {
-        targetList.clear();
-        targetList.addAll(creatures);
+    public PCLUseInfo setTempTargets(Collection<? extends AbstractCreature> creatures) {
+        tempTargets.clear();
+        tempTargets.addAll(creatures);
         return this;
     }
 

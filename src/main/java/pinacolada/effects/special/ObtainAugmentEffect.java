@@ -24,7 +24,7 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
         this.renderBehind = false;
     }
 
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         PGR.dungeon.addAugment(augment.ID, 1);
     }
 

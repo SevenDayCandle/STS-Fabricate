@@ -31,7 +31,7 @@ public class DodgeEffect extends PCLEffect {
         this.offsetY = STARTING_OFFSET_Y;
     }
 
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         for (int i = 0; i < 10; ++i) {
             AbstractDungeon.effectsQueue.add(new FlyingSpikeEffect(this.x - MathUtils.random(-120.0F, 120.0F) * Settings.scale, this.y + MathUtils.random(90.0F, 110.0F) * Settings.scale, -90.0F, 0.0F, MathUtils.random(-200.0F, -50.0F) * Settings.scale, Settings.BLUE_TEXT_COLOR));
             AbstractDungeon.effectsQueue.add(new FlyingSpikeEffect(this.x - MathUtils.random(-120.0F, 120.0F) * Settings.scale, this.y + MathUtils.random(90.0F, 110.0F) * Settings.scale, 90.0F, 0.0F, MathUtils.random(200.0F, 50.0F) * Settings.scale, Settings.BLUE_TEXT_COLOR));

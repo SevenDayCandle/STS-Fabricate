@@ -15,7 +15,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAttackSubscriber {
@@ -55,7 +54,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
         PCLUseInfo pInfo = generateInfo(receiver);
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner, pInfo.targetList).contains(info.owner) && info.output >= amount) {
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner, pInfo.tempTargets).contains(info.owner) && info.output >= amount) {
             useFromTrigger(pInfo.setData(damageAmount));
         }
     }

@@ -29,7 +29,7 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (sx, sy, cx, cy) -> new BiteEffect(cx, cy, Color.WHITE.cpy()), PCLSFX.EVENT_VAMP_BITE);
     public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, PCLSFX.BLUNT_FAST);
     public static final PCLAttackVFX BLUNT_LIGHT = new PCLAttackVFX(AttackEffect.BLUNT_LIGHT, ImageMaster.ATK_BLUNT_LIGHT, PCLSFX.BLUNT_HEAVY);
-    public static final PCLAttackVFX BURN = new PCLAttackVFX(PCLEnum.AttackEffect.BURN, null, Color.RED, FireballEffect::new, PCLSFX.ATTACK_FIRE);
+    public static final PCLAttackVFX BURN = new PCLAttackVFX(PCLEnum.AttackEffect.BURN, null, Color.RED, (sx, sy, cx, cy) -> new FlameBarrierEffect(cx, cy), PCLSFX.ATTACK_FIRE);
     public static final PCLAttackVFX CLAW = new PCLAttackVFX(PCLEnum.AttackEffect.CLAW, null, (sx, sy, cx, cy) -> new ClawEffect(cx, cy, Color.VIOLET.cpy(), Color.WHITE.cpy()), PCLSFX.ATTACK_DAGGER_5, PCLSFX.ATTACK_DAGGER_6);
     public static final PCLAttackVFX DAGGER = new PCLAttackVFX(PCLEnum.AttackEffect.DAGGER, ImageMaster.ATK_SLASH_H, PCLSFX.ATTACK_DAGGER_1, PCLSFX.ATTACK_DAGGER_2);
     public static final PCLAttackVFX DARKNESS = new PCLAttackVFX(PCLEnum.AttackEffect.DARKNESS, null, Color.VIOLET, (sx, sy, cx, cy) -> new DarknessEffect(cx, cy), PCLSFX.PCL_DARKNESS);

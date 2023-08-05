@@ -61,9 +61,11 @@ public class FadingParticleEffect extends VisualEffect {
         EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
 
         final float halfDuration = startingDuration * 0.5f;
-        if (this.duration < halfDuration) {
-            float aMult = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
-            this.color.a = this.color.a * aMult;
+        if (duration > halfDuration) {
+            color.a = Interpolation.fade.apply(alpha, 0f, (duration - halfDuration) / halfDuration);
+        }
+        else {
+            color.a = Interpolation.fade.apply(0f, alpha, duration / halfDuration);
         }
     }
 
@@ -77,7 +79,7 @@ public class FadingParticleEffect extends VisualEffect {
         this.alpha = 1.0F;
         this.colorSpeed = 1f;
         this.blendingMode = PCLRenderHelpers.BlendingMode.Normal;
-        this.color.set(Color.WHITE);
+        this.color.set(EUIColors.white(0));
         this.targetColor.set(this.color);
     }
 

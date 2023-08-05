@@ -60,7 +60,7 @@ public class PField_CardGeneric extends PField_Not {
         }
         else if (subchoices > 0 && subchoices <= choiceSize) {
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual, g)
-                    .setMaxChoices(choiceSize, origin)
+                    .setMaxChoices(choiceSize, origin == PCLCardSelection.Manual ? PCLCardSelection.Random : origin) // "Manual" will cause the max choices selection to do nothing
                     .setDestination(destination);
         }
 

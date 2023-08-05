@@ -3,11 +3,8 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.EUI;
 import extendedui.EUIRenderHelpers;
-import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 
@@ -32,7 +29,7 @@ public class ElectricityEffect extends VisualEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         PCLEffects.Queue.add(new SparkImpactEffect(this.x, this.y));
         for (int i = 0; i < particles; i++) {
             PCLEffects.Queue.trail(randomTexture(images), this::onTrail, x + random(-spread, spread), y + random(-spread, spread))

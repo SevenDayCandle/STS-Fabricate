@@ -65,8 +65,8 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
-        super.firstUpdate();
+    protected void firstUpdate(float deltaTime) {
+        super.firstUpdate(deltaTime);
 
         if (selectedRelic != null) {
             for (RelicInfo item : grid.group) {

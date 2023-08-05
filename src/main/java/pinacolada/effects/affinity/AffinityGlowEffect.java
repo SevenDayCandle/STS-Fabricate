@@ -32,7 +32,7 @@ public class AffinityGlowEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         this.color.a = 0.45f;
         this.scale = 0.73f;
     }

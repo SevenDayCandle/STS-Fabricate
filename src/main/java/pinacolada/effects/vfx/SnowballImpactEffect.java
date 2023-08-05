@@ -23,16 +23,16 @@ public class SnowballImpactEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         for (int i = 0; i < particles; i++) {
             PCLEffects.Queue.particle(EUIUtils.random(images).texture(), this.x, this.y)
-                    .setSpeed(random(-650f, 650f) * Settings.scale, random(-650f, 650f) * Settings.scale)
+                    .setSpeed(random(-500f, 500f) * Settings.scale, random(-500f, 500f) * Settings.scale)
                     .setRotation(random(-100f, 100f), random(-600f, 600f))
-                    .setScale(random(0.1f, 1f) * Settings.scale)
+                    .setScale(random(0.4f, 1f))
                     .setFlip(randomBoolean(0.5f), false)
                     .setColor(color)
                     .setBlendingMode(EUIRenderHelpers.BlendingMode.Glowing)
-                    .setDuration(0.75f, isRealtime);
+                    .setDuration(1f, false);
             PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
         }
 

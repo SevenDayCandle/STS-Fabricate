@@ -30,7 +30,7 @@ public class EffekseerEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         handle = STSEffekseerManager.play(vfxKey.path, position, rotation, scale, color);
     }
 

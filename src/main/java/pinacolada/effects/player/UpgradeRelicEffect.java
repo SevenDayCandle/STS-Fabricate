@@ -18,7 +18,7 @@ public class UpgradeRelicEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         if (relic instanceof PCLRelic) {
             for (int i = 0; i < amount; i++) {
                 ((PCLRelic) relic).upgrade();

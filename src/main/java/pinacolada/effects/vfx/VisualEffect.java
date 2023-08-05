@@ -47,6 +47,12 @@ public class VisualEffect extends PCLEffect {
         return EUIUtils.random(caches).texture();
     }
 
+    @Override
+    protected void firstUpdate(float deltaTime) {
+        super.firstUpdate(deltaTime);
+        updateInternal(deltaTime);
+    }
+
     protected void initialize(float x, float y, float rot, float scale) {
         super.initialize();
         this.x = x;

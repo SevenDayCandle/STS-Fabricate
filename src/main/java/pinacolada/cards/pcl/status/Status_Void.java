@@ -17,7 +17,7 @@ public class Status_Void extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Purple);
+            .setAffinities(2, PCLAffinity.Purple);
 
     public Status_Void() {
         super(DATA);

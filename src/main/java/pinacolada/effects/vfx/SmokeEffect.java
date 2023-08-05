@@ -1,10 +1,8 @@
 package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
@@ -19,12 +17,12 @@ public class SmokeEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float r = 120;
-    protected float vXY = Settings.scale * 180;
-    protected float vR = 180;
-    protected float s = 1.3f;
+    protected float vXY = Settings.scale * 150;
+    protected float vR = 500;
+    protected float s = 1f;
 
     public SmokeEffect(float x, float y) {
-        this(x, y, Color.GRAY);
+        this(x, y, Color.LIGHT_GRAY);
     }
 
     public SmokeEffect(float x, float y, Color color) {
@@ -34,23 +32,25 @@ public class SmokeEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         PCLSFX.play(PCLSFX.ATTACK_WHIFF_2);
 
         for (int i = 0; i < particles; ++i) {
-            float rotation = random(0, 360f);
+            float opac = MathUtils.random(0.64f, 0.8f);
             PCLEffects.Queue.particle(EUIUtils.random(IMAGES).texture(), x, y)
-                    .setColor(this.color.r + MathUtils.random(-0.05F, 0.05F), this.color.g + MathUtils.random(-0.05F, 0.05F), this.color.b + MathUtils.random(-0.05F, 0.05F), 1f)
-                    .setScaleTarget(0.2f + MathUtils.random(0, 0.1f), s + MathUtils.random(0, 0.15f), 5f)
-                    .setRotation(rotation, random(-vR, vR))
-                    .setTargetPosition(x + vXY * MathUtils.cos(rotation), y + vXY * MathUtils.sin(rotation), random(30f, 80f));
+                    .setColor(opac, opac, opac, 1f)
+                    .setScale(random(s / 2, s))
+                    .setFlip(randomBoolean(0.5f), false)
+                    .setRotation(random(-100f, 100f), vR + random(0, vR / 4))
+                    .setSpeed(random(-vXY, vXY), random(-vXY, vXY))
+                    .setDuration(1f, false);
         }
 
         complete();
     }
 
     public SmokeEffect setParameters(float vX, float vY) {
-        return setParameters(vX, vY, 250, 0.75f);
+        return setParameters(vX, vY, Settings.scale * 150, 1f);
     }
 
     public SmokeEffect setParameters(float r, float vXY, float vR, float s) {
@@ -63,7 +63,7 @@ public class SmokeEffect extends PCLEffect {
     }
 
     public SmokeEffect setParameters(float vX, float vY, float vR) {
-        return setParameters(vX, vY, vR, 0.75f);
+        return setParameters(vX, vY, vR, 1f);
     }
 
     public SmokeEffect setParticleCount(int particles) {

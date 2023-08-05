@@ -25,7 +25,7 @@ public class SparkImpactEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         for (int i = 0; i < particles; i++) {
             float r = MathUtils.random(0, 360);
             PCLEffects.Queue.particle(EUIUtils.random(images).texture(), x, y)

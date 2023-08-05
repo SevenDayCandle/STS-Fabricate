@@ -59,16 +59,16 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     }
 
     public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> tFunc) {
-        fillTargetsForEvaluation(info.source, info.target, info.targetList);
-        int prevSize = info.targetList.size();
-        EUIUtils.filterInPlace(info.targetList, tFunc);
+        fillTargetsForEvaluation(info.source, info.target, info.tempTargets);
+        int prevSize = info.tempTargets.size();
+        EUIUtils.filterInPlace(info.tempTargets, tFunc);
         switch (this) {
             case AllAlly:
             case All:
             case AllEnemy:
-                return info.targetList.size() == prevSize;
+                return info.tempTargets.size() == prevSize;
         }
-        return info.targetList.size() > 0;
+        return info.tempTargets.size() > 0;
     }
 
     public final void fillTargetsForEvaluation(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
@@ -160,7 +160,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     }
 
     public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info) {
-        return getTargets(info.source, info.target, info.targetList, 1);
+        return getTargets(info.source, info.target, info.tempTargets, 1);
     }
 
     public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {

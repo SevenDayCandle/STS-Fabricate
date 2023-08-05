@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import extendedui.utilities.EUIColors;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class GenericRenderEffect extends VisualEffect {
@@ -47,9 +46,12 @@ public class GenericRenderEffect extends VisualEffect {
         updateParameters(deltaTime);
 
         final float halfDuration = startingDuration * 0.5f;
-        if (this.duration < halfDuration) {
-            float aMult = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
-            this.color.a = this.color.a * aMult;
+        if (duration > halfDuration) {
+            color.a = Interpolation.fade.apply(alpha, 0f, (duration - halfDuration) / halfDuration);
         }
+        else {
+            color.a = Interpolation.fade.apply(0f, alpha, duration / halfDuration);
+        }
+
     }
 }

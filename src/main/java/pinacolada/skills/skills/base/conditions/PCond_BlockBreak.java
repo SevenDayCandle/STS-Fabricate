@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -9,7 +8,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.interfaces.subscribers.OnBlockBrokenSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -20,8 +18,6 @@ import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 @VisibleSkill
 public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements OnBlockBrokenSubscriber {
@@ -59,7 +55,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
     @Override
     public void onBlockBroken(AbstractCreature creature) {
         PCLUseInfo pInfo = generateInfo(creature);
-        if (target.getTargets(getOwnerCreature(), creature, pInfo.targetList).contains(creature)) {
+        if (target.getTargets(getOwnerCreature(), creature, pInfo.tempTargets).contains(creature)) {
             useFromTrigger(pInfo);
         }
     }

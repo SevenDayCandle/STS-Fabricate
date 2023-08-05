@@ -12,6 +12,7 @@
 								"pcl:MindBlast": {"NAME": "Mind Blast"},
 								"pcl:Miracle": {"NAME": "Miracle"},
 								"pcl:Panacea": {"NAME": "Panacea"},
+								"pcl:SadisticNature": {"NAME": "Sadistic Nature"},
 								"pcl:Transmutation": {"NAME": "Transmutation"}
 				},
 				"CURSE":	{
@@ -19,6 +20,7 @@
 												"NAME": "Ascender's Bane"
 								},
 								"pcl:Curse_Clumsy": {"NAME": "Clumsy"},
+								"pcl:Curse_CurseOfTheBell": {"NAME": "Curse of the Bell"},
 								"pcl:Curse_Decay": {"NAME": "Decay"},
 								"pcl:Curse_Doubt": {"NAME": "Doubt"},
 								"pcl:Curse_Injury": {"NAME": "Injury"},

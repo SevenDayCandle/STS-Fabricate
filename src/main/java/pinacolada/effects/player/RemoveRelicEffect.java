@@ -12,7 +12,7 @@ public class RemoveRelicEffect extends PCLEffectWithCallback<AbstractRelic> {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         relic.onUnequip();
         AbstractDungeon.player.relics.remove(relic);
         AbstractDungeon.player.reorganizeRelics();

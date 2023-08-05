@@ -64,7 +64,7 @@ public class TalkEffect extends PCLEffect {
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         if (appearEffect == null) {
             appearEffect = DialogWord.AppearEffect.BUMP_IN;
         }

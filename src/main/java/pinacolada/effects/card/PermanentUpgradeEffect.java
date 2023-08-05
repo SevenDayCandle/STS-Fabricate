@@ -24,7 +24,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     }
 
     @Override
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
             if (c.canUpgrade() && filter.invoke(c)) {

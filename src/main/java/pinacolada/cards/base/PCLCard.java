@@ -321,6 +321,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return onBlockEffect;
     }
 
+    protected PCardPrimary_GainBlock addBlockMove(PCLCardTarget target) {
+        onBlockEffect = new PCardPrimary_GainBlock(this);
+        onBlockEffect.setTarget(target);
+        return onBlockEffect;
+    }
+
     protected PCardPrimary_DealDamage addDamageMove() {
         onAttackEffect = new PCardPrimary_DealDamage(this);
         return onAttackEffect;

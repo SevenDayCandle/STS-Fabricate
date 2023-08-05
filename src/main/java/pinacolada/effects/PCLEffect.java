@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Pool;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.random.Random;
@@ -75,7 +74,7 @@ public abstract class PCLEffect extends AbstractGameEffect {
         this.isDone = true;
     }
 
-    protected void firstUpdate() {
+    protected void firstUpdate(float deltaTime) {
 
     }
 
@@ -172,15 +171,16 @@ public abstract class PCLEffect extends AbstractGameEffect {
 
     @Override
     public void update() {
+        float delta = getDeltaTime();
         if (duration == startingDuration) {
-            firstUpdate();
+            firstUpdate(delta);
 
             if (!this.isDone) {
-                tickDuration(getDeltaTime());
+                tickDuration(delta);
             }
         }
         else {
-            updateInternal(getDeltaTime());
+            updateInternal(delta);
         }
     }
 
