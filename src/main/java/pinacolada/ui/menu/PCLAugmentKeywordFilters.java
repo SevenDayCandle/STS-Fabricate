@@ -81,6 +81,7 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 .setOnChange(costs -> this.onFilterChanged(currentTiers, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_tier)
+                .setItems(EUIUtils.range(1, 3))
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
     }
@@ -137,22 +138,22 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         }
 
         //Origin check
-        if (!evaluateItem(currentOrigins, (opt) -> EUIGameUtils.isObjectFromMod(c, opt))) {
+        if (!evaluateItem(currentOrigins, EUIGameUtils.getModInfo(c))) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentCategories, (opt) -> c.augment.data.category == opt)) {
+        if (!evaluateItem(currentCategories, c.augment.data.category)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentSubCategories, (opt) -> c.augment.data.categorySub == opt)) {
+        if (!evaluateItem(currentSubCategories, c.augment.data.categorySub)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentTiers, (opt) -> c.augment.data.tier == opt)) {
+        if (!evaluateItem(currentTiers, c.augment.data.tier)) {
             return false;
         }
 
@@ -178,16 +179,18 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     @Override
     protected void initializeImpl(ActionT1<FilterKeywordButton> onClick, ArrayList<PCLAugmentRenderable> cards, AbstractCard.CardColor color, boolean isAccessedFromCardPool) {
         HashSet<ModInfo> availableMods = new HashSet<>();
+        int maxTier = 1;
         if (referenceItems != null) {
             currentTotal = getReferenceCount();
-            for (PCLAugmentRenderable relic : referenceItems) {
-                for (EUIKeywordTooltip tooltip : getAllTooltips(relic)) {
+            for (PCLAugmentRenderable augment : referenceItems) {
+                for (EUIKeywordTooltip tooltip : getAllTooltips(augment)) {
                     if (tooltip.canFilter) {
                         currentFilterCounts.merge(tooltip, 1, Integer::sum);
                     }
                 }
 
-                availableMods.add(EUIGameUtils.getModInfo(relic));
+                availableMods.add(EUIGameUtils.getModInfo(augment));
+                maxTier = Math.max(augment.augment.data.tier, maxTier);
             }
             doForFilters(m -> m.initializeSelection(referenceItems));
         }
@@ -195,6 +198,7 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         ArrayList<ModInfo> modInfos = new ArrayList<>(availableMods);
         modInfos.sort((a, b) -> a == null ? -1 : b == null ? 1 : StringUtils.compare(a.Name, b.Name));
         originsDropdown.setItems(modInfos);
+        tierDropdown.setItems(EUIUtils.range(1, maxTier));
     }
 
     @Override
