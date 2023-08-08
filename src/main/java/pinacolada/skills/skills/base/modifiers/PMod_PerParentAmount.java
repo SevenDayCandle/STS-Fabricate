@@ -6,15 +6,14 @@ import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.fields.PField_Random;
 
 @VisibleSkill
-public class PMod_PerParentAmount extends PMod_Per<PField_Not> {
+public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
 
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerParentAmount.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Random> DATA = register(PMod_PerParentAmount.class, PField_Random.class).selfTarget();
 
     public PMod_PerParentAmount() {
         this(1);
@@ -42,7 +41,14 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Not> {
                 return ((AbstractOrb) obj).passiveAmount;
             }
         }
-        return parent != null ? parent.amount : 0;
+        return getParentAmount(parent);
+    }
+
+    protected int getParentAmount(PSkill<?> skill) {
+        if (skill instanceof PDelay || (fields.random && skill instanceof PCond)) {
+            return getParentAmount(skill.parent);
+        }
+        return skill != null ? skill.amount : 0;
     }
 
     @Override
@@ -54,4 +60,6 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Not> {
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.adjNoun(TEXT.cedit_useParent, getSubSampleText());
     }
+
+
 }

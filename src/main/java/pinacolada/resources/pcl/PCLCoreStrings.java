@@ -243,6 +243,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String combat_afterlifeMet = combat.TEXT[13];
     public final String combat_afterlifeRequirement = combat.TEXT[14];
     public final String combat_rightClickRetarget = combat.TEXT[15];
+    public final String combat_turns = combat.TEXT[16];
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];

@@ -273,7 +273,8 @@
 												"Dodged",
 												"[A-Gen] Requirement satisfied",
 												"Select cards with the following [A-Gen]: {0}",
-												"Right-Click to retarget"
+												"Right-Click to retarget",
+												"${0}@!1:turns@:turn$"
 								]
 				},
 				"pcl:Conditions": {

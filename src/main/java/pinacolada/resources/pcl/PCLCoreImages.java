@@ -31,6 +31,7 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache rightArrow = new TextureCache("images/pcl/ui/core/RightArrow.png");
         public static final TextureCache squareBG1 = new TextureCache("images/pcl/ui/core/SquareBG1.png", true);
         public static final TextureCache squareBG2 = new TextureCache("images/pcl/ui/core/SquareBG2.png", true);
+        public static final TextureCache timer = new TextureCache("images/pcl/ui/core/Timer.png");
     }
 
     public static class Menu {
