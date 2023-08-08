@@ -150,7 +150,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         selectedCount.tryRender(sb);
         EUI.relicHeader.render(sb);
         if (!EUI.relicFilters.isActive) {
-            EUI.openRelicFiltersButton.tryRender(sb);
+            EUI.openFiltersButton.tryRender(sb);
         }
         if (randomSelection.isActive) {
             sb.setColor(this.screenColor);
@@ -163,7 +163,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     protected void updateInternal(float deltaTime) {
         boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate();
         if (shouldDoStandardUpdate) {
-            EUI.openCardFiltersButton.tryUpdate();
+            EUI.openFiltersButton.tryUpdate();
             EUI.relicHeader.update();
             grid.tryUpdate();
             upgradeToggle.updateImpl();
@@ -172,7 +172,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
             selectRandomButton.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.openRelicFiltersButton.hb.hovered) {
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.openFiltersButton.hb.hovered) {
                 return;
             }
 

@@ -315,7 +315,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
             if (!EUI.relicFilters.isActive) {
-                EUI.openRelicFiltersButton.tryRender(sb);
+                EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
             }
         }
@@ -337,7 +337,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
-                EUI.openRelicFiltersButton.tryUpdate();
+                EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();

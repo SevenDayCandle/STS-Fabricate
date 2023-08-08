@@ -13,7 +13,7 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
         this(0.5f, true);
         targetScale = PCLAugmentRenderable.BASE_SCALE;
         startingScale = targetScale;
-        hoveredScale = 1f;
+        hoveredScale = 0.9f;
     }
 
     public PCLAugmentGrid(float horizontalAlignment, boolean autoShowScrollbar) {

@@ -10,8 +10,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 public class CircularWaveEffect extends PCLEffect {
     protected float x;
     protected float y;
-    protected float scaleLower = 0.2f;
-    protected float scaleUpper = 3.10f;
+    protected float scaleLower = 0.1f;
+    protected float scaleUpper = 2f;
     protected float vfxTimer;
     protected float vfxFrequency = 0.2f;
     protected Color endColor;

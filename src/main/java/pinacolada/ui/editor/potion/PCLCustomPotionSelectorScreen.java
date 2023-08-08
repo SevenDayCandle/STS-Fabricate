@@ -304,7 +304,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
             if (!EUI.potionFilters.isActive) {
-                EUI.openPotionFiltersButton.tryRender(sb);
+                EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
             }
         }
@@ -326,7 +326,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !EUI.potionFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
-                EUI.openPotionFiltersButton.tryUpdate();
+                EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();

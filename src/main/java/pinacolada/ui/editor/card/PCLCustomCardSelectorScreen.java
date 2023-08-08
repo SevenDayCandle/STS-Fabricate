@@ -317,7 +317,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
             if (!EUI.cardFilters.isActive) {
-                EUI.openCardFiltersButton.tryRender(sb);
+                EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
             }
         }
@@ -339,7 +339,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
-                EUI.openCardFiltersButton.tryUpdate();
+                EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();

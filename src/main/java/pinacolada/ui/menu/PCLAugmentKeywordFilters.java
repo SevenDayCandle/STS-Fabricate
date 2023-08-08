@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -242,6 +243,7 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         }, PGR.augmentHeader.originalGroup, color, isAccessedFromCardPool);
         PGR.augmentHeader.updateForFilters();
         EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
+        EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
         return this;
     }
 }

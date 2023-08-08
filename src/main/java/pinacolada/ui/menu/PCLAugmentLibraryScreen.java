@@ -58,7 +58,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
         cancelButton.render(sb);
         PGR.augmentHeader.renderImpl(sb);
         if (!PGR.augmentFilters.isActive) {
-            EUI.openBlightFiltersButton.tryRender(sb);
+            EUI.openFiltersButton.tryRender(sb);
             EUIExporter.exportButton.tryRender(sb);
         }
         for (CustomPoolModule<AbstractBlight> module : EUI.globalCustomBlightLibraryModules) {
@@ -79,7 +79,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
                 close();
             }
             PGR.augmentHeader.updateImpl();
-            EUI.openBlightFiltersButton.tryUpdate();
+            EUI.openFiltersButton.tryUpdate();
             EUIExporter.exportButton.tryUpdate();
             for (CustomPoolModule<AbstractBlight> module : EUI.globalCustomBlightLibraryModules) {
                 module.update();
