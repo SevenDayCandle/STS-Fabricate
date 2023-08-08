@@ -120,11 +120,6 @@
 								"DESCRIPTIONS": ["The next #yOrb #yChanneled has +#b{0} effectiveness. While active, deal +{0} [Immaterial Damage]."],
 								"NAME": "Sorcery"
 				},
-				"pcl:StabilizingPower":
-				{
-								"DESCRIPTIONS": ["{0} will not decrease for #b{1} turn(s)."],
-								"NAME": "Stabilized"
-				},
 				"pcl:SuperchargedPower":
 				{
 								"DESCRIPTIONS": ["Gain #b{0} additional [E] each turn."],

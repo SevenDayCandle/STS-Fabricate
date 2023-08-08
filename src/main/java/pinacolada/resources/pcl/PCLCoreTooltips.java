@@ -215,7 +215,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip sorcery = EUIKeywordTooltip.findByID("Sorcery");
     public EUIKeywordTooltip soulbound = EUIKeywordTooltip.findByID("Soulbound");
     public EUIKeywordTooltip spread = EUIKeywordTooltip.findByID("Spread");
-    public EUIKeywordTooltip stabilize = EUIKeywordTooltip.findByID("Stabilize");
     public EUIKeywordTooltip stance = EUIKeywordTooltip.findByID("Stance");
     public EUIKeywordTooltip starter = EUIKeywordTooltip.findByID("Starter");
     public EUIKeywordTooltip startup = EUIKeywordTooltip.findByID("Startup");

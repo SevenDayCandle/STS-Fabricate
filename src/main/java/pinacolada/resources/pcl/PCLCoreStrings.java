@@ -750,9 +750,6 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_spreadAmount(Object amount, Object subject, Object target) {
         return act_zOnAmount(PGR.core.tooltips.spread.title, amount, subject, target);
     }
-    public final String act_stabilize(Object subject, Object target) {
-        return act_zOn(PGR.core.tooltips.stabilize.title, subject, target);
-    }
     public final String act_stun(Object target) {
         return act_generic2(PGR.core.tooltips.stun.title, target);
     }

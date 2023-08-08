@@ -44,7 +44,6 @@ import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.AddPowerEffectBonus;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.powers.SpreadPower;
-import pinacolada.actions.powers.StabilizePower;
 import pinacolada.actions.special.ObtainRelicAction;
 import pinacolada.actions.special.ShowAndObtainCardAction;
 import pinacolada.actions.special.UsePotionAction;
@@ -724,14 +723,6 @@ public final class PCLActions {
 
     public SpreadPower spreadPower(AbstractCreature source, AbstractCreature target, String power, int amount) {
         return add(new SpreadPower(source, target, power, amount));
-    }
-
-    public StabilizePower stabilizePower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount) {
-        return add(new StabilizePower(source, target, power, amount));
-    }
-
-    public StabilizePower stabilizePower(AbstractCreature source, AbstractCreature target, String power, int amount) {
-        return add(new StabilizePower(source, target, power, amount));
     }
 
     public SummonAllyAction summonAlly(PCLCard card, PCLCardAlly slot) {

@@ -513,10 +513,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_SpreadPower(target, helpers);
     }
 
-    public static PMove_StabilizePower stabilize(PCLCardTarget target, PCLPowerHelper... helpers) {
-        return new PMove_StabilizePower(target, helpers);
-    }
-
     public static PMove_Stun stun(int amount) {
         return new PMove_Stun(amount);
     }

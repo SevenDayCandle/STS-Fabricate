@@ -465,12 +465,6 @@
 		"NAME": "Spread",
 		"PRESENT": "Spreads"
 	},
-	"Stabilize":	{
-		"DESCRIPTION": "Prevent a turn-based power from being reduced at the start of turn.",
-		"NAME": "Stabilize",
-		"PAST": "Stabilized",
-		"PRESENT": "Stabilizes"
-	},
 	"Starter":	{
 		"DESCRIPTION": "Activates if played at the start of turn.",
 		"NAME": "Starter"
