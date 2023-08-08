@@ -50,6 +50,16 @@ public class SkillModifier extends AbstractCardModifier {
         return skill;
     }
 
+    @Override
+    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return skill.modifyDamageGiveFirst(getInfo(card, target), damage);
+    }
+
+    @Override
+    public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return skill.modifyDamageGiveLast(getInfo(card, target), damage);
+    }
+
     // Generate infos manually because we cannot attach the skill to the card if it is not an EditorCard
     @Override
     public float modifyBlock(float block, AbstractCard card) {
@@ -59,16 +69,6 @@ public class SkillModifier extends AbstractCardModifier {
     @Override
     public float modifyBlockFinal(float block, AbstractCard card) {
         return skill.modifyBlockLast(getInfo(card, null), block);
-    }
-
-    @Override
-    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return skill.modifyDamageGiveFirst(getInfo(card, target), damage);
-    }
-
-    @Override
-    public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return skill.modifyDamageGiveLast(getInfo(card, target), damage);
     }
 
     @Override

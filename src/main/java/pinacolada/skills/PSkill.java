@@ -429,7 +429,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo generateInfo(AbstractCreature target) {
-        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
+        return generateInfo(getSourceCreature(), target);
+    }
+
+    public PCLUseInfo generateInfo(AbstractCreature source, AbstractCreature target) {
+        return CombatManager.playerSystem.generateInfo(sourceCard, source, target);
     }
 
     public final int getAmountBaseFromCard() {
@@ -740,7 +744,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo getInfo(AbstractCreature target) {
-        return CombatManager.playerSystem.getInfo(sourceCard, getSourceCreature(), target);
+        return generateInfo(getSourceCreature(), target);
+    }
+
+    public PCLUseInfo getInfo(AbstractCreature source, AbstractCreature target) {
+        return CombatManager.playerSystem.getInfo(sourceCard, source, target);
     }
 
     public final String getInheritedThemString() {
@@ -958,6 +966,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public String getTargetStringPerspective(PCLCardTarget target) {
+        return getTargetString(getTargetForPerspective(target), 1);
+    }
+
     public final String getTargetStringSingular() {
         return getTargetStringSingular(target);
     }
@@ -976,10 +988,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             default:
                 return TEXT.subjects_character;
         }
-    }
-
-    public String getTargetStringPerspective(PCLCardTarget target) {
-        return getTargetString(getTargetForPerspective(target), 1);
     }
 
     public String getTargetSubjectString(PCLCardTarget target) {
@@ -1565,12 +1573,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally) {
+    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
         if (this instanceof OnAllyTriggerSubscriber) {
-            ((OnAllyTriggerSubscriber) this).onAllyTrigger(c, ally);
+            ((OnAllyTriggerSubscriber) this).onAllyTrigger(c, ally, caller);
         }
         else if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyTrigger(c, ally);
+            this.childEffect.triggerOnAllyTrigger(c, ally, caller);
         }
     }
 

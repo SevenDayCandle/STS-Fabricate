@@ -1,8 +1,6 @@
 package pinacolada.effects.screen;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import extendedui.ui.controls.EUIDialogColorPicker;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.ui.customRun.PCLCustomLoadoutDialog;

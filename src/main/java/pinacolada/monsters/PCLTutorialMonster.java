@@ -14,7 +14,6 @@ import extendedui.interfaces.markers.TourProvider;
 import extendedui.ui.tooltips.EUITourTooltip;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;

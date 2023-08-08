@@ -31,10 +31,10 @@ public class RockBurstEffect extends PCLEffect {
         for (int i = 0; i < PROJECTILES; ++i) {
             float angle = random(-500f, 500f);
             PCLEffects.Queue.particle(EUIUtils.random(IMAGES).texture(), x, y)
-                            .setColor(EUIColors.random(0.7f, 1f, true))
-                            .setScale(scale * random(0.06f, 0.45f))
-                            .setRotation(random(0, 360f), random(550f, 700f))
-                            .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(60f, 280f))
+                    .setColor(EUIColors.random(0.7f, 1f, true))
+                    .setScale(scale * random(0.06f, 0.45f))
+                    .setRotation(random(0, 360f), random(550f, 700f))
+                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(60f, 280f))
                     .setAcceleration(0, -200f)
                     .setDuration(duration, true);
         }

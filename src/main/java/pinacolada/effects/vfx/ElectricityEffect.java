@@ -45,6 +45,12 @@ public class ElectricityEffect extends VisualEffect {
         complete();
     }
 
+    protected void onTrail(TrailingParticleEffect effect) {
+        effect.texture = randomTexture(images);
+        effect.x = x + random(-jitter, jitter);
+        effect.y = y + random(-jitter, jitter);
+    }
+
     public ElectricityEffect setJitter(float jitter) {
         this.jitter = jitter;
 
@@ -61,11 +67,5 @@ public class ElectricityEffect extends VisualEffect {
         this.spread = spread;
 
         return this;
-    }
-
-    protected void onTrail(TrailingParticleEffect effect) {
-        effect.texture = randomTexture(images);
-        effect.x = x + random(-jitter, jitter);
-        effect.y = y + random(-jitter, jitter);
     }
 }

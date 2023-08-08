@@ -7,10 +7,8 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -41,6 +39,11 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : TEXT.cond_ifX(PGR.core.tooltips.kill.past());
     }
 
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.registerNotBoolean(editor);
+        fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
+    }
+
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
@@ -54,12 +57,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
-        useFromTrigger(generateInfo(monster));
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        fields.registerNotBoolean(editor);
-        fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
+        useFromTrigger(generateInfo(getOwnerCreature(), monster));
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

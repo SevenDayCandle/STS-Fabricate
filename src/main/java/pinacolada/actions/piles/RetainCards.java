@@ -15,7 +15,7 @@ public class RetainCards extends SelectFromPile {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public RetainCards(String sourceName, int amount,  PCLCardSelection origin, CardGroup... groups) {
+    public RetainCards(String sourceName, int amount, PCLCardSelection origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
     }
 

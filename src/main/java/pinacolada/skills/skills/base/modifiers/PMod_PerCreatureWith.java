@@ -45,6 +45,12 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     }
 
     @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
+    }
+
+    @Override
     public String getSubSampleText() {
         return TEXT.subjects_characterWithX(TEXT.subjects_x);
     }
@@ -60,11 +66,5 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     public String getSubText(PCLCardTarget perspective) {
         String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : fields.getPowerAndOrString());
         return target == PCLCardTarget.Any ? TEXT.subjects_characterWithX(baseString) : TEXT.subjects_enemyWithX(baseString);
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }

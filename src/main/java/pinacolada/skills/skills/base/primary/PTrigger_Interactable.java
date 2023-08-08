@@ -1,10 +1,8 @@
 package pinacolada.skills.skills.base.primary;
 
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.ClickableProvider;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -12,7 +10,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
-import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill

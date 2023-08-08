@@ -17,7 +17,6 @@ import com.megacrit.cardcrawl.powers.SurroundedPower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.patches.creature.AbstractMonsterPatches;
 import pinacolada.powers.special.MacroscopePower;
-import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -63,8 +63,8 @@ public class PsychokinesisEffect extends PCLEffect {
             final Color color = new Color(MathUtils.random(0.8f, 1f), MathUtils.random(0.7f, 1f), 1, 1);
             if (randomBoolean(0.2f)) {
                 PCLEffects.Queue.particle(PCLCoreImages.Effects.circle.texture(), x, y)
-                                .setColor(EUIColors.random(0.83f, 1f, false))
-                                .setScaleTarget(this.scaleLower * 0.05f, scale * 0.2f, 5f);
+                        .setColor(EUIColors.random(0.83f, 1f, false))
+                        .setScaleTarget(this.scaleLower * 0.05f, scale * 0.2f, 5f);
             }
             else {
                 PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.011f)

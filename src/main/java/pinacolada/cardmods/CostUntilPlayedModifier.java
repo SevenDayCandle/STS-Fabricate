@@ -57,11 +57,6 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
         }
     }
 
-    public void unapply(AbstractCard card) {
-        GameUtilities.modifyCostForCombat(card, Math.max(0, card.cost - change), false);
-        card.resetAttributes();
-    }
-
     @Override
     public void onCardReset(AbstractCard card) {
         if (card == this.card) {
@@ -94,5 +89,10 @@ public class CostUntilPlayedModifier extends AbstractCardModifier implements OnC
     @Override
     public AbstractCardModifier makeCopy() {
         return new CostUntilPlayedModifier(change, temporary);
+    }
+
+    public void unapply(AbstractCard card) {
+        GameUtilities.modifyCostForCombat(card, Math.max(0, card.cost - change), false);
+        card.resetAttributes();
     }
 }

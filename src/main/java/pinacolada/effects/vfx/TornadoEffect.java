@@ -1,14 +1,12 @@
 package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 
@@ -22,6 +20,10 @@ public class TornadoEffect extends VisualEffect {
 
     public TornadoEffect(float startX, float startY) {
         super(startX, startY);
+    }
+
+    protected void onTrail(TrailingParticleEffect effect) {
+        PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, Color.LIME.cpy()));
     }
 
     public TornadoEffect setFrequency(float frequency) {
@@ -66,9 +68,5 @@ public class TornadoEffect extends VisualEffect {
         }
 
         super.updateInternal(deltaTime);
-    }
-
-    protected void onTrail(TrailingParticleEffect effect) {
-        PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, Color.LIME.cpy()));
     }
 }

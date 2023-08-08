@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -33,7 +31,6 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
@@ -150,6 +147,7 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
+    @Override
     public void update() {
         super.update();
         if (card != null) {
@@ -216,10 +214,6 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
-    protected boolean shouldShowIntents() {
-        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
-    }
-
     @Override
     protected void renderDamageRange(SpriteBatch sb) {
         if (stunned) {
@@ -243,8 +237,16 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
+    public void onOtherAllyTrigger() {
+
+    }
+
     public boolean shouldDim() {
         return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
+    }
+
+    public boolean shouldShowIntents() {
+        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
     }
 
     public void tryTarget() {
@@ -263,10 +265,12 @@ public class PCLCardAlly extends PCLCardCreature {
 
         if (this.animationTimer > 0.5F) {
             this.animX = Interpolation.pow3In.apply(0.0F, 60.0F * Settings.scale, (1.0F - this.animationTimer) * 2.0F);
-        } else if (this.animationTimer < 0.0F) {
+        }
+        else if (this.animationTimer < 0.0F) {
             this.animationTimer = 0.0F;
             this.animX = 0.0F;
-        } else {
+        }
+        else {
             this.animX = Interpolation.fade.apply(0.0F, 60.0F * Settings.scale, this.animationTimer * 2.0F);
         }
 

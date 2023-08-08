@@ -3,7 +3,6 @@ package pinacolada.effects.card;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;

@@ -54,8 +54,9 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
     // When the target loses its block, trigger the effect on the target
     @Override
     public void onBlockBroken(AbstractCreature creature) {
-        PCLUseInfo pInfo = generateInfo(creature);
-        if (target.getTargets(getOwnerCreature(), creature, pInfo.tempTargets).contains(creature)) {
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo pInfo = generateInfo(owner, creature);
+        if (target.getTargets(owner, creature, pInfo.tempTargets).contains(creature)) {
             useFromTrigger(pInfo);
         }
     }

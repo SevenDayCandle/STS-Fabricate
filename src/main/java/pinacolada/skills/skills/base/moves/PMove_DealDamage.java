@@ -48,6 +48,12 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
         this(amount, attackEffect.key, target);
     }
 
+    protected int[] getDamageMatrix(ArrayList<AbstractCreature> targets) {
+        int[] damage = new int[targets.size()];
+        Arrays.fill(damage, amount);
+        return damage;
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_deal(TEXT.subjects_x, EUIRM.strings.adjNoun(TEXT.subjects_non(PGR.core.tooltips.attack.title), PGR.core.strings.subjects_damage));
@@ -80,11 +86,5 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
             order.dealDamage(getSourceCreature(), target.getTarget(info.source, info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self && target != PCLCardTarget.None);
         }
         super.use(info, order);
-    }
-
-    protected int[] getDamageMatrix(ArrayList<AbstractCreature> targets) {
-        int[] damage = new int[targets.size()];
-        Arrays.fill(damage, amount);
-        return damage;
     }
 }

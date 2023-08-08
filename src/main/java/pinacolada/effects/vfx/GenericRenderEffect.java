@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Interpolation;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class GenericRenderEffect extends VisualEffect {
-    public TextureRegion region;
     protected float alpha = 1;
+    public TextureRegion region;
 
     public GenericRenderEffect(Texture texture, float x, float y) {
         this(new TextureRegion(texture), x, y);
@@ -33,13 +33,6 @@ public class GenericRenderEffect extends VisualEffect {
         }
     }
 
-    public GenericRenderEffect setOpacity(float alpha) {
-        this.alpha = alpha;
-        this.color.a = this.alpha;
-
-        return this;
-    }
-
     @Override
     protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
@@ -53,5 +46,12 @@ public class GenericRenderEffect extends VisualEffect {
             color.a = Interpolation.fade.apply(0f, alpha, duration / halfDuration);
         }
 
+    }
+
+    public GenericRenderEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
+
+        return this;
     }
 }

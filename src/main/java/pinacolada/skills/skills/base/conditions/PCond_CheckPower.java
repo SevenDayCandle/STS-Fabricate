@@ -69,10 +69,11 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
-        PCLUseInfo info = generateInfo(t);
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo info = generateInfo(owner, t);
         // For single target powers, the power target needs to match the owner of this skill
         if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t, info.tempTargets).contains(t)))) {
+                : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == owner : target.getTargets(source, t, info.tempTargets).contains(t)))) {
             useFromTrigger(info.setData(power));
         }
     }

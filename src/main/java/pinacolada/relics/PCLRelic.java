@@ -276,13 +276,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return euiTips;
     }
 
-    // Don't use this, use getDescriptionImpl instead which is run after the constructor
-    @Deprecated
-    @Override
-    public final String getUpdatedDescription() {
-        return super.getUpdatedDescription();
-    }
-
     public int getValue() {
         return counter;
     }
@@ -481,6 +474,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         if (this.mainTooltip != null) {
             this.mainTooltip.setTitle(name).setDescription(description);
         }
+    }
+
+    // Don't use this, use getDescriptionImpl instead which is run after the constructor
+    @Deprecated
+    @Override
+    public final String getUpdatedDescription() {
+        return super.getUpdatedDescription();
     }
 
     @Override

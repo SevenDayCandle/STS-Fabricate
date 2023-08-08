@@ -29,6 +29,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
@@ -37,7 +38,6 @@ import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
-import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

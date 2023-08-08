@@ -37,6 +37,18 @@ public class FadingParticleEffect extends VisualEffect {
         free();
     }
 
+    public FadingParticleEffect setColor(Color color) {
+        super.setColor(color);
+        this.targetColor.set(this.color);
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
+        super.setColor(r, g, b, a);
+        this.targetColor.set(this.color);
+        return this;
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         if (blendingMode != PCLRenderHelpers.BlendingMode.Normal) {
@@ -83,6 +95,37 @@ public class FadingParticleEffect extends VisualEffect {
         this.targetColor.set(this.color);
     }
 
+    public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
+        this.blendingMode = blendingMode;
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Color color, Color targetColor, float colorSpeed) {
+        setColor(color);
+        this.targetColor = targetColor;
+        this.colorSpeed = colorSpeed;
+        return this;
+    }
+
+    public FadingParticleEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
+
+        return this;
+    }
+
+    public FadingParticleEffect setRotation(float startRotation) {
+        this.rotation = startRotation;
+
+        return this;
+    }
+
+    public FadingParticleEffect setScale(float scale) {
+        this.scale = scale;
+
+        return this;
+    }
+
     public FadingParticleEffect setAcceleration(float aX, float aY) {
         this.aX = aX;
         this.aY = aY;
@@ -115,18 +158,6 @@ public class FadingParticleEffect extends VisualEffect {
         this.rotation = startRotation;
         this.vRot = speed;
         this.aRot = accel;
-
-        return this;
-    }
-
-    public FadingParticleEffect setRotation(float startRotation) {
-        this.rotation = startRotation;
-
-        return this;
-    }
-
-    public FadingParticleEffect setScale(float scale) {
-        this.scale = scale;
 
         return this;
     }
@@ -175,37 +206,6 @@ public class FadingParticleEffect extends VisualEffect {
         float angle = PCLRenderHelpers.getAngleRadians(x, y, tX, tY);
         this.vX = MathUtils.cos(angle) * speed;
         this.vY = MathUtils.sin(angle) * speed;
-
-        return this;
-    }
-
-    public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
-        this.blendingMode = blendingMode;
-        return this;
-    }
-
-    public FadingParticleEffect setColor(Color color) {
-        super.setColor(color);
-        this.targetColor.set(this.color);
-        return this;
-    }
-
-    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
-        super.setColor(r, g, b, a);
-        this.targetColor.set(this.color);
-        return this;
-    }
-
-    public FadingParticleEffect setColor(Color color, Color targetColor, float colorSpeed) {
-        setColor(color);
-        this.targetColor = targetColor;
-        this.colorSpeed = colorSpeed;
-        return this;
-    }
-
-    public FadingParticleEffect setOpacity(float alpha) {
-        this.alpha = alpha;
-        this.color.a = this.alpha;
 
         return this;
     }

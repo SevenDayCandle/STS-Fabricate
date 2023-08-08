@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.*;
@@ -19,14 +18,11 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
-import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
@@ -153,6 +149,12 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
         return null;
     }
 
+    protected LoadoutStrings getStringsForLanguage(Settings.GameLanguage language) {
+        return currentLanguageMap.getOrDefault(language,
+                currentLanguageMap.getOrDefault(Settings.GameLanguage.ENG,
+                        currentLanguageMap.size() > 0 ? currentLanguageMap.entrySet().iterator().next().getValue() : PCLCustomLoadout.getInitialStrings()));
+    }
+
     public void open(PCLCustomLoadout loadout) {
         setActive(true);
         this.loadout = loadout;
@@ -191,11 +193,5 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
             currentID = cardID;
             this.confirm.setInteractable(true);
         }
-    }
-
-    protected LoadoutStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return currentLanguageMap.getOrDefault(language,
-                currentLanguageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        currentLanguageMap.size() > 0 ? currentLanguageMap.entrySet().iterator().next().getValue() : PCLCustomLoadout.getInitialStrings()));
     }
 }

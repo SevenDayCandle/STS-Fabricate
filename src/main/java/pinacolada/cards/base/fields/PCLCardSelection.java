@@ -1,10 +1,8 @@
 package pinacolada.cards.base.fields;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public enum PCLCardSelection {
@@ -12,46 +10,6 @@ public enum PCLCardSelection {
     Top,
     Bottom,
     Random;
-
-    // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final String getTitle() {
-        switch (this) {
-            case Manual:
-                return PGR.core.strings.cpile_manual;
-            case Top:
-                return PGR.core.strings.cpile_top;
-            case Bottom:
-                return PGR.core.strings.cpile_bottom;
-            case Random:
-                return PGR.core.strings.cpile_random;
-        }
-        return "";
-    }
-
-    public <T> void add(List<T> list, T item, int index) {
-        switch (this) {
-            case Top:
-                addLast(list, item, index);
-                break;
-            case Bottom:
-                addFirst(list, item, index);
-                break;
-            case Random:
-                addRandom(list, item);
-        }
-    }
-
-    public <T> T get(List<T> list, int index) {
-        switch (this) {
-            case Top:
-                return getLast(list, index);
-            case Bottom:
-                return getFirst(list, index);
-            case Random:
-                return getRandom(list, index);
-        }
-        return null;
-    }
 
     public static <T> void addFirst(List<T> list, T item, int index) {
         list.add(Math.max(0, Math.min(list.size(), index)), item);
@@ -98,6 +56,46 @@ public enum PCLCardSelection {
         }
 
         return card;
+    }
+
+    public <T> void add(List<T> list, T item, int index) {
+        switch (this) {
+            case Top:
+                addLast(list, item, index);
+                break;
+            case Bottom:
+                addFirst(list, item, index);
+                break;
+            case Random:
+                addRandom(list, item);
+        }
+    }
+
+    public <T> T get(List<T> list, int index) {
+        switch (this) {
+            case Top:
+                return getLast(list, index);
+            case Bottom:
+                return getFirst(list, index);
+            case Random:
+                return getRandom(list, index);
+        }
+        return null;
+    }
+
+    // These strings cannot be put in as an enum variable because cards are initialized before these strings are
+    public final String getTitle() {
+        switch (this) {
+            case Manual:
+                return PGR.core.strings.cpile_manual;
+            case Top:
+                return PGR.core.strings.cpile_top;
+            case Bottom:
+                return PGR.core.strings.cpile_bottom;
+            case Random:
+                return PGR.core.strings.cpile_random;
+        }
+        return "";
     }
 
 }

@@ -26,7 +26,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;

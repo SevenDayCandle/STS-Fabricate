@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;

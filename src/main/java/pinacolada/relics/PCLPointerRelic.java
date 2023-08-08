@@ -134,11 +134,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
-    }
-
-    @Override
     public String getDescriptionImpl() {
         return StringUtils.capitalize(getEffectPowerTextStrings());
     }
@@ -213,6 +208,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return super.getTooltip();
     }
 
+    @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
+    }
+
     protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
     }
@@ -235,6 +235,31 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
         return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
+
+    @Override
+    public int getXValue() {
+        return counter;
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    }
+
+    @Override
+    public String getID() {
+        return relicId;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
     }
 
     public void refresh(PCLUseInfo info) {
@@ -260,31 +285,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
                 triggerCondition = use;
             }
         }
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
-    }
-
-    @Override
-    public int getXValue() {
-        return counter;
-    }
-
-    @Override
-    public String getID() {
-        return relicId;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Skills getSkills() {
-        return skills;
     }
 
     protected void unsubscribe() {

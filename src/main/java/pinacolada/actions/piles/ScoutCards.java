@@ -1,7 +1,6 @@
 package pinacolada.actions.piles;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
@@ -32,7 +31,7 @@ public class ScoutCards extends FetchFromPile {
             }
             else {
                 AbstractGameAction lastAction = PCLCardSelection.getLast(AbstractDungeon.actionManager.actions, 0);
-                if (lastAction instanceof ReshuffleFromPile && ((ReshuffleFromPile) lastAction).destination == PCLCardSelection.Top &&  Arrays.equals(action.groups, ((ReshuffleFromPile) lastAction).groups)) {
+                if (lastAction instanceof ReshuffleFromPile && ((ReshuffleFromPile) lastAction).destination == PCLCardSelection.Top && Arrays.equals(action.groups, ((ReshuffleFromPile) lastAction).groups)) {
                     lastAction.amount += result.size();
                 }
                 else {

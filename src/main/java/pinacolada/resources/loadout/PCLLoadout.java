@@ -352,10 +352,6 @@ public abstract class PCLLoadout {
         return shortDescription;
     }
 
-    protected AbstractCard.CardRarity getLoadoutCardRarity() {
-        return AbstractCard.CardRarity.COMMON;
-    }
-
     public PCLLoadoutData getDefaultData(int preset) {
         final PCLLoadoutData data = new PCLLoadoutData(this);
         data.preset = preset;
@@ -387,6 +383,10 @@ public abstract class PCLLoadout {
     public CharSelectInfo getLoadout(String name, String description, PCLCharacter c) {
         int hp = getHP();
         return new CharSelectInfo(name + "-" + ID, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
+    }
+
+    protected AbstractCard.CardRarity getLoadoutCardRarity() {
+        return AbstractCard.CardRarity.COMMON;
     }
 
     public String getName() {

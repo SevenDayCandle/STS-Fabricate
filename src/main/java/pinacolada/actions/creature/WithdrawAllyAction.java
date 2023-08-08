@@ -1,19 +1,15 @@
 package pinacolada.actions.creature;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 import pinacolada.actions.PCLAction;
-import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ShowCardAfterWithdrawEffect;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,16 +1,13 @@
 package pinacolada.cards.pcl.curse;
 
-import com.megacrit.cardcrawl.cards.curses.Necronomicurse;
 import com.megacrit.cardcrawl.cards.curses.Normality;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PTrigger;
 

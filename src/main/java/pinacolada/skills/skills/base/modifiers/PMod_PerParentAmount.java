@@ -7,7 +7,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.*;
-import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.fields.PField_Random;
 
 @VisibleSkill
@@ -27,6 +26,18 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
         super(DATA, content);
     }
 
+    protected int getParentAmount(PSkill<?> skill) {
+        if (skill instanceof PDelay || (fields.random && skill instanceof PCond)) {
+            return getParentAmount(skill.parent);
+        }
+        return skill != null ? skill.amount : 0;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return EUIRM.strings.adjNoun(TEXT.cedit_useParent, getSubSampleText());
+    }
+
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         if (info.data != null) {
@@ -44,21 +55,9 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
         return getParentAmount(parent);
     }
 
-    protected int getParentAmount(PSkill<?> skill) {
-        if (skill instanceof PDelay || (fields.random && skill instanceof PCond)) {
-            return getParentAmount(skill.parent);
-        }
-        return skill != null ? skill.amount : 0;
-    }
-
     @Override
     public String getSubText(PCLCardTarget perspective) {
         return TEXT.subjects_amount;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.adjNoun(TEXT.cedit_useParent, getSubSampleText());
     }
 
 

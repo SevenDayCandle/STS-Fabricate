@@ -1,14 +1,11 @@
 package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.StrengthPower;
-import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
-import pinacolada.utilities.GameUtilities;
 
 public class ShacklesPower extends PCLPower {
     public static final String POWER_ID = createFullID(ShacklesPower.class);

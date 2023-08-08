@@ -8,8 +8,8 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class HighlightToken extends PCLTextToken {
-    public static final char TOKEN = '{';
     private static final PCLTextParser internalParser = new PCLTextParser(true);
+    public static final char TOKEN = '{';
 
     private HighlightToken() {
         super(null, null);

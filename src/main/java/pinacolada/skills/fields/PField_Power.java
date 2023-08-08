@@ -35,6 +35,11 @@ public class PField_Power extends PField_Random {
         editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description, v -> debuff = v, debuff);
     }
 
+    public PField_Power setRandom(boolean value) {
+        this.random = value;
+        return this;
+    }
+
     public String getBuffString() {
         return debuff ? PGR.core.tooltips.debuff.title : PGR.core.tooltips.buff.title;
     }
@@ -76,10 +81,5 @@ public class PField_Power extends PField_Random {
 
     public PField_Power setPower(PCLPowerHelper... powers) {
         return setPower(Arrays.asList(powers));
-    }
-
-    public PField_Power setRandom(boolean value) {
-        this.random = value;
-        return this;
     }
 }

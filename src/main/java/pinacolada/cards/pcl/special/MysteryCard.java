@@ -1,26 +1,17 @@
 package pinacolada.cards.pcl.special;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnCardCreatedSubscriber;
-import pinacolada.resources.PCLEnum;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
-import pinacolada.utilities.WeightedList;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class MysteryCard extends PCLCard {
     public static final PCLCardData DATA = register(MysteryCard.class)
@@ -82,15 +73,15 @@ public class MysteryCard extends PCLCard {
             return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], fields.getFullCardString());
         }
 
-        @Override
-        public void onCardCreated(AbstractCard card, boolean startOfBattle) {
-            useFromTrigger(generateInfo(null));
-        }
-
         protected void useImpl(PCLUseInfo info, PCLActions order) {
             if (sourceCard != null) {
                 order.replaceCard(sourceCard.uuid, createObscuredCard());
             }
+        }
+
+        @Override
+        public void onCardCreated(AbstractCard card, boolean startOfBattle) {
+            useFromTrigger(generateInfo(null));
         }
     }
 }

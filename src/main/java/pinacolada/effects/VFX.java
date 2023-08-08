@@ -4,15 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.vfx.combat.*;
 import pinacolada.effects.utility.CombinedEffect;
 import pinacolada.effects.vfx.*;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
-
-import static pinacolada.effects.PCLEffect.random;
 
 // Copied and modified from STS-AnimatorMod
 // TODO merge with PCLEffects

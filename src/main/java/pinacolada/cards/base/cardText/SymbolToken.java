@@ -15,9 +15,9 @@ import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class SymbolToken extends PCLTextToken {
+    private static final Map<String, SymbolToken> tokenCache = new HashMap<>();
     public static final char TOKEN1 = '[';
     public static final char TOKEN2 = '†';
-    private static final Map<String, SymbolToken> tokenCache = new HashMap<>();
 
     // TODO remove
     static {

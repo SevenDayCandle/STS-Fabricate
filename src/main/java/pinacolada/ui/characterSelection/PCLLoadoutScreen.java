@@ -23,7 +23,9 @@ import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
 import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.*;
+import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadoutData;
+import pinacolada.resources.loadout.PCLLoadoutValidation;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 

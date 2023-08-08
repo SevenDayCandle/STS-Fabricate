@@ -1128,6 +1128,22 @@ public class GameUtilities {
         return getPowerAmountMatching(AbstractDungeon.player, powerID);
     }
 
+    public static ArrayList<AbstractPower> getPowerMatchingSingle(AbstractCreature creature, String powerID) {
+        return getPowerMatchingSingle(new ArrayList<>(), creature, powerID);
+    }
+
+    public static ArrayList<AbstractPower> getPowerMatchingSingle(ArrayList<AbstractPower> list, AbstractCreature creature, String powerID) {
+        if (creature != null && creature.powers != null) {
+            for (AbstractPower p : creature.powers) {
+                if (p != null && p.ID != null && p.ID.contains(powerID)) {
+                    list.add(p);
+                }
+            }
+        }
+
+        return list;
+    }
+
     public static ArrayList<AbstractPower> getPowers(String powerID) {
         return getPowers(GameUtilities.getAllCharacters(true), powerID);
     }
@@ -1171,22 +1187,6 @@ public class GameUtilities {
         }
 
         return result;
-    }
-
-    public static ArrayList<AbstractPower> getPowerMatchingSingle(AbstractCreature creature, String powerID) {
-        return getPowerMatchingSingle(new ArrayList<>(), creature, powerID);
-    }
-
-    public static ArrayList<AbstractPower> getPowerMatchingSingle(ArrayList<AbstractPower> list, AbstractCreature creature, String powerID) {
-        if (creature != null && creature.powers != null) {
-            for (AbstractPower p : creature.powers) {
-                if (p != null && p.ID != null && p.ID.contains(powerID)) {
-                    list.add(p);
-                }
-            }
-        }
-
-        return list;
     }
 
     public static Random getRNG() {

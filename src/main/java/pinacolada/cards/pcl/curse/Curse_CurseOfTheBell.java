@@ -1,6 +1,5 @@
 package pinacolada.cards.pcl.curse;
 
-import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.cards.curses.CurseOfTheBell;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;

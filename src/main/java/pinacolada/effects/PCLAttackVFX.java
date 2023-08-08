@@ -44,7 +44,7 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX LIGHTNING = new PCLAttackVFX(AttackEffect.LIGHTNING, null, Color.YELLOW, (sx, sy, cx, cy) -> new LightningEffect(cx, cy), PCLSFX.ATTACK_DAGGER_6);
     public static final PCLAttackVFX POISON = new PCLAttackVFX(AttackEffect.POISON, ImageMaster.ATK_POISON, Color.CHARTREUSE, PCLSFX.ATTACK_POISON, PCLSFX.ATTACK_POISON2);
     public static final PCLAttackVFX PSYCHOKINESIS = new PCLAttackVFX(PCLEnum.AttackEffect.PSYCHOKINESIS, null, Color.MAGENTA, (sx, sy, cx, cy) -> new PsychokinesisEffect(cx, cy), PCLSFX.PCL_PSI);
-    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, 0.6f, (sx, sy, cx, cy) -> (StrongPunchEffect) new StrongPunchEffect(cx, cy, 2), PCLSFX.RAGE);
+    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, 0.6f, (sx, sy, cx, cy) -> new StrongPunchEffect(cx, cy, 2), PCLSFX.RAGE);
     public static final PCLAttackVFX SHIELD = new PCLAttackVFX(AttackEffect.SHIELD, ImageMaster.ATK_SHIELD, (sx, sy, cx, cy) -> new ShieldParticleEffect(cx, cy));
     public static final PCLAttackVFX SLASH_DIAGONAL = new PCLAttackVFX(AttackEffect.SLASH_DIAGONAL, ImageMaster.ATK_SLASH_D, PCLSFX.ATTACK_FAST);
     public static final PCLAttackVFX SLASH_HEAVY = new PCLAttackVFX(AttackEffect.SLASH_HEAVY, ImageMaster.ATK_SLASH_HEAVY, PCLSFX.ATTACK_HEAVY);

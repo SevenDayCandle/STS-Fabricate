@@ -5,14 +5,12 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.function.Predicate;
 
 // Copied and modified from STS-AnimatorMod

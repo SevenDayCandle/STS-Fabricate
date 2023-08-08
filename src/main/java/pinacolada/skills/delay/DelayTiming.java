@@ -7,7 +7,8 @@ public enum DelayTiming {
     StartOfTurnFirst,
     StartOfTurnLast,
     EndOfTurnFirst,
-    EndOfTurnLast,;
+    EndOfTurnLast,
+    ;
 
     public String getDesc() {
         switch (this) {

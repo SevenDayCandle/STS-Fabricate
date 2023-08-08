@@ -1,19 +1,14 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Intent;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PCond_Intent extends PPassiveCond<PField_Intent> {

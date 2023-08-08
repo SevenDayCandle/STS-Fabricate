@@ -24,11 +24,11 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
+    public final String ID;
     protected EUIButton infoIcon;
     protected PCLUseInfo info;
     protected int currentScore;
     protected int highestScore;
-    public final String ID;
 
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);

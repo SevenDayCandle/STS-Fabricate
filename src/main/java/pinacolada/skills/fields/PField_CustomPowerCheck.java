@@ -1,13 +1,10 @@
 package pinacolada.skills.fields;
 
-import extendedui.EUIUtils;
-import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class PField_CustomPowerCheck extends PField_Random {
     public ArrayList<String> cardIDs = new ArrayList<>();
@@ -20,14 +17,6 @@ public class PField_CustomPowerCheck extends PField_Random {
                 ((PField_CustomPowerCheck) other).not == not;
     }
 
-    public String getCardIDAndString() {
-        return getCardIDAndString(cardIDs);
-    }
-
-    public String getCardIDOrString() {
-        return getCardIDOrString(cardIDs);
-    }
-
     @Override
     public PField_CustomPowerCheck makeCopy() {
         return (PField_CustomPowerCheck) new PField_CustomPowerCheck().setCardIDs(cardIDs).setRandom(random).setNot(not);
@@ -36,6 +25,14 @@ public class PField_CustomPowerCheck extends PField_Random {
     // Indexes should correspond to the indexes of powers in the card being built
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerCard(cardIDs);
+    }
+
+    public String getCardIDAndString() {
+        return getCardIDAndString(cardIDs);
+    }
+
+    public String getCardIDOrString() {
+        return getCardIDOrString(cardIDs);
     }
 
     public PField_CustomPowerCheck setCardIDs(Collection<String> cards) {

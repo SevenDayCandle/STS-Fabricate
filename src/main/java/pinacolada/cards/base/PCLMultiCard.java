@@ -59,6 +59,32 @@ public abstract class PCLMultiCard extends PCLCard {
         return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
     }
 
+    public void setup(Object input) {
+        multiCardMove = createMulticardMove();
+        addUseMove(multiCardMove);
+    }
+
+    @Override
+    public void triggerWhenCreated(boolean startOfBattle) {
+        if (inheritedCards.size() < multiCardMove.baseAmount) {
+            while (inheritedCards.size() < multiCardMove.baseAmount) {
+                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
+            }
+        }
+        for (AbstractCard card : inheritedCards.getCards()) {
+            if (card instanceof MysteryCard) {
+                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
+                replaceInheritedCard(card, newCard);
+            }
+            card.isLocked = false;
+            card.isSeen = true;
+        }
+
+        refreshProperties();
+
+        super.triggerWhenCreated(startOfBattle);
+    }
+
     @Override
     public PCLMultiCard makeStatEquivalentCopy() {
         PCLMultiCard other = (PCLMultiCard) super.makeStatEquivalentCopy();
@@ -153,32 +179,6 @@ public abstract class PCLMultiCard extends PCLCard {
         return super.removeAugment(index, save);
     }
 
-    public void setup(Object input) {
-        multiCardMove = createMulticardMove();
-        addUseMove(multiCardMove);
-    }
-
-    @Override
-    public void triggerWhenCreated(boolean startOfBattle) {
-        if (inheritedCards.size() < multiCardMove.baseAmount) {
-            while (inheritedCards.size() < multiCardMove.baseAmount) {
-                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
-            }
-        }
-        for (AbstractCard card : inheritedCards.getCards()) {
-            if (card instanceof MysteryCard) {
-                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
-                replaceInheritedCard(card, newCard);
-            }
-            card.isLocked = false;
-            card.isSeen = true;
-        }
-
-        refreshProperties();
-
-        super.triggerWhenCreated(startOfBattle);
-    }
-
     // TODO make configurable using skill
     protected void addCardProperties(AbstractCard card) {
         if (this.cost == -2 || card.cost == -1) {
@@ -210,6 +210,14 @@ public abstract class PCLMultiCard extends PCLCard {
             }
             addCardProperties(card);
         }
+    }
+
+    public PField_CardCategory createFilterFields() {
+        return new PField_CardCategory();
+    }
+
+    public PField_CardCategory createMysteryFilterFields() {
+        return createFilterFields().setCost(CostFilter.Cost0);
     }
 
     public AbstractCard getCard(int index) {
@@ -318,14 +326,6 @@ public abstract class PCLMultiCard extends PCLCard {
         refreshProperties();
     }
 
-    public PField_CardCategory createFilterFields() {
-        return new PField_CardCategory();
-    }
-
-    public PField_CardCategory createMysteryFilterFields() {
-        return createFilterFields().setCost(CostFilter.Cost0);
-    }
-
     protected abstract PCLMultiCardMove createMulticardMove();
 
     public static class PCLMultiCardMove extends PCustomCond {
@@ -405,8 +405,8 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally) {
-            doPCL(card -> card.triggerWhenTriggered(ally));
+        public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
+            doPCL(card -> card.triggerWhenTriggered(ally, caller));
         }
 
         @Override

@@ -3,8 +3,6 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.utilities.RotatingList;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 

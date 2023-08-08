@@ -45,7 +45,7 @@ public class PCLPowerHelper implements TooltipProvider {
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
     public static final PCLPowerHelper DelayedDamage = new PCLPowerHelper(DelayedDamagePower.POWER_ID, PGR.core.tooltips.delayedDamage, (o, s, a) -> new DelayedDamagePower(o, a, PCLEnum.AttackEffect.CLAW), Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper DrawMinus = new PCLPowerHelper(DrawMinusPower.POWER_ID, PGR.core.tooltips.nextTurnDrawMinus, DrawMinusPower::new, Behavior.SingleTurn, true, true, false);
-    public static final PCLPowerHelper Entangled = new PCLPowerHelper(EntanglePower.POWER_ID, PGR.core.tooltips.entangled, (o,s,a) -> new EntanglePower(o), Behavior.SingleTurn, false, true, false);
+    public static final PCLPowerHelper Entangled = new PCLPowerHelper(EntanglePower.POWER_ID, PGR.core.tooltips.entangled, (o, s, a) -> new EntanglePower(o), Behavior.SingleTurn, false, true, false);
     public static final PCLPowerHelper Frail = new PCLPowerHelper(FrailPower.POWER_ID, PGR.core.tooltips.frail, (o, s, a) -> new FrailPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Impaired = new PCLPowerHelper(ImpairedPower.POWER_ID, PGR.core.tooltips.impaired, (o, s, a) -> new ImpairedPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper LockOn = new PCLPowerHelper(com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID, PGR.core.tooltips.lockOn, PCLLockOnPower::new, Behavior.TurnBased, true, true, true);

@@ -14,14 +14,12 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.tags.CardFlag;
-import pinacolada.effects.screen.PCLCustomColorPickerEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomLoadoutEditEffect;
 import pinacolada.resources.PCLEnum;
@@ -33,7 +31,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.customRun.PCLCustomLoadoutDialog;
-import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.utilities.GameUtilities;
@@ -245,6 +242,25 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    @Override
+    public void refresh() {
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
+        nameInput.setLabel(effect.getBuilder().strings.NAME);
+        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
+        typesDropdown.setSelection(effect.getBuilder().cardType, false);
+        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
+        flagsDropdown.setSelection(effect.getBuilder().flags, false);
+        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
+        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        maxCopies.setValue(effect.getBuilder().maxCopies, false);
+        uniqueToggle.setToggle(effect.getBuilder().unique);
+        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
+
+        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
+    }
+
     protected void openLoadoutCreator(String title, PCLCustomLoadout loadout) {
         effect.currentDialog = new PCLCustomLoadoutEditEffect(title, loadout)
                 .addCallback(this::registerLoadout);
@@ -263,25 +279,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                         }
                     });
         }
-    }
-
-    @Override
-    public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
-        typesDropdown.setSelection(effect.getBuilder().cardType, false);
-        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
-        flagsDropdown.setSelection(effect.getBuilder().flags, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        maxCopies.setValue(effect.getBuilder().maxCopies, false);
-        uniqueToggle.setToggle(effect.getBuilder().unique);
-        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
-
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
-        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
-        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     protected void refreshLoadoutItems() {
@@ -311,12 +308,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 refreshLoadoutItems();
             }
         }
-    }
-
-    protected void setLoadout(PCLLoadout loadout) {
-        effect.modifyAllBuilders((e, i) -> e.setLoadout(loadout));
-        editLoadoutButton.setActive(loadoutDropdown.isActive && loadout instanceof PCLCustomLoadout);
-        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     @Override
@@ -359,6 +350,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.tryUpdate();
         uniqueToggle.tryUpdate();
         soulboundToggle.tryUpdate();
+    }
+
+    protected void setLoadout(PCLLoadout loadout) {
+        effect.modifyAllBuilders((e, i) -> e.setLoadout(loadout));
+        editLoadoutButton.setActive(loadoutDropdown.isActive && loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

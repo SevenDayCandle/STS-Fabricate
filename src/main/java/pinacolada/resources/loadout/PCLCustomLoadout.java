@@ -3,14 +3,10 @@ package pinacolada.resources.loadout;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLCustomLoadout extends PCLLoadout {

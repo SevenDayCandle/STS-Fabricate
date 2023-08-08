@@ -1,11 +1,9 @@
 package pinacolada.patches.card;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -46,12 +44,12 @@ public class AbstractCardPatches {
     @SpirePatch(clz = AbstractCard.class, method = "calculateCardDamage")
     public static class PlayerDamageGivePatches {
 
-        @SpireInsertPatch(locator = MonsterDamageReceiveLocator.class, localvars = "tmp")
-        public static void singleReceive(AbstractCard __instance, AbstractMonster mo, @ByRef float[] tmp) {
-            tmp[0] = CombatManager.onModifyDamageReceiveFirst(tmp[0], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), mo, __instance);
+        @SpireInsertPatch(locator = MonsterMultiDamageFinalReceiveLocator.class, localvars = {"tmp", "i"})
+        public static void multiFinalReceive(AbstractCard __instance, AbstractMonster mo, float[] tmp, int i) {
+            tmp[i] = CombatManager.onModifyDamageReceiveLast(tmp[i], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), AbstractDungeon.getMonsters().monsters.get(i), __instance);
         }
 
-        @SpireInsertPatch(locator = MonsterMultiDamageReceiveLocator.class, localvars = {"tmp","i"})
+        @SpireInsertPatch(locator = MonsterMultiDamageReceiveLocator.class, localvars = {"tmp", "i"})
         public static void multiReceive(AbstractCard __instance, AbstractMonster mo, float[] tmp, int i) {
             tmp[i] = CombatManager.onModifyDamageReceiveFirst(tmp[i], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), AbstractDungeon.getMonsters().monsters.get(i), __instance);
         }
@@ -61,9 +59,9 @@ public class AbstractCardPatches {
             tmp[0] = CombatManager.onModifyDamageReceiveLast(tmp[0], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), mo, __instance);
         }
 
-        @SpireInsertPatch(locator = MonsterMultiDamageFinalReceiveLocator.class, localvars = {"tmp","i"})
-        public static void multiFinalReceive(AbstractCard __instance, AbstractMonster mo, float[] tmp, int i) {
-            tmp[i] = CombatManager.onModifyDamageReceiveLast(tmp[i], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), AbstractDungeon.getMonsters().monsters.get(i), __instance);
+        @SpireInsertPatch(locator = MonsterDamageReceiveLocator.class, localvars = "tmp")
+        public static void singleReceive(AbstractCard __instance, AbstractMonster mo, @ByRef float[] tmp) {
+            tmp[0] = CombatManager.onModifyDamageReceiveFirst(tmp[0], __instance.damageTypeForTurn, GameUtilities.getCardOwner(__instance), mo, __instance);
         }
 
         private static class MonsterDamageReceiveLocator extends SpireInsertLocator {
@@ -118,18 +116,6 @@ public class AbstractCardPatches {
     )
     public static class AbstractCard_HasEnoughEnergy {
 
-        @SpireInstrumentPatch
-        public static ExprEditor instrument() {
-            return new ExprEditor() {
-                // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
-                    if (m.getClassName().equals(GameActionManager.class.getName()) && m.getFieldName().equals("turnHasEnded")) {
-                        m.replace("{ $_ = !(pinacolada.patches.card.AbstractCardPatches.forcePlay) && $proceed($$); }");
-                    }
-                }
-            };
-        }
-
         @SpireInsertPatch(
                 locator = Locator.class
         )
@@ -140,6 +126,18 @@ public class AbstractCardPatches {
             else {
                 return SpireReturn.Continue();
             }
+        }
+
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(GameActionManager.class.getName()) && m.getFieldName().equals("turnHasEnded")) {
+                        m.replace("{ $_ = !(pinacolada.patches.card.AbstractCardPatches.forcePlay) && $proceed($$); }");
+                    }
+                }
+            };
         }
 
         private static class Locator extends SpireInsertLocator {

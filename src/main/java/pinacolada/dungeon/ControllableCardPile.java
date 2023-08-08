@@ -14,7 +14,6 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
-import pinacolada.dungeon.CardController;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;

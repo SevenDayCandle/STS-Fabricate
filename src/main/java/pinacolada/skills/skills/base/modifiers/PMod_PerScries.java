@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;

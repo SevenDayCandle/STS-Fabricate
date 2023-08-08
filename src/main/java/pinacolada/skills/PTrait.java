@@ -1,7 +1,6 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -132,6 +131,12 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
     }
 
+    // Child effects will always be separated by a period
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+    }
+
     @Override
     public PTrait<T> makeCopy() {
         PTrait<T> copy = (PTrait<T>) super.makeCopy();
@@ -203,12 +208,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
             return TEXT.act_has(getSubDescText(perspective));
         }
         return getSubDescText(perspective);
-    }
-
-    // Child effects will always be separated by a period
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     abstract public String getSubDescText(PCLCardTarget perspective);

@@ -53,11 +53,6 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
-        return fields.getQualifiers(info);
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
@@ -67,6 +62,11 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
+    }
+
+    @Override
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
+        return fields.getQualifiers(info);
     }
 
     @Override

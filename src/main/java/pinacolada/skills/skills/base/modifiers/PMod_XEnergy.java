@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
-import extendedui.text.EUISmartText;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;

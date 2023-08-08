@@ -53,6 +53,18 @@ public class VisualEffect extends PCLEffect {
         updateInternal(deltaTime);
     }
 
+    public VisualEffect setRotation(float startRotation) {
+        this.rotation = startRotation;
+
+        return this;
+    }
+
+    public VisualEffect setScale(float scale) {
+        this.scale = scale;
+
+        return this;
+    }
+
     protected void initialize(float x, float y, float rot, float scale) {
         super.initialize();
         this.x = x;
@@ -104,21 +116,9 @@ public class VisualEffect extends PCLEffect {
         return this;
     }
 
-    public VisualEffect setRotation(float startRotation) {
-        this.rotation = startRotation;
-
-        return this;
-    }
-
     public VisualEffect setRotationTarget(float startRotation, float target, float speed) {
         this.rotation = startRotation;
         this.vRot = (target - startRotation) / speed;
-
-        return this;
-    }
-
-    public VisualEffect setScale(float scale) {
-        this.scale = scale;
 
         return this;
     }

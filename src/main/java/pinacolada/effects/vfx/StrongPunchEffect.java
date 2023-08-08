@@ -3,14 +3,10 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.DamageImpactCurvyEffect;
 import com.megacrit.cardcrawl.vfx.combat.DamageImpactLineEffect;
-import com.megacrit.cardcrawl.vfx.combat.StrikeEffect;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.effects.VFX;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 public class StrongPunchEffect extends VisualEffect {
@@ -44,10 +40,10 @@ public class StrongPunchEffect extends VisualEffect {
             if (!triggered) {
                 // TODO use generic render effect
                 int i = 0;
-                for(i = 0; i < 18; ++i) {
+                for (i = 0; i < 18; ++i) {
                     PCLEffects.Queue.add(new DamageImpactLineEffect(x, y));
                 }
-                for(i = 0; i < 5; ++i) {
+                for (i = 0; i < 5; ++i) {
                     PCLEffects.Queue.add(new DamageImpactCurvyEffect(x, y));
                 }
                 PCLSFX.play(PCLSFX.PCL_PUNCH, 0.7f, 0.8f);

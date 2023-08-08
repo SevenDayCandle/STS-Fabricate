@@ -257,9 +257,9 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
-    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally) {
+    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
         for (PSkill<?> effect : effects) {
-            effect.triggerOnAllyTrigger(c, ally);
+            effect.triggerOnAllyTrigger(c, ally, caller);
         }
     }
 

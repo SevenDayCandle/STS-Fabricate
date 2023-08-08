@@ -3,7 +3,6 @@ package pinacolada.effects.screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.ui.controls.EUIDialogYesNo;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
 public class PCLCustomDeletionConfirmationEffect<T> extends PCLEffectWithCallback<T> {

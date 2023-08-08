@@ -29,13 +29,13 @@ import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class AbstractDungeonPatches {
-    public static boolean filterCardGroupForValid;
     private static int tempID;
+    public static boolean filterCardGroupForValid;
 
     // If no suitable card is found, make a replacement because the method will crash if no card is actually found
     protected static AbstractCard tryReturnCard(AbstractCard card, AbstractCard.CardRarity rarity, Random rng) {
         if (card == null) {
-            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity: " + String.valueOf(rarity));
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity: " + rarity);
 
             // First try to find a replacement of another rarity if a rarity was specified
             if (rarity != null) {

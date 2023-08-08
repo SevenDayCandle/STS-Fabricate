@@ -1,6 +1,5 @@
 package pinacolada.patches.creature;
 
-import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -80,21 +79,6 @@ public class AbstractMonsterPatches {
 
     @SpirePatch(clz = AbstractMonster.class, method = "calculateDamage", paramtypez = {int.class})
     public static class AbstractMonster_CalculateDamage {
-        @SpirePostfixPatch
-        public static void postfix(AbstractMonster __instance, int dmg) {
-            PCLIntentInfo.currentEnemy = null;
-        }
-
-        @SpirePrefixPatch
-        public static void prefix(AbstractMonster __instance, int dmg) {
-            PCLIntentInfo.currentEnemy = __instance;
-        }
-
-        @SpireInsertPatch(locator = MonsterDamageGiveLocator.class, localvars = {"tmp"})
-        public static void give(AbstractMonster __instance, @ByRef float[] tmp) {
-            tmp[0] = CombatManager.onModifyDamageGiveFirst(tmp[0], DamageInfo.DamageType.NORMAL, __instance, AbstractDungeon.player, null);
-        }
-
         @SpireInsertPatch(locator = MonsterDamageFinalGiveLocator.class, localvars = {"tmp"})
         public static void finalGive(AbstractMonster __instance, @ByRef float[] tmp) {
             tmp[0] = CombatManager.onModifyDamageGiveLast(tmp[0], DamageInfo.DamageType.NORMAL, __instance, AbstractDungeon.player, null);
@@ -103,6 +87,21 @@ public class AbstractMonsterPatches {
         @SpireInsertPatch(locator = PlayerDamageFinalReceiveLocator.class, localvars = {"tmp"})
         public static void finalReceive(AbstractMonster __instance, @ByRef float[] tmp) {
             tmp[0] = CombatManager.onModifyDamageReceiveLast(tmp[0], DamageInfo.DamageType.NORMAL, __instance, AbstractDungeon.player, null);
+        }
+
+        @SpireInsertPatch(locator = MonsterDamageGiveLocator.class, localvars = {"tmp"})
+        public static void give(AbstractMonster __instance, @ByRef float[] tmp) {
+            tmp[0] = CombatManager.onModifyDamageGiveFirst(tmp[0], DamageInfo.DamageType.NORMAL, __instance, AbstractDungeon.player, null);
+        }
+
+        @SpirePostfixPatch
+        public static void postfix(AbstractMonster __instance, int dmg) {
+            PCLIntentInfo.currentEnemy = null;
+        }
+
+        @SpirePrefixPatch
+        public static void prefix(AbstractMonster __instance, int dmg) {
+            PCLIntentInfo.currentEnemy = __instance;
         }
 
         @SpireInsertPatch(locator = PlayerDamageReceiveLocator.class, localvars = {"tmp"})

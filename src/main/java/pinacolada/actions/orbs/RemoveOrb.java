@@ -1,10 +1,8 @@
 package pinacolada.actions.orbs;
 
-import com.evacipated.cardcrawl.mod.stslib.actions.defect.EvokeSpecificOrbAction;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -79,16 +77,16 @@ public class RemoveOrb extends PCLAction<ArrayList<AbstractOrb>> {
         complete(orbs);
     }
 
-    public RemoveOrb setFilter(FuncT1<Boolean, AbstractOrb> filter) {
-        this.filter = filter;
-
-        return this;
-    }
-
     protected void removeOrb(AbstractOrb orb) {
         if (player.orbs.remove(orb)) {
             player.orbs.add(0, orb);
             player.removeNextOrb();
         }
+    }
+
+    public RemoveOrb setFilter(FuncT1<Boolean, AbstractOrb> filter) {
+        this.filter = filter;
+
+        return this;
     }
 }

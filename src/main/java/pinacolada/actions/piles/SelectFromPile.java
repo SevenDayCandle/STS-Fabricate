@@ -11,10 +11,10 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.text.EUISmartText;
-import pinacolada.dungeon.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.dungeon.GridCardSelectScreenHelper;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -226,10 +226,6 @@ public class SelectFromPile extends CardFilterAction {
         return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
-    public String getActionMessage() {
-        return PGR.core.tooltips.select.title;
-    }
-
     protected void fillCardSubset(List<AbstractCard> source, List<AbstractCard> dest, PCLCardSelection o, int count) {
         int max = Math.min(source.size(), count);
         for (int i = 0; i < max; i++) {
@@ -238,6 +234,10 @@ public class SelectFromPile extends CardFilterAction {
                 dest.add(card);
             }
         }
+    }
+
+    public String getActionMessage() {
+        return PGR.core.tooltips.select.title;
     }
 
     public SelectFromPile hideTopPanel(boolean hideTopPanel) {

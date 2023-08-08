@@ -192,11 +192,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
     }
 
-    @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
-    }
-
     public String getID() {
         return ID;
     }
@@ -204,6 +199,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     @Override
     public EUITooltip getTooltip() {
         return mainTip;
+    }
+
+    @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
     }
 
     protected ColoredString getPrimaryAmount(Color c) {

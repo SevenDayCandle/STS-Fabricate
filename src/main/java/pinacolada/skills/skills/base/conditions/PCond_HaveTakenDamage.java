@@ -55,8 +55,9 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     // When the owner receives damage, triggers the effect onto the attacker (info.owner)
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
-        PCLUseInfo pInfo = generateInfo(info.owner);
-        if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver, pInfo.tempTargets).contains(receiver)) {
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo pInfo = generateInfo(owner, info.owner);
+        if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(owner, receiver, pInfo.tempTargets).contains(receiver)) {
             useFromTrigger(pInfo.setData(info.output), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }

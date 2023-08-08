@@ -9,7 +9,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_CardTarget;
 import pinacolada.skills.skills.PFacetCond;
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 
 // Only used for augments

@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Circlet;
-import com.megacrit.cardcrawl.relics.MarkOfPain;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -164,7 +163,9 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         }
     }
 
-    public String[] getAdditionalRelicIDs() {return null;}
+    public String[] getAdditionalRelicIDs() {
+        return null;
+    }
 
     public List<PCLLoadout> getAvailableLoadouts() {
         return EUIUtils.filter(loadouts.values(), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);

@@ -23,6 +23,8 @@ public interface ClickableProvider {
     }
 
     String getID();
+
     EUITooltip getTooltip();
+
     PCLClickableUse getClickable();
 }

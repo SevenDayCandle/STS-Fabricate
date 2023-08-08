@@ -192,12 +192,40 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     @Override
+    public void setup(Object input) {
+        if (input instanceof BuilderInfo) {
+            this.builder = ((BuilderInfo) input).builder;
+            if (((BuilderInfo) input).shouldFindForms) {
+                findForms();
+            }
+            setupBuilder(this.builder);
+        }
+    }
+
+    public void fullReset() {
+        findForms();
+        super.fullReset();
+    }
+
+    @Override
     public PCLDynamicCard makeCopy() {
         PCLDynamicCard copy = new PCLDynamicCard(builder);
         if (forms != null && !forms.isEmpty()) {
             copy.setForms(forms);
         }
         return copy;
+    }
+
+    @Override
+    protected void onFormChange(Integer form, int timesUpgraded) {
+        PCLDynamicCardData lastBuilder = null;
+        if (forms != null && forms.size() > form) {
+            lastBuilder = forms.get(form);
+        }
+        if (lastBuilder != null && lastBuilder != this.builder) {
+            this.builder = lastBuilder;
+            setupBuilder(this.builder);
+        }
     }
 
     @Override
@@ -251,34 +279,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                 PCLRenderHelpers.drawOnCardAuto(sb, this, custom, new Vector2(0, 0), custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
                 renderEnergyText(sb);
             }
-        }
-    }
-
-    @Override
-    public void setup(Object input) {
-        if (input instanceof BuilderInfo) {
-            this.builder = ((BuilderInfo) input).builder;
-            if (((BuilderInfo) input).shouldFindForms) {
-                findForms();
-            }
-            setupBuilder(this.builder);
-        }
-    }
-
-    public void fullReset() {
-        findForms();
-        super.fullReset();
-    }
-
-    @Override
-    protected void onFormChange(Integer form, int timesUpgraded) {
-        PCLDynamicCardData lastBuilder = null;
-        if (forms != null && forms.size() > form) {
-            lastBuilder = forms.get(form);
-        }
-        if (lastBuilder != null && lastBuilder != this.builder) {
-            this.builder = lastBuilder;
-            setupBuilder(this.builder);
         }
     }
 

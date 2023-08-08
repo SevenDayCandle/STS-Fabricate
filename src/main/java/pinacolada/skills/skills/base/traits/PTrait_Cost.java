@@ -8,7 +8,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
@@ -42,6 +41,11 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
+    public String wrapAmount(int input) {
+        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
             return TEXT.act_zCosts(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), 2, getSubDescText(perspective));
@@ -62,10 +66,5 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     @Override
     public boolean isDetrimental() {
         return amount > 0;
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

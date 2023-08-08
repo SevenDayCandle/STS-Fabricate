@@ -2,14 +2,11 @@ package pinacolada.cards.base.cardText;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkill;
-
-import java.util.ArrayList;
 
 public class PointerToken extends PCLTextToken {
     public static final char TOKEN = '¦';

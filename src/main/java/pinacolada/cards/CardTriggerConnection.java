@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -25,8 +24,8 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
                                               OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
     public final AbstractCard card;
-    public PCLClickableUse triggerCondition;
     protected EUIKeywordTooltip triggerTip;
+    public PCLClickableUse triggerCondition;
 
     public CardTriggerConnection(PTrigger trigger, AbstractCard card) {
         this.trigger = trigger;
@@ -39,6 +38,11 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
             CardGroup gr = g.getCardGroup();
             return gr != null && gr.contains(card);
         });
+    }
+
+    @Override
+    public AbstractCreature getOwner() {
+        return GameUtilities.getCardOwner(card);
     }
 
     @Override
@@ -62,11 +66,6 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public PCLClickableUse getClickable() {
         return triggerCondition;
-    }
-
-    @Override
-    public AbstractCreature getOwner() {
-        return GameUtilities.getCardOwner(card);
     }
 
     public void initialize() {

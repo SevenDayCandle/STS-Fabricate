@@ -37,6 +37,23 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
     }
 
+    @Override
+    public String getDescriptionImpl() {
+        return formatDescription(0, BONUS_PER_CARDS);
+    }
+
+    @Override
+    protected void onStack(AbstractRelic other) {
+        setCounter(counter + getBonus());
+    }
+
+    @Override
+    public void onEquip() {
+        super.onEquip();
+
+        setCounter(Math.max(0, counter) + getBonus());
+    }
+
     protected AbstractCard.CardRarity getRarity(AbstractCard card) {
         int roll = rng.random(100);
         if (roll < 2) {
@@ -63,22 +80,5 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
             setCounter(counter + getBonus());
             flash();
         }
-    }
-
-    @Override
-    protected void onStack(AbstractRelic other) {
-        setCounter(counter + getBonus());
-    }
-
-    @Override
-    public String getDescriptionImpl() {
-        return formatDescription(0, BONUS_PER_CARDS);
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        setCounter(Math.max(0, counter) + getBonus());
     }
 }

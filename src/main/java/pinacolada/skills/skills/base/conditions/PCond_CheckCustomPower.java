@@ -66,9 +66,10 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
-        PCLUseInfo info = generateInfo(t);
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo info = generateInfo(owner, t);
         // For single target powers, the power target needs to match the owner of this skill
-        if (EUIUtils.any(fields.cardIDs, id -> power.ID.contains(id)) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t, info.tempTargets).contains(t))) {
+        if (EUIUtils.any(fields.cardIDs, id -> power.ID.contains(id)) && (target.targetsSingle() ? t == owner : target.getTargets(source, t, info.tempTargets).contains(t))) {
             useFromTrigger(info.setData(power));
         }
     }

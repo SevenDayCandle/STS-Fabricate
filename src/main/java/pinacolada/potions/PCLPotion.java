@@ -102,6 +102,31 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return StringUtils.capitalize(getEffectPowerTextStrings());
     }
 
+    @Override
+    public int getXValue() {
+        return this.potency;
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return this.getPotency() - 1;
+    }
+
+    @Override
+    public String getID() {
+        return ID;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
+    }
+
     public void initialize() {
         skills = new Skills();
         setup();
@@ -188,31 +213,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void setup() {
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return this.getPotency() - 1;
-    }
-
-    @Override
-    public int getXValue() {
-        return this.potency;
-    }
-
-    @Override
-    public String getID() {
-        return ID;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Skills getSkills() {
-        return skills;
     }
 
     @SpireOverride

@@ -12,22 +12,16 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
-import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_CombatEnd;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.ui.editor.PCLCustomEffectPage;
-import pinacolada.ui.editor.PCLCustomPowerEffectPage;
-import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
-import pinacolada.utilities.GameUtilities;
 
 public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public static final int TRIGGER_PRIORITY = 0;

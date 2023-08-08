@@ -1,11 +1,9 @@
 package pinacolada.skills.delay;
 
-import com.gikk.twirk.SETTINGS;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.dungeon.CombatManager;
@@ -35,16 +33,16 @@ public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayU
         this.tip.setSubheader(new ColoredString());
     }
 
-    public static Collection<EUITooltip> getTooltips() {
-        return EUIUtils.map(DELAYS, DelayUse::getTooltip);
-    }
-
     public static void clear() {
         DELAYS.clear();
     }
 
     public static int delayCount() {
         return DELAYS.size();
+    }
+
+    public static Collection<EUITooltip> getTooltips() {
+        return EUIUtils.map(DELAYS, DelayUse::getTooltip);
     }
 
     public static int minTurns() {
@@ -87,9 +85,9 @@ public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayU
     @Override
     public int compareTo(DelayUse o) {
         if (o.turns == this.turns) {
-            return o.getTiming().ordinal() - this.getTiming().ordinal();
+            return this.getTiming().ordinal() - o.getTiming().ordinal();
         }
-        return o.turns - this.turns;
+        return this.turns - o.turns;
     }
 
     public EUITooltip getTooltip() {

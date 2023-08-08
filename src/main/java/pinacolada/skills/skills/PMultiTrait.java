@@ -116,11 +116,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return EUIUtils.joinStrings(" ", getEffectTexts(effects, perspective, addPeriod));
-    }
-
-    @Override
     public boolean hasChildType(Class<?> childType) {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
     }
@@ -411,6 +406,11 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public String getSubText(PCLCardTarget perspective) {
         return null;
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return EUIUtils.joinStrings(" ", getEffectTexts(effects, perspective, addPeriod));
     }
 
     @Override

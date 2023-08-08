@@ -195,7 +195,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardAndString(Object value) {
-        String sub =  !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+        String sub = !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 

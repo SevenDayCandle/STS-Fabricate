@@ -17,7 +17,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -34,8 +33,6 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
-import pinacolada.actions.cards.MoveCard;
-import pinacolada.actions.cards.MoveCards;
 import pinacolada.actions.cards.*;
 import pinacolada.actions.creature.*;
 import pinacolada.actions.orbs.ChannelOrb;
@@ -386,6 +383,10 @@ public final class PCLActions {
         return add(new EvokeOrb(times, limit, random));
     }
 
+    public RemoveOrb evokeOrb(AbstractOrb orb) {
+        return add(new RemoveOrb(orb));
+    }
+
     public MoveCard exhaust(AbstractCard card) {
         return moveCard(card, player.exhaustPile);
     }
@@ -627,10 +628,6 @@ public final class PCLActions {
 
     public RemoveOrb removeOrb(int times, boolean random) {
         return add(new RemoveOrb(times, random));
-    }
-
-    public RemoveOrb evokeOrb(AbstractOrb orb) {
-        return add(new RemoveOrb(orb));
     }
 
     public RemoveSpecificPowerAction removePower(AbstractCreature source, AbstractPower power) {

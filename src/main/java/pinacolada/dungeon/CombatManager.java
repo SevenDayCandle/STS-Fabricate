@@ -340,6 +340,10 @@ public class CombatManager extends EUIBase {
         return PLAYER_EFFECT_BONUSES.entrySet();
     }
 
+    public static float getBonus(String powerID, boolean forPlayer) {
+        return forPlayer ? getPlayerEffectBonus(powerID) : getEffectBonus(powerID);
+    }
+
     public static <T> T getCombatData(String key, T defaultData) {
         if (combatData.containsKey(key)) {
             return (T) combatData.get(key);
@@ -349,10 +353,6 @@ public class CombatManager extends EUIBase {
         }
 
         return defaultData;
-    }
-
-    public static float getBonus(String powerID, boolean forPlayer) {
-        return forPlayer ? getPlayerEffectBonus(powerID) : getEffectBonus(powerID);
     }
 
     public static float getEffectBonus(String powerID) {
@@ -458,8 +458,12 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onAllyTrigger(PCLCard card, PCLCardAlly ally) {
-        card.triggerWhenTriggered(ally);
-        subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, ally));
+        for (PCLCardAlly other : summons.summons) {
+            if (other.card != null) {
+                other.card.triggerWhenTriggered(ally, other);
+            }
+        }
+        subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, ally, ally));
     }
 
     public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally) {
@@ -752,7 +756,7 @@ public class CombatManager extends EUIBase {
                     (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class)),
                     card.name,
                     PGR.core.strings.act_play(card.name)
-                    ).start();
+            ).start();
         }
     }
 

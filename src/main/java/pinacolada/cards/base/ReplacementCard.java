@@ -56,13 +56,13 @@ public class ReplacementCard extends PCLDynamicCard {
         original.upgrade();
     }
 
+    public void setup(Object input) {
+        addUseMove(new ReplacementMove(builder, this));
+    }
+
     @Override
     public ReplacementCard makeCopy() {
         return new ReplacementCard(builder);
-    }
-
-    public void setup(Object input) {
-        addUseMove(new ReplacementMove(builder, this));
     }
 
     protected void updateOriginal() {
