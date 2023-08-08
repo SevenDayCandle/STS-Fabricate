@@ -22,7 +22,7 @@ import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.HashMap;
 
-import static pinacolada.ui.combat.PCLPlayerMeter.makeTitle;
+import static pinacolada.dungeon.PCLPlayerMeter.makeTitle;
 
 public class PCLAugmentPanelItem extends PCLTopPanelItem {
     public static final String ID = createFullID(PCLAugmentPanelItem.class);

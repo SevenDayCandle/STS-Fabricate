@@ -2,6 +2,7 @@ package pinacolada.skills;
 
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -502,7 +503,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return PCLCardValueSource.None;
     }
 
-    public EUITooltip getAttackTooltip() {
+    public EUIKeywordTooltip getAttackTooltip() {
         return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
     }
 
@@ -1390,6 +1391,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public boolean removable() {
         return this.childEffect == null || this.childEffect.removable();
+    }
+
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        return startY;
     }
 
     public boolean requiresTarget() {

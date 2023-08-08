@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.SurroundedPower;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.patches.creature.AbstractMonsterPatches;
 import pinacolada.powers.special.MacroscopePower;
 import pinacolada.resources.PGR;
@@ -221,7 +222,7 @@ public class PCLIntentInfo {
     }
 
     protected float recordDamage(AbstractPower po, float damage, float result) {
-        PGR.combatScreen.formulaDisplay.addEnemyAttackPower(po, damage, result);
+        CombatManager.formulaDisplay.addEnemyAttackPower(po, damage, result);
         return result;
     }
 }

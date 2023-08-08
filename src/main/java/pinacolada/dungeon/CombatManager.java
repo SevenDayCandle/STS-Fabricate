@@ -1,5 +1,6 @@
 package pinacolada.dungeon;
 
+import basemod.ReflectionHacks;
 import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,7 +31,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
-import pinacolada.ui.combat.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
@@ -53,13 +53,12 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
+import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.delay.DelayUse;
-import pinacolada.ui.combat.ControllableCardPile;
-import pinacolada.ui.combat.DrawPileCardPreview;
-import pinacolada.ui.combat.PCLPlayerSystem;
-import pinacolada.ui.combat.SummonPool;
+import pinacolada.ui.combat.DelayDisplay;
+import pinacolada.ui.combat.PowerFormulaDisplay;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -69,7 +68,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-public class CombatManager {
+public class CombatManager extends EUIBase {
     private static final ArrayList<AbstractCard> cardsDiscardedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsDiscardedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
@@ -88,7 +87,10 @@ public class CombatManager {
     private static final Map<String, Object> turnData = new HashMap<>();
     public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
     public static final CardTargetingManager targeting = new CardTargetingManager();
+    public static final CombatManager renderInstance = new CombatManager();
     public static final ControllableCardPile controlPile = new ControllableCardPile();
+    public static final DelayDisplay delayDisplay = new DelayDisplay();
+    public static final PowerFormulaDisplay formulaDisplay = new PowerFormulaDisplay();
     public static final PCLPlayerSystem playerSystem = new PCLPlayerSystem();
     public static final SummonPool summons = new SummonPool();
     private static GameActionManager.Phase currentPhase;
@@ -104,6 +106,10 @@ public class CombatManager {
     public static int energySuspended;
     public static int maxHPSinceLastTurn;
     public static int scriesThisTurn;
+
+    protected CombatManager() {
+        this.isActive = false;
+    }
 
     public static void addBonus(String powerID, float multiplier, boolean forPlayer) {
         multiplier = CombatManager.onGainTriggerablePowerBonus(powerID, multiplier, forPlayer);
@@ -291,8 +297,9 @@ public class CombatManager {
         dodgeChance = 0;
         EFFECT_BONUSES.clear();
         PLAYER_EFFECT_BONUSES.clear();
-        PGR.combatScreen.formulaDisplay.initialize();
+        formulaDisplay.initialize();
         DrawPileCardPreview.reset();
+        DelayUse.clear();
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
@@ -740,7 +747,12 @@ public class CombatManager {
         CombatManager.playerSystem.setLastCardPlayed(card);
         if (PCLCardTag.Recast.has(card)) {
             PCLCardTag.Recast.tryProgress(card);
-            DelayUse.turnStartLast(1, playerSystem.generateInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
+            DelayUse.turnStartLast(1,
+                    playerSystem.generateInfo(card, AbstractDungeon.player, m),
+                    (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class)),
+                    card.name,
+                    PGR.core.strings.act_play(card.name)
+                    ).start();
         }
     }
 
@@ -877,7 +889,7 @@ public class CombatManager {
             battleID = UUID.randomUUID();
         }
 
-        PGR.combatScreen.initialize();
+        renderInstance.setActive(GameUtilities.inBattle());
     }
 
     public static void refreshHandLayout() {
@@ -924,24 +936,6 @@ public class CombatManager {
             else if (po instanceof PCLPower) {
                 ((PCLPower) po).onRemoveDamagePowers();
             }
-        }
-    }
-
-    public static void render(SpriteBatch sb) {
-        summons.render(sb);
-        controlPile.render(sb);
-        playerSystem.render(sb);
-        if (PGR.config.showEstimatedDamage.get() && estimatedDamages != null) {
-            FontHelper.damageNumberFont.getData().setScale(0.5f);
-            for (AbstractCreature c : estimatedDamages.keySet()) {
-                int damage = estimatedDamages.get(c);
-                float startX = c.hb.cX + c.healthHb.width / 1.6f + EUIBase.scale(17);
-                float startY = c.hb.y - EUIBase.scale(23);
-                Texture texture = damage >= c.currentHealth ? PCLCoreImages.Core.dead.texture() : PCLCoreImages.CardIcons.hp.texture();
-                PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, startX, startY, texture.getWidth(), texture.getHeight(), 0.55f, 0f);
-                FontHelper.renderFontLeftTopAligned(sb, FontHelper.damageNumberFont, String.valueOf(-1 * damage), startX + EUIBase.scale(22), startY + EUIBase.scale(10), Color.SALMON);
-            }
-            PCLRenderHelpers.resetFont(FontHelper.damageNumberFont);
         }
     }
 
@@ -1036,25 +1030,6 @@ public class CombatManager {
         getSubscriberGroup(subtype).remove(subscriber);
     }
 
-    public static void update(PCLCard hoveredCard, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard) {
-        summons.update();
-        controlPile.update();
-        playerSystem.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
-        if (currentPhase != AbstractDungeon.actionManager.phase) {
-            currentPhase = AbstractDungeon.actionManager.phase;
-            subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
-            controlPile.refreshCards();
-            summons.applyPowers();
-            if (PGR.config.showEstimatedDamage.get()) {
-                updateEstimatedDamage();
-            }
-            if (shouldRefreshHand) {
-                shouldRefreshHand = false;
-                refreshHandLayout();
-            }
-        }
-    }
-
     public static void updateEstimatedDamage() {
         ArrayList<PCLIntentInfo> intents = GameUtilities.getIntents();
 
@@ -1075,5 +1050,97 @@ public class CombatManager {
         expectedDamage = GameUtilities.getHealthBarAmount(player, expectedDamage, true, true);
 
         estimatedDamages = summons.estimateDamage(expectedDamage);
+    }
+
+    public void renderImpl(SpriteBatch sb) {
+        if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden) {
+            return;
+        }
+
+        summons.render(sb);
+        controlPile.render(sb);
+        playerSystem.render(sb);
+        DrawPileCardPreview.updateAndRenderCurrent(sb);
+        if (PGR.config.showEstimatedDamage.get() && estimatedDamages != null) {
+            FontHelper.damageNumberFont.getData().setScale(0.5f);
+            for (AbstractCreature c : estimatedDamages.keySet()) {
+                int damage = estimatedDamages.get(c);
+                float startX = c.hb.cX + c.healthHb.width / 1.6f + EUIBase.scale(17);
+                float startY = c.hb.y - EUIBase.scale(23);
+                Texture texture = damage >= c.currentHealth ? PCLCoreImages.Core.dead.texture() : PCLCoreImages.CardIcons.hp.texture();
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, startX, startY, texture.getWidth(), texture.getHeight(), 0.55f, 0f);
+                FontHelper.renderFontLeftTopAligned(sb, FontHelper.damageNumberFont, String.valueOf(-1 * damage), startX + EUIBase.scale(22), startY + EUIBase.scale(10), Color.SALMON);
+            }
+            PCLRenderHelpers.resetFont(FontHelper.damageNumberFont);
+        }
+        delayDisplay.tryRender(sb);
+        if (PGR.config.showFormulaDisplay.get()) {
+            formulaDisplay.renderImpl(sb);
+        }
+    }
+
+    public void updateImpl() {
+        if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden) {
+            return;
+        }
+
+        boolean draggingCard = false;
+        AbstractCreature target = null;
+        PCLCard hoveredCard = null;
+        if (player.hoveredCard != null) {
+            hoveredCard = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
+            if (player.isDraggingCard || player.inSingleTargetMode) {
+                draggingCard = true;
+            }
+            CombatManager.targeting.setTargeting(hoveredCard);
+            if (hoveredCard != null) {
+                target = CombatManager.targeting.getHovered();
+            }
+            else {
+                target = ReflectionHacks.getPrivate(player, AbstractPlayer.class, "hoveredMonster");
+            }
+        }
+        else {
+            CombatManager.targeting.setTargeting(null);
+        }
+
+        AbstractCreature originalTarget = target;
+        PCLCard originalCard = hoveredCard;
+
+        // If you are dragging a Summon over another one, highlight the target Summon instead
+        if (player.hoveredCard == null || player.hoveredCard.type == PCLEnum.CardType.SUMMON) {
+            for (PCLCardAlly summon : CombatManager.summons.summons) {
+                if (summon.isHovered()) {
+                    hoveredCard = summon.card;
+                    target = summon.target;
+                    break;
+                }
+            }
+        }
+
+        summons.update();
+        controlPile.update();
+        playerSystem.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
+        if (currentPhase != AbstractDungeon.actionManager.phase) {
+            currentPhase = AbstractDungeon.actionManager.phase;
+            subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
+            controlPile.refreshCards();
+            summons.applyPowers();
+            if (PGR.config.showEstimatedDamage.get()) {
+                updateEstimatedDamage();
+            }
+            if (shouldRefreshHand) {
+                shouldRefreshHand = false;
+                refreshHandLayout();
+            }
+        }
+
+        delayDisplay.setActive(DelayUse.delayCount() > 0).tryUpdate();
+        if (PGR.config.showFormulaDisplay.get()) {
+            formulaDisplay.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
+        }
+        if (PCLHotkeys.toggleFormulaDisplay.isJustPressed()) {
+            PGR.config.showFormulaDisplay.set(!PGR.config.showFormulaDisplay.get());
+        }
     }
 }

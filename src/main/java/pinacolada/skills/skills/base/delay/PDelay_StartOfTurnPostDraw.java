@@ -35,8 +35,8 @@ public class PDelay_StartOfTurnPostDraw extends PDelay {
     }
 
     @Override
-    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction) {
-        return DelayUse.turnStartLast(amount, info, childAction);
+    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description) {
+        return DelayUse.turnStartLast(amount, info, childAction, title, description);
     }
 
     @Override

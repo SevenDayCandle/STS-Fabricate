@@ -28,8 +28,8 @@ public class PDelay_EndOfTurnFirst extends PDelay {
     }
 
     @Override
-    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction) {
-        return DelayUse.turnEnd(amount, info, childAction);
+    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description) {
+        return DelayUse.turnEnd(amount, info, childAction, title, description);
     }
 
     @Override

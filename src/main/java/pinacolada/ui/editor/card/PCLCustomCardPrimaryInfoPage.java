@@ -158,7 +158,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
-                .setTooltip(PGR.core.strings.sui_seriesUI, PGR.core.strings.cetut_attrAffinity);
+                .setTooltip(PGR.core.strings.sui_seriesUI, "");
         addLoadoutButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.88f, MENU_HEIGHT * 0.88f))
                 .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_newLoadout, null))
                 .setClickDelay(0.02f)

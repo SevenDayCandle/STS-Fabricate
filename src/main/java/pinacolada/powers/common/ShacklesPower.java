@@ -34,16 +34,6 @@ public class ShacklesPower extends PCLPower {
     }
 
     @Override
-    public void duringTurn() {
-        super.duringTurn();
-
-        final AbstractMonster m = EUIUtils.safeCast(owner, AbstractMonster.class);
-        if (m != null && !GameUtilities.isAttacking(m.intent)) {
-            PCLActions.top.removePower(owner, this);
-        }
-    }
-
-    @Override
     public void atEndOfTurn(boolean isPlayer) {
         removePower();
     }

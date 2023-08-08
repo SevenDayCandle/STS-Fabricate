@@ -70,23 +70,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             targeting = c.pclTarget;
         }
         else {
-            switch (card.target) {
-                case ENEMY:
-                    targeting = PCLCardTarget.Single;
-                    break;
-                case SELF_AND_ENEMY:
-                    targeting = PCLCardTarget.Any;
-                case ALL:
-                case ALL_ENEMY:
-                    targeting = PCLCardTarget.AllEnemy;
-                    break;
-                case SELF:
-                    targeting = PCLCardTarget.Self;
-                    break;
-                case NONE:
-                    targeting = PCLCardTarget.None;
-                    break;
-            }
+            targeting = PCLCardTarget.forVanilla(card.target);
         }
 
         initialize(1, card.name);

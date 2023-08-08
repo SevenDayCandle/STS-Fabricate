@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.ui.combat.GridCardSelectScreenHelper;
+import pinacolada.dungeon.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLMultiCard;
 import pinacolada.cards.base.tags.PCLCardTag;

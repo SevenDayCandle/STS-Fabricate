@@ -1,7 +1,11 @@
 package pinacolada.skills.skills.special.primary;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
@@ -9,7 +13,10 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
@@ -17,6 +24,7 @@ import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
+import pinacolada.utilities.PCLRenderHelpers;
 
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
@@ -31,7 +39,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         super(DATA, content);
     }
 
-    public PCardPrimary_GainBlock(PointerProvider card) {
+    public PCardPrimary_GainBlock(EditorCard card) {
         super(DATA, card);
     }
 
@@ -93,6 +101,15 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
                 skill instanceof PBlockTrait;
     }
 
+    @Override
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        boolean dim = ally.shouldDim();
+        TextureRegion icon = PGR.core.tooltips.block.icon;
+        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
+        return startY + icon.getRegionHeight() + Settings.scale * 10f;
+    }
+
     public PCardPrimary_GainBlock setBonus(PCond<?> mod, int amount) {
         setChain(mod, PTrait.block(amount));
         return this;
@@ -133,7 +150,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         return this;
     }
 
-    public PCardPrimary_GainBlock setProvider(PointerProvider card) {
+    public PCardPrimary_GainBlock setProvider(EditorCard card) {
         setSource(card);
         return this;
     }

@@ -251,7 +251,7 @@ public abstract class PCLLoadout {
         if (isLocked()) {
             card.isSeen = false;
             card.color = data.cardColor;
-            card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
+            card.setCardRarityType(getLoadoutCardRarity(), AbstractCard.CardType.STATUS);
         }
         else {
             card.addUseMove(new FakeSkill());
@@ -261,7 +261,7 @@ public abstract class PCLLoadout {
             }
             else {
                 card.color = data.cardColor;
-                card.setCardRarityType(AbstractCard.CardRarity.COMMON, SELECTABLE_TYPE);
+                card.setCardRarityType(getLoadoutCardRarity(), SELECTABLE_TYPE);
             }
         }
 
@@ -350,6 +350,10 @@ public abstract class PCLLoadout {
         }
 
         return shortDescription;
+    }
+
+    protected AbstractCard.CardRarity getLoadoutCardRarity() {
+        return AbstractCard.CardRarity.COMMON;
     }
 
     public PCLLoadoutData getDefaultData(int preset) {

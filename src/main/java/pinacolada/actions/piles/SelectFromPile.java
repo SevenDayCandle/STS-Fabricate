@@ -11,7 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.text.EUISmartText;
-import pinacolada.ui.combat.GridCardSelectScreenHelper;
+import pinacolada.dungeon.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;

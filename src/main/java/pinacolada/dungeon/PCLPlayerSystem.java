@@ -1,4 +1,4 @@
-package pinacolada.ui.combat;
+package pinacolada.dungeon;
 
 import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.Color;
@@ -12,7 +12,6 @@ import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 

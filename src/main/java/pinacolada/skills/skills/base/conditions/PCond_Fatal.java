@@ -1,13 +1,16 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -16,7 +19,10 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
 
 @VisibleSkill
 public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber {
@@ -32,7 +38,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill, parentSkill);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : TEXT.cond_ifX(PGR.core.tooltips.kill.past());
     }
 
     @Override
@@ -41,9 +47,9 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
             return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), PGR.core.tooltips.kill.present());
         }
         if (fields.random) {
-            return fields.not ? getTargetIsString(getTargetForPerspective(perspective), TEXT.cond_not(PGR.core.tooltips.kill.past())) : getTargetIsString(getTargetForPerspective(perspective), PGR.core.tooltips.kill.past());
+            return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : PGR.core.tooltips.fatal.title);
         }
-        return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : PGR.core.tooltips.fatal.title);
+        return fields.not ? getTargetIsString(getTargetForPerspective(perspective), TEXT.cond_not(PGR.core.tooltips.kill.past())) : getTargetIsString(getTargetForPerspective(perspective), PGR.core.tooltips.kill.past());
     }
 
     @Override
@@ -51,9 +57,16 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         useFromTrigger(generateInfo(monster));
     }
 
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.registerNotBoolean(editor);
+        fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
+    }
+
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return PCLActions.last.callback(getTargetList(info), (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+        // Copy list in case info list changes from other effects
+        ArrayList<? extends AbstractCreature> targs = new ArrayList<>(fields.random ? info.fillWithTargets() : getTargetList(info));
+        return PCLActions.last.callback(targs, (targets, __) -> {
+            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, !fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);
             }
             else {

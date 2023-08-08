@@ -125,11 +125,6 @@
 								"DESCRIPTIONS": ["{0} will not decrease for #b{1} turn(s)."],
 								"NAME": "Stabilized"
 				},
-				"pcl:StolenGoldPower":
-				{
-								"DESCRIPTIONS": ["You stole #b{0} Gold. You can steal #b{1} more Gold."],
-								"NAME": "Stolen Gold"
-				},
 				"pcl:SuperchargedPower":
 				{
 								"DESCRIPTIONS": ["Gain #b{0} additional [E] each turn."],

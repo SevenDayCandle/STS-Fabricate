@@ -12,6 +12,7 @@ import extendedui.*;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.text.EUISmartText;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
@@ -36,6 +37,7 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -482,7 +484,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerBoolean(String title, String desc, ActionT1<Boolean> onChange, boolean initial) {
-        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.62f, MENU_HEIGHT, MENU_WIDTH, 0))
+        float predictLength = EUISmartText.getSmartWidth(EUIFontHelper.cardDescriptionFontNormal, title, Settings.WIDTH, 0f);
+        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f + predictLength, MENU_HEIGHT, MENU_WIDTH, 0))
                         .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                         .setText(title)
                         .setTooltip(desc != null ? new EUITooltip(title, desc) : null)
@@ -612,6 +615,25 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerIntent(List<PCLIntentType> items) {
         registerDropdown(initializeSearchable(PCLIntentType.sorted(), PCLIntentType::getHeaderString, StringUtils.capitalize(PGR.core.strings.subjects_intent)), items);
+    }
+
+    public void registerLoadout(List<String> cardIDs) {
+        registerDropdown(initializeSearchable(PCLLoadout.getAll(getColor()), PCLLoadout::getName, PGR.core.strings.sui_seriesUI),
+                cards -> {
+                    cardIDs.clear();
+                    cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.ID));
+                },
+                cardIDs,
+                card -> card.ID
+        );
+    }
+
+    public <V> void registerLoadout(List<String> cardIDs, ActionT1<List<PCLLoadout>> onChangeImpl) {
+        registerDropdown(initializeSearchable(PCLLoadout.getAll(getColor()), PCLLoadout::getName, PGR.core.strings.sui_seriesUI),
+                onChangeImpl,
+                cardIDs,
+                card -> card.ID
+        );
     }
 
     public void registerOrb(List<PCLOrbHelper> items) {

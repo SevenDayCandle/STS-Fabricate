@@ -6,7 +6,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.ui.combat.PCLPlayerMeter;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;

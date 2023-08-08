@@ -33,8 +33,8 @@ import java.util.Map;
 
 public abstract class PCLCreature extends CustomMonster implements IntentProvider {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
-    protected static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 1f);
-    protected static final Color TAKEN_TURN_NUMBER_COLOR = EUIColors.lerpNew(Color.GRAY, Settings.CREAM_COLOR, 0.75f);
+    public static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 1f);
+    public static final Color TAKEN_TURN_NUMBER_COLOR = EUIColors.lerpNew(Color.GRAY, Settings.CREAM_COLOR, 0.75f);
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;

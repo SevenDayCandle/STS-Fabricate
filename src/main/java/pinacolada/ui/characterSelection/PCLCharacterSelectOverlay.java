@@ -37,7 +37,7 @@ import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
-import pinacolada.ui.combat.PCLPlayerMeter;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

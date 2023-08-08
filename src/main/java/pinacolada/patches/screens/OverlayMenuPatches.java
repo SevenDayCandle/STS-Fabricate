@@ -19,7 +19,7 @@ public class OverlayMenuPatches {
             return new ExprEditor() {
                 public void edit(javassist.expr.MethodCall m) throws CannotCompileException {
                     if (m.getClassName().equals(CardGroup.class.getName()) && m.getMethodName().equals("update")) {
-                        m.replace("{ if (!pinacolada.ui.combat.GridCardSelectScreenHelper.isActive()) $proceed($$); }");
+                        m.replace("{ if (!pinacolada.dungeon.GridCardSelectScreenHelper.isActive()) $proceed($$); }");
                     }
                 }
             };

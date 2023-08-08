@@ -1,9 +1,12 @@
 package pinacolada.skills.skills.special.primary;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -22,7 +25,10 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
@@ -33,13 +39,13 @@ import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.Arrays;
 
 @VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class)
-
             .setExtra(1, DEFAULT_MAX);
 
     // Damage effects are only customizable in code and cannot be saved in fields
@@ -54,11 +60,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         super(DATA, content);
     }
 
-    public PCardPrimary_DealDamage(PointerProvider card) {
+    public PCardPrimary_DealDamage(EditorCard card) {
         super(DATA, card);
     }
 
-    public PCardPrimary_DealDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect) {
+    public PCardPrimary_DealDamage(EditorCard card, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, card);
         fields.attackEffect = attackEffect;
     }
@@ -92,6 +98,15 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     @Override
     public PCardPrimary_DealDamage makeCopy() {
         return (PCardPrimary_DealDamage) super.makeCopy();
+    }
+
+    @Override
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        boolean dim = ally.shouldDim();
+        TextureRegion icon = getAttackTooltip().icon;
+        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
+        return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 
     @Override
@@ -241,8 +256,8 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         }
     }
 
-    public PCardPrimary_DealDamage setProvider(PointerProvider card) {
-        setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
+    public PCardPrimary_DealDamage setProvider(EditorCard card) {
+        setTarget(card.pclTarget());
         setSource(card);
         return this;
     }

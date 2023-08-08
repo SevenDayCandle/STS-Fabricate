@@ -14,6 +14,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -60,5 +61,11 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (fields.getOrbFilter().invoke(orb)) {
             useFromTrigger(generateInfo(null).setData(orb));
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }

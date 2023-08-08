@@ -1,7 +1,7 @@
 package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.ui.combat.DrawPileCardPreview;
+import pinacolada.dungeon.DrawPileCardPreview;
 
 public interface DrawPileCardPreviewProvider {
     default void refreshCard() {

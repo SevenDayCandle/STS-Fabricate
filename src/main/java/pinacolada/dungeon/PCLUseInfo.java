@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -46,10 +47,10 @@ public class PCLUseInfo {
         this.data = other.data;
     }
 
-    protected void fillWithTargets() {
+    public RandomizedList<AbstractCreature> fillWithTargets() {
         this.targets.clear();
-        if (card instanceof PCLCard) {
-            ((PCLCard) card).pclTarget.getTargets(source, target, targets);
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).pclTarget().getTargets(source, target, targets);
         }
         else if (card != null) {
             switch (card.target) {
@@ -71,6 +72,7 @@ public class PCLUseInfo {
         }
 
         setTempTargets(targets);
+        return targets;
     }
 
     public <T> T getData(Class<T> dataClass) {

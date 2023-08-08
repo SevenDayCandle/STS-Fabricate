@@ -24,7 +24,6 @@ import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,7 +34,6 @@ import static extendedui.EUIUtils.safeIndex;
 // TODO create a non-dynamic-only subclass
 public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     private static final Map<String, PCLCardData> STATIC_DATA = new HashMap<>();
-    private Constructor<? extends PCLCard> constructor;
     private TextureAtlas.AtlasRegion cardIcon = null;
     public Integer[] damage = array(0);
     public Integer[] damageUpgrade = array(0);

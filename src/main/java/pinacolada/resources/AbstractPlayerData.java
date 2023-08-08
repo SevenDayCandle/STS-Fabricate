@@ -87,11 +87,11 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     }
 
     public void addTutorial(PCLCreatureData data) {
-        PCLTutorialMonster.register(data, () -> config.seenTutorial, p -> p.chosenClass == this.resources.playerClass);
+        PCLTutorialMonster.register(data, config.seenTutorial, p -> p.chosenClass == this.resources.playerClass);
     }
 
     public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
-        PCLTutorialMonster.register(data, () -> config.seenTutorial, canShow);
+        PCLTutorialMonster.register(data, config.seenTutorial, canShow);
     }
 
     protected void addUnlockBundle(PCLLoadout loadout) {
@@ -166,6 +166,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
 
     public String[] getAdditionalRelicIDs() {return null;}
 
+    public List<PCLLoadout> getAvailableLoadouts() {
+        return EUIUtils.filter(loadouts.values(), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);
+    }
+
     public PCLEffect getCharSelectScreenAnimation() {
         return null;
     }
@@ -189,7 +193,6 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
 
     public void initialize() {
         initializeLoadouts();
-        config.load(CardCrawlGame.saveSlot);
         reload();
     }
 
@@ -197,7 +200,6 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.ID, core);
-        List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
         for (PCLLoadout loadout : getAvailableLoadouts()) {
             loadouts.put(loadout.ID, loadout);
         }
@@ -253,6 +255,7 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
 
     public void reload() {
         if (config != null) {
+            config.load(CardCrawlGame.saveSlot);
             deserializeTrophies(config.trophies.get());
             deserializeCustomLoadouts();
             deserializeSelectedLoadout();
@@ -315,8 +318,6 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
             }
         }
     }
-
-    public abstract List<PCLLoadout> getAvailableLoadouts();
 
     public abstract U getConfig();
 

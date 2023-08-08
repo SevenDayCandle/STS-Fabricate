@@ -62,6 +62,11 @@ public class PCLCustomLoadout extends PCLLoadout {
         return strings != null && strings.AUTHOR != null ? strings.AUTHOR : "";
     }
 
+
+    protected AbstractCard.CardRarity getLoadoutCardRarity() {
+        return AbstractCard.CardRarity.UNCOMMON;
+    }
+
     public String getName() {
         return strings != null && strings.NAME != null ? strings.NAME : ID;
     }

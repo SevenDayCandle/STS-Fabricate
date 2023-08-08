@@ -20,6 +20,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
@@ -38,6 +39,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
     public ArrayList<CostFilter> costs = new ArrayList<>();
     public ArrayList<String> cardIDs = new ArrayList<>();
+    public ArrayList<String> loadouts = new ArrayList<>();
     public boolean invert;
 
     public PField_CardCategory() {
@@ -53,7 +55,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         setTag(other.tags);
         setCost(other.costs);
         setCardIDs(other.cardIDs);
+        setLoadout(other.loadouts);
         setInvert(other.invert);
+    }
+
+    public static boolean checkForLoadout(String loadout, String card) {
+        PCLLoadout l = PCLLoadout.get(loadout);
+        return l != null && l.isCardFromLoadout(card);
     }
 
     public static AbstractCard getCard(String id) {
@@ -61,6 +69,11 @@ public class PField_CardCategory extends PField_CardGeneric {
             return CardLibrary.getCard(id);
         }
         return null;
+    }
+
+    public static String getLoadoutName(String loadout) {
+        PCLLoadout l = PCLLoadout.get(loadout);
+        return l != null ? l.getName() : loadout;
     }
 
     public PField_CardCategory addAffinity(PCLAffinity... affinities) {
@@ -109,6 +122,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerColor(colors);
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
+        editor.registerLoadout(loadouts);
         editor.registerCard(cardIDs);
         editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
     }
@@ -155,6 +169,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (!costs.isEmpty()) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(EUIUtils.map(costs, c -> c.name))));
         }
+        if (!loadouts.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(loadouts, PField_CardCategory::getLoadoutName)));
+        }
         if (!affinities.isEmpty()) {
             stringsToJoin.add(affinityFunc.invoke(affinities));
         }
@@ -187,6 +204,7 @@ public class PField_CardCategory extends PField_CardGeneric {
                 (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
                         && (colors.isEmpty() || colors.contains(c.color))
                         && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
+                        && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c.cardID)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
                         && (types.isEmpty() || types.contains(c.type))));
@@ -210,6 +228,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (costs.size() > i) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i).name));
+        }
+        if (loadouts.size() > i) {
+            stringsToJoin.add(getLoadoutName(loadouts.get(i)));
         }
         if (affinities.size() > i) {
             stringsToJoin.add(affinities.get(i).getTooltip().toString());
@@ -340,6 +361,20 @@ public class PField_CardCategory extends PField_CardGeneric {
     public PField_CardCategory setInvert(boolean val) {
         this.invert = val;
         return this;
+    }
+
+    public PField_CardCategory setLoadout(Collection<String> nt) {
+        this.loadouts.clear();
+        this.loadouts.addAll(nt);
+        return this;
+    }
+
+    public PField_CardCategory setLoadout(String... nt) {
+        return setLoadout(Arrays.asList(nt));
+    }
+
+    public PField_CardCategory setLoadout(PCLLoadout... nt) {
+        return setLoadout(EUIUtils.map(nt, l -> l.ID));
     }
 
     public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> types) {

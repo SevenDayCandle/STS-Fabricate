@@ -37,18 +37,17 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         super(data, offsetX, offsetY);
     }
 
-    public static void register(PCLCreatureData data, FuncT0<STSConfigItem<Boolean>> getConfig, FuncT1<Boolean, AbstractPlayer> shouldShow) {
-        tutorials.add(new TutorialInfo(data, getConfig, shouldShow));
+    public static void register(PCLCreatureData data, STSConfigItem<Boolean> config, FuncT1<Boolean, AbstractPlayer> shouldShow) {
+        tutorials.add(new TutorialInfo(data, config, shouldShow));
         BaseMod.addMonster(data.ID, data::create);
     }
 
     public static MonsterGroup tryStart() {
         for (PCLTutorialMonster.TutorialInfo tutorialInfo : PCLTutorialMonster.tutorials) {
-            STSConfigItem<Boolean> config = tutorialInfo.getConfig.invoke();
-            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && !config.get()) {
+            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && !tutorialInfo.config.get()) {
                 MonsterGroup group = tutorialInfo.data.getEncounter();
                 if (group != null) {
-                    currentConfig = config;
+                    currentConfig = tutorialInfo.config;
                     return group;
                 }
             }
@@ -135,12 +134,12 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
 
     public static class TutorialInfo {
         public final PCLCreatureData data;
-        public final FuncT0<STSConfigItem<Boolean>> getConfig;
+        public final STSConfigItem<Boolean> config;
         public final FuncT1<Boolean, AbstractPlayer> shouldShow;
 
-        public TutorialInfo(PCLCreatureData data, FuncT0<STSConfigItem<Boolean>> getConfig, FuncT1<Boolean, AbstractPlayer> shouldShow) {
+        public TutorialInfo(PCLCreatureData data, STSConfigItem<Boolean> config, FuncT1<Boolean, AbstractPlayer> shouldShow) {
             this.data = data;
-            this.getConfig = getConfig;
+            this.config = config;
             this.shouldShow = shouldShow;
         }
     }

@@ -1653,6 +1653,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    @Override
+    public PCLCardTarget pclTarget() {
+        return pclTarget;
+    }
+
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractCreature enemy) {

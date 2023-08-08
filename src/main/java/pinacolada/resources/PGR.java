@@ -47,7 +47,6 @@ import pinacolada.ui.cardView.PCLSingleRelicPopup;
 import pinacolada.ui.characterSelection.PCLCharacterSelectOverlay;
 import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
-import pinacolada.ui.combat.PCLCombatScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
@@ -82,7 +81,6 @@ public class PGR {
     public static PCLAugmentSortHeader augmentHeader;
     public static PCLAugmentCollectionScreen augmentScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
-    public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomPotionSelectorScreen customPotions;
     public static PCLCustomRelicSelectorScreen customRelics;
@@ -243,7 +241,6 @@ public class PGR {
     }
 
     protected static void initializeUI() {
-        PGR.combatScreen = new PCLCombatScreen();
         PGR.cardPopup = new PCLSingleCardPopup();
         PGR.relicPopup = new PCLSingleRelicPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
@@ -274,7 +271,7 @@ public class PGR {
             EUIUtils.logError(PGR.class, "Failed to load ImGUI debug panels. These panels will not be available in ImGUI.");
         }
 
-        EUI.addBattleSubscriber(PGR.combatScreen);
+        EUI.addBattleSubscriber(CombatManager.renderInstance);
         EUI.addSubscriber(PGR.cardPopup);
         EUI.addSubscriber(PGR.relicPopup);
         EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);

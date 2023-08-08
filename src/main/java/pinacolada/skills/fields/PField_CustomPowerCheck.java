@@ -9,13 +9,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PField_CustomPowerCheck extends PField_Not {
+public class PField_CustomPowerCheck extends PField_Random {
     public ArrayList<String> cardIDs = new ArrayList<>();
 
     @Override
     public boolean equals(PField other) {
         return other instanceof PField_CustomPowerCheck &&
                 ((PField_CustomPowerCheck) other).cardIDs.equals(cardIDs) &&
+                ((PField_CustomPowerCheck) other).random == random &&
                 ((PField_CustomPowerCheck) other).not == not;
     }
 
@@ -29,7 +30,7 @@ public class PField_CustomPowerCheck extends PField_Not {
 
     @Override
     public PField_CustomPowerCheck makeCopy() {
-        return (PField_CustomPowerCheck) new PField_CustomPowerCheck().setCardIDs(cardIDs).setNot(not);
+        return (PField_CustomPowerCheck) new PField_CustomPowerCheck().setCardIDs(cardIDs).setRandom(random).setNot(not);
     }
 
     // Indexes should correspond to the indexes of powers in the card being built

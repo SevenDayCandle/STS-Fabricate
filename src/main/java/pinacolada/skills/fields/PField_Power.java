@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class PField_Power extends PField_Not {
+public class PField_Power extends PField_Random {
     public ArrayList<PCLPowerHelper> powers = new ArrayList<>();
-    public boolean random;
     public boolean debuff;
 
     public PField_Power addPower(PCLPowerHelper... powers) {

@@ -23,11 +23,10 @@ import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.ui.combat.GridCardSelectScreenHelper;
+import pinacolada.dungeon.GridCardSelectScreenHelper;
 import javassist.CtBehavior;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GridCardSelectScreenPatches {

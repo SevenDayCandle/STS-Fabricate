@@ -1,4 +1,4 @@
-package pinacolada.ui.combat;
+package pinacolada.dungeon;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -39,7 +39,7 @@ public class SummonPool extends EUIBase {
             baseY = AbstractDungeon.player.drawY;
         }
         for (int i = 0; i < times; i++) {
-            summons.add(new PCLCardAlly(baseX + (times + 3 + summons.size()) * OFFSET, baseY));
+            summons.add(addSummon(summons.size() + i));
         }
     }
 
@@ -51,7 +51,7 @@ public class SummonPool extends EUIBase {
         angle += 90.0F - offsetAngle;
         float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
         float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
-        return new PCLCardAlly(x, y);
+        return new PCLCardAlly(i, x, y);
     }
 
     public void applyPowers() {

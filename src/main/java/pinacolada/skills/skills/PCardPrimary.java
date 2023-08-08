@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkillData;
@@ -26,7 +27,7 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         super(data, target, amount, extra);
     }
 
-    public PCardPrimary(PSkillData<T> data, PointerProvider card) {
+    public PCardPrimary(PSkillData<T> data, EditorCard card) {
         super(data);
         setProvider(card);
     }
@@ -55,7 +56,7 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     }
 
     // Obtains the target and numerical values from the given card
-    public abstract PCardPrimary<T> setProvider(PointerProvider card);
+    public abstract PCardPrimary<T> setProvider(EditorCard card);
 
     protected abstract void useImpl(PCLUseInfo info, PCLActions order);
 }

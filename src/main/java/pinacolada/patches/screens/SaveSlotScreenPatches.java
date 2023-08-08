@@ -13,7 +13,9 @@ public class SaveSlotScreenPatches {
         public static void postfix(SaveSlotScreen __instance, int slot) {
             PGR.config.load(slot);
             for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
-                resources.data.reload();
+                if (resources.data != null) {
+                    resources.data.reload();
+                }
             }
         }
     }

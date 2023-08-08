@@ -3,10 +3,11 @@ package pinacolada.skills.delay;
 import pinacolada.resources.PGR;
 
 public enum DelayTiming {
-    EndOfTurnFirst,
-    EndOfTurnLast,
+    // Order used for ordering items in delay preview
     StartOfTurnFirst,
-    StartOfTurnLast;
+    StartOfTurnLast,
+    EndOfTurnFirst,
+    EndOfTurnLast,;
 
     public String getDesc() {
         switch (this) {

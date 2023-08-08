@@ -49,12 +49,14 @@ import static pinacolada.utilities.GameUtilities.scale;
 
 public class PCLCardAlly extends PCLCardCreature {
     protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCardAlly>> ANIMATION_MAP = new HashMap<>();
-    protected static final Color FADE_COOLDOWN_COLOR = EUIColors.lerpNew(Color.DARK_GRAY, Settings.GREEN_TEXT_COLOR, 0.5f);
+    public static final Color FADE_COOLDOWN_COLOR = EUIColors.lerpNew(Color.DARK_GRAY, Settings.GREEN_TEXT_COLOR, 0.5f);
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0, 0, 128, 128);
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
+    public int index;
 
-    public PCLCardAlly(float xPos, float yPos) {
+    public PCLCardAlly(int index, float xPos, float yPos) {
         super(DATA, xPos, yPos);
+        this.index = index;
         this.animation = emptyAnimation;
     }
 
@@ -218,20 +220,6 @@ public class PCLCardAlly extends PCLCardCreature {
         return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
     }
 
-    protected float renderCooldown(SpriteBatch sb, CooldownProvider pr, float startY) {
-        boolean canActivate = pr.canActivate();
-        boolean dim = shouldDim();
-        Color iconColor = dim ? TAKEN_TURN_COLOR : Color.WHITE;
-        Color textColor = canActivate ? (dim ? FADE_COOLDOWN_COLOR : Settings.GREEN_TEXT_COLOR) :
-                (Settings.CREAM_COLOR);
-        PCLRenderHelpers.drawGrayscaleIf(sb,
-                s -> PCLRenderHelpers.drawCentered(sb, iconColor, PGR.core.tooltips.cooldown.icon, this.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
-                dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, textColor);
-
-        return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
-    }
-
     @Override
     protected void renderDamageRange(SpriteBatch sb) {
         if (stunned) {
@@ -240,31 +228,22 @@ public class PCLCardAlly extends PCLCardCreature {
         else if (card != null) {
             float startY = this.intentHb.cY + getBobEffect().y - 12.0F * Settings.scale;
             if (card.onAttackEffect != null) {
-                startY = renderIntentIcon(sb, card.attackType.getTooltip().icon, card.hitCount > 1 ? card.damage + "x" + card.hitCount : Integer.toString(card.damage), startY);
+                startY = card.onAttackEffect.renderIntentIcon(sb, this, startY);
             }
             if (card.onBlockEffect != null) {
-                startY = renderIntentIcon(sb, PGR.core.tooltips.block.icon, card.rightCount > 1 ? card.block + "x" + card.rightCount : Integer.toString(card.block), startY);
+                startY = card.onBlockEffect.renderIntentIcon(sb, this, startY);
             }
             for (PSkill<?> skill : card.getEffects()) {
                 PSkill<?> cur = skill;
                 while (cur != null) {
-                    if (cur instanceof CooldownProvider) {
-                        startY = renderCooldown(sb, ((CooldownProvider) cur), startY);
-                    }
+                    startY = cur.renderIntentIcon(sb, this, startY);
                     cur = cur.getChild();
                 }
             }
         }
     }
 
-    protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY) {
-        boolean dim = shouldDim();
-        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? TAKEN_TURN_COLOR : Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, dim ? TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
-        return startY + icon.getRegionHeight() + Settings.scale * 10f;
-    }
-
-    protected boolean shouldDim() {
+    public boolean shouldDim() {
         return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
     }
 

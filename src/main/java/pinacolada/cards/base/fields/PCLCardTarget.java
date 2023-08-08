@@ -1,5 +1,6 @@
 package pinacolada.cards.base.fields;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
@@ -46,6 +47,21 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public static void fillWithPlayerTeam(ArrayList<AbstractCreature> targets, boolean isAlive) {
         GameUtilities.fillWithSummons(true, targets);
         targets.add(AbstractDungeon.player);
+    }
+
+    public static PCLCardTarget forVanilla(AbstractCard.CardTarget target) {
+        switch (target) {
+            case ENEMY:
+                return PCLCardTarget.Single;
+            case SELF_AND_ENEMY:
+                return PCLCardTarget.Any;
+            case ALL:
+            case ALL_ENEMY:
+                return PCLCardTarget.AllEnemy;
+            case SELF:
+                return PCLCardTarget.Self;
+        }
+        return PCLCardTarget.None;
     }
 
     public static List<PCLCardTarget> getAll() {

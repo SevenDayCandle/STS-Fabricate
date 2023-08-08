@@ -1,7 +1,11 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
@@ -13,6 +17,8 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
+import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -21,6 +27,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveCond;
 import pinacolada.skills.skills.PBranchCond;
+import pinacolada.utilities.PCLRenderHelpers;
 
 // TODO move to primary
 @VisibleSkill
@@ -80,6 +87,21 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     public PCond_Cooldown onRemoveFromCard(AbstractCard card) {
         super.onRemoveFromCard(card);
         return this;
+    }
+
+    @Override
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        boolean canActivate = canActivate();
+        boolean dim = ally.shouldDim();
+        Color iconColor = dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE;
+        Color textColor = canActivate ? (dim ? PCLCardAlly.FADE_COOLDOWN_COLOR : Settings.GREEN_TEXT_COLOR) :
+                (Settings.CREAM_COLOR);
+        PCLRenderHelpers.drawGrayscaleIf(sb,
+                s -> PCLRenderHelpers.drawCentered(sb, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
+                dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(getCooldown()), ally.intentHb.cX, startY, textColor);
+
+        return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
     }
 
     // No-op to avoid refreshing effects changing amount

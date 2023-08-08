@@ -89,7 +89,7 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            getDelayUse(info, (i) -> this.childEffect.use(i, order)).start();
+            getDelayUse(info, (i) -> this.childEffect.use(i, order), this.childEffect.getName(), this.childEffect.getPowerText()).start();
         }
     }
 
@@ -99,7 +99,7 @@ public abstract class PDelay extends PSkill<PField_Empty> {
                 (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)) + COMMA_SEPARATOR + getTiming().getDesc());
     }
 
-    public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);
+    public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description);
 
     public abstract DelayTiming getTiming();
 }

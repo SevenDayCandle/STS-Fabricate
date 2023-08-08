@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.interfaces.markers.CacheableCard;
 import pinacolada.cards.base.fields.PCLAttackType;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.PointerProvider;
 
 public interface EditorCard extends PointerProvider, CacheableCard {
@@ -56,6 +57,8 @@ public interface EditorCard extends PointerProvider, CacheableCard {
     int rightCountBase();
 
     PCLAttackType attackType();
+
+    PCLCardTarget pclTarget();
 
     Texture getPortraitImageTexture();
 }

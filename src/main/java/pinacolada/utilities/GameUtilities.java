@@ -79,6 +79,7 @@ import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.patches.basemod.PotionPoolPatches;
@@ -1589,21 +1590,7 @@ public class GameUtilities {
 
     // Move intent is the source of truth; the actual intent might not be set in time for start of turn effects
     public static boolean isAttacking(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isAttacking(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
-    }
-
-    public static boolean isAttacking(AbstractMonster.Intent intent) {
-        return (intent == AbstractMonster.Intent.ATTACK_DEBUFF || intent == AbstractMonster.Intent.ATTACK_BUFF ||
-                intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.ATTACK);
-    }
-
-    public static boolean isBuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isBuffing(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
-    }
-
-    public static boolean isBuffing(AbstractMonster.Intent intent) {
-        return (intent == AbstractMonster.Intent.BUFF || intent == AbstractMonster.Intent.ATTACK_BUFF ||
-                intent == AbstractMonster.Intent.DEFEND_BUFF);
+        return monster instanceof AbstractMonster && PCLIntentType.Attack.hasIntent(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent());
     }
 
     public static boolean isCardLocked(String id) {
@@ -1636,24 +1623,6 @@ public class GameUtilities {
 
     public static boolean isDebuff(AbstractPower power) {
         return power != null && power.type == AbstractPower.PowerType.DEBUFF;
-    }
-
-    public static boolean isDebuffing(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isDebuffing(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
-    }
-
-    public static boolean isDebuffing(AbstractMonster.Intent intent) {
-        return (intent == AbstractMonster.Intent.ATTACK_DEBUFF || intent == AbstractMonster.Intent.DEBUFF ||
-                intent == AbstractMonster.Intent.DEFEND_DEBUFF || intent == AbstractMonster.Intent.STRONG_DEBUFF);
-    }
-
-    public static boolean isDefending(AbstractCreature monster) {
-        return monster instanceof AbstractMonster && (isDefending(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent()));
-    }
-
-    public static boolean isDefending(AbstractMonster.Intent intent) {
-        return (intent == AbstractMonster.Intent.DEFEND_DEBUFF || intent == AbstractMonster.Intent.DEFEND_BUFF ||
-                intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.DEFEND);
     }
 
     public static boolean isEnemy(AbstractCreature c) {

@@ -1,46 +1,70 @@
 package pinacolada.skills.delay;
 
+import com.gikk.twirk.SETTINGS;
+import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.text.EUISmartText;
+import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.ColoredString;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
+import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class DelayUse implements PCLCombatSubscriber {
+import java.util.Collection;
+import java.util.PriorityQueue;
+
+public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayUse> {
+    protected static final PriorityQueue<DelayUse> DELAYS = new PriorityQueue<>();
     protected int baseTurns;
     protected int turns;
     protected PCLUseInfo capturedCardUseInfo;
     protected ActionT1<PCLUseInfo> onUse;
+    protected EUITooltip tip;
 
-    public DelayUse(int turns, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+    public DelayUse(int turns, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {
         baseTurns = this.turns = turns;
         capturedCardUseInfo = info;
         onUse = action;
+        this.tip = new EUITooltip(title, description);
+        this.tip.setSubheader(new ColoredString());
     }
 
-    public static DelayUse turnEnd(PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return turnEnd(0, info, action);
+    public static Collection<EUITooltip> getTooltips() {
+        return EUIUtils.map(DELAYS, DelayUse::getTooltip);
     }
 
-    public static DelayUse turnEnd(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return new DelayUseEndOfTurnFirst(amount, info, action);
+    public static void clear() {
+        DELAYS.clear();
     }
 
-    public static DelayUse turnEndLast(PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return turnEndLast(0, info, action);
+    public static int delayCount() {
+        return DELAYS.size();
     }
 
-    public static DelayUse turnEndLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return new DelayUseEndOfTurnLast(amount, info, action);
+    public static int minTurns() {
+        return DELAYS.size() > 0 ? DELAYS.peek().turns : 0;
     }
 
-    public static DelayUse turnStart(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return new DelayUseStartOfTurn(amount, info, action);
+    public static DelayUse turnEnd(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {
+        return new DelayUseEndOfTurnFirst(amount, info, action, title, description);
     }
 
-    public static DelayUse turnStartLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
-        return new DelayUseStartOfTurnPostDraw(amount, info, action);
+    public static DelayUse turnEndLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {
+        return new DelayUseEndOfTurnLast(amount, info, action, title, description);
+    }
+
+    public static DelayUse turnStart(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {
+        return new DelayUseStartOfTurn(amount, info, action, title, description);
+    }
+
+    public static DelayUse turnStartLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {
+        return new DelayUseStartOfTurnPostDraw(amount, info, action, title, description);
     }
 
     protected void act() {
@@ -56,11 +80,29 @@ public abstract class DelayUse implements PCLCombatSubscriber {
             }
             onUse.invoke(capturedCardUseInfo);
             CombatManager.unsubscribe(this);
+            DELAYS.remove(this);
         }
+    }
+
+    @Override
+    public int compareTo(DelayUse o) {
+        if (o.turns == this.turns) {
+            return o.getTiming().ordinal() - this.getTiming().ordinal();
+        }
+        return o.turns - this.turns;
+    }
+
+    public EUITooltip getTooltip() {
+        this.tip.subHeader.text = EUIRM.strings.numNoun(turns, PCLCoreStrings.pluralEvaluated(PGR.core.strings.combat_turns, turns));
+        this.tip.subHeader.color = turns <= 0 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR;
+        return tip;
     }
 
     public void start() {
         turns = baseTurns;
         CombatManager.subscribe(this);
+        DELAYS.add(this);
     }
+
+    public abstract DelayTiming getTiming();
 }

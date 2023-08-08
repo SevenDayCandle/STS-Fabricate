@@ -1,4 +1,4 @@
-package pinacolada.ui.combat;
+package pinacolada.dungeon;
 
 import basemod.abstracts.AbstractCardModifier;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,11 +15,9 @@ import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.controls.EUITutorialPage;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

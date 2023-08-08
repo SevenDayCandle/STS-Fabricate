@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CustomPowerCheck;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> EUIUtils.all(fields.cardIDs, po -> checkPowers(po, t)));
+        return evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.cardIDs, po -> checkPowers(po, t)) : EUIUtils.all(fields.cardIDs, po -> checkPowers(po, t)));
     }
 
     private boolean checkPowers(String id, AbstractCreature t) {
@@ -55,7 +56,7 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String baseString = fields.getThresholdRawString(fields.getCardIDOrString());
+        String baseString = fields.getThresholdRawString(fields.random ? fields.getCardIDOrString() : fields.getCardIDAndString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gain(baseString), perspective);
         }
@@ -70,5 +71,11 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
         if (EUIUtils.any(fields.cardIDs, id -> power.ID.contains(id)) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t, info.tempTargets).contains(t))) {
             useFromTrigger(info.setData(power));
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }
