@@ -85,7 +85,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip discard = EUIKeywordTooltip.findByID("Discard").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip draw = EUIKeywordTooltip.findByID("Draw").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip energy = EUIKeywordTooltip.findByName("[E]").setCanAdd(false).forceIcon(true);
-    public EUIKeywordTooltip fetch = EUIKeywordTooltip.findByID("~Fetch").setCanAdd(false).canHighlight(false);
+    public EUIKeywordTooltip fetch = EUIKeywordTooltip.findByID("Fetch").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip heal = EUIKeywordTooltip.findByID("Heal").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip hp = EUIKeywordTooltip.findByID("HP").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip kill = EUIKeywordTooltip.findByID("Kill").setCanAdd(false).canHighlight(false);
@@ -140,7 +140,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip ephemeral = EUIKeywordTooltip.findByID("Ephemeral");
     public EUIKeywordTooltip equilibrium = EUIKeywordTooltip.findByID("Equilibrium");
     public EUIKeywordTooltip escape = EUIKeywordTooltip.findByID("Escape");
-    public EUIKeywordTooltip ethereal = EUIKeywordTooltip.findByID("~Ethereal");
+    public EUIKeywordTooltip ethereal = EUIKeywordTooltip.findByID("Ethereal");
     public EUIKeywordTooltip evoke = EUIKeywordTooltip.findByID("Evoke");
     public EUIKeywordTooltip exhaust = EUIKeywordTooltip.findByID("Exhaust");
     public EUIKeywordTooltip fatal = EUIKeywordTooltip.findByID("Fatal");
@@ -155,7 +155,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip haste = EUIKeywordTooltip.findByID("Haste");
     public EUIKeywordTooltip immaterialDamage = EUIKeywordTooltip.findByID("Immaterial Damage");
     public EUIKeywordTooltip impaired = EUIKeywordTooltip.findByID("Impaired");
-    public EUIKeywordTooltip innate = EUIKeywordTooltip.findByID("~Innate");
+    public EUIKeywordTooltip innate = EUIKeywordTooltip.findByID("Innate");
     public EUIKeywordTooltip innovation = EUIKeywordTooltip.findByID("Innovation");
     public EUIKeywordTooltip intangible = EUIKeywordTooltip.findByID("Intangible");
     public EUIKeywordTooltip interactable = EUIKeywordTooltip.findByID("Interactable");
@@ -164,7 +164,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip level = EUIKeywordTooltip.findByID("Level");
     public EUIKeywordTooltip lightning = EUIKeywordTooltip.findByID("Lightning");
     public EUIKeywordTooltip limited = EUIKeywordTooltip.findByID("Limited");
-    public EUIKeywordTooltip lockOn = EUIKeywordTooltip.findByID("~Lock-On");
+    public EUIKeywordTooltip lockOn = EUIKeywordTooltip.findByID("Lock-On");
     public EUIKeywordTooltip loyal = EUIKeywordTooltip.findByID("Loyal");
     public EUIKeywordTooltip malleable = EUIKeywordTooltip.findByID("Malleable");
     public EUIKeywordTooltip mantra = EUIKeywordTooltip.findByID("Prayer"); // YES THIS THING IS CALLED PRAYER
@@ -184,14 +184,14 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip platedArmor = EUIKeywordTooltip.findByID("Plated Armor");
     public EUIKeywordTooltip poison = EUIKeywordTooltip.findByID("Poison");
     public EUIKeywordTooltip provoked = EUIKeywordTooltip.findByID("Provoked");
-    public EUIKeywordTooltip purge = EUIKeywordTooltip.findByID("~Purge");
+    public EUIKeywordTooltip purge = EUIKeywordTooltip.findByID("Purge");
     public EUIKeywordTooltip ranged = EUIKeywordTooltip.findByID("Ranged Damage");
     public EUIKeywordTooltip rebound = EUIKeywordTooltip.findByID("Rebound");
     public EUIKeywordTooltip recast = EUIKeywordTooltip.findByID("Recast");
     public EUIKeywordTooltip regeneration = EUIKeywordTooltip.findByID("Regeneration");
     public EUIKeywordTooltip resistance = EUIKeywordTooltip.findByID("Resistance");
     public EUIKeywordTooltip resolve = EUIKeywordTooltip.findByID("Resolve");
-    public EUIKeywordTooltip retain = EUIKeywordTooltip.findByID("~Retain");
+    public EUIKeywordTooltip retain = EUIKeywordTooltip.findByID("Retain");
     public EUIKeywordTooltip ritual = EUIKeywordTooltip.findByID("Ritual");
     public EUIKeywordTooltip scout = EUIKeywordTooltip.findByID("Scout");
     public EUIKeywordTooltip scry = EUIKeywordTooltip.findByID("Scry");

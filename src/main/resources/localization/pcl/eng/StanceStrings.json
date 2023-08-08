@@ -8,55 +8,5 @@
 			"At the end of turn, if {0} was not used: Gain {1} additional {0}.",
 			"When exited or re-entered: Gain {0} {1}."
 		]
-	},
-	"pcl:MightStance":
-	{
-		"NAME": "Might Stance",
-		"DESCRIPTION": 
-		[
-		]
-	},
-	"pcl:VelocityStance":
-	{
-		"NAME": "Velocity Stance",
-		"DESCRIPTION": 
-		[
-		]
-	},
-	"pcl:WisdomStance":
-	{
-		"NAME": "Wisdom Stance",
-		"DESCRIPTION": 
-		[
-		]
-	},
-	"pcl:EnduranceStance":
-	{
-		"NAME": "Endurance Stance",
-		"DESCRIPTION":
-		[
-		]
-	},
-	"pcl:InvocationStance":
-	{
-		"NAME": "Invocation Stance",
-		"DESCRIPTION":
-		[
-		]
-	},
-	"pcl:DesecrationStance":
-	{
-		"NAME": "Desecration Stance",
-		"DESCRIPTION":
-		[
-		]
-	},
-	"pcl:TechnicStance":
-    {
-    	"NAME": "Technic Stance",
-    	"DESCRIPTION":
-    	[
-    		"[E] is conserved between turns."
-    	]
-    }
+	}
 }

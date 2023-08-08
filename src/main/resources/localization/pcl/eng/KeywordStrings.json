@@ -549,38 +549,5 @@
 	"Yellow Affinity":	{
 		"DESCRIPTION": "Affinities appear above a card's name.",
 		"NAME": "Yellow Affinity"
-	},
-	"~Ethereal":	{
-		"DESCRIPTION": "#yExhausted if in hand at the end of turn.",
-		"NAME": "Ethereal"
-	},
-	"~Fetch":	{
-		"DESCRIPTION": "Move a card to your hand.",
-		"NAME": "Fetch",
-		"PAST": "fetched",
-		"PRESENT": "fetches",
-		"PROGRESSIVE": "fetching"
-	},
-	"~Innate":	{
-		"DESCRIPTION": "Start each combat with this card in hand.",
-		"NAME": "Innate"
-	},
-	"~Lock-On":	{
-		"DESCRIPTION": "Receive #b+{0}% damage from #yOrbs. Prioritized by cards with random targeting.",
-		"NAME": "Lock-On"
-	},
-	"~Purge":	{
-		"DESCRIPTION": "Removed from combat.",
-		"NAME": "Purge",
-		"PAST": "Purged",
-		"PRESENT": "Purges",
-		"PROGRESSIVE": "Purging"
-	},
-	"~Retain":	{
-		"DESCRIPTION": "Retained cards are not discarded at the end of turn.",
-		"NAME": "Retain",
-		"PAST": "Retained",
-		"PRESENT": "Retains",
-		"PROGRESSIVE": "Retaining"
 	}
 }

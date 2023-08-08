@@ -90,13 +90,7 @@ public class WordToken extends PCLTextToken {
 
             String word = builder.toString();
 
-            WordToken token;
-            if (word.charAt(0) == '~' && word.length() > 1) {
-                token = new WordToken(word.substring(1), additionalWidth);
-            }
-            else {
-                token = new WordToken(word, additionalWidth);
-            }
+            WordToken token = new WordToken(word, additionalWidth);
 
             if (!parser.ignoreKeywords) {
                 EUIKeywordTooltip tooltip = getTooltip(parser, word);

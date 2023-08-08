@@ -43,7 +43,7 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
 
     @Override
     public void receiveEditStrings() {
-        loadCustomStrings(OrbStrings.class);
+        //loadCustomStrings(OrbStrings.class);
         loadCustomCardStrings();
         loadCustomStrings(RelicStrings.class);
         loadCustomStrings(PowerStrings.class);
