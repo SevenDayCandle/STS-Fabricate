@@ -80,6 +80,10 @@
 		"DESCRIPTION": "Executes after a certain number of uses.",
 		"NAME": "Cooldown"
 	},
+	"Corpse Explosion":	{
+		"DESCRIPTION": "On death, deals damage to all enemies based on its Max HP.",
+		"NAME": "Corpse Explosion"
+	},
 	"Counter":	{
 		"DESCRIPTION": "Card property used for custom card effects.",
 		"NAME": "Counter",
@@ -134,6 +138,10 @@
 		"PROGRESSIVE": "dying",
 		"NAME": "Die"
 	},
+	"Double Damage":	{
+		"DESCRIPTION": "Attacks deal #b+100% damage.",
+		"NAME": "Double Damage"
+	},
 	"Draw Minus":	{
 		"DESCRIPTION": "Draw fewer cards at the start of next turn.",
 		"NAME": "Draw Minus"
@@ -141,6 +149,10 @@
 	"Draw Plus":	{
 		"DESCRIPTION": "Draw additional cards at the start of next turn.",
 		"NAME": "Draw Plus"
+	},
+	"Duplication":	{
+		"DESCRIPTION": "The next card played is played an additional time.",
+		"NAME": "Duplication"
 	},
 	"Energized":	{
 		"DESCRIPTION": "Gain [E] at the start of next turn.",
@@ -177,6 +189,10 @@
 		"DESCRIPTION": "Take 50% less #yAttack damage. Reduced after taking #yAttack damage. Restored at the start of turn if it wasn't reduced to #b0.",
 		"NAME": "Flight"
 	},
+	"Foresight":	{
+		"DESCRIPTION": "Scry at the start of your turn.",
+		"NAME": "Foresight"
+	},
 	"Fortified":	{
 		"DESCRIPTION": "#yCards give #b+{0}% [Block].",
 		"NAME": "Fortified"
@@ -184,6 +200,10 @@
 	"Fragile":	{
 		"DESCRIPTION": "Exhausts if you play another card while this is in hand.",
 		"NAME": "Fragile"
+	},
+	"Free Attack":	{
+		"DESCRIPTION": "The next Attack played costs #b0.",
+		"NAME": "Free Attack"
 	},
 	"Grave":	{
 		"DESCRIPTION": "Start each combat with this card in your discard pile.",
@@ -228,6 +248,10 @@
 		"DESCRIPTION": "#yAttacks deal #b+{0}% damage.",
 		"NAME": "Invigorated"
 	},
+	"Invincible":	{
+		"DESCRIPTION": "Limits the amount of HP that can be lost each turn.",
+		"NAME": "Invincible"
+	},
 	"Juggernaut":	{
 		"DESCRIPTION": "Whenever you gain [Block], deal damage to a random enemy.",
 		"NAME": "Juggernaut"
@@ -246,6 +270,10 @@
 	"Limited":	{
 		"DESCRIPTION": "This effect can only trigger once per combat, across all copies of this card.",
 		"NAME": "Limited"
+	},
+	"Lock-On":	{
+		"DESCRIPTION": "Receive #b+{0}% damage from #yOrbs.",
+		"NAME": "Lock-On"
 	},
 	"Loyal":	{
 		"DESCRIPTION": "If this would enter your discard pile, move it to your draw pile instead.",

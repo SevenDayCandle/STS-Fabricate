@@ -31,6 +31,7 @@ public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayU
         onUse = action;
         this.tip = new EUITooltip(title, description);
         this.tip.setSubheader(new ColoredString());
+        this.tip.subHeader.color = Settings.GREEN_TEXT_COLOR;
     }
 
     public static void clear() {
@@ -92,7 +93,6 @@ public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayU
 
     public EUITooltip getTooltip() {
         this.tip.subHeader.text = EUIRM.strings.numNoun(turns, PCLCoreStrings.pluralEvaluated(PGR.core.strings.combat_turns, turns));
-        this.tip.subHeader.color = turns <= 0 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR;
         return tip;
     }
 

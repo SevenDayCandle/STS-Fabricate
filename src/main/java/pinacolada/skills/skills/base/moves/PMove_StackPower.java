@@ -48,7 +48,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
 
     @Override
     public boolean isMetascaling() {
-        return !isDetrimental() && fields.powers.contains(PCLPowerHelper.Regen);
+        return !isDetrimental() && EUIUtils.any(fields.powers, p -> p.isMetascaling);
     }
 
     @Override
