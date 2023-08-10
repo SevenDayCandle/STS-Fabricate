@@ -2113,11 +2113,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (GameUtilities.isColorlessCardColor(this.color)) {
             PCLRenderHelpers.drawGrayscale(sb, (s) ->
                     PCLRenderHelpers.drawOnCardAuto(s, this, card,
-                            new Vector2(0, 0), card.getWidth(), card.getHeight(),
+                            0, 0, card.getWidth(), card.getHeight(),
                             this.color == CardColor.CURSE ? PCLCard.CURSE_COLOR : PCLCard.COLORLESS_ORB_COLOR, transparency, popUpMultiplier));
         }
         else {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, card, new Vector2(0, 0), card.getWidth(), card.getHeight(), getRenderColor(), transparency, popUpMultiplier);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, card, 0, 0, card.getWidth(), card.getHeight(), getRenderColor(), transparency, popUpMultiplier);
         }
     }
 
@@ -2140,9 +2140,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (this.cost > -2 && !getDarken() && !this.isLocked && this.isSeen) {
             Texture baseCard = getCardBackground();
             float popUpMultiplier = isPopup ? 0.5f : 1f;
-            Vector2 offset = new Vector2(-baseCard.getWidth() / (isPopup ? 7.7f : 3.85f), baseCard.getHeight() / (isPopup ? 5.3f : 2.64f));
             Texture energyOrb = getEnergyOrb();
-            PCLRenderHelpers.drawOnCardAuto(sb, this, energyOrb, offset, energyOrb.getWidth(), energyOrb.getHeight(), getRenderColor(), transparency, popUpMultiplier);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, energyOrb, -baseCard.getWidth() / (isPopup ? 7.7f : 3.85f), baseCard.getHeight() / (isPopup ? 5.3f : 2.64f), energyOrb.getWidth(), energyOrb.getHeight(), getRenderColor(), transparency, popUpMultiplier);
 
             renderEnergyText(sb);
         }
@@ -2300,13 +2299,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 }
             }
 
-            PCLRenderHelpers.drawOnCardAuto(sb, this, region, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, region, 0, 72, render_width, render_height, color, transparency, scale);
         }
         else if (isPopup) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width * 2, render_height * 2, color, transparency, scale * 0.5f);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 72, render_width * 2, render_height * 2, color, transparency, scale * 0.5f);
         }
         else {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 72, render_width, render_height, color, transparency, scale);
         }
     }
 
@@ -2346,7 +2345,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             if (shouldUsePCLFrame()) {
                 Texture texture = getTypeIcon();
                 float height = texture.getHeight();
-                PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, -height * 0.2f), texture.getWidth(), height, Color.WHITE, transparency, Settings.scale * 0.24f);
+                PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, -height * 0.2f, texture.getWidth(), height, Color.WHITE, transparency, Settings.scale * 0.24f);
             }
             else {
                 if (isPopup) {
@@ -2573,9 +2572,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRender(SpriteBatch sb, Texture texture, float scale, Vector2 offset) {
+    protected boolean tryRender(SpriteBatch sb, Texture texture, float scale, float drawX, float drawY) {
         if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, offset, texture.getWidth(), texture.getHeight(), getRenderColor(), transparency, scale);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, drawX, drawY, texture.getWidth(), texture.getHeight(), getRenderColor(), transparency, scale);
 
             return true;
         }
@@ -2623,7 +2622,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, Color color, float scale) {
         if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), color, transparency, scale);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 0, texture.getWidth(), texture.getHeight(), color, transparency, scale);
 
             return true;
         }

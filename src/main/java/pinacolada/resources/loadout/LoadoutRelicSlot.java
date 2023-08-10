@@ -66,6 +66,18 @@ public class LoadoutRelicSlot {
         return copy;
     }
 
+    public void markAllSeen() {
+        for (LoadoutRelicSlot.Item item : relics) {
+            item.markAsSeen();
+        }
+    }
+
+    public void markCurrentSeen() {
+        if (selected != null) {
+            selected.markAsSeen();
+        }
+    }
+
     public void next() {
         if (selected == null) {
             select(relics.current());

@@ -1,25 +1,35 @@
 package pinacolada.monsters;
 
 import basemod.BaseMod;
+import com.megacrit.cardcrawl.actions.common.HealAction;
+import com.megacrit.cardcrawl.actions.common.SetMoveAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.NeowsLament;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TourProvider;
 import extendedui.ui.tooltips.EUITourTooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public abstract class PCLTutorialMonster extends PCLCreature implements TourProvider {
     public static ArrayList<TutorialInfo> tutorials = new ArrayList<>();
@@ -71,9 +81,25 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         AbstractDungeon.player.limbo.group = new ArrayList<>();
     }
 
+    public void damage(DamageInfo info) {
+        super.damage(info);
+        if (this.currentHealth <= 0 && !this.halfDead) {
+            this.halfDead = true;
+            this.powers.clear();
+        }
+    }
+
+    public void die() {
+        if (!AbstractDungeon.getCurrRoom().cannotLose) {
+            super.die();
+        }
+    }
+
     public void finishTutorial() {
+        AbstractDungeon.getCurrRoom().cannotLose = false;
+        this.halfDead = false;
         EUITourTooltip.clearTutorialQueue();
-        die();
+        super.die();
         if (currentConfig != null) {
             currentConfig.set(true);
         }
@@ -86,6 +112,7 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
 
     @Override
     public void usePreBattleAction() {
+        AbstractDungeon.getCurrRoom().cannotLose = true;
         performActions(false);
     }
 
@@ -111,6 +138,10 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
             current += 1;
         }
         if (current < steps.size()) {
+            if (currentHealth <= 0 || halfDead) {
+                PCLActions.bottom.add(new HealAction(this, this, this.maxHealth));
+                this.halfDead = false;
+            }
             EUITourTooltip.clearTutorialQueue();
             waitingTip = steps.get(current).invoke();
             waitingTip.setWaitOnProvider(this)

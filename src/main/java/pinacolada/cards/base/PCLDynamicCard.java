@@ -241,15 +241,15 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             TextureAtlas.AtlasRegion vanilla = getVanillaCardBackgroundForRender();
             if (vanilla != null) {
                 PCLRenderHelpers.drawWithMask(sb,
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanilla, new Vector2(0, 0), vanilla.packedWidth, vanilla.packedHeight, getRenderColor(), transparency, popUpMultiplier)
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, 0, 0, width, height, getRenderColor(), transparency, popUpMultiplier),
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanilla, 0, 0, vanilla.packedWidth, vanilla.packedHeight, getRenderColor(), transparency, popUpMultiplier)
                 );
             }
             else {
                 Texture customBack = getCardBackground();
                 PCLRenderHelpers.drawWithMask(sb,
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBack, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier)
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, 0, 0, width, height, getRenderColor(), transparency, popUpMultiplier),
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBack, 0, 0, width, height, getRenderColor(), transparency, popUpMultiplier)
                 );
             }
         }
@@ -276,7 +276,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             else {
                 Texture custom = getEnergyOrb();
                 float popUpMultiplier = isPopup ? 0.5f : 1f;
-                PCLRenderHelpers.drawOnCardAuto(sb, this, custom, new Vector2(0, 0), custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
+                PCLRenderHelpers.drawOnCardAuto(sb, this, custom, 0, 0, custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
                 renderEnergyText(sb);
             }
         }

@@ -55,19 +55,19 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity> {
 
         Texture background = type.getBackground(allowAlternateBorder ? level : Math.min(1, level));
         if (background != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, background, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, background, x, y, size, size, renderColor, card.transparency, 1f, 0);
         }
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), x, y, size, size, renderColor, card.transparency, 1f, 0f);
 
         Texture border = type.getBorder(allowAlternateBorder ? level : Math.min(1, level));
         if (border != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, border, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0f);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, border, x, y, size, size, renderColor, card.transparency, 1f, 0f);
         }
 
         if (type == PCLAffinity.Star) {
             Texture star = PCLCoreImages.CardAffinity.starFg.texture();
-            PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, star, x, y, size, size, renderColor, card.transparency, 1f, 0);
         }
     }
 

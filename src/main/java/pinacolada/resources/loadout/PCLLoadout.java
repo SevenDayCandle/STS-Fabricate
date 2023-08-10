@@ -215,6 +215,7 @@ public abstract class PCLLoadout {
         r1.addItem(new GenericDice(), 4);
         r1.addItem(new Macroscope(), 4);
         r1.addItem(new HeartShapedBox(), 10);
+        r1.markAllSeen();
     }
 
     public void addStarterRelic(ArrayList<String> res, String id) {

@@ -1,6 +1,7 @@
 package pinacolada.cards.base.tags;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
@@ -9,12 +10,14 @@ import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingFie
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
@@ -49,6 +52,7 @@ public enum PCLCardTag implements TooltipProvider {
     Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1, true);
 
     public static final float HEIGHT = 38f;
+    public static final float OFF_X = AbstractCard.RAW_W * 0.45f;
     private static ArrayList<PCLCardTag> PRE;
     private static ArrayList<PCLCardTag> POST;
     public final boolean preText;
@@ -368,18 +372,23 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     public float renderOnCard(SpriteBatch sb, AbstractCard card, float offset_y, float alpha) {
-        Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
-
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, color, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, getTooltip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        float offY = AbstractCard.RAW_H * 0.45f + offset_y;
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), OFF_X, offY, 64, 64, color, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, getTooltip().icon.getTexture(), OFF_X, offY, 64, 64, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), OFF_X, offY, 64, 64, Color.WHITE, alpha, 1);
 
         int tagCount = getInt(card);
         if (tagCount < 0) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseInfinite.texture(), AbstractCard.RAW_W * 0.5f, AbstractCard.RAW_H * 0.42f + offset_y, 96, 64, Color.WHITE, alpha, 0.35f);
         }
         else if (tagCount > 1) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+            String text = String.valueOf(tagCount);
+            EUIFontHelper.cardTitleFontSmall.getData().setScale(card.drawScale * 0.73f);
+            float offX = AbstractCard.RAW_W * 0.5f;
+            offY = AbstractCard.RAW_H * 0.42f + offset_y;
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), offX, offY, 96, 64, Color.WHITE, alpha, 0.35f);
+            PCLRenderHelpers.writeOnCard(sb, card, EUIFontHelper.cardTitleFontSmall, text, offX, offY, Settings.BLUE_TEXT_COLOR, false);
+            PCLRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
         }
 
         return HEIGHT;
