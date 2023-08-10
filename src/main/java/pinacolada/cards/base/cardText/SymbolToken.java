@@ -85,21 +85,21 @@ public class SymbolToken extends PCLTextToken {
 
     @Override
     public int getCharCount() {
-        return (EUIConfiguration.enableDescriptionIcons.get()) && tooltip != null ? 1 : rawText.length();
+        return shouldRenderIcon() ? 1 : rawText.length();
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return EUIConfiguration.enableDescriptionIcons.get() && tooltip != null ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
+        return shouldRenderIcon() ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
     }
 
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         PCLCard card = context.card;
-        float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;
-        float partial = size / 12f;
 
-        if (tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get() || tooltip.forceIcon)) {
+        if (shouldRenderIcon()) {
+            float size = context.font.getLineHeight() * 0.8f;
+            float partial = size / 12f;
             float iconW = size * tooltip.iconmultiW;
             float iconH = size * tooltip.iconmultiH;
             float diff = partial / tooltip.iconmultiW;
@@ -115,5 +115,9 @@ public class SymbolToken extends PCLTextToken {
         else {
             super.render(sb, context, tooltip.title, Settings.GOLD_COLOR);
         }
+    }
+
+    protected boolean shouldRenderIcon() {
+        return tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get() || tooltip.forceIcon);
     }
 }

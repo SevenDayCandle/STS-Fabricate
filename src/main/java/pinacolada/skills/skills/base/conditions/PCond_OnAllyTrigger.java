@@ -41,6 +41,8 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
 
     @Override
     public void onAllyTrigger(PCLCard card, PCLCardAlly ally, PCLCardAlly caller) {
-        triggerOnCard(card, ally);
+        if (isWhenClause() || ally == caller) {
+            triggerOnCard(card, ally);
+        }
     }
 }

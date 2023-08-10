@@ -261,7 +261,7 @@ public interface PointerProvider {
                         }
                     }
                     String key = sub.toString();
-                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(key);
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
                     sb.append(tip != null ? tip.title : key);
                     break;
                 case '{':
@@ -344,7 +344,7 @@ public interface PointerProvider {
                             }
                         }
                         String key = sub.toString();
-                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByName(key);
+                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
                         sb.append(tip != null ? tip.title : key);
                     }
                     else {

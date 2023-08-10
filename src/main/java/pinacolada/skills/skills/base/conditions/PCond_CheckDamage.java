@@ -52,11 +52,12 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
 
     // When the owner attacks, triggers the effect on the target
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
+    public void onAttack(DamageInfo dInfo, int damageAmount, AbstractCreature receiver) {
         AbstractCreature owner = getOwnerCreature();
-        PCLUseInfo pInfo = generateInfo(owner, receiver);
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(owner, info.owner, pInfo.tempTargets).contains(info.owner) && info.output >= amount) {
-            useFromTrigger(pInfo.setData(damageAmount));
+        PCLUseInfo info = generateInfo(owner, receiver);
+        boolean eval = evaluateTargets(info, c -> c == dInfo.owner);
+        if (dInfo.type == DamageInfo.DamageType.NORMAL && eval && dInfo.output >= amount) {
+            useFromTrigger(info.setData(damageAmount));
         }
     }
 }

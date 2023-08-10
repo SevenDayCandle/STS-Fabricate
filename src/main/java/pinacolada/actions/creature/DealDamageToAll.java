@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import extendedui.EUIUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -85,6 +86,10 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
         if (attackVFX != null) {
             addDuration(attackVFX.damageDelay);
         }
+
+        if (targets.size() < damage.length) {
+            EUIUtils.logWarning(this, "Target size " + targets.size() + " is smaller than damage length " + damage.length);
+        }
     }
 
     @Override
@@ -94,9 +99,9 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
                 p.onDamageAllEnemies(this.damage);
             }
 
-            int i = 0;
-            for (AbstractCreature enemy : targets) {
-                if (!GameUtilities.isDeadOrEscaped(enemy)) {
+            for (int i = 0; i < targets.size(); i++) {
+                AbstractCreature enemy = targets.get(i);
+                if (!GameUtilities.isDeadOrEscaped(enemy) && i < this.damage.length) {
                     final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
                     if (orb != null) {
                         info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
@@ -107,8 +112,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
                     DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
                     DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
                 }
-
-                i += 1;
             }
 
             if (GameUtilities.areMonstersBasicallyDead()) {

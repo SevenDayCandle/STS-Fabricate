@@ -2,6 +2,7 @@ package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -32,6 +33,7 @@ public class TemporaryPower extends PCLPower {
         initialize(amount, sourcePower.type, true);
 
         this.name = formatDescription(2, sourcePower.name);
+        mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
         updateDescription();
     }
 

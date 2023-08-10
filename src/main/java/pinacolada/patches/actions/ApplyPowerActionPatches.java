@@ -102,7 +102,7 @@ public class ApplyPowerActionPatches {
         private static class LocatorApply extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 final Matcher matcher = new Matcher.MethodCallMatcher(AbstractDungeon.class, "onModifyPower");
-                return LineFinder.findInOrder(ctBehavior, matcher);
+                return LineFinder.findAllInOrder(ctBehavior, matcher);
             }
         }
     }

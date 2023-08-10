@@ -132,11 +132,24 @@ public class GameUtilities {
         applyPowerInstantly(target, powerHelper.create(target, player, stacks), stacks);
     }
 
+    public static AbstractPower applyPowerInstantly(AbstractCreature target, AbstractPower power) {
+        return applyPowerInstantly(target, power, power.amount);
+    }
+
     public static AbstractPower applyPowerInstantly(AbstractCreature target, AbstractPower power, int stacks) {
         final AbstractPower existingPower = getPower(target, power.ID);
         if (existingPower != null) {
-            if ((stacks != -1 || power.canGoNegative) && ((existingPower.amount += stacks) == 0)) {
-                target.powers.remove(existingPower);
+            // -1 stacks on nonnegative powers mean non-decreasing powers
+            if (existingPower.amount < 0 && !existingPower.canGoNegative) {
+                if (stacks > -1) {
+                    target.powers.remove(existingPower);
+                }
+            }
+            else {
+                existingPower.amount += stacks;
+                if ((existingPower.amount < 0 && !existingPower.canGoNegative) || existingPower.amount == 0) {
+                    target.powers.remove(existingPower);
+                }
             }
 
             return existingPower;

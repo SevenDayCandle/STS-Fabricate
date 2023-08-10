@@ -302,6 +302,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         return indexes;
     }
 
+    public boolean isFilterEmpty() {
+        return cardIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && types.isEmpty() && affinities.isEmpty() && tags.isEmpty() && costs.isEmpty() && loadouts.isEmpty();
+    }
+
     public void makePreviews(RotatingList<EUIPreview> previews) {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);

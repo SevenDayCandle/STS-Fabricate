@@ -55,16 +55,16 @@ public class PField_CardGeneric extends PField_Not {
 
         // Set automatic selection when self targeting, using parent, or if the action is forced and we must select every available card
         if ((!skill.useParent && groupTypes.isEmpty()) || (forced && (skill.useParent || skill.baseAmount <= 0))) {
-            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random, g)
+            return action.invoke(skill.getName(), skill.target.getTarget(info), choiceSize, PCLCardSelection.Random, g)
                     .setDestination(destination);
         }
         else if (subchoices > 0 && subchoices <= choiceSize) {
-            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual, g)
+            return action.invoke(skill.getName(), skill.target.getTarget(info), subchoices, PCLCardSelection.Manual, g)
                     .setMaxChoices(choiceSize, origin == PCLCardSelection.Manual ? PCLCardSelection.Random : origin) // "Manual" will cause the max choices selection to do nothing
                     .setDestination(destination);
         }
 
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin, g)
+        return action.invoke(skill.getName(), skill.target.getTarget(info), choiceSize, origin, g)
                 .setDestination(destination)
                 .showEffect(origin != PCLCardSelection.Manual, false);
     }

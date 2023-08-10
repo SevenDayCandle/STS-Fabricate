@@ -16,6 +16,7 @@ import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @VisibleSkill
@@ -67,13 +68,15 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         return getTargetHasStringPerspective(perspective, baseString);
     }
 
+    // When the specified creatures gain a power, triggers the effect on that target
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
         AbstractCreature owner = getOwnerCreature();
         PCLUseInfo info = generateInfo(owner, t);
+        boolean eval = evaluateTargets(info, c -> c == t);
         // For single target powers, the power target needs to match the owner of this skill
         if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == owner : target.getTargets(source, t, info.tempTargets).contains(t)))) {
+                : (fields.getPowerFilter().invoke(power) && eval)) {
             useFromTrigger(info.setData(power));
         }
     }

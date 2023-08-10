@@ -49,12 +49,10 @@ public class PCLGainPowerEffect extends AbstractGameEffect {
         if (this.region48 != null) {
             float half_w = region48.packedWidth / 2f;
             float half_h = region48.packedHeight / 2f;
-
-            //sb.draw(this.region48, x - 12f, y - 16f, 16f, 16f, 32f, 32f, scale, scale, 0f);
             sb.draw(this.region48, x - half_w, y - half_h, half_w, half_h, region48.packedWidth, region48.packedHeight, scale * 0.1f, scale * 0.1f, 0f);
         }
         else {
-            sb.draw(this.img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale, scale, 0f, 0, 0, 32, 32, false, false);
+            sb.draw(this.img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale, scale, 0f, 0, 0, this.img.getWidth(), this.img.getHeight(), false, false);
         }
 
         sb.setBlendFunction(770, 771);

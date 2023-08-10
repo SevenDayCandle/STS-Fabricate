@@ -84,7 +84,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyBlockFirst(float amount, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyBlockFirst(trigger.getInfo(null), amount);
+            amount = trigger.modifyBlockFirst(trigger.getInfo(getOwner()), amount);
         }
         return amount;
     }
@@ -92,7 +92,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyBlockLast(float amount, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyBlockLast(trigger.getInfo(null), amount);
+            amount = trigger.modifyBlockLast(trigger.getInfo(getOwner()), amount);
         }
         return amount;
     }

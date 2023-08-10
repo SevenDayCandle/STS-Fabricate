@@ -21,18 +21,17 @@ import java.util.HashMap;
 import java.util.List;
 
 // TODO move off of enum
-// TODO deprecate powersymbol or name
 public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, CountingPanelItem {
-    Red(0, "Red", "R"),
-    Green(1, "Green", "G"),
-    Blue(2, "Blue", "B"),
-    Orange(3, "Orange", "O"),
-    Yellow(4, "Yellow", "Y"),
-    Purple(5, "Purple", "P"),
-    Silver(6, "Silver", "S"),
-    Star(-1, "Star", "A"),
-    General(-2, "Gen", "W"),
-    Unknown(-3, "NA", "U");
+    Red(0, "R"),
+    Green(1, "G"),
+    Blue(2, "B"),
+    Orange(3, "O"),
+    Yellow(4, "Y"),
+    Purple(5, "P"),
+    Silver(6, "S"),
+    Star(-1, "A"),
+    General(-2, "W"),
+    Unknown(-3, "U");
 
     private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
@@ -54,12 +53,10 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     }
 
     public final int id;
-    public final String name;
     public final String symbol;
 
-    PCLAffinity(int id, String name, String powerSymbol) {
+    PCLAffinity(int id, String powerSymbol) {
         this.id = id;
-        this.name = name;
         this.symbol = powerSymbol;
     }
 

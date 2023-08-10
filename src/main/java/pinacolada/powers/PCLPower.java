@@ -21,10 +21,12 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.text.EUISmartText;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
@@ -32,6 +34,9 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.cardText.ConditionToken;
+import pinacolada.cards.base.cardText.PointerToken;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
@@ -51,6 +56,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static extendedui.EUI.splitID;
+import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, TooltipProvider {
@@ -122,6 +130,60 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return base + "Power";
     }
 
+    // Remove unrecognized characters and sequences from the description pulled from by the base game and other mods
+    // This kills me
+    public static String sanitizePowerDescription(String description) {
+        if (description == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < description.length(); i++) {
+            char c = description.charAt(i);
+            switch (c) {
+                case '|':
+                    sb.append(EUISmartText.NEWLINE);
+                    break;
+                case '[':
+                case '†':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < description.length()) {
+                        i += 1;
+                        c = description.charAt(i);
+                        if (c == ']') {
+                            break;
+                        }
+                        else {
+                            sub.append(c);
+                        }
+                    }
+                    String key = sub.toString();
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
+                    if (tip != null) {
+                        String[] split = EUIUtils.splitString(" ", tip.title);
+                        for (String s : split) {
+                            sb.append("#y");
+                            sb.append(s);
+                            sb.append(' ');
+                        }
+                    }
+                    else {
+                        sb.append(key);
+                    }
+                    break;
+                case '{':
+                    sb.append("#y");
+                    break;
+                case '}':
+                case ']':
+                    continue;
+                default:
+                    sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
     public float atDamageFinalGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
         return atDamageFinalGive(block, type, c);
     }
@@ -190,6 +252,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             return "";
         }
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
+    }
+
+    public String getDisplayDescription() {
+        return mainTip.description;
     }
 
     public String getID() {
@@ -377,11 +443,13 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected void setupDescription() {
         this.name = powerStrings.NAME;
-        this.description = getUpdatedDescription();
-        mainTip = new EUIKeywordTooltip(name, description);
+        String desc = getUpdatedDescription();
+        mainTip = new EUIKeywordTooltip(name, desc);
         mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
         tooltips.add(mainTip);
-        findTooltipsFromText(description);
+        findTooltipsFromText(desc);
+        // Base game descriptions don't support special characters
+        this.description = sanitizePowerDescription(desc);
     }
 
     protected void setupStrings(PCLRelic relic) {
@@ -477,8 +545,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             return;
         }
 
-        this.description = getUpdatedDescription();
-        mainTip.setDescription(this.description);
+        String desc = getUpdatedDescription();
+        mainTip.setDescription(desc);
+        this.description = sanitizePowerDescription(desc);
     }
 
     @Override

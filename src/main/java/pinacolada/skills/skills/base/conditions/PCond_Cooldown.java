@@ -97,7 +97,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         Color textColor = canActivate ? (dim ? PCLCardAlly.FADE_COOLDOWN_COLOR : Settings.GREEN_TEXT_COLOR) :
                 (Settings.CREAM_COLOR);
         PCLRenderHelpers.drawGrayscaleIf(sb,
-                s -> PCLRenderHelpers.drawCentered(sb, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
+                s -> PCLRenderHelpers.drawCentered(s, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
                 dim);
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(getCooldown()), ally.intentHb.cX, startY, textColor);
 

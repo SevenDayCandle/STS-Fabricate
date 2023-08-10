@@ -132,8 +132,9 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return null;
     }
 
-    public final AbstractCreature getTarget(AbstractCreature m) {
-        return getTarget(AbstractDungeon.player, m);
+    public final AbstractCreature getTarget(PCLUseInfo info) {
+        List<? extends AbstractCreature> mons = getTargets(info);
+        return mons.size() > 0 ? mons.get(0) : null;
     }
 
     public final AbstractCreature getTarget(AbstractCreature p, AbstractCreature m) {

@@ -36,6 +36,6 @@ public class PMod_PerGold extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return PGR.core.tooltips.gold.getTitleOrIcon();
+        return PGR.core.tooltips.gold.title;
     }
 }
