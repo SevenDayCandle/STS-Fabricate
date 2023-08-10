@@ -1,4 +1,32 @@
 {
+	"A-B":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Blue Affinity"
+	},
+	"A-G":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Green Affinity"
+	},
+	"A-O":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Orange Affinity"
+	},
+	"A-P":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Purple Affinity"
+	},
+	"A-R":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Red Affinity"
+	},
+	"A-S":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Silver Affinity"
+	},
+	"A-Y":	{
+		"DESCRIPTION": "Affinities appear above a card's name.",
+		"NAME": "Yellow Affinity"
+	},
 	"Affinity":	{
 		"DESCRIPTION": "Affinities appear above a card's name.",
 		"NAME": "Affinity",
@@ -27,10 +55,6 @@
 	"Blinded":	{
 		"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
 		"NAME": "Blinded"
-	},
-	"Blue Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Blue Affinity"
 	},
 	"Blur":	{
 		"DESCRIPTION": "[Block] is conserved between turns.",
@@ -209,10 +233,6 @@
 		"DESCRIPTION": "Start each combat with this card in your discard pile.",
 		"NAME": "Grave"
 	},
-	"Green Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Green Affinity"
-	},
 	"HP":	{
 		"DESCRIPTION": "A creature dies when it runs out of HP.",
 		"NAME": "HP"
@@ -330,10 +350,6 @@
 		"PRESENT": "obtains",
 		"PROGRESSIVE": "obtaining"
 	},
-	"Orange Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Orange Affinity"
-	},
 	"Orb Slot":	{
 		"DESCRIPTION": "#yOrb #ySlots allow you to channel additional Orbs.",
 		"NAME": "Orb Slot"
@@ -368,10 +384,6 @@
 		"DESCRIPTION": "The target takes #b+{0}% damage from #yAttacks, and it must attack this turn.",
 		"NAME": "Provoked"
 	},
-	"Purple Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Purple Affinity"
-	},
 	"Ranged Damage":	{
 		"DESCRIPTION": "Ignores #yPowers that activate on contact.",
 		"NAME": "Ranged Damage"
@@ -383,10 +395,6 @@
 	"Recast":	{
 		"DESCRIPTION": "Next turn, play a copy of this card. The copy #yPurges and does not #yRecast.",
 		"NAME": "Recast"
-	},
-	"Red Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Red Affinity"
 	},
 	"Regeneration":	{
 		"DESCRIPTION": "Heal HP at the end of the turn. Reduce by 1 each turn.",
@@ -443,10 +451,6 @@
 	"Silenced":	{
 		"DESCRIPTION": "Negate incoming buffs. Does not affect powers specific to cards or monsters.",
 		"NAME": "Silenced"
-	},
-	"Silver Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Silver Affinity"
 	},
 	"Slow":	{
 		"DESCRIPTION": "For every card you have played this turn, take #b10% more damage from #yAttacks.",
@@ -567,9 +571,5 @@
 		"PAST": "withdrawn",
 		"PRESENT": "withdraws",
 		"PROGRESSIVE": "withdrawing"
-	},
-	"Yellow Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Yellow Affinity"
 	}
 }

@@ -71,13 +71,13 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public static final String ICON_WEAK = "weak";
     public static final String ICON_VULNERABLE = "vulnerable";
 
-    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID("Blue Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID("Green Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID("Orange Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID("Purple Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").forceIcon(true);
-    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID(PCLAffinity.Blue.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID(PCLAffinity.Green.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID(PCLAffinity.Orange.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID(PCLAffinity.Purple.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID(PCLAffinity.Red.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID(PCLAffinity.Silver.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID(PCLAffinity.Yellow.getAffinitySymbol()).forceIcon(true);
     public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
 
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").setCanAdd(false).canHighlight(false);
@@ -246,13 +246,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip gold = new EUIKeywordTooltip(RewardItem.TEXT[1].trim());
 
     public PCLCoreTooltips() {
-        EUIKeywordTooltip.registerID(PCLAffinity.Red.getAffinitySymbol(), affinityRed);
-        EUIKeywordTooltip.registerID(PCLAffinity.Green.getAffinitySymbol(), affinityGreen);
-        EUIKeywordTooltip.registerID(PCLAffinity.Blue.getAffinitySymbol(), affinityBlue);
-        EUIKeywordTooltip.registerID(PCLAffinity.Orange.getAffinitySymbol(), affinityOrange);
-        EUIKeywordTooltip.registerID(PCLAffinity.Yellow.getAffinitySymbol(), affinityYellow);
-        EUIKeywordTooltip.registerID(PCLAffinity.Purple.getAffinitySymbol(), affinityPurple);
-        EUIKeywordTooltip.registerID(PCLAffinity.Silver.getAffinitySymbol(), affinitySilver);
         EUIKeywordTooltip.registerID(PCLAffinity.Star.getAffinitySymbol(), multicolor);
         EUIKeywordTooltip.registerID(PCLAffinity.General.getAffinitySymbol(), affinityGeneral);
         EUIKeywordTooltip.registerID(PCLAffinity.Unknown.getAffinitySymbol(), affinityUnknown);

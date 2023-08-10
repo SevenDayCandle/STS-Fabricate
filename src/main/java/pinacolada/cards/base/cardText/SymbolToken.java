@@ -19,16 +19,12 @@ public class SymbolToken extends PCLTextToken {
     public static final char TOKEN1 = '[';
     public static final char TOKEN2 = '†';
 
-    // TODO remove
+    // Called before force icon can be set on the tooltips
     static {
         tokenCache.put("E", new SymbolToken("[E]")); // Energy
-        tokenCache.put(PCLAffinity.Red.getPowerSymbol(), new SymbolToken(PCLAffinity.Red.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Green.getPowerSymbol(), new SymbolToken(PCLAffinity.Green.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Blue.getPowerSymbol(), new SymbolToken(PCLAffinity.Blue.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Orange.getPowerSymbol(), new SymbolToken(PCLAffinity.Orange.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Yellow.getPowerSymbol(), new SymbolToken(PCLAffinity.Yellow.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Purple.getPowerSymbol(), new SymbolToken(PCLAffinity.Purple.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Silver.getPowerSymbol(), new SymbolToken(PCLAffinity.Silver.getFormattedPowerSymbol()));
+        for (PCLAffinity affinity : PCLAffinity.values()) {
+            tokenCache.put(affinity.getPowerSymbol(), new SymbolToken(affinity.getFormattedPowerSymbol()));
+        }
     }
 
     protected EUIKeywordTooltip tooltip;
@@ -85,19 +81,19 @@ public class SymbolToken extends PCLTextToken {
 
     @Override
     public int getCharCount() {
-        return shouldRenderIcon() ? 1 : rawText.length();
+        return tooltip.forceIcon || (tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get())) ? 1 : rawText.length();
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return shouldRenderIcon() ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
+        return tooltip.forceIcon || (tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get())) ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
     }
 
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         PCLCard card = context.card;
 
-        if (shouldRenderIcon()) {
+        if (tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get() || tooltip.forceIcon)) {
             float size = context.font.getLineHeight() * 0.8f;
             float partial = size / 12f;
             float iconW = size * tooltip.iconmultiW;
@@ -117,7 +113,4 @@ public class SymbolToken extends PCLTextToken {
         }
     }
 
-    protected boolean shouldRenderIcon() {
-        return tooltip.icon != null && (EUIConfiguration.enableDescriptionIcons.get() || tooltip.forceIcon);
-    }
 }

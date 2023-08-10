@@ -68,40 +68,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return BASIC_TYPES;
     }
 
-    public static PCLAffinity fromTooltip(EUIKeywordTooltip tooltip) {   //@Formatter: Off
-        if (tooltip.idEquals(PGR.core.tooltips.affinityRed)) {
-            return PCLAffinity.Red;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityGreen)) {
-            return PCLAffinity.Green;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityBlue)) {
-            return PCLAffinity.Blue;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityOrange)) {
-            return PCLAffinity.Orange;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityYellow)) {
-            return PCLAffinity.Yellow;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityPurple)) {
-            return PCLAffinity.Purple;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinitySilver)) {
-            return PCLAffinity.Silver;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.multicolor)) {
-            return PCLAffinity.Star;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityGeneral)) {
-            return PCLAffinity.General;
-        }
-        if (tooltip.idEquals(PGR.core.tooltips.affinityUnknown)) {
-            return PCLAffinity.Unknown;
-        }
-        return null;
-    }   //@Formatter: On
-
     public static PCLAffinity[] getAvailableAffinities() {
         return getAvailableAffinities(GameUtilities.getActingColor());
     }
