@@ -8,7 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
+import com.megacrit.cardcrawl.actions.common.GainGoldAction;
+import com.megacrit.cardcrawl.actions.common.HealAction;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
+import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -31,6 +35,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
@@ -332,6 +337,19 @@ public class CombatManager extends EUIBase {
         PURGED_CARDS.clear();
     }
 
+    public static void executeRemainingActions(ArrayList<AbstractGameAction> actions) {
+        ConcurrentLinkedQueue<OnPhaseChangedSubscriber> subscribers = getSubscriberGroup(OnPhaseChangedSubscriber.class);
+        for (OnPhaseChangedSubscriber phase : subscribers) {
+            if (phase instanceof PCLActions.ExecuteLast) {
+                AbstractGameAction action = ((PCLActions.ExecuteLast) phase).action;
+                if (!isActionCancellable(action)) {
+                    actions.add(action);
+                    subscribers.remove(phase);
+                }
+            }
+        }
+    }
+
     public static Set<Map.Entry<String, Float>> getAllEffectBonuses() {
         return EFFECT_BONUSES.entrySet();
     }
@@ -420,6 +438,17 @@ public class CombatManager extends EUIBase {
                 EUIUtils.logError(CombatManager.class, "Failed to load subscriber class " + eventClass);
             }
         }
+    }
+
+    public static boolean isActionCancellable(AbstractGameAction action) {
+        return (action instanceof PCLAction && ((PCLAction<?>) action).canCancel) ||
+                !(
+                        (action instanceof HealAction) ||
+                                (action instanceof GainGoldAction) ||
+                                (action instanceof GainBlockAction) ||
+                                (action instanceof UseCardAction) ||
+                                action.actionType != AbstractGameAction.ActionType.DAMAGE
+                );
     }
 
     public static void onAfterCardPlayed(AbstractCard card) {

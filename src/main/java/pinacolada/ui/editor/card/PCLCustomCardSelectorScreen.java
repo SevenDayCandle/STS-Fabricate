@@ -22,8 +22,10 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
@@ -31,6 +33,7 @@ import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
 import pinacolada.effects.screen.PCLGenericSelectCardEffect;
 import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -216,14 +219,20 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
 
     // TODO add replacement cards
     private ArrayList<AbstractCard> getAvailableCardsToCopy() {
-        return EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
+        ArrayList<AbstractCard> cards = EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
                 data -> {
                     PCLCard card = data.create();
                     UnlockTracker.markCardAsSeen(data.ID);
                     card.isSeen = true;
                     card.isLocked = false;
+                    // Hide the affinities for colorless cards
+                    if (!PGR.config.showIrrelevantProperties.get() && GameUtilities.isColorlessCardColor(currentColor)) {
+                        card.affinities.sorted.clear();
+                    }
                     return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;
                 });
+        cards.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        return cards;
     }
 
     public void loadFromExisting() {

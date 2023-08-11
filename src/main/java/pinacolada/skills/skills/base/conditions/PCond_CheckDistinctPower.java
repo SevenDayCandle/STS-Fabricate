@@ -1,11 +1,13 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -16,7 +18,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> {
+public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> implements OnApplyPowerSubscriber {
     public static final PSkillData<PField_Power> DATA = register(PCond_CheckDistinctPower.class, PField_Power.class);
 
     public PCond_CheckDistinctPower(PSkillSaveData content) {
@@ -52,6 +54,24 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
+        if (isWhenClause()) {
+            return TEXT.cond_whenMulti(getTargetSubjectString(perspective), TEXT.act_applyXToTarget(fields.getThresholdRawString(fields.getPowerSubjectString()), getTargetSubjectStringPerspective(perspective)));
+        }
         return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(TEXT.subjects_distinct(fields.getPowerSubjectString())));
+    }
+
+    // When the owner APPLIES the specified power to the specified target, triggers the effect on that target
+    @Override
+    public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source) {
+        AbstractCreature owner = getOwnerCreature();
+        if (source == owner) {
+            PCLUseInfo info = generateInfo(owner, t);
+            boolean eval = evaluateTargets(info, c -> c == t);
+            // For single target powers, the power target needs to match the owner of this skill
+            if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
+                    : (fields.getPowerFilter().invoke(power) && eval)) {
+                useFromTrigger(info.setData(power));
+            }
+        }
     }
 }

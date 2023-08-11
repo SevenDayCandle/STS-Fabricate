@@ -100,8 +100,8 @@ public class SymbolToken extends PCLTextToken {
             float iconH = size * tooltip.iconmultiH;
             float diff = partial / tooltip.iconmultiW;
 
-            if (tooltip.backgroundColor != null) {
-                sb.setColor(tooltip.backgroundColor);
+            if (tooltip.badgeColor != null) {
+                sb.setColor(tooltip.badgeColor);
                 sb.draw(EUIRM.images.baseBadge.texture(), context.startX - diff * 2.2f, context.startY - (partial * 6) * 1.2f, iconW * 1.2f, iconH * 1.2f);
             }
             sb.setColor(context.color);

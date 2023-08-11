@@ -22,9 +22,11 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     None,
     All,
     AllAlly,
+    AllAllyEnemy,
     AllEnemy,
     Any,
     RandomAlly,
+    RandomAllyEnemy,
     RandomEnemy,
     Self,
     SelfAllEnemy,
@@ -36,7 +38,9 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     UseParent;
 
     public static final TargetFilter T_AllAlly = new TargetFilter(PGR.core.strings.ctype_allAlly);
+    public static final TargetFilter T_AllAllyEnemy = new TargetFilter(PGR.core.strings.ctype_allAllyEnemy);
     public static final TargetFilter T_RandomAlly = new TargetFilter(PGR.core.strings.ctype_randomAlly);
+    public static final TargetFilter T_RandomAllyEnemy = new TargetFilter(PGR.core.strings.ctype_randomAllyEnemy);
     public static final TargetFilter T_RandomEnemy = new TargetFilter(PGR.core.strings.ctype_randomEnemy);
     public static final TargetFilter T_SelfAllEnemy = new TargetFilter(PGR.core.strings.ctype_selfAllEnemy);
     public static final TargetFilter T_SelfSingle = new TargetFilter(PGR.core.strings.ctype_selfSingle);
@@ -82,6 +86,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case AllAlly:
             case All:
             case AllEnemy:
+            case AllAllyEnemy:
                 return info.tempTargets.size() == prevSize;
         }
         return info.tempTargets.size() > 0;
@@ -122,11 +127,13 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case AllAlly:
             case Team:
                 return PGR.core.strings.ctype_team;
+            case AllAllyEnemy:
             case AllEnemy:
             case SelfAllEnemy:
                 return PGR.core.strings.ctype_tagAoE;
             case RandomEnemy:
             case RandomAlly:
+            case RandomAllyEnemy:
                 return PGR.core.strings.ctype_tagRandom;
         }
         return null;
@@ -150,6 +157,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return TargetFilter.AllEnemy;
             case AllAlly:
                 return T_AllAlly;
+            case AllAllyEnemy:
+                return T_AllAllyEnemy;
             case Team:
                 return T_Team;
             case All:
@@ -166,6 +175,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return T_RandomEnemy;
             case RandomAlly:
                 return T_RandomAlly;
+            case RandomAllyEnemy:
+                return T_RandomAllyEnemy;
             case SelfAllEnemy:
                 return T_SelfAllEnemy;
             case SelfSingle:
@@ -248,8 +259,21 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case AllAlly: {
                 if (GameUtilities.isEnemy(source)) {
                     GameUtilities.fillWithEnemies(true, sourceList);
+                    sourceList.remove(source);
                 }
                 else {
+                    GameUtilities.fillWithSummons(true, sourceList);
+                }
+                break;
+            }
+            case AllAllyEnemy: {
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                    fillWithPlayerTeam(sourceList, true);
+                    sourceList.remove(source);
+                }
+                else {
+                    GameUtilities.fillWithEnemies(true, sourceList);
                     GameUtilities.fillWithSummons(true, sourceList);
                 }
                 break;
@@ -266,11 +290,26 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case RandomAlly: {
                 if (GameUtilities.isEnemy(source)) {
                     GameUtilities.fillWithEnemies(true, sourceList);
+                    sourceList.remove(source);
                 }
                 else {
                     GameUtilities.fillWithSummons(true, sourceList);
                 }
                 popRandomTargets(sourceList, autoAmount);
+                break;
+            }
+            case RandomAllyEnemy: {
+                if (GameUtilities.isEnemy(source)) {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                    fillWithPlayerTeam(sourceList, true);
+                    sourceList.remove(source);
+                }
+                else {
+                    GameUtilities.fillWithEnemies(true, sourceList);
+                    GameUtilities.fillWithSummons(true, sourceList);
+                }
+                popRandomTargets(sourceList, autoAmount);
+                break;
             }
             case SelfSingle:
             case SelfSingleAlly: {
@@ -296,6 +335,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return EUIRM.strings.target_allEnemy;
             case AllAlly:
                 return PGR.core.strings.ctype_allAlly;
+            case AllAllyEnemy:
+                return PGR.core.strings.ctype_allAllyEnemy;
             case Team:
                 return PGR.core.strings.ctype_team;
             case All:
@@ -308,10 +349,12 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return PGR.core.strings.ctype_singleAlly;
             case Any:
                 return EUIRM.strings.target_any;
-            case RandomEnemy:
-                return PGR.core.strings.ctype_randomEnemy;
             case RandomAlly:
                 return PGR.core.strings.ctype_randomAlly;
+            case RandomAllyEnemy:
+                return PGR.core.strings.ctype_randomAllyEnemy;
+            case RandomEnemy:
+                return PGR.core.strings.ctype_randomEnemy;
             case SelfAllEnemy:
                 return PGR.core.strings.ctype_selfAllEnemy;
             case SelfSingle:
@@ -329,9 +372,11 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case Single:
             case SingleAlly:
             case AllAlly:
+            case AllAllyEnemy:
             case Team:
             case All:
             case RandomAlly:
+            case RandomAllyEnemy:
             case SelfSingleAlly:
             case Any:
                 return true;
@@ -342,8 +387,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public final boolean targetsEnemies() {
         switch (this) {
             case Single:
+            case AllAllyEnemy:
             case AllEnemy:
             case All:
+            case RandomAllyEnemy:
             case RandomEnemy:
             case SelfAllEnemy:
             case SelfSingle:
@@ -357,6 +404,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case All:
             case AllAlly:
+            case AllAllyEnemy:
             case Team:
             case AllEnemy:
             case SelfAllEnemy:
@@ -368,6 +416,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public final boolean targetsRandom() {
         switch (this) {
             case RandomAlly:
+            case RandomAllyEnemy:
             case RandomEnemy:
             case Any:
                 return true;
@@ -404,8 +453,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case SingleAlly:
             case AllAlly:
+            case AllAllyEnemy:
             case Team:
             case RandomAlly:
+            case RandomAllyEnemy:
             case SelfSingleAlly:
                 return false;
         }

@@ -26,21 +26,8 @@ public class GameActionManagerPatches {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(GameActionManager __instance) {
             final ArrayList<AbstractGameAction> actions = __instance.actions;
-            for (int i = actions.size() - 1; i >= 0; i--) {
-                AbstractGameAction action = actions.get(i);
-                if (action instanceof PCLAction) {
-                    if (((PCLAction<?>) action).canCancel) {
-                        actions.remove(i);
-                    }
-                }
-                else if (!(action instanceof HealAction
-                        || action instanceof GainGoldAction
-                        || action instanceof GainBlockAction
-                        || action instanceof UseCardAction
-                        || action.actionType == AbstractGameAction.ActionType.DAMAGE)) {
-                    actions.remove(i);
-                }
-            }
+            actions.removeIf(CombatManager::isActionCancellable);
+            CombatManager.executeRemainingActions(actions);
 
             return SpireReturn.Return(null);
         }

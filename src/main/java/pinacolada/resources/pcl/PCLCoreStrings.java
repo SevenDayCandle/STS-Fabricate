@@ -194,23 +194,25 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cpile_random = cardPile.TEXT[6];
 
     public final String ctype_allAlly = cardtype.TEXT[0];
-    public final String ctype_randomAlly = cardtype.TEXT[1];
-    public final String ctype_randomEnemy = cardtype.TEXT[2];
-    public final String ctype_selfAllEnemy = cardtype.TEXT[3];
-    public final String ctype_selfSingleAlly = cardtype.TEXT[4];
-    public final String ctype_selfSingle = cardtype.TEXT[5];
-    public final String ctype_singleAlly = cardtype.TEXT[6];
-    public final String ctype_team = cardtype.TEXT[7];
-    public final String ctype_legendary = cardtype.TEXT[8];
-    public final String ctype_secretRare = cardtype.TEXT[9];
-    public final String ctype_general = cardtype.TEXT[10];
-    public final String ctype_tagAll = cardtype.TEXT[11];
-    public final String ctype_tagAoE = cardtype.TEXT[12];
-    public final String ctype_tagRandom = cardtype.TEXT[13];
-    public final String ctype_turnStartFirst = cardtype.TEXT[14];
-    public final String ctype_turnStartLast = cardtype.TEXT[15];
-    public final String ctype_turnEndFirst = cardtype.TEXT[16];
-    public final String ctype_turnEndLast = cardtype.TEXT[17];
+    public final String ctype_allAllyEnemy = cardtype.TEXT[1];
+    public final String ctype_randomAlly = cardtype.TEXT[2];
+    public final String ctype_randomAllyEnemy = cardtype.TEXT[3];
+    public final String ctype_randomEnemy = cardtype.TEXT[4];
+    public final String ctype_selfAllEnemy = cardtype.TEXT[5];
+    public final String ctype_selfSingleAlly = cardtype.TEXT[6];
+    public final String ctype_selfSingle = cardtype.TEXT[7];
+    public final String ctype_singleAlly = cardtype.TEXT[8];
+    public final String ctype_team = cardtype.TEXT[9];
+    public final String ctype_legendary = cardtype.TEXT[10];
+    public final String ctype_secretRare = cardtype.TEXT[11];
+    public final String ctype_general = cardtype.TEXT[12];
+    public final String ctype_tagAll = cardtype.TEXT[13];
+    public final String ctype_tagAoE = cardtype.TEXT[14];
+    public final String ctype_tagRandom = cardtype.TEXT[15];
+    public final String ctype_turnStartFirst = cardtype.TEXT[16];
+    public final String ctype_turnStartLast = cardtype.TEXT[17];
+    public final String ctype_turnEndFirst = cardtype.TEXT[18];
+    public final String ctype_turnEndLast = cardtype.TEXT[19];
 
     // Character
     public final String csel_leftText = charselect.TEXT[0];
@@ -1154,6 +1156,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_allAllies() {
         return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_allyN));
     }
+    public final String subjects_allAlliesOrEnemies() {
+        return EUIUtils.format(subjects_allX, cond_xOrY(PCLCoreStrings.pluralForce(subjects_allyN), PCLCoreStrings.pluralForce(subjects_enemyN)));
+    }
     public final String subjects_allEnemies() {
         return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_enemyN));
     }
@@ -1165,6 +1170,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_anyAlly() {
         return EUIUtils.format(subjects_anyX, subjects_ally);
+    }
+    public final String subjects_anyAllyOrEnemy() {
+        return EUIUtils.format(subjects_anyX, cond_xOrY(subjects_ally, subjects_enemy));
     }
     public final String subjects_anyEnemy() {
         return EUIUtils.format(subjects_anyX, subjects_enemy);
@@ -1219,6 +1227,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_onAnyAlly(Object desc1) {
         return subjects_onTarget(desc1, subjects_ally);
+    }
+    public final String subjects_onAnyAllyOrEnemy(Object desc1) {
+        return subjects_onTarget(desc1, cond_xOrY(subjects_ally, subjects_enemy));
     }
     public final String subjects_onAnyCharacter(Object desc1) {
         return subjects_onTarget(desc1, subjects_anyone);

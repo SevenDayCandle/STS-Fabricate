@@ -13,7 +13,7 @@ import pinacolada.resources.PGR;
 @SpireInitializer //
 public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber,
                                           PreStartGameSubscriber, OnPlayerTurnStartPostDrawSubscriber, OnPlayerTurnStartSubscriber,
-                                          EditCardsSubscriber, EditRelicsSubscriber, PostInitializeSubscriber, AddAudioSubscriber {
+                                          EditCardsSubscriber, EditCharactersSubscriber, EditKeywordsSubscriber, EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber, AddAudioSubscriber {
     private static final PCLModInitializer instance = new PCLModInitializer();
 
     public static void initialize() {
@@ -32,8 +32,23 @@ public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscri
     }
 
     @Override
+    public void receiveEditCharacters() {
+        PGR.receiveEditCharacters();
+    }
+
+    @Override
+    public void receiveEditKeywords() {
+        PGR.receiveEditKeywords();
+    }
+
+    @Override
     public void receiveEditRelics() {
         PGR.loadCustomRelics();
+    }
+
+    @Override
+    public void receiveEditStrings() {
+        PGR.receiveEditStrings();
     }
 
     @Override

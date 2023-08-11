@@ -8,6 +8,7 @@ import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -24,6 +25,7 @@ import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.commands.*;
@@ -231,13 +233,7 @@ public class PGR {
         config = new PCLMainConfig();
         config.load();
         core = new PCLCoreResources();
-        initialize(core);
-    }
-
-    protected static void initialize(PCLResources<?, ?, ?, ?> resources) {
-        resources.initializeColor();
-
-        BaseMod.subscribe(resources);
+        core.initializeColor();
     }
 
     protected static void initializeUI() {
@@ -390,6 +386,37 @@ public class PGR {
         reloadCustoms();
         CountingPanel.register(new PCLAffinityPanelFilter());
         CustomTargeting.registerCustomTargeting(CardTargetingManager.PCL, CombatManager.targeting);
+        core.receivePostInitialize();
+        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+            resources.receivePostInitialize();
+        }
+
+        for (AbstractCard c : CardLibrary.getAllCards()) {
+            if (c instanceof PCLCard) {
+                c.initializeDescription();
+            }
+        }
+    }
+
+    public static void receiveEditCharacters() {
+        core.receiveEditCharacters();
+        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+            resources.receiveEditCharacters();
+        }
+    }
+
+    public static void receiveEditKeywords() {
+        core.receiveEditKeywords();
+        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+            resources.receiveEditKeywords();
+        }
+    }
+
+    public static void receiveEditStrings() {
+        core.receiveEditStrings();
+        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+            resources.receiveEditStrings();
+        }
     }
 
     public static void registerCommands() {
@@ -414,7 +441,7 @@ public class PGR {
         }
         colorResourceMap.put(resources.cardColor, resources);
         playerResourceMap.put(resources.playerClass, resources);
-        initialize(resources);
+        resources.initializeColor();
     }
 
     public static void registerRewards() {

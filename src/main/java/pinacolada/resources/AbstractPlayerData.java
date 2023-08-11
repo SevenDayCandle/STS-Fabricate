@@ -99,6 +99,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
             unlock.card = loadout.buildCard();
+            unlock.card.isSeen = true;
+            unlock.card.isLocked = false;
             unlock.key = unlock.card.cardID = PGR.core.createID(loadout.getName());
 
             CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);

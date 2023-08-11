@@ -883,6 +883,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case AllAlly:
             case RandomAlly:
                 return TEXT.subjects_onAnyAlly(baseString);
+            case RandomAllyEnemy:
+            case AllAllyEnemy:
+                return TEXT.subjects_onAnyAllyOrEnemy(baseString);
             case All:
             case Any:
                 return TEXT.subjects_onAnyCharacter(baseString);
@@ -926,10 +929,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return TEXT.subjects_allAllies();
             case AllEnemy:
                 return TEXT.subjects_allEnemies();
+            case AllAllyEnemy:
+                return TEXT.subjects_allAlliesOrEnemies();
             case Any:
                 return TEXT.subjects_anyone;
             case RandomAlly:
                 return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)));
+            case RandomAllyEnemy:
+                return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(TEXT.cond_xOrY(PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count), PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count))));
             case RandomEnemy:
                 return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)));
             case Single:
@@ -998,14 +1005,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return PGR.core.strings.subjects_ally;
             case AllEnemy:
                 return PGR.core.strings.subjects_allEnemies();
+            case RandomAlly:
+                return PGR.core.strings.subjects_anyAlly();
+            case RandomAllyEnemy:
+                return PGR.core.strings.subjects_anyAllyOrEnemy();
             case RandomEnemy:
                 return PGR.core.strings.subjects_anyEnemy();
             case AllAlly:
                 return PGR.core.strings.subjects_allAllies();
+            case AllAllyEnemy:
+                return PGR.core.strings.subjects_allAlliesOrEnemies();
             case Team:
                 return PGR.core.strings.ctype_team;
-            case RandomAlly:
-                return PGR.core.strings.subjects_anyAlly();
             case All:
                 return PGR.core.strings.subjects_everyone;
             case Any:

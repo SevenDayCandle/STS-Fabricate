@@ -220,7 +220,9 @@
 				"pcl:CardType": {
 								"TEXT": [
 												"All Allies",
+												"All Allies + Enemies",
 												"Random Ally",
+												"Random Ally + Enemy",
 												"Random Enemy",
 												"Self + All Enemies",
 												"Self + Single Ally",

@@ -11,6 +11,7 @@ import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.common.*;
@@ -384,5 +385,12 @@ public class PCLCoreTooltips extends AbstractTooltips {
         provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
 
         EUIKeywordTooltip.updateTooltipIcons();
+
+        // Refresh the descriptions of all cards to account for loaded icons
+        for (AbstractCard c : CardLibrary.getAllCards()) {
+            if (c instanceof PCLCard) {
+                c.initializeDescription();
+            }
+        }
     }
 }

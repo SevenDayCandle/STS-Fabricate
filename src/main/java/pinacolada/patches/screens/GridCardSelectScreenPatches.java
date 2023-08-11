@@ -307,9 +307,9 @@ public class GridCardSelectScreenPatches {
     )
     public static class RenderSplitArrows {
 
-        private static float arrowScale1 = 1.0F;
-        private static float arrowScale2 = 1.0F;
-        private static float arrowScale3 = 1.0F;
+        private static float arrowScale1 = Settings.scale;
+        private static float arrowScale2 = Settings.scale;
+        private static float arrowScale3 = Settings.scale;
         private static float arrowTimer = 0.0F;
 
         public RenderSplitArrows() {
@@ -322,22 +322,22 @@ public class GridCardSelectScreenPatches {
                 float y = (float) Settings.HEIGHT / 2.0F - 32.0F;
                 float by = 64 * Settings.scale;
                 sb.setColor(Color.WHITE);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1 * Settings.scale, arrowScale1 * Settings.scale, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1 * Settings.scale, arrowScale1 * Settings.scale, -45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, -45.0F, 0, 0, 64, 64, false, false);
                 x += 64.0F * Settings.scale;
                 by += 64.0F * Settings.scale;
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2 * Settings.scale, arrowScale2 * Settings.scale, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2 * Settings.scale, arrowScale2 * Settings.scale, -45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, -45.0F, 0, 0, 64, 64, false, false);
                 x += 64.0F * Settings.scale;
                 by += 64.0F * Settings.scale;
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, -45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, -45.0F, 0, 0, 64, 64, false, false);
 
                 if (cardList.size() > 2) {
                     x = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1 * Settings.scale, arrowScale1 * Settings.scale, 0, 0, 0, 64, 64, false, false);
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 64.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2 * Settings.scale, arrowScale2 * Settings.scale, 0, 0, 0, 64, 64, false, false);
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 128.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3 * Settings.scale, arrowScale3 * Settings.scale, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 64.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 128.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, 0, 0, 0, 64, 64, false, false);
 
                     if (cardList.size() > DEFAULT_MAX) {
                         upButton.renderCentered(sb);
@@ -346,9 +346,9 @@ public class GridCardSelectScreenPatches {
                 }
 
                 arrowTimer += Gdx.graphics.getDeltaTime() * 2.0F;
-                arrowScale1 = 0.8F + (MathUtils.cos(arrowTimer) + 1.0F) / 8.0F;
-                arrowScale2 = 0.8F + (MathUtils.cos(arrowTimer - 0.8F) + 1.0F) / 8.0F;
-                arrowScale3 = 0.8F + (MathUtils.cos(arrowTimer - 1.6F) + 1.0F) / 8.0F;
+                arrowScale1 = (0.8F + (MathUtils.cos(arrowTimer) + 1.0F)) * Settings.scale / 8.0F;
+                arrowScale2 = (0.8F + (MathUtils.cos(arrowTimer - 0.8F) + 1.0F)) * Settings.scale / 8.0F;
+                arrowScale3 = (0.8F + (MathUtils.cos(arrowTimer - 1.6F) + 1.0F)) * Settings.scale / 8.0F;
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

@@ -75,11 +75,6 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
 
     @Override
     public void open(ArrayList<? extends AbstractCard> arrayList, AbstractCard.CardColor color, Object payload) {
-        // Must refresh the description to have the proper character-specific icons show up
-        for (AbstractCard c : arrayList) {
-            c.initializeDescription();
-        }
-
         // Only trigger the custom module if:
         // 1. Just switching into the colorless/curse pool (to initialize the module)
         // 2. When clicking on the button

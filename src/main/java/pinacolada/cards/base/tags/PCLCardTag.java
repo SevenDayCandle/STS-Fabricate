@@ -383,11 +383,11 @@ public enum PCLCardTag implements TooltipProvider {
         }
         else if (tagCount > 1) {
             String text = String.valueOf(tagCount);
-            EUIFontHelper.cardTitleFontSmall.getData().setScale(card.drawScale * 0.73f);
+            EUIFontHelper.cardTitleFontSmall.getData().setScale(card.drawScale * 0.6f);
             float offX = AbstractCard.RAW_W * 0.5f;
             offY = AbstractCard.RAW_H * 0.42f + offset_y;
             PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), offX, offY, 96, 64, Color.WHITE, alpha, 0.35f);
-            PCLRenderHelpers.writeOnCard(sb, card, EUIFontHelper.cardTitleFontSmall, text, offX, offY, Settings.BLUE_TEXT_COLOR, false);
+            PCLRenderHelpers.writeOnCard(sb, card, EUIFontHelper.cardTitleFontSmall, text, offX, offY, Settings.CREAM_COLOR, false);
             PCLRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
         }
 

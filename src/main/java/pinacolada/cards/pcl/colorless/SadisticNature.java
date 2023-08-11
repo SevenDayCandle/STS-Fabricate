@@ -24,7 +24,7 @@ public class SadisticNature extends PCLCard {
     }
 
     public void setup(Object input) {
-        addGainPower(PTrigger.when(PCond.checkPower(PCLCardTarget.RandomEnemy, 1).edit(f -> f.setDebuff(true)),
+        addGainPower(PTrigger.when(PCond.checkDistinctPower(PCLCardTarget.RandomAllyEnemy, 1).edit(f -> f.setDebuff(true)),
                 PMove.dealDamage(5, AbstractGameAction.AttackEffect.POISON, PCLCardTarget.UseParent).setUpgrade(2)));
     }
 }

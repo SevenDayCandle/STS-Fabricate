@@ -34,8 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends AbstractImages, V extends AbstractTooltips, W extends AbstractStrings>
-        implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber {
+public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends AbstractImages, V extends AbstractTooltips, W extends AbstractStrings> {
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
     }.getType();
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {
@@ -234,17 +233,14 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
         data.initialize();
     }
 
-    @Override
     public void receiveEditCharacters() {
     }
 
-    @Override
     public void receiveEditKeywords() {
         loadKeywords();
         setupTooltips();
     }
 
-    @Override
     public void receiveEditStrings() {
         loadLoadoutStrings();
         loadCustomStrings(CharacterStrings.class);
@@ -256,7 +252,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
         loadCustomStrings(UIStrings.class);
     }
 
-    @Override
     public final void receivePostInitialize() {
         postInitialize();
         this.isLoaded = true;

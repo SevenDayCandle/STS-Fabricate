@@ -844,8 +844,8 @@ public final class PCLActions {
         Last
     }
 
-    protected static class ExecuteLast implements OnPhaseChangedSubscriber {
-        private final AbstractGameAction action;
+    public static class ExecuteLast implements OnPhaseChangedSubscriber {
+        public final AbstractGameAction action;
 
         private ExecuteLast(AbstractGameAction action) {
             this.action = action;

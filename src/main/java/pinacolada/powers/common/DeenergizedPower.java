@@ -9,9 +9,7 @@ public class DeenergizedPower extends PCLPower {
 
     public DeenergizedPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
-
-        this.amount = amount;
-        this.type = PowerType.DEBUFF;
+        initialize(amount, PowerType.DEBUFF, false);
 
         updateDescription();
     }

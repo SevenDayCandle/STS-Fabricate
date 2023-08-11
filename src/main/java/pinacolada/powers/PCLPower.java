@@ -25,6 +25,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT3;
+import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUISmartText;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -61,7 +62,7 @@ import static extendedui.EUI.splitID;
 import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, TooltipProvider {
+public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, KeywordProvider {
     protected static final StringBuilder builder = new StringBuilder();
     protected static final float ICON_SIZE = 32f;
     protected static final float ICON_SIZE2 = 48f;
@@ -263,7 +264,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     @Override
-    public EUITooltip getTooltip() {
+    public EUIKeywordTooltip getTooltip() {
         return mainTip;
     }
 
@@ -547,6 +548,15 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
         String desc = getUpdatedDescription();
         mainTip.setDescription(desc);
+        switch (type) {
+            case BUFF:
+                mainTip.setBackgroundColor(EUITooltip.TIP_BUFF);
+                break;
+            case DEBUFF:
+                mainTip.setBackgroundColor(EUITooltip.TIP_DEBUFF);
+            default:
+                mainTip.setBackgroundColor(Color.WHITE);
+        }
         this.description = sanitizePowerDescription(desc);
     }
 
