@@ -51,7 +51,7 @@ public class AbstractOrbPatches {
             float inputDmg = retVal;
             if (GameUtilities.getPowerAmount(target, LockOnPower.POWER_ID) >= 1) {
                 float modifier = CombatManager.getEffectBonus(LockOnPower.POWER_ID);
-                inputDmg = modifier > 0 ? (dmg * ((retVal / (float) dmg) + modifier)) : retVal;
+                inputDmg = modifier > 0 && dmg > 0 ? (dmg * ((retVal / (float) dmg) + modifier)) : retVal;
             }
             return (int) CombatManager.onOrbApplyLockOn(target, inputDmg);
         }

@@ -38,7 +38,7 @@ public class VulnerablePowerPatches {
         @SpirePostfixPatch
         public static float postfix(float result, VulnerablePower __instance, float damage, DamageInfo.DamageType type) {
             float bonus = CombatManager.getEffectBonusForPower(__instance);
-            return bonus == 0 ? result : damage * ((result / damage) + bonus / 100f);
+            return bonus == 0 || damage == 0 ? result : damage * ((result / damage) + bonus / 100f);
         }
     }
 }

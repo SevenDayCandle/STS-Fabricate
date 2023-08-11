@@ -37,7 +37,7 @@ public class FrailPowerPatches {
         @SpirePostfixPatch
         public static float postfix(float result, FrailPower __instance, float damage) {
             float bonus = CombatManager.getEffectBonusForPower(__instance);
-            return bonus == 0 ? result : damage * ((result / damage) - bonus / 100f);
+            return bonus == 0 || damage == 0 ? result : damage * ((result / damage) - bonus / 100f);
         }
     }
 }
