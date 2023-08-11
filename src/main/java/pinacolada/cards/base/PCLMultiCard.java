@@ -346,7 +346,7 @@ public abstract class PCLMultiCard extends PCLCard {
             super.refresh(info, conditionMet);
             for (AbstractCard card : multicard.getCards()) {
                 if (card instanceof PCLCard) {
-                    ((PCLCard) card).refresh(GameUtilities.asMonster(info.source));
+                    ((PCLCard) card).refreshImpl(info);
                 }
                 else {
                     card.calculateCardDamage(GameUtilities.asMonster(info.source));

@@ -15,52 +15,43 @@ import java.util.HashMap;
 public class MerchantPatches {
     @SpirePatch(clz = Merchant.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {float.class, float.class, int.class})
     public static class MerchantPatches_initCards {
-        private static final HashMap<Merchant, MerchantData> map = new HashMap<>();
+        private static CardGroup colorless;
+        private static CardGroup common;
+        private static CardGroup uncommon;
+        private static CardGroup rare;
 
         @SpirePostfixPatch
         public static void postfix(Merchant __instance, float x, float y, int newShopScreen) {
-            final MerchantData data = map.remove(__instance);
-
-            AbstractDungeon.colorlessCardPool = data.colorless;
-            AbstractDungeon.commonCardPool = data.common;
-            AbstractDungeon.uncommonCardPool = data.uncommon;
-            AbstractDungeon.rareCardPool = data.rare;
+            AbstractDungeon.colorlessCardPool = colorless;
+            AbstractDungeon.commonCardPool = common;
+            AbstractDungeon.uncommonCardPool = uncommon;
+            AbstractDungeon.rareCardPool = rare;
         }
 
         @SpirePrefixPatch
         public static void prefix(Merchant __instance, float x, float y, int newShopScreen) {
-            final MerchantData data = new MerchantData();
-            map.put(__instance, data);
+            colorless = AbstractDungeon.colorlessCardPool;
+            AbstractDungeon.colorlessCardPool = getReplacement(colorless);
 
-            data.colorless = AbstractDungeon.colorlessCardPool;
-            AbstractDungeon.colorlessCardPool = data.getReplacement(data.colorless);
+            common = AbstractDungeon.commonCardPool;
+            AbstractDungeon.commonCardPool = getReplacement(common);
 
-            data.common = AbstractDungeon.commonCardPool;
-            AbstractDungeon.commonCardPool = data.getReplacement(data.common);
+            uncommon = AbstractDungeon.uncommonCardPool;
+            AbstractDungeon.uncommonCardPool = getReplacement(uncommon);
 
-            data.uncommon = AbstractDungeon.uncommonCardPool;
-            AbstractDungeon.uncommonCardPool = data.getReplacement(data.uncommon);
-
-            data.rare = AbstractDungeon.rareCardPool;
-            AbstractDungeon.rareCardPool = data.getReplacement(data.rare);
+            rare = AbstractDungeon.rareCardPool;
+            AbstractDungeon.rareCardPool = getReplacement(rare);
         }
 
-        public static class MerchantData {
-            public CardGroup colorless;
-            public CardGroup common;
-            public CardGroup uncommon;
-            public CardGroup rare;
-
-            protected CardGroup getReplacement(CardGroup group) {
-                final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
-                for (AbstractCard c : group.group) {
-                    if (!PGR.dungeon.tryCancelCardReward(c)) {
-                        replacement.group.add(c);
-                    }
+        protected static CardGroup getReplacement(CardGroup group) {
+            final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
+            for (AbstractCard c : group.group) {
+                if (!PGR.dungeon.tryCancelCardReward(c)) {
+                    replacement.group.add(c);
                 }
-
-                return replacement;
             }
+
+            return replacement;
         }
     }
 }

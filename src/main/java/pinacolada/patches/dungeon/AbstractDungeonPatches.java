@@ -35,7 +35,7 @@ public class AbstractDungeonPatches {
     // If no suitable card is found, make a replacement because the method will crash if no card is actually found
     protected static AbstractCard tryReturnCard(AbstractCard card, AbstractCard.CardRarity rarity, Random rng) {
         if (card == null) {
-            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity: " + rarity);
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity " + rarity);
 
             // First try to find a replacement of another rarity if a rarity was specified
             if (rarity != null) {
@@ -50,6 +50,28 @@ public class AbstractDungeonPatches {
             // Modify ID to avoid infinite loops in AbstractDungeon
             card.cardID = card.cardID + tempID;
             tempID += 1;
+        }
+        return card;
+    }
+
+    // Same as above but with type
+    protected static AbstractCard tryReturnCard(AbstractCard card, AbstractCard.CardRarity rarity, AbstractCard.CardType type, Random rng) {
+        if (card == null) {
+            EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card with specified rarity " + rarity + " and type " + type);
+
+            if (rarity != null) {
+                card = PGR.dungeon.getRandomCard(PCLDungeon.getNextRarity(rarity), type, rng, true);
+                if (card != null) {
+                    return card;
+                }
+            }
+
+            card = new QuestionMark();
+            // Modify ID to avoid infinite loops in AbstractDungeon
+            card.cardID = card.cardID + tempID;
+            tempID += 1;
+            // Also modify type in case the function calling this is verifying the card's type
+            card.type = type;
         }
         return card;
     }
@@ -132,9 +154,9 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardFromPool", optional = true)
     public static class AbstractDungeonPatches_GetCardFromPool {
         @SpirePostfixPatch
-        public static AbstractCard postfix(AbstractCard found) {
+        public static AbstractCard postfix(AbstractCard found, AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
             filterCardGroupForValid = false;
-            return tryReturnCard(found, null, AbstractDungeon.cardRng);
+            return tryReturnCard(found, rarity, type, useRng ? AbstractDungeon.cardRng : null);
         }
 
         @SpirePrefixPatch

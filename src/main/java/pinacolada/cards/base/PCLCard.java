@@ -1784,11 +1784,17 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    // Update damage, block, and magic number from the powers on a given target
-    // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractCreature enemy) {
         AbstractCreature owner = getSourceCreature();
         PCLUseInfo info = CombatManager.playerSystem.getInfo(this, owner, enemy);
+        refreshImpl(info);
+    }
+
+    // Update damage, block, and magic number from the powers on a given target
+    // Every step of the calculation is recorded for display in the damage formula widget
+    public void refreshImpl(PCLUseInfo info) {
+        AbstractCreature owner = info.source;
+        AbstractCreature enemy = info.target;
         // We use magicNumber for the counter mechanic; effects have their amounts determined separately
         // Thus, we instead funnel onModifyBaseMagic into a separate addition to apply to our effects
         float effectBonus = CardModifierManager.onModifyBaseMagic(CombatManager.onModifySkillBonus(0, this), this);

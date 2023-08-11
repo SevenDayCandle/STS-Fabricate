@@ -171,6 +171,9 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public String getAuthorString() {
         String author = FlavorText.CardStringsFlavorField.flavor.get(strings);
         if (author != null) {
+            if (loadout != null) {
+                return EUIUtils.joinStrings(",", loadout.getAuthor(), author);
+            }
             return author;
         }
         if (loadout != null) {
