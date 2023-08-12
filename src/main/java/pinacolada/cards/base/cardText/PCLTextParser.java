@@ -116,25 +116,12 @@ public class PCLTextParser {
     }
 
     protected int tryAddToken() {
-        switch (character) {
-            case ConditionToken.TOKEN:
-                return ConditionToken.tryAdd(this);
-            case PointerToken.TOKEN:
-                return PointerToken.tryAdd(this);
-            case LogicToken.TOKEN:
-                return LogicToken.tryAdd(this);
-            case SymbolToken.TOKEN1:
-            case SymbolToken.TOKEN2:
-                return SymbolToken.tryAdd(this);
-            case VariableToken.TOKEN:
-                return VariableToken.tryAdd(this);
-            case HighlightToken.TOKEN:
-                return HighlightToken.tryAdd(this);
-            case ModifierSplitToken.TOKEN:
-                return ModifierSplitToken.add(this);
+        int amount = tryAddBranch();
+        if (amount > 0) {
+            return amount;
         }
 
-        int amount = NewLineToken.tryAdd(this);
+        amount = NewLineToken.tryAdd(this);
         if (amount > 0) {
             return amount;
         }
@@ -152,6 +139,27 @@ public class PCLTextParser {
         }
         EUIUtils.logError(this, "Error parsing card text, Character: " + character + ", Text: " + this.text);
         return 1;
+    }
+
+    protected int tryAddBranch() {
+        switch (character) {
+            case ConditionToken.TOKEN:
+                return ConditionToken.tryAdd(this);
+            case PointerToken.TOKEN:
+                return PointerToken.tryAdd(this);
+            case LogicToken.TOKEN:
+                return LogicToken.tryAdd(this);
+            case SymbolToken.TOKEN1:
+            case SymbolToken.TOKEN2:
+                return SymbolToken.tryAdd(this);
+            case VariableToken.TOKEN:
+                return VariableToken.tryAdd(this);
+            case HighlightToken.TOKEN:
+                return HighlightToken.tryAdd(this);
+            case ModifierSplitToken.TOKEN:
+                return ModifierSplitToken.add(this);
+        }
+        return 0;
     }
 
 }

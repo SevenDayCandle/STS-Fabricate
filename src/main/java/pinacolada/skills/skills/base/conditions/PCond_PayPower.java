@@ -1,10 +1,14 @@
 package pinacolada.skills.skills.base.conditions;
 
+import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
@@ -50,7 +54,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
-        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID));
+        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID), Math.max(1, amount));
     }
 
     @Override
@@ -61,22 +65,39 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerAndString();
-        return capital(target == PCLCardTarget.Self ? TEXT.act_pay(getAmountRawString(), joinedString) : TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)), true);
+        return capital(target == PCLCardTarget.Self ? (baseAmount <= 0 ? TEXT.act_remove(joinedString) : TEXT.act_pay(getAmountRawString(), joinedString))
+                : TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)), true);
     }
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         AbstractCreature sourceCreature = getSourceCreature();
-        ArrayList<AbstractGameAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
-                EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, t, power, -amount))));
 
-        return order.callback(new SequentialAction(actions), () -> {
-            if (conditionMetCache) {
-                onComplete.invoke(info);
-            }
-            else {
-                onFail.invoke(info);
-            }
-        });
+        if (baseAmount <= 0) {
+            ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
+                    EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power.ID))));
+            return order.callback(new SequentialAction(actions), () -> {
+                info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
+                if (conditionMetCache) {
+                    onComplete.invoke(info);
+                }
+                else {
+                    onFail.invoke(info);
+                }
+            });
+        }
+        else {
+            ArrayList<ApplyOrReducePowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
+                    EUIUtils.map(fields.powers, power -> new ApplyOrReducePowerAction(sourceCreature, t, power, -amount))));
+            return order.callback(new SequentialAction(actions), () -> {
+                info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));
+                if (conditionMetCache) {
+                    onComplete.invoke(info);
+                }
+                else {
+                    onFail.invoke(info);
+                }
+            });
+        }
     }
 }

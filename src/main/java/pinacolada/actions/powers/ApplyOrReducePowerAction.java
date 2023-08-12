@@ -57,7 +57,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
         return this;
     }
 
-    protected AbstractPower extractPower() {
+    public AbstractPower extractPower() {
         if (action instanceof ApplyPowerAction) {
             return ReflectionHacks.getPrivate(action, ApplyPowerAction.class, "powerToApply");
         }
