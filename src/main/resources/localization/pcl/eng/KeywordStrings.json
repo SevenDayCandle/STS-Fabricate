@@ -30,7 +30,7 @@
 	"Affinity":	{
 		"DESCRIPTION": "Affinities appear above a card's name.",
 		"NAME": "Affinity",
-		"PLURAL": "Affinities"
+		"PLURAL": "${0}@>1:Affinities@:Affinity$"
 	},
 	"After Image":	{
 		"DESCRIPTION": "Gain [Block] whenever you play a card.",
@@ -111,7 +111,7 @@
 	"Counter":	{
 		"DESCRIPTION": "Card property used for custom card effects.",
 		"NAME": "Counter",
-		"PLURAL": "Counters"
+		"PLURAL": "${0}@>1:Counters@:counter$"
 	},
 	"Create":	{
 		"DESCRIPTION": "Add a new card in the specified pile.",
@@ -568,8 +568,8 @@
 	"Withdraw":	{
 		"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it twice and returns it to your discard pile.",
 		"NAME": "Withdraw",
-		"PAST": "withdrawn",
-		"PRESENT": "withdraws",
-		"PROGRESSIVE": "withdrawing"
+		"PAST": "Withdrawn",
+		"PRESENT": "Withdraws",
+		"PROGRESSIVE": "Withdrawing"
 	}
 }
