@@ -54,13 +54,23 @@ public abstract class HighlightToken extends PCLTextToken {
                             internalParser.initialize(parser.card, word);
                         }
 
+                        WordToken lastToken = null;
                         for (PCLTextToken token : internalParser.getTokens()) {
                             if (token instanceof WordToken) {
-                                ((WordToken) token).coloredString.setColor(color);
-                                ((WordToken) token).tooltip = tooltip;
+                                lastToken = (WordToken) token;
+                                lastToken.coloredString.setColor(color);
+                                lastToken.tooltip = tooltip;
+                                parser.addToken(lastToken);
                             }
-
-                            parser.addToken(token);
+                            else if (token instanceof PunctuationToken && lastToken != null) {
+                                lastToken.rawText = lastToken.rawText + token.rawText;
+                                lastToken.coloredString.text = lastToken.rawText;
+                                lastToken = null;
+                            }
+                            else {
+                                parser.addToken(token);
+                                lastToken = null;
+                            }
                         }
 
                         return index + 1;

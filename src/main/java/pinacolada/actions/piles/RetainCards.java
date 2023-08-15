@@ -28,6 +28,11 @@ public class RetainCards extends SelectFromPile {
     }
 
     @Override
+    protected boolean canSelect(AbstractCard card) {
+        return GameUtilities.canRetain(card) && super.canSelect(card);
+    }
+
+    @Override
     protected void complete(ArrayList<AbstractCard> result) {
         for (AbstractCard card : result) {
             GameUtilities.retain(card);

@@ -170,7 +170,7 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     }
 
     public List<PCLLoadout> getAvailableLoadouts() {
-        return EUIUtils.filter(loadouts.values(), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);
+        return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);
     }
 
     public PCLEffect getCharSelectScreenAnimation() {

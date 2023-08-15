@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -21,6 +22,7 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITourTooltip;
+import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -31,6 +33,8 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
+
+import javax.smartcardio.Card;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_COLORLESS;
@@ -60,7 +64,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
-        final Texture panelTexture = EUIRM.images.rectangularButton.texture();
+        final Texture panelTexture = EUIRM.images.panelRounded.texture();
         final FuncT1<Float, Float> getY = (delta) -> screenH(0.95f) - screenH(0.07f * delta);
         final float buttonHeight = screenH(0.05f);
         final float buttonWidth = screenW(0.18f);
@@ -84,15 +88,15 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnClick(this::openLoadoutEditor);
 
-        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, screenH(0.18f)))
+        Color panelColor = new Color(0.08f, 0.08f, 0.08f, 1);
+        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, screenH(0.15f)))
                 .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
-                .setAlignment(0.9f, 0.1f, true)
-                .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
+                .setAlignment(0.85f, 0.1f, true)
+                .setColors(panelColor, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
-
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, screenH(0.09f)))
-                .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
-                .setAlignment(0.61f, 0.1f, true)
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.9f), buttonWidth, screenH(0.09f)))
+                .setColors(panelColor, Settings.GOLD_COLOR)
+                .setAlignment(0.7f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
@@ -225,6 +229,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             cancel.updateImpl();
             confirm.updateImpl();
             cardGrid.tryUpdate();
+            previewCardsInfo.tryUpdate();
             typesAmount.tryUpdate();
         }
 
@@ -308,6 +313,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     public void open(CharacterOption characterOption, AbstractPlayerData<?, ?> data, ActionT0 onClose) {
         super.open();
+
+        CardCrawlGame.mainMenuScreen.superDarken = false;
         this.onClose = onClose;
         this.characterOption = characterOption;
         this.data = data;

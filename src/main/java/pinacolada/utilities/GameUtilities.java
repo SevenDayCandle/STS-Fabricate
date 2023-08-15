@@ -70,6 +70,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
@@ -220,7 +221,7 @@ public class GameUtilities {
     }
 
     public static boolean canRetain(AbstractCard card) {
-        return !card.isEthereal && !card.retain && !card.selfRetain;
+        return !card.isEthereal && !card.selfRetain && !EphemeralField.value.get(card);
     }
 
     public static boolean chance(float amount) {
@@ -609,7 +610,13 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractCard> getCardsInGame() {
-        return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile, player.masterDeck, player.limbo, CombatManager.PURGED_CARDS);
+        ArrayList<AbstractCard> baseList = getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile, player.masterDeck, player.limbo, CombatManager.PURGED_CARDS);
+        for (PCLCardAlly ally : CombatManager.summons.summons) {
+            if (ally.card != null) {
+                baseList.add(ally.card);
+            }
+        }
+        return baseList;
     }
 
     public static ArrayList<AbstractCard> getCardsInPile(CardGroup... groups) {

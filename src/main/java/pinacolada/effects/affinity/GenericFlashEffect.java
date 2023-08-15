@@ -9,12 +9,11 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.controls.EUIButton;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLSFX;
+import pinacolada.effects.vfx.VisualEffect;
 import pinacolada.ui.AffinityKeywordButton;
 
-public class GenericFlashEffect extends PCLEffect {
-    private static final float EFFECT_DUR = 2f;
-    private final float x;
-    private final float y;
+public class GenericFlashEffect extends VisualEffect {
     private final Texture img;
     private float baseScale;
 
@@ -26,7 +25,7 @@ public class GenericFlashEffect extends PCLEffect {
         this.img = icon;
 
         if (playSfx) {
-            CardCrawlGame.sound.play("BUFF_1");
+            PCLSFX.play(PCLSFX.BUFF_1);
         }
 
         this.duration = 1.5f;
@@ -47,8 +46,8 @@ public class GenericFlashEffect extends PCLEffect {
         return this;
     }
 
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
+    public void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
         if (this.duration > 0.5f) {
             this.scale = Interpolation.exp5Out.apply(2f * baseScale, baseScale * 0.5f, -(this.duration - 2f) / 1.5f);
         }

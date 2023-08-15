@@ -31,7 +31,7 @@ public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSub
     }
 
     @Override
-    public void onAllySummon(PCLCard card, PCLCardAlly ally) {
+    public void onAllySummon(PCLCardAlly ally, PCLCard card, PCLCard returnedCard) {
         triggerOnCard(card, ally);
     }
 }

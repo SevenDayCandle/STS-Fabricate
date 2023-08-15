@@ -48,6 +48,7 @@ public class PCLCardAlly extends PCLCardCreature {
     protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCardAlly>> ANIMATION_MAP = new HashMap<>();
     public static final Color FADE_COOLDOWN_COLOR = EUIColors.lerpNew(Color.DARK_GRAY, Settings.GREEN_TEXT_COLOR, 0.5f);
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0, 0, 128, 128);
+    public static final float INTENT_OFFSET = 14.0F * Settings.scale;
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
     public int index;
 
@@ -181,7 +182,7 @@ public class PCLCardAlly extends PCLCardCreature {
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
             CombatManager.playerSystem.onCardPlayed(card, info, true);
             applyTurnPowers();
-            CombatManager.onAllyTrigger(this.card, this);
+            CombatManager.onAllyTrigger(this.card, this.target, this);
         }
     }
 

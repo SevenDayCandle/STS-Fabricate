@@ -1577,19 +1577,19 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally) {
         if (this instanceof OnAllySummonSubscriber) {
-            ((OnAllySummonSubscriber) this).onAllySummon(c, ally);
+            ((OnAllySummonSubscriber) this).onAllySummon(ally, c, c);
         }
         else if (this.childEffect != null) {
             this.childEffect.triggerOnAllySummon(c, ally);
         }
     }
 
-    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
+    public void triggerOnAllyTrigger(PCLCard c, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
         if (this instanceof OnAllyTriggerSubscriber) {
-            ((OnAllyTriggerSubscriber) this).onAllyTrigger(c, ally, caller);
+            ((OnAllyTriggerSubscriber) this).onAllyTrigger(c, target, ally, caller);
         }
         else if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyTrigger(c, ally, caller);
+            this.childEffect.triggerOnAllyTrigger(c, target, ally, caller);
         }
     }
 

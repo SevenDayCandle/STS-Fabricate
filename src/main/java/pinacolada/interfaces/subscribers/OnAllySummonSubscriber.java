@@ -6,5 +6,5 @@ import pinacolada.monsters.PCLCardAlly;
 
 @CombatSubscriber
 public interface OnAllySummonSubscriber extends PCLCombatSubscriber {
-    void onAllySummon(PCLCard card, PCLCardAlly ally);
+    void onAllySummon(PCLCardAlly ally, PCLCard card, PCLCard returnedCard);
 }

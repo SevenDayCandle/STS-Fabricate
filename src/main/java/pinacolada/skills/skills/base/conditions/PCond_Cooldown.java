@@ -6,9 +6,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.CooldownProgressAction;
@@ -34,6 +36,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 public class PCond_Cooldown extends PActiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();
+    protected float flashTimer;
 
     public PCond_Cooldown(PSkillSaveData content) {
         super(DATA, content);
@@ -97,9 +100,14 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         Color textColor = canActivate ? (dim ? PCLCardAlly.FADE_COOLDOWN_COLOR : Settings.GREEN_TEXT_COLOR) :
                 (Settings.CREAM_COLOR);
         PCLRenderHelpers.drawGrayscaleIf(sb,
-                s -> PCLRenderHelpers.drawCentered(s, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
+                s -> PCLRenderHelpers.drawCentered(s, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f),
                 dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(getCooldown()), ally.intentHb.cX, startY, textColor);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(getCooldown()), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, textColor);
+        if (flashTimer > 0) {
+            Color flashColor = EUIColors.white(flashTimer);
+            PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCentered(s, iconColor, PGR.core.tooltips.cooldown.icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 2f - flashTimer, 0f));
+            flashTimer -= EUI.delta();
+        }
 
         return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
     }
@@ -133,6 +141,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     public boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m) {
         if (cooldown.canActivate()) {
             useFromTrigger(generateInfo(m).setData(cooldown));
+            flashTimer = 1;
         }
         return true;
     }

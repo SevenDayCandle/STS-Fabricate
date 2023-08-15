@@ -436,7 +436,8 @@ public enum PCLCardTag implements TooltipProvider {
             // These tags also need to set the field
             case Ephemeral:
                 card.purgeOnUse = value;
-                break;
+                EphemeralField.value.set(card, value);
+                return;
         }
         SpireField<Boolean> field = getFieldBoolean();
         if (field != null) {

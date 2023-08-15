@@ -23,7 +23,7 @@ public class TornadoEffect extends VisualEffect {
     }
 
     protected void onTrail(TrailingParticleEffect effect) {
-        PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, Color.LIME.cpy()));
+        PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, Color.LIME));
     }
 
     public TornadoEffect setFrequency(float frequency) {

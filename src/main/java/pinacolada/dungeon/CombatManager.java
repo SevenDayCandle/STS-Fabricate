@@ -23,6 +23,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -481,18 +482,18 @@ public class CombatManager extends EUIBase {
         subscriberDo(OnAllyDeathSubscriber.class, s -> s.onAllyDeath(card, ally));
     }
 
-    public static void onAllySummon(PCLCard card, PCLCardAlly ally) {
+    public static void onAllySummon(PCLCardAlly ally, PCLCard card, PCLCard returnedCard) {
         card.triggerWhenSummoned(ally);
-        subscriberDo(OnAllySummonSubscriber.class, s -> s.onAllySummon(card, ally));
+        subscriberDo(OnAllySummonSubscriber.class, s -> s.onAllySummon(ally, card, returnedCard));
     }
 
-    public static void onAllyTrigger(PCLCard card, PCLCardAlly ally) {
+    public static void onAllyTrigger(PCLCard card, AbstractCreature target, PCLCardAlly ally) {
         for (PCLCardAlly other : summons.summons) {
             if (other.card != null) {
-                other.card.triggerWhenTriggered(ally, other);
+                other.card.triggerWhenTriggered(ally, target, other);
             }
         }
-        subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, ally, ally));
+        subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, target, ally, ally));
     }
 
     public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally) {
@@ -861,6 +862,10 @@ public class CombatManager extends EUIBase {
 
     public static int onTryUseXCost(int original, AbstractCard card) {
         return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onTryUseXCost(d, card));
+    }
+
+    public static void onUsePotion(AbstractPotion c) {
+        subscriberDo(OnPotionUseSubscriber.class, s -> s.onUsePotion(c));
     }
 
     public static boolean onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {

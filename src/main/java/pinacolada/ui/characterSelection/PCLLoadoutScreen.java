@@ -2,6 +2,7 @@ package pinacolada.ui.characterSelection;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -317,6 +318,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
+        CardCrawlGame.mainMenuScreen.superDarken = false;
         this.loadout = loadout;
         this.onClose = onClose;
         this.characterOption = option;

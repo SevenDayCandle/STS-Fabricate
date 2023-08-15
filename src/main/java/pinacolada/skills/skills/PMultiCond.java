@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -257,9 +258,9 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
-    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
+    public void triggerOnAllyTrigger(PCLCard c, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
         for (PSkill<?> effect : effects) {
-            effect.triggerOnAllyTrigger(c, ally, caller);
+            effect.triggerOnAllyTrigger(c, target, ally, caller);
         }
     }
 

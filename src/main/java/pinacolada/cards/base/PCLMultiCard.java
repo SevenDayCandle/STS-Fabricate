@@ -3,6 +3,7 @@ package pinacolada.cards.base;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -296,10 +297,10 @@ public abstract class PCLMultiCard extends PCLCard {
             tag.set(this, 0);
         }
         setCardType(CardType.SKILL);
+        updateHeal(0);
         for (AbstractCard card : inheritedCards.getCards()) {
             addCardProperties(card);
         }
-        updateHeal(0);
         initializeDescription();
     }
 
@@ -405,8 +406,8 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally, PCLCardAlly caller) {
-            doPCL(card -> card.triggerWhenTriggered(ally, caller));
+        public void triggerOnAllyTrigger(PCLCard c, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
+            doPCL(card -> card.triggerWhenTriggered(ally, target, caller));
         }
 
         @Override

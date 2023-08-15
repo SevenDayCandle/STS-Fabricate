@@ -122,25 +122,18 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         switch (this) {
             case Red:
                 return new Color(0.8f, 0.5f, 0.5f, 1f);
-
             case Green:
                 return new Color(0.45f, 0.7f, 0.55f, 1f);
-
             case Blue:
                 return new Color(0.45f, 0.55f, 0.7f, 1f);
-
             case Orange:
                 return new Color(0.7f, 0.6f, 0.5f, 1f);
-
             case Yellow:
                 return new Color(0.8f, 0.8f, 0.3f, 1f);
-
             case Purple:
-                return new Color(0.55f, 0.1f, 0.85f, 1);//0.7f, 0.55f, 0.7f, 1f);
-
+                return new Color(0.55f, 0.1f, 0.85f, 1);
             case Silver:
                 return new Color(0.5f, 0.5f, 0.5f, 1f);
-
             case Star:
             default:
                 return new Color(0.95f, 0.95f, 0.95f, 1f);

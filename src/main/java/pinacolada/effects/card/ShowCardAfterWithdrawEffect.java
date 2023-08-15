@@ -12,11 +12,13 @@ public class ShowCardAfterWithdrawEffect extends PCLEffect {
     private static final float PADDING = 30.0F * Settings.scale;
     private final AbstractCard card;
 
-    public ShowCardAfterWithdrawEffect(AbstractCard card) {
+    public ShowCardAfterWithdrawEffect(AbstractCard card, float startX, float startY) {
         super(1.5F);
         this.card = card;
-        this.card.current_x = this.card.target_x = (float) Settings.WIDTH / 2.0F;
-        this.card.current_y = this.card.target_y = (float) Settings.HEIGHT / 2.0F;
+        this.card.current_x = startX;
+        this.card.current_y = startY;
+        this.card.target_x = (float) Settings.WIDTH / 2.0F;
+        this.card.target_y = (float) Settings.HEIGHT / 2.0F;
         this.card.drawScale = 0.01F;
         this.card.targetDrawScale = 0.8F;
         this.card.glowColor = PCLCard.SYNERGY_GLOW_COLOR;

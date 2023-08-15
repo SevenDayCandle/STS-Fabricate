@@ -7,15 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import pinacolada.effects.vfx.VisualEffect;
 import pinacolada.powers.PCLPower;
 
-public class PCLFlashPowerEffect extends AbstractGameEffect {
-    private static final int W = 32;
+public class PCLFlashPowerEffect extends VisualEffect {
     private final Texture img;
     private final AtlasRegion region128;
-    private float x;
-    private float y;
-    private float scale;
 
     public PCLFlashPowerEffect(PCLPower power) {
         this.scale = Settings.scale;
@@ -44,11 +41,23 @@ public class PCLFlashPowerEffect extends AbstractGameEffect {
 
         this.duration = this.startingDuration = 0.7f;
         this.color = Color.WHITE.cpy();
-        this.renderBehind = false;
     }
 
-    public void update() {
-        super.update();
+    public PCLFlashPowerEffect(Texture img, float x, float y) {
+        this.scale = Settings.scale;
+        this.x = x;
+        this.y = y;
+        this.img = img;
+        this.region128 = null;
+        this.duration = this.startingDuration = 0.7f;
+        this.color = Color.WHITE.cpy();
+    }
+
+    public void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
+        if (this.duration < this.startingDuration / 2.0F) {
+            this.color.a = this.duration / (this.startingDuration / 2.0F);
+        }
         this.scale = Interpolation.exp5In.apply(Settings.scale, Settings.scale * 0.3f, this.duration / this.startingDuration);
     }
 
@@ -60,16 +69,15 @@ public class PCLFlashPowerEffect extends AbstractGameEffect {
             float half_h = region128.packedHeight / 2f;
 
             sb.draw(region128, x, y, half_w, half_h, region128.packedWidth, region128.packedHeight, scale, scale, 0f);
-            //sb.draw(this.region128, this.x, this.y, 32f, 32f, 64f, 64f, this.scale * 3f, this.scale * 3f, 0f);
         }
         else if (this.img != null) {
             int width = this.img.getWidth();
             if (width >= 48) {
                 int height = this.img.getHeight();
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 12f, scale * 12f, 0f, 0, 0, width, height, false, false);
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 10f, scale * 10f, 0f, 0, 0, width, height, false, false);
                 sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 8f, scale * 8f, 0f, 0, 0, width, height, false, false);
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 7f, scale * 7f, 0f, 0, 0, width, height, false, false);
+                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 6f, scale * 6f, 0f, 0, 0, width, height, false, false);
+                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 4f, scale * 4f, 0f, 0, 0, width, height, false, false);
+                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 2f, scale * 2f, 0f, 0, 0, width, height, false, false);
             }
             else {
                 this.isDone = true;

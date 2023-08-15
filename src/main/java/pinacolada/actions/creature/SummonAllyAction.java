@@ -1,10 +1,12 @@
 package pinacolada.actions.creature;
 
+import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
@@ -62,14 +64,26 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
             initializeAlly();
         }
 
-        CombatManager.onAllySummon(card, ally);
+        CombatManager.onAllySummon(ally, card, returnedCard);
         complete(returnedCard);
     }
 
     protected void initializeAlly() {
         PCLActions.bottom.callback(() -> {
             if (showEffect) {
-                PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
+                Color particleColor = null;
+                for (PCLAffinity affinity : GameUtilities.getVisiblePCLAffinities(card)) {
+                    if (particleColor == null) {
+                        particleColor = affinity.getAlternateColor();
+                    }
+                    else {
+                        particleColor.lerp(affinity.getAlternateColor(), 0.5f);
+                    }
+                }
+                if (particleColor == null) {
+                    particleColor = Color.WHITE;
+                }
+                PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY, particleColor));
             }
             this.ally.initializeForCard(card, retainPowers, delayForTurn);
         });

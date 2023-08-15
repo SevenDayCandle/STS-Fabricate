@@ -2154,7 +2154,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected void renderEnergyText(SpriteBatch sb) {
-        renderEnergyText(sb, -132f, 192f);
+        float sinAngle = MathUtils.sinDeg(angle);
+        renderEnergyText(sb, -132f - sinAngle * 10, 192f - Math.abs(sinAngle) * 25);
     }
 
     protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset) {
@@ -2569,8 +2570,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnAllySummon(this, ally));
     }
 
-    public void triggerWhenTriggered(PCLCardAlly ally, PCLCardAlly caller) {
-        doEffects(be -> be.triggerOnAllyTrigger(this, ally, caller));
+    public void triggerWhenTriggered(PCLCardAlly ally, AbstractCreature target, PCLCardAlly caller) {
+        doEffects(be -> be.triggerOnAllyTrigger(this, target, ally, caller));
     }
 
     public void triggerWhenWithdrawn(PCLCardAlly ally) {

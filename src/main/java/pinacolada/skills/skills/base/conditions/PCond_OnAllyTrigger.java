@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
@@ -39,8 +40,9 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
         return PGR.core.tooltips.trigger;
     }
 
+    // When the ally is triggered, trigger the effect on the ally
     @Override
-    public void onAllyTrigger(PCLCard card, PCLCardAlly ally, PCLCardAlly caller) {
+    public void onAllyTrigger(PCLCard card, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
         if (isWhenClause() || ally == caller) {
             triggerOnCard(card, ally);
         }

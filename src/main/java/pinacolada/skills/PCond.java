@@ -10,6 +10,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -217,6 +218,26 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_HPPercent hpPercent(PCLCardTarget target, int amount) {
         return new PCond_HPPercent(target, amount);
+    }
+
+    public static PCond_IfHasProperty ifProperty(AbstractCard.CardRarity... property) {
+        return new PCond_IfHasProperty(property);
+    }
+
+    public static PCond_IfHasProperty ifProperty(AbstractCard.CardType... property) {
+        return new PCond_IfHasProperty(property);
+    }
+
+    public static PCond_IfHasProperty ifProperty(PCLAffinity... property) {
+        return new PCond_IfHasProperty(property);
+    }
+
+    public static PCond_IfHasProperty ifProperty(PCLCardTag... property) {
+        return new PCond_IfHasProperty(property);
+    }
+
+    public static PCond_Intent intent(PCLCardTarget target, PCLIntentType... types) {
+        return new PCond_Intent(target, types);
     }
 
     public static PCond_Intent isAttacking(PCLCardTarget target) {
