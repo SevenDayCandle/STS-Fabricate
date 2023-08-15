@@ -21,11 +21,11 @@ public class BleedEffect extends PCLEffect {
         this.count = count;
     }
 
-    public void render(SpriteBatch sb) {
-
+    public void dispose() {
     }
 
-    public void dispose() {
+    public void render(SpriteBatch sb) {
+
     }
 
     @Override

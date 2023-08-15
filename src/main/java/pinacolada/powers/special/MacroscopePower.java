@@ -35,16 +35,6 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
         return damage * Macroscope.MULTIPLIER;
     }
 
-    @Override
-    public int onHeal(int amount) {
-        return amount * Macroscope.MULTIPLIER;
-    }
-
-    @Override
-    public float modifyBlockLast(float block) {
-        return block * Macroscope.MULTIPLIER;
-    }
-
     // Purposely not using ModifyOrbOutput because this will cause Magic attacks to get multiplied twice
     public int getFinalOrbDamage(int initial) {
         return initial * Macroscope.MULTIPLIER;
@@ -56,16 +46,8 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-        if (PGR.dungeon.getDivisor() > 1) {
-            owner.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
-            owner.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
-            owner.healthBarUpdatedEvent();
-            if (owner instanceof AbstractPlayer) {
-                PGR.dungeon.setDivisor(1);
-            }
-        }
+    public float modifyBlockLast(float block) {
+        return block * Macroscope.MULTIPLIER;
     }
 
     @Override
@@ -74,6 +56,24 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
             orb.passiveAmount = getFinalOrbDamage(orb.passiveAmount);
             if (GameUtilities.canOrbApplyFocusToEvoke(orb)) {
                 orb.evokeAmount = getFinalOrbDamage(orb.evokeAmount);
+            }
+        }
+    }
+
+    @Override
+    public int onHeal(int amount) {
+        return amount * Macroscope.MULTIPLIER;
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        if (PGR.dungeon.getDivisor() > 1) {
+            owner.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
+            owner.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
+            owner.healthBarUpdatedEvent();
+            if (owner instanceof AbstractPlayer) {
+                PGR.dungeon.setDivisor(1);
             }
         }
     }

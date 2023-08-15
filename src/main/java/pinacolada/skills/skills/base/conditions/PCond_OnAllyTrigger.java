@@ -28,16 +28,16 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
     }
 
     @Override
+    public EUIKeywordTooltip getDelegateTooltip() {
+        return PGR.core.tooltips.trigger;
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
             return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
         return super.getSubText(perspective);
-    }
-
-    @Override
-    public EUIKeywordTooltip getDelegateTooltip() {
-        return PGR.core.tooltips.trigger;
     }
 
     // When the ally is triggered, trigger the effect on the ally

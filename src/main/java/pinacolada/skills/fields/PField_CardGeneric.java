@@ -87,22 +87,6 @@ public class PField_CardGeneric extends PField_Not {
                 && forced == ((PField_CardGeneric) other).forced;
     }
 
-    @Override
-    public PField_CardGeneric makeCopy() {
-        return new PField_CardGeneric(this);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
-        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
-        editor.registerPile(groupTypes);
-    }
-
-    public PField_CardGeneric setNot(boolean value) {
-        this.not = value;
-        return this;
-    }
-
     public final CardGroup[] getCardGroup(PCLUseInfo info) {
         return getCardGroup(info, true);
     }
@@ -178,6 +162,11 @@ public class PField_CardGeneric extends PField_Not {
         return origin == PCLCardSelection.Random;
     }
 
+    @Override
+    public PField_CardGeneric makeCopy() {
+        return new PField_CardGeneric(this);
+    }
+
     public void registerFBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> forced = v, forced);
     }
@@ -212,6 +201,11 @@ public class PField_CardGeneric extends PField_Not {
         return this;
     }
 
+    public PField_CardGeneric setNot(boolean value) {
+        this.not = value;
+        return this;
+    }
+
     public PField_CardGeneric setOrigin(PCLCardSelection origin) {
         this.origin = origin;
         return this;
@@ -225,5 +219,11 @@ public class PField_CardGeneric extends PField_Not {
     public PField_CardGeneric setTemporaryGroups(ArrayList<PCLCardGroupHelper> cardGroups) {
         this.groupTypes = cardGroups;
         return this;
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
+        editor.registerPile(groupTypes);
     }
 }

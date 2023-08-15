@@ -27,10 +27,6 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
         super(DATA, content);
     }
 
-    public String getSubSampleText() {
-        return TEXT.subjects_unblocked(TEXT.subjects_damage);
-    }
-
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         // Source of truth should be the last taken damage obtained from the effects above this
@@ -44,6 +40,10 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
             return sumTargets(info, t -> damageEff.extra * GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false)) / PGR.dungeon.getDivisor();
         }
         return 0;
+    }
+
+    public String getSubSampleText() {
+        return TEXT.subjects_unblocked(TEXT.subjects_damage);
     }
 
     @Override

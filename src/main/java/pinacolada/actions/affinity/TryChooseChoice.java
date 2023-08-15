@@ -140,6 +140,12 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         return this;
     }
 
+    public TryChooseChoice<T> cancellableFromPlayer(boolean value) {
+        this.canPlayerCancel = value;
+
+        return this;
+    }
+
     @Override
     protected void completeImpl() {
         if (hideTopPanel) {
@@ -202,39 +208,6 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (AbstractDungeon.gridSelectScreen.selectedCards.size() != 0) {
-            for (AbstractCard c : AbstractDungeon.gridSelectScreen.selectedCards) {
-                if (c instanceof ChoiceCard) {
-                    selectedCards.add((ChoiceCard<T>) c);
-                }
-            }
-            selected = true;
-
-            AbstractDungeon.gridSelectScreen.selectedCards.clear();
-            GridCardSelectScreenHelper.clear(true);
-        }
-
-        if (selected) {
-            if (tickDuration(deltaTime)) {
-                complete(selectedCards);
-            }
-            return;
-        }
-
-        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
-        {
-            completeImpl();
-        }
-    }
-
-    public TryChooseChoice<T> cancellableFromPlayer(boolean value) {
-        this.canPlayerCancel = value;
-
-        return this;
-    }
-
     public TryChooseChoice<T> hideTopPanel(boolean hideTopPanel) {
         this.hideTopPanel = hideTopPanel;
 
@@ -274,5 +247,32 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         this.origin = origin;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (AbstractDungeon.gridSelectScreen.selectedCards.size() != 0) {
+            for (AbstractCard c : AbstractDungeon.gridSelectScreen.selectedCards) {
+                if (c instanceof ChoiceCard) {
+                    selectedCards.add((ChoiceCard<T>) c);
+                }
+            }
+            selected = true;
+
+            AbstractDungeon.gridSelectScreen.selectedCards.clear();
+            GridCardSelectScreenHelper.clear(true);
+        }
+
+        if (selected) {
+            if (tickDuration(deltaTime)) {
+                complete(selectedCards);
+            }
+            return;
+        }
+
+        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
+        {
+            completeImpl();
+        }
     }
 }

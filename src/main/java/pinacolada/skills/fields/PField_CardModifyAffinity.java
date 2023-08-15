@@ -24,18 +24,13 @@ public class PField_CardModifyAffinity extends PField_CardModify {
         return super.equals(other);
     }
 
+    public String getAddAffinityChoiceString() {
+        return getAffinityAndOrString(addAffinities, or);
+    }
+
     @Override
     public PField_CardModifyAffinity makeCopy() {
         return new PField_CardModifyAffinity(this);
-    }
-
-    public PField_CardModifyAffinity setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
-    public String getAddAffinityChoiceString() {
-        return getAffinityAndOrString(addAffinities, or);
     }
 
     public PField_CardModifyAffinity setAddAffinity(Collection<PCLAffinity> affinities) {
@@ -46,6 +41,11 @@ public class PField_CardModifyAffinity extends PField_CardModify {
 
     public PField_CardModifyAffinity setAddAffinity(PCLAffinity... affinities) {
         return setAddAffinity(Arrays.asList(affinities));
+    }
+
+    public PField_CardModifyAffinity setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

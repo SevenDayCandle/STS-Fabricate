@@ -21,9 +21,8 @@ public class PCLIntervalAnimation extends PCLAnimation {
         this(vfxTimer, vfxTimer);
     }
 
-    @Override
-    public Type type() {
-        return Type.SPRITE;
+    public void renderSprite(SpriteBatch sb, float x, float y) {
+
     }
 
     public void setFlip(boolean horizontal, boolean vertical) {
@@ -31,8 +30,9 @@ public class PCLIntervalAnimation extends PCLAnimation {
         vFlip = vertical;
     }
 
-    public void renderSprite(SpriteBatch sb, float x, float y) {
-
+    @Override
+    public Type type() {
+        return Type.SPRITE;
     }
 
     public void update(float deltaTime, float x, float y) {

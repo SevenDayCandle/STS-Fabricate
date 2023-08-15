@@ -25,13 +25,13 @@ public class PMod_PerGold extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.gold.title;
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return sumTargets(info, t -> t.gold);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return sumTargets(info, t -> t.gold);
+    public String getSubSampleText() {
+        return PGR.core.tooltips.gold.title;
     }
 
     @Override

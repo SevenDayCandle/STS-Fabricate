@@ -42,10 +42,13 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyCost(c, amount, fields.forced, !fields.not, fields.or);
+    }
+
+    @Override
+    public String getObjectText() {
+        return TEXT.subjects_cost;
     }
 
     @Override
@@ -61,17 +64,14 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyCost(c, amount, fields.forced, !fields.not, fields.or);
-    }
-
-    @Override
-    public String getObjectText() {
-        return TEXT.subjects_cost;
-    }
-
-    @Override
     public boolean isDetrimental() {
         return !fields.not && extra > 0;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
     }
 }

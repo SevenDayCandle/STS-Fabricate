@@ -35,13 +35,13 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return target == PCLCardTarget.Self;
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetStringPerspective(perspective));
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetStringPerspective(perspective));
+    public boolean isDetrimental() {
+        return target == PCLCardTarget.Self;
     }
 
     @Override

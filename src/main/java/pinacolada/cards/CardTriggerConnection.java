@@ -41,11 +41,6 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     }
 
     @Override
-    public AbstractCreature getOwner() {
-        return GameUtilities.getCardOwner(card);
-    }
-
-    @Override
     public boolean canUse(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse) {
         if (canActivate(trigger)) {
             canUse = trigger.canPlay(trigger.getInfo(null), trigger);
@@ -54,18 +49,23 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     }
 
     @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
+    }
+
+    @Override
     public String getID() {
         return this.card.cardID;
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return triggerTip;
+    public AbstractCreature getOwner() {
+        return GameUtilities.getCardOwner(card);
     }
 
     @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
+    public EUIKeywordTooltip getTooltip() {
+        return triggerTip;
     }
 
     public void initialize() {

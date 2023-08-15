@@ -50,24 +50,15 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         super(DATA, PCLCardTarget.None, amount);
     }
 
+    // Must return true when using or cooldown will not progress in a multicond
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return isUsing || getCooldown() <= 0;
+    }
+
     @Override
     public int getBaseCooldown() {
         return baseAmount;
-    }
-
-    @Override
-    public int getCooldown() {
-        return amount;
-    }
-
-    @Override
-    public boolean isDisplayingUpgrade() {
-        return displayUpgrades && getUpgrade() != 0;
-    }
-
-    @Override
-    public void setCooldown(int value) {
-        this.amount = value;
     }
 
     @Override
@@ -76,14 +67,47 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
+    public int getCooldown() {
+        return amount;
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_trigger(PGR.core.tooltips.cooldown.title)) : EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (isWhenClause()) {
+            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
+        }
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
+        return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
+    }
+
+    @Override
+    public boolean isDisplayingUpgrade() {
+        return displayUpgrades && getUpgrade() != 0;
     }
 
     @Override
     public PCond_Cooldown onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         return this;
+    }
+
+    @Override
+    public boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m) {
+        if (cooldown.canActivate()) {
+            useFromTrigger(generateInfo(m).setData(cooldown));
+            flashTimer = 1;
+        }
+        return true;
     }
 
     @Override
@@ -112,38 +136,14 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
     }
 
+    @Override
+    public void setCooldown(int value) {
+        this.amount = value;
+    }
+
     // No-op to avoid refreshing effects changing amount
     public PCond_Cooldown setTemporaryAmount(int amount) {
         return this;
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (isWhenClause()) {
-            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
-        }
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
-    }
-
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
-        return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
-    }
-
-    // Must return true when using or cooldown will not progress in a multicond
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return isUsing || getCooldown() <= 0;
-    }
-
-    @Override
-    public boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m) {
-        if (cooldown.canActivate()) {
-            useFromTrigger(generateInfo(m).setData(cooldown));
-            flashTimer = 1;
-        }
-        return true;
     }
 
     @Override

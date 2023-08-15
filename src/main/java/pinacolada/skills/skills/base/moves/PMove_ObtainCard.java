@@ -45,23 +45,23 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_obtain(TEXT.subjects_card);
-    }
-
-    @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.obtain;
     }
 
     @Override
-    public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
-        order.showAndObtain(c);
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_obtain(TEXT.subjects_card);
     }
 
     @Override
     public boolean isMetascaling() {
         return true;
+    }
+
+    @Override
+    public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
+        order.showAndObtain(c);
     }
 
     @Override

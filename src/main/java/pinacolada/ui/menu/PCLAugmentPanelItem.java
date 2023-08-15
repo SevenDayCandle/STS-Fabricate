@@ -47,6 +47,11 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         return map;
     }
 
+    protected void onClick() {
+        super.onClick();
+        PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
+    }
+
     protected void onRightClick() {
         super.onRightClick();
         this.getHitbox().unhover();
@@ -59,6 +64,12 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
                 new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 6), PGR.core.strings.tutorial_augmentTutorial6, PCLCoreImages.Tutorial.augTut05.texture())
         );
         EUI.ftueScreen.openScreen(tutorial);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        super.render(sb);
+        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 
     public void update() {
@@ -77,16 +88,5 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
             EUIColors.lerp(currentColor, Settings.GREEN_TEXT_COLOR, Color.WHITE, lerpAmount);
             lerpAmount += Gdx.graphics.getDeltaTime();
         }
-    }
-
-    protected void onClick() {
-        super.onClick();
-        PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        super.render(sb);
-        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 }

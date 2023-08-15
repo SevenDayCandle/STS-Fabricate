@@ -39,11 +39,6 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : TEXT.cond_ifX(PGR.core.tooltips.kill.past());
     }
 
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        fields.registerNotBoolean(editor);
-        fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
-    }
-
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
@@ -58,6 +53,11 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     @Override
     public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
         useFromTrigger(generateInfo(getOwnerCreature(), monster));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.registerNotBoolean(editor);
+        fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

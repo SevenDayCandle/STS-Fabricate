@@ -119,11 +119,6 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return powers;
     }
 
-    @Override
-    public PCLDynamicRelicData makeCopy() {
-        return new PCLDynamicRelicData(this);
-    }
-
     public RelicStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -135,14 +130,13 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         this.imagePath = PCLCoreImages.CardAffinity.unknown.path();
     }
 
-    public PCLDynamicRelicData setColor(AbstractCard.CardColor color) {
-        super.setColor(color);
-        return this;
+    @Override
+    public PCLDynamicRelicData makeCopy() {
+        return new PCLDynamicRelicData(this);
     }
 
-    public PCLDynamicRelicData setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-
+    public PCLDynamicRelicData setColor(AbstractCard.CardColor color) {
+        super.setColor(color);
         return this;
     }
 
@@ -153,6 +147,12 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
 
     public PCLDynamicRelicData setImage(Texture portraitImage) {
         this.portraitImage = portraitImage;
+
+        return this;
+    }
+
+    public PCLDynamicRelicData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
 
         return this;
     }

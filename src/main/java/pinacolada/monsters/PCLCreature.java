@@ -74,6 +74,14 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         return creatureData;
     }
 
+    @Override
+    public void addPower(AbstractPower powerToApply) {
+        super.addPower(powerToApply);
+        if (powerToApply instanceof StunMonsterPower) {
+            stunned = true;
+        }
+    }
+
     public void atEndOfRound() {
         hasTakenTurn = false;
     }
@@ -110,14 +118,6 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     @Override
     public void loadAnimation(String atlasUrl, String skeletonUrl, float scale) {
         super.loadAnimation(atlasUrl, skeletonUrl, scale);
-    }
-
-    @Override
-    public void addPower(AbstractPower powerToApply) {
-        super.addPower(powerToApply);
-        if (powerToApply instanceof StunMonsterPower) {
-            stunned = true;
-        }
     }
 
     // Intentionally avoid calling loadAnimation to avoid registering animations
@@ -216,13 +216,13 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void takeTurn() {
+        takeTurn(false);
     }
 
     @Override
-    public void takeTurn() {
-        takeTurn(false);
+    public void update() {
+        super.update();
     }
 
     public abstract void performActions(boolean manual);

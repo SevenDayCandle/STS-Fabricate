@@ -35,16 +35,6 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (fields.destination == PCLCardSelection.Manual) {
-            return super.getSubText(perspective);
-        }
-        String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
-        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)
-                : TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), dest);
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return ReshuffleFromPile::new;
     }
@@ -52,5 +42,15 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.reshuffle;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (fields.destination == PCLCardSelection.Manual) {
+            return super.getSubText(perspective);
+        }
+        String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)
+                : TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), dest);
     }
 }

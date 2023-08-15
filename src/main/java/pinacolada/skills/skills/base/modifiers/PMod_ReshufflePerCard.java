@@ -35,6 +35,16 @@ public class PMod_ReshufflePerCard extends PMod_Do {
     }
 
     @Override
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
+        return ReshuffleFromPile::new;
+    }
+
+    @Override
+    public EUIKeywordTooltip getActionTooltip() {
+        return PGR.core.tooltips.reshuffle;
+    }
+
+    @Override
     public String getMoveString(boolean addPeriod) {
         if (fields.destination == PCLCardSelection.Manual) {
             return super.getMoveString(addPeriod);
@@ -43,15 +53,5 @@ public class PMod_ReshufflePerCard extends PMod_Do {
         String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
         return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString(), dest)
                 : TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), cardString, dest);
-    }
-
-    @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
-        return ReshuffleFromPile::new;
-    }
-
-    @Override
-    public EUIKeywordTooltip getActionTooltip() {
-        return PGR.core.tooltips.reshuffle;
     }
 }

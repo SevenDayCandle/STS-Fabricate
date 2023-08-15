@@ -1,9 +1,7 @@
 package pinacolada.cards.base.tags;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.ExhaustiveField;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingField;
@@ -281,6 +279,11 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
+    @Override
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Autoplay:
@@ -319,11 +322,6 @@ public enum PCLCardTag implements TooltipProvider {
                 return PGR.core.tooltips.unplayable;
         }
         return new EUIKeywordTooltip(this.name());
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
     }
 
     public boolean has(AbstractCard card) {

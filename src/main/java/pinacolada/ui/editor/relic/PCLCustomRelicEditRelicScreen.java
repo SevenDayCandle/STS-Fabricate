@@ -51,6 +51,28 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         super.addSkillPages();
     }
 
+    protected void complete() {
+        super.complete();
+        invalidateItems();
+        if (loadedImage != null) {
+            loadedImage.dispose();
+        }
+    }
+
+    protected void editImage() {
+        Texture image = loadedImage;
+        if (image == null) {
+            image = getBuilder().portraitImage;
+        }
+        currentDialog = PCLCustomImageEffect.forRelic(image)
+                .addCallback(pixmap -> {
+                            if (pixmap != null) {
+                                setLoadedImage(new Texture(pixmap));
+                            }
+                        }
+                );
+    }
+
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomRelicPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
@@ -93,6 +115,15 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
                 saveButton.makeTour(true));
     }
 
+    protected void rebuildItem() {
+        previewRelic = getBuilder().create();
+        previewRelic.scale = 1f;
+        previewRelic.currentX = previewRelic.targetX = CARD_X;
+        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
+        previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
+        previewDescription.setLabel(previewRelic.getDescriptionImpl());
+    }
+
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
         imageButton.tryRender(sb);
@@ -100,6 +131,19 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         upgradeToggle.tryRender(sb);
         previewRelic.render(sb);
         previewDescription.tryRender(sb);
+    }
+
+    public void setLoadedImage(Texture texture) {
+        loadedImage = texture;
+        modifyAllBuilders((e, i) -> e
+                .setImagePath(currentSlot.getImagePath())
+                .setImage(texture));
+    }
+
+    private void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
+        modifyBuilder(__ -> {
+        });
     }
 
     public void updateInnerElements() {
@@ -116,50 +160,6 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     protected void updateVariant() {
         formEditor.refresh();
-    }
-
-    protected void rebuildItem() {
-        previewRelic = getBuilder().create();
-        previewRelic.scale = 1f;
-        previewRelic.currentX = previewRelic.targetX = CARD_X;
-        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
-        previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
-        previewDescription.setLabel(previewRelic.getDescriptionImpl());
-    }
-
-    protected void complete() {
-        super.complete();
-        invalidateItems();
-        if (loadedImage != null) {
-            loadedImage.dispose();
-        }
-    }
-
-    protected void editImage() {
-        Texture image = loadedImage;
-        if (image == null) {
-            image = getBuilder().portraitImage;
-        }
-        currentDialog = PCLCustomImageEffect.forRelic(image)
-                .addCallback(pixmap -> {
-                            if (pixmap != null) {
-                                setLoadedImage(new Texture(pixmap));
-                            }
-                        }
-                );
-    }
-
-    public void setLoadedImage(Texture texture) {
-        loadedImage = texture;
-        modifyAllBuilders((e, i) -> e
-                .setImagePath(currentSlot.getImagePath())
-                .setImage(texture));
-    }
-
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {
-        });
     }
 
 }

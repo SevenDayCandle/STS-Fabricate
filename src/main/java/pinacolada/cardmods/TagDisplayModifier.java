@@ -24,6 +24,11 @@ public class TagDisplayModifier extends AbstractCardModifier {
     }
 
     @Override
+    public AbstractCardModifier makeCopy() {
+        return new TagDisplayModifier();
+    }
+
+    @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
         if (PGR.config.displayCardTagDescription.get()) {
             String text = rawDescription;
@@ -56,11 +61,6 @@ public class TagDisplayModifier extends AbstractCardModifier {
     @Override
     public void onRender(AbstractCard card, SpriteBatch sb) {
         PCLCardTag.renderTagsOnCard(sb, card, card.transparency);
-    }
-
-    @Override
-    public AbstractCardModifier makeCopy() {
-        return new TagDisplayModifier();
     }
 
     @Override

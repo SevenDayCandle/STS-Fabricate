@@ -26,13 +26,13 @@ public class PMod_PerEnergy extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.energy.title;
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return EnergyPanel.getCurrentEnergy();
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return EnergyPanel.getCurrentEnergy();
+    public String getSubSampleText() {
+        return PGR.core.tooltips.energy.title;
     }
 
     @Override

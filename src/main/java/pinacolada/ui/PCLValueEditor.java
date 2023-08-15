@@ -128,15 +128,6 @@ public class PCLValueEditor extends EUIHoverable {
         return this;
     }
 
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
-        increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
-        displayValue.tryUpdate();
-        header.tryUpdate();
-    }
-
     public PCLValueEditor setValue(int value) {
         return setValue(value, true);
     }
@@ -148,5 +139,14 @@ public class PCLValueEditor extends EUIHoverable {
         }
 
         return this;
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
+        increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
+        displayValue.tryUpdate();
+        header.tryUpdate();
     }
 }

@@ -31,12 +31,12 @@ public class HandSizePower extends PCLPower {
 
     }
 
-    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
-        FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, Integer.toString(BaseMod.MAX_HAND_SIZE), x, y, this.fontScale, c);
-    }
-
     public void onVictory() {
         super.onVictory();
         this.onRemove();
+    }
+
+    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
+        FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, Integer.toString(BaseMod.MAX_HAND_SIZE), x, y, this.fontScale, c);
     }
 }

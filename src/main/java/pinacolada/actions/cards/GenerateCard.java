@@ -127,32 +127,6 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (effect != null && !effect.isDone) {
-            effect.update();
-        }
-
-        if (tickDuration(deltaTime)) {
-            if (amount > 1) {
-                GenerateCard copy = new GenerateCard(actualCard, cardGroup);
-                copy.copySettings(this);
-                copy.destination = destination;
-                copy.makeCopy = makeCopy;
-                copy.upgrade = upgrade;
-                copy.cancelIfFull = cancelIfFull;
-                copy.amount = amount - 1;
-                PCLActions.top.add(copy);
-            }
-
-            complete(actualCard);
-
-            if (destination != null && cardGroup.group.remove(actualCard)) {
-                destination.add(cardGroup.group, actualCard, 0);
-            }
-        }
-    }
-
     public GenerateCard repeat(int times) {
         // Always makeCopy because repeating action with the same card will cause visual glitches
         this.makeCopy = true;
@@ -188,5 +162,31 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         this.upgrade = upgrade;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (effect != null && !effect.isDone) {
+            effect.update();
+        }
+
+        if (tickDuration(deltaTime)) {
+            if (amount > 1) {
+                GenerateCard copy = new GenerateCard(actualCard, cardGroup);
+                copy.copySettings(this);
+                copy.destination = destination;
+                copy.makeCopy = makeCopy;
+                copy.upgrade = upgrade;
+                copy.cancelIfFull = cancelIfFull;
+                copy.amount = amount - 1;
+                PCLActions.top.add(copy);
+            }
+
+            complete(actualCard);
+
+            if (destination != null && cardGroup.group.remove(actualCard)) {
+                destination.add(cardGroup.group, actualCard, 0);
+            }
+        }
     }
 }

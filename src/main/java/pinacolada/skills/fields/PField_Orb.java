@@ -28,15 +28,6 @@ public class PField_Orb extends PField_Random {
         return other instanceof PField_Orb && orbs.equals(((PField_Orb) other).orbs) && ((PField_Orb) other).random == random;
     }
 
-    @Override
-    public PField_Orb makeCopy() {
-        return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerOrb(orbs);
-    }
-
     public String getOrbAmountString() {
         String efString = skill.getRawString(PSkill.EFFECT_CHAR);
         return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb)));
@@ -84,6 +75,11 @@ public class PField_Orb extends PField_Random {
         return getOrbString(orbs);
     }
 
+    @Override
+    public PField_Orb makeCopy() {
+        return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random).setNot(not);
+    }
+
     public PField_Orb setOrb(Collection<PCLOrbHelper> orbs) {
         this.orbs.clear();
         this.orbs.addAll(orbs);
@@ -92,5 +88,9 @@ public class PField_Orb extends PField_Random {
 
     public PField_Orb setOrb(PCLOrbHelper... orbs) {
         return setOrb(Arrays.asList(orbs));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerOrb(orbs);
     }
 }

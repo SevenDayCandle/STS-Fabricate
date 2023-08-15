@@ -206,13 +206,13 @@ public class PCLPowerHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     protected void registerHelper(String powerID) {
@@ -235,13 +235,13 @@ public class PCLPowerHelper implements TooltipProvider {
 
     public static class PCLPowerHelperAdapter extends TypeAdapter<PCLPowerHelper> {
         @Override
-        public void write(JsonWriter writer, PCLPowerHelper value) throws IOException {
-            writer.value(value.ID);
+        public PCLPowerHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
         }
 
         @Override
-        public PCLPowerHelper read(JsonReader in) throws IOException {
-            return get(in.nextString());
+        public void write(JsonWriter writer, PCLPowerHelper value) throws IOException {
+            writer.value(value.ID);
         }
     }
 }

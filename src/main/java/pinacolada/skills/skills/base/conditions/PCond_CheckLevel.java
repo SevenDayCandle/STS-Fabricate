@@ -35,18 +35,6 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
         fields.setAffinity(stance);
     }
 
-    public int getQualifierRange() {
-        return fields.getQualiferRange();
-    }
-
-    public String getQualifierText(int i) {
-        return fields.getQualifierText(i);
-    }
-
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
-        return fields.getQualifiers(info);
-    }
-
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         if (fields.affinities.isEmpty()) {
@@ -60,6 +48,18 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
             }
         }
         return !fields.not;
+    }
+
+    public int getQualifierRange() {
+        return fields.getQualiferRange();
+    }
+
+    public String getQualifierText(int i) {
+        return fields.getQualifierText(i);
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
+        return fields.getQualifiers(info);
     }
 
     @Override

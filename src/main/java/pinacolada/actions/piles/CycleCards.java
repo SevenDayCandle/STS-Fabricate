@@ -31,14 +31,14 @@ public class CycleCards extends DiscardFromPile {
         super.complete(result);
     }
 
-    @Override
-    public String getActionMessage() {
-        return PGR.core.tooltips.cycle.title;
-    }
-
     public CycleCards drawInstantly(boolean value) {
         drawInstantly = value;
 
         return this;
+    }
+
+    @Override
+    public String getActionMessage() {
+        return PGR.core.tooltips.cycle.title;
     }
 }

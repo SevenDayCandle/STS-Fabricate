@@ -23,9 +23,23 @@ public class PField_CardTransform extends PField_CardCategory {
         return super.equals(other);
     }
 
+    public String getCardIDString() {
+        return result != null ? getCardIDString(result) : "";
+    }
+
     @Override
     public PField_CardTransform makeCopy() {
         return new PField_CardTransform(this);
+    }
+
+    public PField_CardTransform setOr(boolean value) {
+        this.or = value;
+        return this;
+    }
+
+    public PField_CardTransform setResult(String result) {
+        this.result = result;
+        return this;
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
@@ -40,19 +54,5 @@ public class PField_CardTransform extends PField_CardCategory {
                     }
                 }
         );
-    }
-
-    public String getCardIDString() {
-        return result != null ? getCardIDString(result) : "";
-    }
-
-    public PField_CardTransform setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
-    public PField_CardTransform setResult(String result) {
-        this.result = result;
-        return this;
     }
 }

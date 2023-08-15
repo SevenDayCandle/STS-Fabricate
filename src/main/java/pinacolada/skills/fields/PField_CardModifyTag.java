@@ -24,18 +24,13 @@ public class PField_CardModifyTag extends PField_CardModify {
         return super.equals(other);
     }
 
+    public String getAddTagChoiceString() {
+        return getTagAndOrString(addTags, or);
+    }
+
     @Override
     public PField_CardModifyTag makeCopy() {
         return new PField_CardModifyTag(this);
-    }
-
-    public PField_CardModifyTag setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
-    public String getAddTagChoiceString() {
-        return getTagAndOrString(addTags, or);
     }
 
     public PField_CardModifyTag setAddTag(Collection<PCLCardTag> affinities) {
@@ -46,6 +41,11 @@ public class PField_CardModifyTag extends PField_CardModify {
 
     public PField_CardModifyTag setAddTag(PCLCardTag... affinities) {
         return setAddTag(Arrays.asList(affinities));
+    }
+
+    public PField_CardModifyTag setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

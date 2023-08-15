@@ -51,6 +51,11 @@ public class ReplacementCard extends PCLDynamicCard {
     }
 
     @Override
+    public ReplacementCard makeCopy() {
+        return new ReplacementCard(builder);
+    }
+
+    @Override
     protected void onUpgrade() {
         super.onUpgrade();
         original.upgrade();
@@ -58,11 +63,6 @@ public class ReplacementCard extends PCLDynamicCard {
 
     public void setup(Object input) {
         addUseMove(new ReplacementMove(builder, this));
-    }
-
-    @Override
-    public ReplacementCard makeCopy() {
-        return new ReplacementCard(builder);
     }
 
     protected void updateOriginal() {
@@ -92,11 +92,6 @@ public class ReplacementCard extends PCLDynamicCard {
             return card.original.cardPlayable(GameUtilities.asMonster(info.target));
         }
 
-        @Override
-        public void refresh(PCLUseInfo info, boolean conditionMet) {
-            card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
-        }
-
         protected boolean doCard(ActionT1<AbstractCard> childAction) {
             childAction.invoke(card.original);
             return true;
@@ -107,18 +102,9 @@ public class ReplacementCard extends PCLDynamicCard {
             return card.original.rawDescription;
         }
 
-        protected void useImpl(PCLUseInfo info, PCLActions order) {
-            AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
-            ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
-            // Allow Starter effects on inherited cards to take effect
-            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
-            }
-            card.updateOriginal();
-            card.original.use(AbstractDungeon.player, m);
-            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
-            }
+        @Override
+        public void refresh(PCLUseInfo info, boolean conditionMet) {
+            card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
         }
 
         @Override
@@ -156,6 +142,20 @@ public class ReplacementCard extends PCLDynamicCard {
         @Override
         public void triggerOnScry(AbstractCard c) {
             doCard(AbstractCard::triggerOnScry);
+        }
+
+        protected void useImpl(PCLUseInfo info, PCLActions order) {
+            AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
+            ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
+            // Allow Starter effects on inherited cards to take effect
+            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
+            }
+            card.updateOriginal();
+            card.original.use(AbstractDungeon.player, m);
+            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
+            }
         }
     }
 }

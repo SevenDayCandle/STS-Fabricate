@@ -112,29 +112,6 @@ public class FakeLoadout extends PCLLoadout {
         return null;
     }
 
-    @Override
-    public void onOpen(CharacterOption option) {
-        AbstractCard.CardColor newColor = option.c.getCardColor();
-        if (newColor != color) {
-            color = newColor;
-            clearPresets();
-        }
-    }
-
-    @Override
-    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
-        //
-    }
-
-    protected void setDefaultCardsForData(PCLLoadoutData data) {
-        data.getCardSlot(0).select(0, 4).markAllSeen();
-        data.getCardSlot(1).select(0, 4).markAllSeen();
-        data.getCardSlot(2).select(0, 1).markCurrentSeen();
-        data.getCardSlot(3).select(1, 1).markCurrentSeen();
-        data.getCardSlot(4).select(2, 1).markCurrentSeen();
-        data.getCardSlot(5).select(null);
-    }
-
     public int getValueForRarity(AbstractCard.CardRarity rarity) {
         switch (rarity) {
             case COMMON:
@@ -158,5 +135,28 @@ public class FakeLoadout extends PCLLoadout {
                 return COMMON_LOADOUT_VALUE * 4;
         }
         return COMMON_LOADOUT_VALUE * 5;
+    }
+
+    @Override
+    public void onOpen(CharacterOption option) {
+        AbstractCard.CardColor newColor = option.c.getCardColor();
+        if (newColor != color) {
+            color = newColor;
+            clearPresets();
+        }
+    }
+
+    @Override
+    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
+        //
+    }
+
+    protected void setDefaultCardsForData(PCLLoadoutData data) {
+        data.getCardSlot(0).select(0, 4).markAllSeen();
+        data.getCardSlot(1).select(0, 4).markAllSeen();
+        data.getCardSlot(2).select(0, 1).markCurrentSeen();
+        data.getCardSlot(3).select(1, 1).markCurrentSeen();
+        data.getCardSlot(4).select(2, 1).markCurrentSeen();
+        data.getCardSlot(5).select(null);
     }
 }

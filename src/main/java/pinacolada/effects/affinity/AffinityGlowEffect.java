@@ -31,10 +31,21 @@ public class AffinityGlowEffect extends PCLEffect {
         this.source = source;
     }
 
+    public void dispose() {
+    }
+
     @Override
     protected void firstUpdate(float deltaTime) {
         this.color.a = 0.45f;
         this.scale = 0.73f;
+    }
+
+    public void render(SpriteBatch sb) {
+        if (!this.isDone && this.duration >= 0.0F) {
+            sb.setBlendFunction(PCLRenderHelpers.BlendingMode.Glowing.srcFunc, PCLRenderHelpers.BlendingMode.Glowing.dstFunc);
+            PCLRenderHelpers.drawCentered(sb, color, this.img, source.backgroundButton.hb.cX, source.backgroundButton.hb.cY, source.backgroundButton.hb.width, source.backgroundButton.hb.height, scale, 0, false, false);
+            sb.setBlendFunction(PCLRenderHelpers.BlendingMode.Normal.srcFunc, PCLRenderHelpers.BlendingMode.Normal.dstFunc);
+        }
     }
 
     public void update() {
@@ -49,16 +60,5 @@ public class AffinityGlowEffect extends PCLEffect {
             this.color.a = Interpolation.fade.apply(0.5F, 0F, Math.max(0, 1.4F - this.duration));
         }
 
-    }
-
-    public void render(SpriteBatch sb) {
-        if (!this.isDone && this.duration >= 0.0F) {
-            sb.setBlendFunction(PCLRenderHelpers.BlendingMode.Glowing.srcFunc, PCLRenderHelpers.BlendingMode.Glowing.dstFunc);
-            PCLRenderHelpers.drawCentered(sb, color, this.img, source.backgroundButton.hb.cX, source.backgroundButton.hb.cY, source.backgroundButton.hb.width, source.backgroundButton.hb.height, scale, 0, false, false);
-            sb.setBlendFunction(PCLRenderHelpers.BlendingMode.Normal.srcFunc, PCLRenderHelpers.BlendingMode.Normal.dstFunc);
-        }
-    }
-
-    public void dispose() {
     }
 }

@@ -27,21 +27,6 @@ public class PField_Attack extends PField {
         return new PField_Attack().setAttackEffect(attackEffect).setVFXColor(vfxColor != null ? vfxColor.cpy() : null, vfxTargetColor != null ? vfxTargetColor.cpy() : null);
     }
 
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerDropdown(PCLAttackVFX.keys()
-                , EUIUtils.arrayList(attackEffect)
-                , item -> {
-                    if (item.size() > 0) {
-                        attackEffect = item.get(0);
-                    }
-                }
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()),
-                PGR.core.strings.cedit_attackEffect,
-                true,
-                false, true).setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
-    }
-
     public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {
         this.attackEffect = effect;
         return this;
@@ -61,5 +46,20 @@ public class PField_Attack extends PField {
     public PField_Attack setVFXTargetColor(Color vfxColor) {
         this.vfxTargetColor = vfxColor;
         return this;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerDropdown(PCLAttackVFX.keys()
+                , EUIUtils.arrayList(attackEffect)
+                , item -> {
+                    if (item.size() > 0) {
+                        attackEffect = item.get(0);
+                    }
+                }
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                PGR.core.strings.cedit_attackEffect,
+                true,
+                false, true).setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 }

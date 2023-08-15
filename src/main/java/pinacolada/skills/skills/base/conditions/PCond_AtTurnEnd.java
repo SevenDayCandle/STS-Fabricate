@@ -33,10 +33,6 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
     }
@@ -49,5 +45,9 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
     @Override
     public void onEndOfTurnFirst(boolean isPlayer) {
         useFromTrigger(generateInfo(null));
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 }

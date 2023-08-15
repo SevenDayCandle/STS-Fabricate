@@ -103,57 +103,6 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         showCard();
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            AbstractMonster enemy = GameUtilities.asMonster(target);
-            if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy))) {
-                if (card.type == PCLEnum.CardType.SUMMON) {
-                    enemy = GameUtilities.getRandomSummon(false);
-                    if (enemy == null) {
-                        enemy = GameUtilities.getRandomSummon(true);
-                    }
-                }
-                else {
-                    enemy = GameUtilities.getRandomEnemy(true);
-                }
-            }
-
-            if (!spendEnergy) {
-                card.freeToPlayOnce = true;
-                card.ignoreEnergyOnUse = false;
-            }
-
-            AbstractCardPatches.forcePlay = force;
-
-            if (canUse()) {
-                queueCardItem(enemy);
-                return;
-            }
-            else if (purge) {
-                PCLActions.top.add(new UnlimboAction(card));
-            }
-            else if (exhaust) {
-                PCLActions.top.exhaust(card, player.limbo).setRealtime(true);
-            }
-            else if (spendEnergy && sourcePile == player.hand) {
-                player.limbo.removeCard(card);
-                sourcePile.group.add(MathUtils.clamp(sourcePileIndex, 0, sourcePile.size()), card);
-            }
-            else {
-                PCLActions.top.discard(card, player.limbo).setRealtime(true);
-                PCLActions.top.add(new WaitAction(Settings.ACTION_DUR_FAST));
-            }
-
-            if (card.cantUseMessage != null) {
-                PCLEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
-            }
-
-            AbstractCardPatches.forcePlay = false;
-            card.freeToPlayOnce = false;
-        }
-    }
-
     protected void queueCardItem(AbstractMonster enemy) {
         addToLimbo();
 
@@ -253,5 +202,56 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         this.spendEnergy = spendEnergy;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            AbstractMonster enemy = GameUtilities.asMonster(target);
+            if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy))) {
+                if (card.type == PCLEnum.CardType.SUMMON) {
+                    enemy = GameUtilities.getRandomSummon(false);
+                    if (enemy == null) {
+                        enemy = GameUtilities.getRandomSummon(true);
+                    }
+                }
+                else {
+                    enemy = GameUtilities.getRandomEnemy(true);
+                }
+            }
+
+            if (!spendEnergy) {
+                card.freeToPlayOnce = true;
+                card.ignoreEnergyOnUse = false;
+            }
+
+            AbstractCardPatches.forcePlay = force;
+
+            if (canUse()) {
+                queueCardItem(enemy);
+                return;
+            }
+            else if (purge) {
+                PCLActions.top.add(new UnlimboAction(card));
+            }
+            else if (exhaust) {
+                PCLActions.top.exhaust(card, player.limbo).setRealtime(true);
+            }
+            else if (spendEnergy && sourcePile == player.hand) {
+                player.limbo.removeCard(card);
+                sourcePile.group.add(MathUtils.clamp(sourcePileIndex, 0, sourcePile.size()), card);
+            }
+            else {
+                PCLActions.top.discard(card, player.limbo).setRealtime(true);
+                PCLActions.top.add(new WaitAction(Settings.ACTION_DUR_FAST));
+            }
+
+            if (card.cantUseMessage != null) {
+                PCLEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
+            }
+
+            AbstractCardPatches.forcePlay = false;
+            card.freeToPlayOnce = false;
+        }
     }
 }

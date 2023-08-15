@@ -27,13 +27,13 @@ public class PMod_PerScries extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.scry.title;
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return CombatManager.scriesThisTurn;
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return CombatManager.scriesThisTurn;
+    public String getSubSampleText() {
+        return PGR.core.tooltips.scry.title;
     }
 
     @Override

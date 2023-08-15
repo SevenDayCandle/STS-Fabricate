@@ -39,16 +39,16 @@ public class AddAffinityLevel extends PCLAction<PCLAffinity> {
         }
     }
 
+    public AddAffinityLevel showEffect(boolean showEffect) {
+        this.showEffect = showEffect;
+
+        return this;
+    }
+
     @Override
     protected void updateInternal(float deltaTime) {
         if (tickDuration(deltaTime)) {
             complete(affinity);
         }
-    }
-
-    public AddAffinityLevel showEffect(boolean showEffect) {
-        this.showEffect = showEffect;
-
-        return this;
     }
 }

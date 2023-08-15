@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -101,6 +100,38 @@ public class PCLCardAlly extends PCLCardCreature {
         this.currentHealth = 1;
     }
 
+    public void initializeForCard(PCLCard card, boolean retainPowers, boolean delayForTurn) {
+        super.initializeForCard(card, retainPowers, delayForTurn);
+
+        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
+        PCLAllyAnimation anim = null;
+        if (animFunc != null) {
+            this.animation = anim = animFunc.invoke(this);
+        }
+        if (anim == null) {
+            this.animation = anim = new PCLGeneralAllyAnimation(this);
+        }
+        anim.fadeIn();
+    }
+
+    public void onOtherAllyTrigger() {
+
+    }
+
+    @Override
+    public void performActions(boolean manual) {
+        if (card != null) {
+            refreshAction();
+            final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
+            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
+            card.useEffectsWithoutPowers(info);
+            PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
+            CombatManager.playerSystem.onCardPlayed(card, info, true);
+            applyTurnPowers();
+            CombatManager.onAllyTrigger(this.card, this.target, this);
+        }
+    }
+
     public PCLCard releaseCard(boolean clearPowers) {
         PCLCard releasedCard = this.card;
         if (releasedCard != null) {
@@ -148,58 +179,6 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
-    @Override
-    public void update() {
-        super.update();
-        if (card != null) {
-            this.card.currentHealth = this.currentHealth;
-            if (this.animation instanceof PCLAllyAnimation) {
-                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
-            }
-            if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.DEATH) {
-                hb.update();
-                intentHb.update();
-                healthHb.update();
-                for (int i = 0; i < powers.size(); i++) {
-                    powers.get(i).update(i);
-                }
-                if ((hb.hovered || intentHb.hovered)
-                        && EUIInputManager.rightClick.isJustPressed()
-                        && !(AbstractDungeon.player.isDraggingCard || AbstractDungeon.player.inSingleTargetMode)) {
-                    tryTarget();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void performActions(boolean manual) {
-        if (card != null) {
-            refreshAction();
-            final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
-            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
-            card.useEffectsWithoutPowers(info);
-            PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
-            CombatManager.playerSystem.onCardPlayed(card, info, true);
-            applyTurnPowers();
-            CombatManager.onAllyTrigger(this.card, this.target, this);
-        }
-    }
-
-    public void initializeForCard(PCLCard card, boolean retainPowers, boolean delayForTurn) {
-        super.initializeForCard(card, retainPowers, delayForTurn);
-
-        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
-        PCLAllyAnimation anim = null;
-        if (animFunc != null) {
-            this.animation = anim = animFunc.invoke(this);
-        }
-        if (anim == null) {
-            this.animation = anim = new PCLGeneralAllyAnimation(this);
-        }
-        anim.fadeIn();
-    }
-
     public void renderAnimation(SpriteBatch sb, Color color) {
         super.renderAnimation(sb, color);
         if (card != null) {
@@ -238,10 +217,6 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
-    public void onOtherAllyTrigger() {
-
-    }
-
     public boolean shouldDim() {
         return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
     }
@@ -257,6 +232,30 @@ public class PCLCardAlly extends PCLCardCreature {
                     setTarget(t);
                 }
             });
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (card != null) {
+            this.card.currentHealth = this.currentHealth;
+            if (this.animation instanceof PCLAllyAnimation) {
+                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
+            }
+            if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.DEATH) {
+                hb.update();
+                intentHb.update();
+                healthHb.update();
+                for (int i = 0; i < powers.size(); i++) {
+                    powers.get(i).update(i);
+                }
+                if ((hb.hovered || intentHb.hovered)
+                        && EUIInputManager.rightClick.isJustPressed()
+                        && !(AbstractDungeon.player.isDraggingCard || AbstractDungeon.player.inSingleTargetMode)) {
+                    tryTarget();
+                }
+            }
         }
     }
 

@@ -102,6 +102,11 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
+    }
+
+    @Override
     public boolean isMetascaling() {
         return true;
     }
@@ -124,19 +129,14 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        createPotion((p) -> AbstractDungeon.player.obtainPotion(p));
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         createPotion(order::obtainPotion);
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        createPotion((p) -> AbstractDungeon.player.obtainPotion(p));
     }
 }

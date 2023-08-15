@@ -87,6 +87,13 @@ public class AnimatedParticleEffect extends VisualEffect {
         PCLRenderHelpers.drawCentered(sb, color, region, x, y, width, height, scale, rotation, flipX, flipY);
     }
 
+    public AnimatedParticleEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
+
+        return this;
+    }
+
     @Override
     public void updateInternal(float delta) {
         super.updateInternal(delta);
@@ -106,13 +113,6 @@ public class AnimatedParticleEffect extends VisualEffect {
             this.frameTimer = this.frameDelay;
             this.region = null;
         }
-    }
-
-    public AnimatedParticleEffect setOpacity(float alpha) {
-        this.alpha = alpha;
-        this.color.a = this.alpha;
-
-        return this;
     }
 
     public enum AnimationMode {

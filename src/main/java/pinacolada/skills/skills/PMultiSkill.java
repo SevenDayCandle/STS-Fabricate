@@ -78,6 +78,12 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
+    public PMultiSkill addEffect(PSkill<?> newEffect) {
+        this.effects.add(newEffect);
+        setParentsForChildren();
+        return this;
+    }
+
     @Override
     public PSkill<PField_Empty> addExtraForCombat(int extra) {
         for (PSkill<?> effect : effects) {
@@ -93,6 +99,33 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
             canPlay = canPlay & be.canPlay(info, triggerSource);
         }
         return canPlay;
+    }
+
+    public void chooseEffect(PCLUseInfo info, PCLActions order) {
+        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        PCLCardData cardData;
+        if (choiceCard == null) {
+            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
+                    .showTypeText(false);
+
+            if (source instanceof AbstractRelic) {
+                cardData.strings.NAME = ((AbstractRelic) source).name;
+            }
+            else if (source instanceof AbstractPotion) {
+                cardData.strings.NAME = ((AbstractPotion) source).name;
+            }
+            else if (source instanceof AbstractBlight) {
+                cardData.strings.NAME = ((AbstractBlight) source).name;
+            }
+            else {
+                cardData.strings.NAME = getSourceCreature().name;
+            }
+        }
+        else {
+            cardData = choiceCard.cardData;
+        }
+
+        order.tryChooseSkill(cardData, amount, info.source, info.target, effects);
     }
 
     public void displayUpgrades(boolean value) {
@@ -131,6 +164,19 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    }
+
+    public PSkill<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return null;
     }
 
     @Override
@@ -346,6 +392,23 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
+    public PMultiSkill setEffects(PSkill<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PMultiSkill setEffects(List<PSkill<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+
+        return this;
+    }
+
+    public PMultiSkill setGenerated(boolean val) {
+        generated = val;
+        return this;
+    }
+
     @Override
     public PMultiSkill setSource(PointerProvider card) {
         super.setSource(card);
@@ -424,69 +487,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         for (PSkill<?> effect : effects) {
             effect.useParent(value);
         }
-        return this;
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return null;
-    }
-
-    public PMultiSkill addEffect(PSkill<?> newEffect) {
-        this.effects.add(newEffect);
-        setParentsForChildren();
-        return this;
-    }
-
-    public PSkill<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public PMultiSkill setEffects(PSkill<?>... effects) {
-        return setEffects(Arrays.asList(effects));
-    }
-
-    public PMultiSkill setEffects(List<PSkill<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-
-        return this;
-    }
-
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
-    }
-
-    public void chooseEffect(PCLUseInfo info, PCLActions order) {
-        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        PCLCardData cardData;
-        if (choiceCard == null) {
-            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
-                    .showTypeText(false);
-
-            if (source instanceof AbstractRelic) {
-                cardData.strings.NAME = ((AbstractRelic) source).name;
-            }
-            else if (source instanceof AbstractPotion) {
-                cardData.strings.NAME = ((AbstractPotion) source).name;
-            }
-            else if (source instanceof AbstractBlight) {
-                cardData.strings.NAME = ((AbstractBlight) source).name;
-            }
-            else {
-                cardData.strings.NAME = getSourceCreature().name;
-            }
-        }
-        else {
-            cardData = choiceCard.cardData;
-        }
-
-        order.tryChooseSkill(cardData, amount, info.source, info.target, effects);
-    }
-
-    public PMultiSkill setGenerated(boolean val) {
-        generated = val;
         return this;
     }
 

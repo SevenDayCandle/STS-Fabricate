@@ -21,12 +21,10 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
-import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUISmartText;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -35,9 +33,6 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.cardText.ConditionToken;
-import pinacolada.cards.base.cardText.PointerToken;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
@@ -57,9 +52,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static extendedui.EUI.splitID;
-import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, KeywordProvider {
@@ -193,6 +185,16 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return atDamageGive(block, type, c);
     }
 
+    @Override
+    public void atStartOfTurn() {
+        super.atStartOfTurn();
+
+        if (triggerCondition != null) {
+            triggerCondition.refresh(true, true);
+        }
+
+    }
+
     public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         triggerCondition = new PCLClickableUse(this, onUse);
         return triggerCondition;
@@ -247,6 +249,18 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     }
 
+    @Override
+    public void flash() {
+        this.effects.add(new PCLGainPowerEffect(this, true));
+        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
+    }
+
+    @Override
+    public void flashWithoutSound() {
+        this.effects.add(new PCLGainPowerEffect(this, false));
+        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
+    }
+
     protected String formatDescription(int index, Object... args) {
         if (powerStrings == null || powerStrings.DESCRIPTIONS == null || powerStrings.DESCRIPTIONS.length <= index) {
             EUIUtils.logError(this, "powerStrings.DESCRIPTIONS does not exist, " + this.name);
@@ -255,22 +269,17 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
     }
 
+    @Override
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
+    }
+
     public String getDisplayDescription() {
         return mainTip.description;
     }
 
     public String getID() {
         return ID;
-    }
-
-    @Override
-    public EUIKeywordTooltip getTooltip() {
-        return mainTip;
-    }
-
-    @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
     }
 
     protected ColoredString getPrimaryAmount(Color c) {
@@ -296,6 +305,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     @Override
     public List<EUIKeywordTooltip> getTips() {
         return tooltips;
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return mainTip;
     }
 
     public String getUpdatedDescription() {
@@ -388,6 +402,34 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
     }
 
+    @Override
+    public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source) {
+        super.onApplyPower(power, target, source);
+
+        if (owner == target && power.ID.equals(ID)) {
+            onSamePowerApplied(power);
+            if (triggerCondition != null && triggerCondition.pool.stackAutomatically) {
+                triggerCondition.addUses(1);
+            }
+        }
+    }
+
+    @Override
+    public void onInitialApplication() {
+        super.onInitialApplication();
+
+        onAmountChanged(0, amount);
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+
+        final int previous = amount;
+        amount = 0;
+        onAmountChanged(previous, -previous);
+    }
+
     public void onRemoveDamagePowers() {
 
     }
@@ -396,12 +438,60 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     }
 
+    @Override
+    public void reducePower(int reduceAmount) {
+        final int previous = amount;
+        super.reducePower(reduceAmount);
+        if ((amount == 0) || (!canGoNegative && amount < 0)) {
+            removePower();
+        }
+
+        onAmountChanged(previous, -Math.max(0, reduceAmount));
+    }
+
     public RemoveSpecificPowerAction removePower() {
         return removePower(PCLActions.bottom);
     }
 
     public RemoveSpecificPowerAction removePower(PCLActions order) {
         return order.removePower(owner, owner, this);
+    }
+
+    @Override
+    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
+        if (hideAmount) {
+            return;
+        }
+
+        ColoredString amount = getPrimaryAmount(c);
+        if (amount != null) {
+            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount.text, x, y, fontScale, amount.color);
+        }
+
+        ColoredString amount2 = getSecondaryAmount(c);
+        if (amount2 != null) {
+            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount2.text, x, y + 15f * Settings.scale, 1, amount2.color);
+        }
+    }
+
+    @Override
+    public void renderIcons(SpriteBatch sb, float x, float y, Color c) {
+        if (!enabled) {
+            disabledColor.a = c.a;
+            c = disabledColor;
+        }
+
+        if (hb.cX != x || hb.cY != y) {
+            hb.move(x, y);
+        }
+        Color borderColor = (enabled && triggerCondition != null && triggerCondition.interactable()) ? c : disabledColor;
+        Color imageColor = enabled ? c : disabledColor;
+
+        this.renderIconsImpl(sb, x, y, borderColor, imageColor);
+
+        for (AbstractGameEffect e : effects) {
+            e.render(sb, x, y);
+        }
     }
 
     protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
@@ -512,6 +602,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     @Override
+    public void stackPower(int stackAmount) {
+        stackPower(stackAmount, true);
+    }
+
+    @Override
     public void update(int slot) {
         super.update(slot);
         hb.update();
@@ -558,108 +653,5 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 mainTip.setBackgroundColor(Color.WHITE);
         }
         this.description = sanitizePowerDescription(desc);
-    }
-
-    @Override
-    public void stackPower(int stackAmount) {
-        stackPower(stackAmount, true);
-    }
-
-    @Override
-    public void reducePower(int reduceAmount) {
-        final int previous = amount;
-        super.reducePower(reduceAmount);
-        if ((amount == 0) || (!canGoNegative && amount < 0)) {
-            removePower();
-        }
-
-        onAmountChanged(previous, -Math.max(0, reduceAmount));
-    }
-
-    @Override
-    public void renderIcons(SpriteBatch sb, float x, float y, Color c) {
-        if (!enabled) {
-            disabledColor.a = c.a;
-            c = disabledColor;
-        }
-
-        if (hb.cX != x || hb.cY != y) {
-            hb.move(x, y);
-        }
-        Color borderColor = (enabled && triggerCondition != null && triggerCondition.interactable()) ? c : disabledColor;
-        Color imageColor = enabled ? c : disabledColor;
-
-        this.renderIconsImpl(sb, x, y, borderColor, imageColor);
-
-        for (AbstractGameEffect e : effects) {
-            e.render(sb, x, y);
-        }
-    }
-
-    @Override
-    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
-        if (hideAmount) {
-            return;
-        }
-
-        ColoredString amount = getPrimaryAmount(c);
-        if (amount != null) {
-            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount.text, x, y, fontScale, amount.color);
-        }
-
-        ColoredString amount2 = getSecondaryAmount(c);
-        if (amount2 != null) {
-            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount2.text, x, y + 15f * Settings.scale, 1, amount2.color);
-        }
-    }
-
-    @Override
-    public void atStartOfTurn() {
-        super.atStartOfTurn();
-
-        if (triggerCondition != null) {
-            triggerCondition.refresh(true, true);
-        }
-
-    }
-
-    @Override
-    public void onRemove() {
-        super.onRemove();
-
-        final int previous = amount;
-        amount = 0;
-        onAmountChanged(previous, -previous);
-    }
-
-    @Override
-    public void onInitialApplication() {
-        super.onInitialApplication();
-
-        onAmountChanged(0, amount);
-    }
-
-    @Override
-    public void flash() {
-        this.effects.add(new PCLGainPowerEffect(this, true));
-        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
-    }
-
-    @Override
-    public void flashWithoutSound() {
-        this.effects.add(new PCLGainPowerEffect(this, false));
-        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
-    }
-
-    @Override
-    public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source) {
-        super.onApplyPower(power, target, source);
-
-        if (owner == target && power.ID.equals(ID)) {
-            onSamePowerApplied(power);
-            if (triggerCondition != null && triggerCondition.pool.stackAutomatically) {
-                triggerCondition.addUses(1);
-            }
-        }
     }
 }

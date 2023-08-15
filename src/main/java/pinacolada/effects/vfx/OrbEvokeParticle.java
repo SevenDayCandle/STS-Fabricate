@@ -35,16 +35,16 @@ public class OrbEvokeParticle extends PCLEffect {
     }
 
     @Override
+    public void dispose() {
+
+    }
+
+    @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.color);
         sb.setBlendFunction(770, 1);
         sb.draw(ImageMaster.DARK_ORB_ACTIVATE_VFX, x - W_HALF, y - W_HALF, W_HALF, W_HALF, W, W, scale, scaleY, rotation, 0, 0, W, W, flipHorizontal, flipVertical);
         sb.setBlendFunction(770, 771);
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     @Override

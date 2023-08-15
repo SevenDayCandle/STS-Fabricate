@@ -72,6 +72,31 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         currentBlock = getBuilder().blockSkill;
     }
 
+    protected void complete() {
+        super.complete();
+        invalidateItems();
+        if (loadedImage != null) {
+            loadedImage.dispose();
+        }
+    }
+
+    protected void editImage() {
+        Texture image = loadedImage;
+        if (image == null) {
+            ColoredTexture portrait = getBuilder().portraitImage;
+            if (portrait != null) {
+                image = portrait.texture;
+            }
+        }
+        currentDialog = PCLCustomImageEffect.forCard(image)
+                .addCallback(pixmap -> {
+                            if (pixmap != null) {
+                                setLoadedImage(new Texture(pixmap));
+                            }
+                        }
+                );
+    }
+
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
@@ -107,30 +132,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 saveButton.makeTour(true));
     }
 
-    public void renderInnerElements(SpriteBatch sb) {
-        super.renderInnerElements(sb);
-        imageButton.tryRender(sb);
-        formEditor.tryRender(sb);
-        upgradeToggle.tryRender(sb);
-        previewCard.render(sb);
-    }
-
-    public void updateInnerElements() {
-        super.updateInnerElements();
-        imageButton.tryUpdate();
-        formEditor.tryUpdate();
-        upgradeToggle.tryUpdate();
-        previewCard.update();
-        previewCard.hb.update();
-        if (previewCard.hb.hovered) {
-            EUITooltip.queueTooltips(previewCard);
-        }
-    }
-
-    protected void updateVariant() {
-        formEditor.refresh();
-    }
-
     protected void rebuildItem() {
         previewCard = getBuilder().createImplWithForms(currentBuilder, 0, false);
 
@@ -147,29 +148,12 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         previewCard.current_y = previewCard.target_y = CARD_Y;
     }
 
-    protected void complete() {
-        super.complete();
-        invalidateItems();
-        if (loadedImage != null) {
-            loadedImage.dispose();
-        }
-    }
-
-    protected void editImage() {
-        Texture image = loadedImage;
-        if (image == null) {
-            ColoredTexture portrait = getBuilder().portraitImage;
-            if (portrait != null) {
-                image = portrait.texture;
-            }
-        }
-        currentDialog = PCLCustomImageEffect.forCard(image)
-                .addCallback(pixmap -> {
-                            if (pixmap != null) {
-                                setLoadedImage(new Texture(pixmap));
-                            }
-                        }
-                );
+    public void renderInnerElements(SpriteBatch sb) {
+        super.renderInnerElements(sb);
+        imageButton.tryRender(sb);
+        formEditor.tryRender(sb);
+        upgradeToggle.tryRender(sb);
+        previewCard.render(sb);
     }
 
     public void setLoadedImage(Texture texture) {
@@ -183,6 +167,22 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
         modifyBuilder(__ -> {
         });
+    }
+
+    public void updateInnerElements() {
+        super.updateInnerElements();
+        imageButton.tryUpdate();
+        formEditor.tryUpdate();
+        upgradeToggle.tryUpdate();
+        previewCard.update();
+        previewCard.hb.update();
+        if (previewCard.hb.hovered) {
+            EUITooltip.queueTooltips(previewCard);
+        }
+    }
+
+    protected void updateVariant() {
+        formEditor.refresh();
     }
 
 }

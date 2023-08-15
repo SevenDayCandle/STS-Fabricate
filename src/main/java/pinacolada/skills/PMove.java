@@ -599,13 +599,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (this.vfxFunc != null) {
-            PCLEffects.Queue.add(vfxFunc.invoke(info));
-        }
-        super.use(info, order);
-    }
-
     public PMove<T> setVFX(EffekseerEFK efk) {
         this.vfxFunc = (info) -> EffekseerEFK.efk(efk, info.source != null ? info.source.hb : AbstractDungeon.player.hb);
         return this;
@@ -614,6 +607,13 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     public PMove<T> setVFX(FuncT1<AbstractGameEffect, PCLUseInfo> vfxFunc) {
         this.vfxFunc = vfxFunc;
         return this;
+    }
+
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (this.vfxFunc != null) {
+            PCLEffects.Queue.add(vfxFunc.invoke(info));
+        }
+        super.use(info, order);
     }
 
 }

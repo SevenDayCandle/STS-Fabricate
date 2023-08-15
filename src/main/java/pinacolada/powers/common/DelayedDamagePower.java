@@ -28,13 +28,25 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
     }
 
     @Override
-    public int getHealthBarAmount() {
-        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
+    public void atEndOfTurn(boolean isPlayer) {
+        int damageAmount = owner.isPlayer ? Math.max(0, Math.min(GameUtilities.getHP(owner, true, true) - 1, amount)) : amount;
+        PCLActions.bottom.takeDamage(owner, damageAmount, attackEffect);
+        removePower();
+
+        playApplyPowerSfx();
+        flashWithoutSound();
+
+        super.atEndOfTurn(isPlayer);
     }
 
     @Override
     public Color getColor() {
         return healthBarColor;
+    }
+
+    @Override
+    public int getHealthBarAmount() {
+        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override
@@ -45,17 +57,5 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
     @Override
     public void playApplyPowerSfx() {
         PCLSFX.play(PCLSFX.HEART_BEAT, 1.25f, 1.35f, 0.9f);
-    }
-
-    @Override
-    public void atEndOfTurn(boolean isPlayer) {
-        int damageAmount = owner.isPlayer ? Math.max(0, Math.min(GameUtilities.getHP(owner, true, true) - 1, amount)) : amount;
-        PCLActions.bottom.takeDamage(owner, damageAmount, attackEffect);
-        removePower();
-
-        playApplyPowerSfx();
-        flashWithoutSound();
-
-        super.atEndOfTurn(isPlayer);
     }
 }

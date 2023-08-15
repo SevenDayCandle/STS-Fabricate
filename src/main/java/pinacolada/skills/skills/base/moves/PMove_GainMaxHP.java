@@ -28,29 +28,18 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return amount < 0;
-    }
-
-    @Override
     public String gainText() {
         return PGR.core.tooltips.maxHP.title;
     }
 
     @Override
-    public boolean isMetascaling() {
-        return true;
+    public boolean isDetrimental() {
+        return amount < 0;
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        if (amount < 0) {
-            AbstractDungeon.player.decreaseMaxHealth(-amount);
-        }
-        else {
-            AbstractDungeon.player.increaseMaxHp(amount, true);
-        }
+    public boolean isMetascaling() {
+        return true;
     }
 
     @Override
@@ -62,5 +51,16 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
             info.source.increaseMaxHp(amount, true);
         }
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        if (amount < 0) {
+            AbstractDungeon.player.decreaseMaxHealth(-amount);
+        }
+        else {
+            AbstractDungeon.player.increaseMaxHp(amount, true);
+        }
     }
 }

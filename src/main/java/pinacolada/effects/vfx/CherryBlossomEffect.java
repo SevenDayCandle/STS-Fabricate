@@ -13,6 +13,12 @@ public class CherryBlossomEffect extends PCLEffect {
         this.duration = 2.0F;
     }
 
+    public void dispose() {
+    }
+
+    public void render(SpriteBatch sb) {
+    }
+
     @Override
     public void update() {
         this.duration -= Gdx.graphics.getDeltaTime();
@@ -26,11 +32,5 @@ public class CherryBlossomEffect extends PCLEffect {
         if (this.duration < 0.0F) {
             this.isDone = true;
         }
-    }
-
-    public void render(SpriteBatch sb) {
-    }
-
-    public void dispose() {
     }
 }

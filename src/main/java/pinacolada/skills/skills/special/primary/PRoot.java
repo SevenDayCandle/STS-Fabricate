@@ -35,6 +35,11 @@ public class PRoot extends PPrimary<PField_Empty> {
         return EUIRM.strings.ui_na;
     }
 
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
+    }
+
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
     @Override
@@ -51,19 +56,14 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return !(source instanceof AbstractRelic) || !(skill instanceof PDelegateCond);
+    }
+
+    @Override
     public void triggerOnStartOfBattleForRelic() {
         if (childEffect != null) {
             childEffect.use(generateInfo(null), PCLActions.bottom);
         }
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
-    }
-
-    @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(source instanceof AbstractRelic) || !(skill instanceof PDelegateCond);
     }
 }

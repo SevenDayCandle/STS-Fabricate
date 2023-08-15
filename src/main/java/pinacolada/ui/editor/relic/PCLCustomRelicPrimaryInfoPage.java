@@ -143,6 +143,15 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
+    }
+
+    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
                 idInput.makeTour(true),
@@ -150,15 +159,6 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 languageDropdown.makeTour(true),
                 tierDropdown.makeTour(true),
                 sfxDropdown.makeTour(true));
-    }
-
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
     }
 
     @Override

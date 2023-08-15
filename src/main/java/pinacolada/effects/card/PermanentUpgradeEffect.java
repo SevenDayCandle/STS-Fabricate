@@ -24,6 +24,10 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     }
 
     @Override
+    public void dispose() {
+    }
+
+    @Override
     protected void firstUpdate(float deltaTime) {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
@@ -61,17 +65,6 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     public void render(SpriteBatch sb) {
     }
 
-    @Override
-    public void dispose() {
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            complete(card);
-        }
-    }
-
     public PermanentUpgradeEffect setFilter(FuncT1<Boolean, AbstractCard> filter) {
         this.filter = filter;
 
@@ -82,5 +75,12 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
         this.selection = selection;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            complete(card);
+        }
     }
 }

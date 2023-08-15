@@ -49,6 +49,16 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     }
 
     @Override
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
+        return SelectFromPile::new;
+    }
+
+    @Override
+    public EUIKeywordTooltip getActionTooltip() {
+        return PGR.core.tooltips.transform;
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
     }
@@ -58,16 +68,6 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
         return TEXT.act_transform(
                 useParent ? getInheritedThemString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getCardIDString()
         );
-    }
-
-    @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
-        return SelectFromPile::new;
-    }
-
-    @Override
-    public EUIKeywordTooltip getActionTooltip() {
-        return PGR.core.tooltips.transform;
     }
 
     private void transformImpl(AbstractCard c) {

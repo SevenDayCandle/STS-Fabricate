@@ -41,13 +41,13 @@ public class PCLAugmentRenderable implements KeywordProvider {
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
     }
 
     public void initializeTips() {

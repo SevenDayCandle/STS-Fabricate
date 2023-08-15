@@ -31,13 +31,13 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(TEXT.subjects_target, TEXT.subjects_damage);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return sumTargets(info, t -> t instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) t).getDamage(true) : 0);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return sumTargets(info, t -> t instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) t).getDamage(true) : 0);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(TEXT.subjects_target, TEXT.subjects_damage);
     }
 
     @Override

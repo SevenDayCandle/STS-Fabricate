@@ -31,6 +31,11 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     }
 
     @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return amount;
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(TEXT.cedit_repeat, TEXT.subjects_x);
     }
@@ -54,13 +59,6 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     public void refresh(PCLUseInfo info, boolean conditionMet) {
     }
 
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (childEffect != null) {
-            useImpl(info, order);
-        }
-    }
-
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (shouldPay && childEffect != null) {
             useImpl(info, order);
@@ -68,8 +66,10 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return amount;
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (childEffect != null) {
+            useImpl(info, order);
+        }
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order) {

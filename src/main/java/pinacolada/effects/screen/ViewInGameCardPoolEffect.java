@@ -141,6 +141,13 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         }
     }
 
+    public void refreshCountText() {
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        if (onRefresh != null) {
+            onRefresh.invoke();
+        }
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
@@ -161,37 +168,6 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         }
         randomSelection.tryRender(sb);
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
-        if (shouldDoStandardUpdate) {
-            EUI.openFiltersButton.tryUpdate();
-            EUI.customHeader.update();
-            grid.tryUpdate();
-            upgradeToggle.updateImpl();
-            selectAllButton.tryUpdate();
-            deselectAllButton.tryUpdate();
-            selectRandomButton.tryUpdate();
-            instructions.tryUpdate();
-            selectedCount.tryUpdate();
-
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openFiltersButton.hb.hovered) {
-                return;
-            }
-
-            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
-                complete(this);
-            }
-        }
-    }
-
-    public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
-        if (onRefresh != null) {
-            onRefresh.invoke();
-        }
     }
 
     private void selectRandomCards(PCLRandomCardAmountDialog dialog) {
@@ -303,6 +279,30 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             if (upgrade != null) {
                 upgrade.transparency = upgrade.targetTransparency = c.targetTransparency;
                 upgrade.update();
+            }
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            EUI.openFiltersButton.tryUpdate();
+            EUI.customHeader.update();
+            grid.tryUpdate();
+            upgradeToggle.updateImpl();
+            selectAllButton.tryUpdate();
+            deselectAllButton.tryUpdate();
+            selectRandomButton.tryUpdate();
+            instructions.tryUpdate();
+            selectedCount.tryUpdate();
+
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openFiltersButton.hb.hovered) {
+                return;
+            }
+
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
+                complete(this);
             }
         }
     }

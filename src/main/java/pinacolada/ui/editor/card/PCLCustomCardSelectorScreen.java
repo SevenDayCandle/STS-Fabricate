@@ -25,7 +25,6 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;

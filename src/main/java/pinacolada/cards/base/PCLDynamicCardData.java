@@ -222,11 +222,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         return powers;
     }
 
-    @Override
-    public PCLDynamicCardData makeCopy() {
-        return new PCLDynamicCardData(this);
-    }
-
     public CardStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -242,21 +237,9 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         return create(upgrade);
     }
 
-    public PCLDynamicCardData setColor(AbstractCard.CardColor color) {
-        super.setColor(color);
-        return this;
-    }
-
-    public PCLDynamicCardData setFlags(List<CardFlag> flags) {
-        this.flags = flags == null || flags.isEmpty() ? null : new ArrayList<>(flags);
-
-        return this;
-    }
-
-    public PCLDynamicCardData setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-
-        return this;
+    @Override
+    public PCLDynamicCardData makeCopy() {
+        return new PCLDynamicCardData(this);
     }
 
     public PCLDynamicCardData removePMove(PSkill<?> effect) {
@@ -293,8 +276,19 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         return this;
     }
 
+    public PCLDynamicCardData setColor(AbstractCard.CardColor color) {
+        super.setColor(color);
+        return this;
+    }
+
     public PCLDynamicCardData setDescription(String description) {
         this.strings.DESCRIPTION = description;
+
+        return this;
+    }
+
+    public PCLDynamicCardData setFlags(List<CardFlag> flags) {
+        this.flags = flags == null || flags.isEmpty() ? null : new ArrayList<>(flags);
 
         return this;
     }
@@ -313,6 +307,12 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
 
     public PCLDynamicCardData setImage(ColoredTexture portraitImage) {
         this.portraitImage = portraitImage;
+
+        return this;
+    }
+
+    public PCLDynamicCardData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
 
         return this;
     }

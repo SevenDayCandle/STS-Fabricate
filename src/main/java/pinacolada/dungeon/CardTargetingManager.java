@@ -30,8 +30,55 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
     private AbstractCreature hovered = null;
     private PCLCard card;
 
+    @Override
+    public void clearHovered() {
+        // Do NOT clear the hovered target in this method because we need to obtain it later
+    }
+
+    @Override
+    public AbstractCreature getHovered() {
+        return hovered;
+    }
+
+    @Override
+    public boolean hasTarget() {
+        // Only single targeting requires an actual target
+        return card != null && (hovered != null || isNonTargeting());
+    }
+
     protected boolean isNonTargeting() {
         return !card.pclTarget.targetsSingle() && card.type != PCLEnum.CardType.SUMMON;
+    }
+
+    @Override
+    public void renderReticle(SpriteBatch sb) {
+        if (card != null) {
+            if (hovered != null && (card.type == PCLEnum.CardType.SUMMON || !card.pclTarget.targetsMulti())) {
+                hovered.renderReticle(sb);
+            }
+            else if (isNonTargeting()) {
+                if (card.pclTarget.targetsSelf()) {
+                    AbstractDungeon.player.renderReticle(sb);
+                }
+                if (card.pclTarget.targetsAllies()) {
+                    for (PCLCardAlly m : CombatManager.summons.summons) {
+                        if (m.hasCard()) {
+                            m.renderReticle(sb);
+                        }
+                    }
+                }
+                if (card.pclTarget.targetsEnemies()) {
+                    final AbstractRoom room = GameUtilities.getCurrentRoom();
+                    if (room != null) {
+                        for (AbstractMonster m : room.monsters.monsters) {
+                            if (!GameUtilities.isDeadOrEscaped(m)) {
+                                m.renderReticle(sb);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void setTargeting(PCLCard card) {
@@ -111,53 +158,6 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
             if (card.pclTarget.targetsSelf() && (AbstractDungeon.player.hb.hovered || !card.pclTarget.targetsSingle())) {
                 hovered = AbstractDungeon.player;
                 card.refresh(hovered);
-            }
-        }
-    }
-
-    @Override
-    public AbstractCreature getHovered() {
-        return hovered;
-    }
-
-    @Override
-    public void clearHovered() {
-        // Do NOT clear the hovered target in this method because we need to obtain it later
-    }
-
-    @Override
-    public boolean hasTarget() {
-        // Only single targeting requires an actual target
-        return card != null && (hovered != null || isNonTargeting());
-    }
-
-    @Override
-    public void renderReticle(SpriteBatch sb) {
-        if (card != null) {
-            if (hovered != null && (card.type == PCLEnum.CardType.SUMMON || !card.pclTarget.targetsMulti())) {
-                hovered.renderReticle(sb);
-            }
-            else if (isNonTargeting()) {
-                if (card.pclTarget.targetsSelf()) {
-                    AbstractDungeon.player.renderReticle(sb);
-                }
-                if (card.pclTarget.targetsAllies()) {
-                    for (PCLCardAlly m : CombatManager.summons.summons) {
-                        if (m.hasCard()) {
-                            m.renderReticle(sb);
-                        }
-                    }
-                }
-                if (card.pclTarget.targetsEnemies()) {
-                    final AbstractRoom room = GameUtilities.getCurrentRoom();
-                    if (room != null) {
-                        for (AbstractMonster m : room.monsters.monsters) {
-                            if (!GameUtilities.isDeadOrEscaped(m)) {
-                                m.renderReticle(sb);
-                            }
-                        }
-                    }
-                }
             }
         }
     }

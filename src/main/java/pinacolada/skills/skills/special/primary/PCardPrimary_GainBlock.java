@@ -69,20 +69,6 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public PCardPrimary_GainBlock makeCopy() {
-        return (PCardPrimary_GainBlock) super.makeCopy();
-    }
-
-    @Override
-    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
-        boolean dim = ally.shouldDim();
-        TextureRegion icon = PGR.core.tooltips.block.icon;
-        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
-        return startY + icon.getRegionHeight() + Settings.scale * 10f;
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
@@ -107,6 +93,20 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         return skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PBlockTrait;
+    }
+
+    @Override
+    public PCardPrimary_GainBlock makeCopy() {
+        return (PCardPrimary_GainBlock) super.makeCopy();
+    }
+
+    @Override
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        boolean dim = ally.shouldDim();
+        TextureRegion icon = PGR.core.tooltips.block.icon;
+        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
+        return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 
     public PCardPrimary_GainBlock setBonus(PCond<?> mod, int amount) {

@@ -29,14 +29,14 @@ public class PDelay_StartOfTurn extends PDelay {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return (amount <= 0 ? getTiming().getDesc() :
-                (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)));
+    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description) {
+        return DelayUse.turnStart(amount, info, childAction, title, description);
     }
 
     @Override
-    public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description) {
-        return DelayUse.turnStart(amount, info, childAction, title, description);
+    public String getSubText(PCLCardTarget perspective) {
+        return (amount <= 0 ? getTiming().getDesc() :
+                (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)));
     }
 
     @Override

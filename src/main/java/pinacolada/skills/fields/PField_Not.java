@@ -20,14 +20,6 @@ public class PField_Not extends PField {
         return other instanceof PField_Not && not == ((PField_Not) other).not;
     }
 
-    @Override
-    public PField_Not makeCopy() {
-        return new PField_Not().setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-    }
-
     public String getThresholdPercentRawString(String subject) {
         return getThresholdRawString(skill.getAmountRawString() + "%", subject, skill.baseAmount);
     }
@@ -47,6 +39,11 @@ public class PField_Not extends PField {
         return EUIRM.strings.numNoun(valueStr + "+", subject);
     }
 
+    @Override
+    public PField_Not makeCopy() {
+        return new PField_Not().setNot(not);
+    }
+
     public void registerNotBoolean(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_not, v -> not = v, not);
     }
@@ -58,5 +55,8 @@ public class PField_Not extends PField {
     public PField_Not setNot(boolean value) {
         this.not = value;
         return this;
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 }

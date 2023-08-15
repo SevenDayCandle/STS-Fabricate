@@ -32,6 +32,15 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> {
+            for (PCLCardTag tag : fields.addTags) {
+                order.modifyTag(c, tag, amount, !fields.not);
+            }
+        };
+    }
+
+    @Override
     public String getNumericalObjectText() {
         return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getObjectText()) : getObjectText();
     }
@@ -39,15 +48,6 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     @Override
     public String getObjectSampleText() {
         return TEXT.cedit_tags;
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> {
-            for (PCLCardTag tag : fields.addTags) {
-                order.modifyTag(c, tag, amount, !fields.not);
-            }
-        };
     }
 
     @Override

@@ -55,6 +55,10 @@ public class PointerToken extends PCLTextToken {
         return super.getAdditionalWidth(context);
     }
 
+    private int getMoveAmount() {
+        return move.getAttribute(variableID);
+    }
+
     @Override
     protected float getWidth(BitmapFont font, String text) {
         return super.getWidth(font, coloredString.text);
@@ -69,9 +73,5 @@ public class PointerToken extends PCLTextToken {
         }
 
         super.render(sb, context, coloredString);
-    }
-
-    private int getMoveAmount() {
-        return move.getAttribute(variableID);
     }
 }

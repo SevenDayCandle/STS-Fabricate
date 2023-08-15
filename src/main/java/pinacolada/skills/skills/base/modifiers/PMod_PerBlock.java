@@ -27,13 +27,13 @@ public class PMod_PerBlock extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(TEXT.subjects_card, PGR.core.tooltips.block.title);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return (sourceCard != null ? sourceCard.block / PGR.dungeon.getDivisor() : 0);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return (sourceCard != null ? sourceCard.block / PGR.dungeon.getDivisor() : 0);
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(TEXT.subjects_card, PGR.core.tooltips.block.title);
     }
 
     @Override

@@ -56,6 +56,11 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return description;
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return EUIUtils.format(getSubText(perspective), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
@@ -74,10 +79,5 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         onUse.invoke(this, info, order);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return description;
     }
 }

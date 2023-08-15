@@ -42,6 +42,11 @@ public enum PCLIntentType implements TooltipProvider {
     }
 
     @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
+    @Override
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Attack:
@@ -58,11 +63,6 @@ public enum PCLIntentType implements TooltipProvider {
                 return PGR.core.tooltips.stun;
         }
         return null;
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
     }
 
     public boolean hasIntent(AbstractMonster creature) {

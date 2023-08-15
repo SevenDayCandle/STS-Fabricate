@@ -39,6 +39,12 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString())));
+    }
+
+    @Override
     public boolean meetsCondition(PCLUseInfo info) {
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
@@ -49,12 +55,6 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString())));
     }
 
     abstract public EUIKeywordTooltip getActionTooltip();

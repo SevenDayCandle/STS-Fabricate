@@ -37,48 +37,9 @@ public class FadingParticleEffect extends VisualEffect {
         free();
     }
 
-    public FadingParticleEffect setColor(Color color) {
-        super.setColor(color);
-        this.targetColor.set(this.color);
-        return this;
-    }
-
-    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
-        super.setColor(r, g, b, a);
-        this.targetColor.set(this.color);
-        return this;
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (blendingMode != PCLRenderHelpers.BlendingMode.Normal) {
-            blendingMode.apply(sb);
-            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
-            PCLRenderHelpers.BlendingMode.Normal.apply(sb);
-        }
-        else {
-            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
-        }
-    }
-
     @Override
     public void dispose() {
 
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        super.updateInternal(deltaTime);
-        updateParameters(deltaTime);
-        EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
-
-        final float halfDuration = startingDuration * 0.5f;
-        if (duration > halfDuration) {
-            color.a = Interpolation.fade.apply(alpha, 0f, (duration - halfDuration) / halfDuration);
-        }
-        else {
-            color.a = Interpolation.fade.apply(0f, alpha, duration / halfDuration);
-        }
     }
 
     protected void free() {
@@ -95,8 +56,39 @@ public class FadingParticleEffect extends VisualEffect {
         this.targetColor.set(this.color);
     }
 
+    @Override
+    public void render(SpriteBatch sb) {
+        if (blendingMode != PCLRenderHelpers.BlendingMode.Normal) {
+            blendingMode.apply(sb);
+            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
+            PCLRenderHelpers.BlendingMode.Normal.apply(sb);
+        }
+        else {
+            PCLRenderHelpers.drawCentered(sb, color, texture, x, y, texture.getWidth(), texture.getHeight(), scale, rotation, flipX, flipY);
+        }
+    }
+
+    public FadingParticleEffect setAcceleration(float aX, float aY) {
+        this.aX = aX;
+        this.aY = aY;
+
+        return this;
+    }
+
     public FadingParticleEffect setBlendingMode(PCLRenderHelpers.BlendingMode blendingMode) {
         this.blendingMode = blendingMode;
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Color color) {
+        super.setColor(color);
+        this.targetColor.set(this.color);
+        return this;
+    }
+
+    public FadingParticleEffect setColor(Float r, Float g, Float b, Float a) {
+        super.setColor(r, g, b, a);
+        this.targetColor.set(this.color);
         return this;
     }
 
@@ -107,32 +99,6 @@ public class FadingParticleEffect extends VisualEffect {
         return this;
     }
 
-    public FadingParticleEffect setOpacity(float alpha) {
-        this.alpha = alpha;
-        this.color.a = this.alpha;
-
-        return this;
-    }
-
-    public FadingParticleEffect setRotation(float startRotation) {
-        this.rotation = startRotation;
-
-        return this;
-    }
-
-    public FadingParticleEffect setScale(float scale) {
-        this.scale = scale;
-
-        return this;
-    }
-
-    public FadingParticleEffect setAcceleration(float aX, float aY) {
-        this.aX = aX;
-        this.aY = aY;
-
-        return this;
-    }
-
     public FadingParticleEffect setFlip(boolean flipX, boolean flipY) {
         this.flipX = flipX;
         this.flipY = flipY;
@@ -140,9 +106,22 @@ public class FadingParticleEffect extends VisualEffect {
         return this;
     }
 
+    public FadingParticleEffect setOpacity(float alpha) {
+        this.alpha = alpha;
+        this.color.a = this.alpha;
+
+        return this;
+    }
+
     public FadingParticleEffect setPosition(float x, float y) {
         this.x = x;
         this.y = y;
+
+        return this;
+    }
+
+    public FadingParticleEffect setRotation(float startRotation) {
+        this.rotation = startRotation;
 
         return this;
     }
@@ -165,6 +144,12 @@ public class FadingParticleEffect extends VisualEffect {
     public FadingParticleEffect setRotationTarget(float startRotation, float target, float speed) {
         this.rotation = startRotation;
         this.vRot = (target - startRotation) / speed;
+
+        return this;
+    }
+
+    public FadingParticleEffect setScale(float scale) {
+        this.scale = scale;
 
         return this;
     }
@@ -208,6 +193,21 @@ public class FadingParticleEffect extends VisualEffect {
         this.vY = MathUtils.sin(angle) * speed;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
+        updateParameters(deltaTime);
+        EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
+
+        final float halfDuration = startingDuration * 0.5f;
+        if (duration > halfDuration) {
+            color.a = Interpolation.fade.apply(alpha, 0f, (duration - halfDuration) / halfDuration);
+        }
+        else {
+            color.a = Interpolation.fade.apply(0f, alpha, duration / halfDuration);
+        }
     }
 
     protected static class ParticlePool extends Pool<FadingParticleEffect> {

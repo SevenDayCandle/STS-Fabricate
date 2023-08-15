@@ -32,15 +32,13 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return amount < 0;
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyDamage(c, amount, fields.forced, !fields.not, fields.or);
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
+    public String getObjectText() {
+        return TEXT.subjects_damage;
     }
 
     @Override
@@ -56,12 +54,14 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyDamage(c, amount, fields.forced, !fields.not, fields.or);
+    public boolean isDetrimental() {
+        return amount < 0;
     }
 
     @Override
-    public String getObjectText() {
-        return TEXT.subjects_damage;
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
     }
 }

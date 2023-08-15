@@ -191,14 +191,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     }
 
     @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
-                targetDropdown.makeTour(true),
-                tagsDropdown.makeTour(true),
-                upgradeLabel.makeTour(true));
-    }
-
-    @Override
     public TextureCache getTextureCache() {
         return PCLCoreImages.Menu.editorAttribute;
     }
@@ -206,6 +198,14 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return header.text;
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
+                targetDropdown.makeTour(true),
+                tagsDropdown.makeTour(true),
+                upgradeLabel.makeTour(true));
     }
 
     @Override

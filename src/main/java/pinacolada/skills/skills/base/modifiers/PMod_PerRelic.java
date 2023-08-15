@@ -28,13 +28,8 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return (EUIUtils.count(AbstractDungeon.player.relics, r -> fields.getFullRelicFilter().invoke(r)));
     }
 
     @Override
@@ -43,7 +38,12 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return (EUIUtils.count(AbstractDungeon.player.relics, r -> fields.getFullRelicFilter().invoke(r)));
+    public String getSubText(PCLCardTarget perspective) {
+        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
     }
 }

@@ -81,6 +81,16 @@ public abstract class PCLCardRewardAction extends EUIBase {
         }
     }
 
+    protected void takeReward() {
+        AbstractDungeon.combatRewardScreen.rewards.remove(rewardItem);
+        AbstractDungeon.combatRewardScreen.positionRewards();
+        if (AbstractDungeon.combatRewardScreen.rewards.isEmpty()) {
+            AbstractDungeon.combatRewardScreen.hasTakenAll = true;
+            AbstractDungeon.overlayMenu.proceedButton.show();
+        }
+        shouldClose = true;
+    }
+
     @Override
     public void updateImpl() {
         for (PCLCardRewardActionButton banButton : buttons) {
@@ -90,16 +100,6 @@ public abstract class PCLCardRewardAction extends EUIBase {
             shouldClose = false;
             AbstractDungeon.closeCurrentScreen();
         }
-    }
-
-    protected void takeReward() {
-        AbstractDungeon.combatRewardScreen.rewards.remove(rewardItem);
-        AbstractDungeon.combatRewardScreen.positionRewards();
-        if (AbstractDungeon.combatRewardScreen.rewards.isEmpty()) {
-            AbstractDungeon.combatRewardScreen.hasTakenAll = true;
-            AbstractDungeon.overlayMenu.proceedButton.show();
-        }
-        shouldClose = true;
     }
 
     abstract AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex);

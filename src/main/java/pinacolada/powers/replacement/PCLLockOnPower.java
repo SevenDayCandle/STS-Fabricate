@@ -39,13 +39,6 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
-    }
-
-    @Override
     public void onInitialApplication() {
         super.onInitialApplication();
 
@@ -55,5 +48,12 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     @Override
     public float onOrbApplyLockOn(AbstractCreature target, float dmg) {
         return dmg * getOrbMultiplier(owner.isPlayer);
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+
+        CombatManager.unsubscribe(this);
     }
 }

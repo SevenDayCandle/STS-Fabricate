@@ -17,19 +17,19 @@ public class SpawnRelicEffect extends AbstractGameEffect {
         this.y = y;
     }
 
-    public void update() {
-        if (!this.isDone) {
-            AbstractDungeon.getCurrRoom().spawnRelicAndObtain(x, y, relic);
-        }
+    public void dispose() {
 
-        this.isDone = true;
     }
 
     public void render(SpriteBatch sb) {
 
     }
 
-    public void dispose() {
+    public void update() {
+        if (!this.isDone) {
+            AbstractDungeon.getCurrRoom().spawnRelicAndObtain(x, y, relic);
+        }
 
+        this.isDone = true;
     }
 }

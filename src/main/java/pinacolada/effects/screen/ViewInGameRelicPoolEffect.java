@@ -138,6 +138,13 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         }
     }
 
+    public void refreshCountText() {
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
+        if (onRefresh != null) {
+            onRefresh.invoke();
+        }
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
@@ -157,36 +164,6 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
             sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         }
         randomSelection.tryRender(sb);
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate();
-        if (shouldDoStandardUpdate) {
-            EUI.openFiltersButton.tryUpdate();
-            EUI.relicHeader.update();
-            grid.tryUpdate();
-            upgradeToggle.updateImpl();
-            selectAllButton.tryUpdate();
-            deselectAllButton.tryUpdate();
-            selectRandomButton.tryUpdate();
-            selectedCount.tryUpdate();
-
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.openFiltersButton.hb.hovered) {
-                return;
-            }
-
-            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
-                complete(this);
-            }
-        }
-    }
-
-    public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
-        if (onRefresh != null) {
-            onRefresh.invoke();
-        }
     }
 
     private void selectRandomRelics(PCLRandomRelicAmountDialog dialog) {
@@ -276,6 +253,29 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = value;
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            EUI.openFiltersButton.tryUpdate();
+            EUI.relicHeader.update();
+            grid.tryUpdate();
+            upgradeToggle.updateImpl();
+            selectAllButton.tryUpdate();
+            deselectAllButton.tryUpdate();
+            selectRandomButton.tryUpdate();
+            selectedCount.tryUpdate();
+
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.openFiltersButton.hb.hovered) {
+                return;
+            }
+
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
+                complete(this);
+            }
+        }
     }
 
     private void updateRelicAlpha(RelicInfo c) {

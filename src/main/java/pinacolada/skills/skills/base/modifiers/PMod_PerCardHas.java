@@ -41,25 +41,25 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_xPerYZ(TEXT.subjects_x, TEXT.subjects_card, PCLCoreStrings.past(getActionTooltip()));
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-    }
-
-    @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         return EUIUtils.count(fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn(),
                 c -> fields.getFullCardFilter().invoke(c));
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.cond_xPerYZ(TEXT.subjects_x, TEXT.subjects_card, PCLCoreStrings.past(getActionTooltip()));
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         return fields.getFullCardString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
 
     abstract public EUIKeywordTooltip getActionTooltip();

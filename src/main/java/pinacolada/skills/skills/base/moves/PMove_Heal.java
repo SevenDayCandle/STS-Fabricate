@@ -39,6 +39,14 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (isSelfOnlyTarget()) {
+            return TEXT.act_heal(getAmountRawString());
+        }
+        return TEXT.act_healOn(getAmountRawString(), getTargetStringPerspective(perspective));
+    }
+
+    @Override
     public boolean isDetrimental() {
         return target.targetsEnemies();
     }
@@ -49,24 +57,16 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        AbstractDungeon.player.heal(amount);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (isSelfOnlyTarget()) {
-            return TEXT.act_heal(getAmountRawString());
-        }
-        return TEXT.act_healOn(getAmountRawString(), getTargetStringPerspective(perspective));
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             order.heal(info.source, t, amount);
         }
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        AbstractDungeon.player.heal(amount);
     }
 }

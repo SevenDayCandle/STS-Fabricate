@@ -36,15 +36,13 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return amount < 0;
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyBlock(c, amount, fields.forced, !fields.not, fields.or);
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
-        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
+    public String getObjectText() {
+        return PGR.core.tooltips.block.title;
     }
 
     @Override
@@ -60,12 +58,14 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyBlock(c, amount, fields.forced, !fields.not, fields.or);
+    public boolean isDetrimental() {
+        return amount < 0;
     }
 
     @Override
-    public String getObjectText() {
-        return PGR.core.tooltips.block.title;
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
     }
 }

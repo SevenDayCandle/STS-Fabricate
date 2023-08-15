@@ -37,18 +37,18 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return true;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return PGR.core.tooltips.unplayable.title;
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
+    public String getSubDescText(PCLCardTarget perspective) {
+        return PGR.core.tooltips.unplayable.title;
+    }
 
+    @Override
+    public String getSubSampleText() {
+        return PGR.core.tooltips.unplayable.title;
     }
 
     @Override
@@ -62,14 +62,13 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
         return getSubDescText(perspective);
     }
 
-
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return PGR.core.tooltips.unplayable.title;
+    public boolean isDetrimental() {
+        return true;
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.unplayable.title;
+    public void use(PCLUseInfo info, PCLActions order) {
+
     }
 }

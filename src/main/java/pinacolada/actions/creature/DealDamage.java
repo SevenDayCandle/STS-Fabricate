@@ -110,54 +110,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction()) {
-            complete(null);
-            return;
-        }
-
-        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
-
-        if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f) {
-            addDuration(attackVFX.damageDelay);
-            attackVFX.attack(source, target, pitchMin, pitchMax, vfxColor);
-            hasPlayedEffect = true;
-        }
-
-        if (tickDuration(deltaTime)) {
-            if (applyPowers) {
-                if (card != null) {
-                    card.calculateCardDamage(GameUtilities.asMonster(target));
-                    this.info.output = card.damage;
-                }
-                else {
-                    this.info.applyPowers(this.info.owner, target);
-                }
-            }
-
-            if (orb != null) {
-                this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
-            }
-
-            if (!canKill) {
-                info.output = Math.max(0, Math.min(GameUtilities.getHP(target, true, true) - 1, info.output));
-            }
-            DamageHelper.applyTint(target, enemyTint, attackVFX);
-            DamageHelper.dealDamage(target, info, bypassBlock, bypassThorns);
-
-            if (GameUtilities.areMonstersBasicallyDead()) {
-                GameUtilities.clearPostCombatActions();
-            }
-
-            if (!this.skipWait && !Settings.FAST_MODE) {
-                PCLActions.top.wait(0.1f);
-            }
-
-            complete(target);
-        }
-    }
-
     public DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
         this.onDamageEffect = (s, m) -> EffekseerEFK.efk(effekseerKey, m.hb).duration;
         return this;
@@ -220,5 +172,53 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     @Override
     protected boolean shouldCancelAction() {
         return this.target == null || (this.source != null && this.source.isDying) || (this.info.owner != null && (this.info.owner.isDying || this.info.owner.halfDead));
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction()) {
+            complete(null);
+            return;
+        }
+
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
+
+        if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f) {
+            addDuration(attackVFX.damageDelay);
+            attackVFX.attack(source, target, pitchMin, pitchMax, vfxColor);
+            hasPlayedEffect = true;
+        }
+
+        if (tickDuration(deltaTime)) {
+            if (applyPowers) {
+                if (card != null) {
+                    card.calculateCardDamage(GameUtilities.asMonster(target));
+                    this.info.output = card.damage;
+                }
+                else {
+                    this.info.applyPowers(this.info.owner, target);
+                }
+            }
+
+            if (orb != null) {
+                this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
+            }
+
+            if (!canKill) {
+                info.output = Math.max(0, Math.min(GameUtilities.getHP(target, true, true) - 1, info.output));
+            }
+            DamageHelper.applyTint(target, enemyTint, attackVFX);
+            DamageHelper.dealDamage(target, info, bypassBlock, bypassThorns);
+
+            if (GameUtilities.areMonstersBasicallyDead()) {
+                GameUtilities.clearPostCombatActions();
+            }
+
+            if (!this.skipWait && !Settings.FAST_MODE) {
+                PCLActions.top.wait(0.1f);
+            }
+
+            complete(target);
+        }
     }
 }

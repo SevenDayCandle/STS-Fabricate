@@ -49,20 +49,6 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-        CombatManager.unsubscribe(this);
-
-        AbstractMonster m = EUIUtils.safeCast(this.owner, AbstractMonster.class);
-        if (m != null && this.moveIntent != null) {
-            m.setMove(this.moveByte, this.moveIntent, this.lastDamage, this.lastMultiplier, this.lastIsMultiDamage);
-            m.createIntent();
-            m.applyPowers();
-        }
-
-    }
-
-    @Override
     public void onInitialApplication() {
         super.onInitialApplication();
         CombatManager.subscribe(this);
@@ -106,5 +92,19 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
             PCLActions.bottom.dealDamage(m, AbstractDungeon.player, m.damage.get(0).base, m.damage.get(0).type, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
         }
         return false;
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        CombatManager.unsubscribe(this);
+
+        AbstractMonster m = EUIUtils.safeCast(this.owner, AbstractMonster.class);
+        if (m != null && this.moveIntent != null) {
+            m.setMove(this.moveByte, this.moveIntent, this.lastDamage, this.lastMultiplier, this.lastIsMultiDamage);
+            m.createIntent();
+            m.applyPowers();
+        }
+
     }
 }

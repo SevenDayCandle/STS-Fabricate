@@ -46,34 +46,6 @@ public abstract class PCLStance extends AbstractStance {
         return EUIUtils.format(strings.DESCRIPTION[0], args);
     }
 
-    public void onRefreshStance() {
-
-    }
-
-    protected void queueAura() {
-        PCLEffects.Queue.add(new StanceAura(getAuraColor()));
-    }
-
-    protected void queueParticle() {
-        PCLEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
-    }
-
-    protected boolean tryApplyStance(String stanceID) {
-        String current = CombatManager.getCombatData(PCLStance.class.getSimpleName(), null);
-        if (Objects.equals(stanceID, current)) {
-            return false;
-        }
-
-        CombatManager.setCombatData(PCLStance.class.getSimpleName(), stanceID);
-        return true;
-    }
-
-    @Override
-    public void updateDescription() {
-        final StanceStrings ms = PGR.getStanceString(STANCE_ID);
-        description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, ms.DESCRIPTION);
-    }
-
     @Override
     public void onEnterStance() {
         super.onEnterStance();
@@ -94,6 +66,36 @@ public abstract class PCLStance extends AbstractStance {
         this.stopIdleSfx();
     }
 
+    public void onRefreshStance() {
+
+    }
+
+    protected void queueAura() {
+        PCLEffects.Queue.add(new StanceAura(getAuraColor()));
+    }
+
+    protected void queueParticle() {
+        PCLEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
+    }
+
+    @Override
+    public void stopIdleSfx() {
+        if (sfxId != -1L) {
+            CardCrawlGame.sound.stop("STANCE_LOOP_CALM", sfxId);
+            sfxId = -1L;
+        }
+    }
+
+    protected boolean tryApplyStance(String stanceID) {
+        String current = CombatManager.getCombatData(PCLStance.class.getSimpleName(), null);
+        if (Objects.equals(stanceID, current)) {
+            return false;
+        }
+
+        CombatManager.setCombatData(PCLStance.class.getSimpleName(), stanceID);
+        return true;
+    }
+
     @Override
     public void updateAnimation() {
         if (!Settings.DISABLE_EFFECTS) {
@@ -112,11 +114,9 @@ public abstract class PCLStance extends AbstractStance {
     }
 
     @Override
-    public void stopIdleSfx() {
-        if (sfxId != -1L) {
-            CardCrawlGame.sound.stop("STANCE_LOOP_CALM", sfxId);
-            sfxId = -1L;
-        }
+    public void updateDescription() {
+        final StanceStrings ms = PGR.getStanceString(STANCE_ID);
+        description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, ms.DESCRIPTION);
     }
 
     protected abstract Color getAuraColor();

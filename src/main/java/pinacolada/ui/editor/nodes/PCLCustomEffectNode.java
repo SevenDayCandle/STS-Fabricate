@@ -205,44 +205,17 @@ public class PCLCustomEffectNode extends EUIButton {
         dragging = true;
     }
 
-    protected void onLeftClick() {
-        super.onLeftClick();
-        dragging = false;
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        if (child != null) {
-            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
-            child.renderImpl(sb);
-        }
-        super.renderImpl(sb);
-        deleteButton.render(sb);
-        warningImage.render(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        if (child != null) {
-            child.updateImpl();
-        }
-        if (dragging && !hb.hovered && hologram == null) {
-            hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
-        }
-        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
-            PCLCustomEffectHologram.setHighlighted(this);
-        }
-        deleteButton.update();
-        warningImage.update();
-    }
-
     protected void onHologramRelease(PCLCustomEffectHologram hologram) {
         if (hologram.highlighted != this && hologram.highlighted != null) {
             hologram.highlighted.receiveNode(this);
             editor.fullRebuild();
         }
         this.hologram = null;
+        dragging = false;
+    }
+
+    protected void onLeftClick() {
+        super.onLeftClick();
         dragging = false;
     }
 
@@ -282,6 +255,17 @@ public class PCLCustomEffectNode extends EUIButton {
         }
     }
 
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        if (child != null) {
+            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
+            child.renderImpl(sb);
+        }
+        super.renderImpl(sb);
+        deleteButton.render(sb);
+        warningImage.render(sb);
+    }
+
     public void replaceSkill(PSkill<?> skill) {
         skill.setChild(this.skill.getChild());
         this.skill = skill;
@@ -318,6 +302,22 @@ public class PCLCustomEffectNode extends EUIButton {
     public void startEdit() {
         editor.startEdit(this);
         dragging = false;
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        if (child != null) {
+            child.updateImpl();
+        }
+        if (dragging && !hb.hovered && hologram == null) {
+            hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
+        }
+        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
+            PCLCustomEffectHologram.setHighlighted(this);
+        }
+        deleteButton.update();
+        warningImage.update();
     }
 
     public enum NodeType {

@@ -41,11 +41,6 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public int getXValue() {
-        return GameUtilities.getCounter(sourceCard);
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause() || isPassiveClause()) {
             return EUIRM.strings.adjNoun(fields.getThresholdRawString(plural(PGR.core.tooltips.counter)), TEXT.subjects_card);
@@ -60,5 +55,10 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
             return base + getXRawString();
         }
         return base;
+    }
+
+    @Override
+    public int getXValue() {
+        return GameUtilities.getCounter(sourceCard);
     }
 }

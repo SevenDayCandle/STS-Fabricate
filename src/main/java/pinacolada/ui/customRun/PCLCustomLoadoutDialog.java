@@ -110,6 +110,11 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
                 });
     }
 
+    @Override
+    public PCLCustomLoadoutDialog getCancelValue() {
+        return null;
+    }
+
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
@@ -122,31 +127,8 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-        this.idInput.tryRender(sb);
-        this.idWarning.tryRender(sb);
-        this.nameInput.tryRender(sb);
-        this.languageDropdown.tryRender(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        this.idInput.tryUpdate();
-        this.idWarning.tryUpdate();
-        this.nameInput.tryUpdate();
-        this.languageDropdown.tryUpdate();
-    }
-
-    @Override
     public PCLCustomLoadoutDialog getConfirmValue() {
         return this;
-    }
-
-    @Override
-    public PCLCustomLoadoutDialog getCancelValue() {
-        return null;
     }
 
     protected LoadoutStrings getStringsForLanguage(Settings.GameLanguage language) {
@@ -169,6 +151,24 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
             idInput.setText(currentID);
             currentLanguageMap = new HashMap<>();
         }
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+        this.idInput.tryRender(sb);
+        this.idWarning.tryRender(sb);
+        this.nameInput.tryRender(sb);
+        this.languageDropdown.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        this.idInput.tryUpdate();
+        this.idWarning.tryUpdate();
+        this.nameInput.tryUpdate();
+        this.languageDropdown.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

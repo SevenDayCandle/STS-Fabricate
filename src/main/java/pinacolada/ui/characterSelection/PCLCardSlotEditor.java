@@ -127,59 +127,6 @@ public class PCLCardSlotEditor extends EUIBase {
         }
     }
 
-    @Override
-    public void updateImpl() {
-        if (slot == null) {
-            return;
-        }
-        cardnameText.tryUpdate();
-
-        if (changeButton.isActive && cardnameText.hb.hovered && slot.cards.size() > 1) {
-            if (InputHelper.justClickedLeft) {
-                cardnameText.hb.clickStarted = true;
-            }
-
-            if (cardnameText.hb.clicked) {
-                cardnameText.hb.clicked = false;
-                loadoutEditor.trySelectCard(this);
-                return;
-            }
-
-            cardnameText.setFontColor(Color.WHITE);
-        }
-        else {
-            cardnameText.setFontColor(nameColor);
-        }
-
-        card = slot.getCard(false);
-        if (card != null) {
-            card.current_x = card.target_x = card.hb.x = InputHelper.mX + PREVIEW_OFFSET_X;
-            card.current_y = card.target_y = card.hb.y = InputHelper.mY + PREVIEW_OFFSET_Y;
-            card.update();
-            card.updateHoverLogic();
-            card.drawScale = card.targetDrawScale = CARD_SCALE * ((card.hb.hovered) ? 0.97f : 0.95f);
-            cardamountText.setLabel(slot.amount + "x ").updateImpl();
-        }
-        else {
-            cardamountText.setLabel("").updateImpl();
-        }
-
-        cardvalueText.tryUpdate();
-
-        if (addButton.isActive) {
-            addButton.setInteractable(slot.canAdd()).updateImpl();
-        }
-        if (decrementButton.isActive) {
-            decrementButton.setInteractable(slot.canDecrement()).updateImpl();
-        }
-        if (changeButton.isActive) {
-            changeButton.updateImpl();
-        }
-        if (clearButton.isActive) {
-            clearButton.setInteractable(slot.canRemove()).updateImpl();
-        }
-    }
-
     public PCLCardSlotEditor setSlot(LoadoutCardSlot slot) {
         if (slot == null) {
             this.slot = null;
@@ -234,5 +181,58 @@ public class PCLCardSlotEditor extends EUIBase {
         changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 16, cY + 12);
 
         return this;
+    }
+
+    @Override
+    public void updateImpl() {
+        if (slot == null) {
+            return;
+        }
+        cardnameText.tryUpdate();
+
+        if (changeButton.isActive && cardnameText.hb.hovered && slot.cards.size() > 1) {
+            if (InputHelper.justClickedLeft) {
+                cardnameText.hb.clickStarted = true;
+            }
+
+            if (cardnameText.hb.clicked) {
+                cardnameText.hb.clicked = false;
+                loadoutEditor.trySelectCard(this);
+                return;
+            }
+
+            cardnameText.setFontColor(Color.WHITE);
+        }
+        else {
+            cardnameText.setFontColor(nameColor);
+        }
+
+        card = slot.getCard(false);
+        if (card != null) {
+            card.current_x = card.target_x = card.hb.x = InputHelper.mX + PREVIEW_OFFSET_X;
+            card.current_y = card.target_y = card.hb.y = InputHelper.mY + PREVIEW_OFFSET_Y;
+            card.update();
+            card.updateHoverLogic();
+            card.drawScale = card.targetDrawScale = CARD_SCALE * ((card.hb.hovered) ? 0.97f : 0.95f);
+            cardamountText.setLabel(slot.amount + "x ").updateImpl();
+        }
+        else {
+            cardamountText.setLabel("").updateImpl();
+        }
+
+        cardvalueText.tryUpdate();
+
+        if (addButton.isActive) {
+            addButton.setInteractable(slot.canAdd()).updateImpl();
+        }
+        if (decrementButton.isActive) {
+            decrementButton.setInteractable(slot.canDecrement()).updateImpl();
+        }
+        if (changeButton.isActive) {
+            changeButton.updateImpl();
+        }
+        if (clearButton.isActive) {
+            clearButton.setInteractable(slot.canRemove()).updateImpl();
+        }
     }
 }

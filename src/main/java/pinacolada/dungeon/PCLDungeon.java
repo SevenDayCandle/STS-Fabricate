@@ -631,31 +631,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     }
 
     @Override
-    public PCLDungeon onSave() {
-        loadoutIDs.clear();
-
-        if (data != null) {
-            for (PCLLoadout loadout : loadouts) {
-                loadoutIDs.add(loadout.ID);
-            }
-
-            if (loadout != null) {
-                startingLoadout = loadout.ID;
-            }
-            else {
-                startingLoadout = data.selectedLoadout.ID;
-            }
-        }
-
-        validate();
-
-        fullLog("ON SAVE");
-
-
-        return this;
-    }
-
-    @Override
     public void onLoad(PCLDungeon loaded) {
         AbstractPlayer player = CombatManager.refreshPlayer();
         this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
@@ -692,6 +667,31 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         validate();
 
         fullLog("ON LOAD");
+    }
+
+    @Override
+    public PCLDungeon onSave() {
+        loadoutIDs.clear();
+
+        if (data != null) {
+            for (PCLLoadout loadout : loadouts) {
+                loadoutIDs.add(loadout.ID);
+            }
+
+            if (loadout != null) {
+                startingLoadout = loadout.ID;
+            }
+            else {
+                startingLoadout = data.selectedLoadout.ID;
+            }
+        }
+
+        validate();
+
+        fullLog("ON SAVE");
+
+
+        return this;
     }
 
     @Override

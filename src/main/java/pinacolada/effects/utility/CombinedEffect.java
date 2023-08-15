@@ -21,6 +21,15 @@ public class CombinedEffect extends PCLEffect {
     }
 
     @Override
+    public void render(SpriteBatch sb) {
+        for (AbstractGameEffect effect : effects) {
+            if (!effect.isDone) {
+                effect.render(sb);
+            }
+        }
+    }
+
+    @Override
     public void update() {
         this.duration = 0;
 
@@ -44,15 +53,6 @@ public class CombinedEffect extends PCLEffect {
 
         if (complete) {
             complete();
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        for (AbstractGameEffect effect : effects) {
-            if (!effect.isDone) {
-                effect.render(sb);
-            }
         }
     }
 }

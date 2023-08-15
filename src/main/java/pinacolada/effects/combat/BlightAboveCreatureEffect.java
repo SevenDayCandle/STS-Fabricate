@@ -42,20 +42,7 @@ public class BlightAboveCreatureEffect extends AbstractGameEffect {
         this.scale = Settings.scale;
     }
 
-    public void update() {
-        if (this.duration > 1f) {
-            this.color.a = Interpolation.exp5In.apply(1f, 0f, (this.duration - 1f) * 2f);
-        }
-
-        super.update();
-        if (AbstractDungeon.player.chosenClass == AbstractPlayer.PlayerClass.DEFECT) {
-            this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y + 80f * Settings.scale, Gdx.graphics.getDeltaTime() * 5f);
-        }
-        else {
-            this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y, Gdx.graphics.getDeltaTime() * 5f);
-        }
-
-        this.y += Gdx.graphics.getDeltaTime() * 12f * Settings.scale;
+    public void dispose() {
     }
 
     public void render(SpriteBatch sb) {
@@ -72,6 +59,19 @@ public class BlightAboveCreatureEffect extends AbstractGameEffect {
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose() {
+    public void update() {
+        if (this.duration > 1f) {
+            this.color.a = Interpolation.exp5In.apply(1f, 0f, (this.duration - 1f) * 2f);
+        }
+
+        super.update();
+        if (AbstractDungeon.player.chosenClass == AbstractPlayer.PlayerClass.DEFECT) {
+            this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y + 80f * Settings.scale, Gdx.graphics.getDeltaTime() * 5f);
+        }
+        else {
+            this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y, Gdx.graphics.getDeltaTime() * 5f);
+        }
+
+        this.y += Gdx.graphics.getDeltaTime() * 12f * Settings.scale;
     }
 }

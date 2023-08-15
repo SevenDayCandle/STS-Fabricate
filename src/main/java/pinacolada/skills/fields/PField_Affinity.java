@@ -27,16 +27,6 @@ public class PField_Affinity extends PField_Random {
                 && ((PField_Affinity) other).not == not;
     }
 
-    @Override
-    public PField_Affinity makeCopy() {
-        return (PField_Affinity) new PField_Affinity().setAffinity(affinities).setRandom(random).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerAffinity(affinities);
-        super.setupEditor(editor);
-    }
-
     public String getAffinityAndOrString() {
         return getAffinityAndOrString(affinities, random);
     }
@@ -93,6 +83,11 @@ public class PField_Affinity extends PField_Random {
         return indexes;
     }
 
+    @Override
+    public PField_Affinity makeCopy() {
+        return (PField_Affinity) new PField_Affinity().setAffinity(affinities).setRandom(random).setNot(not);
+    }
+
     public PField_Affinity setAffinity(Collection<PCLAffinity> affinities) {
         this.affinities.clear();
         this.affinities.addAll(affinities);
@@ -101,5 +96,10 @@ public class PField_Affinity extends PField_Random {
 
     public PField_Affinity setAffinity(PCLAffinity... affinities) {
         return setAffinity(Arrays.asList(affinities));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerAffinity(affinities);
+        super.setupEditor(editor);
     }
 }

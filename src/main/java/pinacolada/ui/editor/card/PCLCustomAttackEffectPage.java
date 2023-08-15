@@ -13,13 +13,13 @@ public class PCLCustomAttackEffectPage extends PCLCustomEffectPage {
         super(screen, hb, index, title, onUpdate);
     }
 
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorAttack;
-    }
-
     public PSkill<?> getSourceEffect() {
         PSkill<?> base = screen instanceof PCLCustomCardEditCardScreen ? ((PCLCustomCardEditCardScreen) screen).currentDamage : null;
         return base != null ? base.makeCopy() : null;
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorAttack;
     }
 }

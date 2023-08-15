@@ -42,19 +42,6 @@ public class SelfImmolationPower extends PCLPower {
     }
 
     @Override
-    public void onInitialApplication() {
-        super.onInitialApplication();
-
-        PCLEffects.Queue.add(VFX.bleed(owner.hb));
-        PCLSFX.play(PCLSFX.PCL_SPRAY, 1f, 1.15f, 0.95f);
-    }
-
-    @Override
-    public void playApplyPowerSfx() {
-        PCLSFX.play(PCLSFX.HEART_BEAT, 1f, 1.15f, 0.95f);
-    }
-
-    @Override
     public void atStartOfTurnPostDraw() {
         super.atStartOfTurnPostDraw();
         if (justApplied) {
@@ -67,11 +54,24 @@ public class SelfImmolationPower extends PCLPower {
     }
 
     @Override
+    public void onInitialApplication() {
+        super.onInitialApplication();
+
+        PCLEffects.Queue.add(VFX.bleed(owner.hb));
+        PCLSFX.play(PCLSFX.PCL_SPRAY, 1f, 1.15f, 0.95f);
+    }
+
+    @Override
     public void onPlayCard(AbstractCard card, AbstractMonster m) {
         super.onPlayCard(card, m);
         if (card.block > 0) {
             applyDebuff(card.block * amount);
             this.flash();
         }
+    }
+
+    @Override
+    public void playApplyPowerSfx() {
+        PCLSFX.play(PCLSFX.HEART_BEAT, 1f, 1.15f, 0.95f);
     }
 }

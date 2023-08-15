@@ -395,6 +395,10 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new ColoredString(amount, Settings.CREAM_COLOR);
     }
 
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return 0;
+    }
+
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         String subText = extra > 0 ? getSubText(perspective) + " (" + TEXT.subjects_max(extra) + ")" : getSubText(perspective);
@@ -410,6 +414,21 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     @Override
     public boolean hasChildWarning() {
         return childEffect == null;
+    }
+
+    protected boolean isSkillAffected(PSkill<?> move) {
+        if (!move.isAffectedByMods()) {
+            return false;
+        }
+        if (move == childEffect) {
+            return true;
+        }
+        else if (childEffect instanceof PMultiBase<?>) {
+            return ((PMultiBase<?>) childEffect).getSubEffects().contains(move);
+        }
+        else {
+            return childEffect instanceof PDelay && childEffect.childEffect == move;
+        }
     }
 
     @Override
@@ -446,45 +465,6 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(() -> {
-            if (this.childEffect != null) {
-                updateChildAmount(info, true);
-                this.childEffect.use(info, order);
-            }
-        });
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-        order.callback(() -> {
-            if (this.childEffect != null) {
-                updateChildAmount(info, true);
-                this.childEffect.use(info, order, shouldPay);
-            }
-        });
-    }
-
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return 0;
-    }
-
-    protected boolean isSkillAffected(PSkill<?> move) {
-        if (!move.isAffectedByMods()) {
-            return false;
-        }
-        if (move == childEffect) {
-            return true;
-        }
-        else if (childEffect instanceof PMultiBase<?>) {
-            return ((PMultiBase<?>) childEffect).getSubEffects().contains(move);
-        }
-        else {
-            return childEffect instanceof PDelay && childEffect.childEffect == move;
-        }
-    }
-
     public final int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         cachedValue = getModifiedAmount(be, info, isUsing);
         if (extra > 0) {
@@ -510,5 +490,25 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
                 this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info, isUsing));
             }
         }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.callback(() -> {
+            if (this.childEffect != null) {
+                updateChildAmount(info, true);
+                this.childEffect.use(info, order);
+            }
+        });
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        order.callback(() -> {
+            if (this.childEffect != null) {
+                updateChildAmount(info, true);
+                this.childEffect.use(info, order, shouldPay);
+            }
+        });
     }
 }

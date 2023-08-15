@@ -35,11 +35,6 @@ public class PMod_CyclePerCard extends PMod_Do {
     }
 
     @Override
-    public String getMoveString(boolean addPeriod) {
-        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
@@ -47,5 +42,10 @@ public class PMod_CyclePerCard extends PMod_Do {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
+    }
+
+    @Override
+    public String getMoveString(boolean addPeriod) {
+        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 }

@@ -73,6 +73,16 @@ public abstract class AbstractGlyphBlight extends PCLBlight {
     public void renderOutline(SpriteBatch sb, boolean inTopPanel) {
     }
 
+    public void reset() {
+        this.counter = 0;
+    }
+
+    public void setAmount(int amount) {
+        this.counter = amount;
+    }
+
+    // Screw outlines
+
     public void update() {
         super.update();
         if (this.isDone) {
@@ -84,15 +94,5 @@ public abstract class AbstractGlyphBlight extends PCLBlight {
             }
         }
         updateDescription();
-    }
-
-    public void reset() {
-        this.counter = 0;
-    }
-
-    // Screw outlines
-
-    public void setAmount(int amount) {
-        this.counter = amount;
     }
 }

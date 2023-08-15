@@ -165,6 +165,11 @@ public abstract class PCLAction<T> extends AbstractGameAction {
     }
 
     @Override
+    protected final void tickDuration() {
+        tickDuration(getDeltaTime());
+    }
+
+    @Override
     public void update() {
         if (duration == startDuration) {
             firstUpdate();
@@ -176,11 +181,6 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         else {
             updateInternal(getDeltaTime());
         }
-    }
-
-    @Override
-    protected final void tickDuration() {
-        tickDuration(getDeltaTime());
     }
 
     protected void updateInternal(float deltaTime) {

@@ -90,6 +90,15 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return getBasicGiveString();
+    }
+
+    public String getUntilPlayedString() {
+        return EUIUtils.capitalize(TEXT.subjects_untilX("", PGR.core.tooltips.play.past()).trim());
+    }
+
+    @Override
     public boolean isAffectedByMods() {
         return super.isAffectedByMods() && !fields.not;
     }
@@ -99,24 +108,6 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
-    }
-
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return getBasicGiveString();
-    }
-
-    public String getUntilPlayedString() {
-        return EUIUtils.capitalize(TEXT.subjects_untilX("", PGR.core.tooltips.play.past()).trim());
     }
 
     @Override
@@ -139,6 +130,15 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
         fields.setForced(true);
         useParent(true);
         return this;
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+    }
+
+    public String wrapExtra(int input) {
+        return String.valueOf(input);
     }
 
     public abstract ActionT1<AbstractCard> getAction(PCLActions order);

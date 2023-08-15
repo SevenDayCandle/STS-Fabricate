@@ -38,22 +38,6 @@ public class PField_Relic extends PField_Random {
                 && ((PField_Relic) other).random == random;
     }
 
-    @Override
-    public PField_Relic makeCopy() {
-        return (PField_Relic) new PField_Relic()
-                .setRelicID(relicIDs)
-                .setColor(colors)
-                .setRarity(rarities)
-                .setRandom(random)
-                .setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerColor(colors);
-        editor.registerRelicRarity(rarities);
-        editor.registerRelic(relicIDs);
-    }
-
     public FuncT1<Boolean, AbstractRelic> getFullRelicFilter() {
         return !relicIDs.isEmpty() ? c -> EUIUtils.any(relicIDs, id -> id.equals(c.relicId)) :
                 (c -> (colors.isEmpty() || colors.contains(EUIGameUtils.getRelicColor(c.relicId)))
@@ -109,6 +93,16 @@ public class PField_Relic extends PField_Random {
         return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
+    @Override
+    public PField_Relic makeCopy() {
+        return (PField_Relic) new PField_Relic()
+                .setRelicID(relicIDs)
+                .setColor(colors)
+                .setRarity(rarities)
+                .setRandom(random)
+                .setNot(not);
+    }
+
     public void makePreviews(RotatingList<EUIPreview> previews) {
         for (String cd : relicIDs) {
             AbstractRelic c = getRelic(cd);
@@ -146,5 +140,11 @@ public class PField_Relic extends PField_Random {
 
     public PField_Relic setRelicID(String... orbs) {
         return setRelicID(Arrays.asList(orbs));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerColor(colors);
+        editor.registerRelicRarity(rarities);
+        editor.registerRelic(relicIDs);
     }
 }

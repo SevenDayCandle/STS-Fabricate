@@ -41,6 +41,21 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return amount;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
@@ -61,20 +76,5 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
                 this.childEffect.addAmountForCombat(amount);
             });
         }
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return amount;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
     }
 }

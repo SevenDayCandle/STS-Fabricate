@@ -44,13 +44,8 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
     }
 
     @Override
-    public boolean removeOnCardPlayed(AbstractCard card) {
-        return untilPlayed;
-    }
-
-    @Override
-    public boolean removeAtEndOfTurn(AbstractCard card) {
-        return temporary;
+    public AbstractCardModifier makeCopy() {
+        return new TemporaryBlockModifier(change, temporary, untilPlayed);
     }
 
     public float modifyBlock(float block, AbstractCard card) {
@@ -58,7 +53,12 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
     }
 
     @Override
-    public AbstractCardModifier makeCopy() {
-        return new TemporaryBlockModifier(change, temporary, untilPlayed);
+    public boolean removeAtEndOfTurn(AbstractCard card) {
+        return temporary;
+    }
+
+    @Override
+    public boolean removeOnCardPlayed(AbstractCard card) {
+        return untilPlayed;
     }
 }

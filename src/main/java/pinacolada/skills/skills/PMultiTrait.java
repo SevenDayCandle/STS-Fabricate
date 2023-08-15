@@ -60,6 +60,12 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return this;
     }
 
+    public PMultiTrait addEffect(PTrait<?> newEffect) {
+        this.effects.add(newEffect);
+        setParentsForChildren();
+        return this;
+    }
+
     @Override
     public PSkill<PField_Empty> addExtraForCombat(int extra) {
         for (PSkill<?> effect : effects) {
@@ -106,13 +112,46 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return c;
     }
 
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return null;
+    }
+
     public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
+    public String getSubDescText(PCLCardTarget perspective) {
+        return null;
+    }
+
+    public PTrait<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    public List<PTrait<?>> getSubEffects() {
+        return effects;
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return null;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return null;
+    }
+
+    @Override
     public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(perspective, addPeriod) : "";
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return EUIUtils.joinStrings(" ", getEffectTexts(effects, perspective, addPeriod));
     }
 
     @Override
@@ -143,6 +182,17 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public boolean isDetrimental() {
         return EUIUtils.any(effects, PSkill::isDetrimental);
+    }
+
+    @Override
+    public PMultiTrait makeCopy() {
+        PMultiTrait copy = (PMultiTrait) super.makeCopy();
+        for (PTrait<?> effect : effects) {
+            if (effect != null) {
+                copy.addEffect(effect.makeCopy());
+            }
+        }
+        return copy;
     }
 
     public PMultiTrait makePreviews(RotatingList<EUIPreview> previews) {
@@ -250,10 +300,24 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
+    public PMultiTrait onAddToCard(AbstractCard card) {
+        addSubs(card);
+        super.onAddToCard(card);
+        return this;
+    }
+
+    @Override
     public void onDrag(AbstractMonster m) {
         for (PSkill<?> effect : effects) {
             effect.onDrag(m);
         }
+    }
+
+    @Override
+    public PMultiTrait onRemoveFromCard(AbstractCard card) {
+        removeSubs(card);
+        super.onRemoveFromCard(card);
+        return this;
     }
 
     @Override
@@ -264,6 +328,13 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         }
         if (this.childEffect != null) {
             this.childEffect.recurse(onRecurse);
+        }
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, conditionMet);
         }
     }
 
@@ -281,11 +352,31 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return this;
     }
 
+    public PMultiTrait setEffects(PTrait<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PMultiTrait setEffects(List<PTrait<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+
+        return this;
+    }
+
     @Override
     public PMultiTrait setSource(PointerProvider card) {
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);
+        }
+        return this;
+    }
+
+    @Override
+    public PMultiTrait setTemporaryAmount(int amount) {
+        for (PSkill<?> effect : effects) {
+            effect.setTemporaryAmount(amount);
         }
         return this;
     }
@@ -330,96 +421,5 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
             effect.useParent(value);
         }
         return this;
-    }
-
-    public PMultiTrait addEffect(PTrait<?> newEffect) {
-        this.effects.add(newEffect);
-        setParentsForChildren();
-        return this;
-    }
-
-    public PTrait<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public PMultiTrait setEffects(PTrait<?>... effects) {
-        return setEffects(Arrays.asList(effects));
-    }
-
-    public PMultiTrait setEffects(List<PTrait<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-
-        return this;
-    }
-
-    public List<PTrait<?>> getSubEffects() {
-        return effects;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return null;
-    }
-
-    @Override
-    public PMultiTrait makeCopy() {
-        PMultiTrait copy = (PMultiTrait) super.makeCopy();
-        for (PTrait<?> effect : effects) {
-            if (effect != null) {
-                copy.addEffect(effect.makeCopy());
-            }
-        }
-        return copy;
-    }
-
-    @Override
-    public PMultiTrait onAddToCard(AbstractCard card) {
-        addSubs(card);
-        super.onAddToCard(card);
-        return this;
-    }
-
-    @Override
-    public PMultiTrait onRemoveFromCard(AbstractCard card) {
-        removeSubs(card);
-        super.onRemoveFromCard(card);
-        return this;
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, conditionMet);
-        }
-    }
-
-    @Override
-    public PMultiTrait setTemporaryAmount(int amount) {
-        for (PSkill<?> effect : effects) {
-            effect.setTemporaryAmount(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return null;
-    }
-
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return EUIUtils.joinStrings(" ", getEffectTexts(effects, perspective, addPeriod));
-    }
-
-    @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return null;
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return null;
     }
 }

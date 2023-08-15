@@ -79,6 +79,28 @@ public abstract class PCLCharacter extends CustomPlayer {
         reloadDefaultAnimation();
     }
 
+    @Override
+    public void damage(DamageInfo info) {
+        if (atlas != null && hitAnim != null && info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0) {
+            try {
+                AnimationState.TrackEntry e = this.state.setAnimation(0, hitAnim, false);
+                this.state.addAnimation(0, idleAnim, true, 0f);
+                e.setTimeScale(0.9f);
+            }
+            catch (Exception e) {
+                EUIUtils.logError(this, "Failed to load damage animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
+            }
+        }
+
+        super.damage(info);
+    }
+
+    @Override
+    public void doCharSelectScreenSelectEffect() {
+        CardCrawlGame.sound.playA(getCustomModeCharacterButtonSoundKey(), MathUtils.random(-0.1f, 0.2f));
+        CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
+    }
+
     protected Animation getAnimation(String key) {
         return this.state.getData().getSkeletonData().findAnimation(key);
     }
@@ -92,40 +114,22 @@ public abstract class PCLCharacter extends CustomPlayer {
     }
 
     @Override
-    public ArrayList<String> getStartingDeck() {
-        return prepareLoadout().getStartingDeck();
-    }
-
-    @Override
-    public ArrayList<String> getStartingRelics() {
-        return prepareLoadout().getStartingRelics();
-    }
-
-    @Override
-    public CharSelectInfo getLoadout() {
-        return prepareLoadout().getLoadout(name, description, this);
-    }
-
-    @Override
-    public String getTitle(PlayerClass playerClass) // Top panel title
-    {
-        return name;
-    }
-
-    @Override
     public int getAscensionMaxHPLoss() {
         return AbstractPlayerData.DEFAULT_HP / 10;
     }
 
     @Override
-    public BitmapFont getEnergyNumFont() {
-        return FontHelper.energyNumFontBlue;
+    public CharStat getCharStat() {
+        // yes
+        return super.getCharStat();
     }
 
     @Override
-    public void doCharSelectScreenSelectEffect() {
-        CardCrawlGame.sound.playA(getCustomModeCharacterButtonSoundKey(), MathUtils.random(-0.1f, 0.2f));
-        CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
+    public Texture getCustomModeCharacterButtonImage() {
+        if (charTexture == null) {
+            charTexture = new TextureCache(BaseMod.getPlayerButton(this.chosenClass));
+        }
+        return charTexture.texture();
     }
 
     @Override
@@ -134,13 +138,33 @@ public abstract class PCLCharacter extends CustomPlayer {
     }
 
     @Override
+    public Texture getEnergyImage() {
+        if (this.energyOrb instanceof PCLEnergyOrb) {
+            return ((PCLEnergyOrb) this.energyOrb).getEnergyImage();
+        }
+        else {
+            return super.getEnergyImage();
+        }
+    }
+
+    @Override
+    public BitmapFont getEnergyNumFont() {
+        return FontHelper.energyNumFontBlue;
+    }
+
+    @Override
+    public CharSelectInfo getLoadout() {
+        return prepareLoadout().getLoadout(name, description, this);
+    }
+
+    @Override
     public String getLocalizedCharacterName() {
         return name;
     }
 
     @Override
-    public String getSpireHeartText() {
-        return com.megacrit.cardcrawl.events.beyond.SpireHeart.DESCRIPTIONS[10];
+    public String getPortraitImageName() {
+        return null;
     }
 
     @Override
@@ -162,24 +186,29 @@ public abstract class PCLCharacter extends CustomPlayer {
     }
 
     @Override
-    public String getVampireText() {
-        return com.megacrit.cardcrawl.events.city.Vampires.DESCRIPTIONS[5];
+    public String getSpireHeartText() {
+        return com.megacrit.cardcrawl.events.beyond.SpireHeart.DESCRIPTIONS[10];
     }
 
     @Override
-    public void damage(DamageInfo info) {
-        if (atlas != null && hitAnim != null && info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0) {
-            try {
-                AnimationState.TrackEntry e = this.state.setAnimation(0, hitAnim, false);
-                this.state.addAnimation(0, idleAnim, true, 0f);
-                e.setTimeScale(0.9f);
-            }
-            catch (Exception e) {
-                EUIUtils.logError(this, "Failed to load damage animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
-            }
-        }
+    public ArrayList<String> getStartingDeck() {
+        return prepareLoadout().getStartingDeck();
+    }
 
-        super.damage(info);
+    @Override
+    public ArrayList<String> getStartingRelics() {
+        return prepareLoadout().getStartingRelics();
+    }
+
+    @Override
+    public String getTitle(PlayerClass playerClass) // Top panel title
+    {
+        return name;
+    }
+
+    @Override
+    public String getVampireText() {
+        return com.megacrit.cardcrawl.events.city.Vampires.DESCRIPTIONS[5];
     }
 
     // Intentionally avoid calling loadAnimation to avoid registering animations
@@ -237,35 +266,6 @@ public abstract class PCLCharacter extends CustomPlayer {
         else {
             renderPlayerImageImpl(sb);
         }
-    }
-
-    @Override
-    public Texture getEnergyImage() {
-        if (this.energyOrb instanceof PCLEnergyOrb) {
-            return ((PCLEnergyOrb) this.energyOrb).getEnergyImage();
-        }
-        else {
-            return super.getEnergyImage();
-        }
-    }
-
-    @Override
-    public CharStat getCharStat() {
-        // yes
-        return super.getCharStat();
-    }
-
-    @Override
-    public Texture getCustomModeCharacterButtonImage() {
-        if (charTexture == null) {
-            charTexture = new TextureCache(BaseMod.getPlayerButton(this.chosenClass));
-        }
-        return charTexture.texture();
-    }
-
-    @Override
-    public String getPortraitImageName() {
-        return null;
     }
 
     protected void renderPlayerImageImpl(SpriteBatch sb) {

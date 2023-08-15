@@ -38,11 +38,6 @@ public class RemoveFromPile extends SelectFromPile {
     }
 
     @Override
-    public String getActionMessage() {
-        return PGR.core.strings.grid_chooseCards(amount);
-    }
-
-    @Override
     protected void complete(ArrayList<AbstractCard> result) {
         for (AbstractCard c : result) {
             AbstractCard masterCopy = GameUtilities.getMasterDeckInstance(c.uuid);
@@ -56,5 +51,10 @@ public class RemoveFromPile extends SelectFromPile {
         CombatManager.queueRefreshHandLayout();
 
         super.complete(result);
+    }
+
+    @Override
+    public String getActionMessage() {
+        return PGR.core.strings.grid_chooseCards(amount);
     }
 }

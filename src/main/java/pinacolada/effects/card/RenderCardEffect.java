@@ -18,11 +18,11 @@ public class RenderCardEffect extends PCLEffect {
         card.lighten(true);
     }
 
-    public void render(SpriteBatch sb) {
-        card.render(sb);
-    }
-
     public void dispose() {
 
+    }
+
+    public void render(SpriteBatch sb) {
+        card.render(sb);
     }
 }

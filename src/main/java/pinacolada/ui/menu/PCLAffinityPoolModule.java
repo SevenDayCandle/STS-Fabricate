@@ -84,6 +84,25 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
+    public void initializeSelection(Collection<? extends AbstractCard> cards) {
+        HashSet<PCLLoadout> availableSeries = new HashSet<>();
+        for (AbstractCard card : cards) {
+            availableSeries.add(GameUtilities.getPCLSeries(card));
+            if (card instanceof PCLCard) {
+                ((PCLCard) card).affinities.updateSortedList();
+            }
+        }
+        ArrayList<PCLLoadout> seriesItems = EUIUtils.filter(availableSeries, Objects::nonNull);
+        seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
+
+        currentAffinities = EUIUtils.map(PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
+        currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
+        currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
+        initializeAffinities();
+    }
+
+    @Override
     public boolean isEmpty() {
         return currentSeries.isEmpty() && currentAffinities.isEmpty();
     }
@@ -107,22 +126,12 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public void initializeSelection(Collection<? extends AbstractCard> cards) {
-        HashSet<PCLLoadout> availableSeries = new HashSet<>();
-        for (AbstractCard card : cards) {
-            availableSeries.add(GameUtilities.getPCLSeries(card));
-            if (card instanceof PCLCard) {
-                ((PCLCard) card).affinities.updateSortedList();
-            }
+    public void renderImpl(SpriteBatch sb) {
+        this.seriesDropdown.tryRender(sb);
+        this.affinitiesSectionLabel.tryRender(sb);
+        for (AffinityKeywordButton c : affinityButtons) {
+            c.tryRender(sb);
         }
-        ArrayList<PCLLoadout> seriesItems = EUIUtils.filter(availableSeries, Objects::nonNull);
-        seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
-        seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
-
-        currentAffinities = EUIUtils.map(PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
-        initializeAffinities();
     }
 
     @Override
@@ -134,15 +143,6 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
         }
         for (AffinityKeywordButton c : affinityButtons) {
             c.setLevel(0);
-        }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        this.seriesDropdown.tryRender(sb);
-        this.affinitiesSectionLabel.tryRender(sb);
-        for (AffinityKeywordButton c : affinityButtons) {
-            c.tryRender(sb);
         }
     }
 

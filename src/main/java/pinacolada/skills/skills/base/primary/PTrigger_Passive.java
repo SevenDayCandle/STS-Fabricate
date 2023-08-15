@@ -39,11 +39,6 @@ public class PTrigger_Passive extends PTrigger {
         return TEXT.cond_passive();
     }
 
-    // No-Op, should not subscribe children
-    @Override
-    public void subscribeChildren() {
-    }
-
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
         return skill instanceof PMultiBase ||
@@ -51,5 +46,10 @@ public class PTrigger_Passive extends PTrigger {
                 skill instanceof PFacetCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PTrait;
+    }
+
+    // No-Op, should not subscribe children
+    @Override
+    public void subscribeChildren() {
     }
 }

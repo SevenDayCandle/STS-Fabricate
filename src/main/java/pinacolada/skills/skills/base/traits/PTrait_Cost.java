@@ -41,8 +41,13 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+    public String getSubDescText(PCLCardTarget perspective) {
+        return getAmountRawString();
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return TEXT.subjects_cost;
     }
 
     @Override
@@ -54,17 +59,12 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return getAmountRawString();
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return TEXT.subjects_cost;
-    }
-
-    @Override
     public boolean isDetrimental() {
         return amount > 0;
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

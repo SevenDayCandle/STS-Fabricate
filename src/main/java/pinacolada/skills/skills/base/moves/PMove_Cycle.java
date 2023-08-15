@@ -40,12 +40,6 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
@@ -53,5 +47,11 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 }

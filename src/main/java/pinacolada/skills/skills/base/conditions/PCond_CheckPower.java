@@ -16,7 +16,6 @@ import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @VisibleSkill

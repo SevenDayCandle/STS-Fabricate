@@ -16,22 +16,17 @@ public class PField_Stance extends PField_Random {
         return other instanceof PField_Stance && stances.equals(((PField_Stance) other).stances) && ((PField_Stance) other).random == random && ((PField_Stance) other).not == not;
     }
 
-    @Override
-    public PField_Stance makeCopy() {
-        return (PField_Stance) new PField_Stance().setStance(stances).setRandom(random).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerStance(stances);
-        super.setupEditor(editor);
-    }
-
     public String getAnyStanceString() {
         return stances.isEmpty() ? TEXT.cond_any(PGR.core.tooltips.stance.title) : getStanceString();
     }
 
     public String getStanceString() {
         return getStanceString(stances);
+    }
+
+    @Override
+    public PField_Stance makeCopy() {
+        return (PField_Stance) new PField_Stance().setStance(stances).setRandom(random).setNot(not);
     }
 
     public PField_Stance setStance(Collection<PCLStanceHelper> orbs) {
@@ -42,5 +37,10 @@ public class PField_Stance extends PField_Random {
 
     public PField_Stance setStance(PCLStanceHelper... orbs) {
         return setStance(Arrays.asList(orbs));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerStance(stances);
+        super.setupEditor(editor);
     }
 }

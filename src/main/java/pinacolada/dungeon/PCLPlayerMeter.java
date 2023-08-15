@@ -135,18 +135,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
         return super.isHovered() || infoIcon.hb.hovered;
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-        infoIcon.renderImpl(sb);
-    }
-
-    @Override
-    public void updateImpl(PCLCard card, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
-        infoIcon.setColor(EUIColors.white(isHovered() ? 1f : 0.5f));
-        infoIcon.tryUpdate();
-    }
-
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
         return block;
     }
@@ -176,12 +164,24 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     public void onStartOfTurn() {
     }
 
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+        infoIcon.renderImpl(sb);
+    }
+
     public PCLAffinity set(PCLAffinity affinity, int target) {
         return get(0);
     }
 
     public int size() {
         return 0;
+    }
+
+    @Override
+    public void updateImpl(PCLCard card, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
+        infoIcon.setColor(EUIColors.white(isHovered() ? 1f : 0.5f));
+        infoIcon.tryUpdate();
     }
 
     public abstract String getInfoMainDescrption();

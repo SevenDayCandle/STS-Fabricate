@@ -30,10 +30,25 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
     }
 
     @Override
+    public AbstractPlayerData<?, ?> getData() {
+        return null;
+    }
+
+    @Override
     public String getReplacement(String cardID) {
         // Prevent example templates from showing up for regular characters
         PCLCardData data = PCLCardData.getStaticData(cardID);
         return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
+    }
+
+    @Override
+    public PCLCoreStrings getStrings() {
+        return new PCLCoreStrings(this);
+    }
+
+    @Override
+    public PCLCoreTooltips getTooltips() {
+        return new PCLCoreTooltips();
     }
 
     @Override
@@ -55,20 +70,5 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
         loadCustomStrings(RunModStrings.class);
         loadCustomStrings(StanceStrings.class);
         loadAugmentStrings();
-    }
-
-    @Override
-    public AbstractPlayerData<?, ?> getData() {
-        return null;
-    }
-
-    @Override
-    public PCLCoreStrings getStrings() {
-        return new PCLCoreStrings(this);
-    }
-
-    @Override
-    public PCLCoreTooltips getTooltips() {
-        return new PCLCoreTooltips();
     }
 }

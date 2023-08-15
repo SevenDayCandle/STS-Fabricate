@@ -29,18 +29,7 @@ public class PCLGainPowerEffect extends AbstractGameEffect {
         this.color = new Color(1f, 1f, 1f, 0.5f);
     }
 
-    public void update() {
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration > 0.5f) {
-            this.scale = Interpolation.exp5Out.apply(3f * Settings.scale, Settings.scale, -(this.duration - 2f) / 1.5f);
-        }
-        else {
-            this.color.a = Interpolation.fade.apply(0.5f, 0f, 1f - this.duration);
-        }
-
-    }
-
-    public void render(SpriteBatch sb) {
+    public void dispose() {
     }
 
     public void render(SpriteBatch sb, float x, float y) {
@@ -58,7 +47,18 @@ public class PCLGainPowerEffect extends AbstractGameEffect {
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose() {
+    public void render(SpriteBatch sb) {
+    }
+
+    public void update() {
+        this.duration -= Gdx.graphics.getDeltaTime();
+        if (this.duration > 0.5f) {
+            this.scale = Interpolation.exp5Out.apply(3f * Settings.scale, Settings.scale, -(this.duration - 2f) / 1.5f);
+        }
+        else {
+            this.color.a = Interpolation.fade.apply(0.5f, 0f, 1f - this.duration);
+        }
+
     }
 }
 

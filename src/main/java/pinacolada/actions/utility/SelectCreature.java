@@ -88,6 +88,27 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         super.completeImpl();
     }
 
+    protected void drawCurve(SpriteBatch sb, Vector2 start, Vector2 end, Vector2 control) {
+        float radius = 7f * Settings.scale;
+
+        for (int i = 0; i < points.length - 1; ++i) {
+            points[i] = Bezier.quadratic(points[i], (float) i / 20f, start, control, end, new Vector2());
+            radius += 0.4F * Settings.scale;
+            float angle;
+            Vector2 tmp;
+            if (i != 0) {
+                tmp = new Vector2(points[i - 1].x - points[i].x, points[i - 1].y - points[i].y);
+                angle = tmp.nor().angle() + 90f;
+            }
+            else {
+                tmp = new Vector2(control.x - points[i].x, control.y - points[i].y);
+                angle = tmp.nor().angle() + 270f;
+            }
+
+            sb.draw(ImageMaster.TARGET_UI_CIRCLE, points[i].x - 64f, points[i].y - 64f, 64f, 64f, 128f, 128f, radius / 18f, radius / 18f, angle, 0, 0, 128, 128, false, false);
+        }
+    }
+
     @Override
     protected void firstUpdate() {
         if (target != null) {
@@ -168,94 +189,6 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         this.cancellable = cancellable;
 
         return this;
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        GameCursor.hidden = true;
-
-        if (InputHelper.justClickedRight && cancellable) {
-            if (card != null) {
-                card.applyPowers();
-            }
-
-            completeImpl();
-            return;
-        }
-
-        switch (targeting) {
-            case Self:
-                updateTarget(true, false, false);
-                break;
-            case Single:
-                updateTarget(false, true, true);
-                break;
-            case SingleAlly:
-                updateTarget(false, false, true);
-                break;
-            case SelfSingleAlly:
-                updateTarget(true, false, true);
-                break;
-            case SelfSingle:
-            case Any:
-                updateTarget(true, true, true);
-                break;
-        }
-
-        if (InputHelper.justClickedLeft || InputHelper.justReleasedClickLeft) {
-            InputHelper.justClickedLeft = false;
-            InputHelper.justReleasedClickLeft = false;
-            switch (targeting) {
-                case RandomAlly:
-                    complete(target = GameUtilities.getRandomSummon(true));
-                    return;
-                case RandomEnemy:
-                    complete(target = GameUtilities.getRandomEnemy(true));
-                    return;
-
-                case AllEnemy:
-                case AllAlly:
-                case All:
-                case Team:
-                case None:
-                    complete(null);
-                    return;
-
-                case Self:
-                case Single:
-                case SelfSingle:
-                case SelfSingleAlly:
-                case SingleAlly:
-                case Any:
-                    if (target != null) {
-                        complete(target);
-                        return;
-                    }
-            }
-        }
-
-        EUI.addPostRender(this::render);
-    }
-
-    protected void drawCurve(SpriteBatch sb, Vector2 start, Vector2 end, Vector2 control) {
-        float radius = 7f * Settings.scale;
-
-        for (int i = 0; i < points.length - 1; ++i) {
-            points[i] = Bezier.quadratic(points[i], (float) i / 20f, start, control, end, new Vector2());
-            radius += 0.4F * Settings.scale;
-            float angle;
-            Vector2 tmp;
-            if (i != 0) {
-                tmp = new Vector2(points[i - 1].x - points[i].x, points[i - 1].y - points[i].y);
-                angle = tmp.nor().angle() + 90f;
-            }
-            else {
-                tmp = new Vector2(control.x - points[i].x, control.y - points[i].y);
-                angle = tmp.nor().angle() + 270f;
-            }
-
-            sb.draw(ImageMaster.TARGET_UI_CIRCLE, points[i].x - 64f, points[i].y - 64f, 64f, 64f, 128f, 128f, radius / 18f, radius / 18f, angle, 0, 0, 128, 128, false, false);
-        }
     }
 
     protected void render(SpriteBatch sb) {
@@ -350,6 +283,73 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         this.skipConfirmation = skipConfirmation;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        GameCursor.hidden = true;
+
+        if (InputHelper.justClickedRight && cancellable) {
+            if (card != null) {
+                card.applyPowers();
+            }
+
+            completeImpl();
+            return;
+        }
+
+        switch (targeting) {
+            case Self:
+                updateTarget(true, false, false);
+                break;
+            case Single:
+                updateTarget(false, true, true);
+                break;
+            case SingleAlly:
+                updateTarget(false, false, true);
+                break;
+            case SelfSingleAlly:
+                updateTarget(true, false, true);
+                break;
+            case SelfSingle:
+            case Any:
+                updateTarget(true, true, true);
+                break;
+        }
+
+        if (InputHelper.justClickedLeft || InputHelper.justReleasedClickLeft) {
+            InputHelper.justClickedLeft = false;
+            InputHelper.justReleasedClickLeft = false;
+            switch (targeting) {
+                case RandomAlly:
+                    complete(target = GameUtilities.getRandomSummon(true));
+                    return;
+                case RandomEnemy:
+                    complete(target = GameUtilities.getRandomEnemy(true));
+                    return;
+
+                case AllEnemy:
+                case AllAlly:
+                case All:
+                case Team:
+                case None:
+                    complete(null);
+                    return;
+
+                case Self:
+                case Single:
+                case SelfSingle:
+                case SelfSingleAlly:
+                case SingleAlly:
+                case Any:
+                    if (target != null) {
+                        complete(target);
+                        return;
+                    }
+            }
+        }
+
+        EUI.addPostRender(this::render);
     }
 
     protected void updateTarget(boolean targetPlayer, boolean targetEnemy, boolean targetAlly) {

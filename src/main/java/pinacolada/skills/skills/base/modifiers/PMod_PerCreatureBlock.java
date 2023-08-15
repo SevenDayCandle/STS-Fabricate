@@ -29,13 +29,13 @@ public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.block.title;
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return sumTargets(info, t -> t.currentBlock);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return sumTargets(info, t -> t.currentBlock);
+    public String getSubSampleText() {
+        return PGR.core.tooltips.block.title;
     }
 
     @Override

@@ -28,15 +28,11 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         return true;
     }
 
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
-
-    // This should not activate the child effect when played normally
-
     public String getDelegatePastText() {
         return getDelegateTooltip().past();
     }
+
+    // This should not activate the child effect when played normally
 
     public String getDelegateSampleText() {
         return getDelegateText();
@@ -52,13 +48,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        if (isWhenClause() || isBranch()) {
-            fields.setupEditor(editor);
-        }
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
             return TEXT.cond_wheneverYou(getDelegateText());
@@ -67,6 +56,13 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
             return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_onGeneric(getDelegateText());
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        if (isWhenClause() || isBranch()) {
+            fields.setupEditor(editor);
+        }
     }
 
     public void triggerOnCard(AbstractCard c) {
@@ -79,6 +75,10 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         if (fields.getFullCardFilter().invoke(c)) {
             useFromTrigger(generateInfo(target).setData(Collections.singletonList(c)));
         }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 
     public abstract EUIKeywordTooltip getDelegateTooltip();

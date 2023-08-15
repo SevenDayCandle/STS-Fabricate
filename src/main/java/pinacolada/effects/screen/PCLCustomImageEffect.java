@@ -184,69 +184,6 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (curEffect != null) {
-            curEffect.render(sb);
-        }
-        else {
-            hb.render(sb);
-            cancelButton.tryRender(sb);
-            saveButton.tryRender(sb);
-            loadButton.tryRender(sb);
-            selectExistingButton.tryRender(sb);
-            pasteButton.tryRender(sb);
-            instructionsLabel.tryRender(sb);
-            tintEditor.tryRender(sb);
-            tintToggle.tryRender(sb);
-            zoomBar.tryRender(sb);
-
-            if (outsideImage != null) {
-                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
-            }
-            if (insideImageRenderable != null) {
-                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
-            }
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (curEffect != null) {
-            curEffect.update();
-            if (curEffect.isDone) {
-                curEffect = null;
-            }
-        }
-        else {
-            cancelButton.tryUpdate();
-            saveButton.tryUpdate();
-            loadButton.tryUpdate();
-            selectExistingButton.tryUpdate();
-            pasteButton.tryUpdate();
-            instructionsLabel.tryUpdate();
-            tintEditor.tryUpdate();
-            tintToggle.tryUpdate();
-            camera.update();
-            if (baseTexture != null) {
-                if (!hb.isDragging()) {
-                    zoomBar.tryUpdate();
-                }
-                if (!zoomBar.isDragging) {
-                    hb.update();
-                    if (hb.isDragging()) {
-                        updatePictures();
-                    }
-                }
-            }
-
-            // TODO see if there is a way to check for the "paste" function for different operating systems
-            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-                getImageFromClipboard();
-            }
-        }
-    }
-
     private void getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
         if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
@@ -274,6 +211,32 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private void openTint(PCLCustomColorEditor editor) {
         curEffect = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
                 .addCallback(editor::setColor);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (curEffect != null) {
+            curEffect.render(sb);
+        }
+        else {
+            hb.render(sb);
+            cancelButton.tryRender(sb);
+            saveButton.tryRender(sb);
+            loadButton.tryRender(sb);
+            selectExistingButton.tryRender(sb);
+            pasteButton.tryRender(sb);
+            instructionsLabel.tryRender(sb);
+            tintEditor.tryRender(sb);
+            tintToggle.tryRender(sb);
+            zoomBar.tryRender(sb);
+
+            if (outsideImage != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
+            }
+            if (insideImageRenderable != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
+            }
+        }
     }
 
     private void selectExistingCards() {
@@ -359,6 +322,43 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             updateZoom(1f);
             instructionsLabel.setLabel(PGR.core.strings.cetut_imageCrop);
             saveButton.setInteractable(true);
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (curEffect != null) {
+            curEffect.update();
+            if (curEffect.isDone) {
+                curEffect = null;
+            }
+        }
+        else {
+            cancelButton.tryUpdate();
+            saveButton.tryUpdate();
+            loadButton.tryUpdate();
+            selectExistingButton.tryUpdate();
+            pasteButton.tryUpdate();
+            instructionsLabel.tryUpdate();
+            tintEditor.tryUpdate();
+            tintToggle.tryUpdate();
+            camera.update();
+            if (baseTexture != null) {
+                if (!hb.isDragging()) {
+                    zoomBar.tryUpdate();
+                }
+                if (!zoomBar.isDragging) {
+                    hb.update();
+                    if (hb.isDragging()) {
+                        updatePictures();
+                    }
+                }
+            }
+
+            // TODO see if there is a way to check for the "paste" function for different operating systems
+            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+                getImageFromClipboard();
+            }
         }
     }
 

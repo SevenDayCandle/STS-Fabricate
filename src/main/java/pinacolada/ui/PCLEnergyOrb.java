@@ -76,11 +76,6 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
         }
     }
 
-    @Override
-    public void updateOrb(int energyCount) {
-        this.angle += energyCount == 0 ? Gdx.graphics.getDeltaTime() * 0.5f : Gdx.graphics.getDeltaTime() * 2;
-    }
-
     protected void renderOrbLayer(SpriteBatch sb, float current_x, float current_y) {
         sb.draw(this.images[0].texture(), current_x - 64.0F, current_y - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, ORB_IMG_SCALE, ORB_IMG_SCALE, this.angle * this.angleMults[0], 0, 0, 128, 128, false, false);
         sb.setColor(EUIColors.white(0.26f));
@@ -97,5 +92,10 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
                 s.draw(this.images[i].texture(), current_x - 64.0F, current_y - 64.0F, 64.0F, 64.0F, 32, 32, ORB_IMG_SCALE / 4, ORB_IMG_SCALE / 4, -this.angle * this.angleMults[i] + 90f, 0, 0, 128, 128, false, false);
             }
         });
+    }
+
+    @Override
+    public void updateOrb(int energyCount) {
+        this.angle += energyCount == 0 ? Gdx.graphics.getDeltaTime() * 0.5f : Gdx.graphics.getDeltaTime() * 2;
     }
 }

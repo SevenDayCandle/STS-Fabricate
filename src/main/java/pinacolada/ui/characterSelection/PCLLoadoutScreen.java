@@ -201,120 +201,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-
-        PGR.blackScreen.renderImpl(sb);
-
-        if (relicSelectionEffect != null) {
-            relicSelectionEffect.render(sb);
-        }
-        else if (cardSelectionEffect != null) {
-            cardSelectionEffect.render(sb);
-        }
-        else {
-            seriesButton.tryRender(sb);
-
-            for (EUIButton button : presetButtons) {
-                button.tryRender(sb);
-            }
-
-            startingDeck.renderImpl(sb);
-            deckText.renderImpl(sb);
-            relicText.renderImpl(sb);
-            attributesText.renderImpl(sb);
-
-            // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
-            for (int i = baseStatEditors.size() - 1; i >= 0; i--) {
-                baseStatEditors.get(i).tryRender(sb);
-            }
-
-            cancelButton.renderImpl(sb);
-            clearButton.renderImpl(sb);
-            saveButton.renderImpl(sb);
-            upgradeToggle.renderImpl(sb);
-            hindrancevalueText.tryRender(sb);
-            cardscountText.tryRender(sb);
-            cardsvalueText.tryRender(sb);
-
-            for (int i = relicsEditors.size() - 1; i >= 0; i--) {
-                relicsEditors.get(i).tryRender(sb);
-            }
-
-            for (int i = slotsEditors.size() - 1; i >= 0; i--) {
-                slotsEditors.get(i).tryRender(sb);
-            }
-        }
-
-        contextMenu.tryRender(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-
-        PGR.blackScreen.updateImpl();
-        startingDeck.updateImpl();
-        deckText.updateImpl();
-        relicText.updateImpl();
-        attributesText.updateImpl();
-        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).updateImpl();
-
-        if (cardSelectionEffect != null) {
-            cardSelectionEffect.update();
-
-            if (cardSelectionEffect.isDone) {
-                cardSelectionEffect = null;
-                setSlotsActive(true);
-            }
-        }
-        else if (relicSelectionEffect != null) {
-            relicSelectionEffect.update();
-
-            if (relicSelectionEffect.isDone) {
-                relicSelectionEffect = null;
-                setSlotsActive(true);
-            }
-        }
-        else {
-            seriesButton.tryUpdate();
-
-            if (!EUI.doesActiveElementExist()) {
-                for (int i = 0; i < presetButtons.length; i++) {
-                    final EUIButton button = presetButtons[i];
-                    button
-                            .setColor((i == preset) ? Color.SKY : button.interactable ? Color.LIGHT_GRAY : Color.DARK_GRAY)
-                            .tryUpdate();
-                }
-            }
-
-            for (PCLBaseStatEditor beditor : baseStatEditors) {
-                if (activeEditor == null || activeEditor == beditor) {
-                    beditor.tryUpdate();
-                }
-            }
-
-            cancelButton.updateImpl();
-            clearButton.updateImpl();
-            saveButton.updateImpl();
-
-            for (PCLCardSlotEditor editor : slotsEditors) {
-                editor.tryUpdate();
-            }
-            for (PCLRelicSlotEditor editor : relicsEditors) {
-                editor.tryUpdate();
-            }
-        }
-
-        hindrancevalueText.tryUpdate();
-        cardscountText.tryUpdate();
-        cardsvalueText.tryUpdate();
-        saveButton.tryUpdate();
-
-        contextMenu.tryUpdate();
-    }
-
     public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
@@ -373,6 +259,55 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         if (characterOption != null && data != null) {
             PGR.seriesSelection.open(characterOption, data, this.onClose);
         }
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+
+        PGR.blackScreen.renderImpl(sb);
+
+        if (relicSelectionEffect != null) {
+            relicSelectionEffect.render(sb);
+        }
+        else if (cardSelectionEffect != null) {
+            cardSelectionEffect.render(sb);
+        }
+        else {
+            seriesButton.tryRender(sb);
+
+            for (EUIButton button : presetButtons) {
+                button.tryRender(sb);
+            }
+
+            startingDeck.renderImpl(sb);
+            deckText.renderImpl(sb);
+            relicText.renderImpl(sb);
+            attributesText.renderImpl(sb);
+
+            // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
+            for (int i = baseStatEditors.size() - 1; i >= 0; i--) {
+                baseStatEditors.get(i).tryRender(sb);
+            }
+
+            cancelButton.renderImpl(sb);
+            clearButton.renderImpl(sb);
+            saveButton.renderImpl(sb);
+            upgradeToggle.renderImpl(sb);
+            hindrancevalueText.tryRender(sb);
+            cardscountText.tryRender(sb);
+            cardsvalueText.tryRender(sb);
+
+            for (int i = relicsEditors.size() - 1; i >= 0; i--) {
+                relicsEditors.get(i).tryRender(sb);
+            }
+
+            for (int i = slotsEditors.size() - 1; i >= 0; i--) {
+                slotsEditors.get(i).tryRender(sb);
+            }
+        }
+
+        contextMenu.tryRender(sb);
     }
 
     public void repositionSlotEditor(PCLCardSlotEditor cardSlotEditor, int index) {
@@ -442,6 +377,71 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void trySelectRelic(PCLRelicSlotEditor relicSlot) {
         relicSelectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
         setSlotsActive(false);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+
+        PGR.blackScreen.updateImpl();
+        startingDeck.updateImpl();
+        deckText.updateImpl();
+        relicText.updateImpl();
+        attributesText.updateImpl();
+        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).updateImpl();
+
+        if (cardSelectionEffect != null) {
+            cardSelectionEffect.update();
+
+            if (cardSelectionEffect.isDone) {
+                cardSelectionEffect = null;
+                setSlotsActive(true);
+            }
+        }
+        else if (relicSelectionEffect != null) {
+            relicSelectionEffect.update();
+
+            if (relicSelectionEffect.isDone) {
+                relicSelectionEffect = null;
+                setSlotsActive(true);
+            }
+        }
+        else {
+            seriesButton.tryUpdate();
+
+            if (!EUI.doesActiveElementExist()) {
+                for (int i = 0; i < presetButtons.length; i++) {
+                    final EUIButton button = presetButtons[i];
+                    button
+                            .setColor((i == preset) ? Color.SKY : button.interactable ? Color.LIGHT_GRAY : Color.DARK_GRAY)
+                            .tryUpdate();
+                }
+            }
+
+            for (PCLBaseStatEditor beditor : baseStatEditors) {
+                if (activeEditor == null || activeEditor == beditor) {
+                    beditor.tryUpdate();
+                }
+            }
+
+            cancelButton.updateImpl();
+            clearButton.updateImpl();
+            saveButton.updateImpl();
+
+            for (PCLCardSlotEditor editor : slotsEditors) {
+                editor.tryUpdate();
+            }
+            for (PCLRelicSlotEditor editor : relicsEditors) {
+                editor.tryUpdate();
+            }
+        }
+
+        hindrancevalueText.tryUpdate();
+        cardscountText.tryUpdate();
+        cardsvalueText.tryUpdate();
+        saveButton.tryUpdate();
+
+        contextMenu.tryUpdate();
     }
 
     public void updateValidation() {

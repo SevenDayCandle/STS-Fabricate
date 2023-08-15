@@ -36,13 +36,13 @@ public class PMove_RemoveOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return true;
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_remove(fields.getOrbAmountString());
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.act_remove(fields.getOrbAmountString());
+    public boolean isDetrimental() {
+        return true;
     }
 
     @Override

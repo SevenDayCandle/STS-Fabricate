@@ -73,15 +73,15 @@ public class MysteryCard extends PCLCard {
             return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], fields.getFullCardString());
         }
 
+        @Override
+        public void onCardCreated(AbstractCard card, boolean startOfBattle) {
+            useFromTrigger(generateInfo(null));
+        }
+
         protected void useImpl(PCLUseInfo info, PCLActions order) {
             if (sourceCard != null) {
                 order.replaceCard(sourceCard.uuid, createObscuredCard());
             }
-        }
-
-        @Override
-        public void onCardCreated(AbstractCard card, boolean startOfBattle) {
-            useFromTrigger(generateInfo(null));
         }
     }
 }

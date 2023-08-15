@@ -25,21 +25,6 @@ public class PField_Power extends PField_Random {
         return other instanceof PField_Power && powers.equals(((PField_Power) other).powers) && ((PField_Power) other).random == random && ((PField_Power) other).debuff == debuff;
     }
 
-    @Override
-    public PField_Power makeCopy() {
-        return (PField_Power) new PField_Power().setPower(powers).setRandom(random).setDebuff(debuff).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerPower(powers);
-        editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description, v -> debuff = v, debuff);
-    }
-
-    public PField_Power setRandom(boolean value) {
-        this.random = value;
-        return this;
-    }
-
     public String getBuffString() {
         return debuff ? PGR.core.tooltips.debuff.title : PGR.core.tooltips.buff.title;
     }
@@ -68,6 +53,11 @@ public class PField_Power extends PField_Random {
         return powers.isEmpty() ? getBuffString() : getPowerAndOrString();
     }
 
+    @Override
+    public PField_Power makeCopy() {
+        return (PField_Power) new PField_Power().setPower(powers).setRandom(random).setDebuff(debuff).setNot(not);
+    }
+
     public PField_Power setDebuff(boolean value) {
         this.debuff = value;
         return this;
@@ -81,5 +71,15 @@ public class PField_Power extends PField_Random {
 
     public PField_Power setPower(PCLPowerHelper... powers) {
         return setPower(Arrays.asList(powers));
+    }
+
+    public PField_Power setRandom(boolean value) {
+        this.random = value;
+        return this;
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerPower(powers);
+        editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description, v -> debuff = v, debuff);
     }
 }

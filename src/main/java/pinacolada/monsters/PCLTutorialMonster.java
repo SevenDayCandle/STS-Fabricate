@@ -2,17 +2,12 @@ package pinacolada.monsters;
 
 import basemod.BaseMod;
 import com.megacrit.cardcrawl.actions.common.HealAction;
-import com.megacrit.cardcrawl.actions.common.SetMoveAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.relics.NeowsLament;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT0;
@@ -25,11 +20,9 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public abstract class PCLTutorialMonster extends PCLCreature implements TourProvider {
     public static ArrayList<TutorialInfo> tutorials = new ArrayList<>();
@@ -110,12 +103,6 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         this.setMove("", (byte) -1, Intent.NONE);
     }
 
-    @Override
-    public void usePreBattleAction() {
-        AbstractDungeon.getCurrRoom().cannotLose = true;
-        performActions(false);
-    }
-
     public void onComplete() {
         PCLSFX.play(PCLSFX.TINGSHA);
         PCLEffects.Queue.particle(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
@@ -160,6 +147,12 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
 
     public void talk(String message) {
         PCLEffects.Queue.talk(this, message);
+    }
+
+    @Override
+    public void usePreBattleAction() {
+        AbstractDungeon.getCurrRoom().cannotLose = true;
+        performActions(false);
     }
 
     public static class TutorialInfo {

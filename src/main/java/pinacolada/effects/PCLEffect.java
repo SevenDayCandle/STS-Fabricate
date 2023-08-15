@@ -74,6 +74,11 @@ public abstract class PCLEffect extends AbstractGameEffect {
         this.isDone = true;
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
     protected void firstUpdate(float deltaTime) {
 
     }
@@ -88,6 +93,11 @@ public abstract class PCLEffect extends AbstractGameEffect {
         this.ticks = 0;
         this.renderBehind = false;
         this.isRealtime = false;
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+
     }
 
     public PCLEffect renderBehind(boolean value) {
@@ -182,16 +192,6 @@ public abstract class PCLEffect extends AbstractGameEffect {
         else {
             updateInternal(delta);
         }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     protected void updateInternal(float deltaTime) {

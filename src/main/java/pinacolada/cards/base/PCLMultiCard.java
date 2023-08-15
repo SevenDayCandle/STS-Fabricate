@@ -53,133 +53,6 @@ public abstract class PCLMultiCard extends PCLCard {
         super.addAugment(augment, save);
     }
 
-    // Should not use effects directly on it unless its primary skill is disabled
-    @Override
-    public ArrayList<PSkill<?>> getFullEffects() {
-        ArrayList<PSkill<?>> original = getEffects();
-        return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
-    }
-
-    public void setup(Object input) {
-        multiCardMove = createMulticardMove();
-        addUseMove(multiCardMove);
-    }
-
-    @Override
-    public void triggerWhenCreated(boolean startOfBattle) {
-        if (inheritedCards.size() < multiCardMove.baseAmount) {
-            while (inheritedCards.size() < multiCardMove.baseAmount) {
-                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
-            }
-        }
-        for (AbstractCard card : inheritedCards.getCards()) {
-            if (card instanceof MysteryCard) {
-                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
-                replaceInheritedCard(card, newCard);
-            }
-            card.isLocked = false;
-            card.isSeen = true;
-        }
-
-        refreshProperties();
-
-        super.triggerWhenCreated(startOfBattle);
-    }
-
-    @Override
-    public PCLMultiCard makeStatEquivalentCopy() {
-        PCLMultiCard other = (PCLMultiCard) super.makeStatEquivalentCopy();
-        for (AbstractCard iCard : getCards()) {
-            other.addInheritedCard(iCard.makeStatEquivalentCopy());
-        }
-        other.refreshProperties();
-
-        return other;
-    }
-
-    @Override
-    public void renderUpgradePreview(SpriteBatch sb) {
-        PCLMultiCard upgrade = EUIUtils.safeCast(cardData.tempCard, PCLMultiCard.class);
-        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
-            cardData.tempCard = upgrade = (PCLMultiCard) this.makeSameInstanceOf();
-            upgrade.isPreview = true;
-            for (AbstractCard iCard : inheritedCards.getCards()) {
-                upgrade.addInheritedCard(iCard.makeSameInstanceOf());
-            }
-            upgrade.refreshProperties();
-            upgrade.previousAffinities = new ArrayList<>(upgrade.affinities.sorted);
-            upgrade.upgrade();
-            upgrade.displayUpgrades();
-        }
-
-        upgrade.current_x = this.current_x;
-        upgrade.current_y = this.current_y;
-        upgrade.drawScale = this.drawScale;
-        upgrade.render(sb, false);
-    }
-
-    @Override
-    public void applyPowers() {
-        super.applyPowers();
-        for (AbstractCard card : inheritedCards.getCards()) {
-            card.applyPowers();
-        }
-    }
-
-    @Override
-    public boolean onAddToDeck() {
-        PCLEffects.Queue.callback(new ChooseMulticardAction(this));
-        return super.onAddToDeck();
-    }
-
-    @Override
-    public PCLCardSaveData onSave() {
-        ArrayList<String> ids = new ArrayList<>();
-        for (AbstractCard card : getCards()) {
-            ids.add(card.cardID);
-        }
-        auxiliaryData.additionalData = ids;
-        return auxiliaryData;
-    }
-
-    @Override
-    public void onLoad(PCLCardSaveData data) {
-        super.onLoad(data);
-        inheritedCards.clear();
-        if (data.additionalData != null) {
-            for (String id : data.additionalData) {
-                AbstractCard card = CardLibrary.getCard(id);
-                addInheritedCard(card);
-            }
-        }
-        initializeDescription();
-    }
-
-    @Override
-    protected void onUpgrade() {
-        for (EUICardPreview preview : inheritedCards) {
-            AbstractCard card = preview.defaultPreview;
-            if (card instanceof PCLCard && ((PCLCard) card).isMultiUpgrade() && card.timesUpgraded < this.timesUpgraded) {
-                card.upgrade();
-                preview.upgradedPreview.upgrade();
-            }
-            else if (!card.upgraded) {
-                card.upgrade();
-            }
-        }
-        refreshProperties();
-    }
-
-    @Override
-    public PCLAugment removeAugment(int index, boolean save) {
-        for (AbstractCard c : getCards()) {
-            if (c instanceof PCLCard) {
-                ((PCLCard) c).removeAugment(index, false);
-            }
-        }
-        return super.removeAugment(index, save);
-    }
-
     // TODO make configurable using skill
     protected void addCardProperties(AbstractCard card) {
         if (this.cost == -2 || card.cost == -1) {
@@ -213,6 +86,14 @@ public abstract class PCLMultiCard extends PCLCard {
         }
     }
 
+    @Override
+    public void applyPowers() {
+        super.applyPowers();
+        for (AbstractCard card : inheritedCards.getCards()) {
+            card.applyPowers();
+        }
+    }
+
     public PField_CardCategory createFilterFields() {
         return new PField_CardCategory();
     }
@@ -230,6 +111,13 @@ public abstract class PCLMultiCard extends PCLCard {
             inheritedCards = new CardPreviewList();
         }
         return inheritedCards.getCards();
+    }
+
+    // Should not use effects directly on it unless its primary skill is disabled
+    @Override
+    public ArrayList<PSkill<?>> getFullEffects() {
+        ArrayList<PSkill<?>> original = getEffects();
+        return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
     }
 
     public PCLMultiCardMove getMultiCardMove() {
@@ -256,8 +144,63 @@ public abstract class PCLMultiCard extends PCLCard {
         return currentPreview;
     }
 
+    @Override
+    public PCLMultiCard makeStatEquivalentCopy() {
+        PCLMultiCard other = (PCLMultiCard) super.makeStatEquivalentCopy();
+        for (AbstractCard iCard : getCards()) {
+            other.addInheritedCard(iCard.makeStatEquivalentCopy());
+        }
+        other.refreshProperties();
+
+        return other;
+    }
+
+    @Override
+    public boolean onAddToDeck() {
+        PCLEffects.Queue.callback(new ChooseMulticardAction(this));
+        return super.onAddToDeck();
+    }
+
     public void onCardsRemoved() {
 
+    }
+
+    @Override
+    public void onLoad(PCLCardSaveData data) {
+        super.onLoad(data);
+        inheritedCards.clear();
+        if (data.additionalData != null) {
+            for (String id : data.additionalData) {
+                AbstractCard card = CardLibrary.getCard(id);
+                addInheritedCard(card);
+            }
+        }
+        initializeDescription();
+    }
+
+    @Override
+    public PCLCardSaveData onSave() {
+        ArrayList<String> ids = new ArrayList<>();
+        for (AbstractCard card : getCards()) {
+            ids.add(card.cardID);
+        }
+        auxiliaryData.additionalData = ids;
+        return auxiliaryData;
+    }
+
+    @Override
+    protected void onUpgrade() {
+        for (EUICardPreview preview : inheritedCards) {
+            AbstractCard card = preview.defaultPreview;
+            if (card instanceof PCLCard && ((PCLCard) card).isMultiUpgrade() && card.timesUpgraded < this.timesUpgraded) {
+                card.upgrade();
+                preview.upgradedPreview.upgrade();
+            }
+            else if (!card.upgraded) {
+                card.upgrade();
+            }
+        }
+        refreshProperties();
     }
 
     // TODO make configurable using skill
@@ -304,6 +247,16 @@ public abstract class PCLMultiCard extends PCLCard {
         initializeDescription();
     }
 
+    @Override
+    public PCLAugment removeAugment(int index, boolean save) {
+        for (AbstractCard c : getCards()) {
+            if (c instanceof PCLCard) {
+                ((PCLCard) c).removeAugment(index, false);
+            }
+        }
+        return super.removeAugment(index, save);
+    }
+
     public void removeInheritedCards() {
         PCLEffects.Queue.callback(() -> {
             for (EUICardPreview card : inheritedCards) {
@@ -316,6 +269,27 @@ public abstract class PCLMultiCard extends PCLCard {
         }).addCallback(this::onCardsRemoved);
     }
 
+    @Override
+    public void renderUpgradePreview(SpriteBatch sb) {
+        PCLMultiCard upgrade = EUIUtils.safeCast(cardData.tempCard, PCLMultiCard.class);
+        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
+            cardData.tempCard = upgrade = (PCLMultiCard) this.makeSameInstanceOf();
+            upgrade.isPreview = true;
+            for (AbstractCard iCard : inheritedCards.getCards()) {
+                upgrade.addInheritedCard(iCard.makeSameInstanceOf());
+            }
+            upgrade.refreshProperties();
+            upgrade.previousAffinities = new ArrayList<>(upgrade.affinities.sorted);
+            upgrade.upgrade();
+            upgrade.displayUpgrades();
+        }
+
+        upgrade.current_x = this.current_x;
+        upgrade.current_y = this.current_y;
+        upgrade.drawScale = this.drawScale;
+        upgrade.render(sb, false);
+    }
+
     public void replaceInheritedCard(AbstractCard original, AbstractCard incoming) {
         int index = inheritedCards.getMatchingIndex(original);
         if (incoming != null && index >= 0) {
@@ -325,6 +299,32 @@ public abstract class PCLMultiCard extends PCLCard {
             }
         }
         refreshProperties();
+    }
+
+    public void setup(Object input) {
+        multiCardMove = createMulticardMove();
+        addUseMove(multiCardMove);
+    }
+
+    @Override
+    public void triggerWhenCreated(boolean startOfBattle) {
+        if (inheritedCards.size() < multiCardMove.baseAmount) {
+            while (inheritedCards.size() < multiCardMove.baseAmount) {
+                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
+            }
+        }
+        for (AbstractCard card : inheritedCards.getCards()) {
+            if (card instanceof MysteryCard) {
+                AbstractCard newCard = ((MysteryCard) card).createObscuredCard();
+                replaceInheritedCard(card, newCard);
+            }
+            card.isLocked = false;
+            card.isSeen = true;
+        }
+
+        refreshProperties();
+
+        super.triggerWhenCreated(startOfBattle);
     }
 
     protected abstract PCLMultiCardMove createMulticardMove();
@@ -340,19 +340,6 @@ public abstract class PCLMultiCard extends PCLCard {
         @Override
         public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
             return EUIUtils.find(multicard.getCards(), card -> !card.cardPlayable(GameUtilities.asMonster(info.target))) == null;
-        }
-
-        @Override
-        public void refresh(PCLUseInfo info, boolean conditionMet) {
-            super.refresh(info, conditionMet);
-            for (AbstractCard card : multicard.getCards()) {
-                if (card instanceof PCLCard) {
-                    ((PCLCard) card).refreshImpl(info);
-                }
-                else {
-                    card.calculateCardDamage(GameUtilities.asMonster(info.source));
-                }
-            }
         }
 
         protected void doCard(ActionT1<AbstractCard> childAction) {
@@ -375,23 +362,16 @@ public abstract class PCLMultiCard extends PCLCard {
                     PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText(perspective);
         }
 
-        protected void useImpl(PCLUseInfo info, PCLActions order) {
-            AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
-            ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
-            // Allow Starter effects on inherited cards to take effect
-            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
-            }
+        @Override
+        public void refresh(PCLUseInfo info, boolean conditionMet) {
+            super.refresh(info, conditionMet);
             for (AbstractCard card : multicard.getCards()) {
                 if (card instanceof PCLCard) {
-                    ((PCLCard) card).onUse(info);
+                    ((PCLCard) card).refreshImpl(info);
                 }
                 else {
-                    card.use(AbstractDungeon.player, m);
+                    card.calculateCardDamage(GameUtilities.asMonster(info.source));
                 }
-            }
-            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
             }
         }
 
@@ -465,6 +445,26 @@ public abstract class PCLMultiCard extends PCLCard {
         @Override
         public void triggerOnScry(AbstractCard c) {
             doCard(AbstractCard::triggerOnScry);
+        }
+
+        protected void useImpl(PCLUseInfo info, PCLActions order) {
+            AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
+            ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
+            // Allow Starter effects on inherited cards to take effect
+            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
+            }
+            for (AbstractCard card : multicard.getCards()) {
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).onUse(info);
+                }
+                else {
+                    card.use(AbstractDungeon.player, m);
+                }
+            }
+            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
+            }
         }
     }
 }

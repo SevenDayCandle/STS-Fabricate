@@ -110,17 +110,6 @@ public class AffinityKeywordButton extends EUIBase {
         }
     }
 
-    @Override
-    public void updateImpl() {
-        backgroundButton.setInteractable(PCLEffects.isEmpty()).updateImpl();
-        if (currentLevel > 2) {
-            borderRotation = EUI.timeMulti(-20);
-        }
-        else if (currentLevel > 1) {
-            borderRotation = EUI.timeMulti(8);
-        }
-    }
-
     public void reset(boolean invoke) {
         currentLevel = 0;
         backgroundButton.setColor(PANEL_COLOR);
@@ -184,5 +173,16 @@ public class AffinityKeywordButton extends EUIBase {
         this.showNumbers = showNumbers;
 
         return this;
+    }
+
+    @Override
+    public void updateImpl() {
+        backgroundButton.setInteractable(PCLEffects.isEmpty()).updateImpl();
+        if (currentLevel > 2) {
+            borderRotation = EUI.timeMulti(-20);
+        }
+        else if (currentLevel > 1) {
+            borderRotation = EUI.timeMulti(8);
+        }
     }
 }

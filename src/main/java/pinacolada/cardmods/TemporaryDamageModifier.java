@@ -46,13 +46,8 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
     }
 
     @Override
-    public boolean removeOnCardPlayed(AbstractCard card) {
-        return untilPlayed;
-    }
-
-    @Override
-    public boolean removeAtEndOfTurn(AbstractCard card) {
-        return temporary;
+    public AbstractCardModifier makeCopy() {
+        return new TemporaryDamageModifier(change, temporary, untilPlayed);
     }
 
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
@@ -60,7 +55,12 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
     }
 
     @Override
-    public AbstractCardModifier makeCopy() {
-        return new TemporaryDamageModifier(change, temporary, untilPlayed);
+    public boolean removeAtEndOfTurn(AbstractCard card) {
+        return temporary;
+    }
+
+    @Override
+    public boolean removeOnCardPlayed(AbstractCard card) {
+        return untilPlayed;
     }
 }

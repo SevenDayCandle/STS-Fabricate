@@ -17,11 +17,6 @@ public class DeflectionPower extends PCLPower {
     }
 
     @Override
-    public void playApplyPowerSfx() {
-        PCLSFX.play(PCLSFX.ATTACK_IRON_1, 1.25f, 1.35f, 0.7f);
-    }
-
-    @Override
     public void atEndOfTurn(boolean isPlayer) {
         super.atEndOfTurn(isPlayer);
         reducePower(1);
@@ -35,5 +30,10 @@ public class DeflectionPower extends PCLPower {
         }
 
         return super.onAttacked(info, damageAmount);
+    }
+
+    @Override
+    public void playApplyPowerSfx() {
+        PCLSFX.play(PCLSFX.ATTACK_IRON_1, 1.25f, 1.35f, 0.7f);
     }
 }

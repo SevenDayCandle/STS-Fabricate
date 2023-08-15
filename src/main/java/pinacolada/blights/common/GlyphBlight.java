@@ -27,6 +27,24 @@ public class GlyphBlight extends AbstractGlyphBlight {
         super(ID, PGR.config.ascensionGlyph0, AbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, AbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
+    @Override
+    public void atBattleStart() {
+        super.atBattleStart();
+
+        PCLActions.bottom.selectFromPile(name, 1, createGlyphGroup())
+                .addCallback(selection -> {
+                    if (selection.size() > 0) {
+                        Glyph e = (Glyph) selection.get(0);
+                        e.onUse(null);
+                        for (PSkill<?> skill : e.getEffects()) {
+                            skill.subscribeChildren();
+                        }
+                        this.glyph = e;
+                        flash();
+                    }
+                });
+    }
+
     public CardGroup createGlyphGroup() {
         final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         final RandomizedList<AbstractCard> possiblePicks = new RandomizedList<>();
@@ -53,24 +71,6 @@ public class GlyphBlight extends AbstractGlyphBlight {
         super.onVictory();
 
         this.glyph = null;
-    }
-
-    @Override
-    public void atBattleStart() {
-        super.atBattleStart();
-
-        PCLActions.bottom.selectFromPile(name, 1, createGlyphGroup())
-                .addCallback(selection -> {
-                    if (selection.size() > 0) {
-                        Glyph e = (Glyph) selection.get(0);
-                        e.onUse(null);
-                        for (PSkill<?> skill : e.getEffects()) {
-                            skill.subscribeChildren();
-                        }
-                        this.glyph = e;
-                        flash();
-                    }
-                });
     }
 
     @Override

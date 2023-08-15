@@ -35,11 +35,6 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        fields.setupEditor(editor);
-    }
-
-    @Override
     public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.play;
     }
@@ -47,5 +42,10 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
     @Override
     public void onCardPlayed(AbstractCard card) {
         triggerOnCard(card);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
     }
 }

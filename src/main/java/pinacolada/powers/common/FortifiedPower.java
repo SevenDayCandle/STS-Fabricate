@@ -31,12 +31,12 @@ public class FortifiedPower extends PCLPower {
     }
 
     @Override
-    public float modifyBlock(float block) {
-        return calculateBlock(block, getMultiplier());
+    public String getUpdatedDescription() {
+        return formatDescription(0, PCLRenderHelpers.decimalFormat(getMultiplier()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
     }
 
     @Override
-    public String getUpdatedDescription() {
-        return formatDescription(0, PCLRenderHelpers.decimalFormat(getMultiplier()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
+    public float modifyBlock(float block) {
+        return calculateBlock(block, getMultiplier());
     }
 }

@@ -22,7 +22,6 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -33,8 +32,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
-
-import javax.smartcardio.Card;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_COLORLESS;
@@ -163,77 +160,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         if (onClose != null) {
             onClose.invoke();
         }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        PGR.blackScreen.renderImpl(sb);
-
-        cardGrid.tryRender(sb);
-
-        startingDeck.tryRender(sb);
-        loadoutEditor.tryRender(sb);
-        selectAllButton.tryRender(sb);
-        deselectAllButton.tryRender(sb);
-        previewCards.renderImpl(sb);
-        colorless.renderImpl(sb);
-        cancel.renderImpl(sb);
-        confirm.renderImpl(sb);
-
-        previewCardsInfo.renderImpl(sb);
-        typesAmount.renderImpl(sb);
-
-        if (previewCardsEffect != null) {
-            previewCardsEffect.render(sb);
-        }
-        else {
-            EUI.countingPanel.tryRender(sb);
-        }
-
-        contextMenu.tryRender(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        PGR.blackScreen.updateImpl();
-        EUI.countingPanel.tryUpdate();
-
-        if (previewCardsEffect != null) {
-            previewCardsEffect.update();
-
-            if (previewCardsEffect.isDone) {
-                previewCardsEffect = null;
-            }
-            else {
-                return;
-            }
-        }
-        else {
-            super.updateImpl();
-        }
-
-        if (totalCardsCache != container.shownCards.size() || totalColorlessCache != container.shownColorlessCards.size()) {
-            totalCardsCache = container.shownCards.size();
-            totalColorlessCache = container.shownColorlessCards.size();
-            totalCardsChanged(totalCardsCache, totalColorlessCache);
-        }
-
-        startingDeck.tryUpdate();
-        loadoutEditor.tryUpdate();
-
-        if (!isScreenDisabled) {
-            selectAllButton.tryUpdate();
-            deselectAllButton.tryUpdate();
-            previewCards.updateImpl();
-            colorless.updateImpl();
-            cancel.updateImpl();
-            confirm.updateImpl();
-            cardGrid.tryUpdate();
-            previewCardsInfo.tryUpdate();
-            typesAmount.tryUpdate();
-        }
-
-        contextMenu.tryUpdate();
     }
 
     public void forceUpdateText() {
@@ -379,6 +305,34 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         close();
     }
 
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        PGR.blackScreen.renderImpl(sb);
+
+        cardGrid.tryRender(sb);
+
+        startingDeck.tryRender(sb);
+        loadoutEditor.tryRender(sb);
+        selectAllButton.tryRender(sb);
+        deselectAllButton.tryRender(sb);
+        previewCards.renderImpl(sb);
+        colorless.renderImpl(sb);
+        cancel.renderImpl(sb);
+        confirm.renderImpl(sb);
+
+        previewCardsInfo.renderImpl(sb);
+        typesAmount.renderImpl(sb);
+
+        if (previewCardsEffect != null) {
+            previewCardsEffect.render(sb);
+        }
+        else {
+            EUI.countingPanel.tryRender(sb);
+        }
+
+        contextMenu.tryRender(sb);
+    }
+
     public void selectAll(boolean value) {
         for (PCLLoadout c : container.getAllLoadouts()) {
             container.toggleCards(c, value);
@@ -407,6 +361,49 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 MINIMUM_COLORLESS));
 
         confirm.setInteractable(container.isValid());
+    }
+
+    @Override
+    public void updateImpl() {
+        PGR.blackScreen.updateImpl();
+        EUI.countingPanel.tryUpdate();
+
+        if (previewCardsEffect != null) {
+            previewCardsEffect.update();
+
+            if (previewCardsEffect.isDone) {
+                previewCardsEffect = null;
+            }
+            else {
+                return;
+            }
+        }
+        else {
+            super.updateImpl();
+        }
+
+        if (totalCardsCache != container.shownCards.size() || totalColorlessCache != container.shownColorlessCards.size()) {
+            totalCardsCache = container.shownCards.size();
+            totalColorlessCache = container.shownColorlessCards.size();
+            totalCardsChanged(totalCardsCache, totalColorlessCache);
+        }
+
+        startingDeck.tryUpdate();
+        loadoutEditor.tryUpdate();
+
+        if (!isScreenDisabled) {
+            selectAllButton.tryUpdate();
+            deselectAllButton.tryUpdate();
+            previewCards.updateImpl();
+            colorless.updateImpl();
+            cancel.updateImpl();
+            confirm.updateImpl();
+            cardGrid.tryUpdate();
+            previewCardsInfo.tryUpdate();
+            typesAmount.tryUpdate();
+        }
+
+        contextMenu.tryUpdate();
     }
 
     protected void updateStartingDeckText() {

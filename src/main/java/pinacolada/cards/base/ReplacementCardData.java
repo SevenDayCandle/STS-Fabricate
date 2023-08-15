@@ -137,11 +137,6 @@ public class ReplacementCardData extends PCLDynamicCardData {
         return this;
     }
 
-    public ReplacementCardData setPSkill(PSkill<?>... effect) {
-        super.setPSkill(effect);
-        return this;
-    }
-
     // Build a replacement card that invokes the source card directly
     public ReplacementCard buildAsReplacement() {
         if (strings == null) {
@@ -153,5 +148,10 @@ public class ReplacementCardData extends PCLDynamicCardData {
         }
 
         return new ReplacementCard(this);
+    }
+
+    public ReplacementCardData setPSkill(PSkill<?>... effect) {
+        super.setPSkill(effect);
+        return this;
     }
 }

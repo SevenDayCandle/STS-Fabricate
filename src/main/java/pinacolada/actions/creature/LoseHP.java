@@ -42,21 +42,6 @@ public class LoseHP extends PCLAction<Void> {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            if (!canKill) {
-                amount = Math.max(0, Math.min(GameUtilities.getHP(target, true, false) - 1, amount));
-            }
-
-            DamageHelper.dealDirectHPLoss(source, target, amount, ignoreTempHP, ignorePowers);
-
-            if (!Settings.FAST_MODE) {
-                PCLActions.top.wait(0.1f);
-            }
-        }
-    }
-
     public LoseHP ignorePowers(boolean ignorePowers) {
         this.ignorePowers = ignorePowers;
 
@@ -74,5 +59,20 @@ public class LoseHP extends PCLAction<Void> {
         this.pitchMax = pitchMax;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            if (!canKill) {
+                amount = Math.max(0, Math.min(GameUtilities.getHP(target, true, false) - 1, amount));
+            }
+
+            DamageHelper.dealDirectHPLoss(source, target, amount, ignoreTempHP, ignorePowers);
+
+            if (!Settings.FAST_MODE) {
+                PCLActions.top.wait(0.1f);
+            }
+        }
     }
 }

@@ -76,6 +76,20 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     }
 
     @Override
+    public void reassignChild(PCLCustomEffectNode node) {
+        addSubnode(node);
+        addEffect(node.skill);
+    }
+
+    @Override
+    public void refreshAll() {
+        super.refreshAll();
+        for (PCLCustomEffectNode subnode : subnodes) {
+            subnode.refreshAll();
+        }
+    }
+
+    @Override
     public void renderImpl(SpriteBatch sb) {
         for (PCLCustomEffectNode subnode : subnodes) {
             PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, subnode.hb, 0, 0.15f, 0f, 6);
@@ -89,20 +103,6 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         super.updateImpl();
         for (PCLCustomEffectNode subnode : subnodes) {
             subnode.update();
-        }
-    }
-
-    @Override
-    public void reassignChild(PCLCustomEffectNode node) {
-        addSubnode(node);
-        addEffect(node.skill);
-    }
-
-    @Override
-    public void refreshAll() {
-        super.refreshAll();
-        for (PCLCustomEffectNode subnode : subnodes) {
-            subnode.refreshAll();
         }
     }
 

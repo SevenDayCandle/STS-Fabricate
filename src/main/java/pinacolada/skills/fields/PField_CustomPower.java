@@ -22,12 +22,6 @@ public class PField_CustomPower extends PField {
         return new PField_CustomPower().setIndexes(indexes);
     }
 
-    // Indexes should correspond to the indexes of powers in the card being built
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.getPowerCount() - 1));
-        editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false, false, false);
-    }
-
     public PField_CustomPower setIndexes(Collection<Integer> orbs) {
         this.indexes.clear();
         this.indexes.addAll(orbs);
@@ -36,5 +30,11 @@ public class PField_CustomPower extends PField {
 
     public PField_CustomPower setIndexes(Integer... indexes) {
         return setIndexes(Arrays.asList(indexes));
+    }
+
+    // Indexes should correspond to the indexes of powers in the card being built
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.getPowerCount() - 1));
+        editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false, false, false);
     }
 }

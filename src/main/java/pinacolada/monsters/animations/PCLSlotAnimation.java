@@ -28,6 +28,10 @@ public class PCLSlotAnimation extends PCLAnimation {
         PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCentered(s, renderColor, t, x, y + t.getHeight() * 0.25f, t.getWidth(), t.getHeight(), 0.8f, 0f));
     }
 
+    public void unhighlight() {
+        targetTransitionAlpha = 0f;
+    }
+
     public void update(float deltaTime, float x, float y) {
         this.vfxTimer -= deltaTime;
         if (transitionAlpha > targetTransitionAlpha) {
@@ -37,9 +41,5 @@ public class PCLSlotAnimation extends PCLAnimation {
             transitionAlpha = Math.min(transitionAlpha + deltaTime, targetTransitionAlpha);
         }
         alpha = (0.5f + 0.5f * MathUtils.sin(vfxTimer * RATE)) * transitionAlpha;
-    }
-
-    public void unhighlight() {
-        targetTransitionAlpha = 0f;
     }
 }

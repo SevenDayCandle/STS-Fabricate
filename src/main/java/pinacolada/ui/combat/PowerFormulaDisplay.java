@@ -121,6 +121,14 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         }
     }
 
+    public void setAttackResult(float input, float result) {
+        attack.setResult(input, result);
+    }
+
+    public void setDefendResult(float input, float result) {
+        defend.setResult(input, result);
+    }
+
     @Override
     public void updateImpl(AbstractCard card, AbstractCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
@@ -154,14 +162,6 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         if (target != null) {
             enemyAttack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
         }
-    }
-
-    public void setAttackResult(float input, float result) {
-        attack.setResult(input, result);
-    }
-
-    public void setDefendResult(float input, float result) {
-        defend.setResult(input, result);
     }
 
 }

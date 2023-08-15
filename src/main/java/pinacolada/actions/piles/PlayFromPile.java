@@ -35,6 +35,16 @@ public class PlayFromPile extends SelectFromPile {
     }
 
     @Override
+    protected void complete(ArrayList<AbstractCard> result) {
+        for (AbstractCard card : result) {
+            PCLActions.top.playCard(card, target)
+                    .setSourcePile(GameUtilities.findCardGroup(card, false));
+        }
+
+        super.complete(result);
+    }
+
+    @Override
     protected void completeImpl() {
         super.completeImpl();
 
@@ -50,15 +60,5 @@ public class PlayFromPile extends SelectFromPile {
     @Override
     public String updateMessage() {
         return super.updateMessageInternal(CardRewardScreen.TEXT[0]);
-    }
-
-    @Override
-    protected void complete(ArrayList<AbstractCard> result) {
-        for (AbstractCard card : result) {
-            PCLActions.top.playCard(card, target)
-                    .setSourcePile(GameUtilities.findCardGroup(card, false));
-        }
-
-        super.complete(result);
     }
 }

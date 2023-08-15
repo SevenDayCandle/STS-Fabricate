@@ -92,13 +92,13 @@ public class PCLOrbHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(tooltip);
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     public final boolean isCommon() {
@@ -107,13 +107,13 @@ public class PCLOrbHelper implements TooltipProvider {
 
     public static class PCLOrbHelperAdapter extends TypeAdapter<PCLOrbHelper> {
         @Override
-        public void write(JsonWriter writer, PCLOrbHelper value) throws IOException {
-            writer.value(value.ID);
+        public PCLOrbHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
         }
 
         @Override
-        public PCLOrbHelper read(JsonReader in) throws IOException {
-            return get(in.nextString());
+        public void write(JsonWriter writer, PCLOrbHelper value) throws IOException {
+            writer.value(value.ID);
         }
     }
 }

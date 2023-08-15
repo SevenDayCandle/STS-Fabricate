@@ -56,6 +56,11 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return description;
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return EUIUtils.format(getSubText(perspective), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
@@ -68,10 +73,5 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         PCLActions.bottom.applyPower(powerFunc.invoke(this, info)).allowNegative(true);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return description;
     }
 }

@@ -91,30 +91,6 @@ public class SelectFromPile extends CardFilterAction {
         return this;
     }
 
-    public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
-        this.condition = condition;
-
-        return this;
-    }
-
-    public SelectFromPile setDynamicMessage(FuncT1<String, ArrayList<AbstractCard>> stringFunc) {
-        this.dynamicString = stringFunc;
-
-        return this;
-    }
-
-    public SelectFromPile setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = filter;
-
-        return this;
-    }
-
-    public SelectFromPile setOnClick(ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard) {
-        this.onClickCard = onClickCard;
-
-        return this;
-    }
-
     @Override
     protected void completeImpl() {
         if (hideTopPanel) {
@@ -122,6 +98,16 @@ public class SelectFromPile extends CardFilterAction {
         }
 
         super.completeImpl();
+    }
+
+    protected void fillCardSubset(List<AbstractCard> source, List<AbstractCard> dest, PCLCardSelection o, int count) {
+        int max = Math.min(source.size(), count);
+        for (int i = 0; i < max; i++) {
+            final AbstractCard card = o.get(source, i);
+            if (card != null) {
+                dest.add(card);
+            }
+        }
     }
 
     @Override
@@ -198,44 +184,6 @@ public class SelectFromPile extends CardFilterAction {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (AbstractDungeon.gridSelectScreen.selectedCards.size() != 0) {
-            selectedCards.addAll(AbstractDungeon.gridSelectScreen.selectedCards);
-            selected = true;
-
-            AbstractDungeon.gridSelectScreen.selectedCards.clear();
-            GridCardSelectScreenHelper.clear(true);
-        }
-
-        if (selected) {
-            if (tickDuration(deltaTime)) {
-                complete(selectedCards);
-            }
-            return;
-        }
-
-        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
-        {
-            complete(new ArrayList<>());
-        }
-    }
-
-    @Override
-    public String updateMessage() {
-        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
-    }
-
-    protected void fillCardSubset(List<AbstractCard> source, List<AbstractCard> dest, PCLCardSelection o, int count) {
-        int max = Math.min(source.size(), count);
-        for (int i = 0; i < max; i++) {
-            final AbstractCard card = o.get(source, i);
-            if (card != null) {
-                dest.add(card);
-            }
-        }
-    }
-
     public String getActionMessage() {
         return PGR.core.tooltips.select.title;
     }
@@ -258,8 +206,26 @@ public class SelectFromPile extends CardFilterAction {
         return this;
     }
 
+    public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
+        this.condition = condition;
+
+        return this;
+    }
+
     public SelectFromPile setDestination(PCLCardSelection destination) {
         this.destination = destination;
+
+        return this;
+    }
+
+    public SelectFromPile setDynamicMessage(FuncT1<String, ArrayList<AbstractCard>> stringFunc) {
+        this.dynamicString = stringFunc;
+
+        return this;
+    }
+
+    public SelectFromPile setFilter(FuncT1<Boolean, AbstractCard> filter) {
+        this.filter = filter;
 
         return this;
     }
@@ -283,6 +249,12 @@ public class SelectFromPile extends CardFilterAction {
 
     public SelectFromPile setMessage(String format, Object... args) {
         this.message = EUIUtils.format(format, args);
+
+        return this;
+    }
+
+    public SelectFromPile setOnClick(ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard) {
+        this.onClickCard = onClickCard;
 
         return this;
     }
@@ -312,6 +284,34 @@ public class SelectFromPile extends CardFilterAction {
         this.realtime = isRealtime;
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (AbstractDungeon.gridSelectScreen.selectedCards.size() != 0) {
+            selectedCards.addAll(AbstractDungeon.gridSelectScreen.selectedCards);
+            selected = true;
+
+            AbstractDungeon.gridSelectScreen.selectedCards.clear();
+            GridCardSelectScreenHelper.clear(true);
+        }
+
+        if (selected) {
+            if (tickDuration(deltaTime)) {
+                complete(selectedCards);
+            }
+            return;
+        }
+
+        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
+        {
+            complete(new ArrayList<>());
+        }
+    }
+
+    @Override
+    public String updateMessage() {
+        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
 

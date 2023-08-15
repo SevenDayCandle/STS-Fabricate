@@ -47,15 +47,15 @@ public class BleedParticleEffect extends PCLEffect {
         return this;
     }
 
+    public void dispose() {
+    }
+
     public void render(SpriteBatch sb) {
         sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         sb.setColor(this.color);
         sb.draw(image, x, y, SIZE * 0.5f, SIZE * 0.5f, SIZE, SIZE, scale, scale, rotation, 0, 0, SIZE, SIZE, false, false);
         sb.setColor(Color.WHITE);
         sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    public void dispose() {
     }
 
     @Override

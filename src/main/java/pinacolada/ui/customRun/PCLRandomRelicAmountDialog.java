@@ -66,6 +66,19 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
                 });
     }
 
+    @Override
+    public PCLRandomRelicAmountDialog getCancelValue() {
+        return null;
+    }
+
+    public int getCardCount() {
+        return inputRelics.getCachedValue();
+    }
+
+    public int getColorlessCount() {
+        return inputColorless.getCachedValue();
+    }
+
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
@@ -75,6 +88,22 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
                         onComplete.invoke(getConfirmValue());
                     }
                 });
+    }
+
+    @Override
+    public PCLRandomRelicAmountDialog getConfirmValue() {
+        return this;
+    }
+
+    public void open(ArrayList<AbstractRelic> relics) {
+        setActive(true);
+        inputRelics.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) != AbstractCard.CardColor.COLORLESS));
+        inputColorless.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) == AbstractCard.CardColor.COLORLESS));
+
+        inputRelics.forceSetValue(inputRelics.getMax(), true);
+        inputColorless.forceSetValue(inputColorless.getMax(), true);
+
+        inputColorless.setActive(inputColorless.getMax() > 0);
     }
 
     @Override
@@ -89,34 +118,5 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
         super.updateImpl();
         this.inputRelics.tryUpdate();
         this.inputColorless.tryUpdate();
-    }
-
-    @Override
-    public PCLRandomRelicAmountDialog getConfirmValue() {
-        return this;
-    }
-
-    @Override
-    public PCLRandomRelicAmountDialog getCancelValue() {
-        return null;
-    }
-
-    public int getCardCount() {
-        return inputRelics.getCachedValue();
-    }
-
-    public int getColorlessCount() {
-        return inputColorless.getCachedValue();
-    }
-
-    public void open(ArrayList<AbstractRelic> relics) {
-        setActive(true);
-        inputRelics.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) != AbstractCard.CardColor.COLORLESS));
-        inputColorless.setLimits(0, EUIUtils.count(relics, c -> EUIGameUtils.getRelicColor(c.relicId) == AbstractCard.CardColor.COLORLESS));
-
-        inputRelics.forceSetValue(inputRelics.getMax(), true);
-        inputColorless.forceSetValue(inputColorless.getMax(), true);
-
-        inputColorless.setActive(inputColorless.getMax() > 0);
     }
 }

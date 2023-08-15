@@ -3,7 +3,6 @@ package pinacolada.interfaces.subscribers;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.monsters.PCLCardAlly;
 
 @CombatSubscriber

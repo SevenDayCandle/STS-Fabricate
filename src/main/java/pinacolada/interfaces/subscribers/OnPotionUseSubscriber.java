@@ -1,6 +1,5 @@
 package pinacolada.interfaces.subscribers;
 
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import pinacolada.annotations.CombatSubscriber;
 

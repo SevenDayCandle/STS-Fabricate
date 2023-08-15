@@ -41,6 +41,16 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         fields.setCardGroup(groups);
     }
 
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        for (PCLCardGroupHelper group : fields.groupTypes) {
+            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
@@ -50,6 +60,11 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         return baseAmount <= 0 ? TEXT.subjects_all
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
                 : getAmountRawString();
+    }
+
+    @Override
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
+        return fields.getQualifiers(info);
     }
 
     @Override
@@ -65,23 +80,8 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
-        return fields.getQualifiers(info);
-    }
-
-    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return capital(childEffect == null ? getSubText(perspective) : TEXT.cond_xToY(getSubText(perspective), childEffect.getText(perspective, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        for (PCLCardGroupHelper group : fields.groupTypes) {
-            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

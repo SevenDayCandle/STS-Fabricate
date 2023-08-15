@@ -114,46 +114,6 @@ public class PCLRelicSlotEditor extends EUIBase {
         clearButton.tryRender(sb);
     }
 
-    @Override
-    public void updateImpl() {
-        if (slot == null) {
-            return;
-        }
-        relicNameText.tryUpdate();
-
-        if (changeButton.isActive && relicNameText.hb.hovered) {
-            if (InputHelper.justClickedLeft) {
-                relicNameText.hb.clickStarted = true;
-            }
-
-            if (relicNameText.hb.clicked) {
-                relicNameText.hb.clicked = false;
-                loadoutEditor.trySelectRelic(this);
-                return;
-            }
-
-            relicNameText.setFontColor(Color.WHITE);
-        }
-        else {
-            relicNameText.setFontColor(Color.GOLD);
-        }
-
-        relic = slot.getRelic();
-        if (relic != null && this.relicImage != null) {
-            relicImage.translate(relicValueText.hb.x + relicValueText.hb.width, relicValueText.hb.y);
-            relicImage.updateImpl();
-        }
-
-        relicValueText.tryUpdate();
-
-        if (changeButton.isActive) {
-            changeButton.updateImpl();
-        }
-        if (clearButton.isActive) {
-            clearButton.setInteractable(slot.canRemove()).updateImpl();
-        }
-    }
-
     public PCLRelicSlotEditor setSlot(LoadoutRelicSlot slot) {
         if (slot == null) {
             this.slot = null;
@@ -205,5 +165,45 @@ public class PCLRelicSlotEditor extends EUIBase {
         }
 
         return this;
+    }
+
+    @Override
+    public void updateImpl() {
+        if (slot == null) {
+            return;
+        }
+        relicNameText.tryUpdate();
+
+        if (changeButton.isActive && relicNameText.hb.hovered) {
+            if (InputHelper.justClickedLeft) {
+                relicNameText.hb.clickStarted = true;
+            }
+
+            if (relicNameText.hb.clicked) {
+                relicNameText.hb.clicked = false;
+                loadoutEditor.trySelectRelic(this);
+                return;
+            }
+
+            relicNameText.setFontColor(Color.WHITE);
+        }
+        else {
+            relicNameText.setFontColor(Color.GOLD);
+        }
+
+        relic = slot.getRelic();
+        if (relic != null && this.relicImage != null) {
+            relicImage.translate(relicValueText.hb.x + relicValueText.hb.width, relicValueText.hb.y);
+            relicImage.updateImpl();
+        }
+
+        relicValueText.tryUpdate();
+
+        if (changeButton.isActive) {
+            changeButton.updateImpl();
+        }
+        if (clearButton.isActive) {
+            clearButton.setInteractable(slot.canRemove()).updateImpl();
+        }
     }
 }

@@ -74,6 +74,19 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
                 });
     }
 
+    @Override
+    public PCLRandomCardAmountDialog getCancelValue() {
+        return null;
+    }
+
+    public int getCardCount() {
+        return inputCards.getCachedValue();
+    }
+
+    public int getColorlessCount() {
+        return inputColorless.getCachedValue();
+    }
+
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
@@ -86,37 +99,8 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
-        this.inputCards.tryRender(sb);
-        this.inputColorless.tryRender(sb);
-        this.inputCurse.tryRender(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        this.inputCards.tryUpdate();
-        this.inputColorless.tryUpdate();
-        this.inputCurse.tryUpdate();
-    }
-
-    @Override
     public PCLRandomCardAmountDialog getConfirmValue() {
         return this;
-    }
-
-    @Override
-    public PCLRandomCardAmountDialog getCancelValue() {
-        return null;
-    }
-
-    public int getCardCount() {
-        return inputCards.getCachedValue();
-    }
-
-    public int getColorlessCount() {
-        return inputColorless.getCachedValue();
     }
 
     public int getCurseCount() {
@@ -135,5 +119,21 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
 
         inputColorless.setActive(inputColorless.getMax() > 0);
         inputCurse.setActive(inputCurse.getMax() > 0);
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+        this.inputCards.tryRender(sb);
+        this.inputColorless.tryRender(sb);
+        this.inputCurse.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        this.inputCards.tryUpdate();
+        this.inputColorless.tryUpdate();
+        this.inputCurse.tryUpdate();
     }
 }

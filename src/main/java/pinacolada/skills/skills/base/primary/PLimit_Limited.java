@@ -28,12 +28,12 @@ public class PLimit_Limited extends PLimit {
     }
 
     @Override
-    public boolean tryActivate(PCLUseInfo info) {
-        return info.tryActivateLimited();
+    public String getSubText(PCLCardTarget perspective) {
+        return PGR.core.tooltips.limited.title;
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return PGR.core.tooltips.limited.title;
+    public boolean tryActivate(PCLUseInfo info) {
+        return info.tryActivateLimited();
     }
 }

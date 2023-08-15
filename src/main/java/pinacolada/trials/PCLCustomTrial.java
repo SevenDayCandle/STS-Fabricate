@@ -80,16 +80,45 @@ public class PCLCustomTrial extends CustomTrial {
         addStarterCards(Arrays.asList(moreCardIds));
     }
 
+    public void addStarterCards(List<String> moreCardIds) {
+        this.cardIds.addAll(moreCardIds);
+    }
+
     public void addStarterRelics(String... relicIds) {
         addStarterRelics(Arrays.asList(relicIds));
     }
 
-    public void setMaxHpOverride(int maxHp) {
-        this.maxHpOverride = maxHp;
+    public void addStarterRelics(List<String> moreRelics) {
+        this.relicIds.addAll(moreRelics);
     }
 
-    public void addStarterCards(List<String> moreCardIds) {
-        this.cardIds.addAll(moreCardIds);
+    @Override
+    public ArrayList<String> dailyModIDs() {
+        return this.modIds;
+    }
+
+    @Override
+    public List<String> extraStartingCardIDs() {
+        return this.cardIds;
+    }
+
+    @Override
+    public List<String> extraStartingRelicIDs() {
+        return this.relicIds;
+    }
+
+    @Override
+    public boolean keepStarterRelic() {
+        return this.isKeepingStarterRelic;
+    }
+
+    @Override
+    public boolean keepsStarterCards() {
+        return this.isKeepingStarterCards;
+    }
+
+    public void setMaxHpOverride(int maxHp) {
+        this.maxHpOverride = maxHp;
     }
 
     public void setStarterCards(List<String> starterCards) {
@@ -98,14 +127,18 @@ public class PCLCustomTrial extends CustomTrial {
         this.isKeepingStarterCards = false;
     }
 
-    public void addStarterRelics(List<String> moreRelics) {
-        this.relicIds.addAll(moreRelics);
+    public void setStarterCards(String... moreCardIds) {
+        setStarterCards(Arrays.asList(moreCardIds));
     }
 
     public void setStarterRelics(List<String> starterRelics) {
         this.relicIds.clear();
         this.relicIds.addAll(starterRelics);
         this.isKeepingStarterRelic = false;
+    }
+
+    public void setStarterRelics(String... starterRelics) {
+        setStarterRelics(Arrays.asList(starterRelics));
     }
 
     // TODO Use custom stuff (i.e. glyphs)
@@ -128,39 +161,6 @@ public class PCLCustomTrial extends CustomTrial {
         }
 
         return player;
-    }
-
-    @Override
-    public boolean keepStarterRelic() {
-        return this.isKeepingStarterRelic;
-    }
-
-    @Override
-    public List<String> extraStartingRelicIDs() {
-        return this.relicIds;
-    }
-
-    @Override
-    public boolean keepsStarterCards() {
-        return this.isKeepingStarterCards;
-    }
-
-    @Override
-    public List<String> extraStartingCardIDs() {
-        return this.cardIds;
-    }
-
-    @Override
-    public ArrayList<String> dailyModIDs() {
-        return this.modIds;
-    }
-
-    public void setStarterCards(String... moreCardIds) {
-        setStarterCards(Arrays.asList(moreCardIds));
-    }
-
-    public void setStarterRelics(String... starterRelics) {
-        setStarterRelics(Arrays.asList(starterRelics));
     }
 
 }

@@ -50,11 +50,6 @@ public class PMod_DrawPerCard extends PMod_Do {
     }
 
     @Override
-    public String getAmountRawOrAllString() {
-        return getAmountRawString();
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return FetchFromPile::new;
     }
@@ -62,5 +57,10 @@ public class PMod_DrawPerCard extends PMod_Do {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.draw;
+    }
+
+    @Override
+    public String getAmountRawOrAllString() {
+        return getAmountRawString();
     }
 }

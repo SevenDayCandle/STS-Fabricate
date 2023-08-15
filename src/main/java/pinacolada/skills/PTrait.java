@@ -131,6 +131,17 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
     }
 
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        }
+        if (isVerbose()) {
+            return TEXT.act_has(getSubDescText(perspective));
+        }
+        return getSubDescText(perspective);
+    }
+
     // Child effects will always be separated by a period
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
@@ -197,17 +208,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     @Override
     public String wrapAmount(int input) {
         return input > 0 ? "+" + input : String.valueOf(input);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
-        }
-        if (isVerbose()) {
-            return TEXT.act_has(getSubDescText(perspective));
-        }
-        return getSubDescText(perspective);
     }
 
     abstract public String getSubDescText(PCLCardTarget perspective);

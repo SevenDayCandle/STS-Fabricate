@@ -19,6 +19,12 @@ public class ScreenOnFireEffect3 extends PCLEffect {
         this.startingDuration = this.duration;
     }
 
+    public void dispose() {
+    }
+
+    public void render(SpriteBatch sb) {
+    }
+
     public void update() {
         if (this.duration == this.startingDuration) {
             CardCrawlGame.sound.play("GHOST_FLAMES");
@@ -38,11 +44,5 @@ public class ScreenOnFireEffect3 extends PCLEffect {
             this.isDone = true;
         }
 
-    }
-
-    public void render(SpriteBatch sb) {
-    }
-
-    public void dispose() {
     }
 }

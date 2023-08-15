@@ -18,9 +18,8 @@ public class PCLAnimation extends AbstractAnimation {
 
     }
 
-    @Override
-    public Type type() {
-        return Type.SPRITE;
+    public void renderSprite(SpriteBatch sb, float x, float y) {
+
     }
 
     public void setFlip(boolean horizontal, boolean vertical) {
@@ -28,8 +27,9 @@ public class PCLAnimation extends AbstractAnimation {
         vFlip = vertical;
     }
 
-    public void renderSprite(SpriteBatch sb, float x, float y) {
-
+    @Override
+    public Type type() {
+        return Type.SPRITE;
     }
 
     public void update(float deltaTime, float x, float y) {

@@ -9,8 +9,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.shop.Merchant;
 import pinacolada.resources.PGR;
 
-import java.util.HashMap;
-
 // Copied and modified from STS-AnimatorMod
 public class MerchantPatches {
     @SpirePatch(clz = Merchant.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {float.class, float.class, int.class})
@@ -19,6 +17,17 @@ public class MerchantPatches {
         private static CardGroup common;
         private static CardGroup uncommon;
         private static CardGroup rare;
+
+        protected static CardGroup getReplacement(CardGroup group) {
+            final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
+            for (AbstractCard c : group.group) {
+                if (!PGR.dungeon.tryCancelCardReward(c)) {
+                    replacement.group.add(c);
+                }
+            }
+
+            return replacement;
+        }
 
         @SpirePostfixPatch
         public static void postfix(Merchant __instance, float x, float y, int newShopScreen) {
@@ -41,17 +50,6 @@ public class MerchantPatches {
 
             rare = AbstractDungeon.rareCardPool;
             AbstractDungeon.rareCardPool = getReplacement(rare);
-        }
-
-        protected static CardGroup getReplacement(CardGroup group) {
-            final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
-            for (AbstractCard c : group.group) {
-                if (!PGR.dungeon.tryCancelCardReward(c)) {
-                    replacement.group.add(c);
-                }
-            }
-
-            return replacement;
         }
     }
 }

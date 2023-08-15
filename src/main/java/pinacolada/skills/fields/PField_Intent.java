@@ -20,16 +20,6 @@ public class PField_Intent extends PField_Not {
         return other instanceof PField_Intent && intents.equals(((PField_Intent) other).intents) && ((PField_Intent) other).not == not;
     }
 
-    @Override
-    public PField_Intent makeCopy() {
-        return (PField_Intent) new PField_Intent().setIntent(intents).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerIntent(intents);
-        super.setupEditor(editor);
-    }
-
     public String getAnyIntentString() {
         return intents.isEmpty() ? TEXT.cond_any(PGR.core.strings.subjects_intent) : getIntentString();
     }
@@ -50,6 +40,11 @@ public class PField_Intent extends PField_Not {
         return EUIUtils.any(intents, i -> i.hasIntent(intent));
     }
 
+    @Override
+    public PField_Intent makeCopy() {
+        return (PField_Intent) new PField_Intent().setIntent(intents).setNot(not);
+    }
+
     public PField_Intent setIntent(Collection<PCLIntentType> orbs) {
         this.intents.clear();
         this.intents.addAll(orbs);
@@ -58,5 +53,10 @@ public class PField_Intent extends PField_Not {
 
     public PField_Intent setIntent(PCLIntentType... orbs) {
         return setIntent(Arrays.asList(orbs));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerIntent(intents);
+        super.setupEditor(editor);
     }
 }

@@ -27,16 +27,16 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     }
 
     @Override
+    public EUIKeywordTooltip getDelegateTooltip() {
+        return PGR.core.tooltips.kill;
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
             return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_whenSingle(getDelegatePastText());
-    }
-
-    @Override
-    public EUIKeywordTooltip getDelegateTooltip() {
-        return PGR.core.tooltips.kill;
     }
 
     @Override

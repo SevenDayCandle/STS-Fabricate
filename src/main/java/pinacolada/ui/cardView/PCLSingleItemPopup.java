@@ -164,17 +164,6 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         renderTips(sb);
     }
 
-    @Override
-    public void updateImpl() {
-        this.popupHb.update();
-        this.nextButton.tryUpdate();
-        this.prevButton.tryUpdate();
-        this.updateFade();
-        this.updateInput();
-        this.artAuthorLabel.tryUpdate();
-        this.whatModLabel.tryUpdate();
-    }
-
     protected void renderTips(SpriteBatch sb) {
         popupTooltipY = EUIUtils.lerpSnap(popupTooltipY, popupTooltipYTarget, 8);
         float y = popupTooltipY;
@@ -201,6 +190,17 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         }
 
         this.fadeColor.a = Interpolation.pow2In.apply(0.9F, 0.0F, this.fadeTimer * 4.0F);
+    }
+
+    @Override
+    public void updateImpl() {
+        this.popupHb.update();
+        this.nextButton.tryUpdate();
+        this.prevButton.tryUpdate();
+        this.updateFade();
+        this.updateInput();
+        this.artAuthorLabel.tryUpdate();
+        this.whatModLabel.tryUpdate();
     }
 
     protected void updateInput() {

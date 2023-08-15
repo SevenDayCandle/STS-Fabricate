@@ -95,40 +95,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public PCardPrimary_DealDamage makeCopy() {
-        return (PCardPrimary_DealDamage) super.makeCopy();
-    }
-
-    @Override
-    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
-        boolean dim = ally.shouldDim();
-        TextureRegion icon = getAttackTooltip().icon;
-        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
-        return startY + icon.getRegionHeight() + Settings.scale * 10f;
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
-                    , EUIUtils.arrayList(sc.getBuilder().attackType)
-                    , item -> {
-                        if (item.size() > 0) {
-                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
-                        }
-                    }
-                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
-                    PGR.core.strings.cedit_attackType,
-                    true,
-                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
-        }
-
-        super.setupEditor(editor);
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
@@ -161,6 +127,20 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         return skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PDamageTrait;
+    }
+
+    @Override
+    public PCardPrimary_DealDamage makeCopy() {
+        return (PCardPrimary_DealDamage) super.makeCopy();
+    }
+
+    @Override
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+        boolean dim = ally.shouldDim();
+        TextureRegion icon = getAttackTooltip().icon;
+        PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
+        return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 
     public PCardPrimary_DealDamage setBonus(PCond<?> cond, int amount) {
@@ -261,6 +241,31 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         return this;
     }
 
+    public PCardPrimary_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor) {
+        fields.setVFXColor(vfxColor, vfxTargetColor);
+        return this;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
+                    , EUIUtils.arrayList(sc.getBuilder().attackType)
+                    , item -> {
+                        if (item.size() > 0) {
+                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
+                        }
+                    }
+                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                    PGR.core.strings.cedit_attackType,
+                    true,
+                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
+        }
+
+        super.setupEditor(editor);
+    }
+
     @Override
     public void useImpl(PCLUseInfo info, PCLActions order) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
@@ -272,10 +277,5 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
                 order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
             }
         }
-    }
-
-    public PCardPrimary_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor) {
-        fields.setVFXColor(vfxColor, vfxTargetColor);
-        return this;
     }
 }

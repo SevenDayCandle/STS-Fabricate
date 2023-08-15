@@ -30,13 +30,8 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
     }
 
     @Override
@@ -45,7 +40,12 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
+    public String getSubText(PCLCardTarget perspective) {
+        return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
     }
 }

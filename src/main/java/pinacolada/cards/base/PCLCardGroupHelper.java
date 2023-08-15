@@ -84,13 +84,13 @@ public class PCLCardGroupHelper implements Serializable {
 
     public static class PCLCardGroupHelperAdapter extends TypeAdapter<PCLCardGroupHelper> {
         @Override
-        public void write(JsonWriter writer, PCLCardGroupHelper value) throws IOException {
-            writer.value(String.valueOf(value.pile));
+        public PCLCardGroupHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
         }
 
         @Override
-        public PCLCardGroupHelper read(JsonReader in) throws IOException {
-            return get(in.nextString());
+        public void write(JsonWriter writer, PCLCardGroupHelper value) throws IOException {
+            writer.value(String.valueOf(value.pile));
         }
     }
 }

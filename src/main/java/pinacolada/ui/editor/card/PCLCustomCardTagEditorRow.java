@@ -117,6 +117,41 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         }
     }
 
+    public PCLCustomCardTagEditorRow setForm(int form) {
+        this.form = form;
+        return this;
+    }
+
+    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {
+        displayValue.forceSetValue(value, false);
+        if (update) {
+            item.set(form, displayValue.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
+    }
+
+    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update) {
+        displayValue2.forceSetValue(value2, false);
+        if (update) {
+            item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
+    }
+
+    public PCLCustomCardTagEditorRow setValue(int value, int valueSecondary, boolean update) {
+        displayValue.forceSetValue(value, false);
+        displayValue2.forceSetValue(valueSecondary, false);
+        if (update) {
+            item.set(form, displayValue.getCachedValue());
+            item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
+        }
+
+        return this;
+    }
+
     protected boolean tryHover(boolean isSelected) {
         if (!isComponentHovered() && this.hb.hovered) {
             this.label.setColor(Settings.GREEN_TEXT_COLOR);
@@ -161,40 +196,5 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
             return false;
         }
         return tryHover(isSelected);
-    }
-
-    public PCLCustomCardTagEditorRow setForm(int form) {
-        this.form = form;
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {
-        displayValue.forceSetValue(value, false);
-        if (update) {
-            item.set(form, displayValue.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update) {
-        displayValue2.forceSetValue(value2, false);
-        if (update) {
-            item.setUpgrade(form, displayValue2.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setValue(int value, int valueSecondary, boolean update) {
-        displayValue.forceSetValue(value, false);
-        displayValue2.forceSetValue(valueSecondary, false);
-        if (update) {
-            item.set(form, displayValue.getCachedValue());
-            item.setUpgrade(form, displayValue2.getCachedValue());
-            dr.updateForSelection(true);
-        }
-
-        return this;
     }
 }

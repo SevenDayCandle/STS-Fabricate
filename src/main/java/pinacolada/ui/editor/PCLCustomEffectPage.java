@@ -83,12 +83,9 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         return String.valueOf(editorIndex + 1);
     }
 
-    @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
-                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
-                        .setFlash(buttonsPane)
-        );
+    public PSkill<?> getSourceEffect() {
+        PSkill<?> base = screen.currentEffects.get(editorIndex);
+        return base != null ? base.makeCopy() : null;
     }
 
     @Override
@@ -101,6 +98,20 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    public void initializeEffects() {
+        rootEffect = deconstructEffect();
+
+        refresh();
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
+                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
+                        .setFlash(buttonsPane)
+        );
+    }
+
     @Override
     public void refresh() {
         if (currentEditingSkill != null) {
@@ -109,17 +120,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         if (root != null) {
             root.refreshAll();
         }
-    }
-
-    public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen.currentEffects.get(editorIndex);
-        return base != null ? base.makeCopy() : null;
-    }
-
-    public void initializeEffects() {
-        rootEffect = deconstructEffect();
-
-        refresh();
     }
 
     @Override
@@ -138,6 +138,10 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         }
     }
 
+    public void startEdit(PCLCustomEffectNode node) {
+        currentEditingSkill = new PCLCustomEffectEditingPane(this, node, new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.7f, MENU_WIDTH, MENU_HEIGHT));
+    }
+
     @Override
     public void updateImpl() {
         if (this.currentEditingSkill != null) {
@@ -146,10 +150,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         else {
             updateInner();
         }
-    }
-
-    public void startEdit(PCLCustomEffectNode node) {
-        currentEditingSkill = new PCLCustomEffectEditingPane(this, node, new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.7f, MENU_WIDTH, MENU_HEIGHT));
     }
 
     protected void updateInner() {

@@ -405,6 +405,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info, triggerSource);
     }
 
+    public boolean checkConditionOutsideOfBattle() {
+        return false;
+    }
+
     @Override
     public PCond<T> edit(ActionT1<T> editFunc) {
         editFunc.invoke(fields);
@@ -446,6 +450,31 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     @Override
     public boolean hasChildWarning() {
         return childEffect == null && !((this.parent instanceof PBranchCond && this.parent.childEffect == this) || (this.parent instanceof PMultiCond && this.parent.childEffect != this));
+    }
+
+    /* Check if this skill should display as a branch (i.e. defer to branch for listing out items in conditions) */
+    public final boolean isBranch() {
+        return (parent instanceof PBranchCond && ((PBranchCond) parent).getSubEffects().size() > 2);
+    }
+
+    /*
+        Returns true if this is the skill that activates on a passive trigger
+        i.e. this is either the first condition underneath a passive trigger, or if this is part of a branching condition that meets the first clause
+    */
+    public final boolean isPassiveClause() {
+        return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
+    }
+
+    public boolean isUnderWhen(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return callingSkill instanceof PTrigger_When && !(parentSkill instanceof PCond);
+    }
+
+    /*
+        Returns true if this is the skill that activates on a when trigger
+        i.e. this is either the first condition underneath a when trigger, or if this is part of a branching condition that meets the first clause
+    */
+    public final boolean isWhenClause() {
+        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isWhenClause())));
     }
 
     @Override
@@ -591,41 +620,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
-    public void useOutsideOfBattle() {
-        if (checkConditionOutsideOfBattle() && this.childEffect != null) {
-            this.childEffect.useOutsideOfBattle();
-        }
-    }
-
-    public boolean checkConditionOutsideOfBattle() {
-        return false;
-    }
-
-    /* Check if this skill should display as a branch (i.e. defer to branch for listing out items in conditions) */
-    public final boolean isBranch() {
-        return (parent instanceof PBranchCond && ((PBranchCond) parent).getSubEffects().size() > 2);
-    }
-
-    /*
-        Returns true if this is the skill that activates on a passive trigger
-        i.e. this is either the first condition underneath a passive trigger, or if this is part of a branching condition that meets the first clause
-    */
-    public final boolean isPassiveClause() {
-        return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
-    }
-
-    public boolean isUnderWhen(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return callingSkill instanceof PTrigger_When && !(parentSkill instanceof PCond);
-    }
-
-    /*
-        Returns true if this is the skill that activates on a when trigger
-        i.e. this is either the first condition underneath a when trigger, or if this is part of a branching condition that meets the first clause
-    */
-    public final boolean isWhenClause() {
-        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isWhenClause())));
-    }
-
     protected void useFromTrigger(PCLUseInfo info) {
         useFromTrigger(info, PCLActions.bottom);
     }
@@ -644,6 +638,12 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
             else if (parent instanceof PBranchCond) {
                 parent.use(info, order);
             }
+        }
+    }
+
+    public void useOutsideOfBattle() {
+        if (checkConditionOutsideOfBattle() && this.childEffect != null) {
+            this.childEffect.useOutsideOfBattle();
         }
     }
 

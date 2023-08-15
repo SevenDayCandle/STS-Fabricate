@@ -42,11 +42,6 @@ public class UpgradeFromPile extends SelectFromPile {
     }
 
     @Override
-    public String getActionMessage() {
-        return PGR.core.tooltips.upgrade.title;
-    }
-
-    @Override
     protected void complete(ArrayList<AbstractCard> result) {
         for (AbstractCard card : result) {
             upgradeCard(card, (Settings.WIDTH / 4f) + ((result.size() - 1) * (AbstractCard.IMG_WIDTH * 0.75f)));
@@ -55,6 +50,11 @@ public class UpgradeFromPile extends SelectFromPile {
         CombatManager.queueRefreshHandLayout();
 
         super.complete(result);
+    }
+
+    @Override
+    public String getActionMessage() {
+        return PGR.core.tooltips.upgrade.title;
     }
 
     public UpgradeFromPile isPermanent(boolean isPermanent) {

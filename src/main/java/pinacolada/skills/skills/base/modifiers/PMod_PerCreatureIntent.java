@@ -30,13 +30,13 @@ public class PMod_PerCreatureIntent extends PMod_Per<PField_Intent> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return EUIRM.strings.adjNoun(TEXT.subjects_intent, TEXT.subjects_character);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return EUIUtils.count(getTargetList(info), t -> fields.hasIntent(t));
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return EUIUtils.count(getTargetList(info), t -> fields.hasIntent(t));
+    public String getSubSampleText() {
+        return EUIRM.strings.adjNoun(TEXT.subjects_intent, TEXT.subjects_character);
     }
 
     @Override

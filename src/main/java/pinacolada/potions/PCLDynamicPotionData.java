@@ -125,11 +125,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         return powers;
     }
 
-    @Override
-    public PCLDynamicPotionData makeCopy() {
-        return new PCLDynamicPotionData(this);
-    }
-
     public PotionStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -141,14 +136,13 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         this.imagePath = PCLCoreImages.CardAffinity.unknown.path();
     }
 
-    public PCLDynamicPotionData setColor(AbstractCard.CardColor color) {
-        super.setColor(color);
-        return this;
+    @Override
+    public PCLDynamicPotionData makeCopy() {
+        return new PCLDynamicPotionData(this);
     }
 
-    public PCLDynamicPotionData setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-
+    public PCLDynamicPotionData setColor(AbstractCard.CardColor color) {
+        super.setColor(color);
         return this;
     }
 
@@ -159,6 +153,12 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
 
     public PCLDynamicPotionData setImage(Texture portraitImage) {
         this.portraitImage = portraitImage;
+
+        return this;
+    }
+
+    public PCLDynamicPotionData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
 
         return this;
     }

@@ -28,13 +28,13 @@ public class PMove_GainEnergy extends PMove_Gain {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.energy.title);
+    public String gainText() {
+        return PGR.core.tooltips.energy.getTitleOrIcon();
     }
 
     @Override
-    public String gainText() {
-        return PGR.core.tooltips.energy.getTitleOrIcon();
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.energy.title);
     }
 
     @Override

@@ -47,17 +47,6 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_xPerYZ(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.evoke.past());
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerRBoolean(editor, TEXT.cedit_combat, null);
-    }
-
-    @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         List<AbstractOrb> orbs = fields.random ? CombatManager.orbsEvokedThisCombat() : CombatManager.orbsEvokedThisTurn();
         return (fields.orbs.isEmpty() ? orbs.size() :
@@ -65,7 +54,18 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.cond_xPerYZ(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.evoke.past());
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         return PGR.core.tooltips.orb.title;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_combat, null);
     }
 }

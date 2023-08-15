@@ -30,13 +30,6 @@ public class PlaySFX extends PCLAction<PlaySFX> {
         play();
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            complete(this);
-        }
-    }
-
     public void play() {
         float seconds = PCLSFX.play(key, pitchMin, pitchMax, volume);
         if (callbacks.size() > 0) {
@@ -45,6 +38,13 @@ public class PlaySFX extends PCLAction<PlaySFX> {
         }
         else {
             completeImpl();
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            complete(this);
         }
     }
 }

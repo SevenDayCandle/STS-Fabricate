@@ -31,6 +31,16 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public void atBattleStart() {
+        super.atBattleStart();
+        if (!usedUp) {
+            for (PSkill<?> effect : getEffects()) {
+                effect.triggerOnStartOfBattleForRelic();
+            }
+        }
+    }
+
+    @Override
     public float atBlockLastModify(PCLUseInfo info, float block) {
         if (!usedUp) {
             refresh(info);
@@ -90,6 +100,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public float atDamageModify(float block, AbstractCard c) {
+        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+    }
+
+    @Override
     public float atHealModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
@@ -109,6 +124,14 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
             }
         }
         return damage;
+    }
+
+    @Override
+    public void atPreBattle() {
+        super.atPreBattle();
+        if (!usedUp) {
+            subscribe();
+        }
     }
 
     @Override
@@ -134,69 +157,14 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public String getDescriptionImpl() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
-    }
-
-    @Override
-    protected void preSetup(PCLRelicData data) {
-        skills = new Skills();
-        setup();
-    }
-
-    @Override
-    public PCLPointerRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            updateDescription(null);
+    public void atTurnStart() {
+        super.atTurnStart();
+        if (triggerCondition != null) {
+            triggerCondition.refresh(true, true);
         }
-        return this;
-    }
-
-    @Override
-    public void usedUp() {
-        super.usedUp();
-        unsubscribe();
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
         for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnObtain();
+            effect.resetUses();
         }
-        if (!usedUp) {
-            subscribe();
-        }
-    }
-
-    @Override
-    public void onUnequip() {
-        super.onUnequip();
-        for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnRemoval();
-            effect.unsubscribeChildren();
-        }
-    }
-
-    @Override
-    public void atPreBattle() {
-        super.atPreBattle();
-        if (!usedUp) {
-            subscribe();
-        }
-    }
-
-    @Override
-    public void onVictory() {
-        super.onVictory();
-        unsubscribe();
     }
 
     public void fillPreviews(RotatingList<EUIPreview> list) {
@@ -204,13 +172,28 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public EUITooltip getTooltip() {
-        return super.getTooltip();
+    public PCLClickableUse getClickable() {
+        return triggerCondition;
     }
 
     @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
+    public String getDescriptionImpl() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
+    }
+
+    @Override
+    public String getID() {
+        return relicId;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
     }
 
     protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
@@ -238,28 +221,45 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public EUITooltip getTooltip() {
+        return super.getTooltip();
+    }
+
+    @Override
     public int getXValue() {
         return counter;
     }
 
     @Override
-    public int timesUpgraded() {
-        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    public void onEquip() {
+        super.onEquip();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnObtain();
+        }
+        if (!usedUp) {
+            subscribe();
+        }
     }
 
     @Override
-    public String getID() {
-        return relicId;
+    public void onUnequip() {
+        super.onUnequip();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnRemoval();
+            effect.unsubscribeChildren();
+        }
     }
 
     @Override
-    public String getName() {
-        return name;
+    public void onVictory() {
+        super.onVictory();
+        unsubscribe();
     }
 
     @Override
-    public Skills getSkills() {
-        return skills;
+    protected void preSetup(PCLRelicData data) {
+        skills = new Skills();
+        setup();
     }
 
     public void refresh(PCLUseInfo info) {
@@ -287,6 +287,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         }
     }
 
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    }
+
     protected void unsubscribe() {
         if (triggerCondition != null) {
             triggerCondition = null;
@@ -312,28 +317,23 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public void atBattleStart() {
-        super.atBattleStart();
-        if (!usedUp) {
-            for (PSkill<?> effect : getEffects()) {
-                effect.triggerOnStartOfBattleForRelic();
+    public PCLPointerRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard().onUpgrade();
             }
+            for (PSkill<?> ef : getPowerEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            updateDescription(null);
         }
+        return this;
     }
 
     @Override
-    public void atTurnStart() {
-        super.atTurnStart();
-        if (triggerCondition != null) {
-            triggerCondition.refresh(true, true);
-        }
-        for (PSkill<?> effect : getEffects()) {
-            effect.resetUses();
-        }
-    }
-
-    @Override
-    public float atDamageModify(float block, AbstractCard c) {
-        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+    public void usedUp() {
+        super.usedUp();
+        unsubscribe();
     }
 }

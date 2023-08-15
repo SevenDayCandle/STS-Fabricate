@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -10,18 +9,14 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
@@ -47,6 +42,13 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     }
 
     @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.powers.isEmpty() ?
+                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
+                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID)))) / Math.max(1, this.amount);
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_pay(TEXT.subjects_x, TEXT.cedit_powers);
     }
@@ -61,13 +63,6 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
         return TEXT.act_pay(TEXT.subjects_all, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, addPeriod);
     }
 
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (childEffect != null) {
-            useImpl(info, order, () -> childEffect.use(info, order));
-        }
-    }
-
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (shouldPay && childEffect != null) {
             useImpl(info, order, () -> childEffect.use(info, order));
@@ -75,10 +70,10 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.powers.isEmpty() ?
-                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
-                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID)))) / Math.max(1, this.amount);
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (childEffect != null) {
+            useImpl(info, order, () -> childEffect.use(info, order));
+        }
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {

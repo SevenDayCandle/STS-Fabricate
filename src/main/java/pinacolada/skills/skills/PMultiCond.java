@@ -63,23 +63,12 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         return this;
     }
 
-    public PCond<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public PMultiCond setEffects(PCond<?>... effects) {
-        return setEffects(Arrays.asList(effects));
-    }
-
-    public PMultiCond setEffects(List<PCond<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-        return this;
-    }
-
-    public List<PCond<?>> getSubEffects() {
-        return effects;
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (triggerSource != null && EUIUtils.any(effects, ef -> ef == triggerSource)) {
+            return true;
+        }
+        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
     }
 
     @Override
@@ -122,9 +111,28 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
+    public PCond<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    public List<PCond<?>> getSubEffects() {
+        return effects;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true));
+    }
+
     @Override
     public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(index, perspective, addPeriod) : getText(perspective, addPeriod);
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
+                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override
@@ -207,8 +215,49 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.refresh(info, refreshVal);
+        }
+    }
+
+    @Override
     public boolean requiresTarget() {
         return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
+    }
+
+    @Override
+    public PMultiCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    public PMultiCond setEffects(PCond<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PMultiCond setEffects(List<PCond<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+        return this;
+    }
+
+    @Override
+    public PMultiCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
     }
 
     @Override
@@ -326,6 +375,12 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
+    @Override
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return checkCondition(info, true, source);
+    }
+
     @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {
@@ -336,6 +391,12 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    public void useDirectly(PCLUseInfo info, PCLActions order) {
+        if (this.childEffect != null) {
+            this.childEffect.use(info, order);
+        }
+    }
+
     @Override
     public PMultiCond useParent(boolean value) {
         this.useParent = value;
@@ -343,66 +404,5 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             effect.useParent(value);
         }
         return this;
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true));
-    }
-
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
-                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        conditionMetCache = checkCondition(info, false, null);
-        boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
-        }
-    }
-
-    @Override
-    public PMultiCond setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiCond setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
-        return this;
-    }
-
-    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
-    @Override
-    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
-        return checkCondition(info, true, source);
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (triggerSource != null && EUIUtils.any(effects, ef -> ef == triggerSource)) {
-            return true;
-        }
-        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
-    }
-
-    public void useDirectly(PCLUseInfo info, PCLActions order) {
-        if (this.childEffect != null) {
-            this.childEffect.use(info, order);
-        }
     }
 }

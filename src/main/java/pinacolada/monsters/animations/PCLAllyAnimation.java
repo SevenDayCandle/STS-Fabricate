@@ -55,13 +55,13 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
     public void renderSprite(SpriteBatch sb, float x, float y) {
     }
 
+    public void unhighlight() {
+        targetTransitionAlpha = 0f;
+    }
+
     public void update(float deltaTime, float x, float y) {
         super.update(deltaTime, x, y);
         angle += deltaTime * rate;
         renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * getTransitionRate());
-    }
-
-    public void unhighlight() {
-        targetTransitionAlpha = 0f;
     }
 }

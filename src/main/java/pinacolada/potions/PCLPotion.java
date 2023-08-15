@@ -84,32 +84,13 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return auxiliaryData.timesUpgraded < potionData.maxUpgradeLevel || potionData.maxUpgradeLevel < 0;
     }
 
+    @Override
+    public boolean canUse() {
+        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null, null)) && super.canUse();
+    }
+
     public void fillPreviews(RotatingList<EUIPreview> list) {
         PointerProvider.fillPreviewsForKeywordProvider(this, list);
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return tips;
-    }
-
-    public String getUpdatedDescription() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
-    }
-
-    @Override
-    public int getXValue() {
-        return this.potency;
-    }
-
-    @Override
-    public int timesUpgraded() {
-        return this.getPotency() - 1;
     }
 
     @Override
@@ -122,9 +103,35 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return name;
     }
 
+    // May be null before potion data is initialized
+    // Base will be multiplied by 2, then decreased by 1 (so 0 upgrades will give 0 upgrade bonuses without Sacred Bark and 1 with it)
+    @Override
+    public int getPotency(int i) {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded + 1 : 1;
+    }
+
     @Override
     public Skills getSkills() {
         return skills;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
+    }
+
+    public String getUpdatedDescription() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
+    }
+
+    @Override
+    public int getXValue() {
+        return this.potency;
     }
 
     public void initialize() {
@@ -145,8 +152,18 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public PCLCollectibleSaveData onSave() {
-        return auxiliaryData;
+    public void labRender(SpriteBatch sb) {
+        renderImpl(sb, true);
+    }
+
+    @Override
+    public AbstractPotion makeCopy() {
+        try {
+            return potionData.create();
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -157,9 +174,13 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        renderImpl(sb, false);
     }
 
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
@@ -206,6 +227,12 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
+    }
+
     public PCLPotion setForm(int form) {
         this.auxiliaryData.form = form;
         initializeTips();
@@ -213,6 +240,26 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void setup() {
+    }
+
+    @Override
+    public void shopRender(SpriteBatch sb) {
+        this.generateSparkles(0.0F, 0.0F, false);
+        renderImpl(sb, false);
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return this.getPotency() - 1;
+    }
+
+    public void update() {
+        super.update();
+        if (this.hb.justHovered) {
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard();
+            }
+        }
     }
 
     @SpireOverride
@@ -238,53 +285,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         final PCLUseInfo info = CombatManager.playerSystem.generateInfo(null, AbstractDungeon.player, target);
         for (PSkill<?> ef : getEffects()) {
             ef.use(info, PCLActions.bottom);
-        }
-    }
-
-    @Override
-    public boolean canUse() {
-        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null, null)) && super.canUse();
-    }
-
-    public void update() {
-        super.update();
-        if (this.hb.justHovered) {
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard();
-            }
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        renderImpl(sb, false);
-    }
-
-    @Override
-    public void shopRender(SpriteBatch sb) {
-        this.generateSparkles(0.0F, 0.0F, false);
-        renderImpl(sb, false);
-    }
-
-    @Override
-    public void labRender(SpriteBatch sb) {
-        renderImpl(sb, true);
-    }
-
-    // May be null before potion data is initialized
-    // Base will be multiplied by 2, then decreased by 1 (so 0 upgrades will give 0 upgrade bonuses without Sacred Bark and 1 with it)
-    @Override
-    public int getPotency(int i) {
-        return auxiliaryData != null ? auxiliaryData.timesUpgraded + 1 : 1;
-    }
-
-    @Override
-    public AbstractPotion makeCopy() {
-        try {
-            return potionData.create();
-        }
-        catch (Exception e) {
-            return null;
         }
     }
 }

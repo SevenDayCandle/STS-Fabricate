@@ -42,40 +42,8 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
     }
 
     @Override
-    public void openingSettings() {
-        AbstractDungeon.previousScreen = curScreen();
-    }
-
-    @Override
     public AbstractDungeon.CurrentScreen curScreen() {
         return AUGMENT_SCREEN;
-    }
-
-    @Override
-    public void update() {
-        if (curEffect != null) {
-            curEffect.update();
-            if (curEffect.isDone) {
-                curEffect = null;
-                refreshAugments();
-            }
-        }
-        else {
-            panel.updateImpl();
-        }
-        EUI.countingPanel.tryUpdate();
-
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (curEffect != null) {
-            curEffect.render(sb);
-        }
-        else {
-            panel.renderImpl(sb);
-        }
-        EUI.countingPanel.tryRender(sb);
     }
 
     public void doAction(PCLAugment augment) {
@@ -101,6 +69,11 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         refreshAugments();
     }
 
+    @Override
+    public void openingSettings() {
+        AbstractDungeon.previousScreen = curScreen();
+    }
+
     public void refreshAugments() {
         panel.clear();
         HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
@@ -114,6 +87,33 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         }
         EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {
         }, false);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (curEffect != null) {
+            curEffect.render(sb);
+        }
+        else {
+            panel.renderImpl(sb);
+        }
+        EUI.countingPanel.tryRender(sb);
+    }
+
+    @Override
+    public void update() {
+        if (curEffect != null) {
+            curEffect.update();
+            if (curEffect.isDone) {
+                curEffect = null;
+                refreshAugments();
+            }
+        }
+        else {
+            panel.updateImpl();
+        }
+        EUI.countingPanel.tryUpdate();
+
     }
 
 

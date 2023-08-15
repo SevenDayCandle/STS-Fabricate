@@ -22,6 +22,11 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), gainText()) : TEXT.act_gainAmount(getAmountRawString(), gainText());
+    }
+
+    @Override
     public boolean isDetrimental() {
         return amount < 0;
     }
@@ -29,11 +34,6 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     @Override
     public String wrapAmount(int input) {
         return String.valueOf(Math.abs(input));
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), gainText()) : TEXT.act_gainAmount(getAmountRawString(), gainText());
     }
 
     public abstract String gainText();

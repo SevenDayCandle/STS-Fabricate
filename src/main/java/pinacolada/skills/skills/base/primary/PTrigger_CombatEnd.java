@@ -41,8 +41,8 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public void subscribeChildren() {
-        subscribeToAll();
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.cond_atEndOfCombat();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.cond_atEndOfCombat();
+    public void subscribeChildren() {
+        subscribeToAll();
     }
 }

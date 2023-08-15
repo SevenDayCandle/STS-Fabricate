@@ -36,6 +36,10 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         setColors(OrbFlareEffect.OrbFlareColor.DARK);
     }
 
+    public void dispose() {
+
+    }
+
     public void render(SpriteBatch sb) {
         sb.setColor(this.color2);
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
@@ -46,10 +50,6 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         sb.setBlendFunction(770, 771);
         sb.setColor(this.color2);
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
-    }
-
-    public void dispose() {
-
     }
 
     public OrbFlareNotActuallyNeedingOrbEffect setColors(OrbFlareEffect.OrbFlareColor color) {

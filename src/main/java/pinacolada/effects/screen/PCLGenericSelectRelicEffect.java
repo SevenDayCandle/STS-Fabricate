@@ -60,11 +60,27 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
         }
     }
 
+    public void refresh(List<? extends AbstractRelic> cards) {
+        this.relics = cards;
+        this.grid = (EUIRelicGrid) new EUIRelicGrid()
+                .canDragScreen(false)
+                .add(cards, RelicInfo::new);
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
+    }
+
+    public PCLGenericSelectRelicEffect setStartingPosition(float x, float y) {
+        for (AbstractRelic c : relics) {
+            c.currentX = x - (c.hb.width * 0.5f);
+            c.currentY = y - (c.hb.height * 0.5f);
+        }
+
+        return this;
     }
 
     @Override
@@ -78,21 +94,5 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
         if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
             complete();
         }
-    }
-
-    public void refresh(List<? extends AbstractRelic> cards) {
-        this.relics = cards;
-        this.grid = (EUIRelicGrid) new EUIRelicGrid()
-                .canDragScreen(false)
-                .add(cards, RelicInfo::new);
-    }
-
-    public PCLGenericSelectRelicEffect setStartingPosition(float x, float y) {
-        for (AbstractRelic c : relics) {
-            c.currentX = x - (c.hb.width * 0.5f);
-            c.currentY = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 }

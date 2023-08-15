@@ -43,6 +43,11 @@ public class PCustomMod extends PMod<PField_CardCategory> {
         this(other.cardData, other.descIndex, other.amount, other.extra);
     }
 
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
+    }
+
     public PCustomMod makeCopy() {
         PCustomMod copy = null;
         try {
@@ -57,10 +62,5 @@ public class PCustomMod extends PMod<PField_CardCategory> {
         }
 
         return copy;
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
     }
 }

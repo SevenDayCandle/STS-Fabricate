@@ -34,14 +34,14 @@ public class PCLSubscribingPower extends PCLPower implements PCLCombatSubscriber
         super(owner, source, id);
     }
 
-    public void onRemove() {
-        super.onRemove();
-        unsubscribeFromAll();
-    }
-
     public void onInitialApplication() {
         super.onInitialApplication();
         powerSubscribeTo();
+    }
+
+    public void onRemove() {
+        super.onRemove();
+        unsubscribeFromAll();
     }
 
     // Override this if you do not want automatic subscription on your power

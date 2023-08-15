@@ -43,18 +43,6 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
-    public boolean isDetrimental() {
-        return target.targetsSelf() || target.targetsAllies();
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
-        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         String percentLoss = getAmountRawString() + "%";
         if (target == PCLCardTarget.Self && !isFromCreature() && perspective == PCLCardTarget.Self) {
@@ -66,11 +54,23 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
+    public boolean isDetrimental() {
+        return target.targetsSelf() || target.targetsAllies();
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             int reduction = MathUtils.ceil(t.maxHealth * amount / 100f);
             order.loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).ignorePowers(true).isCancellable(false);
         }
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
+        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
     }
 }

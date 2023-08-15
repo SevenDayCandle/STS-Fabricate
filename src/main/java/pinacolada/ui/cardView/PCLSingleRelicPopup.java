@@ -40,6 +40,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
         super(new EUIHitbox(550.0F * Settings.scale, 680.0F * Settings.scale));
     }
 
+    @Override
+    protected String getCredits(AbstractRelic currentItem) {
+        return null;
+    }
+
     protected String getFramePath(AbstractRelic current) {
         if (!current.isSeen) {
             return "images/ui/relicFrameCommon.png";
@@ -114,6 +119,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
         return "";
     }
 
+    @Override
+    protected boolean isHovered() {
+        return false;
+    }
+
     public void open(AbstractRelic relic, ArrayList<AbstractRelic> group) {
         super.openImpl(relic, group);
         this.group = group;
@@ -126,6 +136,15 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
 
     public void open(AbstractRelic relic) {
         open(relic, null);
+    }
+
+    protected void openNext(AbstractRelic relic) {
+        this.close();
+        CardCrawlGame.relicPopup.open(relic, this.group);
+        forceUnfade();
+        EUIClassUtils.setField(CardCrawlGame.relicPopup, "fadeTimer", 0f);
+        Color otherFadeColor = EUIClassUtils.getField(CardCrawlGame.relicPopup, "fadeColor");
+        otherFadeColor.a = 0.9f;
     }
 
     @Override
@@ -151,31 +170,6 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
 
         super.renderImpl(sb);
         scrollBar.tryRender(sb);
-    }
-
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        scrollBar.update();
-    }
-
-    @Override
-    protected String getCredits(AbstractRelic currentItem) {
-        return null;
-    }
-
-    @Override
-    protected boolean isHovered() {
-        return false;
-    }
-
-    protected void openNext(AbstractRelic relic) {
-        this.close();
-        CardCrawlGame.relicPopup.open(relic, this.group);
-        forceUnfade();
-        EUIClassUtils.setField(CardCrawlGame.relicPopup, "fadeTimer", 0f);
-        Color otherFadeColor = EUIClassUtils.getField(CardCrawlGame.relicPopup, "fadeColor");
-        otherFadeColor.a = 0.9f;
     }
 
     private void renderRelicImage(SpriteBatch sb) {
@@ -211,5 +205,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
         relicDescription = getRelicDescription(currentItem);
         relicFlavor = getRelicFlavor(currentItem);
         relicRarityColor = getRelicColor(currentItem);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        scrollBar.update();
     }
 }

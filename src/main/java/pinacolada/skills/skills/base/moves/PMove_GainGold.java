@@ -31,13 +31,13 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
+    public String gainText() {
+        return PGR.core.tooltips.gold.title;
     }
 
     @Override
-    public String gainText() {
-        return PGR.core.tooltips.gold.title;
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override
@@ -46,16 +46,16 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLSFX.play(PCLSFX.GOLD_GAIN);
-        AbstractDungeon.player.gainGold(amount);
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         PCLSFX.play(PCLSFX.GOLD_GAIN);
         order.gainGold(amount);
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLSFX.play(PCLSFX.GOLD_GAIN);
+        AbstractDungeon.player.gainGold(amount);
     }
 }

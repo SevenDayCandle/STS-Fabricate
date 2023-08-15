@@ -40,6 +40,15 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        String percentLoss = getAmountRawString() + "%";
+        if (isSelfOnlyTarget()) {
+            return TEXT.act_heal(percentLoss);
+        }
+        return TEXT.act_healOn(percentLoss, getTargetStringPerspective(perspective));
+    }
+
+    @Override
     public boolean isDetrimental() {
         return target.targetsEnemies();
     }
@@ -50,27 +59,18 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        int heal = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
-        AbstractDungeon.player.heal(heal);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String percentLoss = getAmountRawString() + "%";
-        if (isSelfOnlyTarget()) {
-            return TEXT.act_heal(percentLoss);
-        }
-        return TEXT.act_healOn(percentLoss, getTargetStringPerspective(perspective));
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
             order.heal(info.source, t, heal);
         }
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        int heal = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
+        AbstractDungeon.player.heal(heal);
     }
 }

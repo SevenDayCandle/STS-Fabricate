@@ -174,6 +174,15 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
+    }
+
+    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
                 idInput.makeTour(true),
@@ -183,13 +192,9 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 sizeDropdown.makeTour(true));
     }
 
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
+    protected void openColorEditor(PCLCustomColorEditor editor) {
+        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
+                .addCallback(editor::setColor);
     }
 
     @Override
@@ -206,11 +211,6 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
 
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
-    }
-
-    protected void openColorEditor(PCLCustomColorEditor editor) {
-        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
-                .addCallback(editor::setColor);
     }
 
     @Override

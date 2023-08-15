@@ -31,13 +31,13 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.hp.title + "%";
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return sumTargets(info, t -> MathUtils.ceil((t.currentHealth + TempHPField.tempHp.get(t)) * 100f / t.maxHealth));
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return sumTargets(info, t -> MathUtils.ceil((t.currentHealth + TempHPField.tempHp.get(t)) * 100f / t.maxHealth));
+    public String getSubSampleText() {
+        return PGR.core.tooltips.hp.title + "%";
     }
 
     @Override

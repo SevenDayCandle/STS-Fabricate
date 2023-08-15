@@ -44,14 +44,6 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
-        }
-        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
-    }
-
-    @Override
     public String getSubDescText(PCLCardTarget perspective) {
         String base = PField.getTagAndString(fields.tags);
         return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
@@ -60,5 +52,13 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     @Override
     public String getSubSampleText() {
         return TEXT.cedit_tags;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        }
+        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
     }
 }

@@ -61,6 +61,18 @@ public abstract class PCLOrb extends AbstractOrb {
         return GameUtilities.getPowerAmount(AbstractDungeon.player, FocusPower.POWER_ID);
     }
 
+    @Override
+    public void applyFocus() {
+        int focus = getFocus();
+        if (canOrbApplyFocusToPassive) {
+            this.passiveAmount = Math.max(0, this.basePassiveAmount + focus);
+            if (canOrbApplyFocusToEvoke) {
+                this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
+            }
+        }
+        CombatManager.onOrbApplyFocus(this);
+    }
+
     public void evoke() {
         // Orb Evoke event is already broadcast
     }
@@ -97,7 +109,24 @@ public abstract class PCLOrb extends AbstractOrb {
         return formatDescription(0);
     }
 
+    @Override
+    public AbstractOrb makeCopy() {
+        try {
+            return getClass().getConstructor().newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void onChannel() {
+    }
+
+    @Override
+    public void onEvoke() {
+        evoke();
     }
 
     public void passive() {
@@ -122,39 +151,10 @@ public abstract class PCLOrb extends AbstractOrb {
     }
 
     @Override
-    public void updateDescription() {
-        this.applyFocus();
-        this.description = getUpdatedDescription();
-        tooltip.setDescription(this.description);
-    }
-
-    @Override
-    public void onEvoke() {
-        evoke();
-    }
-
-    @Override
-    public void applyFocus() {
-        int focus = getFocus();
-        if (canOrbApplyFocusToPassive) {
-            this.passiveAmount = Math.max(0, this.basePassiveAmount + focus);
-            if (canOrbApplyFocusToEvoke) {
-                this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
-            }
+    public void triggerEvokeAnimation() {
+        for (int i = 0; i < 4; i++) {
+            PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerpNew(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
         }
-        CombatManager.onOrbApplyFocus(this);
-    }
-
-    @Override
-    public AbstractOrb makeCopy() {
-        try {
-            return getClass().getConstructor().newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     @Override
@@ -178,9 +178,9 @@ public abstract class PCLOrb extends AbstractOrb {
     }
 
     @Override
-    public void triggerEvokeAnimation() {
-        for (int i = 0; i < 4; i++) {
-            PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerpNew(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
-        }
+    public void updateDescription() {
+        this.applyFocus();
+        this.description = getUpdatedDescription();
+        tooltip.setDescription(this.description);
     }
 }

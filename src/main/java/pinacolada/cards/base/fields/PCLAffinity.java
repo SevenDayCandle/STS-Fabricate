@@ -197,6 +197,10 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return getTooltip().getTitleOrIconForced();
     }
 
+    public Texture getIcon() {
+        return getTextureCache().texture();
+    }
+
     public String getPowerSymbol() {
         return EUIUtils.format("P-{0}", symbol);
     }
@@ -204,10 +208,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     @Override
     public int getRank(AbstractCard c) {
         return GameUtilities.getPCLCardAffinityLevel(c, this, false);
-    }
-
-    public Texture getIcon() {
-        return getTextureCache().texture();
     }
 
     public TextureCache getTextureCache() {
@@ -236,6 +236,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return EUIRenderHelpers.getCroppedRegion(getIcon(), 10);
     }
 
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
     public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Red:
@@ -261,11 +266,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
             default:
                 throw new EnumConstantNotPresentException(PCLAffinity.class, this.name());
         }
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
     }
 
     public PCLCardDataAffinity make() {

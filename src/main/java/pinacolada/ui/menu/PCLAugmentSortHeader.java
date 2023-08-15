@@ -28,6 +28,11 @@ public class PCLAugmentSortHeader extends GenericSortHeader<PCLAugmentRenderable
     }
 
     @Override
+    public GenericFilters<PCLAugmentRenderable, ?> getFilters() {
+        return PGR.augmentFilters;
+    }
+
+    @Override
     protected float getFirstY() {
         return group.group.get(0).hb.y;
     }
@@ -47,10 +52,5 @@ public class PCLAugmentSortHeader extends GenericSortHeader<PCLAugmentRenderable
         else {
             this.group.sort((a, b) -> (a == null ? -1 : b == null ? 1 : (StringUtils.compare(a.augment.data.ID, b.augment.data.ID) * (isAscending ? 1 : -1))));
         }
-    }
-
-    @Override
-    public GenericFilters<PCLAugmentRenderable, ?> getFilters() {
-        return PGR.augmentFilters;
     }
 }

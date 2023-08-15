@@ -24,16 +24,16 @@ public class InnovationPower extends PCLPower implements OnClickableUsedSubscrib
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
-    }
-
-    @Override
     public void onInitialApplication() {
         super.onInitialApplication();
 
         CombatManager.subscribe(this);
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
+
+        CombatManager.unsubscribe(this);
     }
 }

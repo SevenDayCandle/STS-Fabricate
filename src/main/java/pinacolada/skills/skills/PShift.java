@@ -32,8 +32,21 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.cond_whenSingle(getDelegateText());
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? (": " + childEffect.getText(perspective, addPeriod)) : "");
+    }
+
+    @Override
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return skill instanceof PMultiBase ||
+                skill instanceof PPassiveCond ||
+                skill instanceof PPassiveMod ||
+                skill instanceof OutOfCombatMove;
     }
 
     // Should not activate effects when played normally in battle
@@ -43,19 +56,6 @@ public abstract class PShift extends PPrimary<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.cond_whenSingle(getDelegateText());
-    }
-
-    @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PMultiBase ||
-                skill instanceof PPassiveCond ||
-                skill instanceof PPassiveMod ||
-                skill instanceof OutOfCombatMove;
     }
 
     public abstract String getDelegateText();

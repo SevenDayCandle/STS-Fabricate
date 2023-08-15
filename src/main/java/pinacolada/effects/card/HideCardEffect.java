@@ -13,17 +13,17 @@ public class HideCardEffect extends AbstractGameEffect {
         this.c = c;
     }
 
-    public void update() {
-        this.c.current_y = this.c.target_y = -10000;
-        this.c.isFlipped = true;
-        this.isDone = true;
+    public void dispose() {
+
     }
 
     public void render(SpriteBatch sb) {
 
     }
 
-    public void dispose() {
-
+    public void update() {
+        this.c.current_y = this.c.target_y = -10000;
+        this.c.isFlipped = true;
+        this.isDone = true;
     }
 }

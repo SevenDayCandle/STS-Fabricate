@@ -387,7 +387,7 @@ public class PGR {
         CountingPanel.register(new PCLAffinityPanelFilter());
         CustomTargeting.registerCustomTargeting(CardTargetingManager.PCL, CombatManager.targeting);
         core.receivePostInitialize();
-        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+        for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receivePostInitialize();
         }
 
@@ -400,21 +400,21 @@ public class PGR {
 
     public static void receiveEditCharacters() {
         core.receiveEditCharacters();
-        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+        for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receiveEditCharacters();
         }
     }
 
     public static void receiveEditKeywords() {
         core.receiveEditKeywords();
-        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+        for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receiveEditKeywords();
         }
     }
 
     public static void receiveEditStrings() {
         core.receiveEditStrings();
-        for (PCLResources<?,?,?,?> resources : getRegisteredResources()) {
+        for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receiveEditStrings();
         }
     }

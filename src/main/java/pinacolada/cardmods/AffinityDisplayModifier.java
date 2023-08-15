@@ -28,6 +28,11 @@ public class AffinityDisplayModifier extends AbstractCardModifier {
         return null;
     }
 
+    @Override
+    public AbstractCardModifier makeCopy() {
+        return new AffinityDisplayModifier(affinities);
+    }
+
     public void onInitialApplication(AbstractCard card) {
         affinities = new PCLCardAffinities(card);
     }
@@ -35,11 +40,6 @@ public class AffinityDisplayModifier extends AbstractCardModifier {
     @Override
     public void onRender(AbstractCard card, SpriteBatch sb) {
         affinities.renderOnCard(sb, card, false);
-    }
-
-    @Override
-    public AbstractCardModifier makeCopy() {
-        return new AffinityDisplayModifier(affinities);
     }
 
     @Override

@@ -62,6 +62,12 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        String base = fields.relicIDs.isEmpty() ? EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString()) : fields.getFullRelicString();
+        return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString()) : TEXT.act_upgrade(base);
+    }
+
+    @Override
     public boolean isMetascaling() {
         return true;
     }
@@ -84,21 +90,15 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.callback(this::doEffect);
+        super.use(info, order);
+    }
+
+    @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
 
         doEffect();
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String base = fields.relicIDs.isEmpty() ? EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString()) : fields.getFullRelicString();
-        return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString()) : TEXT.act_upgrade(base);
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(this::doEffect);
-        super.use(info, order);
     }
 }

@@ -32,12 +32,6 @@ public class CriticalPower extends PCLPower {
         return type == DamageInfo.DamageType.NORMAL ? calculateDamage(damage, getMultiplier(amount)) : damage;
     }
 
-    public void onUseCard(AbstractCard card, UseCardAction action) {
-        if (owner == AbstractDungeon.player && card.type == AbstractCard.CardType.ATTACK) {
-            removePower();
-        }
-    }
-
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, PCLRenderHelpers.decimalFormat(getMultiplier(amount)));
@@ -46,5 +40,11 @@ public class CriticalPower extends PCLPower {
     @Override
     public void onRemoveDamagePowers() {
         removePower();
+    }
+
+    public void onUseCard(AbstractCard card, UseCardAction action) {
+        if (owner == AbstractDungeon.player && card.type == AbstractCard.CardType.ATTACK) {
+            removePower();
+        }
     }
 }

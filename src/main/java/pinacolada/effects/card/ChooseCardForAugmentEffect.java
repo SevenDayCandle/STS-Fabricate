@@ -30,12 +30,6 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
     }
 
     @Override
-    protected void openGridScreen(CardGroup cardGroup) {
-        GridCardSelectScreenPatches.setAugment(augment);
-        super.openGridScreen(cardGroup);
-    }
-
-    @Override
     protected ArrayList<AbstractCard> getGroup() {
         return AbstractDungeon.player.masterDeck.group;
     }
@@ -43,5 +37,11 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
     public void onCardSelected(AbstractCard c) {
         PGR.dungeon.addAugment(augment.ID, -1);
         augment.addToCard((PCLCard) c);
+    }
+
+    @Override
+    protected void openGridScreen(CardGroup cardGroup) {
+        GridCardSelectScreenPatches.setAugment(augment);
+        super.openGridScreen(cardGroup);
     }
 }

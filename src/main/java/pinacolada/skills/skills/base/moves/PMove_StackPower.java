@@ -41,31 +41,6 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
-    public boolean isDetrimental() {
-        return ((target.targetsSelf()) && EUIUtils.any(fields.powers, po -> po.isDebuff)) ||
-                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff));
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return !isDetrimental() && EUIUtils.any(fields.powers, p -> p.isMetascaling);
-    }
-
-    @Override
-    public void onDrag(AbstractMonster m) {
-        if (m != null) {
-            for (PCLPowerHelper power : fields.powers) {
-                GameUtilities.getIntent(m).addModifier(power.ID, amount);
-            }
-        }
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return String.valueOf(Math.abs(input));
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
@@ -107,6 +82,26 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
+    public boolean isDetrimental() {
+        return ((target.targetsSelf()) && EUIUtils.any(fields.powers, po -> po.isDebuff)) ||
+                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff));
+    }
+
+    @Override
+    public boolean isMetascaling() {
+        return !isDetrimental() && EUIUtils.any(fields.powers, p -> p.isMetascaling);
+    }
+
+    @Override
+    public void onDrag(AbstractMonster m) {
+        if (m != null) {
+            for (PCLPowerHelper power : fields.powers) {
+                GameUtilities.getIntent(m).addModifier(power.ID, amount);
+            }
+        }
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
@@ -133,5 +128,10 @@ public class PMove_StackPower extends PMove<PField_Power> {
             }
         }
         super.use(info, order);
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
     }
 }

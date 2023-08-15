@@ -63,9 +63,37 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (this.childEffect instanceof PCond && this.effects.size() < 2) {
+            return ((PCond<?>) this.childEffect).checkCondition(info, isUsing, triggerSource);
+        }
+        return false;
+    }
+
+    @Override
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
+    }
+
+    protected String getEffectTexts(PCLCardTarget perspective, boolean addPeriod) {
+        switch (effects.size()) {
+            case 0:
+                return EUIUtils.EMPTY_STRING;
+            case 1:
+                return this.effects.get(0).getText(perspective, addPeriod);
+            case 2:
+                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
+                    return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, addPeriod) + " " +
+                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, addPeriod)));
+                }
+            default:
+                ArrayList<String> effectTexts = new ArrayList<>();
+                for (int i = 0; i < effects.size(); i++) {
+                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(perspective, addPeriod));
+                }
+                return getSubText(perspective) + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
+        }
     }
 
     @Override
@@ -102,9 +130,36 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
+    public PSkill<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    @Override
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return this.childEffect != null ? this.childEffect.getSubText(perspective) : EUIUtils.EMPTY_STRING;
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        if (this.childEffect != null) {
+            return getEffectTexts(perspective, addPeriod);
+        }
+        return getSubText(perspective);
+    }
+
     @Override
     public boolean hasChildType(Class<?> childType) {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
+    }
+
+    @Override
+    public boolean hasChildWarning() {
+        return childEffect == null || effects.isEmpty();
     }
 
     @Override
@@ -172,8 +227,49 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.refresh(info, refreshVal);
+        }
+    }
+
+    @Override
     public boolean requiresTarget() {
         return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
+    }
+
+    @Override
+    public PBranchCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    public PBranchCond setEffects(PSkill<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PBranchCond setEffects(List<PSkill<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+        return this;
+    }
+
+    @Override
+    public PBranchCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
     }
 
     @Override
@@ -211,6 +307,10 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return source == childEffect ? (parent == null || parent.tryPassParent(source, info)) : super.tryPassParent(source, info);
+    }
+
     @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {
@@ -219,98 +319,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         if (this.childEffect != null) {
             this.childEffect.unsubscribeChildren();
         }
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return this.childEffect != null ? this.childEffect.getSubText(perspective) : EUIUtils.EMPTY_STRING;
-    }
-
-    protected String getEffectTexts(PCLCardTarget perspective, boolean addPeriod) {
-        switch (effects.size()) {
-            case 0:
-                return EUIUtils.EMPTY_STRING;
-            case 1:
-                return this.effects.get(0).getText(perspective, addPeriod);
-            case 2:
-                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, addPeriod) + " " +
-                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, addPeriod)));
-                }
-            default:
-                ArrayList<String> effectTexts = new ArrayList<>();
-                for (int i = 0; i < effects.size(); i++) {
-                    effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(perspective, addPeriod));
-                }
-                return getSubText(perspective) + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
-        }
-    }
-
-    public PSkill<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public PBranchCond setEffects(PSkill<?>... effects) {
-        return setEffects(Arrays.asList(effects));
-    }
-
-    public PBranchCond setEffects(List<PSkill<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-        return this;
-    }
-
-    @Override
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
-    }
-
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        if (this.childEffect != null) {
-            return getEffectTexts(perspective, addPeriod);
-        }
-        return getSubText(perspective);
-    }
-
-    @Override
-    public boolean hasChildWarning() {
-        return childEffect == null || effects.isEmpty();
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        conditionMetCache = checkCondition(info, false, null);
-        boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
-        }
-    }
-
-    @Override
-    public PBranchCond setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
-        return this;
-    }
-
-    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
-        return source == childEffect ? (parent == null || parent.tryPassParent(source, info)) : super.tryPassParent(source, info);
     }
 
     @Override
@@ -326,14 +334,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         else if (childEffect != null) {
             useSubEffect(info, order, childEffect.getQualifiers(info, true));
         }
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (this.childEffect instanceof PCond && this.effects.size() < 2) {
-            return ((PCond<?>) this.childEffect).checkCondition(info, isUsing, triggerSource);
-        }
-        return false;
     }
 
     public void useSubEffect(PCLUseInfo info, PCLActions order, ArrayList<Integer> qualifiers) {

@@ -86,13 +86,13 @@ public class CardFlag implements TooltipProvider {
 
     public static class CardFlagAdapter extends TypeAdapter<CardFlag> {
         @Override
-        public void write(JsonWriter writer, CardFlag value) throws IOException {
-            writer.value(value.ID);
+        public CardFlag read(JsonReader in) throws IOException {
+            return get(in.nextString());
         }
 
         @Override
-        public CardFlag read(JsonReader in) throws IOException {
-            return get(in.nextString());
+        public void write(JsonWriter writer, CardFlag value) throws IOException {
+            writer.value(value.ID);
         }
     }
 }

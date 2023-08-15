@@ -107,39 +107,6 @@ public class PField_CardCategory extends PField_CardGeneric {
                 && invert == ((PField_CardCategory) other).invert;
     }
 
-    @Override
-    public PField_CardCategory makeCopy() {
-        return new PField_CardCategory(this);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
-        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
-        editor.registerPile(groupTypes);
-        editor.registerRarity(rarities);
-        editor.registerType(types);
-        editor.registerCost(costs);
-        editor.registerColor(colors);
-        editor.registerAffinity(affinities);
-        editor.registerTag(tags);
-        editor.registerLoadout(loadouts);
-        editor.registerCard(cardIDs);
-        editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
-    }
-
-    public String getFullCardString() {
-        return getFullCardOrString(skill.getAmountRawString());
-    }
-
-    public String getFullCardString(Object parse) {
-        return getFullCardOrString(parse);
-    }
-
-    public String getFullCardStringSingular() {
-        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
-        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
-    }
-
     public String getCardAndString() {
         return getCardAndString(skill.getAmountRawString());
     }
@@ -212,6 +179,19 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public String getFullCardOrString(Object value) {
         String sub = !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
+        return invert ? PSkill.TEXT.subjects_non(sub) : sub;
+    }
+
+    public String getFullCardString() {
+        return getFullCardOrString(skill.getAmountRawString());
+    }
+
+    public String getFullCardString(Object parse) {
+        return getFullCardOrString(parse);
+    }
+
+    public String getFullCardStringSingular() {
+        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
@@ -306,13 +286,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         return cardIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && types.isEmpty() && affinities.isEmpty() && tags.isEmpty() && costs.isEmpty() && loadouts.isEmpty();
     }
 
-    public void makePreviews(RotatingList<EUIPreview> previews) {
-        for (String cd : cardIDs) {
-            AbstractCard c = getCard(cd);
-            if (c != null && !EUIUtils.any(previews, p -> p.matches(c.cardID))) {
-                previews.add(new EUICardPreview(c.makeCopy()));
-            }
-        }
+    @Override
+    public PField_CardCategory makeCopy() {
+        return new PField_CardCategory(this);
     }
 
     public String makeFullString(EUITooltip tooltip) {
@@ -320,6 +296,15 @@ public class PField_CardCategory extends PField_CardGeneric {
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
                 !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
+    }
+
+    public void makePreviews(RotatingList<EUIPreview> previews) {
+        for (String cd : cardIDs) {
+            AbstractCard c = getCard(cd);
+            if (c != null && !EUIUtils.any(previews, p -> p.matches(c.cardID))) {
+                previews.add(new EUICardPreview(c.makeCopy()));
+            }
+        }
     }
 
     public PField_CardCategory setAffinity(Collection<PCLAffinity> affinities) {
@@ -409,5 +394,20 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public PField_CardCategory setType(AbstractCard.CardType... types) {
         return setType(Arrays.asList(types));
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
+        editor.registerPile(groupTypes);
+        editor.registerRarity(rarities);
+        editor.registerType(types);
+        editor.registerCost(costs);
+        editor.registerColor(colors);
+        editor.registerAffinity(affinities);
+        editor.registerTag(tags);
+        editor.registerLoadout(loadouts);
+        editor.registerCard(cardIDs);
+        editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
     }
 }

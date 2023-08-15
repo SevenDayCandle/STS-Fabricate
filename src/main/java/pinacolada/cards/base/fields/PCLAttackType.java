@@ -26,6 +26,11 @@ public enum PCLAttackType implements TooltipProvider {
         this.useFocus = useFocus;
     }
 
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
     @Override
     public EUIKeywordTooltip getTooltip() {
@@ -40,10 +45,5 @@ public enum PCLAttackType implements TooltipProvider {
                 return PGR.core.tooltips.ranged;
         }
         return PGR.core.tooltips.normalDamage;
-    }
-
-    @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTooltip());
     }
 }

@@ -200,19 +200,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (currentDialog != null) {
-            currentDialog.update();
-            if (currentDialog.isDone) {
-                currentDialog = null;
-            }
-        }
-        else {
-            updateInnerElements();
-        }
-    }
-
     public void renderInnerElements(SpriteBatch sb) {
         cancelButton.tryRender(sb);
         saveButton.tryRender(sb);
@@ -289,6 +276,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         pages.get(currentPage).tryUpdate();
         for (EUIButton b : pageButtons) {
             b.tryUpdate();
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (currentDialog != null) {
+            currentDialog.update();
+            if (currentDialog.isDone) {
+                currentDialog = null;
+            }
+        }
+        else {
+            updateInnerElements();
         }
     }
 

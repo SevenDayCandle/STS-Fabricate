@@ -29,36 +29,14 @@ public class EffekseerEffect extends PCLEffect {
         this.position = new Vector2(x, y);
     }
 
-    @Override
-    protected void firstUpdate(float deltaTime) {
-        handle = STSEffekseerManager.play(vfxKey.path, position, rotation, scale, color);
-    }
-
-    public EffekseerEffect setScale(float scale) {
-        this.scale = new Vector3(scale, scale, scale);
-        return this;
-    }
-
     public void dispose() {
         super.dispose();
         STSEffekseerManager.stop(handle);
     }
 
     @Override
-    protected void updateInternal(float deltaTime) {
-        this.duration -= deltaTime;
-        this.soundDelay -= deltaTime;
-        if (!hasPlayed && this.soundDelay < 0 && sfxKey != null) {
-            PCLSFX.play(sfxKey, pitchMin, pitchMax, volume);
-            hasPlayed = true;
-        }
-        if (handle == null || !STSEffekseerManager.exists(handle)) {
-            complete();
-        }
-        else if (duration < forceEnd) {
-            STSEffekseerManager.stop(handle);
-            complete();
-        }
+    protected void firstUpdate(float deltaTime) {
+        handle = STSEffekseerManager.play(vfxKey.path, position, rotation, scale, color);
     }
 
     public EffekseerEffect setForceEnd(int forceEnd) {
@@ -86,6 +64,11 @@ public class EffekseerEffect extends PCLEffect {
         return this;
     }
 
+    public EffekseerEffect setScale(float scale) {
+        this.scale = new Vector3(scale, scale, scale);
+        return this;
+    }
+
     public EffekseerEffect setScale(Vector3 scale) {
         this.scale = scale;
         return this;
@@ -106,5 +89,22 @@ public class EffekseerEffect extends PCLEffect {
 
     public EffekseerEffect setSoundKey(String sfxKey, float delay) {
         return setSoundKey(sfxKey, 1f, 1f, 1f, delay);
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        this.duration -= deltaTime;
+        this.soundDelay -= deltaTime;
+        if (!hasPlayed && this.soundDelay < 0 && sfxKey != null) {
+            PCLSFX.play(sfxKey, pitchMin, pitchMax, volume);
+            hasPlayed = true;
+        }
+        if (handle == null || !STSEffekseerManager.exists(handle)) {
+            complete();
+        }
+        else if (duration < forceEnd) {
+            STSEffekseerManager.stop(handle);
+            complete();
+        }
     }
 }

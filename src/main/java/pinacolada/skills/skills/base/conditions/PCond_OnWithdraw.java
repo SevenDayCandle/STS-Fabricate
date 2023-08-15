@@ -27,16 +27,16 @@ public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdra
     }
 
     @Override
+    public EUIKeywordTooltip getDelegateTooltip() {
+        return PGR.core.tooltips.withdraw;
+    }
+
+    @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
             return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
         return super.getSubText(perspective);
-    }
-
-    @Override
-    public EUIKeywordTooltip getDelegateTooltip() {
-        return PGR.core.tooltips.withdraw;
     }
 
     @Override

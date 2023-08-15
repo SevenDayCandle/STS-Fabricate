@@ -24,6 +24,10 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
         this.renderBehind = false;
     }
 
+    public void dispose() {
+
+    }
+
     protected void firstUpdate(float deltaTime) {
         PGR.dungeon.addAugment(augment.ID, 1);
     }
@@ -33,10 +37,6 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
             EUIRenderHelpers.draw(sb, augment.getTexture(), color, x, y, augment.getTexture().getWidth(), augment.getTexture().getHeight());
             FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, augment.getName(), x + augment.getTexture().getWidth() * 2f, y + augment.getTexture().getHeight() / 2f, color);
         });
-    }
-
-    public void dispose() {
-
     }
 
     @Override

@@ -90,12 +90,6 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
         groupMenu.tryRender(sb);
     }
 
-    @Override
-    public void updateImpl() {
-        groupMenu.tryUpdate();
-        groupButton.tryUpdate();
-    }
-
     protected void togglePool(ColorlessGroup val) {
         group = val;
         CardGroup cards = getGroup(val);
@@ -103,6 +97,12 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
             screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards, CustomCardLibraryScreen.currentColor);
         }
         groupButton.setText(group.getTitle());
+    }
+
+    @Override
+    public void updateImpl() {
+        groupMenu.tryUpdate();
+        groupButton.tryUpdate();
     }
 
     public enum ColorlessGroup {

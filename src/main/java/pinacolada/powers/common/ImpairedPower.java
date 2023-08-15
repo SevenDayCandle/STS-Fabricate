@@ -51,10 +51,13 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
+    public void onApplyFocus(AbstractOrb orb) {
+        if (GameUtilities.canOrbApplyFocus(orb)) {
+            orb.passiveAmount = (int) modifyOrbOutgoing(orb.passiveAmount);
+            if (GameUtilities.canOrbApplyFocusToEvoke(orb)) {
+                orb.evokeAmount = (int) modifyOrbOutgoing(orb.evokeAmount);
+            }
+        }
     }
 
     @Override
@@ -65,12 +68,9 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     }
 
     @Override
-    public void onApplyFocus(AbstractOrb orb) {
-        if (GameUtilities.canOrbApplyFocus(orb)) {
-            orb.passiveAmount = (int) modifyOrbOutgoing(orb.passiveAmount);
-            if (GameUtilities.canOrbApplyFocusToEvoke(orb)) {
-                orb.evokeAmount = (int) modifyOrbOutgoing(orb.evokeAmount);
-            }
-        }
+    public void onRemove() {
+        super.onRemove();
+
+        CombatManager.unsubscribe(this);
     }
 }

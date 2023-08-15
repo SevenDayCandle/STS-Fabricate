@@ -92,40 +92,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
         }
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            for (AbstractPower p : player.powers) {
-                p.onDamageAllEnemies(this.damage);
-            }
-
-            for (int i = 0; i < targets.size(); i++) {
-                AbstractCreature enemy = targets.get(i);
-                if (!GameUtilities.isDeadOrEscaped(enemy) && i < this.damage.length) {
-                    final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
-                    if (orb != null) {
-                        info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
-                    }
-                    if (applyPowers) {
-                        info.applyPowers(source, enemy);
-                    }
-                    DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
-                    DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
-                }
-            }
-
-            if (GameUtilities.areMonstersBasicallyDead()) {
-                GameUtilities.clearPostCombatActions();
-            }
-
-            if (!isFast && !Settings.FAST_MODE) {
-                PCLActions.top.wait(0.1f);
-            }
-
-            complete(targets);
-        }
-    }
-
     public DealDamageToAll setDamageEffect(EffekseerEFK effekseerKey) {
         this.onDamageEffect = (m, __) -> EffekseerEFK.efk(effekseerKey, m.hb);
         return this;
@@ -177,5 +143,39 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
         this.enemyTint = enemyTint.cpy();
 
         return this;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            for (AbstractPower p : player.powers) {
+                p.onDamageAllEnemies(this.damage);
+            }
+
+            for (int i = 0; i < targets.size(); i++) {
+                AbstractCreature enemy = targets.get(i);
+                if (!GameUtilities.isDeadOrEscaped(enemy) && i < this.damage.length) {
+                    final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
+                    if (orb != null) {
+                        info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
+                    }
+                    if (applyPowers) {
+                        info.applyPowers(source, enemy);
+                    }
+                    DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
+                    DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
+                }
+            }
+
+            if (GameUtilities.areMonstersBasicallyDead()) {
+                GameUtilities.clearPostCombatActions();
+            }
+
+            if (!isFast && !Settings.FAST_MODE) {
+                PCLActions.top.wait(0.1f);
+            }
+
+            complete(targets);
+        }
     }
 }

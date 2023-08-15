@@ -36,12 +36,6 @@ public class PMove_Scry extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScryCards(s, i);
     }
@@ -49,5 +43,11 @@ public class PMove_Scry extends PMove_Select<PField_CardCategory> {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.scry;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

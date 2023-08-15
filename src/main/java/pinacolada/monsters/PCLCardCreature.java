@@ -49,6 +49,11 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
     }
 
     @Override
+    public void applyPowers() {
+        refreshAction();
+    }
+
+    @Override
     public void atEndOfRound() {
         super.atEndOfRound();
         for (AbstractPower p : powers) {
@@ -56,49 +61,10 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (this.animation != null) {
-            super.render(sb);
-        }
-        if (isHovered()) {
-            renderTip(sb);
-        }
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (card != null) {
-            this.card.refresh(target);
-            this.card.currentHealth = this.currentHealth;
-            if (this.animation instanceof PCLAllyAnimation) {
-                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
-            }
-        }
-    }
-
-    @Override
-    public void performActions(boolean manual) {
-        if (card != null) {
-            refreshAction();
-            final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
-            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
-            card.useEffectsWithoutPowers(info);
-            PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
-            applyTurnPowers();
-        }
-    }
-
     // Unused
     @Override
     protected void getMove(int i) {
 
-    }
-
-    @Override
-    public void applyPowers() {
-        refreshAction();
     }
 
     public EUICardPreview getPreview() {
@@ -170,6 +136,18 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         return card != null && (hb.hovered || intentHb.hovered);
     }
 
+    @Override
+    public void performActions(boolean manual) {
+        if (card != null) {
+            refreshAction();
+            final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
+            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
+            card.useEffectsWithoutPowers(info);
+            PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
+            applyTurnPowers();
+        }
+    }
+
     public void refreshAction() {
         if (card != null) {
             acquireTarget();
@@ -180,6 +158,16 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
             else {
                 this.setMove(card.name, (byte) -1, Intent.ATTACK, card.damage, card.hitCount, card.hitCount > 1);
             }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (this.animation != null) {
+            super.render(sb);
+        }
+        if (isHovered()) {
+            renderTip(sb);
         }
     }
 
@@ -199,6 +187,18 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         if (!GameUtilities.isDeadOrEscaped(target)) {
             this.target = target;
             refreshAction();
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (card != null) {
+            this.card.refresh(target);
+            this.card.currentHealth = this.currentHealth;
+            if (this.animation instanceof PCLAllyAnimation) {
+                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
+            }
         }
     }
 }

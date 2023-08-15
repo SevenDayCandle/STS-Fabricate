@@ -33,11 +33,6 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.act_takeDamage(getAmountRawString());
-    }
-
-    @Override
     public String getSubDescText(PCLCardTarget perspective) {
         return getAttackTooltip().getTitleOrIcon();
     }
@@ -45,6 +40,11 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
     @Override
     public String getSubSampleText() {
         return TEXT.subjects_damage;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return TEXT.act_takeDamage(getAmountRawString());
     }
 
     @Override

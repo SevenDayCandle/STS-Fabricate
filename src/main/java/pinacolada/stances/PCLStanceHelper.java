@@ -83,24 +83,24 @@ public class PCLStanceHelper implements TooltipProvider {
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
-    }
-
-    @Override
     public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 
-    public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper> {
-        @Override
-        public void write(JsonWriter writer, PCLStanceHelper value) throws IOException {
-            writer.value(value.ID);
-        }
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
+    }
 
+    public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper> {
         @Override
         public PCLStanceHelper read(JsonReader in) throws IOException {
             return get(in.nextString());
+        }
+
+        @Override
+        public void write(JsonWriter writer, PCLStanceHelper value) throws IOException {
+            writer.value(value.ID);
         }
     }
 }

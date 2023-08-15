@@ -21,10 +21,9 @@ public class SorceryPower extends PCLPower implements OnOrbChannelSubscriber {
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
+    public void onChannelOrb(AbstractOrb orb) {
+        GameUtilities.modifyOrbBaseFocus(orb, amount, true, false);
+        removePower();
     }
 
     @Override
@@ -35,8 +34,9 @@ public class SorceryPower extends PCLPower implements OnOrbChannelSubscriber {
     }
 
     @Override
-    public void onChannelOrb(AbstractOrb orb) {
-        GameUtilities.modifyOrbBaseFocus(orb, amount, true, false);
-        removePower();
+    public void onRemove() {
+        super.onRemove();
+
+        CombatManager.unsubscribe(this);
     }
 }

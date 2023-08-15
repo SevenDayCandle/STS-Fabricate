@@ -182,6 +182,16 @@ public class PCLMainConfig extends AbstractConfig {
         load();
     }
 
+    public void load() {
+        try {
+            config = new SpireConfig(MOD_ID, MOD_ID);
+            loadImpl();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void loadImpl() {
         abbreviateEffects.addConfig(config);
         ascensionGlyph0.addConfig(config);
@@ -216,16 +226,6 @@ public class PCLMainConfig extends AbstractConfig {
         tourLoadout.addConfig(config);
         tourRelicPrimary.addConfig(config);
         tourSeriesSelect.addConfig(config);
-    }
-
-    public void load() {
-        try {
-            config = new SpireConfig(MOD_ID, MOD_ID);
-            loadImpl();
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

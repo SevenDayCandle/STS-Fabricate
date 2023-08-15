@@ -84,24 +84,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return isOutOf() ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
-        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
-    }
-
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
         final int limit = Math.max(extra, amount);
         // When sourcing cards from the parent skill, make exact copies of the cards
@@ -178,6 +160,11 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
     }
 
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
+    }
+
     protected Iterable<AbstractCard> getSourceCards(int limit) {
         if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
                 || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
@@ -196,8 +183,21 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return isMetascaling() ? fields.getFullCardFilter() : c -> fields.not ^ fields.getFullCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
     }
 
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
+    }
+
     protected boolean isOutOf() {
         return extra > amount;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
     }
 
     @Override

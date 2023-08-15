@@ -108,10 +108,28 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        String base = null;
+        if (sourceCard instanceof PointerProvider && ((PointerProvider) sourceCard).getEffects().contains(this)) {
+            String gString = fields.getGroupString();
+            base = TEXT.cond_whileIn(gString.isEmpty() ? TEXT.subjects_anyPile() : gString);
+        }
+        String amountStr = null;
+        if (amount > 0) {
+            amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+        }
+        return base != null && amountStr != null ? amountStr + COMMA_SEPARATOR + base : base != null ? base : amountStr != null ? amountStr : "";
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         String subText = getCapitalSubText(perspective, addPeriod);
         String childText = (childEffect != null ? childEffect.getText(perspective, addPeriod) : "");
         return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + StringUtils.capitalize(childText);
+    }
+
+    public int getUses() {
+        return this.usesThisTurn;
     }
 
     @Override
@@ -181,6 +199,20 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return this;
     }
 
+    public PTrigger setUpgrade(int upgrade) {
+        super.setUpgrade(upgrade);
+        updateUsesAmount();
+        updateCounter();
+        return this;
+    }
+
+    public PTrigger setUpgradeExtra(int upgrade) {
+        super.setUpgradeExtra(upgrade);
+        updateUsesAmount();
+        updateCounter();
+        return this;
+    }
+
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_combat, null);
@@ -201,6 +233,22 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             this.childEffect.stack(other.getChild());
         }
         return this;
+    }
+
+    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info) {
+        if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
+            if (usesThisTurn > 0) {
+                usesThisTurn -= 1;
+                updateCounter();
+            }
+            flash();
+            return childAction.invoke();
+        }
+        return false;
+    }
+
+    protected boolean triggerOn(FuncT0<Boolean> childAction) {
+        return triggerOn(childAction, getInfo(null));
     }
 
     @Override
@@ -239,6 +287,17 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return false;
     }
 
+    protected void updateCounter() {
+        if (source instanceof AbstractRelic) {
+            ((AbstractRelic) source).counter = this.usesThisTurn;
+        }
+    }
+
+    // When initialized, treat 0 like -1
+    protected void updateUsesAmount() {
+        usesThisTurn = this.amount > 0 ? this.amount : -1;
+    }
+
     // Triggers can only activate through subscribers or clickables
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
@@ -255,64 +314,5 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             flash();
             this.childEffect.use(info, order, shouldPay);
         }
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String base = null;
-        if (sourceCard instanceof PointerProvider && ((PointerProvider) sourceCard).getEffects().contains(this)) {
-            String gString = fields.getGroupString();
-            base = TEXT.cond_whileIn(gString.isEmpty() ? TEXT.subjects_anyPile() : gString);
-        }
-        String amountStr = null;
-        if (amount > 0) {
-            amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
-        }
-        return base != null && amountStr != null ? amountStr + COMMA_SEPARATOR + base : base != null ? base : amountStr != null ? amountStr : "";
-    }
-
-    public int getUses() {
-        return this.usesThisTurn;
-    }
-
-    public PTrigger setUpgrade(int upgrade) {
-        super.setUpgrade(upgrade);
-        updateUsesAmount();
-        updateCounter();
-        return this;
-    }
-
-    public PTrigger setUpgradeExtra(int upgrade) {
-        super.setUpgradeExtra(upgrade);
-        updateUsesAmount();
-        updateCounter();
-        return this;
-    }
-
-    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info) {
-        if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
-            if (usesThisTurn > 0) {
-                usesThisTurn -= 1;
-                updateCounter();
-            }
-            flash();
-            return childAction.invoke();
-        }
-        return false;
-    }
-
-    protected boolean triggerOn(FuncT0<Boolean> childAction) {
-        return triggerOn(childAction, getInfo(null));
-    }
-
-    protected void updateCounter() {
-        if (source instanceof AbstractRelic) {
-            ((AbstractRelic) source).counter = this.usesThisTurn;
-        }
-    }
-
-    // When initialized, treat 0 like -1
-    protected void updateUsesAmount() {
-        usesThisTurn = this.amount > 0 ? this.amount : -1;
     }
 }

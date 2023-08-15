@@ -211,15 +211,6 @@ public class SummonPool extends EUIBase {
         }
     }
 
-    @Override
-    public void updateImpl() {
-        // Update empty animation independently so alpha is the same for all slots
-        PCLCardAlly.emptyAnimation.update(EUI.delta(), 0, 0);
-        for (PCLCardAlly ally : summons) {
-            ally.update();
-        }
-    }
-
     public SummonAllyAction summon(PCLCard card, PCLCardAlly target) {
         return PCLActions.bottom.summonAlly(card, target);
     }
@@ -229,6 +220,15 @@ public class SummonPool extends EUIBase {
             ally.damage(new DamageInfo(info.owner, amount, info.type));
             return amount;
         });
+    }
+
+    @Override
+    public void updateImpl() {
+        // Update empty animation independently so alpha is the same for all slots
+        PCLCardAlly.emptyAnimation.update(EUI.delta(), 0, 0);
+        for (PCLCardAlly ally : summons) {
+            ally.update();
+        }
     }
 
     public WithdrawAllyAction withdraw(PCLCardAlly target) {

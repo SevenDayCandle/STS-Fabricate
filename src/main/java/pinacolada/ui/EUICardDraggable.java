@@ -66,9 +66,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
         draggableIcon.renderImpl(sb);
     }
 
-    public final void updateImpl() {
-    } // This should not be called
-
     protected void savePosition(DraggableHitbox hb) {
 
         if (meterSavedPosition != null && config != null) {
@@ -120,6 +117,9 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             lastTarget = target;
         }
     }
+
+    public final void updateImpl() {
+    } // This should not be called
 
     public abstract void updateImpl(T card, T originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget);
 }

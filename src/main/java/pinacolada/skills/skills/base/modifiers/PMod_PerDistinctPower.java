@@ -35,17 +35,25 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
         fields.setPower(powerHelpers);
     }
 
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount * getMultiplier(info, isUsing);
-    }
-
     public String getConditionText(PCLCardTarget perspective, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective)));
         }
         return TEXT.cond_xPerY(childText,
                 this.amount <= 1 ? getSubText(perspective) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective)));
+    }
+
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return be.baseAmount * getMultiplier(info, isUsing);
+    }
+
+    @Override
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
+        return fields.powers.isEmpty() ?
+                sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == targetType)) :
+                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override
@@ -56,14 +64,6 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
     @Override
     public String getSubSampleText() {
         return TEXT.subjects_distinct(TEXT.cedit_powers);
-    }
-
-    @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
-        return fields.powers.isEmpty() ?
-                sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == targetType)) :
-                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override

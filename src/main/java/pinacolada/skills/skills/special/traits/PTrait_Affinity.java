@@ -47,14 +47,6 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
-        }
-        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
-    }
-
-    @Override
     public String getSubDescText(PCLCardTarget perspective) {
         return fields.getAffinityAndString();
     }
@@ -62,5 +54,13 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     @Override
     public String getSubSampleText() {
         return PGR.core.tooltips.affinityGeneral.title;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
+            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        }
+        return fields.random ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
     }
 }

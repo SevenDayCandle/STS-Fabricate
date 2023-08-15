@@ -171,9 +171,89 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.currentForm = 0;
     }
 
+    public PCLCard getCard() {
+        if (SingleCardViewPopup.isViewingUpgrade) {
+            if (upgradedCard == null) {
+                upgradedCard = getUpgradeCard();
+            }
+
+            return upgradedCard;
+        }
+        else {
+            return displayCard;
+        }
+    }
+
+    private String getCardCopiesText() {
+        if (displayCard == null) {
+            return "";
+        }
+        int currentCopies = (AbstractDungeon.player != null ? EUIUtils.count(AbstractDungeon.player.masterDeck.group, c -> c.cardID.equals(displayCard.cardID)) : -1);
+        int maxCopies = displayCard.cardData != null ? displayCard.cardData.maxCopies : 0;
+
+        if (currentCopies >= 0 && maxCopies > 0) {
+            return currentCopies + "/" + maxCopies;
+        }
+        else if (currentCopies >= 0) {
+            return String.valueOf(currentCopies);
+        }
+        else {
+            return String.valueOf(maxCopies);
+        }
+    }
+
+    @Override
+    protected String getCredits(PCLCard currentItem) {
+        if (currentItem != null) {
+            return currentItem.cardData.getAuthorString();
+        }
+        return null;
+    }
+
     @Override
     protected Iterable<? extends EUITooltip> getTipsForRender(PCLCard currentItem) {
         return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+    }
+
+    private PCLCard getUpgradeCard() {
+        upgradedCard = displayCard.makePopupCopy();
+        upgradedCard.upgrade();
+        upgradedCard.displayUpgrades();
+        return upgradedCard;
+    }
+
+    private void initializeAugments() {
+        currentAugments.clear();
+        // Do not show augments for cards not in your deck, or if the card does not have augment slots
+        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(currentItem) && currentItem.augments.size() > 0) {
+            toggleAugment.setActive(true);
+            float curY = AUGMENT_Y;
+            for (int i = 0; i < currentItem.augments.size(); i++) {
+                int finalI = i;
+                PCLAugmentViewer viewer = new PCLAugmentViewer(new EUIHitbox(AUGMENT_X, curY, scale(300), scale(360)), currentItem, i)
+                        .setOnClick(() -> {
+                            if (currentItem.augments.get(finalI) == null) {
+                                if (PGR.dungeon.augments.size() > 0) {
+                                    this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(currentItem)
+                                            .addCallback((augment -> {
+                                                if (augment != null) {
+                                                    applyAugment(augment);
+                                                }
+                                            }));
+                                }
+                            }
+                            else {
+                                removeAugment(finalI);
+                            }
+                        });
+                curY += viewer.getHeight();
+                currentAugments.add(viewer);
+            }
+        }
+        else {
+            toggleAugment.setActive(false);
+            toggleAugmentView(false);
+        }
     }
 
     protected void initializeLabels() {
@@ -192,6 +272,82 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         ModInfo info = EUIGameUtils.getModInfo(currentItem);
         whatModLabel.setLabel(info != null ? EUIRM.strings.ui_origins + COLON_SEPARATOR + EUIUtils.modifyString(info.Name, w -> "#y" + w) : "");
+    }
+
+    private void initializeToggles() {
+        this.betaArtToggle.setActive(false);// (boolean)_canToggleBetaArt.Invoke(CardCrawlGame.cardPopup));
+        this.upgradeToggle.setActive(SingleCardViewPopup.enableUpgradeToggle && currentItem.canUpgrade());
+
+        if (betaArtToggle.isActive) {
+            this.viewBetaArt = UnlockTracker.betaCardPref.getBoolean(currentItem.cardID, false);
+
+            if (upgradeToggle.isActive) {
+                this.betaArtToggle.hb.move(Settings.WIDTH / 2f + 270f * Settings.scale, 70f * Settings.scale);
+                this.upgradeToggle.hb.move(Settings.WIDTH / 2f - 180f * Settings.scale, 70f * Settings.scale);
+            }
+            else {
+                this.betaArtToggle.hb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
+            }
+        }
+        else {
+            this.upgradeToggle.hb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
+        }
+    }
+
+    @Override
+    protected boolean isHovered() {
+        return this.toggleAugment.hb.hovered ||
+                (showAugments && EUIUtils.any(currentAugments, augment -> augment.augmentButton.hb.hovered)) ||
+                (this.upgradeToggle.hb.hovered) ||
+                (this.betaArtToggle.hb.hovered) ||
+                (this.scrollBar.hb.hovered) ||
+                (this.viewVariants && (this.changeVariant.hb.hovered || this.changeVariantNext.hb.hovered || this.changeVariantPrev.hb.hovered || this.changeVariantNumber.hb.hovered));
+    }
+
+    public void open(PCLCard card, CardGroup group) {
+        CardCrawlGame.isPopupOpen = true;
+
+        if (this.currentItem != null) {
+            this.currentItem.unloadSingleCardView();
+        }
+
+        this.currentItem = card;
+        this.displayCard = card.makePopupCopy();
+        this.displayCard.loadSingleCardView();
+        this.upgradedCard = null;
+        this.group = group;
+        this.currentForm = card.auxiliaryData.form;
+        super.openImpl(currentItem, group != null ? group.group : null);
+
+        initializeToggles();
+        initializeAugments();
+    }
+
+    public void openNext(AbstractCard card) {
+        boolean tmp = SingleCardViewPopup.isViewingUpgrade;
+        this.close();
+        CardCrawlGame.cardPopup.open(card, this.group);
+        SingleCardViewPopup.isViewingUpgrade = tmp;
+        forceUnfade();
+    }
+
+    private void refreshAugments() {
+        float curY = AUGMENT_Y;
+        for (PCLAugmentViewer viewer : currentAugments) {
+            viewer.refreshAugment();
+            viewer.translate(AUGMENT_X, curY);
+            curY += viewer.getHeight();
+        }
+    }
+
+    private void removeAugment(int index) {
+        PCLAugment augment = currentItem.removeAugment(index);
+        if (augment != null) {
+            this.displayCard = currentItem.makePopupCopy();
+            this.upgradedCard = getUpgradeCard();
+            PGR.dungeon.addAugment(augment.ID, 1);
+            refreshAugments();
+        }
     }
 
     @Override
@@ -254,6 +410,33 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     }
 
     @Override
+    protected void renderTips(SpriteBatch sb) {
+        if (showAugments) {
+            for (PCLAugmentViewer augment : currentAugments) {
+                augment.tryRender(sb);
+            }
+        }
+        else {
+            super.renderTips(sb);
+        }
+    }
+
+    private void toggleAugmentView(boolean value) {
+        showAugments = value;
+        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
+    }
+
+    private void toggleBetaArt(boolean value) {
+        this.viewBetaArt = value;
+        UnlockTracker.betaCardPref.putBoolean(this.displayCard.cardID, this.viewBetaArt);
+        UnlockTracker.betaCardPref.flush();
+    }
+
+    private void toggleUpgrade(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
+    }
+
+    @Override
     public void updateImpl() {
         if (this.effect != null) {
             this.effect.update();
@@ -289,189 +472,6 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         else {
             scrollBar.tryUpdate();
         }
-    }
-
-    @Override
-    protected void renderTips(SpriteBatch sb) {
-        if (showAugments) {
-            for (PCLAugmentViewer augment : currentAugments) {
-                augment.tryRender(sb);
-            }
-        }
-        else {
-            super.renderTips(sb);
-        }
-    }
-
-    @Override
-    protected String getCredits(PCLCard currentItem) {
-        if (currentItem != null) {
-            return currentItem.cardData.getAuthorString();
-        }
-        return null;
-    }
-
-    @Override
-    protected boolean isHovered() {
-        return this.toggleAugment.hb.hovered ||
-                (showAugments && EUIUtils.any(currentAugments, augment -> augment.augmentButton.hb.hovered)) ||
-                (this.upgradeToggle.hb.hovered) ||
-                (this.betaArtToggle.hb.hovered) ||
-                (this.scrollBar.hb.hovered) ||
-                (this.viewVariants && (this.changeVariant.hb.hovered || this.changeVariantNext.hb.hovered || this.changeVariantPrev.hb.hovered || this.changeVariantNumber.hb.hovered));
-    }
-
-    public void openNext(AbstractCard card) {
-        boolean tmp = SingleCardViewPopup.isViewingUpgrade;
-        this.close();
-        CardCrawlGame.cardPopup.open(card, this.group);
-        SingleCardViewPopup.isViewingUpgrade = tmp;
-        forceUnfade();
-    }
-
-    public PCLCard getCard() {
-        if (SingleCardViewPopup.isViewingUpgrade) {
-            if (upgradedCard == null) {
-                upgradedCard = getUpgradeCard();
-            }
-
-            return upgradedCard;
-        }
-        else {
-            return displayCard;
-        }
-    }
-
-    private String getCardCopiesText() {
-        if (displayCard == null) {
-            return "";
-        }
-        int currentCopies = (AbstractDungeon.player != null ? EUIUtils.count(AbstractDungeon.player.masterDeck.group, c -> c.cardID.equals(displayCard.cardID)) : -1);
-        int maxCopies = displayCard.cardData != null ? displayCard.cardData.maxCopies : 0;
-
-        if (currentCopies >= 0 && maxCopies > 0) {
-            return currentCopies + "/" + maxCopies;
-        }
-        else if (currentCopies >= 0) {
-            return String.valueOf(currentCopies);
-        }
-        else {
-            return String.valueOf(maxCopies);
-        }
-    }
-
-    private PCLCard getUpgradeCard() {
-        upgradedCard = displayCard.makePopupCopy();
-        upgradedCard.upgrade();
-        upgradedCard.displayUpgrades();
-        return upgradedCard;
-    }
-
-    private void initializeAugments() {
-        currentAugments.clear();
-        // Do not show augments for cards not in your deck, or if the card does not have augment slots
-        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(currentItem) && currentItem.augments.size() > 0) {
-            toggleAugment.setActive(true);
-            float curY = AUGMENT_Y;
-            for (int i = 0; i < currentItem.augments.size(); i++) {
-                int finalI = i;
-                PCLAugmentViewer viewer = new PCLAugmentViewer(new EUIHitbox(AUGMENT_X, curY, scale(300), scale(360)), currentItem, i)
-                        .setOnClick(() -> {
-                            if (currentItem.augments.get(finalI) == null) {
-                                if (PGR.dungeon.augments.size() > 0) {
-                                    this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(currentItem)
-                                            .addCallback((augment -> {
-                                                if (augment != null) {
-                                                    applyAugment(augment);
-                                                }
-                                            }));
-                                }
-                            }
-                            else {
-                                removeAugment(finalI);
-                            }
-                        });
-                curY += viewer.getHeight();
-                currentAugments.add(viewer);
-            }
-        }
-        else {
-            toggleAugment.setActive(false);
-            toggleAugmentView(false);
-        }
-    }
-
-    private void initializeToggles() {
-        this.betaArtToggle.setActive(false);// (boolean)_canToggleBetaArt.Invoke(CardCrawlGame.cardPopup));
-        this.upgradeToggle.setActive(SingleCardViewPopup.enableUpgradeToggle && currentItem.canUpgrade());
-
-        if (betaArtToggle.isActive) {
-            this.viewBetaArt = UnlockTracker.betaCardPref.getBoolean(currentItem.cardID, false);
-
-            if (upgradeToggle.isActive) {
-                this.betaArtToggle.hb.move(Settings.WIDTH / 2f + 270f * Settings.scale, 70f * Settings.scale);
-                this.upgradeToggle.hb.move(Settings.WIDTH / 2f - 180f * Settings.scale, 70f * Settings.scale);
-            }
-            else {
-                this.betaArtToggle.hb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
-            }
-        }
-        else {
-            this.upgradeToggle.hb.move(Settings.WIDTH / 2f, 70f * Settings.scale);
-        }
-    }
-
-    public void open(PCLCard card, CardGroup group) {
-        CardCrawlGame.isPopupOpen = true;
-
-        if (this.currentItem != null) {
-            this.currentItem.unloadSingleCardView();
-        }
-
-        this.currentItem = card;
-        this.displayCard = card.makePopupCopy();
-        this.displayCard.loadSingleCardView();
-        this.upgradedCard = null;
-        this.group = group;
-        this.currentForm = card.auxiliaryData.form;
-        super.openImpl(currentItem, group != null ? group.group : null);
-
-        initializeToggles();
-        initializeAugments();
-    }
-
-    private void refreshAugments() {
-        float curY = AUGMENT_Y;
-        for (PCLAugmentViewer viewer : currentAugments) {
-            viewer.refreshAugment();
-            viewer.translate(AUGMENT_X, curY);
-            curY += viewer.getHeight();
-        }
-    }
-
-    private void removeAugment(int index) {
-        PCLAugment augment = currentItem.removeAugment(index);
-        if (augment != null) {
-            this.displayCard = currentItem.makePopupCopy();
-            this.upgradedCard = getUpgradeCard();
-            PGR.dungeon.addAugment(augment.ID, 1);
-            refreshAugments();
-        }
-    }
-
-    private void toggleAugmentView(boolean value) {
-        showAugments = value;
-        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
-    }
-
-    private void toggleBetaArt(boolean value) {
-        this.viewBetaArt = value;
-        UnlockTracker.betaCardPref.putBoolean(this.displayCard.cardID, this.viewBetaArt);
-        UnlockTracker.betaCardPref.flush();
-    }
-
-    private void toggleUpgrade(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = value;
     }
 
 }

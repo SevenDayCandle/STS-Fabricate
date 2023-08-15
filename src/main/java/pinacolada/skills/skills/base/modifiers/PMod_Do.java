@@ -69,19 +69,11 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + " " + TEXT.cond_doX(TEXT.subjects_x);
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerRequired(editor);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
+        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
+                c -> fields.getFullCardFilter().invoke(c)
+        )));
     }
 
     public String getMoveString(boolean addPeriod) {
@@ -91,11 +83,36 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + " " + TEXT.cond_doX(TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
                 (isChildEffectUsingParent() ? childEffect.getText(perspective, addPeriod) :
                         (TEXT.cond_xPerY(capital(childEffect.getText(perspective, false), addPeriod), EUIRM.strings.nounVerb(getSubText(perspective), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
+    }
+
+    protected boolean isChildEffectUsingParent() {
+        return childEffect != null && (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
+    }
+
+    // Useparent on the child should also cause a "forced" filter
+    protected boolean isForced() {
+        return fields.forced || isChildEffectUsingParent();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRequired(editor);
     }
 
     @Override
@@ -108,23 +125,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                         this.childEffect.use(info, order);
                     }
                 });
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
-        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
-                c -> fields.getFullCardFilter().invoke(c)
-        )));
-    }
-
-    protected boolean isChildEffectUsingParent() {
-        return childEffect != null && (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
-    }
-
-    // Useparent on the child should also cause a "forced" filter
-    protected boolean isForced() {
-        return fields.forced || isChildEffectUsingParent();
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();

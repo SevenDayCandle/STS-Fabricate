@@ -26,12 +26,6 @@ public enum PCLAugmentCategory implements CountingPanelItem {
     }
 
     @Override
-    public int getRank(AbstractCard c) {
-        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
-        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
-    }
-
-    @Override
     public Texture getIcon() {
         switch (this) {
             case Summon:
@@ -60,6 +54,12 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                 return RunHistoryScreen.TEXT[15];
         }
         return AbstractCard.TEXT[5];
+    }
+
+    @Override
+    public int getRank(AbstractCard c) {
+        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
+        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
     }
 
     public boolean isTypeValid(AbstractCard.CardType type) {

@@ -49,6 +49,10 @@ public class AugmentModifier extends AbstractCardModifier {
         return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, AugmentModifier.class));
     }
 
+    public boolean canPlayCard(AbstractCard card) {
+        return augment.skill.canPlay(getInfo(card, null), null);
+    }
+
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {
         if (info == null) {
             info = CombatManager.playerSystem.getInfo(card, AbstractDungeon.player, target);
@@ -61,13 +65,13 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     @Override
-    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return augment.skill.modifyDamageGiveFirst(getInfo(card, target), damage);
+    public String identifier(AbstractCard card) {
+        return augment.skill.effectID + augment.skill.getUUID();
     }
 
     @Override
-    public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return augment.skill.modifyDamageGiveLast(getInfo(card, target), damage);
+    public AbstractCardModifier makeCopy() {
+        return new AugmentModifier(augment.ID);
     }
 
     // Generate infos manually because we cannot attach the augment.skill to the card if it is not an EditorCard
@@ -82,6 +86,16 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     @Override
+    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return augment.skill.modifyDamageGiveFirst(getInfo(card, target), damage);
+    }
+
+    @Override
+    public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return augment.skill.modifyDamageGiveLast(getInfo(card, target), damage);
+    }
+
+    @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
         return augment.skill instanceof PTrait ? rawDescription : rawDescription + EUIUtils.SPLIT_LINE + augment.skill.getText(PCLCardTarget.Self, true);
     }
@@ -92,8 +106,17 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     @Override
-    public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
-        augment.skill.use(getInfo(card, target), PCLActions.bottom);
+    public void onApplyPowers(AbstractCard card) {
+        info = refreshInfo(card, null);
+    }
+
+    @Override
+    public void onCalculateCardDamage(AbstractCard card, AbstractMonster mo) {
+        info = refreshInfo(card, mo);
+    }
+
+    public void onDiscard(AbstractCard card) {
+        augment.skill.triggerOnDiscard(card);
     }
 
     public void onDrawn(AbstractCard card) {
@@ -114,45 +137,17 @@ public class AugmentModifier extends AbstractCardModifier {
         }
     }
 
-    @Override
-    public void onRemove(AbstractCard card) {
-        augment.skill.onRemoveFromCard(card);
-    }
-
-    @Override
-    public void onApplyPowers(AbstractCard card) {
-        info = refreshInfo(card, null);
-    }
-
-    @Override
-    public void onCalculateCardDamage(AbstractCard card, AbstractMonster mo) {
-        info = refreshInfo(card, mo);
-    }
-
     public void onOtherCardPlayed(AbstractCard card, AbstractCard otherCard, CardGroup group) {
         augment.skill.triggerOnOtherCardPlayed(otherCard);
     }
 
-    public boolean canPlayCard(AbstractCard card) {
-        return augment.skill.canPlay(getInfo(card, null), null);
-    }
-
-    @Override
-    public AbstractCardModifier makeCopy() {
-        return new AugmentModifier(augment.ID);
-    }
-
-    @Override
-    public String identifier(AbstractCard card) {
-        return augment.skill.effectID + augment.skill.getUUID();
-    }
-
-    public void onDiscard(AbstractCard card) {
-        augment.skill.triggerOnDiscard(card);
-    }
-
     public void onPurged(AbstractCard card) {
         augment.skill.triggerOnPurge(card);
+    }
+
+    @Override
+    public void onRemove(AbstractCard card) {
+        augment.skill.onRemoveFromCard(card);
     }
 
     public void onReshuffled(AbstractCard card, CardGroup group) {
@@ -161,6 +156,11 @@ public class AugmentModifier extends AbstractCardModifier {
 
     public void onUpgraded(AbstractCard card) {
         augment.skill.triggerOnUpgrade(card);
+    }
+
+    @Override
+    public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
+        augment.skill.use(getInfo(card, target), PCLActions.bottom);
     }
 
     public PCLUseInfo refreshInfo(AbstractCard card, AbstractCreature target) {

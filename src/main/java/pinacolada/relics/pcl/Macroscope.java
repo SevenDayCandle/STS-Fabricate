@@ -22,11 +22,6 @@ public class Macroscope extends PCLRelic {
     }
 
     @Override
-    public String getDescriptionImpl() {
-        return formatDescription(0, MULTIPLIER);
-    }
-
-    @Override
     public void atPreBattle() {
         super.atPreBattle();
 
@@ -38,16 +33,21 @@ public class Macroscope extends PCLRelic {
     }
 
     @Override
+    public String getDescriptionImpl() {
+        return formatDescription(0, MULTIPLIER);
+    }
+
+    @Override
+    public void onSpawnMonster(AbstractMonster monster) {
+        GameUtilities.applyPowerInstantly(monster, new MacroscopePower(monster), 1);
+    }
+
+    @Override
     public void onVictory() {
         super.onVictory();
         player.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
         player.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
         player.healthBarUpdatedEvent();
         PGR.dungeon.setDivisor(1);
-    }
-
-    @Override
-    public void onSpawnMonster(AbstractMonster monster) {
-        GameUtilities.applyPowerInstantly(monster, new MacroscopePower(monster), 1);
     }
 }

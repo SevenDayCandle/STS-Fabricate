@@ -40,15 +40,15 @@ public class PTrigger_Interactable extends PTrigger {
         return PGR.core.tooltips.interactable.title;
     }
 
-    // No-Op, should not subscribe children
-    @Override
-    public void subscribeChildren() {
-    }
-
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String sub = amount > 1 || fields.not ? super.getSubText(perspective) : "";
         String main = source != null && source.getEffects().contains(this) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         return sub.isEmpty() ? main : sub + COMMA_SEPARATOR + main;
+    }
+
+    // No-Op, should not subscribe children
+    @Override
+    public void subscribeChildren() {
     }
 }

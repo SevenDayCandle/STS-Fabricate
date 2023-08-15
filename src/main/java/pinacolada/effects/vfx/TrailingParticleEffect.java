@@ -24,6 +24,11 @@ public class TrailingParticleEffect extends FadingParticleEffect {
         return trailPool.obtain(texture, onTrail, x, y, rot, scale);
     }
 
+    @Override
+    protected void free() {
+        trailPool.free(this);
+    }
+
     protected void initialize(Texture texture, ActionT1<TrailingParticleEffect> onTrail, float x, float y, float rot, float scale) {
         super.initialize(texture, x, y, rot, scale);
         this.onTrail = onTrail;
@@ -46,11 +51,6 @@ public class TrailingParticleEffect extends FadingParticleEffect {
             onTrail.invoke(this);
             vfxTimer = random(vfxFrequencyMin, vfxFrequencyMax);
         }
-    }
-
-    @Override
-    protected void free() {
-        trailPool.free(this);
     }
 
     protected static class ParticlePool extends Pool<TrailingParticleEffect> {

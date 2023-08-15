@@ -64,11 +64,27 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         }
     }
 
+    public void refresh(CardGroup cards) {
+        this.cards = cards;
+        this.grid = new EUICardGrid()
+                .canDragScreen(false)
+                .addCards(cards.group);
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
+    }
+
+    public PCLGenericSelectCardEffect setStartingPosition(float x, float y) {
+        for (AbstractCard c : cards.group) {
+            c.current_x = x - (c.hb.width * 0.5f);
+            c.current_y = y - (c.hb.height * 0.5f);
+        }
+
+        return this;
     }
 
     @Override
@@ -82,21 +98,5 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
             complete();
         }
-    }
-
-    public void refresh(CardGroup cards) {
-        this.cards = cards;
-        this.grid = new EUICardGrid()
-                .canDragScreen(false)
-                .addCards(cards.group);
-    }
-
-    public PCLGenericSelectCardEffect setStartingPosition(float x, float y) {
-        for (AbstractCard c : cards.group) {
-            c.current_x = x - (c.hb.width * 0.5f);
-            c.current_y = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 }

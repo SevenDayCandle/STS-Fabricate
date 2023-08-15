@@ -35,12 +35,6 @@ public class PMove_Scout extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScoutCards(s, i);
     }
@@ -48,5 +42,11 @@ public class PMove_Scout extends PMove_Select<PField_CardCategory> {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.scout;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

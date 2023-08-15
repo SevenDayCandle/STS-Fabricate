@@ -1,14 +1,11 @@
 package pinacolada.effects.affinity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.controls.EUIButton;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.VisualEffect;
 import pinacolada.ui.AffinityKeywordButton;
@@ -40,6 +37,14 @@ public class GenericFlashEffect extends VisualEffect {
         this(button.background.texture, button.hb.cX, button.hb.cY, playSfx);
     }
 
+    public void dispose() {
+    }
+
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.color);
+        renderImage(sb, this.img, x, y, false, false);
+    }
+
     public GenericFlashEffect setScale(float scale) {
         this.baseScale = this.scale = scale;
 
@@ -55,14 +60,6 @@ public class GenericFlashEffect extends VisualEffect {
             this.color.a = Interpolation.fade.apply(0.5f, 0f, 1f - this.duration);
         }
 
-    }
-
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        renderImage(sb, this.img, x, y, false, false);
-    }
-
-    public void dispose() {
     }
 }
 

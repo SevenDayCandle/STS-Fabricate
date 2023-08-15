@@ -65,6 +65,16 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         this(other.cardData, other.descIndex, other.amount, other.extra);
     }
 
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return false;
+    }
+
+    @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
+    }
+
     // Assume that special card skill powers are always beneficial to the player (i.e. they are debuffs on enemies and buffs on you/allies)
     @Override
     public boolean isDetrimental() {
@@ -89,25 +99,15 @@ public class PCustomCond extends PCond<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        useImpl(info, order);
-        super.use(info, order);
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         useImpl(info, order);
         super.use(info, order, shouldPay);
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return false;
+    public void use(PCLUseInfo info, PCLActions order) {
+        useImpl(info, order);
+        super.use(info, order);
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order) {

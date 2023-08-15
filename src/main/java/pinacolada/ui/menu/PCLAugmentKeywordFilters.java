@@ -95,6 +95,16 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     }
 
     @Override
+    public boolean areFiltersEmpty() {
+        return (currentName == null || currentName.isEmpty())
+                && (currentDescription == null || currentDescription.isEmpty())
+                && currentOrigins.isEmpty() && currentCategories.isEmpty()
+                && currentSubCategories.isEmpty() && currentTiers.isEmpty()
+                && currentFilters.isEmpty() && currentNegateFilters.isEmpty()
+                && EUIUtils.all(getGlobalFilters(), CustomFilterModule::isEmpty);
+    }
+
+    @Override
     public void clearFilters(boolean shouldInvoke, boolean shouldClearColors) {
         currentOrigins.clear();
         currentFilters.clear();
@@ -108,16 +118,6 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         nameInput.setLabel("");
         descriptionInput.setLabel("");
         doForFilters(CustomFilterModule::reset);
-    }
-
-    @Override
-    public boolean areFiltersEmpty() {
-        return (currentName == null || currentName.isEmpty())
-                && (currentDescription == null || currentDescription.isEmpty())
-                && currentOrigins.isEmpty() && currentCategories.isEmpty()
-                && currentSubCategories.isEmpty() && currentTiers.isEmpty()
-                && currentFilters.isEmpty() && currentNegateFilters.isEmpty()
-                && EUIUtils.all(getGlobalFilters(), CustomFilterModule::isEmpty);
     }
 
     public boolean evaluate(PCLAugmentRenderable c) {
@@ -171,9 +171,25 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         return customModule == null || customModule.isItemValid(c);
     }
 
+    public List<EUIKeywordTooltip> getAllTooltips(PCLAugmentRenderable c) {
+        return c.getTipsForFilters();
+    }
+
     @Override
     public ArrayList<CustomFilterModule<PCLAugmentRenderable>> getGlobalFilters() {
         return globalFilters;
+    }
+
+    public PCLAugmentKeywordFilters initializeForCustomHeader(ItemGroup<PCLAugmentRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
+        PGR.augmentHeader.setGroup(group).snapToGroup(snapToGroup);
+        initialize(button -> {
+            PGR.augmentHeader.updateForFilters();
+            onClick.invoke(button);
+        }, PGR.augmentHeader.originalGroup, color, isAccessedFromCardPool);
+        PGR.augmentHeader.updateForFilters();
+        EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
+        EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
+        return this;
     }
 
     @Override
@@ -202,21 +218,6 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     }
 
     @Override
-    public void updateFilters() {
-        float xPos = updateDropdown(originsDropdown, hb.x - SPACING * 3.65f);
-        xPos = updateDropdown(categoryDropdown, xPos);
-        xPos = updateDropdown(subCategoryDropdown, xPos);
-        xPos = updateDropdown(tierDropdown, xPos);
-        nameInput.setPosition(hb.x + SPACING * 5.15f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
-        descriptionInput.setPosition(nameInput.hb.cX + nameInput.hb.width + SPACING * 2.95f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
-        doForFilters(CustomFilterModule<PCLAugmentRenderable>::update);
-    }
-
-    public List<EUIKeywordTooltip> getAllTooltips(PCLAugmentRenderable c) {
-        return c.getTipsForFilters();
-    }
-
-    @Override
     public boolean isHoveredImpl() {
         return originsDropdown.areAnyItemsHovered()
                 || categoryDropdown.areAnyItemsHovered()
@@ -239,15 +240,14 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         doForFilters(m -> m.render(sb));
     }
 
-    public PCLAugmentKeywordFilters initializeForCustomHeader(ItemGroup<PCLAugmentRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
-        PGR.augmentHeader.setGroup(group).snapToGroup(snapToGroup);
-        initialize(button -> {
-            PGR.augmentHeader.updateForFilters();
-            onClick.invoke(button);
-        }, PGR.augmentHeader.originalGroup, color, isAccessedFromCardPool);
-        PGR.augmentHeader.updateForFilters();
-        EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
-        EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
-        return this;
+    @Override
+    public void updateFilters() {
+        float xPos = updateDropdown(originsDropdown, hb.x - SPACING * 3.65f);
+        xPos = updateDropdown(categoryDropdown, xPos);
+        xPos = updateDropdown(subCategoryDropdown, xPos);
+        xPos = updateDropdown(tierDropdown, xPos);
+        nameInput.setPosition(hb.x + SPACING * 5.15f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
+        descriptionInput.setPosition(nameInput.hb.cX + nameInput.hb.width + SPACING * 2.95f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
+        doForFilters(CustomFilterModule<PCLAugmentRenderable>::update);
     }
 }

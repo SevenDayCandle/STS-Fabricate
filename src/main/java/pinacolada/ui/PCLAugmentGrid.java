@@ -25,12 +25,16 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
+    public void forceUpdateItemPosition(PCLAugmentRenderable augment, float x, float y) {
+        augment.currentX = augment.targetX = x;
+        augment.currentY = augment.targetY = y;
+        augment.hb.update();
+        augment.hb.move(augment.currentX, augment.currentY);
+    }
 
-        if (hovered != null) {
-            hovered.renderTip(sb);
-        }
+    @Override
+    public Hitbox getHitbox(PCLAugmentRenderable item) {
+        return item.hb;
     }
 
     @Override
@@ -46,24 +50,17 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     }
 
     @Override
-    public void updateItemPosition(PCLAugmentRenderable augment, float x, float y) {
-        augment.targetX = x;
-        augment.targetY = y;
-        augment.currentX = EUIUtils.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);
-        augment.currentY = EUIUtils.lerpSnap(augment.currentY, augment.targetY, LERP_SPEED);
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+
+        if (hovered != null) {
+            hovered.renderTip(sb);
+        }
     }
 
     @Override
-    public Hitbox getHitbox(PCLAugmentRenderable item) {
-        return item.hb;
-    }
-
-    @Override
-    public void forceUpdateItemPosition(PCLAugmentRenderable augment, float x, float y) {
-        augment.currentX = augment.targetX = x;
-        augment.currentY = augment.targetY = y;
-        augment.hb.update();
-        augment.hb.move(augment.currentX, augment.currentY);
+    protected void renderItem(SpriteBatch sb, PCLAugmentRenderable augment) {
+        augment.render(sb);
     }
 
     @Override
@@ -83,7 +80,10 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     }
 
     @Override
-    protected void renderItem(SpriteBatch sb, PCLAugmentRenderable augment) {
-        augment.render(sb);
+    public void updateItemPosition(PCLAugmentRenderable augment, float x, float y) {
+        augment.targetX = x;
+        augment.targetY = y;
+        augment.currentX = EUIUtils.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);
+        augment.currentY = EUIUtils.lerpSnap(augment.currentY, augment.targetY, LERP_SPEED);
     }
 }

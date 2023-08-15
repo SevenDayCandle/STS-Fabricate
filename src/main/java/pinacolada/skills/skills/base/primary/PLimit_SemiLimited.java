@@ -29,12 +29,12 @@ public class PLimit_SemiLimited extends PLimit {
     }
 
     @Override
-    public boolean tryActivate(PCLUseInfo info) {
-        return info.tryActivateSemiLimited();
+    public String getSubText(PCLCardTarget perspective) {
+        return PGR.core.tooltips.semiLimited.title;
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return PGR.core.tooltips.semiLimited.title;
+    public boolean tryActivate(PCLUseInfo info) {
+        return info.tryActivateSemiLimited();
     }
 }

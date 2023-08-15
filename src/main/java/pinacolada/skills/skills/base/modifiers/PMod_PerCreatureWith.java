@@ -45,9 +45,10 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerRBoolean(editor, TEXT.cedit_or, null);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        List<? extends AbstractCreature> targetList = getTargetList(info);
+        return fields.powers.isEmpty() ? EUIUtils.count(targetList, t -> t.powers != null && EUIUtils.any(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                EUIUtils.count(targetList, t -> fields.random ? EUIUtils.any(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount) : EUIUtils.all(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount));
     }
 
     @Override
@@ -56,15 +57,14 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        List<? extends AbstractCreature> targetList = getTargetList(info);
-        return fields.powers.isEmpty() ? EUIUtils.count(targetList, t -> t.powers != null && EUIUtils.any(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                EUIUtils.count(targetList, t -> fields.random ? EUIUtils.any(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount) : EUIUtils.all(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount));
-    }
-
-    @Override
     public String getSubText(PCLCardTarget perspective) {
         String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : fields.getPowerAndOrString());
         return target == PCLCardTarget.Any ? TEXT.subjects_characterWithX(baseString) : TEXT.subjects_enemyWithX(baseString);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }

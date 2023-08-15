@@ -89,6 +89,12 @@ public class TalkEffect extends PCLEffect {
                 rotation, 0, 0, size, size, facingRight, false);
     }
 
+    public TalkEffect setEffect(DialogWord.AppearEffect appearEffect) {
+        this.appearEffect = appearEffect;
+
+        return this;
+    }
+
     @Override
     protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
@@ -109,11 +115,5 @@ public class TalkEffect extends PCLEffect {
         else {
             color.a = MathUtils.lerp(color.a, 0f, deltaTime * 12f);
         }
-    }
-
-    public TalkEffect setEffect(DialogWord.AppearEffect appearEffect) {
-        this.appearEffect = appearEffect;
-
-        return this;
     }
 }

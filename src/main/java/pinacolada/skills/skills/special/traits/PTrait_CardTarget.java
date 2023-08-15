@@ -38,10 +38,13 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     }
 
     @Override
-    public PTrait_CardTarget makeCopy() {
-        PTrait_CardTarget other = (PTrait_CardTarget) super.makeCopy();
-        other.newTarget = this.newTarget;
-        return other;
+    public String getSubDescText(PCLCardTarget perspective) {
+        return newTarget.getTitle();
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return TEXT.cedit_cardTarget;
     }
 
     @Override
@@ -53,12 +56,9 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return newTarget.getTitle();
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return TEXT.cedit_cardTarget;
+    public PTrait_CardTarget makeCopy() {
+        PTrait_CardTarget other = (PTrait_CardTarget) super.makeCopy();
+        other.newTarget = this.newTarget;
+        return other;
     }
 }

@@ -53,6 +53,28 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         super.addSkillPages();
     }
 
+    protected void complete() {
+        super.complete();
+        invalidateItems();
+        if (loadedImage != null) {
+            loadedImage.dispose();
+        }
+    }
+
+    protected void editImage() {
+        Texture image = loadedImage;
+        if (image == null) {
+            image = getBuilder().portraitImage;
+        }
+        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
+                .addCallback(pixmap -> {
+                            if (pixmap != null) {
+                                setLoadedImage(new Texture(pixmap));
+                            }
+                        }
+                );
+    }
+
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomRelicPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
@@ -95,6 +117,15 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
                 saveButton.makeTour(true));
     }
 
+    protected void rebuildItem() {
+        preview = getBuilder().create();
+        preview.scale = 1f;
+        preview.posX = CARD_X;
+        preview.posY = RELIC_Y;
+        preview.hb.move(preview.posX, preview.posY);
+        previewDescription.setLabel(preview.getUpdatedDescription());
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         if (imageEditor != null) {
@@ -102,6 +133,40 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         }
         else {
             super.render(sb);
+        }
+    }
+
+    public void renderInnerElements(SpriteBatch sb) {
+        super.renderInnerElements(sb);
+        //imageButton.tryRender(sb);
+        formEditor.tryRender(sb);
+        upgradeToggle.tryRender(sb);
+        preview.labRender(sb);
+        previewDescription.tryRender(sb);
+    }
+
+    public void setLoadedImage(Texture texture) {
+        loadedImage = texture;
+        modifyAllBuilders((e, i) -> e
+                .setImagePath(currentSlot.getImagePath())
+                .setImage(texture));
+    }
+
+    private void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
+        modifyBuilder(__ -> {
+        });
+    }
+
+    public void updateInnerElements() {
+        super.updateInnerElements();
+        //imageButton.tryUpdate();
+        formEditor.tryUpdate();
+        upgradeToggle.tryUpdate();
+        preview.hb.update();
+        previewDescription.tryUpdate();
+        if (preview.hb.hovered) {
+            EUITooltip.queueTooltips(preview);
         }
     }
 
@@ -118,73 +183,8 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         }
     }
 
-    public void renderInnerElements(SpriteBatch sb) {
-        super.renderInnerElements(sb);
-        //imageButton.tryRender(sb);
-        formEditor.tryRender(sb);
-        upgradeToggle.tryRender(sb);
-        preview.labRender(sb);
-        previewDescription.tryRender(sb);
-    }
-
-    public void updateInnerElements() {
-        super.updateInnerElements();
-        //imageButton.tryUpdate();
-        formEditor.tryUpdate();
-        upgradeToggle.tryUpdate();
-        preview.hb.update();
-        previewDescription.tryUpdate();
-        if (preview.hb.hovered) {
-            EUITooltip.queueTooltips(preview);
-        }
-    }
-
     protected void updateVariant() {
         formEditor.refresh();
-    }
-
-    protected void rebuildItem() {
-        preview = getBuilder().create();
-        preview.scale = 1f;
-        preview.posX = CARD_X;
-        preview.posY = RELIC_Y;
-        preview.hb.move(preview.posX, preview.posY);
-        previewDescription.setLabel(preview.getUpdatedDescription());
-    }
-
-    protected void complete() {
-        super.complete();
-        invalidateItems();
-        if (loadedImage != null) {
-            loadedImage.dispose();
-        }
-    }
-
-    protected void editImage() {
-        Texture image = loadedImage;
-        if (image == null) {
-            image = getBuilder().portraitImage;
-        }
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
-                .addCallback(pixmap -> {
-                            if (pixmap != null) {
-                                setLoadedImage(new Texture(pixmap));
-                            }
-                        }
-                );
-    }
-
-    public void setLoadedImage(Texture texture) {
-        loadedImage = texture;
-        modifyAllBuilders((e, i) -> e
-                .setImagePath(currentSlot.getImagePath())
-                .setImage(texture));
-    }
-
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {
-        });
     }
 
 }

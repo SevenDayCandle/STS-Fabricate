@@ -46,11 +46,9 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     }
 
     @Override
-    public void onOpen() {
-        super.onOpen();
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorPower,
-                quickAddButton.makeTour(true)
-        );
+    public PSkill<?> getSourceEffect() {
+        PSkill<?> base = screen.currentPowers.get(editorIndex);
+        return base != null ? base.makeCopy() : null;
     }
 
     @Override
@@ -59,9 +57,17 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     }
 
     @Override
-    public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen.currentPowers.get(editorIndex);
-        return base != null ? base.makeCopy() : null;
+    public void onOpen() {
+        super.onOpen();
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorPower,
+                quickAddButton.makeTour(true)
+        );
+    }
+
+    protected void openDropdown() {
+        Integer[] list = EUIUtils.range(0, screen.effectPages.size() - 1);
+        quickAddMenu.setItems(list);
+        quickAddMenu.positionToOpen();
     }
 
     @Override
@@ -71,19 +77,6 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         quickAddMenu.tryRender(sb);
     }
 
-    @Override
-    public void updateInner() {
-        super.updateInner();
-        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
-        quickAddMenu.tryUpdate();
-    }
-
-    protected void openDropdown() {
-        Integer[] list = EUIUtils.range(0, screen.effectPages.size() - 1);
-        quickAddMenu.setItems(list);
-        quickAddMenu.positionToOpen();
-    }
-
     protected void startPowerHologram(int i) {
         PCLCustomEffectPage page = screen.effectPages.get(i);
         screen.openPageAtIndex(screen.pages.indexOf(page));
@@ -91,5 +84,12 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(page, applyPower, PCLCustomEffectNode.NodeType.Move, page.hb);
         page.root.receiveNode(node);
         page.fullRebuild();
+    }
+
+    @Override
+    public void updateInner() {
+        super.updateInner();
+        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
+        quickAddMenu.tryUpdate();
     }
 }

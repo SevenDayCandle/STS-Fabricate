@@ -77,6 +77,25 @@ public class PCLAugmentList extends EUICanvasGrid {
         cancel.tryRender(sb);
     }
 
+    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
+        int multiplier = sortDesc ? -1 : 1;
+        augments.sort((a, b) -> sortImpl(a, b, sortType) * multiplier);
+    }
+
+    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
+        switch (sortType) {
+            case Name:
+                return StringUtils.compare(a.augment.augment.getName(), b.augment.augment.getName());
+            case Count:
+                return Float.compare(a.amount, b.amount);
+            case Category:
+                return a.augment.augment.data.category.ordinal() - b.augment.augment.data.category.ordinal();
+            case Level:
+                return a.augment.augment.data.tier - b.augment.augment.data.tier;
+        }
+        return 0;
+    }
+
     @Override
     public void updateImpl() {
         super.updateImpl();
@@ -101,25 +120,6 @@ public class PCLAugmentList extends EUICanvasGrid {
             }
         }
         cancel.tryUpdate();
-    }
-
-    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
-        int multiplier = sortDesc ? -1 : 1;
-        augments.sort((a, b) -> sortImpl(a, b, sortType) * multiplier);
-    }
-
-    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
-        switch (sortType) {
-            case Name:
-                return StringUtils.compare(a.augment.augment.getName(), b.augment.augment.getName());
-            case Count:
-                return Float.compare(a.amount, b.amount);
-            case Category:
-                return a.augment.augment.data.category.ordinal() - b.augment.augment.data.category.ordinal();
-            case Level:
-                return a.augment.augment.data.tier - b.augment.augment.data.tier;
-        }
-        return 0;
     }
 
 }

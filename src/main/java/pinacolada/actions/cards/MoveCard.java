@@ -129,30 +129,6 @@ public class MoveCard extends PCLAction<AbstractCard> {
         CombatManager.onCardMoved(card, sourcePile, targetPile);
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (showEffect && targetPile.type != CombatManager.PURGED_CARDS.type) {
-            updateCard();
-        }
-
-        if (tickDuration(deltaTime)) {
-            complete(card);
-
-            if (targetPile.type == CardGroup.CardGroupType.HAND || (sourcePile != null && sourcePile.type == CardGroup.CardGroupType.HAND)) {
-                CombatManager.queueRefreshHandLayout();
-            }
-
-            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS)) {
-                PCLEffects.Queue.add(new UnfadeOutEffect(card));
-                PCLActions.bottom.callback(() -> PCLEffects.Queue.add(new UnfadeOutEffect(card)));
-            }
-
-            if (targetPile != player.limbo && player.limbo.contains(card)) {
-                PCLActions.bottom.add(new UnlimboAction(card, false));
-            }
-        }
-    }
-
     protected void moveToDiscardPile() {
         if (showEffect) {
             showCard();
@@ -327,5 +303,29 @@ public class MoveCard extends PCLAction<AbstractCard> {
         card.targetAngle = 0;
         card.hoverTimer = 0.5f;
         card.update();
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (showEffect && targetPile.type != CombatManager.PURGED_CARDS.type) {
+            updateCard();
+        }
+
+        if (tickDuration(deltaTime)) {
+            complete(card);
+
+            if (targetPile.type == CardGroup.CardGroupType.HAND || (sourcePile != null && sourcePile.type == CardGroup.CardGroupType.HAND)) {
+                CombatManager.queueRefreshHandLayout();
+            }
+
+            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS)) {
+                PCLEffects.Queue.add(new UnfadeOutEffect(card));
+                PCLActions.bottom.callback(() -> PCLEffects.Queue.add(new UnfadeOutEffect(card)));
+            }
+
+            if (targetPile != player.limbo && player.limbo.contains(card)) {
+                PCLActions.bottom.add(new UnlimboAction(card, false));
+            }
+        }
     }
 }

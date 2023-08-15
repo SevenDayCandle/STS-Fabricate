@@ -157,13 +157,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         return charScreen != null ? charScreen.ascensionLevel : 0;
     }
 
-    @Override
-    public void disableConfirm(boolean value) {
-        if (charScreen != null) {
-            charScreen.confirmButton.isDisabled = value;
-        }
-    }
-
     private void changeLoadout(int index) {
         int actualIndex = index % loadouts.size();
         if (actualIndex < 0) {
@@ -183,6 +176,13 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         if (preset != loadout.preset) {
             loadout.preset = preset;
             refreshInternal();
+        }
+    }
+
+    @Override
+    public void disableConfirm(boolean value) {
+        if (charScreen != null) {
+            charScreen.confirmButton.isDisabled = value;
         }
     }
 
@@ -432,6 +432,25 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    public void renderRelicInfo(SpriteBatch sb) {
+        if (cachedRelics != null) {
+            for (AbstractRelic r : cachedRelics) {
+                r.renderWithoutAmount(sb, Color.WHITE);
+            }
+        }
+    }
+
+    // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly
+    public boolean shouldRenderPCLRelics() {
+        return startingCardsLabel.isActive && cachedRelics != null;
+    }
+
+    public void updateForAscension() {
+        for (PCLGlyphEditor glyphEditor : glyphEditors) {
+            glyphEditor.refresh(ascensionLevel());
+        }
+    }
+
     public void updateImpl() {
         if (playEffect != null) {
             playEffect.update();
@@ -464,25 +483,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                     r.hb.update();
                 }
             }
-        }
-    }
-
-    public void renderRelicInfo(SpriteBatch sb) {
-        if (cachedRelics != null) {
-            for (AbstractRelic r : cachedRelics) {
-                r.renderWithoutAmount(sb, Color.WHITE);
-            }
-        }
-    }
-
-    // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly
-    public boolean shouldRenderPCLRelics() {
-        return startingCardsLabel.isActive && cachedRelics != null;
-    }
-
-    public void updateForAscension() {
-        for (PCLGlyphEditor glyphEditor : glyphEditors) {
-            glyphEditor.refresh(ascensionLevel());
         }
     }
 

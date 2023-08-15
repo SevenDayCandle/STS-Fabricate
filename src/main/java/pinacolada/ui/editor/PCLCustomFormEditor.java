@@ -89,6 +89,10 @@ public class PCLCustomFormEditor extends EUIBase {
         remove.tryRender(sb);
     }
 
+    public void setValue(int value) {
+        screen.setCurrentBuilder(value);
+    }
+
     @Override
     public void updateImpl() {
         this.hb.update();
@@ -98,9 +102,5 @@ public class PCLCustomFormEditor extends EUIBase {
         increaseButton.setInteractable(screen.currentBuilder < formValues.size() - 1).tryUpdate();
         add.tryUpdate();
         remove.tryUpdate();
-    }
-
-    public void setValue(int value) {
-        screen.setCurrentBuilder(value);
     }
 }

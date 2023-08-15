@@ -210,6 +210,43 @@ public class PCLCustomRunCanvas extends EUICanvas {
         updatePositions();
     }
 
+    protected void onUpdateModifiers(List<CustomMod> mods) {
+        this.screen.activeMods = mods;
+        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
+    }
+
+    public void open() {
+        confirmButton.show();
+        cancelButton.show(CharacterSelectScreen.TEXT[5]);
+    }
+
+    public void openCardPool() {
+        currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
+    }
+
+    public void openLoadoutEditor() {
+        allowLoadoutToggle.toggle(true);
+        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {
+        });
+    }
+
+    public void openRelicPool() {
+        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
+    }
+
+    protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
+        element.setPosition(xPos, yPos);
+        return yPos - diff;
+    }
+
+    protected float positionElement(EUIHoverable element, float yPos, float diff) {
+        return positionElement(element, SCREEN_X, yPos, diff);
+    }
+
+    protected float positionElement(EUIHoverable element, float yPos) {
+        return positionElement(element, yPos, GAP_Y);
+    }
+
     public void renderImpl(SpriteBatch sb) {
         if (currentEffect != null) {
             currentEffect.render(sb);
@@ -239,6 +276,37 @@ public class PCLCustomRunCanvas extends EUICanvas {
             confirmButton.render(sb);
             cancelButton.render(sb);
         }
+    }
+
+    public void resetPositions() {
+        scrollBar.scroll(0, true);
+    }
+
+    public void setAscension(int i) {
+        ascensionEditor.setValue(i, false);
+        int value = ascensionEditor.getValue();
+        ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
+        ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
+    }
+
+    public void setCharacter(CharacterOption c) {
+        selectedCharacterLabel.setLabel(c.c.getLocalizedCharacterName());
+        for (PCLCustomRunCharacterButton button : characters) {
+            button.glowing = (button.character == c);
+        }
+        ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
+    }
+
+    public void setup(CustomModeScreen original) {
+        for (AbstractPlayer p : CardCrawlGame.characterManager.getAllCharacters()) {
+            characters.add(new PCLCustomRunCharacterButton(screen, p));
+        }
+
+        // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
+        ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
+        modList = EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID));
+        modList.sort(this::compareMod);
+        modifierDropdown.setItems(modList);
     }
 
     public void updateImpl() {
@@ -283,74 +351,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 }
             }
         }
-    }
-
-    protected void onUpdateModifiers(List<CustomMod> mods) {
-        this.screen.activeMods = mods;
-        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
-    }
-
-    public void open() {
-        confirmButton.show();
-        cancelButton.show(CharacterSelectScreen.TEXT[5]);
-    }
-
-    public void openCardPool() {
-        currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
-    }
-
-    public void openLoadoutEditor() {
-        allowLoadoutToggle.toggle(true);
-        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {
-        });
-    }
-
-    public void openRelicPool() {
-        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
-    }
-
-    protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
-        element.setPosition(xPos, yPos);
-        return yPos - diff;
-    }
-
-    protected float positionElement(EUIHoverable element, float yPos, float diff) {
-        return positionElement(element, SCREEN_X, yPos, diff);
-    }
-
-    protected float positionElement(EUIHoverable element, float yPos) {
-        return positionElement(element, yPos, GAP_Y);
-    }
-
-    public void resetPositions() {
-        scrollBar.scroll(0, true);
-    }
-
-    public void setAscension(int i) {
-        ascensionEditor.setValue(i, false);
-        int value = ascensionEditor.getValue();
-        ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
-        ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
-    }
-
-    public void setCharacter(CharacterOption c) {
-        selectedCharacterLabel.setLabel(c.c.getLocalizedCharacterName());
-        for (PCLCustomRunCharacterButton button : characters) {
-            button.glowing = (button.character == c);
-        }
-        ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
-    }
-
-    public void setup(CustomModeScreen original) {
-        for (AbstractPlayer p : CardCrawlGame.characterManager.getAllCharacters()) {
-            characters.add(new PCLCustomRunCharacterButton(screen, p));
-        }
-
-        // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
-        ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
-        modList = EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID));
-        modList.sort(this::compareMod);
-        modifierDropdown.setItems(modList);
     }
 
     protected void updatePositions() {

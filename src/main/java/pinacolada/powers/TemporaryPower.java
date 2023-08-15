@@ -52,6 +52,16 @@ public class TemporaryPower extends PCLPower {
     }
 
     @Override
+    public void atStartOfTurn() {
+        if (stabilizeTurns > 0) {
+            stabilizeTurns -= 1;
+        }
+        else {
+            removePower();
+        }
+    }
+
+    @Override
     public String getUpdatedDescription() {
         if (originalPower == null) {
             return super.getUpdatedDescription();
@@ -76,6 +86,10 @@ public class TemporaryPower extends PCLPower {
         );
     }
 
+    public void stabilize(int turns) {
+        stabilizeTurns += turns;
+    }
+
     @Override
     public void stackPower(int stackAmount, boolean updateBaseAmount) {
         int sourceAmount = GameUtilities.getPowerAmount(owner, originalPower.ID);
@@ -96,30 +110,16 @@ public class TemporaryPower extends PCLPower {
         onAmountChanged(previous, stackAmount);
     }
 
-    @Override
-    public void updateDescription() {
-        super.updateDescription();
-        mainTip.title = name;
-    }
-
-    @Override
-    public void atStartOfTurn() {
-        if (stabilizeTurns > 0) {
-            stabilizeTurns -= 1;
-        }
-        else {
-            removePower();
-        }
-    }
-
-    public void stabilize(int turns) {
-        stabilizeTurns += turns;
-    }
-
     protected void tryRemoveSourcePower() {
         int powerAmount = GameUtilities.getPowerAmount(owner, originalPower.ID);
         if (amountBelowThreshold(powerAmount)) {
             PCLActions.bottom.removePower(owner, owner, originalPower.ID);
         }
+    }
+
+    @Override
+    public void updateDescription() {
+        super.updateDescription();
+        mainTip.title = name;
     }
 }

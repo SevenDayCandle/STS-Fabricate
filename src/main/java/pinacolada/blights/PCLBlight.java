@@ -50,17 +50,31 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     }
 
     @Override
-    public List<EUIKeywordTooltip> getTipsForFilters() {
-        return tips.subList(1, tips.size());
-    }
-
-    @Override
     public List<EUIKeywordTooltip> getTips() {
         return tips;
     }
 
+    @Override
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
+    }
+
     public String getUpdatedDescription() {
         return formatDescription(0, counter);
+    }
+
+    @Override
+    public void initializeTips() {
+        if (tips == null) {
+            tips = new ArrayList<>();
+        }
+        else {
+            tips.clear();
+        }
+
+        mainTooltip = new EUIKeywordTooltip(name, description);
+        tips.add(mainTooltip);
+        EUITooltip.scanForTips(description, tips);
     }
 
     public PCLBlight makeCopy() {
@@ -76,20 +90,6 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     @Override
     public void renderTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(this);
-    }
-
-    @Override
-    public void initializeTips() {
-        if (tips == null) {
-            tips = new ArrayList<>();
-        }
-        else {
-            tips.clear();
-        }
-
-        mainTooltip = new EUIKeywordTooltip(name, description);
-        tips.add(mainTooltip);
-        EUITooltip.scanForTips(description, tips);
     }
 
     @Override

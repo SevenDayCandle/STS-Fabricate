@@ -55,6 +55,13 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
         AbstractDungeon.gridSelectScreen.open(mergedGroup, amount, PGR.core.strings.grid_chooseCards(amount), false, false, false, true);
     }
 
+    public boolean isBanned(AbstractCard c) {
+        return c.cost < 0
+                || c.purgeOnUse
+                || PCLCardTag.Fleeting.has(c)
+                || c instanceof PCLMultiCard;
+    }
+
     @Override
     protected void updateInternal(float deltaTime) {
         if (AbstractDungeon.gridSelectScreen.selectedCards.size() >= amount) {
@@ -69,12 +76,5 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
             multicard.initializeDescription();
             complete(multicard);
         }
-    }
-
-    public boolean isBanned(AbstractCard c) {
-        return c.cost < 0
-                || c.purgeOnUse
-                || PCLCardTag.Fleeting.has(c)
-                || c instanceof PCLMultiCard;
     }
 }

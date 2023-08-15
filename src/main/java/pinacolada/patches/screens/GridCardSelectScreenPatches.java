@@ -32,21 +32,21 @@ import java.util.List;
 public class GridCardSelectScreenPatches {
 
     protected static final float ICON_SIZE = 64f * Settings.scale;
-    protected static final int DEFAULT_MAX = 3;    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
-            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
-            .setOnClick(GridCardSelectScreenPatches::addIndex);
+    protected static final int DEFAULT_MAX = 3;
     protected static final float[] Y_POSITIONS_2 = new float[]{
             Settings.HEIGHT * 0.75F - 50.0F * Settings.scale,
             Settings.HEIGHT * 0.25F + 50.0F * Settings.scale
-    };    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
-            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
-            .setOnClick(GridCardSelectScreenPatches::subtractIndex);
+    };    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
+            .setOnClick(GridCardSelectScreenPatches::addIndex);
     protected static final float[] Y_POSITIONS_3 = new float[]{
             Settings.HEIGHT * 0.75F + 25.0F * Settings.scale,
             Settings.HEIGHT * 0.5F,
             Settings.HEIGHT * 0.25F - 25.0F * Settings.scale
     };
-    protected static int maxIndex = DEFAULT_MAX;
+    protected static int maxIndex = DEFAULT_MAX;    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+            .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
+            .setOnClick(GridCardSelectScreenPatches::subtractIndex);
     protected static ArrayList<AbstractCard> cardList = new ArrayList<>();
     protected static boolean waitingForBranchUpgradeSelection = false;
     protected static int branchUpgradeForm = 0;
@@ -516,6 +516,8 @@ public class GridCardSelectScreenPatches {
             }
         }
     }
+
+
 
 
 

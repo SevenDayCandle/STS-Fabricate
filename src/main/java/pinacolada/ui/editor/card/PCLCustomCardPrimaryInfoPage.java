@@ -218,6 +218,15 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
+        return header.text;
+    }
+
+    @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary,
                 idInput.makeTour(true),
@@ -231,34 +240,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 branchUpgrades.makeTour(true),
                 uniqueToggle.makeTour(true),
                 soulboundToggle.makeTour(true));
-    }
-
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    public String getTitle() {
-        return header.text;
-    }
-
-    @Override
-    public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
-        typesDropdown.setSelection(effect.getBuilder().cardType, false);
-        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
-        flagsDropdown.setSelection(effect.getBuilder().flags, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        maxCopies.setValue(effect.getBuilder().maxCopies, false);
-        uniqueToggle.setToggle(effect.getBuilder().unique);
-        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
-
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
-        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
-        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     protected void openLoadoutCreator(String title, PCLCustomLoadout loadout) {
@@ -279,6 +260,25 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                         }
                     });
         }
+    }
+
+    @Override
+    public void refresh() {
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
+        nameInput.setLabel(effect.getBuilder().strings.NAME);
+        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
+        typesDropdown.setSelection(effect.getBuilder().cardType, false);
+        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
+        flagsDropdown.setSelection(effect.getBuilder().flags, false);
+        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
+        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        maxCopies.setValue(effect.getBuilder().maxCopies, false);
+        uniqueToggle.setToggle(effect.getBuilder().unique);
+        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
+
+        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     protected void refreshLoadoutItems() {
@@ -331,6 +331,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         soulboundToggle.tryRender(sb);
     }
 
+    protected void setLoadout(PCLLoadout loadout) {
+        effect.modifyAllBuilders((e, i) -> e.setLoadout(loadout));
+        editLoadoutButton.setActive(loadoutDropdown.isActive && loadout instanceof PCLCustomLoadout);
+        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
+    }
+
     @Override
     public void updateImpl() {
         header.tryUpdate();
@@ -350,12 +356,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.tryUpdate();
         uniqueToggle.tryUpdate();
         soulboundToggle.tryUpdate();
-    }
-
-    protected void setLoadout(PCLLoadout loadout) {
-        effect.modifyAllBuilders((e, i) -> e.setLoadout(loadout));
-        editLoadoutButton.setActive(loadoutDropdown.isActive && loadout instanceof PCLCustomLoadout);
-        deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

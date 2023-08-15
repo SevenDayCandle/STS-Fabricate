@@ -147,18 +147,6 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
         return this;
     }
 
-    @Override
-    public void updateImpl() {
-        super.updateImpl();
-        decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
-        decreaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() > displayValue.getMin()).tryUpdate();
-        increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
-        increaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() < displayValue.getMax()).tryUpdate();
-        displayValue.tryUpdate();
-        displayValueSecondary.tryUpdate();
-        header.tryUpdate();
-    }
-
     public PCLCustomUpgradableEditor setValue(int value) {
         return setValue(value, displayValueSecondary.getCachedValue());
     }
@@ -175,5 +163,17 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
         }
 
         return this;
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
+        decreaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() > displayValue.getMin()).tryUpdate();
+        increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
+        increaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() < displayValue.getMax()).tryUpdate();
+        displayValue.tryUpdate();
+        displayValueSecondary.tryUpdate();
+        header.tryUpdate();
     }
 }

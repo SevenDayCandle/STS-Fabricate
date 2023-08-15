@@ -66,20 +66,6 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        grid.tryRender(sb);
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
-
-        if (InputHelper.justClickedLeft && !grid.isHovered()) {
-            complete();
-        }
-    }
-
     private void onCardClicked(AbstractCard card) {
         selectedCard = card;
         CardCrawlGame.sound.play("CARD_SELECT");
@@ -98,6 +84,20 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
                         .renderImpl(sb);
                 return;
             }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        grid.tryRender(sb);
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        grid.tryUpdate();
+
+        if (InputHelper.justClickedLeft && !grid.isHovered()) {
+            complete();
         }
     }
 }

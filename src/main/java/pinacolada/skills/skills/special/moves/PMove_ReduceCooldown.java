@@ -28,13 +28,18 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.progressCooldown(getSourceCreature(), c, extra);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return PGR.core.tooltips.cooldown.title;
     }
 
     @Override
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
+    public String getObjectText() {
+        return PGR.core.tooltips.cooldown.title;
     }
 
     @Override
@@ -46,17 +51,12 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.progressCooldown(getSourceCreature(), c, extra);
-    }
-
-    @Override
-    public String getObjectText() {
-        return PGR.core.tooltips.cooldown.title;
-    }
-
-    @Override
     public boolean isDetrimental() {
         return extra < 0;
+    }
+
+    @Override
+    public String wrapExtra(int input) {
+        return String.valueOf(input);
     }
 }

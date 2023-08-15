@@ -79,20 +79,6 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        grid.tryRender(sb);
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
-
-        if (InputHelper.justClickedLeft && !grid.isHovered()) {
-            complete();
-        }
-    }
-
     private void onRelicClicked(RelicInfo relic) {
         if (selectedRelic != null) {
             selectedRelic.stopPulse();
@@ -122,6 +108,20 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                         .renderImpl(sb);
                 return;
             }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        grid.tryRender(sb);
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        grid.tryUpdate();
+
+        if (InputHelper.justClickedLeft && !grid.isHovered()) {
+            complete();
         }
     }
 }

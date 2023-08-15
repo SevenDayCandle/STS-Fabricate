@@ -28,13 +28,8 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
+    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
+        return (EUIUtils.count(AbstractDungeon.player.potions, r -> fields.getFullPotionFilter().invoke(r)));
     }
 
     @Override
@@ -43,7 +38,12 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return (EUIUtils.count(AbstractDungeon.player.potions, r -> fields.getFullPotionFilter().invoke(r)));
+    public String getSubText(PCLCardTarget perspective) {
+        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
     }
 }

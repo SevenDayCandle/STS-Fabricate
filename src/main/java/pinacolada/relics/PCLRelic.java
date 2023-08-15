@@ -155,12 +155,23 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return block;
     }
 
+    @Override
+    public void atPreBattle() {
+        super.atPreBattle();
+
+        activateBattleEffect();
+    }
+
     public float atRightCountModify(PCLUseInfo info, float block) {
         return block;
     }
 
     public float atSkillBonusModify(PCLUseInfo info, float block) {
         return block;
+    }
+
+    public boolean canSpawn() {
+        return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
     }
 
     public boolean canUpgrade() {
@@ -267,13 +278,20 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return euiTips;
+    }
+
+    @Override
     public List<EUIKeywordTooltip> getTipsForFilters() {
         return euiTips.subList(1, euiTips.size());
     }
 
+    // Don't use this, use getDescriptionImpl instead which is run after the constructor
+    @Deprecated
     @Override
-    public List<EUIKeywordTooltip> getTips() {
-        return euiTips;
+    public final String getUpdatedDescription() {
+        return super.getUpdatedDescription();
     }
 
     public int getValue() {
@@ -295,6 +313,26 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         EUITooltip.scanForTips(description, euiTips);
     }
 
+    @Override
+    protected void initializeTips() {
+        // Unused, use euitips instead
+        tips.clear();
+    }
+
+    @Override
+    public void instantObtain(AbstractPlayer p, int slot, boolean callOnEquip) {
+        if (tryRetain(callOnEquip)) {
+            super.instantObtain(p, slot, callOnEquip);
+        }
+    }
+
+    @Override
+    public void instantObtain() {
+        if (tryRetain(true)) {
+            super.instantObtain();
+        }
+    }
+
     public boolean isEnabled() {
         return !super.grayscale;
     }
@@ -310,8 +348,29 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
-    public PCLCollectibleSaveData onSave() {
-        return auxiliaryData;
+    public PCLRelic makeCopy() {
+        try {
+            return relicData.create();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void obtain() {
+        if (tryRetain(true)) {
+            super.obtain();
+        }
+    }
+
+    @Override
+    public void onEquip() {
+        super.onEquip();
+
+        if (GameUtilities.inBattle(true)) {
+            activateBattleEffect();
+        }
     }
 
     @Override
@@ -322,17 +381,73 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
     }
 
     protected void onStack(AbstractRelic other) {
         upgrade();
     }
 
+    @Override
+    public void onUnequip() {
+        super.onUnequip();
+
+        if (GameUtilities.inBattle(true)) {
+            deactivateBattleEffect();
+        }
+    }
+
+    @Override
+    public void onVictory() {
+        super.onVictory();
+
+        deactivateBattleEffect();
+    }
+
     protected void preSetup(PCLRelicData data) {
 
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (!Settings.hideRelics) {
+            float xOffset = -64;
+            float yOffset = -64;
+
+            if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD && !isObtained) {
+                FloatyEffect f_effect = getFEffect();
+                xOffset += f_effect.x;
+                yOffset += f_effect.y;
+            }
+
+            renderRelicImage(sb, Color.WHITE, xOffset, yOffset, 0.5f);
+            renderCounter(sb, false);
+            if (this.isDone) {
+                renderFlash(sb, false);
+            }
+            if (this.hb.hovered && !this.isObtained && (!AbstractDungeon.isScreenUp || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.SHOP)) {
+                this.renderBossTip(sb);
+            }
+
+            this.hb.render(sb);
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
+        renderRelicImage(sb,
+                this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
+                -64f,
+                -64f,
+                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
+        renderHoverTip(sb);
+        this.hb.render(sb);
+    }
+
+    @Override
+    public void renderBossTip(SpriteBatch sb) {
+        EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
     }
 
     public void renderHoverTip(SpriteBatch sb) {
@@ -346,13 +461,59 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
     }
 
+    @Override
+    public void renderInTopPanel(SpriteBatch sb) {
+        if (!Settings.hideRelics) {
+            PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f, 0.5f), grayscale);
+            this.renderCounter(sb, true);
+            this.renderFlash(sb, true);
+            this.hb.render(sb);
+        }
+    }
+
     public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
         sb.setColor(color);
         sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
     }
 
+    @Override
+    public void renderTip(SpriteBatch sb) {
+        if (RewardItemPatches.isRenderingForSapphire) {
+            EUITooltip.queueTooltips(mainTooltip, getSapphireTooltip());
+            RewardItemPatches.isRenderingForSapphire = false;
+            return;
+        }
+        EUITooltip.queueTooltips(this);
+    }
+
     public void renderUnseenTip() {
         EUITooltip.queueTooltip(getHiddenTooltip());
+    }
+
+    @Override
+    public void renderWithoutAmount(SpriteBatch sb, Color c) {
+        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
+        if (this.hb.hovered) {
+            this.renderTip(sb);
+        }
+        this.hb.render(sb);
+    }
+
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
+    }
+
+    // Imitating lizard tail so that used up status can be saved
+    @Override
+    public void setCounter(int setCounter) {
+        if (setCounter == -2) {
+            this.usedUp();
+        }
+        else {
+            super.setCounter(setCounter);
+        }
     }
 
     public boolean setEnabled(boolean value) {
@@ -394,6 +555,20 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return true;
     }
 
+    @Override
+    public final void updateDescription(AbstractPlayer.PlayerClass c) {
+        this.description = usedUp ? MSG[2] : getDescriptionImpl();
+        PCLRelicData[] replacements = getReplacementIDs();
+        if (replacements != null) {
+            String joinedNames = PCLCoreStrings.joinWithAnd(r -> r.strings.NAME, replacements);
+            String replaceString = PCLCoreStrings.colorString("i", EUIUtils.format(PGR.core.strings.misc_replaces, joinedNames));
+            this.description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, replaceString, this.description);
+        }
+        if (this.mainTooltip != null) {
+            this.mainTooltip.setTitle(name).setDescription(description);
+        }
+    }
+
     protected void updateFlash() {
         if (this.flashTimer != 0.0F) {
             this.flashTimer -= Gdx.graphics.getDeltaTime();
@@ -428,180 +603,5 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         this.usedUp = true;
         this.description = MSG[2];
         this.initializePCLTips();
-    }
-
-    @Override
-    public void instantObtain(AbstractPlayer p, int slot, boolean callOnEquip) {
-        if (tryRetain(callOnEquip)) {
-            super.instantObtain(p, slot, callOnEquip);
-        }
-    }
-
-    @Override
-    public void instantObtain() {
-        if (tryRetain(true)) {
-            super.instantObtain();
-        }
-    }
-
-    @Override
-    public void obtain() {
-        if (tryRetain(true)) {
-            super.obtain();
-        }
-    }
-
-    // Imitating lizard tail so that used up status can be saved
-    @Override
-    public void setCounter(int setCounter) {
-        if (setCounter == -2) {
-            this.usedUp();
-        }
-        else {
-            super.setCounter(setCounter);
-        }
-    }
-
-    @Override
-    public final void updateDescription(AbstractPlayer.PlayerClass c) {
-        this.description = usedUp ? MSG[2] : getDescriptionImpl();
-        PCLRelicData[] replacements = getReplacementIDs();
-        if (replacements != null) {
-            String joinedNames = PCLCoreStrings.joinWithAnd(r -> r.strings.NAME, replacements);
-            String replaceString = PCLCoreStrings.colorString("i", EUIUtils.format(PGR.core.strings.misc_replaces, joinedNames));
-            this.description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, replaceString, this.description);
-        }
-        if (this.mainTooltip != null) {
-            this.mainTooltip.setTitle(name).setDescription(description);
-        }
-    }
-
-    // Don't use this, use getDescriptionImpl instead which is run after the constructor
-    @Deprecated
-    @Override
-    public final String getUpdatedDescription() {
-        return super.getUpdatedDescription();
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        if (GameUtilities.inBattle(true)) {
-            activateBattleEffect();
-        }
-    }
-
-    @Override
-    public void onUnequip() {
-        super.onUnequip();
-
-        if (GameUtilities.inBattle(true)) {
-            deactivateBattleEffect();
-        }
-    }
-
-    @Override
-    public void atPreBattle() {
-        super.atPreBattle();
-
-        activateBattleEffect();
-    }
-
-    @Override
-    public void onVictory() {
-        super.onVictory();
-
-        deactivateBattleEffect();
-    }
-
-    @Override
-    public void renderInTopPanel(SpriteBatch sb) {
-        if (!Settings.hideRelics) {
-            PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f, 0.5f), grayscale);
-            this.renderCounter(sb, true);
-            this.renderFlash(sb, true);
-            this.hb.render(sb);
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (!Settings.hideRelics) {
-            float xOffset = -64;
-            float yOffset = -64;
-
-            if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD && !isObtained) {
-                FloatyEffect f_effect = getFEffect();
-                xOffset += f_effect.x;
-                yOffset += f_effect.y;
-            }
-
-            renderRelicImage(sb, Color.WHITE, xOffset, yOffset, 0.5f);
-            renderCounter(sb, false);
-            if (this.isDone) {
-                renderFlash(sb, false);
-            }
-            if (this.hb.hovered && !this.isObtained && (!AbstractDungeon.isScreenUp || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.SHOP)) {
-                this.renderBossTip(sb);
-            }
-
-            this.hb.render(sb);
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
-        renderRelicImage(sb,
-                this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
-                -64f,
-                -64f,
-                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
-        renderHoverTip(sb);
-        this.hb.render(sb);
-    }
-
-    @Override
-    public void renderWithoutAmount(SpriteBatch sb, Color c) {
-        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
-        if (this.hb.hovered) {
-            this.renderTip(sb);
-        }
-        this.hb.render(sb);
-    }
-
-    @Override
-    public void renderBossTip(SpriteBatch sb) {
-        EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
-    }
-
-    @Override
-    public void renderTip(SpriteBatch sb) {
-        if (RewardItemPatches.isRenderingForSapphire) {
-            EUITooltip.queueTooltips(mainTooltip, getSapphireTooltip());
-            RewardItemPatches.isRenderingForSapphire = false;
-            return;
-        }
-        EUITooltip.queueTooltips(this);
-    }
-
-    @Override
-    protected void initializeTips() {
-        // Unused, use euitips instead
-        tips.clear();
-    }
-
-    @Override
-    public PCLRelic makeCopy() {
-        try {
-            return relicData.create();
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    public boolean canSpawn() {
-        return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
     }
 }

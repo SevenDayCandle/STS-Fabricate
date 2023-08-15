@@ -105,6 +105,11 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
+    public String getSubText(PCLCardTarget perspective) {
+        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.not ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
+    }
+
+    @Override
     public boolean isMetascaling() {
         return true;
     }
@@ -133,19 +138,14 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        createRelic(PCLEffects.Queue::obtainRelic);
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.not ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         createRelic(order::obtainRelic);
         super.use(info, order);
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        createRelic(PCLEffects.Queue::obtainRelic);
     }
 }

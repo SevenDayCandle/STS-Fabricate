@@ -30,23 +30,6 @@ public class PField_Potion extends PField_Random {
                 && ((PField_Potion) other).random == random;
     }
 
-    @Override
-    public PField_Potion makeCopy() {
-        return (PField_Potion) new PField_Potion()
-                .setPotionID(potionIDs)
-                .setColor(colors)
-                .setRarity(rarities)
-                .setSize(sizes)
-                .setRandom(random);
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerColor(colors);
-        editor.registerPotionRarity(rarities);
-        editor.registerPotionSize(sizes);
-        editor.registerPotion(potionIDs);
-    }
-
     public FuncT1<Boolean, AbstractPotion> getFullPotionFilter() {
         return !potionIDs.isEmpty() ? c -> EUIUtils.any(potionIDs, id -> id.equals(c.ID)) :
                 (c -> (colors.isEmpty() || colors.contains(EUIGameUtils.getPotionColor(c.ID)))
@@ -108,6 +91,16 @@ public class PField_Potion extends PField_Random {
         return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
+    @Override
+    public PField_Potion makeCopy() {
+        return (PField_Potion) new PField_Potion()
+                .setPotionID(potionIDs)
+                .setColor(colors)
+                .setRarity(rarities)
+                .setSize(sizes)
+                .setRandom(random);
+    }
+
     public PField_Potion setColor(Collection<AbstractCard.CardColor> types) {
         this.colors.clear();
         this.colors.addAll(types);
@@ -146,5 +139,12 @@ public class PField_Potion extends PField_Random {
         this.sizes.clear();
         this.sizes.addAll(types);
         return this;
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerColor(colors);
+        editor.registerPotionRarity(rarities);
+        editor.registerPotionSize(sizes);
+        editor.registerPotion(potionIDs);
     }
 }

@@ -50,18 +50,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return new ColoredString(amString, Settings.CREAM_COLOR);
     }
 
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
-        String childText = childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "";
-        return getConditionText(perspective, childText) + appendix + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return fields.not ? (be.baseAmount + (getMultiplier(info, isUsing) * amount)) : be.baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
-    }
-
     public String getConditionText(PCLCardTarget perspective, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective)));
@@ -71,8 +59,24 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        return fields.not ? (be.baseAmount + (getMultiplier(info, isUsing) * amount)) : be.baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.cond_xPerY(TEXT.subjects_x, getSubSampleText());
+    }
+
+    public String getSubSampleText() {
+        return getSubText(PCLCardTarget.Self);
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
+        String childText = childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "";
+        return getConditionText(perspective, childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -84,10 +88,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     @Override
     public String wrapAmount(int input) {
         return input >= 0 && fields.not ? "+" + input : String.valueOf(input);
-    }
-
-    public String getSubSampleText() {
-        return getSubText(PCLCardTarget.Self);
     }
 
     public abstract int getMultiplier(PCLUseInfo info, boolean isUsing);

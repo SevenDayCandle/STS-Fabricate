@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.effects.vfx.VisualEffect;
 import pinacolada.powers.PCLPower;
 
@@ -53,12 +52,8 @@ public class PCLFlashPowerEffect extends VisualEffect {
         this.color = Color.WHITE.cpy();
     }
 
-    public void updateInternal(float deltaTime) {
-        super.updateInternal(deltaTime);
-        if (this.duration < this.startingDuration / 2.0F) {
-            this.color.a = this.duration / (this.startingDuration / 2.0F);
-        }
-        this.scale = Interpolation.exp5In.apply(Settings.scale, Settings.scale * 0.3f, this.duration / this.startingDuration);
+    public void dispose() {
+
     }
 
     public void render(SpriteBatch sb) {
@@ -90,8 +85,12 @@ public class PCLFlashPowerEffect extends VisualEffect {
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose() {
-
+    public void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
+        if (this.duration < this.startingDuration / 2.0F) {
+            this.color.a = this.duration / (this.startingDuration / 2.0F);
+        }
+        this.scale = Interpolation.exp5In.apply(Settings.scale, Settings.scale * 0.3f, this.duration / this.startingDuration);
     }
 }
 

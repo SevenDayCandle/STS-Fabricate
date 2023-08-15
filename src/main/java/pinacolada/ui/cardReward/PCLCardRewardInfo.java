@@ -37,13 +37,13 @@ public class PCLCardRewardInfo extends EUIBase {
         upgradeToggle.renderImpl(sb);
     }
 
-    @Override
-    public void updateImpl() {
-        upgradeToggle.updateImpl();
-    }
-
     private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = value;
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
+    }
+
+    @Override
+    public void updateImpl() {
+        upgradeToggle.updateImpl();
     }
 }

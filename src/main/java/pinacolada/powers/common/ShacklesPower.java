@@ -19,6 +19,11 @@ public class ShacklesPower extends PCLPower {
     }
 
     @Override
+    public void atEndOfTurn(boolean isPlayer) {
+        removePower();
+    }
+
+    @Override
     protected void onAmountChanged(int previousAmount, int difference) {
         PCLActions.top.applyPower(new StrengthPower(owner, -difference));
 
@@ -28,10 +33,5 @@ public class ShacklesPower extends PCLPower {
     @Override
     public void playApplyPowerSfx() {
         PCLSFX.play(PCLSFX.POWER_SHACKLE, 0.95F, 1.05f);
-    }
-
-    @Override
-    public void atEndOfTurn(boolean isPlayer) {
-        removePower();
     }
 }

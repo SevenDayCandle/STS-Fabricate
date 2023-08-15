@@ -17,13 +17,13 @@ public class PCLConstrictedPower extends ConstrictedPower implements CloneablePo
     }
 
     @Override
-    public int getHealthBarAmount() {
-        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
+    public Color getColor() {
+        return healthBarColor;
     }
 
     @Override
-    public Color getColor() {
-        return healthBarColor;
+    public int getHealthBarAmount() {
+        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override

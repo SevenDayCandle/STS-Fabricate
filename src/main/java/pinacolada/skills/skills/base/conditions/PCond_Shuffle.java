@@ -32,10 +32,6 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
     }
@@ -48,5 +44,9 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     @Override
     public void onShuffle(boolean triggerRelics) {
         useFromTrigger(generateInfo(null));
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 }

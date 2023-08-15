@@ -28,6 +28,11 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
     }
 
     @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return triggerSource == this;
+    }
+
+    @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         if (childEffect != null) {
             if (childEffect instanceof PCond && !isWhenClause()) {
@@ -36,10 +41,5 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
             return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
         }
         return getCapitalSubText(perspective, addPeriod) + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return triggerSource == this;
     }
 }

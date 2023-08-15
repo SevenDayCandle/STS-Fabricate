@@ -308,57 +308,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return editor.getTitle();
     }
 
-    @Override
-    public void refresh() {
-        PSkillData<?> data = node.skill != null ? node.skill.data : null;
-        int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
-        int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
-        int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
-        int eMax = data != null ? data.maxExtra : PSkill.DEFAULT_MAX;
-
-        effects.setSelection(node.skill, false);
-        valueEditor
-                .setLimits(min, max)
-                .setValue(getAmountForSkill(node.skill), getAmountUpgradeForSkill(node.skill), false)
-                .setActive(min != max);
-        extraEditor
-                .setLimits(eMin, eMax)
-                .setValue(getExtraForSkill(node.skill), getExtraUpgradeForSkill(node.skill), false)
-                .setActive(eMin != eMax);
-        if (node.skill != null && lastEffect != node.skill) {
-            lastEffect = node.skill;
-            activeElements.clear();
-            valueEditor.setHeaderText(node.skill.getHeaderTextForAmount());
-            extraEditor.setHeaderText(node.skill.getHeaderTextForExtra());
-            targets
-                    .setItems(PSkill.getEligibleTargets(node.skill))
-                    .setActive(targets.getAllItems().size() > 1);
-            piles.setItems(PSkill.getEligiblePiles(node.skill))
-                    .setActive(piles.getAllItems().size() > 1);
-            origins.setItems(PSkill.getEligibleOrigins(node.skill))
-                    .setActive(origins.getAllItems().size() >= 1);
-            piles.setItems(PSkill.getEligiblePiles(node.skill))
-                    .setActive(piles.getAllItems().size() >= 1);
-            node.skill.setupEditor(this);
-
-            float xOff = 0;
-            additionalHeight = -MENU_HEIGHT * 2.7f;
-            if (targets.isActive) {
-                targets.setSelection(node.skill.target, false);
-                xOff = position(targets, xOff);
-            }
-            for (EUIHoverable element : activeElements) {
-                xOff = position(element, xOff);
-            }
-            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 4f;
-            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 3.3f;
-        }
-        else if (node.skill == null) {
-            valueEditor.setHeaderText(PGR.core.strings.cedit_value);
-            extraEditor.setHeaderText(PGR.core.strings.cedit_extraValue);
-        }
-    }
-
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
         return initializeRegular(Arrays.asList(items), labelFunc, title, multiselect);
     }
@@ -473,6 +422,57 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         element.setOffset(setX, additionalHeight);
         element.hb.update();
         return end + scale(20);
+    }
+
+    @Override
+    public void refresh() {
+        PSkillData<?> data = node.skill != null ? node.skill.data : null;
+        int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
+        int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
+        int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
+        int eMax = data != null ? data.maxExtra : PSkill.DEFAULT_MAX;
+
+        effects.setSelection(node.skill, false);
+        valueEditor
+                .setLimits(min, max)
+                .setValue(getAmountForSkill(node.skill), getAmountUpgradeForSkill(node.skill), false)
+                .setActive(min != max);
+        extraEditor
+                .setLimits(eMin, eMax)
+                .setValue(getExtraForSkill(node.skill), getExtraUpgradeForSkill(node.skill), false)
+                .setActive(eMin != eMax);
+        if (node.skill != null && lastEffect != node.skill) {
+            lastEffect = node.skill;
+            activeElements.clear();
+            valueEditor.setHeaderText(node.skill.getHeaderTextForAmount());
+            extraEditor.setHeaderText(node.skill.getHeaderTextForExtra());
+            targets
+                    .setItems(PSkill.getEligibleTargets(node.skill))
+                    .setActive(targets.getAllItems().size() > 1);
+            piles.setItems(PSkill.getEligiblePiles(node.skill))
+                    .setActive(piles.getAllItems().size() > 1);
+            origins.setItems(PSkill.getEligibleOrigins(node.skill))
+                    .setActive(origins.getAllItems().size() >= 1);
+            piles.setItems(PSkill.getEligiblePiles(node.skill))
+                    .setActive(piles.getAllItems().size() >= 1);
+            node.skill.setupEditor(this);
+
+            float xOff = 0;
+            additionalHeight = -MENU_HEIGHT * 2.7f;
+            if (targets.isActive) {
+                targets.setSelection(node.skill.target, false);
+                xOff = position(targets, xOff);
+            }
+            for (EUIHoverable element : activeElements) {
+                xOff = position(element, xOff);
+            }
+            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 4f;
+            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 3.3f;
+        }
+        else if (node.skill == null) {
+            valueEditor.setHeaderText(PGR.core.strings.cedit_value);
+            extraEditor.setHeaderText(PGR.core.strings.cedit_extraValue);
+        }
     }
 
     public void registerAffinity(List<PCLAffinity> items) {

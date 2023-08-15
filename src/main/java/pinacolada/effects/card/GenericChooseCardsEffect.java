@@ -49,40 +49,6 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.screenColor);
-        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
-        if (AbstractDungeon.screen == CurrentScreen.GRID) {
-            AbstractDungeon.gridSelectScreen.render(sb);
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (cardsToChoose > 0) {
-            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToChoose) {
-                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
-                    cards.add(card.makeCopy());
-                    onCardSelected(card);
-                }
-                selected = true;
-                AbstractDungeon.gridSelectScreen.selectedCards.clear();
-                AbstractDungeon.gridSelectScreen.targetGroup.clear();
-                cardsToChoose = 0;
-            }
-        }
-        if (selected) {
-            complete(this);
-            return;
-        }
-
-        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
-        {
-            complete();
-        }
-    }
-
     protected boolean forPurge() {
         return false;
     }
@@ -128,6 +94,40 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
 
         openGridScreen(cardGroup);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.screenColor);
+        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
+        if (AbstractDungeon.screen == CurrentScreen.GRID) {
+            AbstractDungeon.gridSelectScreen.render(sb);
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (cardsToChoose > 0) {
+            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToChoose) {
+                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
+                    cards.add(card.makeCopy());
+                    onCardSelected(card);
+                }
+                selected = true;
+                AbstractDungeon.gridSelectScreen.selectedCards.clear();
+                AbstractDungeon.gridSelectScreen.targetGroup.clear();
+                cardsToChoose = 0;
+            }
+        }
+        if (selected) {
+            complete(this);
+            return;
+        }
+
+        if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
+        {
+            complete();
+        }
     }
 
     protected abstract ArrayList<AbstractCard> getGroup();
