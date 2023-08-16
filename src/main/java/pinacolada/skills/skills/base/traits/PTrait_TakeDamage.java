@@ -34,7 +34,7 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
 
     @Override
     public String getSubDescText(PCLCardTarget perspective) {
-        return getAttackTooltip().getTitleOrIcon();
+        return getDamageString(perspective);
     }
 
     @Override

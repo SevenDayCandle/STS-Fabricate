@@ -783,8 +783,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_applyX(Object power) {
         return actFmt(3, power);
     }
-    public final String act_breakXonY(Object power, Object target) {
-        return actFmt(4, power, target);
+    public final String act_breakXonY(Object ordinal, Object power, Object target) {
+        return actFmt(4, ordinal, power, target);
     }
     public final String act_choose(Object amount) {
         return actFmt(5, amount);

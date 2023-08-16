@@ -433,6 +433,7 @@ public class PGR {
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
         ConsoleCommand.addCommand("unlockascension", UnlockAscensionCommand.class);
+        ConsoleCommand.addCommand("unlocklevel", UnlockLevelCommand.class);
     }
 
     public static void registerResource(PCLResources<?, ?, ?, ?> resources) {

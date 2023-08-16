@@ -31,6 +31,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 
@@ -212,7 +213,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
     @Override
     protected Iterable<? extends EUITooltip> getTipsForRender(PCLCard currentItem) {
-        return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+        return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : Collections.emptyList();
     }
 
     private PCLCard getUpgradeCard() {

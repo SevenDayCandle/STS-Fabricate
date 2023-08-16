@@ -88,7 +88,7 @@ public abstract class PCLEffect extends AbstractGameEffect {
     }
 
     protected void initialize() {
-        this.duration = startingDuration;
+        this.duration = startingDuration = Settings.ACTION_DUR_FAST;
         this.isDone = false;
         this.ticks = 0;
         this.renderBehind = false;

@@ -195,9 +195,7 @@ public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
             }
 
             if (!creatures.isEmpty()) {
-                creatures.sort((o1, o2) -> {
-                    return (int) (o1.hb.cX - o2.hb.cX);
-                });
+                creatures.sort((o1, o2) -> (int) (o1.hb.cX - o2.hb.cX));
 
                 if (hovered != null) {
                     int currentTargetIndex = creatures.indexOf(hovered);

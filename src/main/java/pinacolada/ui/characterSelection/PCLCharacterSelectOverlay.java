@@ -73,7 +73,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
 
     public PCLCharacterSelectOverlay() {
-        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f);
+        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f) + scale(10);
 
         textScale = Settings.scale;
 

@@ -8,7 +8,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLSlotAnimation extends PCLAnimation {
-    protected static final float RATE = 0.85f * (float) Math.PI;
+    protected static final float RATE = 1.25f * (float) Math.PI;
     protected float transitionAlpha;
     public float targetTransitionAlpha;
 

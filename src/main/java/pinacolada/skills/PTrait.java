@@ -1,6 +1,7 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.configuration.EUIConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -120,6 +121,13 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     public void applyToCard(AbstractCard c, boolean conditionMet) {
+    }
+
+    public String getDamageString(PCLCardTarget perspective) {
+        if (perspective != PCLCardTarget.Self || !EUIConfiguration.enableDescriptionIcons.get()) {
+            return TEXT.subjects_damage;
+        }
+        return getAttackTooltip().getTitleOrIcon();
     }
 
     public String getSampleAmount() {

@@ -24,7 +24,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
     public static final PSkillData<PField_Not> DATA = register(PCond_BlockBreak.class, PField_Not.class, 1, 1);
 
     public PCond_BlockBreak() {
-        super(DATA, PCLCardTarget.None, 0);
+        super(DATA, PCLCardTarget.Single, 0);
     }
 
     public PCond_BlockBreak(PCLCardTarget target) {
@@ -37,18 +37,17 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_breakXonY(PGR.core.tooltips.block.title, TEXT.subjects_x)) : TEXT.act_breakXonY(PGR.core.tooltips.block.title, TEXT.subjects_x);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_breakXonY(0, PGR.core.tooltips.block.title, TEXT.subjects_x)) : TEXT.act_breakXonY(0, PGR.core.tooltips.block.title, TEXT.subjects_x);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        // TODO proper grammar for other sources
-        String baseString = TEXT.act_breakXonY(PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
+        String baseString = TEXT.act_breakXonY(getTargetOrdinal(getTargetForPerspective(target)), PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
         if (isWhenClause()) {
             return TEXT.cond_whenMulti(isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you, baseString);
         }
 
-        return TEXT.cond_ifXDid(TEXT.subjects_you, baseString);
+        return TEXT.cond_ifXDid(isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you, baseString);
     }
 
     // When the target loses its block, trigger the effect on the target

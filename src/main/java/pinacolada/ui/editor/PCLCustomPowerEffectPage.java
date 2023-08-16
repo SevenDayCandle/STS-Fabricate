@@ -26,7 +26,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
-        quickAddMenu = new EUIContextMenu<Integer>(new EUIHitbox(0, 0, 0, 0), this::getNameForEffect)
+        quickAddMenu = new EUIContextMenu<>(new EUIHitbox(0, 0, 0, 0), this::getNameForEffect)
                 .setOnChange(options -> {
                     for (Integer i : options) {
                         startPowerHologram(i);

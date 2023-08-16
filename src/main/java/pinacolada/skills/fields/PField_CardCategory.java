@@ -131,7 +131,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 
-    public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, FuncT1<String, String> pluralFunc) {
+    protected final ArrayList<String> getCardXPrefixes(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (!costs.isEmpty()) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(EUIUtils.map(costs, c -> c.name))));
@@ -151,6 +151,19 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (!rarities.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(rarities, EUIGameUtils::textForRarity)));
         }
+        return stringsToJoin;
+    }
+
+    public final String getCardXPrefixString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc) {
+        ArrayList<String> stringsToJoin = getCardXPrefixes(affinityFunc, joinFunc);
+        if (!types.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, EUIGameUtils::textForType)));
+        }
+        return stringsToJoin.isEmpty() ? PSkill.TEXT.subjects_any : EUIUtils.joinStrings(" ", stringsToJoin);
+    }
+
+    public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, FuncT1<String, String> pluralFunc) {
+        ArrayList<String> stringsToJoin = getCardXPrefixes(affinityFunc, joinFunc);
         if (!types.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, type -> pluralFunc.invoke(GameUtilities.tooltipForType(type).plural()))));
         }

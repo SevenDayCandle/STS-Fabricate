@@ -35,9 +35,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
         this.ID = id;
         infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(25), scale(-40f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
-                .setOnClick(() -> {
-                    EUI.ftueScreen.openScreen(new EUITutorial(getInfoPages()));
-                })
+                .setOnClick(() -> EUI.ftueScreen.openScreen(new EUITutorial(getInfoPages())))
                 .setColor(EUIColors.white(0.5f));
     }
 

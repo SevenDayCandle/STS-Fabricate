@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -240,7 +241,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void open(CharacterOption characterOption, AbstractPlayerData<?, ?> data, ActionT0 onClose) {
         super.open();
 
-        CardCrawlGame.mainMenuScreen.superDarken = false;
         this.onClose = onClose;
         this.characterOption = characterOption;
         this.data = data;
@@ -307,8 +307,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     @Override
     public void renderImpl(SpriteBatch sb) {
-        PGR.blackScreen.renderImpl(sb);
-
         cardGrid.tryRender(sb);
 
         startingDeck.tryRender(sb);
@@ -365,7 +363,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     @Override
     public void updateImpl() {
-        PGR.blackScreen.updateImpl();
+        CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
+
         EUI.countingPanel.tryUpdate();
 
         if (previewCardsEffect != null) {

@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 
@@ -92,7 +93,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     }
 
     protected Iterable<? extends EUITooltip> getTipsForRender(U currentItem) {
-        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : new ArrayList<>();
+        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : Collections.emptyList();
     }
 
     protected void initializeLabels() {

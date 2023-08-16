@@ -46,13 +46,9 @@ public class PCLDebugAugmentPanel {
                 augmentList.render();
             });
             DEUIUtils.withWidth(90, () ->
-            {
-                augmentCount.renderInline();
-            });
+                    augmentCount.renderInline());
             DEUIUtils.disabledIf(AbstractDungeon.player == null || augmentList.get() == null, () ->
-            {
-                obtain.render(this::obtain);
-            });
+                    obtain.render(this::obtain));
         });
     }
 }

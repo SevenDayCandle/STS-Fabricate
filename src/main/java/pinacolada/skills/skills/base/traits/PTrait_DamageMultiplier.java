@@ -34,7 +34,7 @@ public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty> {
 
     @Override
     public String getSubDescText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getAttackTooltip().getTitleOrIcon());
+        return EUIRM.strings.numNoun(getAmountRawString() + "%", getDamageString(perspective));
     }
 
     @Override

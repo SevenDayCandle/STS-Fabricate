@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -147,13 +148,13 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         cardscountText = new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setPosition(saveButton.hb.cX, cardsvalueText.hb.y + cardsvalueText.hb.height + labelHeight * 0.5f)
+                .setPosition(saveButton.hb.cX, cardsvalueText.hb.y + labelHeight * 1.4f)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
         hindrancevalueText = (EUITextBox) new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setPosition(saveButton.hb.cX, cardscountText.hb.y + cardscountText.hb.height + labelHeight * 0.5f)
+                .setPosition(saveButton.hb.cX, cardscountText.hb.y + labelHeight * 1.4f)
                 .setFont(FontHelper.tipHeaderFont, 1)
                 .setTooltip(new EUIHeaderlessTooltip(EUIUtils.format(PGR.core.strings.loadout_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
@@ -204,7 +205,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
-        CardCrawlGame.mainMenuScreen.superDarken = false;
         this.loadout = loadout;
         this.onClose = onClose;
         this.characterOption = option;
@@ -264,8 +264,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
-
-        PGR.blackScreen.renderImpl(sb);
 
         if (relicSelectionEffect != null) {
             relicSelectionEffect.render(sb);
@@ -383,7 +381,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void updateImpl() {
         super.updateImpl();
 
-        PGR.blackScreen.updateImpl();
+        CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
         startingDeck.updateImpl();
         deckText.updateImpl();
         relicText.updateImpl();
