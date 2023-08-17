@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
@@ -449,6 +450,36 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return condString + PCLCoreStrings.period(addPeriod);
     }
 
+    /*
+    Returns true if this is the skill that activates on a when trigger
+    i.e. this is either the first condition underneath a when trigger, or if this is part of a branching condition that meets the first clause
+*/
+    public final PTrigger_When getWhenClause() {
+        PTrigger_When when = EUIUtils.safeCast(parent, PTrigger_When.class);
+        if (when != null) {
+            return when;
+        }
+        if (parent instanceof PMultiBase<?> && parent instanceof PCond) {
+            when = EUIUtils.safeCast(parent.parent, PTrigger_When.class);
+        }
+        return when;
+    }
+
+    public final String getWheneverAreString(Object impl, PCLCardTarget perspective) {
+        PCLCardTarget properTarget = getTargetForPerspective(perspective);
+        return TEXT.cond_xIsY(getTargetSubjectString(properTarget), getTargetOrdinal(properTarget), impl);
+    }
+
+    public final String getWheneverString(Object impl, PCLCardTarget perspective) {
+        PCLCardTarget properTarget = getTargetForPerspective(perspective);
+        return EUIRM.strings.nounVerb(getTargetSubjectString(properTarget), impl);
+    }
+
+    public final String getWheneverYouString(Object impl) {
+        String subjectString = isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you;
+        return EUIRM.strings.nounVerb(subjectString, impl);
+    }
+
     @Override
     public boolean hasChildWarning() {
         return childEffect == null && !((this.parent instanceof PBranchCond && this.parent.childEffect == this) || (this.parent instanceof PMultiCond && this.parent.childEffect != this));
@@ -476,7 +507,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         i.e. this is either the first condition underneath a when trigger, or if this is part of a branching condition that meets the first clause
     */
     public final boolean isWhenClause() {
-        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isWhenClause())));
+        return getWhenClause() != null;
     }
 
     @Override

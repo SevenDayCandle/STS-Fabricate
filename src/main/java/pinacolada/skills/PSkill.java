@@ -1102,16 +1102,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
     }
 
-    public final String getWheneverAreString(Object impl, PCLCardTarget perspective) {
-        PCLCardTarget properTarget = getTargetForPerspective(perspective);
-        return TEXT.cond_whenObjectIs(getTargetSubjectString(properTarget), getTargetOrdinal(properTarget), impl);
-    }
-
-    public final String getWheneverString(Object impl, PCLCardTarget perspective) {
-        PCLCardTarget properTarget = getTargetForPerspective(perspective);
-        return TEXT.cond_whenMulti(getTargetSubjectString(properTarget), impl);
-    }
-
     public final String getXRawString() {
         return source != null ? EUIUtils.format(BOUND_FORMAT, "F" + getCardPointer()) : "";
     }
@@ -1535,6 +1525,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         fields.setupEditor(editor);
+    }
+
+    public boolean shouldUseWhenText() {
+        return true;
     }
 
     public PSkill<T> stack(PSkill<?> other) {

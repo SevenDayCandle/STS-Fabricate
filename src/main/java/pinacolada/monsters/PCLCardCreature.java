@@ -71,8 +71,14 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         if (preview != null) {
             AbstractCard c = preview.getCard();
             if (c != null) {
-                c.current_x = c.target_x = this.hb.x + (AbstractCard.IMG_WIDTH * 0.9F + 16.0F) * (this.hb.x > (float) Settings.WIDTH * 0.7F ? card.drawScale : -card.drawScale);
-                c.current_y = c.target_y = this.hb.y + scale(60f);
+                if (this.hb.x < Settings.WIDTH * 0.35f) {
+                    c.current_x = c.target_x = this.hb.x;
+                    c.current_y = c.target_y = this.hb.y - AbstractCard.IMG_HEIGHT  * card.drawScale;
+                }
+                else {
+                    c.current_x = c.target_x = this.hb.x - (AbstractCard.IMG_WIDTH * 0.9F + 16.0F) * card.drawScale;
+                    c.current_y = c.target_y = this.hb.y + scale(60f);
+                }
                 c.hb.move(c.current_x, c.current_y);
             }
         }

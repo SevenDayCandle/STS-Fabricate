@@ -132,6 +132,13 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         this.state = new AnimationState(this.stateData);
     }
 
+    public void refreshLocation(float x, float y) {
+        drawX = x;
+        drawY = y;
+        refreshHitboxLocation();
+        refreshIntentHbLocation();
+    }
+
     public void render(SpriteBatch sb) {
         if (!this.isDead && !this.escaped) {
             this.renderAnimation(sb);

@@ -48,6 +48,11 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
     }
 
     @Override
+    public boolean shouldUseWhenText() {
+        return false;
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
     }
 }

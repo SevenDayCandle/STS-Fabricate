@@ -28,4 +28,8 @@ public abstract class PPrimary<T extends PField> extends PSkill<T> {
     public boolean isSkillAllowed(PSkill<?> skill) {
         return true;
     }
+
+    public boolean shouldUseWhenText() {
+        return false;
+    }
 }

@@ -33,7 +33,7 @@ public abstract class PShift extends PPrimary<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return TEXT.cond_whenSingle(getDelegateText());
+        return TEXT.cond_when(getDelegateText());
     }
 
     @Override

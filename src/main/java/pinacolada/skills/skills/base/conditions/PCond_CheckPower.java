@@ -54,7 +54,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override

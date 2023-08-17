@@ -37,17 +37,17 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_breakXonY(0, PGR.core.tooltips.block.title, TEXT.subjects_x)) : TEXT.act_breakXonY(0, PGR.core.tooltips.block.title, TEXT.subjects_x);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.cond_xOnYIsBroken(PGR.core.tooltips.block.title, TEXT.subjects_x)) : TEXT.cond_xOnYIsBroken(PGR.core.tooltips.block.title, TEXT.subjects_x);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String baseString = TEXT.act_breakXonY(getTargetOrdinal(getTargetForPerspective(target)), PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
+        String baseString = TEXT.cond_xOnYIsBroken(PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
         if (isWhenClause()) {
-            return TEXT.cond_whenMulti(isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you, baseString);
+            return baseString;
         }
 
-        return TEXT.cond_ifXDid(isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you, baseString);
+        return TEXT.cond_ifX(baseString);
     }
 
     // When the target loses its block, trigger the effect on the target

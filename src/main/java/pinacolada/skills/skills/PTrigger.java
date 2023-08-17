@@ -3,7 +3,6 @@ package pinacolada.skills.skills;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.interfaces.delegates.FuncT0;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.CardTriggerConnection;
@@ -12,6 +11,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -74,6 +74,14 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return (PTrigger_When) chain(new PTrigger_When().setAmount(perTurn), effects);
     }
 
+    public static PTrigger_When whenEveryTimes(int perTurn, PSkill<?>... effects) {
+        return (PTrigger_When) chain(new PTrigger_When().setAmount(perTurn).edit(f -> f.setForced(true)), effects);
+    }
+
+    public static PTrigger_When whenEveryTimesCombat(int perTurn, PSkill<?>... effects) {
+        return (PTrigger_When) chain(new PTrigger_When().setAmount(perTurn).edit(f -> f.setForced(true).setNot(true)), effects);
+    }
+
     public static PTrigger_When whenPerCombat(int perTurn, PSkill<?>... effects) {
         return chain((PTrigger_When) new PTrigger_When().setAmount(perTurn).edit(f -> f.setNot(true)), effects);
     }
@@ -114,11 +122,13 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             String gString = fields.getGroupString();
             base = TEXT.cond_whileIn(gString.isEmpty() ? TEXT.subjects_anyPile() : gString);
         }
-        String amountStr = null;
-        if (amount > 0) {
-            amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+
+        // Times per combat. Overwritten by Every x times
+        if (amount > 0 && !fields.forced) {
+            String amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+            return base != null ? amountStr + COMMA_SEPARATOR + base : amountStr != null ? amountStr : "";
         }
-        return base != null && amountStr != null ? amountStr + COMMA_SEPARATOR + base : base != null ? base : amountStr != null ? amountStr : "";
+        return base != null ? base : "";
     }
 
     @Override
@@ -216,6 +226,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerFBoolean(editor, TEXT.cedit_every, null);
     }
 
     public PTrigger stack(PSkill<?> other) {
@@ -233,22 +244,6 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             this.childEffect.stack(other.getChild());
         }
         return this;
-    }
-
-    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info) {
-        if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
-            if (usesThisTurn > 0) {
-                usesThisTurn -= 1;
-                updateCounter();
-            }
-            flash();
-            return childAction.invoke();
-        }
-        return false;
-    }
-
-    protected boolean triggerOn(FuncT0<Boolean> childAction) {
-        return triggerOn(childAction, getInfo(null));
     }
 
     @Override
@@ -269,6 +264,17 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
 
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         if (controller != null && !controller.canActivate(this)) {
+            return false;
+        }
+        if (fields.forced) {
+            if (super.tryPassParent(source, info)) {
+                usesThisTurn += 1;
+                if (usesThisTurn >= amount) {
+                    usesThisTurn = 0;
+                    flash();
+                    return true;
+                }
+            }
             return false;
         }
         if (usesThisTurn != 0) {
@@ -294,8 +300,10 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     // When initialized, treat 0 like -1
+    // For every x triggers, instead reset it to 0
     protected void updateUsesAmount() {
-        usesThisTurn = this.amount > 0 ? this.amount : -1;
+        usesThisTurn = fields.forced ? 0 :
+                this.amount > 0 ? this.amount : -1;
     }
 
     // Triggers can only activate through subscribers or clickables
@@ -306,7 +314,15 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     // Called when executed through a clickable
     @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-        if (usesThisTurn != 0) {
+        if (fields.forced) {
+            usesThisTurn += 1;
+            if (usesThisTurn >= amount) {
+                usesThisTurn = 0;
+                this.childEffect.use(info, order, shouldPay);
+                flash();
+            }
+        }
+        else if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
                 updateCounter();

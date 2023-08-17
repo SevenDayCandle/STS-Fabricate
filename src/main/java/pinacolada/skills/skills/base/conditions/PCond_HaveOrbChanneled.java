@@ -54,17 +54,17 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_wheneverYou(TEXT.act_channel(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_channel(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
-            return TEXT.cond_wheneverYou(PGR.core.tooltips.channel.title);
+            return getWheneverString(PGR.core.tooltips.channel.title, perspective);
         }
         String tt = fields.getOrbAndOrString();
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(TEXT.act_channel(tt));
+            return getWheneverString(TEXT.act_channel(tt), perspective);
         }
         return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt)) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt));

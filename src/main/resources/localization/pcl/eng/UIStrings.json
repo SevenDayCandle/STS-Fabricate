@@ -5,7 +5,6 @@
 												"add {0} to {1}",
 												"apply {0} to {1}",
 												"apply {0}",
-												"${0}@?1?2?3?8:break@:breaks$ {1} on {2}",
 												"choose {0}",
 												"costs {0}",
 												"deal {0} {1}",
@@ -139,7 +138,8 @@
 												"New Loadout",
 												"Rename Loadout",
 												"Delete Loadout",
-												"Invert"
+												"Invert",
+												"Every X"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -281,6 +281,9 @@
 				},
 				"pcl:Conditions": {
 								"TEXT": [
+												"a {0} {1}",
+												"a {0} is {1}",
+												"a {0} is {1} on {2}",
 												"any {0}",
 												"at combat end",
 												"at combat start",
@@ -288,6 +291,8 @@
 												"at turn start",
 												"do {0}",
 												"do for each",
+												"every {0} ${0}@!1:times@:time$ {1}",
+												"every {0} ${0}@!1:times@:time$ this turn {1}",
 												"for {0} ${0}@!1:turns@:turn$",
 												"if your highest {0} is",
 												"if {0} ${1}@?0?2?3:have@:has$ {2}",
@@ -305,16 +310,11 @@
 												"on {0}",
 												"otherwise, {0}",
 												"there ${0}@!1:are@:is$ {1}",
-												"when {0} {1}",
 												"when {0}",
-												"when {0} ${1}@?0:are@:is$ {2}",
-												"when a {0} {1}",
-												"when a {0} is {1}",
-												"when a {0} is {1} on {2}",
 												"while in {0}",
-												"{0} active",
 												"{0} and {1}",
 												"{0} ${1}@?0:are@:is$ {2}",
+												"{0} on {1} is broken",
 												"{0} or {1}",
 												"{0} per {1}",
 												"{0} per {1} {2}",

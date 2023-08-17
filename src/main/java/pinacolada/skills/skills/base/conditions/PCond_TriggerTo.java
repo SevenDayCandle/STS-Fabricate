@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.powers.ThornsPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -47,9 +48,6 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         Object tt = fields.getOrbOrString();
-        if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
-        }
         return TEXT.act_trigger(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
     }
 

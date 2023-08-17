@@ -1932,8 +1932,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected void renderEnergyText(SpriteBatch sb) {
-        float sinAngle = MathUtils.sinDeg(angle);
-        renderEnergyText(sb, -132f - sinAngle * 10, 192f - Math.abs(sinAngle) * 25);
+        renderEnergyText(sb, -132f, 192f);
     }
 
     protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset) {

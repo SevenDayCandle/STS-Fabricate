@@ -36,7 +36,7 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(PGR.core.tooltips.scry.title);
+            return getWheneverYouString(PGR.core.tooltips.scry.title);
         }
         if (baseAmount > 1) {
             return TEXT.act_genericTimes(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getAmountRawString());

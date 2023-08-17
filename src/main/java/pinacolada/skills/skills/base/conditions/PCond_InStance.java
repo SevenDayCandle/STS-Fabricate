@@ -42,14 +42,14 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_wheneverYou(TEXT.act_enterStance(PGR.core.tooltips.stance.title)) : PGR.core.tooltips.stance.title;
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_enterStance(PGR.core.tooltips.stance.title)) : PGR.core.tooltips.stance.title;
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String base = fields.getAnyStanceString();
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(TEXT.act_enterStance(base));
+            return getWheneverYouString(TEXT.act_enterStance(base));
         }
         return fields.random ? TEXT.cond_not(base) : base;
     }

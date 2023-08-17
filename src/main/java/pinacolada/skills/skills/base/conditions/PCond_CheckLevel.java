@@ -70,10 +70,10 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
-            return TEXT.cond_wheneverYou(PGR.core.tooltips.level.title);
+            return getWheneverYouString(PGR.core.tooltips.level.title);
         }
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityChoiceString()));
+            return getWheneverYouString(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityChoiceString()));
         }
         return TEXT.cond_ifX(TEXT.cond_levelItem(getAmountRawString(), fields.getAffinityChoiceString()));
     }

@@ -35,7 +35,7 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return TEXT.cond_whenAObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
+            return TEXT.cond_aObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
         return super.getSubText(perspective);
     }

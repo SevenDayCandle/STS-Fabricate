@@ -44,16 +44,16 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_aObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isBranch()) {
-            return TEXT.cond_wheneverYou(getDelegateText());
+            return getWheneverYouString(getDelegateText());
         }
         if (isWhenClause()) {
-            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+            return TEXT.cond_aObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_onGeneric(getDelegateText());
     }

@@ -31,27 +31,20 @@ public class SummonPool extends EUIBase {
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public int triggerTimes = BASE_TRIGGER;
 
-    public void add(int times) {
+    public void addSummon(int times) {
         float baseX = 0;
         float baseY = 0;
         if (AbstractDungeon.player != null) {
             baseX = AbstractDungeon.player.drawX;
             baseY = AbstractDungeon.player.drawY;
         }
-        for (int i = 0; i < times; i++) {
-            summons.add(addSummon(summons.size() + i));
+        int curSize = summons.size();
+        for (int i = curSize; i < times + curSize; i++) {
+            summons.add(new PCLCardAlly(i, baseX, baseY));
         }
-    }
-
-    protected PCLCardAlly addSummon(int i) {
-        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
-        float angle = 100.0F + BASE_LIMIT * 12.0F;
-        float offsetAngle = angle / 2.0F;
-        angle *= i / (BASE_LIMIT - 1.0F);
-        angle += 90.0F - offsetAngle;
-        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
-        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
-        return new PCLCardAlly(i, x, y);
+        for (PCLCardAlly summon : summons) {
+            repositionSummon(summon);
+        }
     }
 
     public void applyPowers() {
@@ -151,9 +144,7 @@ public class SummonPool extends EUIBase {
         triggerTimes = BASE_TRIGGER;
 
         if (AbstractDungeon.player != null) {
-            for (int i = 0; i < BASE_LIMIT; i++) {
-                summons.add(addSummon(i));
-            }
+            addSummon(BASE_LIMIT);
         }
     }
 
@@ -209,6 +200,16 @@ public class SummonPool extends EUIBase {
         for (PCLCardAlly ally : summons) {
             ally.render(sb);
         }
+    }
+
+    public void repositionSummon(PCLCardAlly ally) {
+        int size = summons.size();
+        float dist = OFFSET + size * 10.0F * Settings.scale;
+        float angle = 100.0F + size * 12.0F;
+        float offsetAngle = angle / 2.0F;
+        angle *= ally.index / (size - 1.0F);
+        angle += 90.0F - offsetAngle;
+        ally.refreshLocation(dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX, dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F);
     }
 
     public SummonAllyAction summon(PCLCard card, PCLCardAlly target) {

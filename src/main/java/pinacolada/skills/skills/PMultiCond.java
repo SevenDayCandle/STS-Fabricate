@@ -121,7 +121,7 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, true));
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, false))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, false));
     }
 
     @Override
@@ -274,6 +274,11 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             childEffect.setTemporaryExtra(extra);
         }
         return this;
+    }
+
+    @Override
+    public boolean shouldUseWhenText() {
+        return EUIUtils.all(getSubEffects(), PSkill::shouldUseWhenText);
     }
 
     @Override

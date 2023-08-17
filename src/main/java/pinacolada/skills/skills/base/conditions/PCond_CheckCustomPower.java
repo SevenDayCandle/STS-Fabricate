@@ -51,7 +51,7 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(TEXT.cedit_customPower)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_customPower);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(TEXT.cedit_customPower)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_customPower);
     }
 
     @Override

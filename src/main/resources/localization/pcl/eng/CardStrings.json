@@ -1,17 +1,23 @@
 {
 				"COLORLESS":	{
+								"pcl:Apparition": {"NAME": "Apparition"},
 								"pcl:Apotheosis": {"NAME": "Apotheosis"},
+								"pcl:Bite": {"NAME": "Bite"},
 								"pcl:Chrysalis": {"NAME": "Chrysalis"},
 								"pcl:DarkShackles": {"NAME": "Dark Shackles"},
 								"pcl:DeepBreath": {"NAME": "Deep Breath"},
 								"pcl:Forethought": {"NAME": "Forethought"},
+								"pcl:JAX": {"NAME": "J.A.X."},
 								"pcl:Insight": {"NAME": "Insight"},
 								"pcl:Madness": {"NAME": "Madness"},
 								"pcl:Magnetism": {"NAME": "Magnetism"},
+								"pcl:Mayhem": {"NAME": "Mayhem"},
 								"pcl:Metamorphosis": {"NAME": "Metamorphosis"},
 								"pcl:MindBlast": {"NAME": "Mind Blast"},
 								"pcl:Miracle": {"NAME": "Miracle"},
 								"pcl:Panacea": {"NAME": "Panacea"},
+								"pcl:Panache": {"NAME": "Panache"},
+								"pcl:PanicButton": {"NAME": "Panic Button"},
 								"pcl:SadisticNature": {"NAME": "Sadistic Nature"},
 								"pcl:Transmutation": {"NAME": "Transmutation"}
 				},

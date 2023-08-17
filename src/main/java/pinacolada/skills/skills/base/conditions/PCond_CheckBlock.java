@@ -36,7 +36,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override

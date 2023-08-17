@@ -36,13 +36,13 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : TEXT.cond_ifX(PGR.core.tooltips.kill.past());
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(PGR.core.tooltips.kill.present()) : TEXT.cond_ifX(PGR.core.tooltips.kill.past());
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), PGR.core.tooltips.kill.present());
+            return getWheneverString(PGR.core.tooltips.kill.present(), perspective);
         }
         if (fields.random) {
             return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : PGR.core.tooltips.fatal.title);

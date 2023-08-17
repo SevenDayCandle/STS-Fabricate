@@ -203,7 +203,7 @@ public class PSkillPower extends PCLPower implements TriggerConnection {
         for (PTrigger trigger : ptriggers) {
             int uses = trigger.getUses();
             if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
-                return new ColoredString(uses, uses > 0 ? Color.GREEN : Color.GRAY, c.a);
+                return new ColoredString(uses, uses > 0 && (trigger.fields.forced || uses >= trigger.amount) ? Color.GREEN : Color.GRAY, c.a);
             }
         }
         return null;

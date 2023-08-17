@@ -434,6 +434,12 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
+    @Override
+    public boolean shouldUseWhenText() {
+        return EUIUtils.all(getSubEffects(), PSkill::shouldUseWhenText);
+    }
+
+    @Override
     public PMultiSkill stack(PSkill<?> other) {
         super.stack(other);
         if (other instanceof PMultiBase) {
@@ -442,6 +448,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
+    @Override
     public void subscribeChildren() {
         for (PSkill<?> effect : effects) {
             effect.subscribeChildren();

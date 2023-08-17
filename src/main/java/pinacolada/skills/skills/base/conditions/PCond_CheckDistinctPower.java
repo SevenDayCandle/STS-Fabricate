@@ -55,7 +55,7 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
-            return TEXT.cond_whenMulti(getTargetSubjectString(perspective), TEXT.act_applyXToTarget(fields.getThresholdRawString(fields.getPowerSubjectString()), getTargetSubjectStringPerspective(perspective)));
+            return getWheneverYouString(TEXT.act_applyXToTarget(fields.getThresholdRawString(fields.getPowerSubjectString()), getTargetSubjectStringPerspective(perspective)));
         }
         return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(TEXT.subjects_distinct(fields.getPowerSubjectString())));
     }

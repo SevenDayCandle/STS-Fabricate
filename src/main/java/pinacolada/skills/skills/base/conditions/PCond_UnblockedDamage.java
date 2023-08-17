@@ -37,7 +37,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill, parentSkill);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill, parentSkill);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.attack.title);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(PGR.core.tooltips.attack.present()) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.attack.title);
     }
 
     @Override

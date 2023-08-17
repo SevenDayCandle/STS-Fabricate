@@ -123,6 +123,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_renameLoadout = cedit.TEXT[75];
     public final String cedit_deleteLoadout = cedit.TEXT[76];
     public final String cedit_invert = cedit.TEXT[77];
+    public final String cedit_every = cedit.TEXT[78];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -783,164 +784,161 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_applyX(Object power) {
         return actFmt(3, power);
     }
-    public final String act_breakXonY(Object ordinal, Object power, Object target) {
-        return actFmt(4, ordinal, power, target);
-    }
     public final String act_choose(Object amount) {
-        return actFmt(5, amount);
+        return actFmt(4, amount);
     }
     public final String act_costs(Object amount) {
-        return actFmt(6, amount);
+        return actFmt(5, amount);
     }
     public final String act_deal(Object amount, Object damage) {
-        return actFmt(7, amount, damage);
+        return actFmt(6, amount, damage);
     }
     public final String act_dealTo(Object amount, Object damage, Object target) {
-        return actFmt(8, amount, damage, target);
+        return actFmt(7, amount, damage, target);
     }
     public final String act_deals(Object power) {
-        return actFmt(9, power);
+        return actFmt(8, power);
     }
     public final String act_disable(Object power) {
-        return actFmt(10, power);
+        return actFmt(9, power);
     }
     public final String act_doThis(Object times) {
-        return actFmt(11, times);
+        return actFmt(10, times);
     }
     public final String act_enterStance(Object stance) {
-        return actFmt(12, stance);
+        return actFmt(11, stance);
     }
     public final String act_exitStance() {
-        return actFmt(13);
+        return actFmt(12);
     }
     public final String act_gainAmount(Object amount, Object power) {
-        return actFmt(14, amount, power);
+        return actFmt(13, amount, power);
     }
     public final String act_gain(Object power) {
-        return actFmt(15, power);
+        return actFmt(14, power);
     }
     public final String act_giveTarget(Object target, Object power) {
-        return actFmt(16, target, power);
+        return actFmt(15, target, power);
     }
     public final String act_giveTargetAmount(Object target, Object amount, Object power) {
-        return actFmt(17, target, amount, power);
+        return actFmt(16, target, amount, power);
     }
     public final String act_has(Object amount) {
-        return actFmt(18, amount);
+        return actFmt(17, amount);
     }
     public final String act_hasAmount(Object amount, Object power) {
-        return actFmt(19, amount, power);
+        return actFmt(18, amount, power);
     }
     public final String act_haveObject(Object amount, Object power) {
-        return actFmt(20, amount, power);
+        return actFmt(19, amount, power);
     }
     public final String act_increaseBy(Object power, Object amount) {
-        return actFmt(21, power, amount);
+        return actFmt(20, power, amount);
     }
     public final String act_increasePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(22, property, target, amount);
+        return actFmt(21, property, target, amount);
     }
     public final String act_increasePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(23, property, target, source, amount);
+        return actFmt(22, property, target, source, amount);
     }
     public final String act_lose(Object power) {
-        return actFmt(24, power);
+        return actFmt(23, power);
     }
     public final String act_loseAmount(Object amount, Object power) {
-        return actFmt(25, amount, power);
+        return actFmt(24, amount, power);
     }
     public final String act_move(Object amount, Object target) {
-        return actFmt(26, amount, target);
+        return actFmt(25, amount, target);
     }
     public final String act_moveTo(Object amount, Object dest, Object target) {
-        return actFmt(27, amount, dest, target);
+        return actFmt(26, amount, dest, target);
     }
     public final String act_reduceBy(Object power, Object amount) {
-        return actFmt(28, power, amount);
+        return actFmt(27, power, amount);
     }
     public final String act_reducePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(29, property, target, amount);
+        return actFmt(28, property, target, amount);
     }
     public final String act_reducePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(30, property, target, source, amount);
+        return actFmt(29, property, target, source, amount);
     }
     public final String act_remove(Object item) {
-        return actFmt(31, item);
+        return actFmt(30, item);
     }
     public final String act_removeFrom(Object item, Object target) {
-        return actFmt(32, item, target);
+        return actFmt(31, item, target);
     }
     public final String act_removeFromPlace(Object item, Object target, Object place) {
-        return actFmt(33, item, target, place);
+        return actFmt(32, item, target, place);
     }
     public final String act_removeInPlace(Object item, Object target, Object place) {
-        return actFmt(34, item, target, place);
+        return actFmt(33, item, target, place);
     }
     public final String act_select(Object amount) {
-        return actFmt(35, amount);
+        return actFmt(34, amount);
     }
-    public final String act_setOf(Object item, Object target, Object affinity4) {
-        return actFmt(36, item, target, affinity4);
+    public final String act_setOf(Object item, Object target, Object affinity3) {
+        return actFmt(35, item, target, affinity3);
     }
-    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity4) {
-        return actFmt(37, item, target, place, affinity4);
+    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity3) {
+        return actFmt(36, item, target, place, affinity3);
     }
     public final String act_setTo(Object item, Object affinity) {
-        return actFmt(38, item, affinity);
+        return actFmt(37, item, affinity);
     }
     public final String act_setTheLast(Object amount, Object item, Object affinity) {
-        return actFmt(39, amount, item, affinity);
+        return actFmt(38, amount, item, affinity);
     }
     public final String act_skipTurn() {
-        return actFmt(40);
+        return actFmt(39);
     }
     public final String act_stealFrom(Object amount, Object item, Object target) {
-        return actFmt(41, amount, item, target);
+        return actFmt(40, amount, item, target);
     }
     public final String act_stealX(Object amount, Object power) {
-        return actFmt(42, amount, power);
+        return actFmt(41, amount, power);
     }
     public final String act_take(Object amount, Object damage) {
-        return actFmt(43, amount, damage);
+        return actFmt(42, amount, damage);
     }
     public final String act_transform(Object subject, Object target) {
-        return actFmt(44, subject, target);
+        return actFmt(43, subject, target);
     }
     public final String act_use(Object target) {
-        return actFmt(45, target);
+        return actFmt(44, target);
     }
     public final String act_zCannot(Object target, Object action, Object object) {
-        return actFmt(46, target, action, object);
+        return actFmt(45, target, action, object);
     }
     public final String act_zCosts(Object object, Object ordinal, Object amount) {
-        return actFmt(47, object, ordinal, amount);
+        return actFmt(46, object, ordinal, amount);
     }
     public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(48, object, amount, bonus);
+        return actFmt(47, object, amount, bonus);
     }
     public final String act_zHas(Object object, Object amount) {
-        return actFmt(49, object, amount);
+        return actFmt(48, object, amount);
     }
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(50, object, ordinal, amount, bonus);
+        return actFmt(49, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(51, action, object, target);
+        return actFmt(50, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(52, action, amount, object, target);
+        return actFmt(51, action, amount, object, target);
     }
     public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(53, verb, amount, subject, target);
+        return actFmt(52, verb, amount, subject, target);
     }
     public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
-        return actFmt(54, verb, amount, subject, dest, target);
+        return actFmt(53, verb, amount, subject, dest, target);
     }
     public final String act_zToX(Object action, Object object, Object target) {
-        return actFmt(55, action, object, target);
+        return actFmt(54, action, object, target);
     }
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(56, verb, amount, subject, target);
+        return actFmt(55, verb, amount, subject, target);
     }
 
     public final String combat_controlPileDescriptionFull(String keyName) {
@@ -987,138 +985,135 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_perThisTurn(Object subject, Object desc4, Object target) {
         return subjects_thisTurn(cond_xPerYZ(subject, desc4, target));
     }
-    public final String cond_wheneverYou(Object desc1) {
-        return cond_whenMulti(subjects_you, desc1);
-    }
 
-    public final String cond_any(Object desc1) {
-        return condFmt(0, desc1);
+    public final String cond_aObject(Object subject, Object target) {
+        return condFmt(0, subject, target);
+    }
+    public final String cond_aObjectIs(Object target, Object desc9) {
+        return condFmt(1, target, desc9);
+    }
+    public final String cond_aObjectIsOn(Object target, Object desc9, Object place) {
+        return condFmt(2, target, desc9, place);
+    }
+    public final String cond_any(Object desc4) {
+        return condFmt(3, desc4);
     }
     public final String cond_atEndOfCombat() {
-        return condFmt(1);
-    }
-    public final String cond_atStartOfCombat() {
-        return condFmt(2);
-    }
-    public final String cond_atEndOfTurn() {
-        return condFmt(3);
-    }
-    public final String cond_atStartOfTurn() {
         return condFmt(4);
     }
-    public final String cond_doX(Object subject) {
-        return condFmt(5, subject);
+    public final String cond_atStartOfCombat() {
+        return condFmt(5);
     }
-    public final String cond_doForEach() {
+    public final String cond_atEndOfTurn() {
         return condFmt(6);
     }
-    public final String cond_forTurns(Object subject) {
-        return condFmt(7, subject);
+    public final String cond_atStartOfTurn() {
+        return condFmt(7);
     }
-    public final String cond_ifHighest(Object subject) {
+    public final String cond_doX(Object subject) {
         return condFmt(8, subject);
     }
-    public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
-        return condFmt(9, target, ordinal, desc);
+    public final String cond_doForEach() {
+        return condFmt(9);
     }
-    public final String cond_ifTargetTook(Object target, Object desc) {
-        return condFmt(10, target, desc);
+    public final String cond_everyXTimesY(Object times, Object subject) {
+        return condFmt(10, times, subject);
     }
-    public final String cond_ifTargetDidX(Object target, Object subject, Object desc4) {
-        return condFmt(11, target, subject, desc4);
+    public final String cond_everyXTimesYThisTurn(Object times, Object subject) {
+        return condFmt(11, times, subject);
     }
-    public final String cond_ifXDid(Object subject, Object desc) {
-        return condFmt(12, subject, desc);
+    public final String cond_forTurns(Object subject) {
+        return condFmt(12, subject);
     }
-    public final String cond_ifX(Object subject) {
+    public final String cond_ifHighest(Object subject) {
         return condFmt(13, subject);
     }
+    public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
+        return condFmt(14, target, ordinal, desc);
+    }
+    public final String cond_ifTargetTook(Object target, Object desc) {
+        return condFmt(15, target, desc);
+    }
+    public final String cond_ifTargetDidX(Object target, Object subject, Object desc9) {
+        return condFmt(16, target, subject, desc9);
+    }
+    public final String cond_ifXDid(Object subject, Object desc) {
+        return condFmt(17, subject, desc);
+    }
+    public final String cond_ifX(Object subject) {
+        return condFmt(18, subject);
+    }
     public final String cond_inXAtTurnEnd(Object subject) {
-        return condFmt(14, subject);
-    }
-    public final String cond_inXAtTurnStart(Object subject) {
-        return condFmt(15, subject);
-    }
-    public final String cond_inTurns(Object subject) {
-        return condFmt(16, subject);
-    }
-    public final String cond_levelItem(Object level, Object subject) {
-        return condFmt(17, level, subject);
-    }
-    public final String cond_nextTurn() {
-        return condFmt(18);
-    }
-    public final String cond_no(Object subject) {
         return condFmt(19, subject);
     }
-    public final String cond_not(Object subject) {
+    public final String cond_inXAtTurnStart(Object subject) {
         return condFmt(20, subject);
     }
-    public final String cond_onGeneric(Object subject) {
+    public final String cond_inTurns(Object subject) {
         return condFmt(21, subject);
     }
-    public final String cond_otherwise(Object subject) {
-        return condFmt(22, subject);
+    public final String cond_levelItem(Object level, Object subject) {
+        return condFmt(22, level, subject);
     }
-    public final String cond_thereIs(Object number, Object target) {
-        return condFmt(23, number, target);
+    public final String cond_nextTurn() {
+        return condFmt(23);
     }
-    public final String cond_whenMulti(Object subject, Object target) {
-        return condFmt(24, subject, target);
+    public final String cond_no(Object subject) {
+        return condFmt(24, subject);
     }
-    public final String cond_whenSingle(Object subject) {
+    public final String cond_not(Object subject) {
         return condFmt(25, subject);
     }
-    public final String cond_whenObjectIs(Object subject, Object ord, Object desc) {
-        return condFmt(26, subject, ord, desc);
+    public final String cond_onGeneric(Object subject) {
+        return condFmt(26, subject);
     }
-    public final String cond_whenAObject(Object subject, Object target) {
-        return condFmt(27, subject, target);
+    public final String cond_otherwise(Object subject) {
+        return condFmt(27, subject);
     }
-    public final String cond_whenAObjectIs(Object target, Object desc7) {
-        return condFmt(28, target, desc7);
+    public final String cond_thereIs(Object number, Object target) {
+        return condFmt(28, number, target);
     }
-    public final String cond_whenAObjectIsOn(Object target, Object desc7, Object place) {
-        return condFmt(29, target, desc7, place);
+    public final String cond_when(Object subject) {
+        return condFmt(29, subject);
     }
     public final String cond_whileIn(Object subject) {
         return condFmt(30, subject);
     }
-    public final String cond_xActive(Object subject) {
-        return condFmt(31, subject);
-    }
     public final String cond_xAndY(Object subject, Object target) {
-        return condFmt(32, subject, target);
+        return condFmt(31, subject, target);
     }
-    public final String cond_xIsY(Object desc7, Object ordinal, Object desc8) {
-        return condFmt(33, desc7, ordinal, desc8);
+    public final String cond_xIsY(Object desc9, Object ordinal, Object desc10) {
+        return condFmt(32, desc9, ordinal, desc10);
     }
-    public final String cond_xOrY(Object desc7, Object desc8) {
-        return condFmt(34, desc7, desc8);
+    public final String cond_xOnYIsBroken(Object desc9, Object desc10) {
+        return condFmt(33, desc9, desc10);
+    }
+    public final String cond_xOrY(Object desc9, Object desc10) {
+        return condFmt(34, desc9, desc10);
     }
     public final String cond_xPerY(Object subject, Object per) {
         return condFmt(35, subject, per);
     }
-    public final String cond_xPerYZ(Object desc7, Object desc8, Object desc9) {
-        return condFmt(36, desc7, desc8, desc9);
+    public final String cond_xPerYZ(Object desc9, Object desc10, Object desc11) {
+        return condFmt(36, desc9, desc10, desc11);
     }
-    public final String cond_xPerIn(Object desc7, Object desc8, Object desc9) {
-        return condFmt(37, desc7, desc8, desc9);
+    public final String cond_xPerIn(Object desc9, Object desc10, Object desc11) {
+        return condFmt(37, desc9, desc10, desc11);
     }
-    public final String cond_timesPerCombat(Object desc6) {
-        return condFmt(38, desc6);
+    public final String cond_timesPerCombat(Object desc8) {
+        return condFmt(38, desc8);
     }
-    public final String cond_timesPerTurn(Object desc6) {
-        return condFmt(39, desc6);
+    public final String cond_timesPerTurn(Object desc8) {
+        return condFmt(39, desc8);
     }
-    public final String cond_xToY(Object desc6, Object desc7) {
-        return condFmt(40, desc6, desc7);
+    public final String cond_xToY(Object desc8, Object desc9) {
+        return condFmt(40, desc8, desc9);
     }
-    public final String cond_xThenY(Object desc6, Object desc7) {
-        return condFmt(41, desc6, desc7);
+    public final String cond_xThenY(Object desc8, Object desc9) {
+        return condFmt(41, desc8, desc9);
     }
-    public final String cond_xConditional(Object desc6, Object desc7) {
-        return condFmt(42, desc6, desc7);
+    public final String cond_xConditional(Object desc8, Object desc9) {
+        return condFmt(42, desc8, desc9);
     }
     public final String cond_passive() {
         return condFmt(43);
