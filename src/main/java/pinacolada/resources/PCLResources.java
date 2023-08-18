@@ -131,6 +131,11 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
         return characterStrings;
     }
 
+    // Intercepts cards generated from events
+    public String getEventReplacement(String cardID) {
+        return null;
+    }
+
     public FileHandle getFallbackFile(String fileName) {
         return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
     }

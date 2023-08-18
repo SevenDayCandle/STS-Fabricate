@@ -36,9 +36,10 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class PCLCustomEffectNode extends EUIButton {
+    public static final float BUTTON_SIZE = scale(40);
+    public static final float DISTANCE_Y = scale(-100);
     public static final float SIZE_X = scale(120);
     public static final float SIZE_Y = scale(60);
-    public static final float DISTANCE_Y = scale(-100);
     private boolean dragging;
     protected List<PSkill<?>> effects;
     protected PCLCustomEffectHologram hologram;
@@ -61,9 +62,9 @@ public class PCLCustomEffectNode extends EUIButton {
         this.editor = editor;
         this.type = type;
         this.skill = skill;
-        this.warningImage = new EUIImage(EUIRM.images.warning.texture(), new RelativeHitbox(hb, 48, 48, hb.width * -0.2f, hb.height * 0.4f));
+        this.warningImage = new EUIImage(EUIRM.images.warning.texture(), new RelativeHitbox(hb, BUTTON_SIZE, BUTTON_SIZE, hb.width * -0.2f, hb.height * 0.4f));
         this.warningImage.setActive(false);
-        this.deleteButton = new EUIButton(EUIRM.images.xButton.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
+        this.deleteButton = new EUIButton(EUIRM.images.xButton.texture(), new RelativeHitbox(hb, BUTTON_SIZE, BUTTON_SIZE, hb.width * 1.2f, hb.height * 0.4f));
         this.deleteButton.setOnClick(() -> {
             if (canRemove()) {
                 deleteSelf();

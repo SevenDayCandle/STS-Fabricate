@@ -1151,6 +1151,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_allAllies() {
         return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_allyN));
     }
+    public final String subjects_allAlliesAndEnemies() {
+        return EUIUtils.format(subjects_allX, cond_xAndY(PCLCoreStrings.pluralForce(subjects_allyN), PCLCoreStrings.pluralForce(subjects_enemyN)));
+    }
     public final String subjects_allAlliesOrEnemies() {
         return EUIUtils.format(subjects_allX, cond_xOrY(PCLCoreStrings.pluralForce(subjects_allyN), PCLCoreStrings.pluralForce(subjects_enemyN)));
     }

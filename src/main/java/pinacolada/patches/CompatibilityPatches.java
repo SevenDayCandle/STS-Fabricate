@@ -3,10 +3,16 @@ package pinacolada.patches;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import extendedui.EUIUtils;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 
 public class CompatibilityPatches {
+    public static String getProperName(String derp) {
+        AbstractCard proper = CardLibrary.getCard(derp);
+        return proper != null ? proper.name : EUIUtils.EMPTY_STRING;
+    }
 
     @SpirePatch(cls = "infinitespire.quests.PickUpCardQuest", method = "getTitle", optional = true)
     public static class InfiniteSpire_PickUpCardQuest {

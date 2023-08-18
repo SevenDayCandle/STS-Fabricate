@@ -930,7 +930,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case AllEnemy:
                 return TEXT.subjects_allEnemies();
             case AllAllyEnemy:
-                return TEXT.subjects_allAlliesOrEnemies();
+                return TEXT.subjects_allAlliesAndEnemies();
             case Any:
                 return TEXT.subjects_anyone;
             case RandomAlly:

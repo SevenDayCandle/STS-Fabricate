@@ -23,28 +23,22 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
-import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.text.EUISmartText;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
-import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLSFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
-import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -54,11 +48,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, KeywordProvider {
+public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, KeywordProvider {
     protected static final StringBuilder builder = new StringBuilder();
     protected static final float ICON_SIZE = 32f;
-    protected static final float ICON_SIZE2 = 48f;
-    protected static final float CLICKABLE_SIZE = ICON_SIZE * Settings.scale * 1.5f;
+    protected static final float HITBOX_SIZE = ICON_SIZE * Settings.scale * 1.5f;
     protected static final Color disabledColor = new Color(0.5f, 0.5f, 0.5f, 1);
     public static final int DUMMY_MULT = 100;
     public static AbstractPlayer player = null;
@@ -66,11 +59,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected final ArrayList<AbstractGameEffect> effects;
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     protected PowerStrings powerStrings;
-    public EUIHitbox hb;
     public AbstractCreature source;
+    public EUIHitbox hb;
     public EUIKeywordTooltip mainTip;
-    public PCLClickableUse triggerCondition;
-    public boolean clickable;
     public boolean enabled = true;
     public boolean hideAmount = false;
     public int baseAmount = 0;
@@ -90,7 +81,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.effects = ReflectionHacks.getPrivate(this, AbstractPower.class, "effect");
         this.owner = owner;
         this.source = source;
-        hb = new EUIHitbox(CLICKABLE_SIZE, CLICKABLE_SIZE);
+        hb = new EUIHitbox(HITBOX_SIZE, HITBOX_SIZE);
     }
 
     public PCLPower(AbstractCreature owner, PCLCardData cardData) {
@@ -185,46 +176,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return atDamageGive(block, type, c);
     }
 
-    @Override
-    public void atStartOfTurn() {
-        super.atStartOfTurn();
-
-        if (triggerCondition != null) {
-            triggerCondition.refresh(true, true);
-        }
-
-    }
-
-    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
-        triggerCondition = new PCLClickableUse(this, onUse);
-        return triggerCondition;
-    }
-
-    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
-        triggerCondition = new PCLClickableUse(this, onUse, uses, refreshEachTurn, stackAutomatically);
-        return triggerCondition;
-    }
-
-    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, PCLTriggerUsePool pool) {
-        triggerCondition = new PCLClickableUse(this, onUse, pool);
-        return triggerCondition;
-    }
-
-    public PCLClickableUse createTrigger(PSkill<?> move) {
-        triggerCondition = new PCLClickableUse(this, move);
-        return triggerCondition;
-    }
-
-    public PCLClickableUse createTrigger(PSkill<?> move, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
-        triggerCondition = new PCLClickableUse(this, move, uses, refreshEachTurn, stackAutomatically);
-        return triggerCondition;
-    }
-
-    public PCLClickableUse createTrigger(PSkill<?> move, PCLTriggerUsePool pool) {
-        triggerCondition = new PCLClickableUse(this, move, pool);
-        return triggerCondition;
-    }
-
     protected void findTooltipsFromText(String text) {
 
         boolean foundIcon = false;
@@ -269,9 +220,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
     }
 
-    @Override
-    public PCLClickableUse getClickable() {
-        return triggerCondition;
+    protected Color getBorderColor(Color c) {
+        return (enabled) ? c : disabledColor;
+    }
+
+    protected Color getImageColor(Color c) {
+        return (enabled) ? c : disabledColor;
     }
 
     public String getDisplayDescription() {
@@ -408,9 +362,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
         if (owner == target && power.ID.equals(ID)) {
             onSamePowerApplied(power);
-            if (triggerCondition != null && triggerCondition.pool.stackAutomatically) {
-                triggerCondition.addUses(1);
-            }
         }
     }
 
@@ -484,8 +435,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         if (hb.cX != x || hb.cY != y) {
             hb.move(x, y);
         }
-        Color borderColor = (enabled && triggerCondition != null && triggerCondition.interactable()) ? c : disabledColor;
-        Color imageColor = enabled ? c : disabledColor;
+
+        Color borderColor = getBorderColor(c);
+        Color imageColor = getImageColor(c);
 
         this.renderIconsImpl(sb, x, y, borderColor, imageColor);
 
@@ -495,23 +447,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
-        float scale = 1;
-        if (triggerCondition != null) {
-            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.Menu.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
-            scale = 0.75f;
-        }
-
         if (this.region48 != null) {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, 1, 0);
         }
         else {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, 1, 0);
         }
-
-        if (triggerCondition != null && enabled && hb.hovered && clickable) {
-            PCLRenderHelpers.drawCentered(sb, EUIColors.white(0.3f), EUIRM.images.squaredButton.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
-        }
-
     }
 
     public int resetAmount() {
@@ -609,28 +550,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     @Override
     public void update(int slot) {
         super.update(slot);
-        hb.update();
-        if (triggerCondition != null) {
-            triggerCondition.refresh(false, hb.justHovered);
-        }
-
+        updateHitbox();
         if (hb.hovered) {
-            EUITooltip.queueTooltips(tooltips, InputHelper.mX + hb.width, InputHelper.mY + (hb.height * 0.5f));
-            clickable = triggerCondition != null && triggerCondition.interactable();
-            if (clickable) {
-                if (hb.justHovered) {
-                    PCLSFX.play(PCLSFX.UI_HOVER);
-                }
-
-                if (InputHelper.justClickedLeft) {
-                    hb.clickStarted = true;
-                    PCLSFX.play(PCLSFX.UI_CLICK_1);
-                }
-                else if (hb.clicked) {
-                    hb.clicked = false;
-                    triggerCondition.targetToUse(1);
-                }
-            }
+            updateHoverLogic();
         }
     }
 
@@ -653,5 +575,13 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 mainTip.setBackgroundColor(Color.WHITE);
         }
         this.description = sanitizePowerDescription(desc);
+    }
+
+    public void updateHitbox() {
+        hb.update();
+    }
+
+    public void updateHoverLogic() {
+        EUITooltip.queueTooltips(tooltips, InputHelper.mX + hb.width, InputHelper.mY + (hb.height * 0.5f));
     }
 }

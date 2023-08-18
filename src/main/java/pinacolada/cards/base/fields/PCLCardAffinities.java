@@ -15,6 +15,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import static pinacolada.cards.base.fields.PCLAffinity.General;
 import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
@@ -200,14 +201,6 @@ public class PCLCardAffinities {
             }
         }
         return list;
-    }
-
-    public Integer[] getAffinityLevelsAsArray() {
-        final Integer[] values = new Integer[PCLAffinity.all().length];
-        for (int i = 0; i < values.length; i++) {
-            values[i] = getLevel(PCLAffinity.all()[i]);
-        }
-        return values;
     }
 
     protected PCLAffinity[] getAvailableAffinities() {
@@ -481,5 +474,4 @@ public class PCLCardAffinities {
 
         sorted.sort(PCLCardAffinity::compareTo);
     }
-
 }

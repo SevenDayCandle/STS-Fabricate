@@ -37,11 +37,11 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
                 .setColor(EUIColors.white(0.3f));
     }
 
-    protected AbstractCard getLastCard() {
+    public AbstractCard getLastCard() {
         return lastCard;
     }
 
-    protected AbstractCreature getLastTarget() {
+    public AbstractCreature getLastTarget() {
         return lastTarget;
     }
 

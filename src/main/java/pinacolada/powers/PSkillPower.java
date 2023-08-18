@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PSkillPower extends PCLPower implements TriggerConnection {
+public class PSkillPower extends PCLClickablePower implements TriggerConnection {
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
     public PSkillPower(AbstractCreature owner, int turns, PTrigger... effects) {

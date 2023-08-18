@@ -164,7 +164,19 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_Fatal fatal() {
+        return (PCond_Fatal) new PCond_Fatal().edit(f -> f.setRandom(true));
+    }
+
+    public static PCond_Fatal fatal(PCLCardTarget target) {
+        return (PCond_Fatal) new PCond_Fatal(target).edit(f -> f.setRandom(true));
+    }
+
+    public static PCond_Fatal fatalMinion() {
         return new PCond_Fatal();
+    }
+
+    public static PCond_Fatal fatalMinion(PCLCardTarget target) {
+        return new PCond_Fatal(target);
     }
 
     public static PCond_HaveDiscarded haveDiscarded() {

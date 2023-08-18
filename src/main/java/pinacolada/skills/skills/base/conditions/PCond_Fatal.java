@@ -27,7 +27,11 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1);
 
     public PCond_Fatal() {
-        super(DATA, PCLCardTarget.None, 0);
+        super(DATA, PCLCardTarget.Single, 0);
+    }
+
+    public PCond_Fatal(PCLCardTarget target) {
+        super(DATA, target, 0);
     }
 
     public PCond_Fatal(PSkillSaveData content) {
