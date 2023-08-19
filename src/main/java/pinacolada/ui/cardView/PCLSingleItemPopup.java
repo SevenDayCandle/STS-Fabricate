@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.EUIBase;
@@ -166,7 +167,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     }
 
     protected void renderTips(SpriteBatch sb) {
-        popupTooltipY = EUIUtils.lerpSnap(popupTooltipY, popupTooltipYTarget, 8);
+        popupTooltipY = EUIRenderHelpers.lerpSnap(popupTooltipY, popupTooltipYTarget, 8);
         float y = popupTooltipY;
         for (int i = 0; i < tooltips.size(); i++) {
             EUITooltip tip = tooltips.get(i);
@@ -178,7 +179,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         }
 
         if (preview != null) {
-            preview.render(sb, popupHb.cX, popupHb.cY, 1f, EUIGameUtils.canShowUpgrades(false), true);
+            preview.render(sb, Settings.WIDTH * 0.2f - 10f * Settings.scale, Settings.HEIGHT * 0.25f, 1f, EUIGameUtils.canShowUpgrades(false), true);
         }
 
         scrollBar.render(sb);

@@ -126,7 +126,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public String getUpdatedDescription() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
+        return getEffectPowerTextStrings();
     }
 
     @Override

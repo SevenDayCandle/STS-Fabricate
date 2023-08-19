@@ -178,7 +178,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public String getDescriptionImpl() {
-        return StringUtils.capitalize(getEffectPowerTextStrings());
+        return getEffectPowerTextStrings();
     }
 
     @Override

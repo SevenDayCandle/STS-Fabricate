@@ -987,9 +987,11 @@ public class GameUtilities {
         if (card instanceof PCLCard) {
             return ((PCLCard) card).affinities;
         }
-        AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
-        if (mod != null) {
-            return mod.affinities;
+        if (card != null) {
+            AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
+            if (mod != null) {
+                return mod.affinities;
+            }
         }
         return null;
     }
@@ -997,9 +999,9 @@ public class GameUtilities {
     public static PCLCardAffinities getPCLCardAffinities(Iterable<? extends AbstractCard> cards) {
         final PCLCardAffinities affinities = new PCLCardAffinities(null);
         for (AbstractCard c : cards) {
-            PCLCard card = EUIUtils.safeCast(c, PCLCard.class);
-            if (card != null) {
-                affinities.add(card.affinities, 1);
+            PCLCardAffinities cAffs = getPCLCardAffinities(c);
+            if (cAffs != null) {
+                affinities.add(cAffs, 1);
             }
         }
 

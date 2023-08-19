@@ -212,7 +212,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     protected void onUpdateModifiers(List<CustomMod> mods) {
         this.screen.activeMods = mods;
-        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
+        modsTooltip.setDescription(EUIUtils.joinStringsMap(EUIUtils.SPLIT_LINE, m -> PCLCoreStrings.colorString(m.color, m.name), mods));
     }
 
     public void open() {

@@ -1,5 +1,6 @@
 package pinacolada.augments;
 
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.exporter.EUIExporter;
@@ -22,7 +23,7 @@ public class EUIExporterPCLAugmentRow extends EUIExporterRow {
     }
 
     public EUIExporterPCLAugmentRow(PCLAugment augment) {
-        super(augment.ID, "", augment.getName());
+        super(augment.ID, EUIGameUtils.getModID(augment), "", augment.getName());
         category = String.valueOf(augment.data.category);
         subCategory = augment.data.categorySub.suffix;
         tier = augment.data.tier;

@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.controls.EUIButton;
@@ -379,7 +380,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void updateZoom(float scrollPercentage) {
         zoomBar.scroll(scrollPercentage, false);
-        scale = MathUtils.lerp(0f, 1f, scrollPercentage);
+        scale = EUIRenderHelpers.lerp(0f, 1f, scrollPercentage);
 
         updatePictures();
     }

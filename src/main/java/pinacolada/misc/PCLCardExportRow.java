@@ -1,5 +1,6 @@
 package pinacolada.misc;
 
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporterRow;
 import pinacolada.cards.base.PCLCard;
@@ -49,7 +50,7 @@ public class PCLCardExportRow extends EUIExporterRow {
     public String effects;
 
     public PCLCardExportRow(PCLCard card) {
-        super(card.cardData.ID, String.valueOf(card.cardData.cardColor), card.name);
+        super(card.cardData.ID, EUIGameUtils.getModID(card), String.valueOf(card.cardData.cardColor), card.name);
         PCLCardData data = card.cardData;
         int form = card.getForm();
         this.form = form;
@@ -92,8 +93,8 @@ public class PCLCardExportRow extends EUIExporterRow {
         star = affinities.getLevel(PCLAffinity.Star, form);
         starUpgrade = affinities.getUpgrade(PCLAffinity.Star, form);
 
-        tags = EUIUtils.joinStrings("/", EUIUtils.map(data.tags.values(), tagInfo -> tagInfo.tag));
-        effects = EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, EUIUtils.map(card.getFullEffects(), PSkill::getExportText));
+        tags = EUIUtils.joinStringsMap("/", tagInfo -> String.valueOf(tagInfo.tag), data.tags.values());
+        effects = EUIUtils.joinStringsMap(PSkill.EFFECT_SEPARATOR, PSkill::getExportText, card.getFullEffects());
     }
 
     @Override

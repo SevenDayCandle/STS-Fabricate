@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import extendedui.EUI;
+import extendedui.EUIRenderHelpers;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.monsters.PCLCreature;

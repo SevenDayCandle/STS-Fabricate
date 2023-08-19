@@ -756,8 +756,11 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_stun(Object target) {
         return act_generic2(PGR.core.tooltips.stun.title, target);
     }
-    public final String act_takeDamage(Object target) {
-        return act_take(target, subjects_damage);
+    public final String act_takeDamage(Object amount) {
+        return act_take(amount, subjects_damage);
+    }
+    public final String act_targetTakesDamage(Object target, Object ordinal, Object amount) {
+        return act_zTakes(target, ordinal, amount, subjects_damage);
     }
     public final String act_trigger(Object subject) {
         return act_generic2(PGR.core.tooltips.trigger.title, subject);
@@ -922,23 +925,26 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
         return actFmt(49, object, ordinal, amount, bonus);
     }
+    public final String act_zTakes(Object object, Object ordinal, Object amount, Object bonus) {
+        return actFmt(49, object, ordinal, amount, bonus);
+    }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(50, action, object, target);
+        return actFmt(51, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(51, action, amount, object, target);
+        return actFmt(52, action, amount, object, target);
     }
     public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(52, verb, amount, subject, target);
+        return actFmt(53, verb, amount, subject, target);
     }
     public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
-        return actFmt(53, verb, amount, subject, dest, target);
+        return actFmt(54, verb, amount, subject, dest, target);
     }
     public final String act_zToX(Object action, Object object, Object target) {
-        return actFmt(54, action, object, target);
+        return actFmt(55, action, object, target);
     }
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(55, verb, amount, subject, target);
+        return actFmt(56, verb, amount, subject, target);
     }
 
     public final String combat_controlPileDescriptionFull(String keyName) {

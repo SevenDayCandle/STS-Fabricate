@@ -102,36 +102,34 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     private static String getTagTipString(AbstractCard card, List<PCLCardTag> tags) {
-        ArrayList<String> tagNames = new ArrayList<>();
-        for (PCLCardTag tag : tags) {
-            int value = tag.getInt(card);
-            switch (value) {
-                case -1:
-                    // For cards that allow infinite, just show the tag name, imitating vanilla behavior
-                    if (tag.minValue == -1) {
-                        // Except for innate/delayed
-                        if (tag == Innate || tag == Delayed) {
-                            tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite));
-                        }
-                        else {
-                            tagNames.add(tag.getTooltip().title);
-                        }
+        String base = EUIUtils.joinStringsMap(PSkill.EFFECT_SEPARATOR, tag -> getTagTipStringSingle(card, tag), tags);
+        return !base.isEmpty() ? base + LocalizedStrings.PERIOD : "";
+    }
+
+    private static String getTagTipStringSingle(AbstractCard card, PCLCardTag tag) {
+        int value = tag.getInt(card);
+        switch (value) {
+            case -1:
+                // For cards that allow infinite, just show the tag name, imitating vanilla behavior
+                if (tag.minValue == -1) {
+                    // Except for innate/delayed
+                    if (tag == Innate || tag == Delayed) {
+                        return EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite);
                     }
-                    break;
-                case 0:
-                    break;
-                case 1:
-                    // Do not show numerical values for Exhaust, Innate, Delayed or tags that cannot go beyond 1
-                    if (tag.maxValue == 1 || tag == Exhaust || tag == Innate || tag == Delayed) {
-                        tagNames.add(tag.getTooltip().title);
-                        break;
+                    else {
+                        return tag.getTooltip().title;
                     }
-                default:
-                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, value));
-                    break;
-            }
+                }
+                break;
+            case 0:
+                break;
+            case 1:
+                // Do not show numerical values for Exhaust, Innate, Delayed or tags that cannot go beyond 1
+                if (tag.maxValue == 1 || tag == Exhaust || tag == Innate || tag == Delayed) {
+                    return tag.getTooltip().title;
+                }
         }
-        return tagNames.size() > 0 ? EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames) + LocalizedStrings.PERIOD : "";
+        return EUIRM.strings.generic2(tag.getTooltip().title, value);
     }
 
     private static void initializePreAndPost() {

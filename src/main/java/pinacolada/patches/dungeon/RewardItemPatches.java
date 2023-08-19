@@ -24,15 +24,17 @@ public class RewardItemPatches {
             public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
                 if (count == 0 && m.getFieldName().equals("relicLink")) {
                     ++count;
-                    m.replace("$_ = pinacolada.patches.dungeon.RewardItemPatches.isPCL(relic) ? null : $proceed($$);");
+                    m.replace("$_ = pinacolada.patches.dungeon.RewardItemPatches.isPCL(relic, $proceed($$)) ? null : $proceed($$);");
                 }
             }
         };
     }
 
-    public static boolean isPCL(AbstractRelic relic) {
+    public static boolean isPCL(AbstractRelic relic, RewardItem relicLink) {
         if (relic instanceof PCLRelic) {
-            isRenderingForSapphire = true;
+            if (relicLink != null && relicLink.type == RewardItem.RewardType.SAPPHIRE_KEY) {
+                isRenderingForSapphire = true;
+            }
             return true;
         }
         return false;

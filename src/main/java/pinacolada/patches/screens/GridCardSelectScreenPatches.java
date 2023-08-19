@@ -31,6 +31,8 @@ import java.util.List;
 
 public class GridCardSelectScreenPatches {
 
+    protected static final float BASE_X = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
+    protected static final float BASE_Y = (float) Settings.HEIGHT / 2.0F - 32.0F;
     protected static final float ICON_SIZE = 64f * Settings.scale;
     protected static final int DEFAULT_MAX = 3;
     protected static final float[] Y_POSITIONS_2 = new float[]{
@@ -318,26 +320,26 @@ public class GridCardSelectScreenPatches {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(GridCardSelectScreen __instance, SpriteBatch sb) {
             if (__instance.forUpgrade && cardList.size() > 1) {
-                float x = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
-                float y = (float) Settings.HEIGHT / 2.0F - 32.0F;
-                float by = 64 * Settings.scale;
+                float x = BASE_X;
+                float y = BASE_Y;
+                float by = ICON_SIZE;
                 sb.setColor(Color.WHITE);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, -45.0F, 0, 0, 64, 64, false, false);
-                x += 64.0F * Settings.scale;
-                by += 64.0F * Settings.scale;
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, -45.0F, 0, 0, 64, 64, false, false);
-                x += 64.0F * Settings.scale;
-                by += 64.0F * Settings.scale;
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, 45.0F, 0, 0, 64, 64, false, false);
-                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, -45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale1, arrowScale1, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale1, arrowScale1, -45.0F, 0, 0, 64, 64, false, false);
+                x += ICON_SIZE;
+                by += ICON_SIZE;
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale2, arrowScale2, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale2, arrowScale2, -45.0F, 0, 0, 64, 64, false, false);
+                x += ICON_SIZE;
+                by += ICON_SIZE;
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y + by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale3, arrowScale3, 45.0F, 0, 0, 64, 64, false, false);
+                sb.draw(ImageMaster.UPGRADE_ARROW, x, y - by, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale3, arrowScale3, -45.0F, 0, 0, 64, 64, false, false);
 
                 if (cardList.size() > 2) {
                     x = (float) Settings.WIDTH / 2.0F - 73.0F * Settings.scale - 32.0F;
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale1, arrowScale1, 0, 0, 0, 64, 64, false, false);
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 64.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale2, arrowScale2, 0, 0, 0, 64, 64, false, false);
-                    sb.draw(ImageMaster.UPGRADE_ARROW, x + 128.0F * Settings.scale, y, 32.0F, 32.0F, 64.0F, 64.0F, arrowScale3, arrowScale3, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x, y, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale1, arrowScale1, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x + ICON_SIZE, y, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale2, arrowScale2, 0, 0, 0, 64, 64, false, false);
+                    sb.draw(ImageMaster.UPGRADE_ARROW, x + ICON_SIZE * 2, y, 32.0F, 32.0F, ICON_SIZE, ICON_SIZE, arrowScale3, arrowScale3, 0, 0, 0, 64, 64, false, false);
 
                     if (cardList.size() > DEFAULT_MAX) {
                         upButton.renderCentered(sb);

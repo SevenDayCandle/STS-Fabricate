@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import extendedui.EUIRenderHelpers;
 
 public class BlightAboveCreatureEffect extends AbstractGameEffect {
     private static final float DUR = 1f;

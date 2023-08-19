@@ -94,10 +94,7 @@ public class AfterlifePile {
         final boolean[] required = getRequiredAffinities(currentCard, cards);
 
         return booleanArrayMet(required) ? PGR.core.strings.combat_afterlifeMet : EUIUtils.format(PGR.core.strings.combat_afterlifeRequirement,
-                EUIUtils.joinStrings(", ",
-                        EUIUtils.map(
-                                EUIUtils.filter(PCLAffinity.basic(), af -> required[af.id])
-                                , PCLAffinity::getTooltip)));
+                EUIUtils.joinStringsMap(", ", af -> af.getTooltip().getTitleOrIcon(), EUIUtils.filter(PCLAffinity.basic(), af -> required[af.id])));
     }
 
     @SafeVarargs

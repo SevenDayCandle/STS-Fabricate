@@ -12,6 +12,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.cardText.ConditionToken;
 import pinacolada.cards.base.cardText.PointerToken;
@@ -137,13 +138,15 @@ public interface PointerProvider {
     }
 
     default String getEffectPowerTextStrings() {
-        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getPowerText));
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getPowerText()) : null,
+                getFullEffects());
     }
 
     default String getEffectStrings() {
-        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getText()) : null,
+                getFullEffects());
     }
 
     default ArrayList<PSkill<?>> getEffects() {

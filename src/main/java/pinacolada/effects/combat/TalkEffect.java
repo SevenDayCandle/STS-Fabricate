@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.ui.DialogWord;
 import com.megacrit.cardcrawl.vfx.SpeechTextEffect;
+import extendedui.EUIRenderHelpers;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 

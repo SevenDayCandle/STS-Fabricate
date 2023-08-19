@@ -321,7 +321,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public static <T> String joinData(T[] items, FuncT1<String, T> stringFunction, String separator) {
-        return items.length > 0 ? EUIUtils.joinStrings(separator, EUIUtils.map(items, stringFunction)) : null;
+        return items.length > 0 ? EUIUtils.joinStringsMap(separator, stringFunction, items) : null;
     }
 
     public static <T> String joinData(Collection<T> items, FuncT1<String, T> stringFunction) {
@@ -329,7 +329,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public static <T> String joinData(Collection<T> items, FuncT1<String, T> stringFunction, String separator) {
-        return items.size() > 0 ? EUIUtils.joinStrings(separator, EUIUtils.mapAsNonnull(items, stringFunction)) : null;
+        return items.size() > 0 ? EUIUtils.joinStringsMapNonnull(separator, stringFunction, items) : null;
     }
 
     public static <T> String joinDataAsJson(T[] items, FuncT1<String, T> stringFunction) {

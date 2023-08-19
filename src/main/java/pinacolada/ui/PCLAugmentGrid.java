@@ -3,7 +3,7 @@ package pinacolada.ui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.MathHelper;
-import extendedui.EUIUtils;
+import extendedui.EUIRenderHelpers;
 import extendedui.ui.controls.EUIItemGrid;
 import pinacolada.augments.PCLAugmentRenderable;
 
@@ -83,7 +83,7 @@ public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
     public void updateItemPosition(PCLAugmentRenderable augment, float x, float y) {
         augment.targetX = x;
         augment.targetY = y;
-        augment.currentX = EUIUtils.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);
-        augment.currentY = EUIUtils.lerpSnap(augment.currentY, augment.targetY, LERP_SPEED);
+        augment.currentX = EUIRenderHelpers.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);
+        augment.currentY = EUIRenderHelpers.lerpSnap(augment.currentY, augment.targetY, LERP_SPEED);
     }
 }

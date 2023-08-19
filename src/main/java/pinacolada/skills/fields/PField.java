@@ -135,16 +135,16 @@ public abstract class PField implements Serializable {
 
     // If we are not displaying tags as card tag icons, we should not render them as icons in the description either even if the EUI setting is disabled
     public static String getTagAndString(ArrayList<PCLCardTag> tags) {
-        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(PGR.config.displayCardTagDescription.get() ? PField::safeInvokeTipTitle : PField::safeInvokeTip, tags);
     }
 
     public static String getTagOrString(ArrayList<PCLCardTag> tags) {
-        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(PGR.config.displayCardTagDescription.get() ? PField::safeInvokeTipTitle : PField::safeInvokeTip, tags);
     }
 
     public static String getTagString(ArrayList<PCLCardTag> tags) {
         return (PGR.config.displayCardTagDescription.get() || PSkill.isVerbose()) ? getTagAndString(tags) :
-                tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, PField::safeInvokeTip)));
+                tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStringsMap(" ", PField::safeInvokeTip, tags));
     }
 
     protected static String safeInvokeTip(TooltipProvider provider) {
