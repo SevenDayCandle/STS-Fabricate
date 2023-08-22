@@ -43,7 +43,7 @@ public class PCLGlyphEditor extends EUIHoverable {
 
         image = new EUIImage(blight.img, Color.WHITE).setHitbox(hb);
 
-        tooltip = new EUITooltip(blight.strings.NAME, blight.getAscensionTooltipDescription(0));
+        tooltip = new EUITooltip(blight.blightData.strings.NAME, blight.getAscensionTooltipDescription(0));
     }
 
     public void decrease() {

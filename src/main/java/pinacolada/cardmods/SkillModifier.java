@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class SkillModifier extends AbstractCardModifier {
     protected String serialized;
     protected transient PSkill<?> skill;
-    protected PCLUseInfo info;
+    protected transient PCLUseInfo info;
 
     public SkillModifier(String serialized) {
         this.serialized = serialized;

@@ -7,11 +7,12 @@ import pinacolada.interfaces.subscribers.OnCardResetSubscriber;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
+@AbstractCardModifier.SaveIgnore
 public class CostUntilPlayedModifier extends AbstractCardModifier implements OnCardResetSubscriber {
-    protected AbstractCard card;
-    protected int previousAmount;
-    protected boolean temporary;
-    public int change;
+    protected transient AbstractCard card;
+    protected transient int previousAmount;
+    protected transient boolean temporary;
+    public transient int change;
 
     public CostUntilPlayedModifier(int change, boolean temporary) {
         this.change = change;

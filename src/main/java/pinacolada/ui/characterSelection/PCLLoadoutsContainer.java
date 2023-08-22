@@ -1,8 +1,6 @@
 package pinacolada.ui.characterSelection;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIUtils;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +15,6 @@ import java.util.stream.Collectors;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutsContainer {
-    public static final int MINIMUM_CARDS = 75; // 75
-    public static final int MINIMUM_COLORLESS = 40;
 
     public final ArrayList<AbstractCard> shownCards = new ArrayList<>();
     public final ArrayList<AbstractCard> shownColorlessCards = new ArrayList<>();
@@ -27,8 +23,8 @@ public class PCLLoadoutsContainer {
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
     public final HashSet<String> bannedColorless = new HashSet<>();
+    public final HashSet<String> selectedLoadouts = new HashSet<>();
     private AbstractPlayerData<?, ?> data;
-    public int currentCardLimit;
     public PCLCard currentSeriesCard;
 
     public static boolean isRarityAllowed(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
@@ -47,22 +43,34 @@ public class PCLLoadoutsContainer {
         shownColorlessCards.clear();
 
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
-            if (entry.getValue().isLocked()) {
+            PCLLoadout loadout = entry.getValue();
+            if (loadout.isLocked() || !(loadout.isCore() || selectedLoadouts.contains(entry.getValue().ID) || currentSeriesCard == entry.getKey())) {
                 continue;
             }
-            int selectedAmount = 0;
-            for (PCLCardData data : entry.getValue().cardDatas) {
+            int bannedAmount = 0;
+            int unlockedAmount = 0;
+            for (PCLCardData data : loadout.cardDatas) {
+                if (!data.isLocked()) {
+                    unlockedAmount += 1;
+                }
                 if (!bannedCards.contains(data.ID)) {
-                    selectedAmount += 1;
                     AbstractCard c = allCards.get(data.ID);
                     if (c != null) {
                         shownCards.add(c);
                     }
                 }
+                else {
+                    bannedAmount += 1;
+                }
             }
 
-            for (PSkill<?> s : entry.getKey().getFullEffects()) {
-                s.setAmount(selectedAmount);
+            PSkill<?> unlockEffect = entry.getKey().getEffect(0);
+            if (unlockEffect != null) {
+                unlockEffect.setAmount(unlockedAmount);
+            }
+            PSkill<?> bannedEffect = entry.getKey().getEffect(1);
+            if (bannedEffect != null) {
+                bannedEffect.setAmount(bannedAmount);
             }
         }
 
@@ -72,11 +80,6 @@ public class PCLLoadoutsContainer {
                 shownColorlessCards.add(c);
             }
         }
-
-
-        if (data != null) {
-            currentCardLimit = MathUtils.clamp(data.config.cardsCount.get(), MINIMUM_CARDS, shownCards.size());
-        }
     }
 
     public void commitChanges(AbstractPlayerData<?, ?> data) {
@@ -84,12 +87,12 @@ public class PCLLoadoutsContainer {
         HashSet<String> banned = new HashSet<>(bannedCards);
         banned.addAll(bannedColorless);
         data.config.bannedCards.set(banned);
-        data.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit));
+        data.config.selectedLoadouts.set(selectedLoadouts);
         data.saveSelectedLoadout();
 
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
+        EUIUtils.logInfoIfDebug(this, "Series Count: " + data.config.selectedLoadouts.get().size());
         EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());
-        EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.config.cardsCount.get());
     }
 
     public void createCards(AbstractPlayerData<?, ?> data) {
@@ -101,6 +104,9 @@ public class PCLLoadoutsContainer {
         loadoutMap.clear();
         bannedCards.clear();
         bannedColorless.clear();
+        selectedLoadouts.clear();
+
+        selectedLoadouts.addAll(data.config.selectedLoadouts.get());
 
         for (PCLLoadout series : data.getEveryLoadout()) {
             // Add series representation to the grid selection
@@ -121,9 +127,10 @@ public class PCLLoadoutsContainer {
 
             // Add this series cards to the total list of available cards
             for (PCLCardData cData : series.cardDatas) {
-                AbstractCard card = CardLibrary.getCard(cData.ID);
-                if (card != null) {
-                    allCards.put(cData.ID, card);
+                AbstractCard card = cData.makeCardFromLibrary(0);
+                allCards.put(cData.ID, card);
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).affinities.updateSortedList();
                 }
                 if (data.config.bannedCards.get().contains(cData.ID)) {
                     bannedCards.add(cData.ID);
@@ -132,9 +139,10 @@ public class PCLLoadoutsContainer {
 
             // Colorless bans
             for (PCLCardData cData : series.colorlessData) {
-                AbstractCard card = CardLibrary.getCard(cData.ID);
-                if (card != null) {
-                    allColorlessCards.put(cData.ID, card);
+                AbstractCard card = cData.makeCardFromLibrary(0);
+                allColorlessCards.put(cData.ID, card);
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).affinities.updateSortedList();
                 }
                 if (data.config.bannedCards.get().contains(cData.ID)) {
                     bannedColorless.add(cData.ID);
@@ -148,19 +156,15 @@ public class PCLLoadoutsContainer {
         return loadoutMap.get(card);
     }
 
+    // Grid will not actually contain the core series card for now
     public Collection<AbstractCard> getAllCards() {
         return loadoutMap.entrySet()
                 .stream()
+                .filter(entry -> !entry.getValue().isCore())
                 .sorted((a, b) -> {
                     PCLLoadout lA = a.getValue();
                     PCLLoadout lB = b.getValue();
-                    if (lA.isCore()) {
-                        return -1;
-                    }
-                    else if (lB.isCore()) {
-                        return 1;
-                    }
-                    else if (lA.unlockLevel != lB.unlockLevel) {
+                    if (lA.unlockLevel != lB.unlockLevel) {
                         return lA.unlockLevel - lB.unlockLevel;
                     }
                     return StringUtils.compare(a.getKey().name, b.getKey().name);
@@ -174,7 +178,7 @@ public class PCLLoadoutsContainer {
     }
 
     public boolean isValid() {
-        return shownCards.size() >= MINIMUM_CARDS && shownColorlessCards.size() >= MINIMUM_COLORLESS;
+        return shownCards.size() >= PCLSeriesSelectScreen.MINIMUM_CARDS && shownColorlessCards.size() >= PCLSeriesSelectScreen.MINIMUM_COLORLESS;
     }
 
     // You cannot select core loadout cards
@@ -184,7 +188,9 @@ public class PCLLoadoutsContainer {
             for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
                 PCLCard c = entry.getKey();
                 c.stopGlowing();
-                c.setCardRarity(entry.getValue().isCore() ? AbstractCard.CardRarity.CURSE : AbstractCard.CardRarity.COMMON);
+                c.setCardRarity(entry.getValue().isCore() ? AbstractCard.CardRarity.CURSE :
+                        selectedLoadouts.contains(entry.getValue().ID) ? AbstractCard.CardRarity.UNCOMMON :
+                        AbstractCard.CardRarity.COMMON);
             }
             card.setCardRarity(AbstractCard.CardRarity.RARE);
             card.beginGlowing();
@@ -193,15 +199,13 @@ public class PCLLoadoutsContainer {
         return false;
     }
 
-    public Collection<String> toggleCards(PCLLoadout loadout, boolean value) {
-        Collection<String> cardIds = EUIUtils.map(loadout.cardDatas, l -> l.ID);
+    public void toggleCards(PCLLoadout loadout, boolean value) {
         if (value) {
-            cardIds.forEach(bannedCards::remove);
+            selectedLoadouts.add(loadout.ID);
         }
         else {
-            bannedCards.addAll(cardIds);
+            selectedLoadouts.remove(loadout.ID);
         }
         calculateCardCounts();
-        return cardIds;
     }
 }

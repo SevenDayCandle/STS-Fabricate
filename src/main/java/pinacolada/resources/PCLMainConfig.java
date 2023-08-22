@@ -106,6 +106,10 @@ public class PCLMainConfig extends AbstractConfig {
         return PGR.BASE_PREFIX.toUpperCase(Locale.ROOT) + "-" + name;
     }
 
+    public static String createFullID(String prefix, String name) {
+        return prefix + "-" + name;
+    }
+
     public boolean hideTipDescription(String id) {
         if (tips == null) {
             tips = new HashSet<>();

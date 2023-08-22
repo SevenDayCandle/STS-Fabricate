@@ -22,15 +22,15 @@ public class CharacterOptionPatches {
         }
     }
 
-    @SpirePatch(clz = CharacterOption.class, method = "renderRelics")
+    @SpirePatch(clz = CharacterOption.class, method = "renderInfo")
     public static class CharacterOption_RenderRelics {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CharacterOption __instance, SpriteBatch sb) {
             if ((EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU))) {
                 return SpireReturn.Return();
             }
-            if (PGR.charSelectProvider.shouldRenderPCLRelics()) {
-                PGR.charSelectProvider.renderRelicInfo(sb);
+            if (PGR.charSelectProvider.shouldRenderPCLInfo()) {
+                PGR.charSelectProvider.renderPCLInfo(sb);
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

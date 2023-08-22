@@ -23,11 +23,10 @@ import pinacolada.skills.PTrait;
 
 import java.util.ArrayList;
 
-@AbstractCardModifier.SaveIgnore
 public class AugmentModifier extends AbstractCardModifier {
     protected String augmentID;
     protected transient PCLAugment augment;
-    protected PCLUseInfo info;
+    protected transient PCLUseInfo info;
 
     public AugmentModifier(String augmentID) {
         this.augmentID = augmentID;

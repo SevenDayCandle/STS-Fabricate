@@ -9,7 +9,9 @@ import com.megacrit.cardcrawl.helpers.BlightHelper;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleBlight;
+import pinacolada.blights.PCLBlightData;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkillData;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +35,8 @@ public class BlightHelperPatches {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleBlight.class)) {
             try {
                 VisibleBlight a = ct.getAnnotation(VisibleBlight.class);
-                String id = ReflectionHacks.getPrivateStatic(ct, a.id());
+                Object data = ReflectionHacks.getPrivateStatic(ct, a.data());
+                String id = data instanceof PCLBlightData ? ((PCLBlightData) data).ID : String.valueOf(data);
                 customBlights.put(id, (Class<? extends AbstractBlight>) ct);
                 EUIUtils.logInfoIfDebug(BlightHelper.class, "Adding blight " + id);
             }

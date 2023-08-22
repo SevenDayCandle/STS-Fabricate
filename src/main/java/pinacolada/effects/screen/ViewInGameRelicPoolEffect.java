@@ -139,7 +139,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     }
 
     public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_banned, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
         if (onRefresh != null) {
             onRefresh.invoke();
         }

@@ -1,15 +1,23 @@
 package pinacolada.blights;
 
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
-import com.megacrit.cardcrawl.localization.BlightStrings;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.MathHelper;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,36 +25,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PCLBlight extends AbstractBlight implements KeywordProvider {
-    protected final int initialAmount;
-    public final BlightStrings strings;
+    public static final float RENDER_SCALE = 0.8f;
+    public final PCLBlightData blightData;
     public ArrayList<EUIKeywordTooltip> tips;
     public EUIKeywordTooltip mainTooltip;
 
-    public PCLBlight(String id) {
-        this(id, PGR.getBlightStrings(id), -1);
-    }
-
-    public PCLBlight(String id, BlightStrings strings, int amount) {
-        super(id, strings.NAME, GameUtilities.EMPTY_STRING, "durian.png", true);
-
-        this.img = EUIRM.getTexture(PGR.getBlightImage(id));
-        this.outlineImg = EUIRM.getTexture(PGR.getBlightOutlineImage(id));
-        this.initialAmount = amount;
-        this.counter = amount;
-        this.strings = strings;
+    public PCLBlight(PCLBlightData data) {
+        super(data.ID, data.strings.NAME, GameUtilities.EMPTY_STRING, "durian.png", true);
+        this.blightData = data;
+        this.scale = RENDER_SCALE; // Because they end up looking larger in game than in the character select screen
+        setupImages();
         updateDescription();
-    }
-
-    public PCLBlight(String id, int amount) {
-        this(id, PGR.getBlightStrings(id), amount);
     }
 
     public static String createFullID(Class<? extends PCLBlight> type) {
         return PGR.core.createID(type.getSimpleName());
     }
 
+    protected static PCLBlightData register(Class<? extends PCLBlight> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLBlightData register(Class<? extends PCLBlight> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerBlightData(new PCLBlightData(type, resources));
+    }
+
+    protected static <T extends PCLBlightData> T registerBlightData(T cardData) {
+        return PCLBlightData.registerData(cardData);
+    }
+
     protected String formatDescription(int index, Object... args) {
-        return EUIUtils.format(strings.DESCRIPTION[index], args);
+        return EUIUtils.format(blightData.strings.DESCRIPTION[index], args);
     }
 
     @Override
@@ -77,19 +86,61 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         EUITooltip.scanForTips(description, tips);
     }
 
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, false);
+        if (t == null) {
+            path = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(path, true, false);
+        }
+        this.img = t;
+        this.outlineImg = t;
+    }
+
     public PCLBlight makeCopy() {
         try {
-            return getClass().getConstructor().newInstance();
+            return blightData.create();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            EUIUtils.logError(this, e.getMessage());
+        catch (Exception e) {
             return null;
         }
+    }
+
+    protected void preSetup(PCLRelicData data) {
+
+    }
+
+    // TODO add outlines
+    @Override
+    public void renderOutline(Color c, SpriteBatch sb, boolean inTopPanel) {
+    }
+
+    @Override
+    public void renderOutline(SpriteBatch sb, boolean inTopPanel) {
     }
 
     @Override
     public void renderTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(this);
+    }
+
+    public void setupImages() {
+        loadImage(blightData.imagePath);
+    }
+
+    public void update() {
+        super.update();
+        if (this.isDone) {
+            if (this.hb.hovered && AbstractDungeon.topPanel.potionUi.isHidden) {
+                this.scale = Settings.scale;
+            }
+            else {
+                this.scale = MathHelper.scaleLerpSnap(RENDER_SCALE, Settings.scale);
+            }
+        }
+        // TODO move elsewhere
+        if (this.hb.justHovered) {
+            updateDescription();
+        }
     }
 
     @Override

@@ -45,7 +45,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
         final float h = hb.height;
 
         image = new EUIImage(type.getTexture(), new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f)).setTooltip(this.tooltip);
-        label = new EUILabel(FontHelper.tipHeaderFont, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
+        label = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
                 .setAlignment(0.5f, 0f, false)
                 .setColor(type.labelColor)
                 .setTooltip(this.tooltip);

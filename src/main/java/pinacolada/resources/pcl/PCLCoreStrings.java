@@ -229,6 +229,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String csel_relicPool = charselect.TEXT[10];
     public final String csel_relicPoolInfo = charselect.TEXT[11];
     public final String csel_ascensionGlyph = charselect.TEXT[12];
+    public final String csel_ability = charselect.TEXT[13];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -378,7 +379,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String sui_seriesUI = seriesui.TEXT[0];
     public final String sui_affinities = seriesui.TEXT[1];
     public final String sui_core = seriesui.TEXT[2];
-    public final String sui_selected = seriesui.TEXT[3];
+    public final String sui_banned = seriesui.TEXT[3];
     public final String sui_unlocked = seriesui.TEXT[4];
     public final String sui_removeFromPool = seriesui.TEXT[5];
     public final String sui_addToPool = seriesui.TEXT[6];
@@ -1312,7 +1313,7 @@ public class PCLCoreStrings extends AbstractStrings {
     }
 
     public final String sui_selected(Object amount, Object total) {
-        return EUIUtils.format(sui_selected, amount, total);
+        return EUIUtils.format(sui_banned, amount, total);
     }
 
     public final String sui_totalCards(Object color, Object total, Object req, Object color2, Object total2, Object req2) {

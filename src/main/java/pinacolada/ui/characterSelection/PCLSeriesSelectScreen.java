@@ -34,11 +34,10 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
 
-import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
-import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_COLORLESS;
-
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
+    public static final int MINIMUM_CARDS = 75; // 75
+    public static final int MINIMUM_COLORLESS = 40;
     public final PCLLoadoutsContainer container = new PCLLoadoutsContainer();
     public final EUICardGrid cardGrid;
     public final EUILabel startingDeck;
@@ -174,23 +173,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null) {
             for (PCLCardData data : loadout.cardDatas) {
-                AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
-                if (nc instanceof PCLCard) {
-                    ((PCLCard) nc).affinities.updateSortedList();
-                }
-                cards.group.add(nc);
+                cards.group.add(container.allCards.get(data.ID));
             }
         }
         else {
-            for (PCLLoadout cs : container.getAllLoadouts()) {
-                for (PCLCardData data : cs.cardDatas) {
-                    AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
-                    if (nc instanceof PCLCard) {
-                        ((PCLCard) nc).affinities.updateSortedList();
-                    }
-                    cards.group.add(nc);
-                }
-            }
+            cards.group.addAll(container.shownCards);
         }
         cards.sortAlphabetically(true);
         cards.sortByRarity(true);

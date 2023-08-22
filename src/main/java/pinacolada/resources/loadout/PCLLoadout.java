@@ -429,6 +429,10 @@ public abstract class PCLLoadout {
         return PGR.getResources(color);
     }
 
+    public Collection<String> getStartingBlights() {
+        return null;
+    }
+
     public ArrayList<String> getStartingDeck() {
         final ArrayList<String> cards = new ArrayList<>();
         for (LoadoutCardSlot slot : getPreset().cardSlots) {
@@ -540,6 +544,12 @@ public abstract class PCLLoadout {
         return resources.data == null || resources.data.getCoreLoadout() == this;
     }
 
+    public boolean isEnabled() {
+        PCLResources<?, ?, ?, ?> resources = getResources();
+        return resources == null || (resources.getUnlockLevel() >= unlockLevel &&
+                (resources.data == null || resources.data.getCoreLoadout() == this || resources.data.config.selectedLoadouts.get().contains(this.ID)));
+    }
+
     public boolean isLocked() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources != null && resources.getUnlockLevel() < unlockLevel;
@@ -595,14 +605,14 @@ public abstract class PCLLoadout {
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
-            super("", PGR.core.strings.sui_selected, (a, b, c) -> {
+            super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {
             }, 0, cardDatas.size());
         }
     }
 
     protected class FakeSkill2 extends PSpecialSkill {
         public FakeSkill2() {
-            super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {
+            super("", PGR.core.strings.sui_banned, (a, b, c) -> {
             }, 0, cardDatas.size());
         }
     }

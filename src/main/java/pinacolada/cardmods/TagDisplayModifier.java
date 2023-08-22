@@ -11,8 +11,9 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PGR;
 
 // Modifier for displaying tags if they are applied to a card. Does NOT actually apply any tags
+@AbstractCardModifier.SaveIgnore
 public class TagDisplayModifier extends AbstractCardModifier {
-    public boolean hadCommonIcons;
+    public transient boolean hadCommonIcons;
 
     public static TagDisplayModifier get(AbstractCard c) {
         for (AbstractCardModifier mod : CardModifierManager.modifiers(c)) {

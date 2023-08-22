@@ -869,6 +869,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
+        subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, m));
         PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
         if (pclCard != null) {
             pclCard.unfadeOut();

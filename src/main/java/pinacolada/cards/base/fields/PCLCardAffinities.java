@@ -25,9 +25,9 @@ public class PCLCardAffinities {
     private static final ColoredTexture upgradeCircle = new ColoredTexture(PCLCoreImages.Core.circle.texture(), Settings.GREEN_RELIC_COLOR);
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
-    public AbstractCard card;
     public PCLCardAffinity star = null;
     public boolean collapseDuplicates = false;
+    public transient AbstractCard card;
 
     public PCLCardAffinities(AbstractCard card) {
         this.card = card;

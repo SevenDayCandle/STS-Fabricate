@@ -142,7 +142,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     }
 
     public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_banned, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
         if (onRefresh != null) {
             onRefresh.invoke();
         }

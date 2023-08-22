@@ -10,7 +10,7 @@ import pinacolada.cards.base.fields.PCLCardAffinities;
 // Modifier for displaying affinities if they are applied to a non PCL card
 @AbstractCardModifier.SaveIgnore
 public class AffinityDisplayModifier extends AbstractCardModifier {
-    public PCLCardAffinities affinities = new PCLCardAffinities(null);
+    public transient PCLCardAffinities affinities = new PCLCardAffinities(null);
 
     public AffinityDisplayModifier() {
     }

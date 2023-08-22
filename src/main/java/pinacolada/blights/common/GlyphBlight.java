@@ -10,7 +10,10 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleBlight;
+import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.pcl.glyphs.Glyph;
+import pinacolada.relics.PCLRelicData;
+import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -19,12 +22,13 @@ import pinacolada.utilities.RandomizedList;
 
 @VisibleBlight
 public class GlyphBlight extends AbstractGlyphBlight {
-    public static final String ID = createFullID(GlyphBlight.class);
+    public static final PCLBlightData DATA = register(GlyphBlight.class)
+            .setUnique(true);
     public static final int MAX_CHOICES = 3;
     public Glyph glyph;
 
     public GlyphBlight() {
-        super(ID, PGR.config.ascensionGlyph0, AbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, AbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
+        super(DATA, PGR.config.ascensionGlyph0, AbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, AbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
     @Override
@@ -63,7 +67,7 @@ public class GlyphBlight extends AbstractGlyphBlight {
 
     @Override
     public String getUpdatedDescription() {
-        return formatDescription(0, GameUtilities.inGame() ? EUIUtils.format(strings.DESCRIPTION[1], getPotency()) : "");
+        return formatDescription(0, GameUtilities.inGame() ? EUIUtils.format(blightData.strings.DESCRIPTION[1], getPotency()) : "");
     }
 
     @Override

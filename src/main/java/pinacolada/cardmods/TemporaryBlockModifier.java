@@ -5,10 +5,11 @@ import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 
 // Copied and modified from STS-AnimatorMod
+@AbstractCardModifier.SaveIgnore
 public class TemporaryBlockModifier extends AbstractCardModifier {
-    protected boolean temporary;
-    protected boolean untilPlayed;
-    public int change;
+    protected transient boolean temporary;
+    protected transient boolean untilPlayed;
+    public transient int change;
 
     public TemporaryBlockModifier(int change) {
         this(change, false, false);

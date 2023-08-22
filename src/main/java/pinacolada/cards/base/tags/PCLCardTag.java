@@ -102,7 +102,7 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     private static String getTagTipString(AbstractCard card, List<PCLCardTag> tags) {
-        String base = EUIUtils.joinStringsMap(PSkill.EFFECT_SEPARATOR, tag -> getTagTipStringSingle(card, tag), tags);
+        String base = EUIUtils.joinStringsMapNonnull(PSkill.EFFECT_SEPARATOR, tag -> getTagTipStringSingle(card, tag), tags);
         return !base.isEmpty() ? base + LocalizedStrings.PERIOD : "";
     }
 
@@ -122,7 +122,7 @@ public enum PCLCardTag implements TooltipProvider {
                 }
                 break;
             case 0:
-                break;
+                return null;
             case 1:
                 // Do not show numerical values for Exhaust, Innate, Delayed or tags that cannot go beyond 1
                 if (tag.maxValue == 1 || tag == Exhaust || tag == Innate || tag == Delayed) {

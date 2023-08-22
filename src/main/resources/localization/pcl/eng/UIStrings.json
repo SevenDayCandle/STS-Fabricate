@@ -256,7 +256,8 @@
 												"View an archive of this character's mechanics",
 												"Edit Relic Pool",
 												"Choose which relics will appear in your runs.",
-												"Ascension Glyphs:"
+												"Modifiers:",
+												"Abilities"
 								]
 				},
 				"pcl:Combat": {
@@ -492,15 +493,15 @@
 												"Loadout",
 												"Affinities",
 												"Core Set",
-												"Selected: {0}/{1}",
+												"Banned: {0}/{1}",
 												"Unlocked: {0}/{1}",
 												"Deselect All",
 												"Select All",
 												"Show All",
 												"Cards: {#{0}:{1}/{2}} | Colorless: {#{3}:{4}/{5}}",
-												"#oLeft-Click a group to use its cards in your loadout.",
-												"#oRight-Click a group to add or remove its cards from the pool.",
-												"#oLeft-Click a card to add/remove it from the pool. Removed cards are faded out.",
+												"#oLeft-Click a loadout to use its cards for this run.",
+												"#oRight-Click a loadout for additional options.",
+												"#oLeft-Click a card to ban or unban it. Banned cards are faded out.",
 												"Character Cards",
 												"Add All",
 												"Add all available cards into the card pool",

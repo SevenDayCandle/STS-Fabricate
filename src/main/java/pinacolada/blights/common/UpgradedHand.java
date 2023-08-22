@@ -3,17 +3,20 @@ package pinacolada.blights.common;
 import basemod.BaseMod;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlight;
+import pinacolada.blights.PCLBlightData;
 
 @VisibleBlight
 public class UpgradedHand extends PCLBlight {
-    public static final String ID = createFullID(UpgradedHand.class);
+    public static final PCLBlightData DATA = register(UpgradedHand.class)
+            .setUnique(true);
 
     public UpgradedHand() {
         this(1);
     }
 
     public UpgradedHand(int turns) {
-        super(ID, turns);
+        super(DATA);
+        this.counter = turns;
     }
 
     public void addAmount(int amount) {

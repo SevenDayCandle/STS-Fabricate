@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.PotionSlot;
@@ -41,10 +42,7 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
@@ -473,21 +471,17 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     data.saveTrophies();
                 }
 
+                // Add character blights if applicable
+                Collection<String> blightIDs = loadout.getStartingBlights();
+                if (blightIDs != null) {
+                    for (String id : blightIDs) {
+                        initializeCharacterBlight(id);
+                    }
+                }
+
                 // Add glyphs
                 for (int i = 0; i < AbstractPlayerData.GLYPHS.size(); i++) {
-                    boolean shouldAdd = true;
-                    for (AbstractBlight blight : player.blights) {
-                        if (AbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
-                            shouldAdd = false;
-                            break;
-                        }
-                    }
-                    int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
-                    if (shouldAdd && counter > 0) {
-                        AbstractBlight blight = AbstractPlayerData.GLYPHS.get(i).makeCopy();
-                        blight.setCounter(counter);
-                        GameUtilities.obtainBlightWithoutEffect(blight);
-                    }
+                    initializeGlyph(i);
                 }
 
                 initializePotions();
@@ -495,6 +489,32 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         banItems(data);
+    }
+
+    private void initializeCharacterBlight(String id) {
+        for (AbstractBlight blight : player.blights) {
+            if (blight.blightID.equals(id)) {
+                return;
+            }
+        }
+        AbstractBlight blight = BlightHelper.getBlight(id);
+        if (blight != null) {
+            GameUtilities.obtainBlightWithoutEffect(blight);
+        }
+    }
+
+    private void initializeGlyph(int i) {
+        for (AbstractBlight blight : player.blights) {
+            if (AbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
+                return;
+            }
+        }
+        int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
+        if (counter > 0) {
+            AbstractBlight blight = AbstractPlayerData.GLYPHS.get(i).makeCopy();
+            blight.setCounter(counter);
+            GameUtilities.obtainBlightWithoutEffect(blight);
+        }
     }
 
     // Modify starting potion slots and energy
@@ -518,10 +538,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
         loadout = data.selectedLoadout;
 
-        for (PCLLoadout loadout : data.getEveryLoadout()) {
-            // Series must be unlocked to be present in-game
-            if (!loadout.isLocked()) {
-                loadouts.add(loadout);
+        for (PCLLoadout l : data.getEveryLoadout()) {
+            // Series must be unlocked and enabled to be present in-game
+            if (l == loadout || l.isEnabled()) {
+                loadouts.add(l);
             }
         }
     }
