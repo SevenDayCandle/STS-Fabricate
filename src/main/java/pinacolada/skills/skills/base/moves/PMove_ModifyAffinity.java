@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -71,7 +72,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
 
     @Override
     public String getObjectSampleText() {
-        return TEXT.sui_affinities;
+        return PGR.core.tooltips.affinityGeneral.title;
     }
 
     @Override

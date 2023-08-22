@@ -476,7 +476,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerAffinity(List<PCLAffinity> items) {
-        registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), PGR.core.strings.sui_affinities), items);
+        registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), PGR.core.tooltips.affinityGeneral.title), items);
     }
 
     public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial) {

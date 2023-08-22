@@ -2,6 +2,7 @@ package pinacolada.ui.characterSelection;
 
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -40,6 +41,7 @@ import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -342,7 +344,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     public void refreshInternal() {
         EUIClassUtils.setField(characterOption, "gold", loadout.getGold());
-        EUIClassUtils.setField(characterOption, "hp", String.valueOf(loadout.getHP()));
+        EUIClassUtils.setField(characterOption, "hp", loadout.getHP() + "/" + loadout.getHP());
         ArrayList<String> startingRelics = loadout.getStartingRelics();
         ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = startingRelics;
         cachedRelics = EUIUtils.map(startingRelics, RelicLibrary::getRelic);
@@ -450,32 +452,30 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         int gold = EUIClassUtils.getField(characterOption, "gold");
         String hp = EUIClassUtils.getField(characterOption, "hp");
 
-        EUIFontHelper.cardTooltipTitleFontNormal.getData().setScale(0.8f);
         EUISmartText.write(sb, FontHelper.bannerNameFont, characterOption.name, infoX - 35.0F * Settings.scale, infoY + 350.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
-        sb.draw(ImageMaster.TP_HP, infoX - 10.0F * Settings.scale - 32.0F, infoY + 230.0F * Settings.scale - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 64, 64, false, false);
-        EUISmartText.write(sb,  EUIFontHelper.cardTooltipTitleFontNormal, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
-        sb.draw(ImageMaster.TP_GOLD, infoX + 260.0F * Settings.scale - 32.0F, infoY + 230.0F * Settings.scale - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 64, 64, false, false);
-        EUISmartText.write(sb, EUIFontHelper.cardTooltipTitleFontNormal, CharacterOption.TEXT[5] + Integer.toString(gold), infoX+ 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
+        EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.CardIcons.hp.texture(), infoX - 10.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
+        EUISmartText.write(sb,  EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
+        EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.Tooltips.gold.texture(), infoX + 260.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
+        EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + Integer.toString(gold), infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
 
         if (cachedBlights != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTooltipTitleFontNormal, PGR.core.strings.csel_ability, infoX - 35.0F * Settings.scale, infoY + 150.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 150.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
                 r.render(sb);
             }
         }
         if (cachedRelics != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTooltipTitleFontNormal, PGR.core.strings.loadout_relicHeader, infoX - 35.0F * Settings.scale, infoY + 60.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractRelic r : cachedRelics) {
                 r.renderWithoutAmount(sb, Color.WHITE);
             }
         }
         if (unlocksRemaining > 0) {
-            EUISmartText.write(sb,  EUIFontHelper.cardTooltipTitleFontNormal, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 60.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUISmartText.write(sb, FontHelper.tipHeaderFont, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 60.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
             int unlockProgress = UnlockTracker.getCurrentProgress(characterOption.c.chosenClass);
             int unlockCost = UnlockTracker.getCurrentScoreCost(characterOption.c.chosenClass);
-            EUISmartText.write(sb,  EUIFontHelper.cardTooltipTitleFontNormal, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 100.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUISmartText.write(sb, FontHelper.tipHeaderFont, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 88.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
         }
-        EUIRenderHelpers.resetFont(EUIFontHelper.cardTooltipTitleFontNormal);
 
         // TODO render flavor text somewhere
     }
@@ -515,8 +515,8 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 geditor.tryUpdate();
             }
             if (characterOption != null) {
-                float x = getInfoX() + Settings.scale * 250;
-                float y = getInfoY() + Settings.scale * 120;
+                float x = getInfoX() + Settings.scale * 200;
+                float y = getInfoY() + Settings.scale * 145;
                 if (cachedBlights != null) {
                     for (int i = 0; i < cachedBlights.size(); i++) {
                         AbstractBlight r = cachedBlights.get(i);
@@ -530,7 +530,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                     for (int i = 0; i < cachedRelics.size(); i++) {
                         AbstractRelic r = cachedRelics.get(i);
                         r.currentX = x + i * 73.0F * Settings.scale;
-                        r.currentY = y - 60.0F * Settings.scale;
+                        r.currentY = y - 75.0F * Settings.scale;
                         r.hb.move(r.currentX, r.currentY);
                         r.hb.update();
                     }

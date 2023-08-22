@@ -48,6 +48,6 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COLON_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : "");
     }
 }

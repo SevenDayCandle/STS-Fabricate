@@ -39,7 +39,7 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getConditionRawString(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+        return getConditionRawString(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COLON_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override

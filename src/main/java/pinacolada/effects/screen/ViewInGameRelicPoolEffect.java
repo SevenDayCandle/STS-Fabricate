@@ -27,6 +27,7 @@ import pinacolada.utilities.RandomizedList;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
@@ -139,7 +140,12 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     }
 
     public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_banned, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
+        if (canToggle) {
+            selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
+        }
+        else {
+            selectedCount.setLabel(EUIRM.strings.ui_total + COLON_SEPARATOR + relics.size());
+        }
         if (onRefresh != null) {
             onRefresh.invoke();
         }

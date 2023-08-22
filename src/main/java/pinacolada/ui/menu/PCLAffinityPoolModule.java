@@ -55,7 +55,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
         affinitiesSectionLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(0, 0, scale(48), scale(48)))
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
-                .setLabel(PGR.core.strings.sui_affinities)
+                .setLabel(PGR.core.tooltips.affinityGeneral.title)
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.0f, false);
 

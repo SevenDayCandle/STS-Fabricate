@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanelStats;
-import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -229,7 +228,7 @@ public abstract class PCLLoadout {
         return false;
     }
 
-    public PCLCard buildCard() {
+    public PCLCard buildCard(boolean selected, boolean inPool) {
         final PCLCardData data = getSymbolicCard();
         if (data == null) {
             EUIUtils.logWarning(this, getName() + " has no symbolic card.");
@@ -251,18 +250,23 @@ public abstract class PCLLoadout {
 
         if (isLocked()) {
             card.isSeen = false;
-            card.color = data.cardColor;
-            card.setCardRarityType(getLoadoutCardRarity(), AbstractCard.CardType.STATUS);
+            card.color = AbstractCard.CardColor.CURSE;
+            card.setCardRarityType(AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
         }
         else {
             card.addUseMove(new FakeSkill());
-            if (isCore()) {
-                card.color = AbstractCard.CardColor.COLORLESS;
-                card.setCardRarityType(AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
+            card.addUseMove(new FakeSkill2());
+            if (selected) {
+                card.color = data.cardColor;
+                card.setCardRarityType(AbstractCard.CardRarity.SPECIAL, SELECTABLE_TYPE);
+            }
+            else if (inPool) {
+                card.color = data.cardColor;
+                card.setCardRarityType(AbstractCard.CardRarity.UNCOMMON, SELECTABLE_TYPE);
             }
             else {
-                card.color = data.cardColor;
-                card.setCardRarityType(getLoadoutCardRarity(), SELECTABLE_TYPE);
+                card.color = AbstractCard.CardColor.COLORLESS;
+                card.setCardRarityType(AbstractCard.CardRarity.COMMON, SELECTABLE_TYPE);
             }
         }
 
@@ -292,10 +296,6 @@ public abstract class PCLLoadout {
         }
 
         card.initializeDescription();
-
-        if (isCore()) {
-            card.tooltips.add(new EUIKeywordTooltip(PGR.core.strings.sui_core, PGR.core.strings.sui_coreInstructions));
-        }
 
         return card;
     }
@@ -384,10 +384,6 @@ public abstract class PCLLoadout {
     public CharSelectInfo getLoadout(String name, String description, PCLCharacter c) {
         int hp = getHP();
         return new CharSelectInfo(name + "-" + ID, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
-    }
-
-    protected AbstractCard.CardRarity getLoadoutCardRarity() {
-        return AbstractCard.CardRarity.COMMON;
     }
 
     public String getName() {
@@ -612,7 +608,7 @@ public abstract class PCLLoadout {
 
     protected class FakeSkill2 extends PSpecialSkill {
         public FakeSkill2() {
-            super("", PGR.core.strings.sui_banned, (a, b, c) -> {
+            super("", PGR.core.strings.sui_selected, (a, b, c) -> {
             }, 0, cardDatas.size());
         }
     }

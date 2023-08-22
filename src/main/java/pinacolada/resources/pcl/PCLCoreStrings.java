@@ -377,27 +377,28 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String rewards_orbSlot = rewards.TEXT[9];
     // Series
     public final String sui_seriesUI = seriesui.TEXT[0];
-    public final String sui_affinities = seriesui.TEXT[1];
-    public final String sui_core = seriesui.TEXT[2];
-    public final String sui_banned = seriesui.TEXT[3];
-    public final String sui_unlocked = seriesui.TEXT[4];
-    public final String sui_removeFromPool = seriesui.TEXT[5];
-    public final String sui_addToPool = seriesui.TEXT[6];
+    public final String sui_core = seriesui.TEXT[1];
+    public final String sui_selected = seriesui.TEXT[2];
+    public final String sui_unlocked = seriesui.TEXT[3];
+    public final String sui_removeFromPool = seriesui.TEXT[4];
+    public final String sui_addToPool = seriesui.TEXT[5];
+    public final String sui_resetBan = seriesui.TEXT[6];
     public final String sui_viewPool = seriesui.TEXT[7];
     public final String sui_totalCards = seriesui.TEXT[8];
     public final String sui_instructions1 = seriesui.TEXT[9];
     public final String sui_instructions2 = seriesui.TEXT[10];
     public final String sui_viewPoolInstructions = seriesui.TEXT[11];
     public final String sui_characterCards = seriesui.TEXT[12];
-    public final String sui_selectAll = seriesui.TEXT[13];
-    public final String sui_selectAllDesc = seriesui.TEXT[14];
-    public final String sui_deselectAll = seriesui.TEXT[15];
-    public final String sui_deselectDesc = seriesui.TEXT[16];
-    public final String sui_selectRandom = seriesui.TEXT[17];
-    public final String sui_showCardPool = seriesui.TEXT[18];
-    public final String sui_showColorless = seriesui.TEXT[19];
-    public final String sui_coreInstructions = seriesui.TEXT[20];
-    public final String sui_totalInstructions = seriesui.TEXT[21];
+    public final String sui_resetPool = seriesui.TEXT[13];
+    public final String sui_resetPoolDesc = seriesui.TEXT[14];
+    public final String sui_resetBanDesc = seriesui.TEXT[15];
+    public final String sui_selectAll = seriesui.TEXT[16];
+    public final String sui_deselectAll = seriesui.TEXT[17];
+    public final String sui_selectRandom = seriesui.TEXT[18];
+    public final String sui_showCardPool = seriesui.TEXT[19];
+    public final String sui_showColorless = seriesui.TEXT[20];
+    public final String sui_coreInstructions = seriesui.TEXT[21];
+    public final String sui_totalInstructions = seriesui.TEXT[22];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -1313,7 +1314,7 @@ public class PCLCoreStrings extends AbstractStrings {
     }
 
     public final String sui_selected(Object amount, Object total) {
-        return EUIUtils.format(sui_banned, amount, total);
+        return EUIUtils.format(sui_selected, amount, total);
     }
 
     public final String sui_totalCards(Object color, Object total, Object req, Object color2, Object total2, Object req2) {

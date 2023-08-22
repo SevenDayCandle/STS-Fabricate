@@ -24,6 +24,7 @@ import pinacolada.utilities.RandomizedList;
 
 import java.util.HashSet;
 
+import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
@@ -86,12 +87,12 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         final float buttonWidth = scale(256);
         final float buttonHeight = scale(48);
 
-        selectedCount = new EUILabel(EUIFontHelper.cardTipTitleFont, new EUIHitbox(xPos, Settings.HEIGHT * 0.85f, buttonWidth, buttonHeight * 2f))
+        selectedCount = new EUILabel(EUIFontHelper.cardTipTitleFontBase, new EUIHitbox(xPos, Settings.HEIGHT * 0.85f, buttonWidth, buttonHeight * 2f))
                 .setColor(Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f, true);
 
         instructions = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.6f, buttonWidth, Settings.HEIGHT * 0.18f))
-                .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
+                .setLabel(PGR.core.strings.sui_viewPoolInstructions)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
@@ -142,7 +143,12 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     }
 
     public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_banned, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        if (canToggle) {
+            selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        }
+        else {
+            selectedCount.setLabel(EUIRM.strings.ui_total + COLON_SEPARATOR + cards.group.size());
+        }
         if (onRefresh != null) {
             onRefresh.invoke();
         }

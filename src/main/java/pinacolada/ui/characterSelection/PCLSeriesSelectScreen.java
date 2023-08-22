@@ -24,6 +24,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
@@ -33,16 +34,19 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public static final int MINIMUM_CARDS = 75; // 75
     public static final int MINIMUM_COLORLESS = 40;
-    public final PCLLoadoutsContainer container = new PCLLoadoutsContainer();
     public final EUICardGrid cardGrid;
     public final EUILabel startingDeck;
-    public final EUIButton selectAllButton;
-    public final EUIButton deselectAllButton;
+    public final EUIButton resetPoolButton;
+    public final EUIButton resetBanButton;
     public final EUIButton previewCards;
     public final EUIButton colorless;
     public final EUIButton cancel;
@@ -51,6 +55,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUITextBox typesAmount;
     public final EUITextBox previewCardsInfo;
     public final EUIContextMenu<ContextOption> contextMenu;
+    public final ArrayList<AbstractCard> shownCards = new ArrayList<>();
+    public final ArrayList<AbstractCard> shownColorlessCards = new ArrayList<>();
+    public final HashMap<String, AbstractCard> allCards = new HashMap<>();
+    public final HashMap<String, AbstractCard> allColorlessCards = new HashMap<>();
+    public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
+    public final HashSet<String> bannedCards = new HashSet<>();
+    public final HashSet<String> bannedColorless = new HashSet<>();
+    public final HashSet<String> selectedLoadouts = new HashSet<>();
     protected PCLCard selectedCard;
     protected ActionT0 onClose;
     protected ViewInGameCardPoolEffect previewCardsEffect;
@@ -58,6 +70,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected AbstractPlayerData<?, ?> data;
     protected int totalCardsCache = 0;
     protected int totalColorlessCache = 0;
+    public PCLCard currentSeriesCard;
     public boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
@@ -94,7 +107,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.9f), buttonWidth, screenH(0.09f)))
                 .setColors(panelColor, Settings.GOLD_COLOR)
                 .setAlignment(0.7f, 0.1f, true)
-                .setFont(EUIFontHelper.cardTipTitleFont, 1);
+                .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showCardPool)
@@ -106,16 +119,16 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setOnClick(this::previewColorless)
                 .setColor(Color.LIGHT_GRAY);
 
-        selectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_selectAll)
-                .setTooltip(PGR.core.strings.sui_selectAll, PGR.core.strings.sui_selectAllDesc)
-                .setOnClick(() -> this.selectAll(true))
+        resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetPool)
+                .setTooltip(PGR.core.strings.sui_resetPool, PGR.core.strings.sui_resetPoolDesc)
+                .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.ROYAL);
 
-        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.7f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_deselectAll)
-                .setTooltip(PGR.core.strings.sui_deselectAll, PGR.core.strings.sui_deselectDesc)
-                .setOnClick(() -> this.selectAll(false))
+        resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.7f), buttonWidth, buttonHeight)
+                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetBan)
+                .setTooltip(PGR.core.strings.sui_resetBan, PGR.core.strings.sui_resetBanDesc)
+                .setOnClick(this::unbanAll)
                 .setColor(Color.FIREBRICK);
 
         cancel = EUIButton.createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.25f)
@@ -139,6 +152,62 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setItems(ContextOption.values());
     }
 
+    public static boolean isRarityAllowed(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
+        switch (rarity) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+                return type != AbstractCard.CardType.STATUS && type != AbstractCard.CardType.CURSE;
+        }
+        return false;
+    }
+
+    // Calculate the number of cards in each set, then update the loadout representative with that amount
+    public void calculateCardCounts() {
+        shownCards.clear();
+        shownColorlessCards.clear();
+
+        for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+            PCLLoadout loadout = entry.getValue();
+            if (loadout.isLocked()) {
+                continue;
+            }
+            boolean isSelected = (loadout.isCore() || selectedLoadouts.contains(entry.getValue().ID) || currentSeriesCard == entry.getKey());
+            int allowedAmount = 0;
+            int unlockedAmount = 0;
+            for (PCLCardData data : loadout.cardDatas) {
+                if (!data.isLocked()) {
+                    unlockedAmount += 1;
+                }
+                if (!bannedCards.contains(data.ID)) {
+                    if (isSelected) {
+                        AbstractCard c = allCards.get(data.ID);
+                        if (c != null) {
+                            shownCards.add(c);
+                        }
+                    }
+                    allowedAmount += 1;
+                }
+            }
+
+            PSkill<?> unlockEffect = entry.getKey().getEffect(0);
+            if (unlockEffect != null) {
+                unlockEffect.setAmount(unlockedAmount);
+            }
+            PSkill<?> bannedEffect = entry.getKey().getEffect(1);
+            if (bannedEffect != null) {
+                bannedEffect.setAmount(allowedAmount);
+            }
+        }
+
+        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+            if (isRarityAllowed(c.rarity, c.type) &&
+                    data.resources.containsColorless(c) && !bannedColorless.contains(c.cardID)) {
+                shownColorlessCards.add(c);
+            }
+        }
+    }
+
     public void cancel() {
         SingleCardViewPopup.isViewingUpgrade = false;
         cardGrid.clear();
@@ -146,9 +215,79 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public void chooseSeries(AbstractCard card) {
-        if (container.selectCard(EUIUtils.safeCast(card, PCLCard.class))) {
+        if (selectCard(EUIUtils.safeCast(card, PCLCard.class))) {
             updateStartingDeckText();
         }
+    }
+
+    public void commitChanges(AbstractPlayerData<?, ?> data) {
+        data.selectedLoadout = find(currentSeriesCard);
+        HashSet<String> banned = new HashSet<>(bannedCards);
+        banned.addAll(bannedColorless);
+        data.config.bannedCards.set(banned);
+        data.config.selectedLoadouts.set(selectedLoadouts);
+        data.saveSelectedLoadout();
+
+        EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
+        EUIUtils.logInfoIfDebug(this, "Series Count: " + data.config.selectedLoadouts.get().size());
+        EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());
+    }
+
+    public void createCards(AbstractPlayerData<?, ?> data) {
+        allCards.clear();
+        allColorlessCards.clear();
+        shownCards.clear();
+        shownColorlessCards.clear();
+        loadoutMap.clear();
+        bannedCards.clear();
+        bannedColorless.clear();
+        selectedLoadouts.clear();
+
+        selectedLoadouts.addAll(data.config.selectedLoadouts.get());
+
+        for (PCLLoadout series : data.getEveryLoadout()) {
+            boolean isSelected = Objects.equals(series.ID, data.selectedLoadout.ID);
+            // Add series representation to the grid selection
+            final PCLCard gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID));
+            if (gridCard != null) {
+                loadoutMap.put(gridCard, series);
+                gridCard.targetTransparency = 1f;
+
+                if (isSelected) {
+                    currentSeriesCard = gridCard;
+                    gridCard.setCardRarity(AbstractCard.CardRarity.RARE);
+                    gridCard.beginGlowing();
+                }
+            }
+            else {
+                EUIUtils.logError(this, "BuildCard() failed, " + series.getName());
+            }
+
+            // Add this series cards to the total list of available cards
+            for (PCLCardData cData : series.cardDatas) {
+                AbstractCard card = cData.makeCardFromLibrary(0);
+                allCards.put(cData.ID, card);
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).affinities.updateSortedList();
+                }
+                if (data.config.bannedCards.get().contains(cData.ID)) {
+                    bannedCards.add(cData.ID);
+                }
+            }
+
+            // Colorless bans
+            for (PCLCardData cData : series.colorlessData) {
+                AbstractCard card = cData.makeCardFromLibrary(0);
+                allColorlessCards.put(cData.ID, card);
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).affinities.updateSortedList();
+                }
+                if (data.config.bannedCards.get().contains(cData.ID)) {
+                    bannedColorless.add(cData.ID);
+                }
+            }
+        }
+        calculateCardCounts();
     }
 
     @Override
@@ -162,22 +301,47 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
     }
 
+    public PCLLoadout find(PCLCard card) {
+        return loadoutMap.get(card);
+    }
+
     public void forceUpdateText() {
-        container.calculateCardCounts();
-        totalCardsCache = container.shownCards.size();
-        totalColorlessCache = container.shownColorlessCards.size();
+        calculateCardCounts();
+        totalCardsCache = shownCards.size();
+        totalColorlessCache = shownColorlessCards.size();
         totalCardsChanged(totalCardsCache, totalColorlessCache);
+    }
+
+    // Grid will not actually contain the core series card for now
+    public Collection<AbstractCard> getAllCards() {
+        return loadoutMap.entrySet()
+                .stream()
+                .filter(entry -> !entry.getValue().isCore())
+                .sorted((a, b) -> {
+                    PCLLoadout lA = a.getValue();
+                    PCLLoadout lB = b.getValue();
+                    if (lA.unlockLevel != lB.unlockLevel) {
+                        return lA.unlockLevel - lB.unlockLevel;
+                    }
+                    return StringUtils.compare(a.getKey().name, b.getKey().name);
+                })
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public Collection<PCLLoadout> getAllLoadouts() {
+        return loadoutMap.values();
     }
 
     public CardGroup getCardPool(PCLLoadout loadout) {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null) {
             for (PCLCardData data : loadout.cardDatas) {
-                cards.group.add(container.allCards.get(data.ID));
+                cards.group.add(allCards.get(data.ID));
             }
         }
         else {
-            cards.group.addAll(container.shownCards);
+            cards.group.addAll(shownCards);
         }
         cards.sortAlphabetically(true);
         cards.sortByRarity(true);
@@ -188,7 +352,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (data != null) {
             for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
-                if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type) &&
+                if (isRarityAllowed(c.rarity, c.type) &&
                         data.resources.containsColorless(c)) {
                     cards.addToBottom(c.makeCopy());
                 }
@@ -197,7 +361,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         else {
             for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
                 for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
-                    if (PCLLoadoutsContainer.isRarityAllowed(c.rarity, c.type) && !resources.filterColorless(c)) {
+                    if (isRarityAllowed(c.rarity, c.type) && !resources.filterColorless(c)) {
                         cards.addToBottom(c.makeCopy());
                     }
                 }
@@ -209,6 +373,10 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         return cards;
     }
 
+    public boolean isValid() {
+        return shownCards.size() >= PCLSeriesSelectScreen.MINIMUM_CARDS && shownColorlessCards.size() >= PCLSeriesSelectScreen.MINIMUM_COLORLESS;
+    }
+
     protected void onCardClicked(AbstractCard card) {
         if (!isScreenDisabled) {
             chooseSeries(card);
@@ -218,9 +386,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     // Since core sets cannot be toggled, only show the view card option for them
     public void onCardRightClicked(AbstractCard card) {
         selectedCard = EUIUtils.safeCast(card, PCLCard.class);
-        PCLLoadout c = container.find(selectedCard);
+        PCLLoadout c = find(selectedCard);
         if (!c.isLocked()) {
-            contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
+            contextMenu.setItems(ContextOption.getOptions(card.type != PCLLoadout.SELECTABLE_TYPE ? null : selectedLoadouts.contains(c.ID)));
             contextMenu.positionToOpen();
         }
     }
@@ -232,19 +400,17 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         this.characterOption = characterOption;
         this.data = data;
 
-        container.createCards(data);
-        cardGrid.addCards(container.getAllCards());
+        createCards(data);
+        cardGrid.addCards(getAllCards());
         updateStartingDeckText();
 
-        EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
+        EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
 
         EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
-                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
+                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
+                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_coreInstructions)
-                        .setPosition(Settings.WIDTH * 0.20f, Settings.HEIGHT * 0.75f),
                 new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
                         .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
                 loadoutEditor.makeTour(true)
@@ -252,7 +418,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     protected void openLoadoutEditor() {
-        PCLLoadout current = container.find(container.currentSeriesCard);
+        PCLLoadout current = find(currentSeriesCard);
         if (characterOption != null && current != null && data != null) {
             proceed();
             PGR.loadoutEditor.open(current, data, characterOption, this.onClose);
@@ -260,11 +426,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public void previewCardPool(AbstractCard source) {
-        if (container.shownCards.size() > 0) {
+        if (shownCards.size() > 0) {
             PCLLoadout loadout = null;
             if (source != null) {
                 source.unhover();
-                loadout = container.find(EUIUtils.safeCast(source, PCLCard.class));
+                loadout = find(EUIUtils.safeCast(source, PCLCard.class));
             }
             final CardGroup cards = getCardPool(loadout);
             previewCards(cards, loadout);
@@ -273,14 +439,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout) {
-        previewCardsEffect = new ViewInGameCardPoolEffect(cards, container.bannedCards, this::forceUpdateText)
+        previewCardsEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);
     }
 
     public void previewColorless() {
-        previewCardsEffect = new ViewInGameCardPoolEffect(getColorlessPool(), container.bannedColorless, this::forceUpdateText)
+        previewCardsEffect = new ViewInGameCardPoolEffect(getColorlessPool(), bannedColorless, this::forceUpdateText)
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);
     }
@@ -288,7 +454,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void proceed() {
         SingleCardViewPopup.isViewingUpgrade = false;
         cardGrid.clear();
-        container.commitChanges(data);
+        commitChanges(data);
         close();
     }
 
@@ -298,8 +464,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         startingDeck.tryRender(sb);
         loadoutEditor.tryRender(sb);
-        selectAllButton.tryRender(sb);
-        deselectAllButton.tryRender(sb);
+        resetPoolButton.tryRender(sb);
+        resetBanButton.tryRender(sb);
         previewCards.renderImpl(sb);
         colorless.renderImpl(sb);
         cancel.renderImpl(sb);
@@ -319,13 +485,37 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public void selectAll(boolean value) {
-        for (PCLLoadout c : container.getAllLoadouts()) {
-            container.toggleCards(c, value);
+        for (PCLLoadout c : getAllLoadouts()) {
+            toggleCards(c, value);
+        }
+        updateGlows();
+        calculateCardCounts();
+    }
+
+    // You cannot select core loadout cards
+    public boolean selectCard(PCLCard card) {
+        if (loadoutMap.containsKey(card) && card.type == PCLLoadout.SELECTABLE_TYPE) {
+            currentSeriesCard = card;
+            updateGlows();
+            calculateCardCounts();
+            return true;
+        }
+        return false;
+    }
+
+    public void toggleCards(PCLLoadout loadout, boolean value) {
+        if (value) {
+            selectedLoadouts.add(loadout.ID);
+        }
+        else {
+            selectedLoadouts.remove(loadout.ID);
         }
     }
 
-    public void togglePool(AbstractCard card, boolean value) {
-        container.toggleCards(container.find(EUIUtils.safeCast(card, PCLCard.class)), value);
+    public void toggleCards(AbstractCard card, boolean value) {
+        toggleCards(find(EUIUtils.safeCast(card, PCLCard.class)), value);
+        updateGlows();
+        calculateCardCounts();
     }
 
     private void toggleViewUpgrades(boolean value) {
@@ -334,7 +524,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     protected void totalCardsChanged(int totalCards, int totalColorless) {
         if (EUI.countingPanel.isActive) {
-            EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
+            EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
         }
 
         typesAmount.setLabel(PGR.core.strings.sui_totalCards(
@@ -345,7 +535,52 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 totalColorless,
                 MINIMUM_COLORLESS));
 
-        confirm.setInteractable(container.isValid());
+        confirm.setInteractable(isValid());
+    }
+
+    public void unbanAll() {
+        bannedCards.clear();
+        calculateCardCounts();
+    }
+
+    public void unbanCards(AbstractCard card, boolean value) {
+        unbanCards(find(EUIUtils.safeCast(card, PCLCard.class)), value);
+    }
+
+    public void unbanCards(PCLLoadout loadout, boolean value) {
+        Collection<String> cardIds = EUIUtils.map(loadout.cardDatas, l -> l.ID);
+        if (value) {
+            cardIds.forEach(bannedCards::remove);
+        }
+        else {
+            bannedCards.addAll(cardIds);
+        }
+        calculateCardCounts();
+    }
+
+    protected void updateGlows() {
+        for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+            PCLCard c = entry.getKey();
+            c.stopGlowing();
+            if (c == currentSeriesCard) {
+                currentSeriesCard.setCardRarity(AbstractCard.CardRarity.RARE);
+                currentSeriesCard.color = data.resources.cardColor;
+                currentSeriesCard.beginGlowing();
+            }
+            else {
+                c.stopGlowing();
+                if (c.type == PCLLoadout.SELECTABLE_TYPE) {
+                    if (selectedLoadouts.contains(entry.getValue().ID)) {
+                        c.setCardRarity(AbstractCard.CardRarity.UNCOMMON);
+                        c.color = data.resources.cardColor;
+                    }
+                    else {
+                        c.setCardRarity(AbstractCard.CardRarity.COMMON);
+                        c.color = AbstractCard.CardColor.COLORLESS;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -368,9 +603,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             super.updateImpl();
         }
 
-        if (totalCardsCache != container.shownCards.size() || totalColorlessCache != container.shownColorlessCards.size()) {
-            totalCardsCache = container.shownCards.size();
-            totalColorlessCache = container.shownColorlessCards.size();
+        if (totalCardsCache != shownCards.size() || totalColorlessCache != shownColorlessCards.size()) {
+            totalCardsCache = shownCards.size();
+            totalColorlessCache = shownColorlessCards.size();
             totalCardsChanged(totalCardsCache, totalColorlessCache);
         }
 
@@ -378,8 +613,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         loadoutEditor.tryUpdate();
 
         if (!isScreenDisabled) {
-            selectAllButton.tryUpdate();
-            deselectAllButton.tryUpdate();
+            resetPoolButton.tryUpdate();
+            resetBanButton.tryUpdate();
             previewCards.updateImpl();
             colorless.updateImpl();
             cancel.updateImpl();
@@ -393,12 +628,13 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     protected void updateStartingDeckText() {
-        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", (container.currentSeriesCard != null) ? container.currentSeriesCard.name : ""));
+        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", (currentSeriesCard != null) ? currentSeriesCard.name : ""));
     }
 
     public enum ContextOption {
-        Deselect(PGR.core.strings.sui_removeFromPool, (s, c) -> s.togglePool(c, false)),
-        Select(PGR.core.strings.sui_addToPool, (s, c) -> s.togglePool(c, true)),
+        Deselect(PGR.core.strings.sui_removeFromPool, (s, c) -> s.toggleCards(c, false)),
+        Select(PGR.core.strings.sui_addToPool, (s, c) -> s.toggleCards(c, true)),
+        UnbanAll(PGR.core.strings.sui_resetBan, (s, c) -> s.unbanCards(c, true)),
         ViewCards(PGR.core.strings.sui_viewPool, (screen, card) -> {
             if (screen.previewCardsEffect == null) {
                 screen.previewCardPool(card);
@@ -411,6 +647,13 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         ContextOption(String name, ActionT2<PCLSeriesSelectScreen, AbstractCard> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
+        }
+
+        public static Collection<ContextOption> getOptions(Boolean isSelected) {
+            if (isSelected == null) {
+                return Collections.singleton(ViewCards);
+            }
+            return !isSelected ? Arrays.asList(Select, UnbanAll, ViewCards) : Arrays.asList(Deselect, UnbanAll, ViewCards);
         }
     }
 
