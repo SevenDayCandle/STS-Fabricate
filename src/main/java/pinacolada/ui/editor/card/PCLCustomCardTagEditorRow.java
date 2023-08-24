@@ -85,8 +85,9 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
     }
 
     public void forceRefresh() {
+        Integer upVal = item.getUpgrade(form);
         displayValue.forceSetValue(item.get(form), false);
-        displayValue2.forceSetValue(item.getUpgrade(form), false);
+        displayValue2.forceSetValue(upVal != null ? upVal : 0, false);
     }
 
     public int getValue() {

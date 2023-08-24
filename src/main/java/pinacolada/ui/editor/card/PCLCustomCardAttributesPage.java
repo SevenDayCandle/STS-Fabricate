@@ -70,7 +70,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
 
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
-                .setOnChange(tags -> screen.modifyAllBuilders((e, i) -> e.setTags(tags)))
+                .setOnChange(this::modifyTags)
                 .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIcon() + " " + item.tag.getTooltip().title, true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
@@ -79,7 +79,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
-                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
+                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(new Integer[]{}, new Integer[]{})))
                 .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
         targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
@@ -200,6 +200,30 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    // Lists start off as empty before they are selected. When they are first selected, set the value for the current form to 1
+    protected void modifyTags(List<PCLCardTagInfo> tags) {
+        int form = screen.currentBuilder;
+        int maxForm = screen.tempBuilders.size();
+        for (PCLCardTagInfo info : tags) {
+            if (info.value.length == 0) {
+                info.value = new Integer[maxForm];
+                Arrays.fill(info.value, 0);
+                info.set(form, 1);
+            }
+            if (info.upgrades.length == 0) {
+                info.upgrades = new Integer[maxForm];
+                Arrays.fill(info.upgrades, 0);
+                info.setUpgrade(form, 1);
+            }
+        }
+        for (EUIDropdownRow<?> row : tagsDropdown.rows) {
+            if (row instanceof PCLCustomCardTagEditorRow) {
+                ((PCLCustomCardTagEditorRow) row).setForm(form).forceRefresh();
+            }
+        }
+        screen.modifyAllBuilders((e, i) -> e.setTags(tags));
+    }
+
     @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
@@ -231,13 +255,8 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
             PCLCardTagInfo info = infos.get(i);
             if (builder.tags.containsKey(info.tag)) {
                 PCLCardTagInfo other = builder.tags.get(info.tag);
-                Integer start = other.get(form);
-                Integer upgrade = other.getUpgrade(form);
-                if (upgrade == null) {
-                    upgrade = start;
-                }
-                info.set(form, start);
-                info.setUpgrade(form, upgrade);
+                info.value = other.value.clone();
+                info.upgrades = other.upgrades != null ? other.upgrades.clone() : info.value.clone();
                 selection.add(i);
             }
         }
