@@ -2,13 +2,13 @@
 {
 	"pcl:GenericDice":
 	{
-		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yRest rooms gives #b1 use per #b{0} cards in the pool."],
+		"DESCRIPTIONS": ["You may reroll card rewards for other cards of the same rarity. When you enter a room, there is a #b1% chance per card in the pool past #b{0} to gain a reroll.", "{#g:Current chance: {0}%}"],
 		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
 		"NAME": "Generic Dice"
 	},
 	"pcl:HeartShapedBox":
 	{
-		"DESCRIPTIONS": ["Cards in card rewards may come with an additional #yGold or #yMax. #yHP bonus."],
+		"DESCRIPTIONS": ["There is a #b1% chance per card in the pool past #b{0} for card rewards to come with a #yGold or #yMax. #yHP bonus.", "{#g:Current chance: {0}%}"],
 		"FLAVOR": "You'll get a lot of complaints about this thing.",
 		"NAME": "Heart-Shaped Box"
 	},

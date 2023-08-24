@@ -189,6 +189,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
     }
 
+    public List<String> getStartingBlights() {
+        return null;
+    }
+
     @Deprecated
     public PCLTrophies getTrophies(String id) {
         return trophies.get(id);

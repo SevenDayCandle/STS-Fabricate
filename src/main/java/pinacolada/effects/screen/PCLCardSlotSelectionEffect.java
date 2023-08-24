@@ -75,8 +75,8 @@ public class PCLCardSlotSelectionEffect extends PCLEffect {
     }
 
     private void onCardRender(SpriteBatch sb, AbstractCard card) {
-        for (LoadoutCardSlot.Item item : slot.slot.cards) {
-            if (item.ID.equals(card.cardID)) {
+        for (LoadoutCardSlot.Item item : slot.slot.items) {
+            if (item.item.equals(card.cardID)) {
                 cardValue_text
                         .setLabel(item.estimatedValue)
                         .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)

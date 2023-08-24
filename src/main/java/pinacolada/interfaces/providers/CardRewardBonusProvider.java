@@ -17,25 +17,25 @@ import pinacolada.utilities.GameUtilities;
 public interface CardRewardBonusProvider {
     static PCLCardRewardBundle getGoldBundle(AbstractCard card, int gold) {
         return new PCLCardRewardBundle(card, CardRewardBonusProvider::receiveGold).setAmount(gold)
-                .setIcon(ImageMaster.UI_GOLD, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setIcon(ImageMaster.UI_GOLD, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.55f)
                 .setText(PGR.core.strings.rewards_goldBonus(gold), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     static PCLCardRewardBundle getMaxHPBundle(AbstractCard card, int maxHP) {
         return new PCLCardRewardBundle(card, CardRewardBonusProvider::receiveMaxHP).setAmount(maxHP)
-                .setIcon(ImageMaster.TP_HP, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setIcon(ImageMaster.TP_HP, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.55f)
                 .setText(PGR.core.strings.rewards_maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     static PCLCardRewardBundle getPotionBundle(AbstractCard card, AbstractPotion potion) {
         return new PCLCardRewardBundle(card, (__) -> CardRewardBonusProvider.receivePotion(potion))
-                .setIcon(ImageMaster.POTION_S_CONTAINER, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setIcon(ImageMaster.POTION_S_CONTAINER, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.55f)
                 .setText(potion.name, Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     static PCLCardRewardBundle getRelicBundle(AbstractCard card, AbstractRelic relic) {
         return new PCLCardRewardBundle(card, (__) -> GameUtilities.obtainRelicFromEvent(relic))
-                .setIcon(relic.img, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setIcon(relic.img, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.55f)
                 .setText(relic.name, Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 

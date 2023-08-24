@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -32,11 +31,11 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
-import static pinacolada.ui.characterSelection.PCLLoadoutScreen.MAX_RELIC_SLOTS;
-
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
+    public static final int DEFAULT_CARD_SLOTS = 6;
+    public static final int DEFAULT_RELIC_SLOTS = 2;
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
@@ -189,6 +188,9 @@ public abstract class PCLLoadout {
         for (PCLCardData card : getPlayerData().getCoreLoadout().strikes) {
             slot.addItem(card, 0);
         }
+    }
+
+    public void addLoadoutBlights(LoadoutBlightSlot r1) {
     }
 
     public void addLoadoutCards(LoadoutCardSlot slot) {
@@ -360,6 +362,7 @@ public abstract class PCLLoadout {
             data.values.put(type, 0);
         }
 
+        setDefaultBlightsForData(data);
         setDefaultCardsForData(data);
         setDefaultRelicsForData(data);
         return data;
@@ -425,8 +428,35 @@ public abstract class PCLLoadout {
         return PGR.getResources(color);
     }
 
-    public Collection<String> getStartingBlights() {
-        return null;
+    public int getSlotsForAbility() {
+        return 0;
+    }
+
+    public int getSlotsForCard() {
+        return DEFAULT_CARD_SLOTS;
+    }
+
+    public int getSlotsForRelic() {
+        return DEFAULT_RELIC_SLOTS;
+    }
+
+    public ArrayList<String> getStartingBlights() {
+        final ArrayList<String> res = new ArrayList<>();
+
+        AbstractPlayerData<?, ?> data = getPlayerData();
+        if (data != null) {
+            List<String> starterRelics = data.getStartingBlights();
+            if (starterRelics != null) {
+                res.addAll(starterRelics);
+            }
+        }
+
+        for (LoadoutBlightSlot rSlot : getPreset().blightSlots) {
+            if (rSlot.selected != null && rSlot.selected.item != null) {
+                res.add(rSlot.selected.item.blightID);
+            }
+        }
+        return res;
     }
 
     public ArrayList<String> getStartingDeck() {
@@ -471,8 +501,8 @@ public abstract class PCLLoadout {
         }
 
         for (LoadoutRelicSlot rSlot : getPreset().relicSlots) {
-            if (rSlot.selected != null && rSlot.selected.relic != null) {
-                res.add(rSlot.selected.relic.relicId);
+            if (rSlot.selected != null && rSlot.selected.item != null) {
+                res.add(rSlot.selected.item.relicId);
             }
         }
         return res;
@@ -510,14 +540,20 @@ public abstract class PCLLoadout {
         addBasicStrikes(strikeSlot);
         addBasicDefends(defendSlot);
 
-        for (int i = 0; i < CARD_SLOTS; i++) {
+        // 2 slots are taken by strikes/defends by default
+        for (int i = 2; i < getSlotsForCard(); i++) {
             LoadoutCardSlot slot = data.addCardSlot(0, LoadoutCardSlot.MAX_LIMIT);
             addLoadoutCards(slot);
         }
 
-        for (int i = 0; i < MAX_RELIC_SLOTS; i++) {
+        for (int i = 0; i < getSlotsForRelic(); i++) {
             LoadoutRelicSlot r1 = data.addRelicSlot();
             addLoadoutRelics(r1);
+        }
+
+        for (int i = 0; i < getSlotsForAbility(); i++) {
+            LoadoutBlightSlot r1 = data.addBlightSlot();
+            addLoadoutBlights(r1);
         }
     }
 
@@ -576,19 +612,35 @@ public abstract class PCLLoadout {
         }
     }
 
+    protected void setDefaultBlightsForData(PCLLoadoutData data) {
+        for (int i = 0; i < data.blightsSize(); i++) {
+            data.getBlightSlot(i).select(i);
+        }
+    }
+
     protected void setDefaultCardsForData(PCLLoadoutData data) {
-        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.getLoadout() != this));
-        data.getCardSlot(0).select(0, 4).markAllSeen();
-        data.getCardSlot(1).select(0, 4).markAllSeen();
-        data.getCardSlot(2).select(0, 1).markCurrentSeen();
-        data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
-        data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
-        data.getCardSlot(5).select(null);
+        if (data.cardsSize() > 5) {
+            int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.getLoadout() != this));
+            data.getCardSlot(0).select(0, 4).markAllSeen();
+            data.getCardSlot(1).select(0, 4).markAllSeen();
+            data.getCardSlot(2).select(0, 1).markCurrentSeen();
+            data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
+            data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
+            data.getCardSlot(5).clear();
+        }
+        else {
+            data.getCardSlot(0).select(0, 4).markAllSeen();
+            data.getCardSlot(1).select(0, 4).markAllSeen();
+        }
     }
 
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
-        data.getRelicSlot(0).select(0);
-        data.getRelicSlot(1).select((AbstractRelic) null);
+        if (data.relicsSize() > 0) {
+            data.getRelicSlot(0).select(0);
+            for (int i = 1; i < data.relicsSize(); i++) {
+                data.getRelicSlot(i).clear();
+            }
+        }
     }
 
     public void sortItems() {

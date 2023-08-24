@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.RestRoom;
+import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
@@ -18,7 +19,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID)
             .setUnique(true);
-    public static final int BONUS_PER_CARDS = 25;
+    public static final int BASE_OFFSET = 40;
 
     public GenericDice() {
         super(DATA);
@@ -28,57 +29,48 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         return counter > 0;
     }
 
-    public AbstractCard doAction(AbstractCard card, RewardItem rewardItem, int cardIndex) {
+    public boolean doAction(AbstractCard card, RewardItem rewardItem, int cardIndex) {
         setCounter(counter - 1);
-        return getReward(card, rewardItem);
+        rerollCard(card, getReward(card, rewardItem), rewardItem, cardIndex);
+        return false;
     }
 
-    protected int getBonus() {
-        return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
+    public static int getChance() {
+        return GameUtilities.getTotalCardsInRewardPool() - BASE_OFFSET;
     }
+
 
     @Override
     public String getDescriptionImpl() {
-        return formatDescription(0, BONUS_PER_CARDS);
-    }
-
-    protected AbstractCard.CardRarity getRarity(AbstractCard card) {
-        int roll = rng.random(100);
-        if (roll < 2) {
-            return AbstractCard.CardRarity.RARE;
+        if (GameUtilities.inGame()) {
+            return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, formatDescription(0, BASE_OFFSET), formatDescription(1, getChance()));
         }
-        if (roll < 11) {
-            return card.rarity == AbstractCard.CardRarity.RARE ? AbstractCard.CardRarity.RARE : AbstractCard.CardRarity.UNCOMMON;
-        }
-        if (roll < 25) {
-            return AbstractCard.CardRarity.UNCOMMON;
-        }
-        return AbstractCard.CardRarity.COMMON;
+        return formatDescription(0, BASE_OFFSET);
     }
 
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {
-        return PGR.dungeon.getRandomRewardReplacementCard(getRarity(card), rewardItem.cards, AbstractDungeon.cardRng, true);
+        return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
     }
 
     @Override
     public void onEnterRoom(AbstractRoom room) {
         super.onEnterRoom(room);
 
-        if (room instanceof RestRoom) {
-            setCounter(counter + getBonus());
-            flash();
+        float chance = getChance();
+        while (chance > 0) {
+            if (GameUtilities.chance(chance)) {
+                setCounter(counter + 1);
+                flash();
+            }
+            chance -= 100;
         }
-    }
 
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        setCounter(Math.max(0, counter) + getBonus());
+        updateDescription(null);
     }
 
     @Override
     protected void onStack(AbstractRelic other) {
-        setCounter(counter + getBonus());
+        super.onStack(other);
+        setCounter(counter + other.counter);
     }
 }

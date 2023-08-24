@@ -498,7 +498,7 @@
 												"Add to Pool",
 												"Reset Bans",
 												"View Cards",
-												"Cards: {#{0}:{1}/{2}} | Colorless: {#{3}:{4}/{5}}",
+												"Loadouts: #b{0} | Cards: {#{1}:{2}/{3}} | Colorless: {#{4}:{5}/{6}}",
 												"#oLeft-Click a loadout to use its cards for this run.",
 												"#oRight-Click a loadout for additional options.",
 												"#oLeft-Click a card to ban or unban it. Banned cards are faded out.",
@@ -511,7 +511,6 @@
 												"Allow Random",
 												"Show card pool",
 												"Manage Colorless",
-												"The #yCore #ySet cannot be selected as a loadout, and its cards cannot be removed from the card pool.",
 												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes."
 								]
 				},

@@ -7,18 +7,17 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
+import pinacolada.resources.PGR;
 import pinacolada.ui.cardReward.PCLCardRewardScreen;
 
 import java.util.ArrayList;
 
 public class CardRewardScreenPatches {
-    private static final PCLCardRewardScreen screen = PCLCardRewardScreen.Instance;
-
     @SpirePatch(clz = CardRewardScreen.class, method = "update")
     public static class CardRewardScreen_Update {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance) {
-            screen.updateImpl();
+            PGR.rewardScreen.updateImpl();
         }
     }
 
@@ -26,12 +25,12 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_Render {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, SpriteBatch sb) {
-            screen.renderImpl(sb);
+            PGR.rewardScreen.renderImpl(sb);
         }
 
         @SpirePrefixPatch
         public static void prefix(CardRewardScreen __instance, SpriteBatch sb) {
-            screen.preRender(sb);
+            PGR.rewardScreen.preRender(sb);
         }
     }
 
@@ -39,7 +38,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_DraftOpen {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance) {
-            screen.open(null, null, null);
+            PGR.rewardScreen.open(null, null, null);
         }
     }
 
@@ -47,7 +46,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_ChooseOneOpen {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, ArrayList<AbstractCard> choices) {
-            screen.open(choices, null, null);
+            PGR.rewardScreen.open(choices, null, null);
         }
     }
 
@@ -55,7 +54,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_CustomCombatOpen {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, ArrayList<AbstractCard> choices, String text, boolean skippable) {
-            screen.open(choices, null, text);
+            PGR.rewardScreen.open(choices, null, text);
         }
     }
 
@@ -63,7 +62,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_Open {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
-            screen.open(cards, rItem, header);
+            PGR.rewardScreen.open(cards, rItem, header);
         }
     }
 
@@ -71,7 +70,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_OnClose {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance) {
-            screen.close();
+            PGR.rewardScreen.close();
         }
     }
 
@@ -79,7 +78,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_AcquireCard {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, AbstractCard hoveredCard) {
-            screen.onCardObtained(hoveredCard);
+            PGR.rewardScreen.onCardObtained(hoveredCard);
         }
     }
 }

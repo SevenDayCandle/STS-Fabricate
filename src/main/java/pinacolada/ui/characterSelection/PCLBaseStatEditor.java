@@ -36,7 +36,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
     public PCLLoadoutData data;
 
     public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutScreen editor) {
-        super(new EUIHitbox(0, 0, ICON_SIZE * 2.5f, ICON_SIZE).setCenter(cX, cY));
+        super(new EUIHitbox(0, 0, ICON_SIZE * 2f, ICON_SIZE).setCenter(cX, cY));
         this.type = type;
         this.editor = editor;
         this.tooltip = type.getTip();

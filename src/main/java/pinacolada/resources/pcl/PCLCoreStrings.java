@@ -397,8 +397,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String sui_selectRandom = seriesui.TEXT[18];
     public final String sui_showCardPool = seriesui.TEXT[19];
     public final String sui_showColorless = seriesui.TEXT[20];
-    public final String sui_coreInstructions = seriesui.TEXT[21];
-    public final String sui_totalInstructions = seriesui.TEXT[22];
+    public final String sui_totalInstructions = seriesui.TEXT[21];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -1317,8 +1316,8 @@ public class PCLCoreStrings extends AbstractStrings {
         return EUIUtils.format(sui_selected, amount, total);
     }
 
-    public final String sui_totalCards(Object color, Object total, Object req, Object color2, Object total2, Object req2) {
-        return EUIUtils.format(sui_totalCards, color, total, req, color2, total2, req2);
+    public final String sui_totalCards(Object loadouts, Object color, Object total, Object req, Object color2, Object total2, Object req2) {
+        return EUIUtils.format(sui_totalCards, loadouts, color, total, req, color2, total2, req2);
     }
 
     public final String sui_unlocked(Object amount, Object total) {

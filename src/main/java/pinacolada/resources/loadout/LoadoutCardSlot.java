@@ -11,15 +11,12 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
 import java.util.function.Predicate;
 
 // Copied and modified from STS-AnimatorMod
-public class LoadoutCardSlot {
+public class LoadoutCardSlot extends LoadoutSlot<String, LoadoutCardSlot.Item> {
     public static final int MAX_LIMIT = 6;
-    public transient final PCLLoadoutData container;
-    public transient final RotatingList<Item> cards;
-
-    public Item selected;
     public int amount;
     public int currentMax;
     public int max;
@@ -30,12 +27,11 @@ public class LoadoutCardSlot {
     }
 
     public LoadoutCardSlot(PCLLoadoutData container, int min, int max) {
+        super(container);
         if (min > max) {
             throw new RuntimeException("Min can't be greater than max.");
         }
 
-        this.cards = new RotatingList<>();
-        this.container = container;
         this.min = min;
         this.max = max;
     }
@@ -47,11 +43,7 @@ public class LoadoutCardSlot {
     }
 
     public void addItem(PCLCardData data, int estimatedValue) {
-        cards.add(new Item(data, estimatedValue));
-    }
-
-    public void addItem(String data, int estimatedValue) {
-        cards.add(new Item(data, estimatedValue));
+        addItem(data.ID, estimatedValue);
     }
 
     public boolean canAdd() {
@@ -67,22 +59,15 @@ public class LoadoutCardSlot {
     }
 
     public LoadoutCardSlot clear() {
-        return select(null);
+        super.clear();
+        this.amount = 0;
+        return this;
     }
 
     public void decrement() {
         if (amount > 1) {
             amount -= 1;
         }
-    }
-
-    public int findIndex(Predicate<Item> predicate) {
-        for (int i = 0; i < cards.size(); i++) {
-            if (predicate.test(cards.get(i))) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public AbstractCard getCard(boolean refresh) {
@@ -94,11 +79,17 @@ public class LoadoutCardSlot {
     }
 
     public String getSelectedID() {
-        return selected != null ? selected.ID : null;
+        return selected != null ? selected.item : null;
     }
 
-    public int getSlotIndex() {
-        return container.cardSlots.indexOf(this);
+    @Override
+    public ArrayList<? extends LoadoutSlot<String, Item>> getSlots() {
+        return container.cardSlots;
+    }
+
+    @Override
+    public Item makeItem(String item, int estimateValue) {
+        return new Item(this, item, estimateValue);
     }
 
     public boolean isIDBanned(String id) {
@@ -107,65 +98,24 @@ public class LoadoutCardSlot {
     }
 
     public boolean isInvalid() {
-        PCLCustomCardSlot slot = PCLCustomCardSlot.get(selected.ID);
+        PCLCustomCardSlot slot = PCLCustomCardSlot.get(selected.item);
         if (slot != null) {
             return !container.loadout.allowCustoms();
         }
-        return selected.isLocked() || isIDBanned(selected.ID);
+        return selected.isLocked() || selected.isBanned();
     }
 
     public LoadoutCardSlot makeCopy(PCLLoadoutData container) {
         final LoadoutCardSlot copy = new LoadoutCardSlot(container, min, max);
-        copy.cards.addAll(cards);
+        copy.items.addAll(items);
         if (selected != null) {
-            copy.select(selected.ID, amount);
+            copy.select(selected.item, amount);
         }
 
         return copy;
     }
 
-    public void markAllSeen() {
-        for (Item item : cards) {
-            item.markAsSeen();
-        }
-    }
-
-    public void markCurrentSeen() {
-        if (selected != null) {
-            selected.markAsSeen();
-        }
-    }
-
-    public void next() {
-        if (selected == null) {
-            select(cards.current());
-        }
-        else {
-            select(cards.next(true));
-        }
-
-        int i = 0;
-        while (true) {
-            int currentIndex = i;
-            for (LoadoutCardSlot s : container.cardSlots) {
-                if (s != this && selected.ID.equals(s.getSelectedID())) {
-                    select(cards.next(true));
-                    i += 1;
-                    break;
-                }
-            }
-
-            if (currentIndex == i) {
-                return;
-            }
-            else if (i >= cards.size()) {
-                select(null);
-                return;
-            }
-        }
-    }
-
-    public LoadoutCardSlot select(Item item) {
+    public LoadoutCardSlot select(String item) {
         return select(item, item == null ? 0 : 1);
     }
 
@@ -191,13 +141,13 @@ public class LoadoutCardSlot {
     }
 
     public LoadoutCardSlot select(int index, int amount) {
-        return select(cards.setIndex(index), amount);
+        return select(items.setIndex(index), amount);
     }
 
     public LoadoutCardSlot select(String id, int amount) {
         int i = 0;
-        for (Item item : cards) {
-            if (item.ID.equals(id)) {
+        for (Item item : items) {
+            if (item.item.equals(id)) {
                 return select(i, amount);
             }
             i += 1;
@@ -206,24 +156,17 @@ public class LoadoutCardSlot {
         return null;
     }
 
-    public static class Item {
-        public final String ID;
-        public final int estimatedValue;
+    public static class Item extends LoadoutSlot.Item<String> {
 
         protected AbstractCard card;
 
-        public Item(PCLCardData data, int estimatedValue) {
-            this(data.ID, estimatedValue);
-        }
-
-        public Item(String id, int estimatedValue) {
-            this.ID = id;
-            this.estimatedValue = estimatedValue;
+        public Item(LoadoutCardSlot slot, String id, int estimatedValue) {
+            super(slot, id, estimatedValue);
         }
 
         public AbstractCard getCard(boolean forceRefresh) {
             if (card == null || forceRefresh) {
-                AbstractCard eCard = CardLibrary.getCard(ID);
+                AbstractCard eCard = CardLibrary.getCard(item);
                 if (eCard != null) {
                     card = eCard.makeStatEquivalentCopy();
                 }
@@ -240,13 +183,23 @@ public class LoadoutCardSlot {
             return null;
         }
 
+        @Override
+        public boolean matches(String id) {
+            return item.equals(id);
+        }
+
+        public boolean isBanned() {
+            AbstractPlayerData<?, ?> playerData = slot.container.loadout.getPlayerData();
+            return playerData != null && playerData.config.bannedCards.get().contains(item);
+        }
+
         public boolean isLocked() {
-            return GameUtilities.isCardLocked(ID);
+            return GameUtilities.isCardLocked(item);
         }
 
         public void markAsSeen() {
-            if (!UnlockTracker.isCardSeen(ID)) {
-                UnlockTracker.markCardAsSeen(ID);
+            if (!UnlockTracker.isCardSeen(item)) {
+                UnlockTracker.markCardAsSeen(item);
             }
         }
 

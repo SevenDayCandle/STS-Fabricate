@@ -92,7 +92,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColor(Settings.CREAM_COLOR);
 
         loadoutEditor = new EUIButton(EUIRM.images.rectangularButton.texture(),
-                new EUIHitbox(startingDeck.hb.x + scale(30), startingDeck.hb.y - scale(90), scale(150), scale(52)))
+                new EUIHitbox(startingDeck.hb.x + scale(30), startingDeck.hb.y - scale(65), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_deckEditor)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
@@ -104,9 +104,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setAlignment(0.85f, 0.1f, true)
                 .setColors(panelColor, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.9f), buttonWidth, screenH(0.09f)))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(4f), buttonWidth, screenH(0.12f)))
                 .setColors(panelColor, Settings.GOLD_COLOR)
-                .setAlignment(0.7f, 0.1f, true)
+                .setAlignment(0.82f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
@@ -527,7 +527,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
         }
 
+        PCLLoadout cur = loadoutMap.get(currentSeriesCard);
         typesAmount.setLabel(PGR.core.strings.sui_totalCards(
+                cur != null && !selectedLoadouts.contains(cur.ID) ? 1 + selectedLoadouts.size() : selectedLoadouts.size(),
                 totalCards >= MINIMUM_CARDS ? "g" : "r",
                 totalCards,
                 MINIMUM_CARDS,

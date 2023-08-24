@@ -157,6 +157,6 @@ public class FakeLoadout extends PCLLoadout {
         data.getCardSlot(2).select(0, 1).markCurrentSeen();
         data.getCardSlot(3).select(1, 1).markCurrentSeen();
         data.getCardSlot(4).select(2, 1).markCurrentSeen();
-        data.getCardSlot(5).select(null);
+        data.getCardSlot(5).clear();
     }
 }

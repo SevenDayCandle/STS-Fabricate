@@ -35,7 +35,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     public PCLRelicSlotSelectionEffect(PCLRelicSlotEditor slot) {
         super(0.7f, true);
 
-        this.selectedRelic = slot.slot.getRelic();
+        this.selectedRelic = slot.slot.getItem();
         this.slot = slot;
         ArrayList<LoadoutRelicSlot.Item> cards = slot.getSelectableRelics();
         if (cards.isEmpty()) {
@@ -49,9 +49,9 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                 .setOnRender(this::onRelicRender);
 
         for (LoadoutRelicSlot.Item item : cards) {
-            item.relic.currentX = InputHelper.mX;
-            item.relic.currentY = InputHelper.mY;
-            grid.add(new RelicInfo(item.relic));
+            item.item.currentX = InputHelper.mX;
+            item.item.currentY = InputHelper.mY;
+            grid.add(new RelicInfo(item.item));
         }
     }
 
@@ -59,7 +59,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     protected void complete() {
         super.complete();
 
-        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.slot.getRelic().relicId)) {
+        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.slot.getItem().relicId)) {
             slot.slot.select(selectedRelic);
         }
     }
@@ -99,8 +99,8 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     }
 
     private void onRelicRender(SpriteBatch sb, RelicInfo relic) {
-        for (LoadoutRelicSlot.Item item : slot.slot.relics) {
-            if (item.relic.relicId.equals(relic.relic.relicId)) {
+        for (LoadoutRelicSlot.Item item : slot.slot.items) {
+            if (item.item.relicId.equals(relic.relic.relicId)) {
                 cardValue_text
                         .setLabel(item.estimatedValue)
                         .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)

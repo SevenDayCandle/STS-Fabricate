@@ -458,8 +458,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
             if (fake != null) {
                 for (LoadoutRelicSlot rSlot : fake.getPreset().relicSlots) {
-                    if (rSlot.selected != null && rSlot.selected.relic != null) {
-                        GameUtilities.obtainRelicFromEvent(RelicLibrary.getRelic(rSlot.selected.relic.relicId).makeCopy());
+                    if (rSlot.selected != null && rSlot.selected.item != null) {
+                        GameUtilities.obtainRelicFromEvent(RelicLibrary.getRelic(rSlot.selected.item.relicId).makeCopy());
                     }
                 }
 

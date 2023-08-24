@@ -451,6 +451,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         int unlocksRemaining = EUIClassUtils.getField(characterOption, "unlocksRemaining");
         int gold = EUIClassUtils.getField(characterOption, "gold");
         String hp = EUIClassUtils.getField(characterOption, "hp");
+        String flavor = EUIClassUtils.getField(characterOption, "flavorText");
 
         EUISmartText.write(sb, FontHelper.bannerNameFont, characterOption.name, infoX - 35.0F * Settings.scale, infoY + 350.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.CardIcons.hp.texture(), infoX - 10.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
@@ -459,25 +460,27 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + Integer.toString(gold), infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
 
         if (cachedBlights != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 150.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
                 r.render(sb);
             }
         }
         if (cachedRelics != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 10.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractRelic r : cachedRelics) {
                 r.renderWithoutAmount(sb, Color.WHITE);
             }
         }
+
+        EUIFontHelper.cardTitleFontSmall.getData().setScale(0.8f);
+        EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, flavor, infoX - 26.0F * Settings.scale, infoY + 160.0F * Settings.scale, 10000.0F, 30.0F * Settings.scale, Settings.CREAM_COLOR);
         if (unlocksRemaining > 0) {
-            EUISmartText.write(sb, FontHelper.tipHeaderFont, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 60.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 80.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
             int unlockProgress = UnlockTracker.getCurrentProgress(characterOption.c.chosenClass);
             int unlockCost = UnlockTracker.getCurrentScoreCost(characterOption.c.chosenClass);
-            EUISmartText.write(sb, FontHelper.tipHeaderFont, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 88.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
         }
-
-        // TODO render flavor text somewhere
+        EUIRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
     }
 
     // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly
@@ -515,8 +518,8 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 geditor.tryUpdate();
             }
             if (characterOption != null) {
-                float x = getInfoX() + Settings.scale * 200;
-                float y = getInfoY() + Settings.scale * 145;
+                float x = getInfoX() + Settings.scale * 155;
+                float y = getInfoY() + Settings.scale * 75;
                 if (cachedBlights != null) {
                     for (int i = 0; i < cachedBlights.size(); i++) {
                         AbstractBlight r = cachedBlights.get(i);

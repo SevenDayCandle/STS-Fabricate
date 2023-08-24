@@ -77,12 +77,12 @@ public class PCLCardSlotEditor extends EUIBase {
 
     public ArrayList<LoadoutCardSlot.Item> getSelectableCards() {
         final ArrayList<LoadoutCardSlot.Item> cards = new ArrayList<>();
-        for (LoadoutCardSlot.Item item : this.slot.cards) {
+        for (LoadoutCardSlot.Item item : this.slot.items) {
             // Custom cards should not be treated as locked in this effect
-            boolean add = !slot.isIDBanned(item.ID) && (!item.isLocked() || PCLCustomCardSlot.get(item.ID) != null);
+            boolean add = !item.isBanned() && (!item.isLocked() || PCLCustomCardSlot.get(item.item) != null);
             if (add) {
-                for (PCLCardSlotEditor slot : loadoutEditor.slotsEditors) {
-                    if (slot.slot != this.slot && item.ID.equals(slot.slot.getSelectedID()) && slot.slot.amount > 0) {
+                for (PCLCardSlotEditor slot : loadoutEditor.cardEditors) {
+                    if (slot.slot != this.slot && item.item.equals(slot.slot.getSelectedID()) && slot.slot.amount > 0) {
                         add = false;
                         break;
                     }
@@ -142,7 +142,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }
 
         final boolean add = card != null && slot.max > 1;
-        final boolean change = slot.cards.size() > 1;
+        final boolean change = slot.items.size() > 1;
         final boolean remove = card != null && slot.max > slot.min;
 
         this.slot = slot;
@@ -171,18 +171,6 @@ public class PCLCardSlotEditor extends EUIBase {
         return this;
     }
 
-    public PCLCardSlotEditor translate(float cX, float cY) {
-        cardvalueText.setPosition(cX, cY);
-        cardamountText.setPosition(cardvalueText.hb.x + cardvalueText.hb.width, cY);
-        cardnameText.setPosition(cardamountText.hb.x + cardamountText.hb.width, cY);
-        decrementButton.setPosition(cardnameText.hb.x + cardnameText.hb.width, cY + 12);
-        addButton.setPosition(decrementButton.hb.x + decrementButton.hb.width + 16, cY + 12);
-        clearButton.setPosition(addButton.hb.x + addButton.hb.width + 16, cY + 12);
-        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 16, cY + 12);
-
-        return this;
-    }
-
     @Override
     public void updateImpl() {
         if (slot == null) {
@@ -190,7 +178,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }
         cardnameText.tryUpdate();
 
-        if (changeButton.isActive && cardnameText.hb.hovered && slot.cards.size() > 1) {
+        if (changeButton.isActive && cardnameText.hb.hovered && slot.items.size() > 1) {
             if (InputHelper.justClickedLeft) {
                 cardnameText.hb.clickStarted = true;
             }

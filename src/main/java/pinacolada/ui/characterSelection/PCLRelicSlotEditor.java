@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUIRelic;
+import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -33,7 +33,7 @@ public class PCLRelicSlotEditor extends EUIBase {
     protected EUITextBox relicValueText;
     protected EUIButton changeButton;
     protected EUIButton clearButton;
-    protected EUIRelic relicImage;
+    protected EUIImage relicImage;
     protected AbstractRelic relic;
     public LoadoutRelicSlot slot;
     public PCLLoadoutScreen loadoutEditor;
@@ -66,14 +66,14 @@ public class PCLRelicSlotEditor extends EUIBase {
 
     public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
         final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
-        for (LoadoutRelicSlot.Item item : this.slot.relics) {
+        for (LoadoutRelicSlot.Item item : this.slot.items) {
             // Customs should not be treated as locked in this effect
-            boolean add = !slot.isIDBanned(item.relic.relicId) && (!item.isLocked() || PCLCustomRelicSlot.get(item.relic.relicId) != null);
+            boolean add = !item.isBanned() && (!item.isLocked() || PCLCustomRelicSlot.get(item.item.relicId) != null);
             if (add) {
                 // Custom relics may incorrectly be marked as not seen
-                item.relic.isSeen = true;
+                item.item.isSeen = true;
                 for (PCLRelicSlotEditor slot : loadoutEditor.relicsEditors) {
-                    if (slot.slot != this.slot && slot.slot.getRelic() == item.relic) {
+                    if (slot.slot != this.slot && slot.slot.getItem() == item.item) {
                         add = false;
                     }
                 }
@@ -85,7 +85,7 @@ public class PCLRelicSlotEditor extends EUIBase {
         }
         relics.sort((a, b) -> {
             if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(a.relic.name, b.relic.name);
+                return StringUtils.compare(a.item.name, b.item.name);
             }
             return a.estimatedValue - b.estimatedValue;
         });
@@ -125,10 +125,10 @@ public class PCLRelicSlotEditor extends EUIBase {
             return this;
         }
 
-        final boolean change = slot.relics.size() > 1;
+        final boolean change = slot.items.size() > 1;
 
         this.slot = slot;
-        this.relic = slot.getRelic();
+        this.relic = slot.getItem();
         this.relicNameText.setLabel(relic != null ? relic.name : "").setActive(true);
         this.relicValueText.setActive(true);
         this.clearButton.setOnClick(() -> {
@@ -139,7 +139,7 @@ public class PCLRelicSlotEditor extends EUIBase {
         }).setInteractable(slot.canRemove()).setActive(relic != null);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this)).setActive(change);
         if (relic != null) {
-            this.relicImage = new EUIRelic(relic, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING / 2, relicValueText.hb.y, relic.hb.width, relic.hb.height));
+            this.relicImage = new EUIImage(relic.img, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width, relicValueText.hb.y, relic.hb.width, relic.hb.height));
             if (relic instanceof PCLRelic) {
                 this.relicImage.setScale(0.7f, 0.7f);
             }
@@ -152,18 +152,6 @@ public class PCLRelicSlotEditor extends EUIBase {
         }
 
         refreshValues();
-        return this;
-    }
-
-    public PCLRelicSlotEditor translate(float cX, float cY) {
-        relicValueText.setPosition(cX, cY);
-        relicNameText.setPosition(relicValueText.hb.x + relicValueText.hb.width + SPACING, cY);
-        clearButton.setPosition(relicNameText.hb.x + relicNameText.hb.width, cY);
-        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 8, cY);
-        if (relic != null && this.relicImage != null) {
-            this.relicImage.translate(relicValueText.hb.x + relicValueText.hb.width + SPACING / 2, relicValueText.hb.y);
-        }
-
         return this;
     }
 
@@ -191,17 +179,14 @@ public class PCLRelicSlotEditor extends EUIBase {
             relicNameText.setFontColor(Color.GOLD);
         }
 
-        relic = slot.getRelic();
+        relic = slot.getItem();
         if (relic != null && this.relicImage != null) {
-            relicImage.translate(relicValueText.hb.x + relicValueText.hb.width, relicValueText.hb.y);
             relicImage.updateImpl();
         }
 
         relicValueText.tryUpdate();
 
-        if (changeButton.isActive) {
-            changeButton.updateImpl();
-        }
+        changeButton.tryUpdate();
         if (clearButton.isActive) {
             clearButton.setInteractable(slot.canRemove()).updateImpl();
         }

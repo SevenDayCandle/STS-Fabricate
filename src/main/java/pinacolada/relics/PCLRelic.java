@@ -110,6 +110,11 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return PCLRelicData.registerTemplate(new PCLRelicData(type, resources));
     }
 
+    public static void renderUnseenTip() {
+        EUITooltip.queueTooltip(getHiddenTooltip());
+    }
+
+
     protected void activateBattleEffect() {
 
     }
@@ -372,6 +377,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         if (GameUtilities.inBattle(true)) {
             activateBattleEffect();
         }
+
+        updateDescription(null);
     }
 
     @Override
@@ -379,6 +386,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         if (data != null) {
             this.auxiliaryData = new PCLCollectibleSaveData(data);
         }
+        updateDescription(null);
     }
 
     @Override
@@ -442,16 +450,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
                 -64f,
                 -64f,
                 AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
-        renderHoverTip(sb);
-        this.hb.render(sb);
-    }
-
-    @Override
-    public void renderBossTip(SpriteBatch sb) {
-        EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
-    }
-
-    public void renderHoverTip(SpriteBatch sb) {
         if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
             if (!this.isSeen) {
                 renderUnseenTip();
@@ -460,6 +458,12 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
                 this.renderTip(sb);
             }
         }
+        this.hb.render(sb);
+    }
+
+    @Override
+    public void renderBossTip(SpriteBatch sb) {
+        EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
     }
 
     @Override
@@ -485,10 +489,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
             return;
         }
         EUITooltip.queueTooltips(this);
-    }
-
-    public void renderUnseenTip() {
-        EUITooltip.queueTooltip(getHiddenTooltip());
     }
 
     @Override

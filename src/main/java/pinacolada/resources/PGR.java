@@ -44,6 +44,7 @@ import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
+import pinacolada.ui.cardReward.PCLCardRewardScreen;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
 import pinacolada.ui.cardView.PCLSingleRelicPopup;
 import pinacolada.ui.characterSelection.PCLCharacterSelectOverlay;
@@ -82,6 +83,7 @@ public class PGR {
     public static PCLAugmentLibraryScreen augmentLibrary;
     public static PCLAugmentSortHeader augmentHeader;
     public static PCLAugmentCollectionScreen augmentScreen;
+    public static PCLCardRewardScreen rewardScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomPotionSelectorScreen customPotions;
@@ -256,6 +258,7 @@ public class PGR {
         PGR.blackScreen = new EUIImage(ImageMaster.WHITE_SQUARE_IMG, new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
                 .setColor(0, 0, 0, 0.8f);
+        PGR.rewardScreen = new PCLCardRewardScreen();
         try {
             PGR.debugAugments = new PCLDebugAugmentPanel();
             PGR.debugCards = new PCLDebugCardPanel();

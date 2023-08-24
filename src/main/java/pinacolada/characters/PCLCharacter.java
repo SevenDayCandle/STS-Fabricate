@@ -190,10 +190,6 @@ public abstract class PCLCharacter extends CustomPlayer {
         return com.megacrit.cardcrawl.events.beyond.SpireHeart.DESCRIPTIONS[10];
     }
 
-    public ArrayList<String> getStartingBlights() {
-        return null;
-    }
-
     @Override
     public ArrayList<String> getStartingDeck() {
         return prepareLoadout().getStartingDeck();
