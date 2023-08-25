@@ -53,7 +53,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        // If this skill is under a PTrigger and this references that same PTrigger, the game will crash from a stack overflow
+        // If this skill is under a PTrigger and this references that same PTrigger, this will cause an infinite loop
         // In this instance, we should describe the power itself instead
         ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
         PSkill<?> highestParent = getHighestParent();

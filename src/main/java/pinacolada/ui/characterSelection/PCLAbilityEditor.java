@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLBlight;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutBlightSlot;
-import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
 // Copied and modified from STS-AnimatorMod
 public class PCLAbilityEditor extends EUIBase {
     protected static final float CARD_SCALE = 0.75f;
-    protected EUITextBox relicNameText;
+    protected EUITextBox nameText;
     protected EUIButton changeButton;
     protected EUIButton changeButton2;
     protected EUIImage image;
@@ -39,17 +38,17 @@ public class PCLAbilityEditor extends EUIBase {
     public PCLAbilityEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
         this.loadoutEditor = loadoutEditor;
 
-        relicNameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
 
         final float offY = BUTTON_SIZE / 4;
-        changeButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width + offY, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new EUIHitbox(nameText.hb.x + nameText.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
-        changeButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new EUIHitbox(changeButton.hb.x + changeButton.hb.width + offY, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new EUIHitbox(changeButton.hb.x + changeButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
 
@@ -88,7 +87,10 @@ public class PCLAbilityEditor extends EUIBase {
 
     @Override
     public void renderImpl(SpriteBatch sb) {
-        relicNameText.tryRender(sb);
+        nameText.tryRender(sb);
+        if (nameText.hb.hovered && item != null) {
+            item.renderTip(sb);
+        }
         if (this.image != null) {
             image.renderCentered(sb);
             if (image.hb.hovered && item != null) {
@@ -115,7 +117,7 @@ public class PCLAbilityEditor extends EUIBase {
         if (slot == null) {
             this.slot = null;
             this.item = null;
-            this.relicNameText.setActive(false);
+            this.nameText.setActive(false);
             this.changeButton.setActive(false);
             return this;
         }
@@ -124,11 +126,11 @@ public class PCLAbilityEditor extends EUIBase {
 
         this.slot = slot;
         this.item = slot.getItem();
-        this.relicNameText.setLabel(item != null ? item.name : "").setActive(true);
+        this.nameText.setLabel(item != null ? item.name : "").setActive(true);
         this.changeButton.setOnClick(this::selectPrev).setActive(change);
         this.changeButton2.setOnClick(this::selectNext).setActive(change);
         if (item != null) {
-            this.image = new EUIImage(item.img, new EUIHitbox(relicNameText.hb.x - item.hb.width, relicNameText.hb.y, item.hb.width, item.hb.height));
+            this.image = new EUIImage(item.img, new EUIHitbox(nameText.hb.x - item.hb.width, nameText.hb.y, item.hb.width, item.hb.height));
             if (item instanceof PCLBlight) {
                 this.image.setScale(0.7f, 0.7f);
             }
@@ -149,23 +151,23 @@ public class PCLAbilityEditor extends EUIBase {
         if (slot == null) {
             return;
         }
-        relicNameText.tryUpdate();
+        nameText.tryUpdate();
 
-        if (changeButton.isActive && relicNameText.hb.hovered) {
+        if (changeButton.isActive && nameText.hb.hovered) {
             if (InputHelper.justClickedLeft) {
-                relicNameText.hb.clickStarted = true;
+                nameText.hb.clickStarted = true;
             }
 
-            if (relicNameText.hb.clicked) {
-                relicNameText.hb.clicked = false;
+            if (nameText.hb.clicked) {
+                nameText.hb.clicked = false;
                 loadoutEditor.trySelectAbility(this);
                 return;
             }
 
-            relicNameText.setFontColor(Color.WHITE);
+            nameText.setFontColor(Color.WHITE);
         }
         else {
-            relicNameText.setFontColor(Color.GOLD);
+            nameText.setFontColor(Color.GOLD);
         }
 
         item = slot.getItem();

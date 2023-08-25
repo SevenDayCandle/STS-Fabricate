@@ -25,7 +25,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
     }
 
     public PMove_TriggerAlly(int amount) {
-        super(DATA, PCLCardTarget.Self, amount);
+        super(DATA, PCLCardTarget.SingleAlly, amount);
     }
 
     public PMove_TriggerAlly(PSkillSaveData content) {

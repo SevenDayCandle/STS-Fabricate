@@ -244,7 +244,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         if (cardEditors.size() > 0 && relicsEditors.size() > 0) {
             EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
                     new EUITourTooltip(deckText.hb, deckText.text, PGR.core.strings.loadout_tutorialCard)
-                            .setFlash(cardEditors.get(0).cardnameText.image),
+                            .setFlash(cardEditors.get(0).nameText.image),
                     new EUITourTooltip(cardEditors.get(0).cardvalueText.hb, deckText.text, PGR.core.strings.loadout_tutorialValue)
                             .setFlash(cardEditors.get(0).cardvalueText.image),
                     cardEditors.get(0).decrementButton.makeTour(true),

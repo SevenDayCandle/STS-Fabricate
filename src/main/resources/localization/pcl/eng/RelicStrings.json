@@ -2,7 +2,7 @@
 {
 	"pcl:GenericDice":
 	{
-		"DESCRIPTIONS": ["You may reroll card rewards for other cards of the same rarity. When you enter a room, there is a #b1% chance per card in the pool past #b{0} to gain a reroll.", "{#g:Current chance: {0}%}"],
+		"DESCRIPTIONS": ["You may reroll card rewards for other cards of the same rarity. When you enter a room, there is a #b1% chance per card in the pool to gain a reroll.", "{#g:Current chance: {0}%}"],
 		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
 		"NAME": "Generic Dice"
 	},

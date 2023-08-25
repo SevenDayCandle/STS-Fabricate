@@ -10,6 +10,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -42,7 +43,7 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_evoke(TEXT.subjects_x);
+        return TEXT.cond_xToY(TEXT.act_evoke(PGR.core.tooltips.orb.title), TEXT.subjects_x);
     }
 
     @Override

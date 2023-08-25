@@ -148,7 +148,8 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                         AbstractCard newCard = slot.make(false);
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
-                        grid.addCard(newCard);
+                        EUI.customHeader.originalGroup.add(newCard);
+                        refreshGrid();
                         slot.commitBuilder();
                     });
         }
@@ -163,7 +164,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                         AbstractCard newCard = slot.getBuilder(0).createImplWithForms(0, 0, false);
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
-                        grid.addCard(newCard);
+                        EUI.customHeader.originalGroup.add(newCard);
+                        slot.commitBuilder();
+                        refreshGrid();
                     });
         }
     }
@@ -181,7 +184,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                                         AbstractCard newCard = slot.getBuilder(0).createImplWithForms(0, 0, false);
                                         currentSlots.put(newCard, slot);
                                         PCLCustomCardSlot.getCards(co).add(slot);
-                                        grid.addCard(newCard);
+                                        slot.commitBuilder();
                                     });
                         }
                     });
@@ -194,10 +197,11 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
                         AbstractCard newCard = cardSlot.getBuilder(0).createImplWithForms(0, 0, false);
-                        grid.removeCard(card);
+                        EUI.customHeader.originalGroup.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newCard, cardSlot);
-                        grid.addCard(newCard);
+                        EUI.customHeader.originalGroup.add(newCard);
+                        refreshGrid();
                     });
         }
     }
@@ -216,7 +220,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         return list;
     }
 
-    // TODO add replacement cards
     private ArrayList<AbstractCard> getAvailableCardsToCopy() {
         ArrayList<AbstractCard> cards = EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
                 data -> {
@@ -245,7 +248,8 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                                 AbstractCard newCard = slot.make(false);
                                 currentSlots.put(newCard, slot);
                                 PCLCustomCardSlot.getCards(currentColor).add(slot);
-                                grid.addCard(newCard);
+                                EUI.customHeader.originalGroup.add(newCard);
+                                refreshGrid();
                             });
                 }
             });
@@ -294,14 +298,23 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 reloadButton.makeTour(true));
     }
 
+    public void refreshGrid() {
+        grid.cards.group = EUI.customHeader.originalGroup;
+        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
+            grid.moveToTop();
+            grid.forceUpdateCardPositions();
+        }, currentColor, false, true);
+    }
+
     public void remove(AbstractCard card, PCLCustomCardSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomCardSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            grid.removeCard(card);
+                            EUI.customHeader.originalGroup.remove(card);
                             currentSlots.remove(card);
                             v.wipeBuilder();
+                            EUI.customHeader.updateForFilters();
                         }
                     });
         }

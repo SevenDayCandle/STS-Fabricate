@@ -612,7 +612,7 @@
 												"A #ySummon card is played by dragging it onto a #ySummon #ySlot. Doing so creates an ally that stores the card you played, and who is given HP based on that card's HP value.",
 												"#ySummons with #yTurn #yStart #yTiming †Turn Start Timing] make their move at the start of your turn, while those with #yTurn #yEnd #yTiming †Turn End Timing] make their move at the end of your turn. This is referred to as a #yTrigger. #ySummons will not #yTrigger on the turn they are set onto the field.",
 												"The icon immediately above a #ySummon signifies how much damage it intends to deal. If the #ySummon has a #yCooldown effect, an additional icon will appear above the damage intent signifying the number of turns before the #yCooldown is activated.",
-												"Hover over a #ySummon to see what creature it will target. #oRight-Click on a #ySummon to select a new target for it.",
+												"Hover over a #ySummon to see what creature it will target. If the #ySummon targets a single non-random creature, you may #oRight-Click on it to select a new target for it.",
 												"#ySummoning a card onto a #ySummon #ySlot that already has a #ySummon will #yWithdraw the previous #ySummon, #yTriggering it #b2 times and moving it to your discard pile.",
 												"#ySummons can be targeted with Attacks and Skills like other monsters can.",
 												"If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged. You can view the expected damage your #ySummon will take by enabling the #yShow #yEstimated #yDamage option in #yFabricate.",

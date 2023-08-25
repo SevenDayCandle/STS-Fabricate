@@ -26,7 +26,7 @@ public class PCLCardSlotEditor extends EUIBase {
     public static final float PREVIEW_OFFSET_X = AbstractCard.IMG_WIDTH * 0.6f;
     public static final float PREVIEW_OFFSET_Y = -AbstractCard.IMG_HEIGHT * 0.57f;
     public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
-    protected EUITextBox cardnameText;
+    protected EUITextBox nameText;
     protected EUITextBox cardvalueText;
     protected EUITextBox cardamountText;
     protected EUIButton addButton;
@@ -52,22 +52,22 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
-        cardnameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardamountText.hb.x + cardamountText.hb.width, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardamountText.hb.x + cardamountText.hb.width, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         final float offY = BUTTON_SIZE / 4;
-        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(nameText.hb.x + nameText.hb.width, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_decrease, "")
                 .setClickDelay(0.02f);
-        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_add, "")
                 .setClickDelay(0.02f);
-        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, cardnameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
         nameColor = Settings.GOLD_COLOR;
@@ -114,14 +114,14 @@ public class PCLCardSlotEditor extends EUIBase {
 
     @Override
     public void renderImpl(SpriteBatch sb) {
-        cardnameText.tryRender(sb);
+        nameText.tryRender(sb);
         cardvalueText.tryRender(sb);
         cardamountText.tryRender(sb);
         addButton.tryRender(sb);
         decrementButton.tryRender(sb);
         changeButton.tryRender(sb);
         clearButton.tryRender(sb);
-        if (cardnameText.hb.hovered && card != null) {
+        if (nameText.hb.hovered && card != null) {
             card.renderInLibrary(sb);
             card.renderCardTip(sb);
         }
@@ -132,7 +132,7 @@ public class PCLCardSlotEditor extends EUIBase {
             this.slot = null;
             this.card = null;
             this.cardamountText.setActive(false);
-            this.cardnameText.setActive(false);
+            this.nameText.setActive(false);
             this.cardvalueText.setActive(false);
             this.addButton.setActive(false);
             this.decrementButton.setActive(false);
@@ -147,7 +147,7 @@ public class PCLCardSlotEditor extends EUIBase {
 
         this.slot = slot;
         this.card = slot.getCard(true);
-        this.cardnameText.setLabel(card != null ? card.name : "").setActive(true);
+        this.nameText.setLabel(card != null ? card.name : "").setActive(true);
         this.cardvalueText.setActive(true);
         this.cardamountText.setActive(card != null);
         this.addButton.setOnClick(() -> {
@@ -160,7 +160,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }).setInteractable(slot.canDecrement()).setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();
-            this.cardnameText.setLabel("");
+            this.nameText.setLabel("");
             refreshValues();
         }).setInteractable(slot.canRemove()).setActive(true);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this)).setInteractable(change).setActive(true);
@@ -176,23 +176,23 @@ public class PCLCardSlotEditor extends EUIBase {
         if (slot == null) {
             return;
         }
-        cardnameText.tryUpdate();
+        nameText.tryUpdate();
 
-        if (changeButton.isActive && cardnameText.hb.hovered && slot.items.size() > 1) {
+        if (changeButton.isActive && nameText.hb.hovered && slot.items.size() > 1) {
             if (InputHelper.justClickedLeft) {
-                cardnameText.hb.clickStarted = true;
+                nameText.hb.clickStarted = true;
             }
 
-            if (cardnameText.hb.clicked) {
-                cardnameText.hb.clicked = false;
+            if (nameText.hb.clicked) {
+                nameText.hb.clicked = false;
                 loadoutEditor.trySelectCard(this);
                 return;
             }
 
-            cardnameText.setFontColor(Color.WHITE);
+            nameText.setFontColor(Color.WHITE);
         }
         else {
-            cardnameText.setFontColor(nameColor);
+            nameText.setFontColor(nameColor);
         }
 
         card = slot.getCard(false);

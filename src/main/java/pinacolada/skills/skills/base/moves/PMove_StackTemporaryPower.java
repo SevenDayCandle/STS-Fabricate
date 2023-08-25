@@ -51,7 +51,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
             case SingleAlly:
                 return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
             case Self:
-                if (isFromCreature()) {
+                if (isFromCreature() || perspective != PCLCardTarget.Self) {
                     return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
                 }
             default:

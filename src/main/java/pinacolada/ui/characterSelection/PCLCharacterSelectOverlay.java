@@ -347,11 +347,12 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         EUIClassUtils.setField(characterOption, "hp", loadout.getHP() + "/" + loadout.getHP());
         ArrayList<String> startingRelics = loadout.getStartingRelics();
         ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = startingRelics;
-        cachedRelics = EUIUtils.map(startingRelics, RelicLibrary::getRelic);
-        cachedBlights = EUIUtils.map(loadout.getStartingBlights(), BlightHelper::getBlight);
+        cachedRelics = EUIUtils.mapAsNonnull(startingRelics, RelicLibrary::getRelic);
+        cachedBlights = EUIUtils.mapAsNonnull(loadout.getStartingBlights(), BlightHelper::getBlight);
 
         // Instead of continually refreshing relics at every render, change them only when the character or loadout changes
         for (AbstractBlight b : cachedBlights) {
+            b.isSeen = true;
             b.updateDescription(characterOption.c.chosenClass);
         }
         for (AbstractRelic r : cachedRelics) {
@@ -462,7 +463,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         if (cachedBlights != null) {
             EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
-                r.render(sb);
+                r.render(sb, false, Color.WHITE);
             }
         }
         if (cachedRelics != null) {

@@ -40,7 +40,7 @@ public abstract class PCLLoadout {
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
-    public static final int COMMON_LOADOUT_VALUE = 5;
+    public static final int COMMON_LOADOUT_VALUE = 6;
     public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
     public final String ID;
@@ -213,9 +213,9 @@ public abstract class PCLLoadout {
     }
 
     public void addLoadoutRelics(LoadoutRelicSlot r1) {
-        r1.addItem(new GenericDice(), 4);
-        r1.addItem(new Macroscope(), 4);
-        r1.addItem(new HeartShapedBox(), 10);
+        r1.addItem(new GenericDice(), 3);
+        r1.addItem(new Macroscope(), 5);
+        r1.addItem(new HeartShapedBox(), 8);
         r1.markAllSeen();
     }
 

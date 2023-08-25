@@ -75,7 +75,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
         // Use expanded text like PMove_GainBlock if verbose mode is used
         if (isVerbose()) {
-            if (isSelfOnlyTarget()) {
+            if (isSelfOnlyTarget(perspective)) {
                 return amount < 0 ? TEXT.act_loseAmount(amountString, PGR.core.tooltips.block) : TEXT.act_gainAmount(amountString, PGR.core.tooltips.block);
             }
             return TEXT.act_giveTargetAmount(getTargetString(target), amountString, PGR.core.tooltips.block); // Ignore perspective because this comes from the card

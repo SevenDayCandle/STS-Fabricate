@@ -40,7 +40,7 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (isSelfOnlyTarget()) {
+        if (isSelfOnlyTarget(perspective)) {
             return TEXT.act_heal(getAmountRawString());
         }
         return TEXT.act_healOn(getAmountRawString(), getTargetStringPerspective(perspective));

@@ -19,7 +19,6 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID)
             .setUnique(true);
-    public static final int BASE_OFFSET = 40;
 
     public GenericDice() {
         super(DATA);
@@ -36,16 +35,16 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     }
 
     public static int getChance() {
-        return GameUtilities.getTotalCardsInRewardPool() - BASE_OFFSET;
+        return GameUtilities.getTotalCardsInRewardPool();
     }
 
 
     @Override
     public String getDescriptionImpl() {
         if (GameUtilities.inGame()) {
-            return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, formatDescription(0, BASE_OFFSET), formatDescription(1, getChance()));
+            return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, formatDescription(0), formatDescription(1, getChance()));
         }
-        return formatDescription(0, BASE_OFFSET);
+        return formatDescription(0);
     }
 
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {

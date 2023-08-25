@@ -38,7 +38,7 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_takeDamage(TEXT.subjects_x);
+        return TEXT.cond_xToY(TEXT.act_takeDamage(TEXT.subjects_x), TEXT.subjects_x);
     }
 
     @Override

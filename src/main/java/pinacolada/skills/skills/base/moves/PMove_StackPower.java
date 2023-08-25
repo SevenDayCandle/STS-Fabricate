@@ -47,7 +47,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
             joinedString = fields.getPowerOrString();
             switch (target) {
                 case Self:
-                    if (isFromCreature()) {
+                    if (isFromCreature() || perspective != PCLCardTarget.Self) {
                         return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
                     }
                 case None:
@@ -63,7 +63,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
         switch (target) {
             case Self:
-                if (isFromCreature()) {
+                if (isFromCreature() || perspective != PCLCardTarget.Self) {
                     return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
                 }
             case None:

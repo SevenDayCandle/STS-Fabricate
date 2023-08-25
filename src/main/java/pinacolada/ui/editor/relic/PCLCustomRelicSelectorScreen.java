@@ -147,8 +147,10 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                         newRelic.isSeen = true;
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
+                        grid.group.group = EUI.relicHeader.originalGroup;
                         grid.add(newRelic);
                         slot.commitBuilder();
+                        refreshGrid();
                     });
         }
     }
@@ -163,7 +165,10 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                         newRelic.isSeen = true;
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
+                        grid.group.group = EUI.relicHeader.originalGroup;
                         grid.add(newRelic);
+                        slot.commitBuilder();
+                        refreshGrid();
                     });
         }
     }
@@ -182,7 +187,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                                         newRelic.isSeen = true;
                                         currentSlots.put(newRelic, slot);
                                         PCLCustomRelicSlot.getRelics(co).add(slot);
-                                        grid.add(newRelic);
+                                        slot.commitBuilder();
                                     });
                         }
                     });
@@ -196,10 +201,12 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                         cardSlot.commitBuilder();
                         AbstractRelic newRelic = cardSlot.getBuilder(0).create();
                         newRelic.isSeen = true;
+                        grid.group.group = EUI.relicHeader.originalGroup;
                         grid.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newRelic, cardSlot);
                         grid.add(newRelic);
+                        refreshGrid();
                     });
         }
     }
@@ -240,7 +247,9 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                                 newRelic.isSeen = true;
                                 currentSlots.put(newRelic, slot);
                                 PCLCustomRelicSlot.getRelics(currentColor).add(slot);
+                                grid.group.group = EUI.relicHeader.originalGroup;
                                 grid.add(newRelic);
+                                refreshGrid();
                             });
                 }
             });
@@ -279,6 +288,10 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             currentSlots.put(relic, slot);
             grid.add(relic);
         }
+        refreshGrid();
+    }
+
+    public void refreshGrid() {
         EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
             grid.forceUpdatePositions();
@@ -290,9 +303,11 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomRelicSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
+                            grid.group.group = EUI.relicHeader.originalGroup;
                             grid.remove(card);
                             currentSlots.remove(card);
                             v.wipeBuilder();
+                            refreshGrid();
                         }
                     });
         }

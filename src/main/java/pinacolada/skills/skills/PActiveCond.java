@@ -5,6 +5,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -34,6 +35,11 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
 
     public String getQualifierText(int i) {
         return fields.getQualifierText(i);
+    }
+
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        return capital(childEffect == null ? getSubText(perspective) : TEXT.cond_xToY(getSubText(perspective), childEffect.getText(perspective, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

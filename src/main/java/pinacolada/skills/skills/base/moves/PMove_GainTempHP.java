@@ -39,7 +39,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (isSelfOnlyTarget()) {
+        if (isSelfOnlyTarget(perspective)) {
             return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
         }
         return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), PGR.core.tooltips.tempHP);

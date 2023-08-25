@@ -144,8 +144,10 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                         AbstractPotion newPotion = slot.make();
                         currentSlots.put(newPotion, slot);
                         PCLCustomPotionSlot.getPotions(currentColor).add(slot);
+                        grid.group.group = EUI.potionHeader.originalGroup;
                         grid.add(newPotion);
                         slot.commitBuilder();
+                        refreshGrid();
                     });
         }
     }
@@ -159,7 +161,10 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                         AbstractPotion newPotion = slot.getBuilder(0).create();
                         currentSlots.put(newPotion, slot);
                         PCLCustomPotionSlot.getPotions(currentColor).add(slot);
+                        grid.group.group = EUI.potionHeader.originalGroup;
                         grid.add(newPotion);
+                        slot.commitBuilder();
+                        refreshGrid();
                     });
         }
     }
@@ -177,7 +182,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                                         AbstractPotion newPotion = slot.getBuilder(0).create();
                                         currentSlots.put(newPotion, slot);
                                         PCLCustomPotionSlot.getPotions(co).add(slot);
-                                        grid.add(newPotion);
+                                        slot.commitBuilder();
                                     });
                         }
                     });
@@ -190,10 +195,12 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
                         AbstractPotion newPotion = cardSlot.getBuilder(0).create();
+                        grid.group.group = EUI.potionHeader.originalGroup;
                         grid.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newPotion, cardSlot);
                         grid.add(newPotion);
+                        refreshGrid();
                     });
         }
     }
@@ -231,7 +238,9 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                                 AbstractPotion newPotion = slot.make();
                                 currentSlots.put(newPotion, slot);
                                 PCLCustomPotionSlot.getPotions(currentColor).add(slot);
+                                grid.group.group = EUI.potionHeader.originalGroup;
                                 grid.add(newPotion);
+                                refreshGrid();
                             });
                 }
             });
@@ -268,6 +277,10 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             currentSlots.put(potion, slot);
             grid.add(potion);
         }
+        refreshGrid();
+    }
+
+    public void refreshGrid() {
         EUI.potionFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
             grid.forceUpdatePositions();
@@ -279,9 +292,11 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomPotionSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
+                            grid.group.group = EUI.potionHeader.originalGroup;
                             grid.remove(card);
                             currentSlots.remove(card);
                             v.wipeBuilder();
+                            refreshGrid();
                         }
                     });
         }

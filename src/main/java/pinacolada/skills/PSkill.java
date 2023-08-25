@@ -429,7 +429,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo generateInfo(AbstractCreature target) {
-        return generateInfo(getSourceCreature(), target);
+        return generateInfo(getOwnerCreature(), target);
     }
 
     public PCLUseInfo generateInfo(AbstractCreature source, AbstractCreature target) {
@@ -744,7 +744,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo getInfo(AbstractCreature target) {
-        return generateInfo(getSourceCreature(), target);
+        return generateInfo(getOwnerCreature(), target);
     }
 
     public PCLUseInfo getInfo(AbstractCreature source, AbstractCreature target) {
@@ -1200,8 +1200,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return false;
     }
 
-    public final boolean isSelfOnlyTarget() {
-        return (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()));
+    public final boolean isSelfOnlyTarget(PCLCardTarget perpsective) {
+        return (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature() && perpsective == PCLCardTarget.Self));
     }
 
     /*

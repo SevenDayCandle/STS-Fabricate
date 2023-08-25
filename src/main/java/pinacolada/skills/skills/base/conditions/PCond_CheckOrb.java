@@ -41,7 +41,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.orb.title);
     }
 
     @Override

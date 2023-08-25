@@ -29,7 +29,7 @@ import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
 public class PCLRelicSlotEditor extends EUIBase {
     protected static final float CARD_SCALE = 0.75f;
     public static final float SPACING = 64f * Settings.scale;
-    protected EUITextBox relicNameText;
+    protected EUITextBox nameText;
     protected EUITextBox relicValueText;
     protected EUIButton changeButton;
     protected EUIButton clearButton;
@@ -47,17 +47,17 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        relicNameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
 
         final float offY = BUTTON_SIZE / 4;
-        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(nameText.hb.x + nameText.hb.width, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, relicNameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
 
@@ -102,7 +102,10 @@ public class PCLRelicSlotEditor extends EUIBase {
 
     @Override
     public void renderImpl(SpriteBatch sb) {
-        relicNameText.tryRender(sb);
+        nameText.tryRender(sb);
+        if (nameText.hb.hovered && relic != null) {
+            relic.renderTip(sb);
+        }
         if (this.relicImage != null) {
             relicImage.renderCentered(sb);
             if (relicImage.hb.hovered && relic != null) {
@@ -118,7 +121,7 @@ public class PCLRelicSlotEditor extends EUIBase {
         if (slot == null) {
             this.slot = null;
             this.relic = null;
-            this.relicNameText.setActive(false);
+            this.nameText.setActive(false);
             this.relicValueText.setActive(false);
             this.changeButton.setActive(false);
             this.clearButton.setActive(false);
@@ -129,11 +132,11 @@ public class PCLRelicSlotEditor extends EUIBase {
 
         this.slot = slot;
         this.relic = slot.getItem();
-        this.relicNameText.setLabel(relic != null ? relic.name : "").setActive(true);
+        this.nameText.setLabel(relic != null ? relic.name : "").setActive(true);
         this.relicValueText.setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();
-            this.relicNameText.setLabel("");
+            this.nameText.setLabel("");
             this.relicImage = null;
             refreshValues();
         }).setInteractable(slot.canRemove()).setActive(relic != null);
@@ -160,23 +163,23 @@ public class PCLRelicSlotEditor extends EUIBase {
         if (slot == null) {
             return;
         }
-        relicNameText.tryUpdate();
+        nameText.tryUpdate();
 
-        if (changeButton.isActive && relicNameText.hb.hovered) {
+        if (changeButton.isActive && nameText.hb.hovered) {
             if (InputHelper.justClickedLeft) {
-                relicNameText.hb.clickStarted = true;
+                nameText.hb.clickStarted = true;
             }
 
-            if (relicNameText.hb.clicked) {
-                relicNameText.hb.clicked = false;
+            if (nameText.hb.clicked) {
+                nameText.hb.clicked = false;
                 loadoutEditor.trySelectRelic(this);
                 return;
             }
 
-            relicNameText.setFontColor(Color.WHITE);
+            nameText.setFontColor(Color.WHITE);
         }
         else {
-            relicNameText.setFontColor(Color.GOLD);
+            nameText.setFontColor(Color.GOLD);
         }
 
         relic = slot.getItem();
