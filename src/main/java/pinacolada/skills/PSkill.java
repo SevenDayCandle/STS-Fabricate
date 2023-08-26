@@ -917,6 +917,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return target == PCLCardTarget.Self && !isFromCreature() ? 0 : target.ordinal();
     }
 
+    public final int getTargetOrdinalPerspective(PCLCardTarget perspective) {
+        return getTargetOrdinal(getTargetForPerspective(perspective));
+    }
+
     public String getTargetString(PCLCardTarget target) {
         return getTargetString(target, 1);
     }

@@ -12,7 +12,11 @@ import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
+import pinacolada.ui.cardReward.PCLCardRewardScreen;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 @VisibleRelic
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
@@ -22,6 +26,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
 
     public GenericDice() {
         super(DATA);
+        setCounter(1);
     }
 
     public boolean canAct() {
@@ -48,7 +53,14 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     }
 
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {
-        return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
+        for (AbstractCard c : rewardItem.cards) {
+            PCLCardRewardScreen.seenCards.add(c.cardID);
+        }
+        AbstractCard replacement = PGR.dungeon.getRandomRewardReplacementCard(card.rarity, c -> !(PCLCardRewardScreen.seenCards.contains(c.cardID)), AbstractDungeon.cardRng, true);
+        if (replacement != null) {
+            PCLCardRewardScreen.seenCards.add(replacement.cardID);
+        }
+        return replacement;
     }
 
     @Override

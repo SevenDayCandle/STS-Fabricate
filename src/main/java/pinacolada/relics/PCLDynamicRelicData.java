@@ -45,6 +45,8 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         setColor(original.cardColor);
         setSfx(original.sfx);
         setTier(original.tier);
+        setMaxUpgrades(original.maxUpgradeLevel);
+        setBranchFactor(original.branchFactor);
     }
 
     public PCLDynamicRelicData(PCLDynamicRelicData original) {
@@ -54,6 +56,8 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         setColor(original.cardColor);
         setSfx(original.sfx);
         setTier(original.tier);
+        setMaxUpgrades(original.maxUpgradeLevel);
+        setBranchFactor(original.branchFactor);
         setLanguageMap(original.languageMap);
         setCounter(original.counter.clone(), original.counterUpgrade.clone());
         setPSkill(original.moves, true, true);

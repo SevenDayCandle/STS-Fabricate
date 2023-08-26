@@ -109,10 +109,10 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         super.renderImpl(sb);
         title.renderImpl(sb);
         if (getLastCard() != null) {
-            if (getLastCard().baseDamage > 0) {
+            if (getLastCard().baseDamage >= 0) {
                 attack.renderImpl(sb);
             }
-            if (getLastCard().baseBlock > 0) {
+            if (getLastCard().baseBlock >= 0) {
                 defend.renderImpl(sb);
             }
         }

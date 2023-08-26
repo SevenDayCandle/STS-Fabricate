@@ -277,6 +277,17 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     public void setup() {
     }
 
+    public void setTimesUpgraded(int times) {
+        auxiliaryData.timesUpgraded = times;
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        updateDescription(null);
+    }
+
     protected void subscribe() {
         for (PSkill<?> effect : getEffects()) {
             effect.subscribeChildren();

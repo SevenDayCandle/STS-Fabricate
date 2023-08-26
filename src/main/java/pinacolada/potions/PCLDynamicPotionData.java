@@ -48,6 +48,8 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         setBottleColor(original.liquidColor.cpy(), original.hybridColor.cpy(), original.spotsColor.cpy());
         setRarity(original.rarity);
         setSize(original.size);
+        setMaxUpgrades(original.maxUpgradeLevel);
+        setBranchFactor(original.branchFactor);
     }
 
     public PCLDynamicPotionData(PCLDynamicPotionData original) {
@@ -59,6 +61,8 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         setBottleColor(original.liquidColor.cpy(), original.hybridColor.cpy(), original.spotsColor.cpy());
         setRarity(original.rarity);
         setSize(original.size);
+        setMaxUpgrades(original.maxUpgradeLevel);
+        setBranchFactor(original.branchFactor);
         setLanguageMap(original.languageMap);
         setCounter(original.counter.clone(), original.counterUpgrade.clone());
         setPSkill(original.moves, true, true);

@@ -22,7 +22,7 @@ public class PowerFormulaEnemyRow extends PowerFormulaRow {
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
-        if (card != null && (card.baseDamage > 0 || card.baseBlock > 0)) {
+        if (card != null && (card.baseDamage >= 0 || card.baseBlock >= 0)) {
             PCLRenderHelpers.drawCentered(sb, Color.WHITE, EUIRM.images.border.texture(), hb.cX + hb.width * getOffsetCx(powers.size() / 2), hb.cY, ICON_SIZE, 16f, 1f, 0);
         }
     }

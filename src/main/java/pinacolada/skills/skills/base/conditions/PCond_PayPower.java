@@ -48,7 +48,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)));
+        return evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)));
     }
 
     private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
@@ -62,9 +62,10 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
+        String amountString = baseAmount <= 0 ? TEXT.subjects_all : getAmountRawString();
         String joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerAndString();
-        return capital(target == PCLCardTarget.Self ? (baseAmount <= 0 ? TEXT.act_remove(joinedString) : TEXT.act_pay(getAmountRawString(), joinedString))
-                : TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)), true);
+        return capital(target == PCLCardTarget.Self ? (baseAmount <= 0 ? TEXT.act_remove(joinedString) : TEXT.act_pay(amountString, joinedString))
+                : TEXT.act_removeFrom(EUIRM.strings.numNoun(amountString, joinedString), getTargetStringPerspective(perspective)), true);
     }
 
     @Override

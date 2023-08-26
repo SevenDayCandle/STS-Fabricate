@@ -3,8 +3,10 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
@@ -26,7 +28,11 @@ public class PField_Power extends PField_Random {
     }
 
     public String getBuffString() {
-        return debuff ? PGR.core.tooltips.debuff.title : PGR.core.tooltips.buff.title;
+        return getBuffString(skill.amount);
+    }
+
+    public String getBuffString(int amount) {
+        return PCLCoreStrings.plural(debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff, amount);
     }
 
     public String getPowerAndOrString() {

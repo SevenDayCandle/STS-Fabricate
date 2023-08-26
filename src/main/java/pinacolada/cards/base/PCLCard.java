@@ -269,31 +269,31 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void addAttackDisplay(AbstractPower p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
+        if (formulaDisplay != null && (baseDamage > 0 || onAttackEffect != null)) {
             formulaDisplay.addAttackPower(p, oldDamage, tempDamage);
         }
     }
 
     public void addAttackDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
+        if (formulaDisplay != null && (baseDamage > 0 || onAttackEffect != null)) {
             formulaDisplay.addAttackAffinity(p, oldDamage, tempDamage);
         }
     }
 
     public void addAttackDisplay(Texture tex, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
+        if (formulaDisplay != null && (baseDamage > 0 || onAttackEffect != null)) {
             formulaDisplay.addAttackGeneric(tex, oldDamage, tempDamage);
         }
     }
 
     public void addAttackDisplay(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
+        if (formulaDisplay != null && (baseDamage > 0 || onAttackEffect != null)) {
             formulaDisplay.addAttackGeneric(oldDamage, tempDamage);
         }
     }
 
     public void addAttackResult(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
+        if (formulaDisplay != null && (baseDamage > 0 || onAttackEffect != null)) {
             formulaDisplay.setAttackResult(oldDamage, tempDamage);
         }
     }
@@ -364,31 +364,31 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void addDefendDisplay(AbstractPower p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
+        if (formulaDisplay != null && (baseBlock > 0 || onBlockEffect != null)) {
             formulaDisplay.addDefendPower(p, oldDamage, tempDamage);
         }
     }
 
     public void addDefendDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
+        if (formulaDisplay != null && (baseBlock > 0 || onBlockEffect != null)) {
             formulaDisplay.addDefendAffinity(p, oldDamage, tempDamage);
         }
     }
 
     public void addDefendDisplay(Texture p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
+        if (formulaDisplay != null && (baseBlock > 0 || onBlockEffect != null)) {
             formulaDisplay.addDefendGeneric(p, oldDamage, tempDamage);
         }
     }
 
     public void addDefendDisplay(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
+        if (formulaDisplay != null && (baseBlock > 0 || onBlockEffect != null)) {
             formulaDisplay.addDefendGeneric(oldDamage, tempDamage);
         }
     }
 
     public void addDefendResult(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
+        if (formulaDisplay != null && (baseBlock > 0 || onBlockEffect != null)) {
             formulaDisplay.setDefendResult(oldDamage, tempDamage);
         }
     }

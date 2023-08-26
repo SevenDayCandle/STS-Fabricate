@@ -377,12 +377,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return getRandomCardFromPool(pool, c -> c.type == type && canObtainCopy(c), AbstractDungeon.cardRng);
     }
 
-    public AbstractCard getRandomRewardReplacementCard(AbstractCard.CardRarity rarity, ArrayList<AbstractCard> ignore, Random rng, boolean allowOtherRarities) {
+    public AbstractCard getRandomRewardReplacementCard(AbstractCard.CardRarity rarity, FuncT1<Boolean, AbstractCard> filterFunc, Random rng, boolean allowOtherRarities) {
         AbstractCard replacement = null;
         boolean searchingCard = true;
 
         while (searchingCard) {
-            final AbstractCard temp = getRandomCard(rarity, c -> !(EUIUtils.any(ignore, i -> i.cardID.equals(c.cardID))) && canObtainCopy(c), rng, allowOtherRarities);
+            final AbstractCard temp = getRandomCard(rarity, c -> filterFunc.invoke(c) && canObtainCopy(c), rng, allowOtherRarities);
             if (temp == null) {
                 break;
             }

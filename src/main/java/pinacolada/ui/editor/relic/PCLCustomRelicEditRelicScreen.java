@@ -117,6 +117,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     protected void rebuildItem() {
         previewRelic = getBuilder().create();
+        previewRelic.setTimesUpgraded(upgraded ? 1 : 0);
         previewRelic.scale = 1f;
         previewRelic.currentX = previewRelic.targetX = CARD_X;
         previewRelic.currentY = previewRelic.targetY = RELIC_Y;
@@ -140,10 +141,10 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
                 .setImage(texture));
     }
 
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {
-        });
+    protected void toggleViewUpgrades(boolean value) {
+        super.toggleViewUpgrades(value);
+        previewRelic.setTimesUpgraded(upgraded ? 1 : 0);
+        previewDescription.setLabel(previewRelic.getDescriptionImpl());
     }
 
     public void updateInnerElements() {

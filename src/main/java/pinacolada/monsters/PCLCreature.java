@@ -210,7 +210,7 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     }
 
     protected boolean shouldShowIntents() {
-        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements;
+        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewAnyEnemyIntent() && !Settings.hideCombatElements;
     }
 
     public void takeTurn(boolean manual) {

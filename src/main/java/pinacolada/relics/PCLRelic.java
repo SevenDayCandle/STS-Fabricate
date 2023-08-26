@@ -37,6 +37,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -526,6 +527,12 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         this.auxiliaryData.form = form;
         initializePCLTips();
         return this;
+    }
+
+    public void setTimesUpgraded(int times) {
+        auxiliaryData.timesUpgraded = times;
+        updateName();
+        updateDescription(null);
     }
 
     public void setupImages(String imagePath) {

@@ -239,6 +239,17 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return this;
     }
 
+    public void setTimesUpgraded(int i) {
+        auxiliaryData.timesUpgraded = i;
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        initializeTips();
+    }
+
     public void setup() {
     }
 
@@ -275,6 +286,12 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public PCLPotion upgrade() {
         if (this.canUpgrade()) {
             auxiliaryData.timesUpgraded += 1;
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            for (PSkill<?> ef : getPowerEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
             initializeTips();
         }
         return this;

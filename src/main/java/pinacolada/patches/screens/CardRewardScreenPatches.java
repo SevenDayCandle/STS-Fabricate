@@ -70,7 +70,7 @@ public class CardRewardScreenPatches {
     public static class CardRewardScreen_OnClose {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance) {
-            PGR.rewardScreen.close();
+            PGR.rewardScreen.close(false);
         }
     }
 

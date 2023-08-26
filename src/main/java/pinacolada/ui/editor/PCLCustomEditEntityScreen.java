@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -41,6 +42,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public final T currentSlot;
     public final boolean fromInGame;
     protected ActionT0 onSave;
+    protected boolean upgraded;
     public ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
     public ArrayList<PTrigger> currentPowers = new ArrayList<>();
     public ArrayList<EUIButton> pageButtons = new ArrayList<>();
@@ -159,6 +161,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     public void preInitialize(T currentSlot) {
+        SingleCardViewPopup.isViewingUpgrade = false; // To avoid glitches while rendering card upgrades, as the renderUpgradePreview function fetches the card's saved forms
         cancelButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(BUTTON_WIDTH * 0.6f, BUTTON_CY)
                 .setColor(Color.FIREBRICK)
@@ -250,6 +253,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         clearPages();
         addSkillPages();
         setupPageButtons();
+    }
+
+    protected void toggleViewUpgrades(boolean value) {
+        upgraded = value;
     }
 
     protected void undo() {

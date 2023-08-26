@@ -107,28 +107,24 @@ public class PCLPlayerSystem extends EUIBase {
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
-        if (card.baseBlock > 0) {
-            for (PCLAffinity p : PCLAffinity.basic()) {
-                card.addDefendDisplay(p, block, block);
-            }
+        for (PCLAffinity p : PCLAffinity.basic()) {
+            card.addDefendDisplay(p, block, block);
+        }
 
-            for (PCLPlayerMeter meter : getMeters()) {
-                block = meter.modifyBlock(block, source, card, target);
-            }
+        for (PCLPlayerMeter meter : getMeters()) {
+            block = meter.modifyBlock(block, source, card, target);
         }
 
         return block;
     }
 
     public float modifyDamage(float damage, PCLCard source, PCLCard card, AbstractCreature target) {
-        if (card.baseDamage > 0) {
-            for (PCLAffinity p : PCLAffinity.basic()) {
-                card.addAttackDisplay(p, damage, damage);
-            }
+        for (PCLAffinity p : PCLAffinity.basic()) {
+            card.addAttackDisplay(p, damage, damage);
+        }
 
-            for (PCLPlayerMeter meter : getMeters()) {
-                damage = meter.modifyDamage(damage, source, card, target);
-            }
+        for (PCLPlayerMeter meter : getMeters()) {
+            damage = meter.modifyDamage(damage, source, card, target);
         }
 
         return damage;

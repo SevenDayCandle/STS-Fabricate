@@ -31,6 +31,7 @@ import com.megacrit.cardcrawl.relics.Calipers;
 import com.megacrit.cardcrawl.relics.PenNib;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
@@ -1070,19 +1071,20 @@ public class CombatManager extends EUIBase {
     }
 
     public static void updateEstimatedDamage() {
-        ArrayList<PCLIntentInfo> intents = GameUtilities.getIntents();
-
-        int bufferCount = GameUtilities.getBlockedHits(player);
         int expectedDamage = 0;
+        int bufferCount = GameUtilities.getBlockedHits(player);
 
-        for (PCLIntentInfo intent : intents) {
-            if (intent.isIntentVisible()) {
-                int hits = intent.getDamageMulti();
-                while (bufferCount > 0 && hits > 0) {
-                    hits -= 1;
-                    bufferCount -= 1;
+        if (EUIGameUtils.canViewAnyEnemyIntent()) {
+            ArrayList<PCLIntentInfo> intents = GameUtilities.getIntents();
+            for (PCLIntentInfo intent : intents) {
+                if (intent.isIntentVisible()) {
+                    int hits = intent.getDamageMulti();
+                    while (bufferCount > 0 && hits > 0) {
+                        hits -= 1;
+                        bufferCount -= 1;
+                    }
+                    expectedDamage += intent.getDamage(false) * hits;
                 }
-                expectedDamage += intent.getDamage(false) * hits;
             }
         }
 

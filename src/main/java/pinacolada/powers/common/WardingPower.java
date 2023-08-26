@@ -1,6 +1,9 @@
 package pinacolada.powers.common;
 
+import com.megacrit.cardcrawl.actions.utility.UseCardAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.powers.PCLPower;
 
 public class WardingPower extends PCLPower {
@@ -13,13 +16,14 @@ public class WardingPower extends PCLPower {
     }
 
     @Override
-    public float modifyBlock(float block) {
-        return block + amount;
+    public float modifyBlock(float block, AbstractCard card) {
+        return super.modifyBlock(block, card) + amount;
     }
 
-    public void onGainedBlock(float amount) {
-        super.onGainedBlock(amount);
-        if (amount > 0) {
+    @Override
+    public void onAfterUseCard(AbstractCard card, UseCardAction action) {
+        super.onAfterUseCard(card, action);
+        if (card.baseBlock > 0 || (card instanceof EditorCard && ((EditorCard) card).getCardBlock() != null)) {
             removePower();
         }
     }

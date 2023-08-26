@@ -30,6 +30,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     private Texture customEnergyOrbLarge;
     protected ArrayList<PCLDynamicCardData> forms;
     protected PCLDynamicCardData builder;
+    protected boolean shouldFindForms;
 
     public PCLDynamicCard(PCLDynamicCardData builder) {
         this(builder, 0, 0, false, true);

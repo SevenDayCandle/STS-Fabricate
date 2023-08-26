@@ -125,7 +125,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setItems(AbstractRelic.LandingSound.values())
                 .setTooltip(EUIRM.strings.relic_landingSound, PGR.core.strings.cetut_landingSound);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val)))
+                , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
@@ -149,6 +149,11 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
 
     public String getTitle() {
         return header.text;
+    }
+
+    protected void modifyMaxUpgrades(int val) {
+        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
+        effect.upgradeToggle.setActive(val != 0);
     }
 
     @Override

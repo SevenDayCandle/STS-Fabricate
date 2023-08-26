@@ -51,14 +51,14 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(TEXT.cedit_customPower)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_customPower);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gainAmount(TEXT.subjects_x, TEXT.cedit_customPower)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_customPower);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String baseString = fields.getThresholdRawString(fields.random ? fields.getCardIDOrString() : fields.getCardIDAndString());
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_gain(baseString), perspective);
+            return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), baseString), perspective);
         }
 
         return getTargetHasStringPerspective(perspective, baseString);

@@ -190,7 +190,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     }
 
     public PCLDynamicCard create() {
-        return createImplWithForms(0, 0, true);
+        return createImplWithForms(0, 0, false);
     }
 
     public PCLDynamicCard createImplWithForms(int form, int timesUpgraded, boolean shouldFindForms) {

@@ -45,7 +45,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return ((fields.powers.isEmpty() ?
                 evaluateTargets(info, t -> amount == 0 ? (t.powers == null || !EUIUtils.any(t.powers, po -> po.type == targetType)) : t.powers != null && EUIUtils.any(t.powers, po -> po.type == targetType && po.amount >= amount)) :
-                evaluateTargets(info, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
+                evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
     }
 
     private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
@@ -54,17 +54,16 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gainAmount(TEXT.subjects_x, TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String baseString = fields.getThresholdRawString(fields.getPowerSubjectString());
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_gain(baseString), perspective);
+            return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), fields.getThresholdRawString(fields.powers.isEmpty() ? fields.getBuffString(2) : fields.getPowerOrString())), perspective);
         }
 
-        return getTargetHasStringPerspective(perspective, baseString);
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(fields.getPowerSubjectString()));
     }
 
     // When the specified creatures gain a power, triggers the effect on that target

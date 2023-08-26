@@ -36,14 +36,14 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String baseString = fields.getThresholdRawString(PGR.core.tooltips.block.toString());
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_gain(baseString), perspective);
+            return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), baseString), perspective);
         }
 
         return getTargetHasStringPerspective(perspective, baseString);

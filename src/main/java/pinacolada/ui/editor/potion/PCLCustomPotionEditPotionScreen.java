@@ -119,6 +119,7 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
 
     protected void rebuildItem() {
         preview = getBuilder().create();
+        preview.setTimesUpgraded(upgraded ? 1 : 0);
         preview.scale = 1f;
         preview.posX = CARD_X;
         preview.posY = RELIC_Y;
@@ -152,10 +153,10 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
                 .setImage(texture));
     }
 
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {
-        });
+    protected void toggleViewUpgrades(boolean value) {
+        super.toggleViewUpgrades(value);
+        preview.setTimesUpgraded(upgraded ? 1 : 0);
+        previewDescription.setLabel(preview.getUpdatedDescription());
     }
 
     public void updateInnerElements() {

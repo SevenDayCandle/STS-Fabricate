@@ -11,6 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.ColoredTexture;
@@ -133,10 +134,9 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
     }
 
     protected void rebuildItem() {
-        previewCard = getBuilder().createImplWithForms(currentBuilder, 0, false);
+        previewCard = getBuilder().createImplWithForms(currentBuilder, upgraded ? 1 : 0, false);
 
-        if (SingleCardViewPopup.isViewingUpgrade) {
-            //previewCard.upgrade();
+        if (upgraded) {
             previewCard.displayUpgrades();
         }
         else {
@@ -163,10 +163,16 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 .setImage(new ColoredTexture(texture)));
     }
 
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        modifyBuilder(__ -> {
-        });
+    protected void toggleViewUpgrades(boolean value) {
+        super.toggleViewUpgrades(value);
+        if (upgraded) {
+            previewCard.changeForm(previewCard.getForm(), 0, 1);
+            previewCard.displayUpgrades();
+        }
+        else {
+            previewCard.changeForm(previewCard.getForm(), 1, 0);
+            previewCard.displayUpgradesForSkills(false);
+        }
     }
 
     public void updateInnerElements() {

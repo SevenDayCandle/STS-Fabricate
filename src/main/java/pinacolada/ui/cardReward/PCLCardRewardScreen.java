@@ -24,12 +24,14 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardScreen extends EUIBase {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;
     protected final ArrayList<PCLCardRewardActionButton> buttons = new ArrayList<>();
     protected final ArrayList<PCLCardRewardBundle> bundles = new ArrayList<>();
+    public static final HashSet<String> seenCards = new HashSet<>();
     private boolean shouldClose; // Needed to prevent comodification errors
     protected CardRewardActionProvider actionProvider;
     protected CardRewardBonusProvider lastProvider;
@@ -59,10 +61,14 @@ public class PCLCardRewardScreen extends EUIBase {
         canReroll = actionProvider.canAct();
     }
 
-    public void close() {
+    public void close(boolean clearBundles) {
         EUI.countingPanel.close();
         upgradeToggle.toggle(false);
         buttons.clear();
+        if (clearBundles) {
+            bundles.clear();
+            PCLCardRewardScreen.seenCards.clear();
+        }
     }
 
     public void onCardObtained(AbstractCard hoveredCard) {
@@ -83,7 +89,7 @@ public class PCLCardRewardScreen extends EUIBase {
 
     public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
         if (GameUtilities.inBattle(true) || cards == null || rItem == null) {
-            close();
+            close(true);
             return;
         }
 
@@ -98,7 +104,7 @@ public class PCLCardRewardScreen extends EUIBase {
         if (this.rewardItem != rewardItem) {
             this.rewardItem = rewardItem;
             this.bundles.clear();
-
+            PCLCardRewardScreen.seenCards.clear();
 
             final ArrayList<AbstractCard> toRemove = new ArrayList<>();
             for (AbstractCard card : cards) {
@@ -108,7 +114,7 @@ public class PCLCardRewardScreen extends EUIBase {
             }
 
             for (AbstractCard card : toRemove) {
-                final AbstractCard replacement = PGR.dungeon.getRandomRewardReplacementCard(card.rarity, cards, AbstractDungeon.cardRng, true);
+                final AbstractCard replacement = PGR.dungeon.getRandomRewardReplacementCard(card.rarity, c -> !(EUIUtils.any(cards, i -> i.cardID.equals(c.cardID))), AbstractDungeon.cardRng, true);
                 if (replacement != null) {
                     GameUtilities.copyVisualProperties(replacement, card);
                     cards.remove(card);
