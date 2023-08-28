@@ -79,6 +79,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID(PCLAffinity.Red.getAffinitySymbol()).forceIcon(true);
     public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID(PCLAffinity.Silver.getAffinitySymbol()).forceIcon(true);
     public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID(PCLAffinity.Yellow.getAffinitySymbol()).forceIcon(true);
+    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByID(EUI.ENERGY_ID).setCanAdd(false).forceIcon(true);
     public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
 
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").setCanAdd(false).canHighlight(false);
@@ -91,7 +92,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip debuff = EUIKeywordTooltip.findByID("Debuff").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip discard = EUIKeywordTooltip.findByID("Discard").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip draw = EUIKeywordTooltip.findByID("Draw").setCanAdd(false).canHighlight(false);
-    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByName("[E]").setCanAdd(false).forceIcon(true);
     public EUIKeywordTooltip fetch = EUIKeywordTooltip.findByID("Fetch").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip heal = EUIKeywordTooltip.findByID("Heal").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip hp = EUIKeywordTooltip.findByID("HP").setCanAdd(false).canHighlight(false);

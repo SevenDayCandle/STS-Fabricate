@@ -3,6 +3,7 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -21,7 +22,7 @@ public class SymbolToken extends PCLTextToken {
 
     // Called before force icon can be set on the tooltips
     static {
-        tokenCache.put("E", new SymbolToken("[E]")); // Energy
+        tokenCache.put(EUI.ENERGY_ID, new SymbolToken(EUI.ENERGY_TIP)); // Energy
         for (PCLAffinity affinity : PCLAffinity.values()) {
             tokenCache.put(affinity.getPowerSymbol(), new SymbolToken(affinity.getFormattedPowerSymbol()));
         }

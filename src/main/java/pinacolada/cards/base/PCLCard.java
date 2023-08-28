@@ -1960,7 +1960,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     protected void renderGlowEffect(SpriteBatch sb, float duration, float scaleMult) {
         TextureAtlas.AtlasRegion img = getBorderTexture();
-        float iScale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F * scaleMult, 1.0F - duration)) * drawScale * Settings.scale;
+        float iScale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.13F * scaleMult, 1.0F - duration)) * drawScale * Settings.scale;
         glowColor.a = duration / 2.0F;
         sb.setColor(glowColor);
         sb.draw(img, current_x + img.offsetX - img.originalWidth / 2.0F, current_y + img.offsetY - img.originalHeight / 2.0F, img.originalWidth / 2.0F - img.offsetX, img.originalHeight / 2.0F - img.offsetY, img.packedWidth, img.packedHeight, iScale, iScale, angle);

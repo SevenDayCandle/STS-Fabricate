@@ -60,7 +60,10 @@ public class PowerFormulaRow extends EUIHoverable {
     protected void addPower(AbstractPower po, float input, float result) {
         RelativeHitbox hitbox = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1);
         PowerFormulaItem item;
-        if (po.region48 != null) {
+        if (po.region128 != null) {
+            item = new PowerFormulaItem(hitbox, po.owner instanceof AbstractPlayer, po.region128, result);
+        }
+        else if (po.region48 != null) {
             item = new PowerFormulaItem(hitbox, po.owner instanceof AbstractPlayer, po.region48, result);
         }
         else {

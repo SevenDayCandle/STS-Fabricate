@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLCustomColorPickerEffect;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -204,7 +206,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomPotionSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
         rarityDropdown.setSelection(effect.getBuilder().rarity, false);
         sizeDropdown.setSelection(effect.getBuilder().size, false);
@@ -259,8 +261,8 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     private void validifyCardID(String cardID) {
-        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
-        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
+        String fullID = PCLCustomPotionSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomPotionSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
             idWarning.setActive(true);
             effect.saveButton.setInteractable(false);
         }

@@ -116,8 +116,8 @@ public class PCLClickablePower extends PCLPower implements ClickableProvider {
             scale = 0.75f;
         }
 
-        if (this.region48 != null) {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
+        if (this.region128 != null) {
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.region128, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
         }
         else {
             PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, scale, 0);

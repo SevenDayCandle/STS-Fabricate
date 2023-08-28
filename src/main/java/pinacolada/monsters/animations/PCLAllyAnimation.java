@@ -13,19 +13,25 @@ import pinacolada.monsters.PCLCreature;
 public class PCLAllyAnimation extends PCLIntervalAnimation {
     public static final float RADIUS = 320;
     protected Color shineColor;
-    protected float scale = 0.45f;
+    protected float scale;
     protected float angle;
-    protected float rate = 40f;
+    protected float rate;
     protected float transitionAlpha;
     protected float targetTransitionAlpha = 1f;
     public PCLCreature owner;
 
     public PCLAllyAnimation(PCLCreature owner) {
-        this(owner, 0.3f, 0.4f);
+        this(owner, 0.3f, 0.4f, 0.4f, 40f);
     }
 
     public PCLAllyAnimation(PCLCreature owner, float intMin, float intMax) {
+        this(owner, intMin, intMax, 0.5f, 40f);
+    }
+
+    public PCLAllyAnimation(PCLCreature owner, float intMin, float intMax, float scale, float rate) {
         super(intMin, intMax);
+        this.scale = scale;
+        this.rate = rate;
         renderColor = Color.WHITE.cpy();
         renderColor.a = transitionAlpha;
         this.shineColor = renderColor.cpy();

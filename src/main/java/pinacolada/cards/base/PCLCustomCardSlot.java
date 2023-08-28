@@ -165,7 +165,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
 
     public static void initialize() {
         CUSTOM_CARDS.clear();
-        migrateLegacyFiles();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
@@ -201,32 +200,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
 
     protected static String makeNewID(AbstractCard.CardColor color) {
         return makeNewID(getBaseIDPrefix(color), getCards(color));
-    }
-
-    private static void migrateLegacyFiles() {
-        FileHandle legacyFolder = Gdx.files.local(FOLDER);
-        if (legacyFolder.exists()) {
-            for (FileHandle f : legacyFolder.list(JSON_FILTER)) {
-                try {
-                    String jsonString = f.readString();
-                    PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-
-                    String newFilePath = slot.makeFilePath();
-                    f.moveTo(Gdx.files.local(newFilePath));
-
-                    String oldImagePath = slot.makeMigrationImagePath();
-                    String newImagePath = slot.makeImagePath();
-                    FileHandle oldImage = Gdx.files.local(oldImagePath);
-                    if (oldImage.exists()) {
-                        oldImage.moveTo(Gdx.files.local(newImagePath));
-                    }
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                    EUIUtils.logError(PCLCustomCardSlot.class, "Could not migrate Custom Card: " + f.path());
-                }
-            }
-        }
     }
 
     public void commitBuilder() {

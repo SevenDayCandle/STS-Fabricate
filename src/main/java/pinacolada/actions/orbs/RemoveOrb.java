@@ -81,6 +81,7 @@ public class RemoveOrb extends PCLAction<ArrayList<AbstractOrb>> {
         if (player.orbs.remove(orb)) {
             player.orbs.add(0, orb);
             player.removeNextOrb();
+            orbs.add(orb);
         }
     }
 

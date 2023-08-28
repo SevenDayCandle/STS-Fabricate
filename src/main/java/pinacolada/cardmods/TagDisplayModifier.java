@@ -24,6 +24,19 @@ public class TagDisplayModifier extends AbstractCardModifier {
         return null;
     }
 
+    public static String modifyDescriptionForCard(String rawDescription, AbstractCard card) {
+        String text = rawDescription;
+        String preString = PCLCardTag.getTagTipPreString(card);
+        if (!preString.isEmpty()) {
+            text = preString + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + text;
+        }
+        String postString = PCLCardTag.getTagTipPostString(card);
+        if (!postString.isEmpty()) {
+            text = text + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + postString;
+        }
+        return text;
+    }
+
     @Override
     public AbstractCardModifier makeCopy() {
         return new TagDisplayModifier();
@@ -32,16 +45,7 @@ public class TagDisplayModifier extends AbstractCardModifier {
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
         if (PGR.config.displayCardTagDescription.get()) {
-            String text = rawDescription;
-            String preString = PCLCardTag.getTagTipPreString(card);
-            if (!preString.isEmpty()) {
-                text = preString + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + text;
-            }
-            String postString = PCLCardTag.getTagTipPostString(card);
-            if (!postString.isEmpty()) {
-                text = text + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + postString;
-            }
-            return text;
+            return modifyDescriptionForCard(rawDescription, card);
         }
         return rawDescription;
     }

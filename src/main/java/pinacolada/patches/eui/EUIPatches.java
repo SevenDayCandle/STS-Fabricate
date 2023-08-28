@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.patches.game.TooltipPatches;
 import extendedui.patches.screens.MenuPanelScreenPatches;
 import extendedui.ui.TextureCache;
 import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
@@ -125,6 +126,14 @@ public class EUIPatches {
                 return SpireReturn.Return(PGR.core.tooltips.summon.title);
             }
             return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = TooltipPatches.class, method = "useEUIForPowers")
+    public static class TooltipPatches_UseEUIForPowers {
+        @SpirePostfixPatch
+        public static boolean postfix(boolean res) {
+            return res || GameUtilities.isPCLPlayerClass();
         }
     }
 }

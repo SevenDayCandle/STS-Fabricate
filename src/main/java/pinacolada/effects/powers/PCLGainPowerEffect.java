@@ -13,11 +13,11 @@ import pinacolada.powers.PCLPower;
 public class PCLGainPowerEffect extends AbstractGameEffect {
     private static final float EFFECT_DUR = 2f;
     private final Texture img;
-    private final AtlasRegion region48;
+    private final AtlasRegion region128;
 
     public PCLGainPowerEffect(PCLPower power, boolean playSfx) {
         this.img = power.img;
-        this.region48 = power.region48;
+        this.region128 = power.region128;
 
         if (playSfx) {
             power.playApplyPowerSfx();
@@ -35,10 +35,10 @@ public class PCLGainPowerEffect extends AbstractGameEffect {
     public void render(SpriteBatch sb, float x, float y) {
         sb.setColor(this.color);
         sb.setBlendFunction(770, 1);
-        if (this.region48 != null) {
-            float half_w = region48.packedWidth / 2f;
-            float half_h = region48.packedHeight / 2f;
-            sb.draw(this.region48, x - half_w, y - half_h, half_w, half_h, region48.packedWidth, region48.packedHeight, scale * 0.1f, scale * 0.1f, 0f);
+        if (this.region128 != null) {
+            float half_w = region128.packedWidth / 2f;
+            float half_h = region128.packedHeight / 2f;
+            sb.draw(this.region128, x - half_w, y - half_h, half_w, half_h, region128.packedWidth, region128.packedHeight, scale * 0.1f, scale * 0.1f, 0f);
         }
         else {
             sb.draw(this.img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale, scale, 0f, 0, 0, this.img.getWidth(), this.img.getHeight(), false, false);

@@ -128,6 +128,12 @@ public class GridCardSelectScreenHelper {
         onClickCard = newOnClickCard;
     }
 
+    public static void unflash() {
+        for (AbstractCard c : mergedGroup.group) {
+            c.stopGlowing();
+        }
+    }
+
     public static boolean updateCardPositionAndHover(GridCardSelectScreen selectScreen) {
         if (cardGroups.isEmpty()) {
             return false;
@@ -157,7 +163,6 @@ public class GridCardSelectScreenHelper {
                 card.target_y = drawStartY + currentDiffY - lineNum * padY;
                 card.angle = card.targetAngle = 0;
                 card.fadingOut = false;
-                card.stopGlowing();
                 card.update();
                 card.updateHoverLogic();
 

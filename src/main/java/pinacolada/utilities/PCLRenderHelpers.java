@@ -148,25 +148,6 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
         return result;
     }
 
-    public static TextureRegion getSmallIcon(String id) {
-        switch (id) {
-            case "E":
-                return AbstractDungeon.player != null ? AbstractDungeon.player.getOrb() : PGR.core.tooltips.energy.icon;
-            case "CARD":
-                return AbstractCard.orb_card;
-            case "POTION":
-                return AbstractCard.orb_potion;
-            case "RELIC":
-                return AbstractCard.orb_relic;
-            case "SPECIAL":
-                return AbstractCard.orb_special;
-
-            default:
-                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(id);
-                return (tooltip != null) ? tooltip.icon : null;
-        }
-    }
-
     public static BitmapFont getSmallTextFont(PCLCard card, String text) {
         float scaleModifier = 0.8f;
         int length = text.length();

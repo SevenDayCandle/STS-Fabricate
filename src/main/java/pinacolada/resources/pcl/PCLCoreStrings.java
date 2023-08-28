@@ -341,15 +341,16 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String options_vanillaCustomRunMenu = options.TEXT[4];
     public final String options_showEstimatedDamage = options.TEXT[5];
     public final String options_showFormulaDisplay = options.TEXT[6];
-    public final String options_hideIrrelevantAffinities = options.TEXT[7];
-    public final String options_enableCustomCards = options.TEXT[8];
-    public final String options_enableCustomRelics = options.TEXT[9];
-    public final String options_enableCustomPotions = options.TEXT[10];
-    public final String options_enableCustomEvents = options.TEXT[11];
-    public final String options_lowVRAM = options.TEXT[12];
-    public final String options_madnessReplacements = options.TEXT[13];
-    public final String options_fabricatePopup = options.TEXT[14];
-    public final String options_alwaysPCLCard = options.TEXT[15];
+    public final String options_showUpgradeToggle = options.TEXT[7];
+    public final String options_hideIrrelevantAffinities = options.TEXT[8];
+    public final String options_enableCustomCards = options.TEXT[9];
+    public final String options_enableCustomRelics = options.TEXT[10];
+    public final String options_enableCustomPotions = options.TEXT[11];
+    public final String options_enableCustomEvents = options.TEXT[12];
+    public final String options_lowVRAM = options.TEXT[13];
+    public final String options_madnessReplacements = options.TEXT[14];
+    public final String options_fabricatePopup = options.TEXT[15];
+    public final String options_alwaysPCLCard = options.TEXT[16];
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
@@ -358,12 +359,13 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[4];
     public final String optionDesc_showEstimatedDamage = optionDesc.TEXT[5];
     public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[6];
-    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[7];
-    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[8];
-    public final String optionDesc_lowVRAM = optionDesc.TEXT[9];
-    public final String optionDesc_madnessReplacements = optionDesc.TEXT[10];
-    public final String optionDesc_fabricatePopup = optionDesc.TEXT[11];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[12];
+    public final String optionDesc_showUpgradeToggle = options.TEXT[7];
+    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[8];
+    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[9];
+    public final String optionDesc_lowVRAM = optionDesc.TEXT[10];
+    public final String optionDesc_madnessReplacements = optionDesc.TEXT[11];
+    public final String optionDesc_fabricatePopup = optionDesc.TEXT[12];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[13];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];

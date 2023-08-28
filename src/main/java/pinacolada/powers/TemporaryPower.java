@@ -24,7 +24,7 @@ public class TemporaryPower extends PCLPower {
         originalPower = sourcePower;
         this.img = sourcePower.img;
         this.amount = sourcePower.amount;
-        this.region48 = sourcePower.region128;
+        this.region128 = sourcePower.region128 != null ? sourcePower.region128 : sourcePower.region48;
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(ID);
         if (sourcePower instanceof PCLPower) {
             this.sourceMaxAmount = ((PCLPower) sourcePower).maxAmount;
@@ -33,7 +33,7 @@ public class TemporaryPower extends PCLPower {
         initialize(amount, sourcePower.type, true);
 
         this.name = formatDescription(2, sourcePower.name);
-        mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
+        mainTip.icon = this.region128 != null ? this.region128 : img != null ? new TextureRegion(img) : null;
         updateDescription();
     }
 

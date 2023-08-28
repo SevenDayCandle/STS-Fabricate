@@ -143,6 +143,7 @@ public class SelectFromPile extends CardFilterAction {
             GridCardSelectScreenHelper.addGroup(temp);
         }
 
+        GridCardSelectScreenHelper.unflash();
         CardGroup mergedGroup = GridCardSelectScreenHelper.getCardGroup();
         if (mergedGroup.isEmpty()) {
             GridCardSelectScreenHelper.clear(true);

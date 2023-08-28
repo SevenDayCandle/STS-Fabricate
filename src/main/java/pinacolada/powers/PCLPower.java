@@ -447,8 +447,8 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
-        if (this.region48 != null) {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, 1, 0);
+        if (this.region128 != null) {
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.region128, x, y, ICON_SIZE, ICON_SIZE, 1, 0);
         }
         else {
             PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, 1, 0);
@@ -477,7 +477,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.name = powerStrings.NAME;
         String desc = getUpdatedDescription();
         mainTip = new EUIKeywordTooltip(name, desc);
-        mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
+        mainTip.icon = this.region128 != null ? this.region128 : img != null ? new TextureRegion(img) : null;
         tooltips.add(mainTip);
         findTooltipsFromText(desc);
         // Base game descriptions don't support special characters
@@ -486,12 +486,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected void setupStrings(PCLRelic relic) {
         this.ID = deriveID(relic.relicId);
-        // Vanilla rendering cannot render generated region48 properly
+        this.region128 = relic.getPowerIcon();
+        // Vanilla rendering cannot render generated region128 properly
         if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        else {
-            this.region48 = relic.getPowerIcon();
         }
         this.powerStrings = new PowerStrings();
         this.powerStrings.NAME = relic.getNameFromData();
@@ -501,12 +499,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected void setupStrings(PCLCardData cardData) {
         this.ID = deriveID(cardData.ID);
-        // Vanilla rendering cannot render generated region48 properly
+        this.region128 = cardData.getCardIcon();
+        // Vanilla rendering cannot render generated region128 properly
         if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        else {
-            this.region48 = cardData.getCardIcon();
         }
         this.powerStrings = new PowerStrings();
         this.powerStrings.NAME = cardData.strings.NAME;

@@ -2,6 +2,7 @@ package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUI;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.cardText.ConditionToken;
 import pinacolada.cards.base.cardText.PointerToken;
+import pinacolada.cards.base.cardText.SymbolToken;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -251,6 +253,7 @@ public interface PointerProvider {
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
                     break;
+                case SymbolToken.TOKEN2:
                 case '[':
                     sub = new StringBuilder();
                     while (i + 1 < baseString.length()) {
@@ -333,6 +336,7 @@ public interface PointerProvider {
                     }
                     sb.append(EUISmartText.parseLogicString(sub.toString()));
                     break;
+                case SymbolToken.TOKEN2:
                 case '[':
                     if (!EUIConfiguration.useEUITooltips.get()) {
                         sub = new StringBuilder();
@@ -348,7 +352,10 @@ public interface PointerProvider {
                         }
                         String key = sub.toString();
                         EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
-                        sb.append(tip != null ? tip.title : key);
+                        // Energy tip is a special case that can be rendered as an icon in the base game
+                        sb.append(tip != null ?
+                                (EUI.ENERGY_ID.equals(tip.ID) ? EUI.ENERGY_TIP : tip.title)
+                                : key);
                     }
                     else {
                         sb.append(c);

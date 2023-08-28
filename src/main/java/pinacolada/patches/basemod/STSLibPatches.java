@@ -1,5 +1,7 @@
 package pinacolada.patches.basemod;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.patches.CommonKeywordIconsPatches;
 import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText;
 import com.evacipated.cardcrawl.mod.stslib.patches.relicInterfaces.BetterOnUsePotionPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
@@ -9,8 +11,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.markers.FabricateItem;
+import pinacolada.resources.PGR;
 
 public class STSLibPatches {
     @SpirePatch(clz = FlavorText.FlavorIntoCardStrings.class, method = "postfix")
@@ -30,6 +34,17 @@ public class STSLibPatches {
         @SpirePrefixPatch
         public static void prefix(AbstractPotion c) {
             CombatManager.onUsePotion(c);
+        }
+    }
+
+    @SpirePatch(clz = CommonKeywordIconsPatches.class, method = "RenderBadges")
+    public static class CommonKeywordIconsPatches_RenderBadges {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix(SpriteBatch sb, AbstractCard card) {
+            if (PGR.config.displayCardTagDescription.get()) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 }

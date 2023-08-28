@@ -46,12 +46,10 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
             if (this.powerStrings.NAME == null) {
                 this.ID = createPowerID(effect);
                 if (effectCopy.sourceCard instanceof EditorCard) {
-                    // Vanilla rendering cannot render generated region48 properly
+                    // Vanilla rendering cannot render generated region128 properly
+                    this.region128 = PCLRenderHelpers.generateIcon(((EditorCard) effectCopy.sourceCard).getPortraitImageTexture());
                     if (!EUIConfiguration.useEUITooltips.get()) {
                         this.img = PCLCoreImages.CardAffinity.unknown.texture();
-                    }
-                    else {
-                        this.region48 = PCLRenderHelpers.generateIcon(((EditorCard) effectCopy.sourceCard).getPortraitImageTexture());
                     }
                     this.powerStrings.NAME = effectCopy.sourceCard.name;
                 }

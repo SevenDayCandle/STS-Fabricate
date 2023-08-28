@@ -50,6 +50,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
             }
         }
         GridCardSelectScreenHelper.addGroup(cardGroup);
+        GridCardSelectScreenHelper.unflash();
         CardGroup mergedGroup = GridCardSelectScreenHelper.getCardGroup();
 
         AbstractDungeon.gridSelectScreen.open(mergedGroup, amount, PGR.core.strings.grid_chooseCards(amount), false, false, false, true);

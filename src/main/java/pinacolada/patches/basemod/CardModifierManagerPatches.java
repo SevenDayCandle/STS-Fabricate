@@ -2,12 +2,13 @@ package pinacolada.patches.basemod;
 
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
-import com.evacipated.cardcrawl.modthespire.lib.ByRef;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.CommonKeywordIconsField;
+import com.evacipated.cardcrawl.mod.stslib.patches.CommonKeywordIconsPatches;
+import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.cardmods.TagDisplayModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
@@ -31,6 +32,17 @@ public class CardModifierManagerPatches {
             if (card instanceof PCLCard) {
                 ((PCLCard) card).initializeName();
             }
+        }
+    }
+
+    @SpirePatch(clz = CardModifierManager.class, method = "onCreateDescription")
+    public static class CardModifierManager_OnCreateDescription {
+        @SpirePostfixPatch
+        public static String postfix(String retVal, AbstractCard card, String rawDescription) {
+            if (PGR.config.displayCardTagDescription.get() && CommonKeywordIconsField.useIcons.get(card)) {
+                return TagDisplayModifier.modifyDescriptionForCard(retVal, card);
+            }
+            return retVal;
         }
     }
 

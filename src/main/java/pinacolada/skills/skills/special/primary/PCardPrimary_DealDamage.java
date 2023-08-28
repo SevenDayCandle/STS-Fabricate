@@ -250,6 +250,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
         if (sc != null) {
+            editor.shouldOverrideTarget = true;
             editor.registerDropdown(Arrays.asList(PCLAttackType.values())
                     , EUIUtils.arrayList(sc.getBuilder().attackType)
                     , item -> {

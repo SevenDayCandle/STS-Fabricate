@@ -40,4 +40,12 @@ public class AbstractCreaturePatches {
             CombatManager.onBlockBroken(__instance);
         }
     }
+
+    @SpirePatch(clz = AbstractCreature.class, method = "heal", paramtypez = {int.class})
+    public static class AbstractCreaturePatches_Heal {
+        @SpirePrefixPatch
+        public static void method(AbstractCreature __instance, @ByRef int[] healAmount) {
+            healAmount[0] = CombatManager.onCreatureHeal(__instance, healAmount[0]);
+        }
+    }
 }

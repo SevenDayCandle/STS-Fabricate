@@ -11,7 +11,7 @@ import pinacolada.powers.PCLPower;
 
 public class PCLFlashPowerEffect extends VisualEffect {
     private final Texture img;
-    private final AtlasRegion region128;
+    private final AtlasRegion region;
 
     public PCLFlashPowerEffect(PCLPower power) {
         this.scale = Settings.scale;
@@ -26,16 +26,16 @@ public class PCLFlashPowerEffect extends VisualEffect {
         }
 
         this.img = power.img;
-        if (power.region48 != null) {
-            this.region128 = power.region48;
+        if (power.region128 != null) {
+            this.region = power.region128;
         }
         else {
-            this.region128 = power.region128;
+            this.region = power.region48;
         }
 
-        if (this.region128 != null) {
-            this.x -= (float) (this.region128.packedWidth / 2);
-            this.y -= (float) (this.region128.packedHeight / 2);
+        if (this.region != null) {
+            this.x -= (float) (this.region.packedWidth / 2);
+            this.y -= (float) (this.region.packedHeight / 2);
         }
 
         this.duration = this.startingDuration = 0.7f;
@@ -47,7 +47,7 @@ public class PCLFlashPowerEffect extends VisualEffect {
         this.x = x;
         this.y = y;
         this.img = img;
-        this.region128 = null;
+        this.region = null;
         this.duration = this.startingDuration = 0.7f;
         this.color = Color.WHITE.cpy();
     }
@@ -59,11 +59,11 @@ public class PCLFlashPowerEffect extends VisualEffect {
     public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
-        if (this.region128 != null) {
-            float half_w = region128.packedWidth / 2f;
-            float half_h = region128.packedHeight / 2f;
+        if (this.region != null) {
+            float half_w = region.packedWidth / 2f;
+            float half_h = region.packedHeight / 2f;
 
-            sb.draw(region128, x, y, half_w, half_h, region128.packedWidth, region128.packedHeight, scale, scale, 0f);
+            sb.draw(region, x, y, half_w, half_h, region.packedWidth, region.packedHeight, scale, scale, 0f);
         }
         else if (this.img != null) {
             int width = this.img.getWidth();

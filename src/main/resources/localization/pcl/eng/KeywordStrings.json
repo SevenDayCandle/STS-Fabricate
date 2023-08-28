@@ -423,7 +423,7 @@
 		"NAME": "Sanctuary"
 	},
 	"Scout":	{
-		"DESCRIPTION": "Draw cards, then move the same number of cards to the top of your draw pile.",
+		"DESCRIPTION": "Fetch cards from the top of your draw pile, then put the same number of cards from your hand in their place.",
 		"NAME": "Scout",
 		"PAST": "Scouted",
 		"PRESENT": "Scouts",

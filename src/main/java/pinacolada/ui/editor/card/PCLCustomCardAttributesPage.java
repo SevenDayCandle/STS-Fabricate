@@ -83,11 +83,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
         targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setOnChange(targets -> {
-                    if (!targets.isEmpty()) {
-                        screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
-                    }
-                })
+                .setOnChange(this::modifyTargets)
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosizeButton(true)
@@ -222,6 +218,17 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
             }
         }
         screen.modifyAllBuilders((e, i) -> e.setTags(tags));
+    }
+
+    protected void modifyTargets(List<PCLCardTarget> targets) {
+        if (!targets.isEmpty()) {
+            screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
+            for (PCLCustomGenericPage page: screen.pages) {
+                if (page != this) {
+                    page.refresh();
+                }
+            }
+        }
     }
 
     @Override

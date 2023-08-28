@@ -77,6 +77,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public EUIHitbox hb;
     public PCLCustomEffectPage editor;
     public PCLCustomEffectNode node;
+    public boolean shouldOverrideTarget;
 
     public PCLCustomEffectEditingPane(PCLCustomEffectPage editor, PCLCustomEffectNode node, EUIHitbox hb) {
         this.editor = editor;
@@ -371,12 +372,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
         targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardTarget::getTitle)
-                .setOnChange(targets -> {
-                    if (node.skill != null && !targets.isEmpty()) {
-                        node.skill.setTarget(targets.get(0));
-                        editor.updateRootEffect();
-                    }
-                })
+                .setOnChange(this::modifyTargets)
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
@@ -385,6 +381,23 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         destinations = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_destinations, false);
         origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false);
         piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true);
+    }
+
+    protected void modifyTargets(List<PCLCardTarget> targets) {
+        if (node.skill != null && !targets.isEmpty()) {
+            node.skill.setTarget(targets.get(0));
+            if (shouldOverrideTarget) {
+                if (editor.screen instanceof PCLCustomCardEditCardScreen) {
+                    ((PCLCustomCardEditCardScreen) editor.screen).modifyBuilder(e -> e.setTarget(targets.get(0)));
+                    for (PCLCustomGenericPage page: editor.screen.pages) {
+                        if (page != editor) {
+                            page.refresh();
+                        }
+                    }
+                }
+            }
+            editor.updateRootEffect();
+        }
     }
 
     public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(T[] items, String title) {
@@ -431,6 +444,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
         int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
         int eMax = data != null ? data.maxExtra : PSkill.DEFAULT_MAX;
+        shouldOverrideTarget = false;
 
         effects.setSelection(node.skill, false);
         valueEditor

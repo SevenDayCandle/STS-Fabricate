@@ -652,6 +652,10 @@ public class CombatManager extends EUIBase {
         return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(cooldown, source, m));
     }
 
+    public static int onCreatureHeal(AbstractCreature instance, int block) {
+        return subscriberInout(OnCreatureHealSubscriber.class, block, (s, b) -> s.onHeal(instance, b));
+    }
+
     public static void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect) {
         subscriberDo(OnDamageActionSubscriber.class, s -> s.onDamageAction(action, target, info, effect));
     }
