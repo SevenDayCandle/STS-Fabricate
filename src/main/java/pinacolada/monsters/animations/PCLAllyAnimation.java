@@ -21,11 +21,11 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
     public PCLCreature owner;
 
     public PCLAllyAnimation(PCLCreature owner) {
-        this(owner, 0.3f, 0.4f, 0.4f, 40f);
+        this(owner, 0.3f, 0.4f, 0.38f, 40f);
     }
 
     public PCLAllyAnimation(PCLCreature owner, float intMin, float intMax) {
-        this(owner, intMin, intMax, 0.5f, 40f);
+        this(owner, intMin, intMax, 0.34f, 40f);
     }
 
     public PCLAllyAnimation(PCLCreature owner, float intMin, float intMax, float scale, float rate) {

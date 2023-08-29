@@ -368,6 +368,12 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return setAttack(cost, rarity, attackType, PCLCardTarget.Single);
     }
 
+    public PCLCardData setAttackType(PCLAttackType attackType) {
+        this.attackType = attackType;
+
+        return this;
+    }
+
     public PCLCardData setBlock(int block, int blockUpgrade) {
         this.block[0] = block;
         this.blockUpgrade[0] = blockUpgrade;

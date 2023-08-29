@@ -511,4 +511,12 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
             }
         });
     }
+
+    @Override
+    public void useOutsideOfBattle() {
+        if (this.childEffect != null) {
+            updateChildAmount(generateInfo(null), true);
+            this.childEffect.useOutsideOfBattle();
+        }
+    }
 }

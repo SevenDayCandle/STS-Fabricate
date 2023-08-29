@@ -27,11 +27,11 @@ public class PCLGeneralAllyAnimation extends PCLAllyAnimation {
         float angleExt = this.angle;
         float angleInt = -(this.angle);
 
-        sb.draw(metal, x - hSize, y - hSize / 2f, hSize, hSize, rSize, rSize, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(metal, x - hSize, y - hSize * 0.6f, hSize, hSize, rSize, rSize, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
         sb.setBlendFunction(770, 1);
         this.shineColor.a = Interpolation.sine.apply(0.1f, 0.42f, angleExt / 185) * this.transitionAlpha;
         sb.setColor(this.shineColor);
-        sb.draw(metal, x - hSize, y - hSize / 2f, hSize, hSize, rSize, rSize, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(metal, x - hSize, y - hSize * 0.6f, hSize, hSize, rSize, rSize, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
 
         sb.setColor(Color.WHITE);
     }

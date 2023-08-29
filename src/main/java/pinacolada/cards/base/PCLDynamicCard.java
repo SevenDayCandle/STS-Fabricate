@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
@@ -62,7 +63,26 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     public void fullReset() {
         findForms();
-        super.fullReset();
+        this.clearSkills();
+        for (PCLCardTag tag : PCLCardTag.values()) {
+            tag.set(this, 0);
+        }
+        this.onAttackEffect = null;
+        this.onBlockEffect = null;
+
+        // Use the builder as the source of truth for numbers since this may be inconsistent with the current cardData
+        onFormChange(this.auxiliaryData.form, timesUpgraded);
+        if (cardData != builder) {
+            cardData.setNumbers(builder);
+            cardData.setAttackType(builder.attackType);
+            cardData.setTarget(builder.cardTarget);
+            cardData.setTiming(builder.timing);
+            cardData.setTags(builder.tags);
+        }
+
+        setupProperties(builder, this.auxiliaryData.form, timesUpgraded);
+        setForm(this.auxiliaryData.form, timesUpgraded);
+        refresh(null);
     }
 
     protected TextureAtlas.AtlasRegion getBaseGameCardBackground() {
@@ -354,6 +374,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         PCLDynamicCard copy = new PCLDynamicCard(builder);
         if (forms != null && !forms.isEmpty()) {
             copy.setForms(forms);
+            copy.onFormChange(copy.getForm(), copy.timesUpgraded);
         }
         return copy;
     }

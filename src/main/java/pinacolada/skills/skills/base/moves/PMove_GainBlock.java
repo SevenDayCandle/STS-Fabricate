@@ -13,7 +13,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_GainBlock extends PMove<PField_Empty> {
+public class PMove_GainBlock extends PMove_Gain {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainBlock.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX);
 
@@ -39,13 +39,9 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (isSelfOnlyTarget(perspective)) {
-            return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.block) : TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
-        }
-        return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), PGR.core.tooltips.block);
+    public String gainText() {
+        return PGR.core.tooltips.block.toString();
     }
-
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (amount < 0) {
@@ -60,10 +56,5 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
         }
 
         super.use(info, order);
-    }
-
-    @Override
-    public String wrapAmount(int input) {
-        return String.valueOf(Math.abs(input));
     }
 }

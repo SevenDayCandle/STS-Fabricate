@@ -13,7 +13,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_GainTempHP extends PMove<PField_Empty> {
+public class PMove_GainTempHP extends PMove_Gain {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainTempHP.class, PField_Empty.class);
 
     public PMove_GainTempHP() {
@@ -38,11 +38,8 @@ public class PMove_GainTempHP extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (isSelfOnlyTarget(perspective)) {
-            return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
-        }
-        return TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), PGR.core.tooltips.tempHP);
+    public String gainText() {
+        return PGR.core.tooltips.tempHP.toString();
     }
 
     @Override
