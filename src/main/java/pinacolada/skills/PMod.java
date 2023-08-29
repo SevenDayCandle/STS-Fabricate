@@ -79,10 +79,6 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return (PMod_PerDamage) new PMod_PerDamage(amount).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerAffinityLevel bonusPerLevel(int amount, PCLAffinity... aff) {
-        return (PMod_PerAffinityLevel) new PMod_PerAffinityLevel(amount, aff).edit(f -> f.setNot(true));
-    }
-
     public static PMod_PerOrb bonusPerOrb(int amount, PCLOrbHelper... aff) {
         return new PMod_PerOrb(amount, aff);
     }
@@ -269,10 +265,6 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     public static PMod_PerEnergy perEnergy(int amount) {
         return new PMod_PerEnergy(amount);
-    }
-
-    public static PMod_PerAffinityLevel perLevel(int amount, PCLAffinity... aff) {
-        return new PMod_PerAffinityLevel(amount, aff);
     }
 
     public static PMod_PerOrb perOrb(PCLOrbHelper... orbs) {

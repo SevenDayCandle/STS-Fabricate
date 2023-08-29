@@ -653,10 +653,6 @@ public class GameUtilities {
         return card instanceof PCLCard ? card.magicNumber : 0;
     }
 
-    public static PCLAffinity getCurrentAffinity() {
-        return CombatManager.playerSystem.getCurrentAffinity();
-    }
-
     public static AbstractRoom getCurrentRoom() {
         return (AbstractDungeon.currMapNode == null) ? null : AbstractDungeon.currMapNode.getRoom();
     }
@@ -977,10 +973,6 @@ public class GameUtilities {
         }
 
         return cards;
-    }
-
-    public static int getPCLAffinityLevel(PCLAffinity affinity) {
-        return CombatManager.playerSystem.getLevel(affinity);
     }
 
     public static PCLCardAffinities getPCLCardAffinities(AbstractCard card) {

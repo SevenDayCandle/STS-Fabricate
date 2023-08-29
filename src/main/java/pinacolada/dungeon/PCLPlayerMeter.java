@@ -55,12 +55,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
         return category + ": " + EUIRM.strings.generic2(addendum, index);
     }
 
-    public void addLevel(PCLAffinity affinity, int amount) {
-    }
-
-    public void addSkip(int amount) {
-    }
-
     public boolean canGlow(AbstractCard c) {
         return false;
     }
@@ -74,17 +68,8 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     public void flashAffinity(PCLAffinity affinity) {
     }
 
-    /* Creates a NEW info object. To be used when executing infos in effects to ensure that data is not interfered with during the action execution process */
-    public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        return new PCLUseInfo(card, source, target);
-    }
-
     public PCLAffinity get(int target) {
         return PCLAffinity.General;
-    }
-
-    public PCLAffinity getCurrentAffinity() {
-        return get(0);
     }
 
     public int getCurrentScore() {
@@ -93,29 +78,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
 
     public int getHighestScore() {
         return highestScore;
-    }
-
-    /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
-    public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        if (info == null) {
-            info = generateInfo(card, source, target);
-        }
-        else {
-            info.set(card, source, target);
-        }
-        return info;
-    }
-
-    public int getLevel(PCLAffinity affinity) {
-        return 0;
-    }
-
-    public Object getRerollDescription() {
-        return null;
-    }
-
-    public Object getRerollDescription2() {
-        return null;
     }
 
     public void increaseScore(int amount) {
@@ -187,4 +149,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     public abstract EUITutorialPage[] getInfoPages();
 
     public abstract String getInfoTitle();
+
+    public abstract void setupInfo(PCLUseInfo newInfo);
 }

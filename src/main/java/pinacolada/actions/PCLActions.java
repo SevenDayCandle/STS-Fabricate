@@ -30,8 +30,6 @@ import com.megacrit.cardcrawl.vfx.cardManip.CardFlashVfx;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import pinacolada.actions.affinity.AddAffinityLevel;
-import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
 import pinacolada.actions.cards.*;
 import pinacolada.actions.creature.*;
@@ -155,10 +153,6 @@ public final class PCLActions {
         }
 
         return action;
-    }
-
-    public AddAffinityLevel addAffinityLevel(PCLAffinity affinity, int amount) {
-        return add(new AddAffinityLevel(affinity, amount));
     }
 
     public AddPowerEffectBonus addPowerEffectBonus(String powerID, int amount, boolean forPlayer) {
@@ -643,18 +637,6 @@ public final class PCLActions {
 
     public ReplaceCard replaceCard(UUID uuid, AbstractCard replacement) {
         return add(new ReplaceCard(uuid, replacement));
-    }
-
-    public RerollAffinity rerollAffinity() {
-        return add(new RerollAffinity(0));
-    }
-
-    public RerollAffinity rerollAffinity(int target) {
-        return add(new RerollAffinity(target));
-    }
-
-    public RerollAffinity rerollAffinity(int target, PCLAffinity... affinities) {
-        return add(new RerollAffinity(target)).setAffinityChoices(affinities);
     }
 
     public ReshuffleDiscardPile reshuffleDiscardPile(boolean onlyIfEmpty) {

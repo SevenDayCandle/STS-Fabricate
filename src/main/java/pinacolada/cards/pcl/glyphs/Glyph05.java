@@ -17,7 +17,7 @@ public class Glyph05 extends Glyph {
 
     public void action(PSpecialSkill move, PCLUseInfo info, PCLActions order) {
         for (PCLAffinity af : move.fields.affinities) {
-            for (PCLPlayerMeter meter : CombatManager.playerSystem.getMeters()) {
+            for (PCLPlayerMeter meter : CombatManager.playerSystem.getActiveMeters()) {
                 meter.disableAffinity(af);
             }
         }

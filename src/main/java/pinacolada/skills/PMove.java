@@ -45,10 +45,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         super(data, target, amount, extra);
     }
 
-    public static PMove_AddLevel addLevel(int amount, PCLAffinity... affinities) {
-        return new PMove_AddLevel(amount, affinities);
-    }
-
     public static PMove_AddPowerBonus addPowerBonus(int amount, PCLPowerHelper... p) {
         return new PMove_AddPowerBonus(amount, p);
     }

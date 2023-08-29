@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
@@ -15,95 +16,106 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 public class PCLPlayerSystem extends EUIBase {
     protected final LinkedHashMap<AbstractPlayer.PlayerClass, PCLPlayerMeter> meters = new LinkedHashMap<>();
-    public final PCLEmptyMeter fakeMeter = new PCLEmptyMeter();
+    protected final ArrayList<PCLPlayerMeter> activeMeters = new ArrayList<>();
+    protected PCLUseInfo info;
     protected PCLCard lastCardPlayed = null;
 
     public PCLPlayerSystem() {
     }
 
-    public void addLevel(PCLAffinity affinity, int amount) {
-        getActiveMeter().addLevel(affinity, amount);
-    }
-
-    public void addSkip(int amount) {
-        getActiveMeter().addSkip(amount);
-    }
-
     public void flash(int target) {
-        getActiveMeter().flash(target);
+        PCLPlayerMeter active = getActiveMeter();
+        if (active != null) {
+            active.flash(target);
+        }
     }
 
     public void flashAffinity(PCLAffinity target) {
-        getActiveMeter().flashAffinity(target);
+        PCLPlayerMeter active = getActiveMeter();
+        if (active != null) {
+            active.flashAffinity(target);
+        }
     }
 
     /* Creates a NEW info object. To be used when executing infos in effects to ensure that data is not interfered with during the action execution process */
     public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        return getActiveMeter().generateInfo(card, source, target);
+        PCLUseInfo newInfo = new PCLUseInfo(card, source, target);
+        for (PCLPlayerMeter meter : meters.values()) {
+            meter.setupInfo(newInfo);
+        }
+        return newInfo;
     }
 
     public PCLPlayerMeter getActiveMeter() {
         if (player != null) {
-            return meters.getOrDefault(player.chosenClass, fakeMeter);
+            return meters.getOrDefault(player.chosenClass, null);
         }
-        return fakeMeter;
+        return null;
+    }
+
+    public Collection<PCLPlayerMeter> getActiveMeters() {
+        return activeMeters;
     }
 
     public PCLAffinity getAffinity(int index) {
-        return getActiveMeter().get(index);
-    }
-
-    public PCLAffinity getCurrentAffinity() {
-        return getActiveMeter().getCurrentAffinity();
+        PCLPlayerMeter active = getActiveMeter();
+        return active != null ? active.get(index) : PCLAffinity.General;
     }
 
     public Color getGlowColor(AbstractCard c) {
-        return getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            if (meter.canGlow(c)) {
+                return PCLCard.SYNERGY_GLOW_COLOR;
+            }
+        }
+        return PCLCard.REGULAR_GLOW_COLOR;
     }
 
     /* Updates a CACHED info object. To be used in updating calls to avoid memory churn */
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
-        return getActiveMeter().getInfo(card, source, target);
+        if (info == null) {
+            info = generateInfo(card, source, target);
+        }
+        else {
+            info.set(card, source, target);
+            for (PCLPlayerMeter meter : meters.values()) {
+                meter.setupInfo(info);
+            }
+        }
+        return info;
     }
 
     public PCLCard getLastCardPlayed() {
         return lastCardPlayed;
     }
 
-    public int getLevel(PCLAffinity affinity) {
-        return getActiveMeter().getLevel(affinity);
-    }
-
     public PCLPlayerMeter getMeter(AbstractPlayer.PlayerClass playerClass) {
         return meters.get(playerClass);
     }
 
-    public Collection<PCLPlayerMeter> getMeters() {
-        return meters.values();
-    }
-
-    public Object getRerollDescription() {
-        return getActiveMeter().getRerollDescription();
-    }
-
-    public Object getRerollDescription2() {
-        return getActiveMeter().getRerollDescription2();
-    }
-
     public void initialize() {
+        activeMeters.clear();
+        // Meter should be factored in if it corresponds with the active player, or if the player has a card of that color
+        PCLPlayerMeter active = getActiveMeter();
+        HashSet<AbstractPlayer.PlayerClass> playerClasses = player != null ? EUIUtils.mapAsSet(player.masterDeck.group,
+                c -> c instanceof PCLCard ? ((PCLCard) c).cardData.resources.playerClass : EUIGameUtils.getPlayerClassForCardColor(c.color)) :
+                new HashSet<>();
+        playerClasses.remove(null); // Ignore cards not corresponding to a player class
+        for (Map.Entry<AbstractPlayer.PlayerClass, PCLPlayerMeter> entry : meters.entrySet()) {
+            PCLPlayerMeter meter = entry.getValue();
+            meter.initialize();
+            if (meter == active || playerClasses.contains(entry.getKey())) {
+                activeMeters.add(meter);
+            }
+        }
 
         EUIUtils.logInfoIfDebug(this, "Initialized PCL Affinity System.");
-
-        for (PCLPlayerMeter meter : getMeters()) {
-            meter.initialize();
-        }
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
@@ -111,7 +123,7 @@ public class PCLPlayerSystem extends EUIBase {
             card.addDefendDisplay(p, block, block);
         }
 
-        for (PCLPlayerMeter meter : getMeters()) {
+        for (PCLPlayerMeter meter : getActiveMeters()) {
             block = meter.modifyBlock(block, source, card, target);
         }
 
@@ -123,7 +135,7 @@ public class PCLPlayerSystem extends EUIBase {
             card.addAttackDisplay(p, damage, damage);
         }
 
-        for (PCLPlayerMeter meter : getMeters()) {
+        for (PCLPlayerMeter meter : getActiveMeters()) {
             damage = meter.modifyDamage(damage, source, card, target);
         }
 
@@ -135,7 +147,7 @@ public class PCLPlayerSystem extends EUIBase {
             initial *= PCLLockOnPower.getOrbMultiplier(target.isPlayer);
         }
 
-        for (PCLPlayerMeter meter : getMeters()) {
+        for (PCLPlayerMeter meter : getActiveMeters()) {
             initial = meter.modifyOrbOutput(initial, target, orb);
         }
 
@@ -143,24 +155,34 @@ public class PCLPlayerSystem extends EUIBase {
     }
 
     public void onCardCreated(AbstractCard card, boolean startOfBattle) {
-        getActiveMeter().onCardCreated(card, startOfBattle);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.onCardCreated(card, startOfBattle);
+        }
     }
 
     public AbstractCardModifier onCardModified(AbstractCard card, AbstractCardModifier modifier) {
-        return getActiveMeter().onCardModified(card, modifier);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            modifier = meter.onCardModified(card, modifier);
+        }
+        return modifier;
     }
 
     public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon) {
-        getActiveMeter().onCardPlayed(card, info, fromSummon);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.onCardPlayed(card, info, fromSummon);
+        }
     }
 
     public void onEndOfTurn() {
-        setLastCardPlayed(null);
-        getActiveMeter().onEndOfTurn();
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.onEndOfTurn();
+        }
     }
 
     public void onStartOfTurn() {
-        getActiveMeter().onStartOfTurn();
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.onStartOfTurn();
+        }
     }
 
     public void registerMeter(AbstractPlayer.PlayerClass playerClass, PCLPlayerMeter meter) {
@@ -172,7 +194,9 @@ public class PCLPlayerSystem extends EUIBase {
             return;
         }
 
-        getActiveMeter().renderImpl(sb);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.renderImpl(sb);
+        }
     }
 
     public void setLastCardPlayed(AbstractCard card) {
@@ -187,11 +211,15 @@ public class PCLPlayerSystem extends EUIBase {
     }
 
     public void update(PCLCard hoveredCard, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard) {
-        getActiveMeter().update(hoveredCard, originalCard, target, originalTarget, draggingCard);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
+        }
     }
 
     @Override
     public void updateImpl() {
-        getActiveMeter().update(null, null, null, null, false);
+        for (PCLPlayerMeter meter : getActiveMeters()) {
+            meter.update(null, null, null, null, false);
+        }
     }
 }

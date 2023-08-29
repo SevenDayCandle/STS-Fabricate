@@ -13,6 +13,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
@@ -30,6 +31,8 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     public final PowerFormulaRow attack;
     public final PowerFormulaRow defend;
     public final PowerFormulaEnemyRow enemyAttack;
+    private boolean updatedAttack;
+    private boolean updatedDefend;
 
     public PowerFormulaDisplay() {
         super(PGR.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
@@ -108,13 +111,11 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         title.renderImpl(sb);
-        if (getLastCard() != null) {
-            if (getLastCard().baseDamage >= 0) {
-                attack.renderImpl(sb);
-            }
-            if (getLastCard().baseBlock >= 0) {
-                defend.renderImpl(sb);
-            }
+        if (updatedAttack) {
+            attack.renderImpl(sb);
+        }
+        if (updatedDefend) {
+            defend.renderImpl(sb);
         }
         if (getLastTarget() != null && enemyAttack.shouldRender) {
             enemyAttack.renderImpl(sb);
@@ -140,24 +141,32 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
                 float curOff = hb.height * -0.5f;
                 if (pCard.onAttackEffect != null) {
                     curOff = moveHitbox(attackHb, curOff);
+                    updatedAttack = true;
+                }
+                else {
+                    updatedAttack = false;
                 }
                 if (pCard.onBlockEffect != null) {
                     curOff = moveHitbox(defendHb, curOff);
+                    updatedDefend = true;
+                }
+                else {
+                    updatedDefend = false;
                 }
                 curOff = moveHitbox(enemyAttackHb, curOff);
             }
             else {
                 title.setLabel("--");
+                updatedAttack = false;
+                updatedDefend = false;
             }
         }
         title.updateImpl();
-        if (pCard != null) {
-            if (pCard.onAttackEffect != null) {
-                attack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
-            }
-            if (pCard.onBlockEffect != null) {
-                defend.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
-            }
+        if (updatedAttack) {
+            attack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
+        }
+        if (updatedDefend) {
+            defend.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
         }
         if (target != null) {
             enemyAttack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);

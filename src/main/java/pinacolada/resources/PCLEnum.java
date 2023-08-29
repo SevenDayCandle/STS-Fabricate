@@ -4,6 +4,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuPanelScreen;
@@ -39,6 +40,11 @@ public class PCLEnum {
     public static class CardType {
         @SpireEnum
         public static AbstractCard.CardType SUMMON;
+    }
+
+    public static class PlayerClass {
+        @SpireEnum
+        public static AbstractPlayer.PlayerClass CORE; // Dummy playerclass used by PCLCoreResources
     }
 
     public static class AttackEffect {

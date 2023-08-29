@@ -9,18 +9,20 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class PCLUseInfo {
+    public final HashMap<PCLPlayerMeter, Object> auxiliaryData = new HashMap<>();
     public final RandomizedList<AbstractCreature> targets;
     public final RandomizedList<AbstractCreature> tempTargets = new RandomizedList<>();
     public AbstractCreature source;
     public AbstractCreature target;
     public AbstractCard card;
     public AbstractCard previousCard;
-    public PCLAffinity currentAffinity;
     public boolean canActivateSemiLimited;
     public boolean canActivateLimited;
     public boolean isStarter;
@@ -30,19 +32,6 @@ public class PCLUseInfo {
         this.targets = new RandomizedList<>();
 
         set(card, source, target);
-    }
-
-    public PCLUseInfo(PCLUseInfo other) {
-        this.card = other.card;
-        this.source = other.source;
-        this.target = other.target;
-        this.previousCard = other.previousCard;
-        this.currentAffinity = other.currentAffinity;
-        this.targets = new RandomizedList<>(other.targets);
-        this.canActivateSemiLimited = other.canActivateSemiLimited;
-        this.canActivateLimited = other.canActivateLimited;
-        this.isStarter = other.isStarter;
-        this.data = other.data;
     }
 
     public RandomizedList<AbstractCreature> fillWithTargets() {
@@ -73,6 +62,38 @@ public class PCLUseInfo {
         return targets;
     }
 
+    public <T> T getAux(PCLPlayerMeter meter, Class<T> dataClass) {
+        return EUIUtils.safeCast(auxiliaryData.getOrDefault(meter, null), dataClass);
+    }
+
+    public <T> T getAuxOrCreate(PCLPlayerMeter meter, Class<T> dataClass) {
+        T object = EUIUtils.safeCast(auxiliaryData.getOrDefault(meter, null), dataClass);
+        if (object == null) {
+            try {
+                object = dataClass.newInstance();
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName());
+            }
+        }
+        auxiliaryData.put(meter, object);
+        return object;
+    }
+
+    public <T> T getAuxOrCreate(PCLPlayerMeter meter, Constructor<T> dataClass, Object... args) {
+        T object = EUIUtils.safeCast(auxiliaryData.getOrDefault(meter, null), dataClass.getDeclaringClass());
+        if (object == null) {
+            try {
+                object = dataClass.newInstance(args);
+            }
+            catch (Exception e) {
+                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName());
+            }
+        }
+        auxiliaryData.put(meter, object);
+        return object;
+    }
+
     public <T> T getData(Class<T> dataClass) {
         return EUIUtils.safeCast(data, dataClass);
     }
@@ -97,16 +118,11 @@ public class PCLUseInfo {
         return previousCard != null ? previousCard.cardID : "";
     }
 
-    public PCLUseInfo makeCopy() {
-        return new PCLUseInfo(this);
-    }
-
     public PCLUseInfo set(AbstractCard card, AbstractCreature source, AbstractCreature target) {
         this.card = card;
         this.source = source;
         this.target = target;
         this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
-        this.currentAffinity = CombatManager.playerSystem.getActiveMeter().getCurrentAffinity();
         fillWithTargets();
         if (card != null) {
             this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);

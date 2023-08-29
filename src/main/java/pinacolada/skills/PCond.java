@@ -87,10 +87,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckEnergy(amount);
     }
 
-    public static PCond_CheckLevel checkLevel(int amount, PCLAffinity... affinities) {
-        return new PCond_CheckLevel(amount, affinities);
-    }
-
     public static PCond_CheckOrb checkOrb(int amount, PCLOrbHelper... orbs) {
         return new PCond_CheckOrb(amount, orbs);
     }
