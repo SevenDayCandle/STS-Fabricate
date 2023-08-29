@@ -83,11 +83,11 @@ public class EUIPatches {
             AbstractCard.CardColor color = GameUtilities.getActingColor();
             if (color != AbstractCard.CardColor.COLORLESS) {
                 for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(color)) {
-                    retVal.add(c.make(true));
+                    retVal.add(c.make());
                 }
             }
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
-                retVal.add(c.make(true));
+                retVal.add(c.make());
             }
             return retVal;
         }

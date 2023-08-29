@@ -11,6 +11,7 @@ import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
 
 public class PCLCardDataAffinityGroup implements Serializable {
+    static final long serialVersionUID = 1L;
     protected PCLCardDataAffinity[] list = new PCLCardDataAffinity[TOTAL_AFFINITIES];
     public PCLCardDataAffinity star = null;
 

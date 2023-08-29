@@ -245,7 +245,7 @@ public abstract class PCLLoadout {
             cd.setImagePath(data.imagePath);
         }
 
-        PCLDynamicCard card = cd.createImplWithForms(0, 0, false, false);
+        PCLDynamicCard card = cd.createImplWithForms(0, 0, false);
 
         card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();

@@ -112,6 +112,7 @@ public class PCLLoadoutData {
     }
 
     public static class LoadoutInfo implements Serializable {
+        static final long serialVersionUID = 1L;
         public String loadout;
         public int preset;
         public String values;
@@ -151,6 +152,7 @@ public class PCLLoadoutData {
         }
 
         public static class LoadoutCardInfo implements Serializable {
+            static final long serialVersionUID = 1L;
             public String id;
             public Integer count;
 

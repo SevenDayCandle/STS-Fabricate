@@ -110,7 +110,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         if (cardsToChoose > 0) {
             if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToChoose) {
                 for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
-                    cards.add(card.makeCopy());
+                    cards.add(card);
                     onCardSelected(card);
                 }
                 selected = true;

@@ -145,7 +145,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(currentColor);
             currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
-                        AbstractCard newCard = slot.make(false);
+                        AbstractCard newCard = slot.make();
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
                         EUI.customHeader.originalGroup.add(newCard);
@@ -161,7 +161,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
                         slot.commitBuilder();
-                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(0, 0, false);
+                        AbstractCard newCard = slot.make();
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
                         EUI.customHeader.originalGroup.add(newCard);
@@ -181,7 +181,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                             currentDialog = new PCLCustomCardEditCardScreen(slot)
                                     .setOnSave(() -> {
                                         slot.commitBuilder();
-                                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(0, 0, false);
+                                        AbstractCard newCard = slot.make();
                                         currentSlots.put(newCard, slot);
                                         PCLCustomCardSlot.getCards(co).add(slot);
                                         slot.commitBuilder();
@@ -196,7 +196,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
-                        AbstractCard newCard = cardSlot.getBuilder(0).createImplWithForms(0, 0, false);
+                        AbstractCard newCard = cardSlot.make();
                         EUI.customHeader.originalGroup.remove(card);
                         currentSlots.remove(card);
                         currentSlots.put(newCard, cardSlot);
@@ -245,7 +245,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     currentDialog = new PCLCustomCardEditCardScreen(slot)
                             .setOnSave(() -> {
                                 slot.commitBuilder();
-                                AbstractCard newCard = slot.make(false);
+                                AbstractCard newCard = slot.make();
                                 currentSlots.put(newCard, slot);
                                 PCLCustomCardSlot.getCards(currentColor).add(slot);
                                 EUI.customHeader.originalGroup.add(newCard);
@@ -282,7 +282,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         currentSlots.clear();
         grid.clear();
         for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor)) {
-            AbstractCard card = slot.make(false);
+            AbstractCard card = slot.make();
             currentSlots.put(card, slot);
             grid.addCard(card);
         }

@@ -190,21 +190,21 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     }
 
     public PCLDynamicCard create() {
-        return createImplWithForms(0, 0, false);
+        return createImplWithForms(0, 0);
     }
 
-    public PCLDynamicCard createImplWithForms(int form, int timesUpgraded, boolean shouldFindForms) {
-        return createImplWithForms(form, timesUpgraded, shouldFindForms, true);
+    public PCLDynamicCard createImplWithForms(int form, int timesUpgraded) {
+        return createImplWithForms(form, timesUpgraded, true);
     }
 
-    public PCLDynamicCard createImplWithForms(int form, int timesUpgraded, boolean shouldFindForms, boolean shouldSetTextures) {
+    public PCLDynamicCard createImplWithForms(int form, int timesUpgraded, boolean shouldSetTextures) {
         setTextForLanguage();
 
         if (imagePath == null) {
             imagePath = QuestionMark.DATA.imagePath;
         }
 
-        return new PCLDynamicCard(this, form, timesUpgraded, shouldFindForms, shouldSetTextures);
+        return new PCLDynamicCard(this, form, timesUpgraded, shouldSetTextures);
     }
 
     @Override

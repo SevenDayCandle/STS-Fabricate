@@ -97,7 +97,7 @@ public class PCLCardRewardScreen extends EUIBase {
         openForBundle(rItem, cards);
         openForReroll(rItem);
         upgradeToggle.toggle(false);
-        upgradeToggle.setActive(GameUtilities.isPCLPlayerClass()); // TODO enable this for other characters
+        upgradeToggle.setActive(GameUtilities.isPCLPlayerClass() || PGR.config.showUpgradeOnCardRewards.get());
     }
 
     protected void openForBundle(RewardItem rewardItem, ArrayList<AbstractCard> cards) {

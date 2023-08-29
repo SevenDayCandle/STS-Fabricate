@@ -1,6 +1,7 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -46,11 +47,9 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
             if (this.powerStrings.NAME == null) {
                 this.ID = createPowerID(effect);
                 if (effectCopy.sourceCard instanceof EditorCard) {
-                    // Vanilla rendering cannot render generated region128 properly
-                    this.region128 = PCLRenderHelpers.generateIcon(((EditorCard) effectCopy.sourceCard).getPortraitImageTexture());
-                    if (!EUIConfiguration.useEUITooltips.get()) {
-                        this.img = PCLCoreImages.CardAffinity.unknown.texture();
-                    }
+                    // Vanilla rendering will require a smaller icon with a fixed size
+                    Texture portraitTexture = ((EditorCard) effectCopy.sourceCard).getPortraitImageTexture();
+                    this.region128 = this.region48 = PCLRenderHelpers.generateIcon(portraitTexture);
                     this.powerStrings.NAME = effectCopy.sourceCard.name;
                 }
                 else {

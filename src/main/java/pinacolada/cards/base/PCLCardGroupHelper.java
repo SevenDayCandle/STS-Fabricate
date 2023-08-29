@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 @JsonAdapter(PCLCardGroupHelper.PCLCardGroupHelperAdapter.class)
 public class PCLCardGroupHelper implements Serializable {
+    static final long serialVersionUID = 1L;
     private static final Map<CardGroup.CardGroupType, PCLCardGroupHelper> ALL = new HashMap<>();
 
     public static final PCLCardGroupHelper DiscardPile = new PCLCardGroupHelper(CardGroup.CardGroupType.DISCARD_PILE, InputSettingsScreen.TEXT[12].toLowerCase());

@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -69,7 +70,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicPotionData(PCLCustomPotionSlot data, PCLCustomPotionSlot.PotionForm f) {
+    public PCLDynamicPotionData(PCLCustomPotionSlot data, PCLCustomEditorLoadable.EffectItemForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setRarity(AbstractPotion.PotionRarity.valueOf(data.rarity)));

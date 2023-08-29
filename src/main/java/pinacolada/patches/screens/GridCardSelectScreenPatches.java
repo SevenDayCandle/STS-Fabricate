@@ -38,7 +38,8 @@ public class GridCardSelectScreenPatches {
     protected static final float[] Y_POSITIONS_2 = new float[]{
             Settings.HEIGHT * 0.75F - 50.0F * Settings.scale,
             Settings.HEIGHT * 0.25F + 50.0F * Settings.scale
-    };    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
+    };
+    protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE))
             .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90)
             .setOnClick(GridCardSelectScreenPatches::addIndex);
     protected static final float[] Y_POSITIONS_3 = new float[]{
@@ -46,7 +47,8 @@ public class GridCardSelectScreenPatches {
             Settings.HEIGHT * 0.5F,
             Settings.HEIGHT * 0.25F - 25.0F * Settings.scale
     };
-    protected static int maxIndex = DEFAULT_MAX;    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
+    protected static int maxIndex = DEFAULT_MAX;
+    protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE))
             .setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90)
             .setOnClick(GridCardSelectScreenPatches::subtractIndex);
     protected static ArrayList<AbstractCard> cardList = new ArrayList<>();
@@ -309,9 +311,9 @@ public class GridCardSelectScreenPatches {
     )
     public static class RenderSplitArrows {
 
-        private static float arrowScale1 = Settings.scale;
-        private static float arrowScale2 = Settings.scale;
-        private static float arrowScale3 = Settings.scale;
+        private static float arrowScale1 = 1;
+        private static float arrowScale2 = 1;
+        private static float arrowScale3 = 1;
         private static float arrowTimer = 0.0F;
 
         public RenderSplitArrows() {
@@ -348,9 +350,9 @@ public class GridCardSelectScreenPatches {
                 }
 
                 arrowTimer += Gdx.graphics.getDeltaTime() * 2.0F;
-                arrowScale1 = (0.8F + (MathUtils.cos(arrowTimer) + 1.0F)) * Settings.scale / 8.0F;
-                arrowScale2 = (0.8F + (MathUtils.cos(arrowTimer - 0.8F) + 1.0F)) * Settings.scale / 8.0F;
-                arrowScale3 = (0.8F + (MathUtils.cos(arrowTimer - 1.6F) + 1.0F)) * Settings.scale / 8.0F;
+                arrowScale1 = 1F + ((MathUtils.cos(arrowTimer) + 1.0F) / 5.0F);
+                arrowScale2 = 1F + ((MathUtils.cos(arrowTimer - 0.8F) + 1.0F)  / 5.0F);
+                arrowScale3 = 1F + ((MathUtils.cos(arrowTimer - 1.6F) + 1.0F) / 5.0F);
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

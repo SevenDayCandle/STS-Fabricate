@@ -6,6 +6,7 @@ import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
 public class PCLCardDataAffinity implements Serializable {
+    static final long serialVersionUID = 1L;
     public final PCLAffinity type;
     public Integer[] value;
     public Integer[] upgrades;

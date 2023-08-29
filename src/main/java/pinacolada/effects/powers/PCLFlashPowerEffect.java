@@ -10,19 +10,17 @@ import pinacolada.effects.vfx.VisualEffect;
 import pinacolada.powers.PCLPower;
 
 public class PCLFlashPowerEffect extends VisualEffect {
+    protected static final float REGION_SIZE = Settings.scale * 84;
+    protected static final float REGION_HALF = REGION_SIZE / 2;
     private final Texture img;
     private final AtlasRegion region;
 
     public PCLFlashPowerEffect(PCLPower power) {
-        this.scale = Settings.scale;
+        super(0.7f, power.hb.cX - REGION_HALF, power.hb.cY - REGION_HALF, 0, 1);
 
         if (power.owner != null && !power.owner.isDeadOrEscaped()) {
-            this.x = power.owner.hb.cX;
-            this.y = power.owner.hb.cY;
-        }
-        else {
-            this.x = power.hb.cX;
-            this.y = power.hb.cY;
+            this.x = power.owner.hb.cX - REGION_HALF;
+            this.y = power.owner.hb.cY - REGION_HALF;
         }
 
         this.img = power.img;
@@ -33,27 +31,7 @@ public class PCLFlashPowerEffect extends VisualEffect {
             this.region = power.region48;
         }
 
-        if (this.region != null) {
-            this.x -= (float) (this.region.packedWidth / 2);
-            this.y -= (float) (this.region.packedHeight / 2);
-        }
-
-        this.duration = this.startingDuration = 0.7f;
         this.color = Color.WHITE.cpy();
-    }
-
-    public PCLFlashPowerEffect(Texture img, float x, float y) {
-        this.scale = Settings.scale;
-        this.x = x;
-        this.y = y;
-        this.img = img;
-        this.region = null;
-        this.duration = this.startingDuration = 0.7f;
-        this.color = Color.WHITE.cpy();
-    }
-
-    public void dispose() {
-
     }
 
     public void render(SpriteBatch sb) {
@@ -63,20 +41,18 @@ public class PCLFlashPowerEffect extends VisualEffect {
             float half_w = region.packedWidth / 2f;
             float half_h = region.packedHeight / 2f;
 
-            sb.draw(region, x, y, half_w, half_h, region.packedWidth, region.packedHeight, scale, scale, 0f);
+            sb.draw(region, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 4f, scale * 4f, 0f);
+            sb.draw(region, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 3f, scale * 3f, 0f);
+            sb.draw(region, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 2f, scale * 2f, 0f);
+            sb.draw(region, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale, scale, 0f);
         }
         else if (this.img != null) {
             int width = this.img.getWidth();
-            if (width >= 48) {
-                int height = this.img.getHeight();
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 8f, scale * 8f, 0f, 0, 0, width, height, false, false);
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 6f, scale * 6f, 0f, 0, 0, width, height, false, false);
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 4f, scale * 4f, 0f, 0, 0, width, height, false, false);
-                sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 2f, scale * 2f, 0f, 0, 0, width, height, false, false);
-            }
-            else {
-                this.isDone = true;
-            }
+            int height = this.img.getHeight();
+            sb.draw(img, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 4f, scale * 4f, 0f, 0, 0, width, height, false, false);
+            sb.draw(img, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 3f, scale * 3f, 0f, 0, 0, width, height, false, false);
+            sb.draw(img, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale * 2f, scale * 2f, 0f, 0, 0, width, height, false, false);
+            sb.draw(img, x, y, REGION_HALF, REGION_HALF, REGION_SIZE, REGION_SIZE, scale, scale, 0f, 0, 0, width, height, false, false);
         }
         else {
             this.isDone = true;
@@ -90,7 +66,7 @@ public class PCLFlashPowerEffect extends VisualEffect {
         if (this.duration < this.startingDuration / 2.0F) {
             this.color.a = this.duration / (this.startingDuration / 2.0F);
         }
-        this.scale = Interpolation.exp5In.apply(Settings.scale, Settings.scale * 0.3f, this.duration / this.startingDuration);
+        this.scale = Interpolation.exp5In.apply(1f, 0.3f, this.duration / this.startingDuration);
     }
 }
 

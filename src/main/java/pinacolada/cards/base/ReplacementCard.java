@@ -21,14 +21,10 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public class ReplacementCard extends PCLDynamicCard {
-    protected final ReplacementCardData builder;
     protected AbstractCard original;
 
-    public ReplacementCard(ReplacementCardData builder) {
+    public ReplacementCard(PCLDynamicCardData builder) {
         super(builder);
-        this.builder = builder;
-        // Intentionally bypassing getCard to avoid the original itself being replaced
-        this.original = CardLibraryPatches.getDirectCard(builder.originalID).makeStatEquivalentCopy();
     }
 
     // Base game pop up textures are loaded from CustomCard
@@ -50,6 +46,22 @@ public class ReplacementCard extends PCLDynamicCard {
         }
     }
 
+    // TODO finish this
+    protected void fixCardDescription() {
+        if (original.rawDescription != null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < original.rawDescription.length(); i++) {
+                char c = original.rawDescription.charAt(i);
+                switch (c) {
+                    case '*':
+                        break;
+                    default:
+                        sb.append(c);
+                }
+            }
+        }
+    }
+
     @Override
     public ReplacementCard makeCopy() {
         return new ReplacementCard(builder);
@@ -59,10 +71,17 @@ public class ReplacementCard extends PCLDynamicCard {
     protected void onUpgrade() {
         super.onUpgrade();
         original.upgrade();
+        // Card descriptions can change on upgrade
+        fixCardDescription();
     }
 
     public void setup(Object input) {
-        addUseMove(new ReplacementMove(builder, this));
+        if (input instanceof ReplacementCardData) {
+            this.builder = (ReplacementCardData) input;
+            // Intentionally bypassing getCard to avoid the original itself being replaced
+            this.original = CardLibraryPatches.getDirectCard(((ReplacementCardData) builder).originalID).makeStatEquivalentCopy();
+            addUseMove(new ReplacementMove(builder, this));
+        }
     }
 
     protected void updateOriginal() {

@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import java.io.Serializable;
 
 public class PSkillSaveData implements Serializable {
+    static final long serialVersionUID = 1L;
     public String effectID;
     public String effectData;
     public String target;

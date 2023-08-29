@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -64,7 +65,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicRelicData(PCLCustomRelicSlot data, PCLCustomRelicSlot.RelicForm f) {
+    public PCLDynamicRelicData(PCLCustomRelicSlot data, PCLCustomEditorLoadable.EffectItemForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setSfx(AbstractRelic.LandingSound.valueOf(data.sfx)));

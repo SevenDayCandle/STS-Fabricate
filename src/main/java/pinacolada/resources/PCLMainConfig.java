@@ -50,6 +50,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String SHOW_ESTIMATED_DAMAGE = PCLMainConfig.createFullID("ShowEstimatedDamage");
     private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
+    private static final String SHOW_UPGRADE_ON_CARD_REWARDS = PCLMainConfig.createFullID("ShowUpgradeOnCardRewards");
     private static final String TOUR_CARDATTRIBUTE = PCLMainConfig.createFullID("TourCardAttribute");
     private static final String TOUR_CARDPRIMARY = PCLMainConfig.createFullID("TourCardPrimary");
     private static final String TOUR_CHARSELECT = PCLMainConfig.createFullID("TourCharSelect");
@@ -79,6 +80,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(SHOW_ESTIMATED_DAMAGE, false);
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
+    public STSConfigItem<Boolean> showUpgradeOnCardRewards = new STSConfigItem<Boolean>(SHOW_UPGRADE_ON_CARD_REWARDS, false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
     public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(TOUR_CARDATTRIBUTE, false);
     public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(TOUR_CARDPRIMARY, false);
@@ -158,6 +160,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
         yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        yPos = addToggle(0, showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, yPos, PGR.core.strings.optionDesc_showUpgradeToggle);
         yPos = addToggle(0, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, fabricatePopup, PGR.core.strings.options_fabricatePopup, yPos, PGR.core.strings.optionDesc_fabricatePopup);
@@ -174,6 +177,7 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        makeModToggle(showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, PGR.core.strings.optionDesc_showUpgradeToggle);
         makeModToggle(fabricatePopup, PGR.core.strings.options_fabricatePopup, PGR.core.strings.optionDesc_fabricatePopup);
 
         EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateCardDescriptions());
@@ -214,6 +218,7 @@ public class PCLMainConfig extends AbstractConfig {
         showEstimatedDamage.addConfig(config);
         showFormulaDisplay.addConfig(config);
         showIrrelevantProperties.addConfig(config);
+        showUpgradeOnCardRewards.addConfig(config);
         vanillaLibraryScreen.addConfig(config);
         lastCSVPath.addConfig(config);
         lastImagePath.addConfig(config);

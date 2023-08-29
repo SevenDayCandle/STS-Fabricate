@@ -6,7 +6,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 
-public abstract class PCLCustomLoadable {
+import java.io.Serializable;
+
+public abstract class PCLCustomLoadable implements Serializable {
+    static final long serialVersionUID = 1L;
     public static final int ID_SIZE = 4;
     public static final String FOLDER = "custom";
 
@@ -67,4 +70,5 @@ public abstract class PCLCustomLoadable {
     }
 
     abstract protected String getSubfolderPath();
+
 }

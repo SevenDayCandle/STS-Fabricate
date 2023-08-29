@@ -13,6 +13,7 @@ import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -263,15 +264,11 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return SUBFOLDER;
     }
 
-    public PCLDynamicCard make() {
-        return make(false);
-    }
-
     /**
      * Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc.
      */
-    public PCLDynamicCard make(boolean shouldFindForms) {
-        return getBuilder(0).createImplWithForms(0, 0, shouldFindForms);
+    public PCLDynamicCard make() {
+        return getBuilder(0).createImplWithForms(0, 0);
     }
 
     // Copy down the properties from all builders into this slot
@@ -356,7 +353,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Card: " + filePath);
     }
 
-    public static class CardForm {
+    public static class CardForm implements Serializable {
+        static final long serialVersionUID = 1L;
         public String attackType;
         public String damageEffect;
         public String blockEffect;

@@ -33,12 +33,12 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     protected boolean shouldFindForms;
 
     public PCLDynamicCard(PCLDynamicCardData builder) {
-        this(builder, 0, 0, false, true);
+        this(builder, 0, 0, true);
     }
 
-    public PCLDynamicCard(PCLDynamicCardData builder, int form, int timesUpgraded, boolean shouldFindForms, boolean shouldSetTextures) {
+    public PCLDynamicCard(PCLDynamicCardData builder, int form, int timesUpgraded, boolean shouldSetTextures) {
         super(builder, builder.ID, builder.imagePath,
-                builder.getCost(form), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, new BuilderInfo(builder, shouldFindForms));
+                builder.getCost(form), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, builder);
         assignActualColor();
         if (shouldSetTextures) {
             initializeTextures();
@@ -432,11 +432,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     @Override
     public void setup(Object input) {
-        if (input instanceof BuilderInfo) {
-            this.builder = ((BuilderInfo) input).builder;
-            if (((BuilderInfo) input).shouldFindForms) {
-                findForms();
-            }
+        if (input instanceof PCLDynamicCardData) {
+            this.builder = (PCLDynamicCardData) input;
+            findForms();
             setupBuilder(this.builder);
         }
     }
@@ -493,15 +491,5 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     @Override
     protected boolean shouldUsePCLFrame() {
         return vanillaBg == null && customBg == null && super.shouldUsePCLFrame();
-    }
-
-    private static class BuilderInfo {
-        protected final PCLDynamicCardData builder;
-        protected final boolean shouldFindForms;
-
-        BuilderInfo(PCLDynamicCardData builder, boolean shouldFindForms) {
-            this.builder = builder;
-            this.shouldFindForms = shouldFindForms;
-        }
     }
 }

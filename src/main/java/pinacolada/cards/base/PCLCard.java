@@ -544,7 +544,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public int changeForm(Integer form, int timesUpgraded) {
-        return changeForm(form, timesUpgraded, timesUpgraded);
+        return changeForm(form, this.timesUpgraded, timesUpgraded);
     }
 
     public int changeForm(Integer form, int prevUpgrade, int timesUpgraded) {
@@ -955,7 +955,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public Color getRarityColor() {
-
         if (rarity == PCLEnum.CardRarity.SECRET) {
             return COLOR_SECRET;
         }
@@ -971,7 +970,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             case COMMON:
             case UNCOMMON:
             case RARE:
-                return Color.WHITE;
+                return EUIColors.white(transparency);
         }
         return getRarityColor();
     }
@@ -2060,10 +2059,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), sc)) {
             // Copying base game location behavior
             if (isPopup) {
-                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
+                renderAtlas(sb, EUIColors.white(transparency), getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
             }
             else {
-                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), current_x, current_y, sc);
+                renderAtlas(sb, EUIColors.white(transparency), getPortraitFrameVanillaRegion(), current_x, current_y, sc);
             }
         }
     }
@@ -2680,8 +2679,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public void upgrade() {
         if (canUpgrade()) {
-            changeForm(auxiliaryData.form, timesUpgraded, timesUpgraded + 1);
             onUpgrade();
+            changeForm(auxiliaryData.form, timesUpgraded, timesUpgraded + 1);
             affinities.applyUpgrades(cardData.affinities, auxiliaryData.form);
         }
     }

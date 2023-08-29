@@ -134,7 +134,8 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
     }
 
     protected void rebuildItem() {
-        previewCard = getBuilder().createImplWithForms(currentBuilder, upgraded ? 1 : 0, false);
+        previewCard = getBuilder().createImplWithForms(currentBuilder, upgraded ? 1 : 0);
+        previewCard.setForms(tempBuilders);
 
         if (upgraded) {
             previewCard.displayUpgrades();

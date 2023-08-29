@@ -153,7 +153,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCard create(int form, int upgrade) throws RuntimeException {
         PCLCard card = create();
         if ((form > 0 && form < card.cardData.maxForms) || upgrade > 0) {
-            card.changeForm(form, card.timesUpgraded, upgrade);
+            card.changeForm(form, upgrade);
         }
 
         return card;
@@ -162,7 +162,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCard create(int upgrade) throws RuntimeException {
         PCLCard card = create();
         if (upgrade > 0) {
-            card.changeForm(card.auxiliaryData.form, card.timesUpgraded, upgrade);
+            card.changeForm(card.auxiliaryData.form, upgrade);
         }
 
         return card;

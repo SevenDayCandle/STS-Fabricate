@@ -15,6 +15,8 @@ import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
 public class PCLCardTagInfo implements Serializable, TooltipProvider {
+    static final long serialVersionUID = 1L;
+
     public final PCLCardTag tag;
     public Integer[] value;
     public Integer[] upgrades;

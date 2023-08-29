@@ -14,6 +14,7 @@ import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,8 +23,6 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
 public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicData, PCLDynamicRelic> {
     private static final TypeToken<PCLCustomRelicSlot> TTOKEN = new TypeToken<PCLCustomRelicSlot>() {
-    };
-    private static final TypeToken<RelicForm> TTOKENFORM = new TypeToken<RelicForm>() {
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomRelicSlot>> CUSTOM_RELICS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
@@ -254,7 +253,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         }
 
         for (PCLDynamicRelicData builder : builders) {
-            RelicForm f = new RelicForm();
+            EffectItemForm f = new EffectItemForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -269,7 +268,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         builders = new ArrayList<>();
 
         for (String fo : forms) {
-            RelicForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
             PCLDynamicRelicData builder = new PCLDynamicRelicData(this, f);
             builders.add(builder);
         }
@@ -291,10 +290,5 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         writer = Gdx.files.local(filePath);
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic: " + filePath);
-    }
-
-    public static class RelicForm {
-        public String[] effects;
-        public String[] powerEffects;
     }
 }

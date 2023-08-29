@@ -23,8 +23,6 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotionData, PCLDynamicPotion> {
     private static final TypeToken<PCLCustomPotionSlot> TTOKEN = new TypeToken<PCLCustomPotionSlot>() {
     };
-    private static final TypeToken<PotionForm> TTOKENFORM = new TypeToken<PotionForm>() {
-    };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomPotionSlot>> CUSTOM_POTIONS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_POTION_ID = "PCLP";
@@ -262,7 +260,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         }
 
         for (PCLDynamicPotionData builder : builders) {
-            PotionForm f = new PotionForm();
+            EffectItemForm f = new EffectItemForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -277,7 +275,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         builders = new ArrayList<>();
 
         for (String fo : forms) {
-            PotionForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
             PCLDynamicPotionData builder = new PCLDynamicPotionData(this, f);
             builders.add(builder);
         }
@@ -301,8 +299,4 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Potion: " + filePath);
     }
 
-    public static class PotionForm {
-        public String[] effects;
-        public String[] powerEffects;
-    }
 }

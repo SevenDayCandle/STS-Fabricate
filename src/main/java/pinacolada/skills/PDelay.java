@@ -95,8 +95,17 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            getDelayUse(info, (i) -> this.childEffect.use(i, order), this.childEffect.getName(), this.childEffect.getPowerText()).start();
+            getDelayUse(info, (i) -> useChildEffect(i, order), this.childEffect.getName(), this.childEffect.getPowerText()).start();
         }
+    }
+
+    // TODO make an entirely new copy of the effect with the value pre-updated
+    // PMods skip over PDelay, so if this effect's parent is a PDelay, then that PMod would need to be re-applied to this delay's child
+    protected void useChildEffect(PCLUseInfo info, PCLActions order) {
+        if (parent instanceof PMod && this.childEffect.isAffectedByMods()) {
+            this.childEffect.setTemporaryAmount(((PMod<?>) parent).updateAmount(this.childEffect, info, true));
+        }
+        this.childEffect.use(info, order);
     }
 
     public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description);

@@ -553,12 +553,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
                 CardGroup pool = GameUtilities.getCardPool(rarity);
                 if (pool != null) {
-                    pool.addToBottom(c.make(true));
+                    pool.addToBottom(c.make());
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
                 }
                 CardGroup spool = GameUtilities.getCardPoolSource(rarity);
                 if (spool != null) {
-                    spool.addToBottom(c.make(true));
+                    spool.addToBottom(c.make());
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
                 }
             }
