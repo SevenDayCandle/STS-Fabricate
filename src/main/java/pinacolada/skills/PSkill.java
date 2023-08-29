@@ -893,10 +893,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case SelfAllEnemy:
             case RandomEnemy:
                 return TEXT.subjects_onAnyEnemy(baseString);
-            case Single:
             case SingleAlly:
-            case SelfSingle:
             case SelfSingleAlly:
+            case Single:
+            case SelfSingle:
                 return TEXT.subjects_onTheEnemy(baseString);
             case UseParent:
                 return TEXT.subjects_onTarget(baseString, TEXT.subjects_them(0));
@@ -966,6 +966,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, allyBase);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, allyBase);
+            case SelfPlayer:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_you);
+                }
+                return TEXT.subjects_you;
             case UseParent:
                 return TEXT.subjects_them(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:
@@ -1040,6 +1045,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_ally);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_ally);
+            case SelfPlayer:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_you);
+                }
+                return TEXT.subjects_you;
             case UseParent:
                 return TEXT.subjects_they(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:

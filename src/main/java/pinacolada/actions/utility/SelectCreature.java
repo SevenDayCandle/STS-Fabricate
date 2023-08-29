@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.GameCursor;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -33,33 +34,43 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     private float arrowScaleTimer;
     protected ActionT1<AbstractCreature> onHovering;
     protected AbstractCreature previous;
-    protected AbstractCreature target;
     protected PCLCardTarget targeting;
     protected boolean autoSelect;
     protected boolean skipConfirmation;
     protected boolean cancellable;
 
     public SelectCreature(AbstractCreature target) {
+        this(AbstractDungeon.player, target);
+    }
+
+    public SelectCreature(AbstractCreature source, AbstractCreature target) {
         super(ActionType.SPECIAL);
 
         this.card = null;
-        this.target = target;
         this.cancellable = true;
 
-        initialize(1);
+        initialize(source, target, 1);
     }
 
     public SelectCreature(PCLCardTarget targeting, String sourceName) {
+        this(targeting, sourceName, AbstractDungeon.player);
+    }
+
+    public SelectCreature(PCLCardTarget targeting, String sourceName, AbstractCreature source) {
         super(ActionType.SPECIAL);
 
         this.card = null;
         this.targeting = targeting;
         this.cancellable = true;
 
-        initialize(1, sourceName);
+        initialize(source, null, 1, sourceName);
     }
 
     public SelectCreature(AbstractCard card) {
+        this(card, GameUtilities.getCardOwner(card));
+    }
+
+    public SelectCreature(AbstractCard card, AbstractCreature source) {
         super(ActionType.SPECIAL);
 
         this.card = card;
@@ -73,7 +84,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             targeting = PCLCardTarget.forVanilla(card.target);
         }
 
-        initialize(1, card.name);
+        initialize(source, null, 1, card.name);
     }
 
     public SelectCreature autoSelectSingleTarget(boolean autoSelectSingleTarget) {
@@ -156,22 +167,21 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         if (skipConfirmation) {
             switch (targeting) {
                 case Self:
-                    complete(player);
+                case SelfAllEnemy:
+                case Team:
+                    complete(source);
                     return;
-
+                case SelfSingle:
                 case RandomEnemy:
                     complete(GameUtilities.getRandomEnemy(true));
                     return;
-
+                case SelfSingleAlly:
                 case RandomAlly:
                     complete(GameUtilities.getRandomSummon(true));
                     return;
-
                 case AllEnemy:
                 case All:
-                case Team:
                 case AllAlly:
-                case SelfAllEnemy:
                 case None:
                     complete(null);
                     return;
@@ -195,20 +205,31 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         switch (targeting) {
             case Self:
             case Single:
+            case SelfSingle:
+            case SelfSingleAlly:
+            case SelfPlayer:
             case Any:
                 renderArrow(sb);
                 if (target != null) {
                     target.renderReticle(sb);
                 }
                 break;
-
             case RandomEnemy:
             case AllEnemy:
+                for (AbstractCreature c : GameUtilities.getEnemies(true)) {
+                    c.renderReticle(sb);
+                }
+                break;
+            case AllAlly:
+                for (AbstractCreature c : GameUtilities.getSummons(true)) {
+                    c.renderReticle(sb);
+                }
+                break;
+            case All:
                 for (AbstractCreature c : GameUtilities.getAllCharacters(true)) {
                     c.renderReticle(sb);
                 }
                 break;
-
             case None:
                 break;
         }
@@ -300,20 +321,21 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
 
         switch (targeting) {
             case Self:
-                updateTarget(true, false, false);
+            case SelfPlayer:
+                updateTarget(true, false, false, true);
                 break;
             case Single:
-                updateTarget(false, true, true);
+                updateTarget(false, true, true, false);
                 break;
             case SingleAlly:
-                updateTarget(false, false, true);
+                updateTarget(false, false, true, false);
                 break;
             case SelfSingleAlly:
-                updateTarget(true, false, true);
+                updateTarget(true, false, true, true);
                 break;
             case SelfSingle:
             case Any:
-                updateTarget(true, true, true);
+                updateTarget(true, true, true, true);
                 break;
         }
 
@@ -352,19 +374,19 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         EUI.addPostRender(this::render);
     }
 
-    protected void updateTarget(boolean targetPlayer, boolean targetEnemy, boolean targetAlly) {
+    protected void updateTarget(boolean targetPlayer, boolean targetEnemy, boolean targetAlly, boolean canTargetSelf) {
         if (target != null) {
             previous = target;
             target = null;
         }
 
-        if (targetPlayer && (player.hb.hovered && !player.isDying)) {
+        if (targetPlayer && (player.hb.hovered && !player.isDying) && (canTargetSelf || player != source)) {
             target = player;
         }
         else {
             if (targetEnemy) {
                 for (AbstractMonster m : GameUtilities.getEnemies(true)) {
-                    if (m.hb.hovered && !m.isDying) {
+                    if (m.hb.hovered && !m.isDying && (canTargetSelf || m != source)) {
                         target = m;
                         break;
                     }
@@ -372,7 +394,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             }
             if (targetAlly && target == null) {
                 for (AbstractMonster m : GameUtilities.getSummons(true)) {
-                    if (m.hb.hovered && !m.isDying) {
+                    if (m.hb.hovered && !m.isDying && (canTargetSelf || m != source)) {
                         target = m;
                         break;
                     }

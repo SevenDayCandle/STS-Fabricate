@@ -486,7 +486,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected void setupStrings(PCLRelic relic) {
         this.ID = deriveID(relic.relicId);
-        this.region128 = relic.getPowerIcon();
+        this.region128 = this.region48 = relic.getPowerIcon();
         // Vanilla rendering cannot render generated region128 properly
         if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
@@ -499,7 +499,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected void setupStrings(PCLCardData cardData) {
         this.ID = deriveID(cardData.ID);
-        this.region128 = cardData.getCardIcon();
+        this.region128 = this.region48 = cardData.getCardIcon();
         // Vanilla rendering cannot render generated region128 properly
         if (!EUIConfiguration.useEUITooltips.get()) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();

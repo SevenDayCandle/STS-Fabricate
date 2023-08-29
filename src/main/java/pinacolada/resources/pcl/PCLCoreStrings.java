@@ -200,20 +200,21 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String ctype_randomAllyEnemy = cardtype.TEXT[3];
     public final String ctype_randomEnemy = cardtype.TEXT[4];
     public final String ctype_selfAllEnemy = cardtype.TEXT[5];
-    public final String ctype_selfSingleAlly = cardtype.TEXT[6];
-    public final String ctype_selfSingle = cardtype.TEXT[7];
-    public final String ctype_singleAlly = cardtype.TEXT[8];
-    public final String ctype_team = cardtype.TEXT[9];
-    public final String ctype_legendary = cardtype.TEXT[10];
-    public final String ctype_secretRare = cardtype.TEXT[11];
-    public final String ctype_general = cardtype.TEXT[12];
-    public final String ctype_tagAll = cardtype.TEXT[13];
-    public final String ctype_tagAoE = cardtype.TEXT[14];
-    public final String ctype_tagRandom = cardtype.TEXT[15];
-    public final String ctype_turnStartFirst = cardtype.TEXT[16];
-    public final String ctype_turnStartLast = cardtype.TEXT[17];
-    public final String ctype_turnEndFirst = cardtype.TEXT[18];
-    public final String ctype_turnEndLast = cardtype.TEXT[19];
+    public final String ctype_selfPlayer = cardtype.TEXT[6];
+    public final String ctype_selfSingleAlly = cardtype.TEXT[7];
+    public final String ctype_selfSingle = cardtype.TEXT[8];
+    public final String ctype_singleAlly = cardtype.TEXT[9];
+    public final String ctype_team = cardtype.TEXT[10];
+    public final String ctype_legendary = cardtype.TEXT[11];
+    public final String ctype_secretRare = cardtype.TEXT[12];
+    public final String ctype_general = cardtype.TEXT[13];
+    public final String ctype_tagAll = cardtype.TEXT[14];
+    public final String ctype_tagAoE = cardtype.TEXT[15];
+    public final String ctype_tagRandom = cardtype.TEXT[16];
+    public final String ctype_turnStartFirst = cardtype.TEXT[17];
+    public final String ctype_turnStartLast = cardtype.TEXT[18];
+    public final String ctype_turnEndFirst = cardtype.TEXT[19];
+    public final String ctype_turnEndLast = cardtype.TEXT[20];
 
     // Character
     public final String csel_leftText = charselect.TEXT[0];
