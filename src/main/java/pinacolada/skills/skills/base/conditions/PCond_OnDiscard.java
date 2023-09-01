@@ -13,7 +13,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnDiscard extends PDelegateCardCond implements OnCardDiscardedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnDiscard.class, PField_CardCategory.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_OnDiscard() {
         super(DATA);

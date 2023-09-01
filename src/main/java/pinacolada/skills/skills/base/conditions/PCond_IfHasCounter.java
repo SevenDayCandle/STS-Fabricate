@@ -15,7 +15,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PCond_IfHasCounter.class, PField_Not.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_IfHasCounter(PSkillSaveData content) {
         super(DATA, content);

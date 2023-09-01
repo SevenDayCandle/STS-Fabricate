@@ -17,7 +17,7 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PSpecialSkill.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
     private final String description;
     private final ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse;
 

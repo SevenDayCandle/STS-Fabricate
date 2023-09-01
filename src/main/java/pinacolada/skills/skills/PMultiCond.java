@@ -31,7 +31,7 @@ import java.util.List;
 @VisibleSkill
 public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>> {
     public static final PSkillData<PField_Not> DATA = register(PMultiCond.class, PField_Not.class, 0, 0)
-            .selfTarget();
+            .noTarget();
     protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
     public PMultiCond() {

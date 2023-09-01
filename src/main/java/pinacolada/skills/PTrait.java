@@ -88,12 +88,12 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType) {
         return PSkill.register(type, effectType, -DEFAULT_MAX, DEFAULT_MAX)
-                .selfTarget();
+                .noTarget();
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors) {
         return PSkill.register(type, effectType, -DEFAULT_MAX, DEFAULT_MAX, cardColors)
-                .selfTarget();
+                .noTarget();
     }
 
     public static PTrait_Tag tags(PCLCardTag... tags) {

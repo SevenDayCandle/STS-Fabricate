@@ -18,7 +18,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMove_Create extends PMove_GenerateCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Create.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_Create() {
         super(DATA, PCLCardTarget.None, 1);

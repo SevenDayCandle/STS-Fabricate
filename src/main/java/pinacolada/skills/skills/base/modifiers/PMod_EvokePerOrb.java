@@ -20,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
 
-    public static final PSkillData<PField_Orb> DATA = register(PMod_EvokePerOrb.class, PField_Orb.class).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMod_EvokePerOrb.class, PField_Orb.class).noTarget();
 
     public PMod_EvokePerOrb(PSkillSaveData content) {
         super(DATA, content);

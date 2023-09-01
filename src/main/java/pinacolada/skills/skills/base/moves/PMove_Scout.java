@@ -19,7 +19,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMove_Scout extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scout.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Scout() {

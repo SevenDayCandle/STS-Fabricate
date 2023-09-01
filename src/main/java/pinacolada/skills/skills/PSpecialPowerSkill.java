@@ -17,7 +17,7 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     public static final PSkillData<PField_Empty> DATA = register(PSpecialPowerSkill.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
     private final String description;
     private final FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> powerFunc;
 

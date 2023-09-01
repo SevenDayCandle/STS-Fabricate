@@ -13,7 +13,7 @@ import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
 public class PCond_CheckGold extends PPassiveCond<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PCond_CheckGold.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PCond_CheckGold.class, PField_Not.class).noTarget();
 
     public PCond_CheckGold(PSkillSaveData content) {
         super(DATA, content);

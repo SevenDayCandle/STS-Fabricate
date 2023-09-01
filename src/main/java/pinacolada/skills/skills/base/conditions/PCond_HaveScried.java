@@ -18,7 +18,7 @@ import pinacolada.skills.skills.PPassiveCond;
 public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScryActionSubscriber {
 
     public static final PSkillData<PField_Not> DATA = register(PCond_HaveScried.class, PField_Not.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_HaveScried() {
         super(DATA, PCLCardTarget.None, 0);

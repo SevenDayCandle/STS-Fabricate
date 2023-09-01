@@ -14,7 +14,7 @@ import pinacolada.skills.skills.PDelegateCond;
 @VisibleSkill
 public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuffleSubscriber {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Shuffle.class, PField_Empty.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_Shuffle() {
         super(DATA, PCLCardTarget.None, 0);

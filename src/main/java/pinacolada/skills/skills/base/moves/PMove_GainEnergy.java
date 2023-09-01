@@ -13,7 +13,7 @@ import pinacolada.skills.fields.PField_Empty;
 public class PMove_GainEnergy extends PMove_Gain {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainEnergy.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_GainEnergy() {
         this(1);

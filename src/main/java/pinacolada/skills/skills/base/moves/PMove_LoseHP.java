@@ -14,11 +14,12 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_LoseHP.class, PField_Empty.class);
+public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMove {
+    public static final PSkillData<PField_Attack> DATA = register(PMove_LoseHP.class, PField_Attack.class);
 
     public PMove_LoseHP() {
         this(1);
@@ -34,6 +35,11 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
 
     public PMove_LoseHP(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
+    }
+
+    public PMove_LoseHP(PCLCardTarget target, int amount, AbstractGameAction.AttackEffect attackEffect) {
+        super(DATA, target, amount);
+        fields.setAttackEffect(attackEffect);
     }
 
     @Override
@@ -59,7 +65,7 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
-            order.loseHP(info.source, t, amount, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
+            order.loseHP(info.source, t, amount, fields.attackEffect).isCancellable(false);
         }
         super.use(info, order);
     }

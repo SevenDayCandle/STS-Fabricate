@@ -32,20 +32,20 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     }
 
     public PMove_DealDamage(int amount, AbstractGameAction.AttackEffect attackEffect) {
-        this(amount, attackEffect, PCLCardTarget.Single);
+        this(PCLCardTarget.Single, amount, attackEffect);
     }
 
-    public PMove_DealDamage(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target) {
+    public PMove_DealDamage(PCLCardTarget target, int amount, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, target, amount);
         fields.setAttackEffect(attackEffect);
     }
 
     public PMove_DealDamage(int amount, PCLAttackVFX attackEffect) {
-        this(amount, attackEffect.key, PCLCardTarget.Single);
+        this(PCLCardTarget.Single, amount, attackEffect.key);
     }
 
-    public PMove_DealDamage(int amount, PCLAttackVFX attackEffect, PCLCardTarget target) {
-        this(amount, attackEffect.key, target);
+    public PMove_DealDamage(PCLCardTarget target, int amount, PCLAttackVFX attackEffect) {
+        this(target, amount, attackEffect.key);
     }
 
     protected int[] getDamageMatrix(ArrayList<AbstractCreature> targets) {

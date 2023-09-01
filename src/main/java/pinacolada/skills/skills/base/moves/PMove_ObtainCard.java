@@ -26,7 +26,7 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.MasterDeck)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ObtainCard() {
         this(1);

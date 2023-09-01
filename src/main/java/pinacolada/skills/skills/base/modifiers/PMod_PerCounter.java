@@ -12,7 +12,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PMod_PerCounter extends PMod_Per<PField_Not> {
 
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerCounter.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCounter.class, PField_Not.class).noTarget();
 
     public PMod_PerCounter() {
         this(1);

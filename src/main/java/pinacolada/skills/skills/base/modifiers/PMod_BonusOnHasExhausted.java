@@ -14,7 +14,7 @@ import java.util.List;
 @VisibleSkill
 public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_BonusOnHasExhausted.class, PField_CardCategory.class)
-            .selfTarget();
+            .noTarget();
 
     public PMod_BonusOnHasExhausted() {
         this(1, 1);

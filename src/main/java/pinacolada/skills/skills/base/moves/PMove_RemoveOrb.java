@@ -15,7 +15,7 @@ import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMove_RemoveOrb extends PMove<PField_Orb> {
-    public static final PSkillData<PField_Orb> DATA = register(PMove_RemoveOrb.class, PField_Orb.class).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMove_RemoveOrb.class, PField_Orb.class).noTarget();
 
     public PMove_RemoveOrb(PSkillSaveData content) {
         super(DATA, content);

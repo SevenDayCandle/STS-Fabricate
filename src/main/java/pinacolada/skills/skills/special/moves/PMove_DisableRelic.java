@@ -13,7 +13,7 @@ import pinacolada.skills.fields.PField_Empty;
 public class PMove_DisableRelic extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_DisableRelic.class, PField_Empty.class, 1, 1)
             .setSourceTypes(PSkillData.SourceType.Collectible)
-            .selfTarget()
+            .noTarget()
             .pclOnly();
 
     public PMove_DisableRelic() {

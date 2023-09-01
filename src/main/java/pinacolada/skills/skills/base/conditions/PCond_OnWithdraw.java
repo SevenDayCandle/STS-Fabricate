@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdrawSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnWithdraw.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
-            .selfTarget();
+            .noTarget();
 
     public PCond_OnWithdraw() {
         super(DATA);

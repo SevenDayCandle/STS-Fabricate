@@ -12,7 +12,7 @@ import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
 public class PMove_Shuffle extends PMove<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_Shuffle.class, PField_Empty.class, 1, 1).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMove_Shuffle.class, PField_Empty.class, 1, 1).noTarget();
 
     public PMove_Shuffle() {
         super(DATA);

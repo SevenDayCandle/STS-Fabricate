@@ -15,7 +15,7 @@ import pinacolada.skills.skills.PPassiveCond;
 @VisibleSkill
 public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
     public static final PSkillData<PField_Relic> DATA = register(PCond_CheckRelic.class, PField_Relic.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_CheckRelic(PSkillSaveData content) {
         super(DATA, content);

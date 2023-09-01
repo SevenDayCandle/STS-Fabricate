@@ -14,7 +14,7 @@ import java.util.List;
 
 @VisibleSkill
 public class PMod_PerCardPlayed extends PMod_PerCardHas {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class).noTarget();
 
     public PMod_PerCardPlayed() {
         this(1, 0);

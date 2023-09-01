@@ -17,7 +17,7 @@ import pinacolada.skills.skills.PActiveCond;
 @VisibleSkill
 public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PCond_TakeDamageTo.class, PField_Not.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_TakeDamageTo(PSkillSaveData content) {
         super(DATA, content);

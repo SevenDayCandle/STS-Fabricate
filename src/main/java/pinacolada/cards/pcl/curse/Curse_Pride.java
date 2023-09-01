@@ -17,7 +17,7 @@ public class Curse_Pride extends PCLCard {
     public static final PCLCardData DATA = registerTemplate(Curse_Pride.class, Pride.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(1, PCLCardTarget.None, true)
-            .setTags(PCLCardTag.Exhaust)
+            .setTags(PCLCardTag.Innate, PCLCardTag.Exhaust)
             .setAffinities(PCLAffinity.Star);
 
     public Curse_Pride() {

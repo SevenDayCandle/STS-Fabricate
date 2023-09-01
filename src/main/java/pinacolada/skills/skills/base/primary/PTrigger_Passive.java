@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PTrigger;
 @VisibleSkill
 public class PTrigger_Passive extends PTrigger {
     public static final PSkillData<PField_CardGeneric> DATA = register(PTrigger_Passive.class, PField_CardGeneric.class, -1, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PTrigger_Passive() {
         super(DATA);

@@ -20,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPassiveEffectSubscriber {
     public static final PSkillData<PField_Orb> DATA = register(PCond_CheckOrb.class, PField_Orb.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_CheckOrb(PSkillSaveData content) {
         super(DATA, content);

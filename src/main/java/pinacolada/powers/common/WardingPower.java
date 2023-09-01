@@ -21,8 +21,8 @@ public class WardingPower extends PCLPower {
     }
 
     @Override
-    public void onAfterUseCard(AbstractCard card, UseCardAction action) {
-        super.onAfterUseCard(card, action);
+    public void onUseCard(AbstractCard card, UseCardAction action) {
+        super.onUseCard(card, action);
         if (card.baseBlock > 0 || (card instanceof EditorCard && ((EditorCard) card).getCardBlock() != null)) {
             removePower();
         }

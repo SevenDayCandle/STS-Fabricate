@@ -13,7 +13,7 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PDelay_EndOfTurnLast extends PDelay {
     public static final PSkillData<PField_Empty> DATA = register(PDelay_EndOfTurnLast.class, PField_Empty.class, 0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PDelay_EndOfTurnLast() {
         super(DATA);

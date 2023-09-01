@@ -9,7 +9,9 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import pinacolada.dungeon.CombatManager;
@@ -41,6 +43,17 @@ public class STSLibPatches {
     public static class CommonKeywordIconsPatches_RenderBadges {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(SpriteBatch sb, AbstractCard card) {
+            if (PGR.config.displayCardTagDescription.get()) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = CommonKeywordIconsPatches.SingleCardViewRenderIconOnCard.class, method = "patch")
+    public static class CommonKeywordIconsPatches_SingleCardViewRenderIconOnCard {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix() {
             if (PGR.config.displayCardTagDescription.get()) {
                 return SpireReturn.Return();
             }

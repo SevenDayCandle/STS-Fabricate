@@ -63,17 +63,17 @@ public class PSkillData<T extends PField> {
         return colors.isEmpty() || (excludeColors ^ colors.contains(co));
     }
 
+    public PSkillData<T> noTarget() {
+        this.targets = new ArrayList<>();
+        targets.add(PCLCardTarget.None);
+        return this;
+    }
+
     // Only register colors registered with the PGR system. Ignores colorless because this needs to be used by other characters too
     public PSkillData<T> pclOnly() {
         for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
             colors.add(r.cardColor);
         }
-        return this;
-    }
-
-    public PSkillData<T> selfTarget() {
-        this.targets = new ArrayList<>();
-        targets.add(PCLCardTarget.Self);
         return this;
     }
 

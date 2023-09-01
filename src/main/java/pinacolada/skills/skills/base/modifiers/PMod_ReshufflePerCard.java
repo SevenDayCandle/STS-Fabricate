@@ -19,7 +19,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMod_ReshufflePerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_ReshufflePerCard.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
     public PMod_ReshufflePerCard(PSkillSaveData content) {

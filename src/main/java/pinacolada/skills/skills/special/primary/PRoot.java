@@ -20,7 +20,7 @@ import static pinacolada.utilities.GameUtilities.EMPTY_STRING;
 @VisibleSkill
 public class PRoot extends PPrimary<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PRoot.class, PField_Empty.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PRoot(PSkillSaveData content) {
         super(DATA, content);

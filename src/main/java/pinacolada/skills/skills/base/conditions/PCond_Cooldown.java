@@ -35,7 +35,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 @VisibleSkill
 public class PCond_Cooldown extends PActiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
-            .selfTarget();
+            .noTarget();
     protected float flashTimer;
 
     public PCond_Cooldown(PSkillSaveData content) {

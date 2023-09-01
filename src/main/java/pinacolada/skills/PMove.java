@@ -15,6 +15,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
@@ -113,6 +114,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return (PMove_Create) new PMove_Create(copies, cardData).edit(f -> f.setCardGroup(PCLCardGroupHelper.Hand));
     }
 
+    public static PMove_Create createCopy(int amount) {
+        return (PMove_Create) new PMove_Create(1, PCLCardGroupHelper.Hand).edit(f -> f.setForced(true));
+    }
+
     public static PMove_Create createDiscardPile(int copies) {
         return new PMove_Create(copies, PCLCardGroupHelper.DiscardPile);
     }
@@ -121,12 +126,20 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
     }
 
+    public static PMove_Create createDiscardPileCopy(int copies) {
+        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DiscardPile).edit(f -> f.setForced(true));
+    }
+
     public static PMove_Create createDrawPile(int copies) {
         return new PMove_Create(copies, PCLCardGroupHelper.DrawPile);
     }
 
     public static PMove_Create createDrawPile(int copies, String... ids) {
         return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
+    public static PMove_Create createDrawPileCopy(int copies) {
+        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DrawPile).edit(f -> f.setForced(true));
     }
 
     public static PMove_Create createRandom(int copies, int choices, PCLCardGroupHelper... cardgroup) {
@@ -150,7 +163,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_DealDamage dealDamage(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target) {
-        return new PMove_DealDamage(amount, attackEffect, target);
+        return new PMove_DealDamage(target, amount, attackEffect);
     }
 
     public static PMove_DealDamage dealDamageToAll(int amount) {
@@ -158,7 +171,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_DealDamage dealDamageToAll(int amount, AbstractGameAction.AttackEffect attackEffect) {
-        return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.AllEnemy);
+        return new PMove_DealDamage(PCLCardTarget.AllEnemy, amount, attackEffect);
     }
 
     public static PMove_DealDamage dealDamageToRandom(int amount) {
@@ -166,7 +179,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_DealDamage dealDamageToRandom(int amount, AbstractGameAction.AttackEffect attackEffect) {
-        return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.RandomEnemy);
+        return new PMove_DealDamage(PCLCardTarget.RandomEnemy, amount, attackEffect);
     }
 
     public static PMove_Discard discard(int amount) {
@@ -317,6 +330,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
 
     public static PMove_LoseHP loseHp(PCLCardTarget target, int amount) {
         return new PMove_LoseHP(target, amount);
+    }
+
+    public static PMove_LoseHP loseHp(PCLCardTarget target, int amount, AbstractGameAction.AttackEffect vfx) {
+        return new PMove_LoseHP(target, amount, vfx);
     }
 
     public static PMove_LoseHPPercent loseHpPercent(int amount) {
@@ -518,7 +535,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_DealDamage takeDamage(int amount, AbstractGameAction.AttackEffect attackEffect) {
-        return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.Self);
+        return new PMove_DealDamage(PCLCardTarget.Self, amount, attackEffect);
     }
 
     public static PMove_Transform transform(PCLCardData cardData, int amount, PCLCardGroupHelper... groups) {

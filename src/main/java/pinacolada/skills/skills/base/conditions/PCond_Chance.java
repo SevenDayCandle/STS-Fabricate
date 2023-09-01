@@ -16,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_Chance extends PPassiveCond<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PCond_Chance.class, PField_Not.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_Chance(PSkillSaveData content) {
         super(DATA, content);

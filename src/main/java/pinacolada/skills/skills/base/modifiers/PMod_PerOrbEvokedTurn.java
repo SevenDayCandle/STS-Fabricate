@@ -21,7 +21,7 @@ import java.util.List;
 @VisibleSkill
 public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
 
-    public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrbEvokedTurn.class, PField_Orb.class).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrbEvokedTurn.class, PField_Orb.class).noTarget();
 
     public PMod_PerOrbEvokedTurn(PSkillSaveData content) {
         super(DATA, content);

@@ -16,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance> {
 
-    public static final PSkillData<PField_Stance> DATA = register(PMod_BonusInStance.class, PField_Stance.class).selfTarget();
+    public static final PSkillData<PField_Stance> DATA = register(PMod_BonusInStance.class, PField_Stance.class).noTarget();
 
     public PMod_BonusInStance(PSkillSaveData content) {
         super(DATA, content);

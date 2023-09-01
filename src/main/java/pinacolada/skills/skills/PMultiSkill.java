@@ -29,12 +29,13 @@ import pinacolada.skills.fields.PField_Empty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @VisibleSkill
 public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>> {
     public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
     public boolean generated = false;
 
@@ -51,6 +52,12 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill(PSkill<?>... effects) {
         super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
         this.effects.addAll(Arrays.asList(effects));
+        setParentsForChildren();
+    }
+
+    public PMultiSkill(Collection<? extends PSkill<?>> effects) {
+        super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
+        this.effects.addAll(effects);
         setParentsForChildren();
     }
 

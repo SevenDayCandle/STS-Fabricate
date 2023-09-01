@@ -22,7 +22,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_PermanentUpgrade.class, PField_CardCategory.class)
-            .selfTarget();
+            .noTarget();
 
     public PMove_PermanentUpgrade() {
         this(1);

@@ -21,7 +21,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeTo.class, PField_Orb.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_EvokeTo(PSkillSaveData content) {
         super(DATA, content);

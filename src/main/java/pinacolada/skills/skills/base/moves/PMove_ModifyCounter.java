@@ -14,7 +14,7 @@ public class PMove_ModifyCounter extends PMove_Modify<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyCounter.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ModifyCounter() {
         this(1, 1);

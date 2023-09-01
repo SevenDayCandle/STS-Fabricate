@@ -24,7 +24,7 @@ import pinacolada.skills.fields.PField_CardTransform;
 @VisibleSkill
 public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     public static final PSkillData<PField_CardTransform> DATA = register(PMove_Transform.class, PField_CardTransform.class)
-            .selfTarget();
+            .noTarget();
 
     public PMove_Transform() {
         this(1);

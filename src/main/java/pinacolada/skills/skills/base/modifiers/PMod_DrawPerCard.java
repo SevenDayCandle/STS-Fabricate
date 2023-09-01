@@ -25,7 +25,7 @@ import java.util.ArrayList;
 @VisibleSkill
 public class PMod_DrawPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_DrawPerCard.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMod_DrawPerCard(PSkillSaveData content) {

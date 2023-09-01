@@ -26,7 +26,7 @@ import java.util.List;
 @VisibleSkill
 public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTrait<?>> {
     public static final PSkillData<PField_Empty> DATA = register(PMultiTrait.class, PField_Empty.class, 0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
     protected ArrayList<PTrait<?>> effects = new ArrayList<>();
 
     public PMultiTrait() {

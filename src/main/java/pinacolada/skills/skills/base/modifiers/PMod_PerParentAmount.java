@@ -12,7 +12,7 @@ import pinacolada.skills.fields.PField_Random;
 @VisibleSkill
 public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
 
-    public static final PSkillData<PField_Random> DATA = register(PMod_PerParentAmount.class, PField_Random.class).selfTarget();
+    public static final PSkillData<PField_Random> DATA = register(PMod_PerParentAmount.class, PField_Random.class).noTarget();
 
     public PMod_PerParentAmount() {
         this(1);

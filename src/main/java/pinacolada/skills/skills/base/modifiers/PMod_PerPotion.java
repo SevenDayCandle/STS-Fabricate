@@ -12,7 +12,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PMod_PerPotion extends PMod_Per<PField_Potion> {
-    public static final PSkillData<PField_Potion> DATA = register(PMod_PerPotion.class, PField_Potion.class).selfTarget();
+    public static final PSkillData<PField_Potion> DATA = register(PMod_PerPotion.class, PField_Potion.class).noTarget();
 
     public PMod_PerPotion(PSkillSaveData content) {
         super(DATA, content);

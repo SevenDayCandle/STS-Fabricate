@@ -17,7 +17,7 @@ import pinacolada.skills.skills.PActiveCond;
 @VisibleSkill
 public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PCond_PayEnergy.class, PField_Empty.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_PayEnergy(PSkillSaveData content) {
         super(DATA, content);

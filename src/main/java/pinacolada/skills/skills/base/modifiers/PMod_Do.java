@@ -95,8 +95,8 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
-                (isChildEffectUsingParent() ? childEffect.getText(perspective, addPeriod) :
-                        (TEXT.cond_xPerY(capital(childEffect.getText(perspective, false), addPeriod), EUIRM.strings.nounVerb(getSubText(perspective), getActionPast())) + PCLCoreStrings.period(addPeriod))
+                (isChildEffectUsingParent() ? capital(childEffect.getText(perspective, addPeriod), true) :
+                        (TEXT.cond_xPerY(capital(childEffect.getText(perspective, false), true), EUIRM.strings.nounVerb(getSubText(perspective), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
     }
 

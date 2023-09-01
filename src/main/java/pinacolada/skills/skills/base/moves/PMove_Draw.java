@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PCallbackMove;
 @VisibleSkill
 public class PMove_Draw extends PCallbackMove<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Draw.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile)
             .setOrigins(PCLCardSelection.Top);
 

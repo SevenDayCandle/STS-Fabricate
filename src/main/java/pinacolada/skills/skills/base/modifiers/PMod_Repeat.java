@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PActiveMod;
 @VisibleSkill
 public class PMod_Repeat extends PActiveMod<PField_Empty> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PMod_Repeat.class, PField_Empty.class).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_Repeat.class, PField_Empty.class).noTarget();
 
     public PMod_Repeat(PSkillSaveData content) {
         super(DATA, content);

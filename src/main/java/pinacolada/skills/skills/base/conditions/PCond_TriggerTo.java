@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.powers.ThornsPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -11,7 +10,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -22,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PCond_TriggerTo.class, PField_Orb.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_TriggerTo(PSkillSaveData content) {
         super(DATA, content);

@@ -26,6 +26,6 @@ public class Curse_Decay extends PCLCard {
 
     @Override
     public void setup(Object input) {
-        addUseMove(PCond.onTurnEnd(), new PMove_DealDamage(2, PCLAttackVFX.POISON, PCLCardTarget.Self));
+        addUseMove(PCond.onTurnEnd(), new PMove_DealDamage(PCLCardTarget.Self, 2, PCLAttackVFX.POISON));
     }
 }

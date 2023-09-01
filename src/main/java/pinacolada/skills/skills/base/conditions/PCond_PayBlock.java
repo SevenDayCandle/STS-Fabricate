@@ -17,7 +17,7 @@ import pinacolada.skills.skills.PActiveCond;
 @VisibleSkill
 public class PCond_PayBlock extends PActiveCond<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PCond_PayBlock.class, PField_Empty.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_PayBlock(PSkillSaveData content) {
         super(DATA, content);

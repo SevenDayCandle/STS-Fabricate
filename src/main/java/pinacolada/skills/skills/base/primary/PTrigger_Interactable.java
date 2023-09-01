@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PTrigger;
 public class PTrigger_Interactable extends PTrigger {
 
     public static final PSkillData<PField_CardGeneric> DATA = register(PTrigger_Interactable.class, PField_CardGeneric.class, -1, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PTrigger_Interactable() {
         this(1);

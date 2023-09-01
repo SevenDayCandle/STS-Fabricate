@@ -26,7 +26,7 @@ import java.util.ArrayList;
 @VisibleSkill
 public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
-    public static final PSkillData<PField_Power> DATA = register(PMod_PayPerPower.class, PField_Power.class).selfTarget();
+    public static final PSkillData<PField_Power> DATA = register(PMod_PayPerPower.class, PField_Power.class).noTarget();
 
     public PMod_PayPerPower(PSkillSaveData content) {
         super(DATA, content);

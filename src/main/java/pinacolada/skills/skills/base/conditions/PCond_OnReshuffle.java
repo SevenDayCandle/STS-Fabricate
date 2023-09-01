@@ -14,7 +14,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnReshuffle extends PDelegateCardCond implements OnCardReshuffledSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnReshuffle.class, PField_CardCategory.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_OnReshuffle() {
         super(DATA);

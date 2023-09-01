@@ -30,7 +30,7 @@ import java.util.Map;
 @VisibleSkill
 public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfCombatMove {
     public static final PSkillData<PField_Relic> DATA = register(PMove_ObtainRelic.class, PField_Relic.class)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ObtainRelic() {
         super(DATA);

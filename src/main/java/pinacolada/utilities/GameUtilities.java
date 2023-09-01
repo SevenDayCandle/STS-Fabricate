@@ -804,11 +804,18 @@ public class GameUtilities {
     }
 
     public static int getHealthBarAmount(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP) {
+        return Math.min(getHealthBarDamage(c, amount, subtractBlock, subtractTempHP), c.currentHealth);
+    }
+
+    public static int getHealthBarDamage(AbstractCreature c, int amount) {
+        return getHealthBarDamage(c, amount, true, true);
+    }
+
+    public static int getHealthBarDamage(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP) {
         if (c == null || (!subtractBlock && !subtractTempHP)) {
             return amount;
         }
 
-        int max = c.currentHealth;
         if (amount > 0 && subtractBlock) {
             int blocked = Math.min(c.currentBlock + GameUtilities.getEndOfTurnBlock(c), amount);
             amount -= blocked;
@@ -819,7 +826,7 @@ public class GameUtilities {
             amount -= blocked;
         }
 
-        return MathUtils.clamp(amount, 0, max);
+        return Math.max(0, amount);
     }
 
     public static float getHealthPercentage(AbstractCreature creature) {
@@ -1399,6 +1406,7 @@ public class GameUtilities {
         return null;
     }
 
+    // TODO factor in prismatic shard
     public static int getTotalCardsInPlay() {
         return AbstractDungeon.colorlessCardPool.size()
                 + AbstractDungeon.commonCardPool.size()
@@ -1407,6 +1415,7 @@ public class GameUtilities {
                 + AbstractDungeon.curseCardPool.size();
     }
 
+    // TODO factor in prismatic shard
     public static int getTotalCardsInRewardPool() {
         return AbstractDungeon.commonCardPool.size()
                 + AbstractDungeon.uncommonCardPool.size()

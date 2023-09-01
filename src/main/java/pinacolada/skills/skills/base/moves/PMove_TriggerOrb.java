@@ -16,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 public class PMove_TriggerOrb extends PMove<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PMove_TriggerOrb.class, PField_Orb.class)
             .setExtra(0, Integer.MAX_VALUE)
-            .selfTarget();
+            .noTarget();
 
     public PMove_TriggerOrb() {
         this(1, 1);

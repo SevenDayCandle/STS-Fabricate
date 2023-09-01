@@ -27,7 +27,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfCombatMove {
     public static final PSkillData<PField_Relic> DATA = register(PMove_UpgradeRelic.class, PField_Relic.class)
-            .selfTarget();
+            .noTarget();
 
     public PMove_UpgradeRelic() {
         super(DATA);

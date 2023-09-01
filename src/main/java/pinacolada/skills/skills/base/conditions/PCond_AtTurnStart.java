@@ -15,7 +15,7 @@ import pinacolada.skills.skills.PDelegateCond;
 public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber {
 
     public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnStart.class, PField_Empty.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_AtTurnStart() {
         super(DATA, PCLCardTarget.None, 0);

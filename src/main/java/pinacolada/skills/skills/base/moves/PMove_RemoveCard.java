@@ -22,7 +22,7 @@ import pinacolada.skills.skills.PCallbackMove;
 public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_RemoveCard.class, PField_CardCategory.class)
             .setGroups(PCLCardGroupHelper.getAll())
-            .selfTarget();
+            .noTarget();
 
     public PMove_RemoveCard() {
         this(1);

@@ -14,7 +14,7 @@ import java.util.List;
 @VisibleSkill
 public class PCond_HaveExhausted extends PCond_HaveCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_HaveExhausted.class, PField_CardCategory.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_HaveExhausted() {
         this(1);

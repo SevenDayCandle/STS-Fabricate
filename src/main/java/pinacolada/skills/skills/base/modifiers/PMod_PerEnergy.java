@@ -11,7 +11,7 @@ import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
 public class PMod_PerEnergy extends PMod_Per<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerEnergy.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerEnergy.class, PField_Not.class).noTarget();
 
     public PMod_PerEnergy(PSkillSaveData content) {
         super(DATA, content);

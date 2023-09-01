@@ -15,6 +15,7 @@ import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.cards.base.cardText.ConditionToken;
 import pinacolada.cards.base.cardText.PointerToken;
 import pinacolada.cards.base.cardText.SymbolToken;
@@ -51,9 +52,15 @@ public interface PointerProvider {
         }
         for (EUIKeywordTooltip tip : provider.getTips()) {
             EUICardPreview preview = tip.createPreview();
-            if (preview != null && !EUIUtils.any(list, p -> p.matches(preview.defaultPreview.cardID))) {
-                list.add(preview);
+            // Check for both the tip card and the template, if it exists
+            if (preview != null) {
+                TemplateCardData template = TemplateCardData.getTemplate(preview.defaultPreview.cardID);
+                if (!EUIUtils.any(list, p -> p.matches(preview.defaultPreview.cardID))
+                        && (template == null || !EUIUtils.any(list, p -> p.matches(template.ID)) )) {
+                    list.add(preview);
+                }
             }
+
         }
 
         for (EUIPreview preview : list) {

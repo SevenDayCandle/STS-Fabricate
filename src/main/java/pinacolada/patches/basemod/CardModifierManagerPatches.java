@@ -59,7 +59,7 @@ public class CardModifierManagerPatches {
     public static class CardModifierManagerPatches_OnModifyBlockLast {
         @SpirePostfixPatch
         public static float postfix(float retVal, float damage, AbstractCard card) {
-            return CombatManager.onModifyBlockFirst(retVal, card);
+            return CombatManager.onModifyBlockLast(retVal, card);
         }
     }
 

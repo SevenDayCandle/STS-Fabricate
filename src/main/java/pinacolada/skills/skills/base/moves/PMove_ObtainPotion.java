@@ -29,7 +29,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCombatMove {
     public static final PSkillData<PField_Potion> DATA = register(PMove_ObtainPotion.class, PField_Potion.class)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ObtainPotion() {
         super(DATA);

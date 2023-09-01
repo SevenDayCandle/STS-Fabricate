@@ -14,7 +14,7 @@ import pinacolada.skills.skills.PPassiveCond;
 public class PCond_Starter extends PPassiveCond<PField_Not> {
 
     public static final PSkillData<PField_Not> DATA = register(PCond_Starter.class, PField_Not.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_Starter() {
         super(DATA, PCLCardTarget.None, 0);

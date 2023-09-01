@@ -19,7 +19,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMod_PurgePerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PurgePerCard.class, PField_CardCategory.class)
-            .selfTarget();
+            .noTarget();
 
     public PMod_PurgePerCard(PSkillSaveData content) {
         super(DATA, content);

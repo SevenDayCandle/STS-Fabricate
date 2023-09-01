@@ -27,7 +27,7 @@ import java.util.List;
 @VisibleSkill
 public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<?>> {
     public static final PSkillData<PField_Not> DATA = register(PBranchCond.class, PField_Not.class, 0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
 
     public PBranchCond() {

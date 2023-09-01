@@ -21,7 +21,7 @@ import java.util.List;
 public class PMod_SelectPerCard extends PMod_Do {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_SelectPerCard.class, PField_CardCategory.class)
-            .selfTarget();
+            .noTarget();
 
     public PMod_SelectPerCard(PSkillSaveData content) {
         super(DATA, content);

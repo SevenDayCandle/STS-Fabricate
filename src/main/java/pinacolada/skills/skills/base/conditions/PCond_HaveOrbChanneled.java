@@ -22,7 +22,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 @VisibleSkill
 public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements OnOrbChannelSubscriber {
     public static final PSkillData<PField_Orb> DATA = register(PCond_HaveOrbChanneled.class, PField_Orb.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_HaveOrbChanneled() {
         this(1);

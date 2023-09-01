@@ -20,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PCond_PayOrb extends PActiveCond<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PCond_PayOrb.class, PField_Orb.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_PayOrb(PSkillSaveData content) {
         super(DATA, content);

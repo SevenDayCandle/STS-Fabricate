@@ -17,7 +17,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMove_Purge extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Purge.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setExtra(0, DEFAULT_MAX);
 
     public PMove_Purge() {

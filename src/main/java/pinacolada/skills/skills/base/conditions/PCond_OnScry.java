@@ -13,7 +13,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnScry extends PDelegateCardCond implements OnCardScrySubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnScry.class, PField_CardCategory.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_OnScry() {
         super(DATA);

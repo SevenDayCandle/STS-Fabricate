@@ -10,7 +10,7 @@ import pinacolada.skills.skills.PShift;
 @VisibleSkill
 public class PShift_OnObtain extends PShift {
     public static final PSkillData<PField_Empty> DATA = register(PShift_OnObtain.class, PField_Empty.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PShift_OnObtain() {
         super(DATA);

@@ -17,7 +17,7 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_ModifyBlock.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ModifyBlock() {
         this(1, 1);

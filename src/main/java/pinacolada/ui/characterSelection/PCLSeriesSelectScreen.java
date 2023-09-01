@@ -224,8 +224,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         data.selectedLoadout = find(currentSeriesCard);
         HashSet<String> banned = new HashSet<>(bannedCards);
         banned.addAll(bannedColorless);
+        // TODO add list config class that lets you set the items of a config without replacing its list
         data.config.bannedCards.set(banned);
-        data.config.selectedLoadouts.set(selectedLoadouts);
+        data.config.selectedLoadouts.set(new HashSet<>(selectedLoadouts));
         data.saveSelectedLoadout();
 
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());

@@ -14,7 +14,7 @@ import java.util.List;
 @VisibleSkill
 public class PCond_HaveDiscardedThis extends PCond_HaveCardThis {
     public static final PSkillData<PField_CardGeneric> DATA = register(PCond_HaveDiscardedThis.class, PField_CardGeneric.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_HaveDiscardedThis() {
         this(1);

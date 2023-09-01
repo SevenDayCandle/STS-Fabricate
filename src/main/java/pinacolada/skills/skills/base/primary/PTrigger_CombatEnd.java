@@ -17,7 +17,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 @VisibleSkill
 public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscriber {
     public static final PSkillData<PField_CardGeneric> DATA = register(PTrigger_CombatEnd.class, PField_CardGeneric.class, 0, 0)
-            .selfTarget();
+            .noTarget();
 
     public PTrigger_CombatEnd() {
         super(DATA);

@@ -11,7 +11,7 @@ import pinacolada.skills.fields.PField_CardGeneric;
 @VisibleSkill
 public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup {
 
-    public static final PSkillData<PField_CardGeneric> DATA = register(PMod_ChangeGroupOnStarter.class, PField_CardGeneric.class).selfTarget();
+    public static final PSkillData<PField_CardGeneric> DATA = register(PMod_ChangeGroupOnStarter.class, PField_CardGeneric.class).noTarget();
 
     public PMod_ChangeGroupOnStarter(PSkillSaveData content) {
         super(DATA, content);

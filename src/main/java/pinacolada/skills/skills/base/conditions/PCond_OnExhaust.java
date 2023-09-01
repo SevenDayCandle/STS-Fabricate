@@ -13,7 +13,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnExhaust extends PDelegateCardCond implements OnCardExhaustedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnExhaust.class, PField_CardCategory.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_OnExhaust() {
         super(DATA);

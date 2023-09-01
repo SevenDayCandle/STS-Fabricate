@@ -1092,7 +1092,7 @@ public class CombatManager extends EUIBase {
             }
         }
 
-        expectedDamage = GameUtilities.getHealthBarAmount(player, expectedDamage, true, true);
+        expectedDamage = GameUtilities.getHealthBarDamage(player, expectedDamage, true, true);
 
         estimatedDamages = summons.estimateDamage(expectedDamage);
     }

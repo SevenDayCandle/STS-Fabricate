@@ -19,7 +19,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMod_FetchPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_FetchPerCard.class, PField_CardCategory.class)
-            .selfTarget()
+            .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
 
     public PMod_FetchPerCard(PSkillSaveData content) {

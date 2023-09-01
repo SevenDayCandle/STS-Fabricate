@@ -14,7 +14,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCard.class, PField_CardCategory.class)
             .setGroups(PCLCardGroupHelper.getAll())
-            .selfTarget();
+            .noTarget();
 
     public PMod_PerCard(PSkillSaveData content) {
         super(DATA, content);

@@ -241,16 +241,12 @@ public class PCLMainConfig extends AbstractConfig {
     private void updateCardDescriptions() {
         EUIPreview.invalidate();
         for (AbstractCard c : CardLibrary.getAllCards()) {
-            if (c instanceof PCLCard) {
-                c.initializeDescription();
-            }
+            c.initializeDescription();
         }
 
         if (GameUtilities.inGame()) {
             for (AbstractCard c : GameUtilities.getCardsInGame()) {
-                if (c instanceof PCLCard) {
-                    c.initializeDescription();
-                }
+                c.initializeDescription();
             }
         }
     }

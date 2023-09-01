@@ -12,7 +12,7 @@ import pinacolada.skills.skills.PLimit;
 @VisibleSkill
 public class PLimit_Limited extends PLimit {
     public static final PSkillData<PField_Empty> DATA = register(PLimit_Limited.class, PField_Empty.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PLimit_Limited() {
         super(DATA);

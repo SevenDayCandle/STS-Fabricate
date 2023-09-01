@@ -12,7 +12,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PMod_PerRelic extends PMod_Per<PField_Relic> {
-    public static final PSkillData<PField_Relic> DATA = register(PMod_PerRelic.class, PField_Relic.class).selfTarget();
+    public static final PSkillData<PField_Relic> DATA = register(PMod_PerRelic.class, PField_Relic.class).noTarget();
 
     public PMod_PerRelic(PSkillSaveData content) {
         super(DATA, content);

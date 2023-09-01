@@ -15,7 +15,7 @@ import pinacolada.skills.skills.PPassiveCond;
 @VisibleSkill
 public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
     public static final PSkillData<PField_Potion> DATA = register(PCond_CheckPotion.class, PField_Potion.class)
-            .selfTarget();
+            .noTarget();
 
     public PCond_CheckPotion(PSkillSaveData content) {
         super(DATA, content);

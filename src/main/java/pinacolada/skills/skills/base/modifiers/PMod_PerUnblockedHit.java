@@ -13,7 +13,7 @@ import pinacolada.utilities.GameUtilities;
 @VisibleSkill
 public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
 
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerUnblockedHit.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerUnblockedHit.class, PField_Not.class).noTarget();
 
     public PMod_PerUnblockedHit() {
         this(1);

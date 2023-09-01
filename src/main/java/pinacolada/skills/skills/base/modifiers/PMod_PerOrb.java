@@ -14,7 +14,7 @@ import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMod_PerOrb extends PMod_Per<PField_Orb> {
-    public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrb.class, PField_Orb.class).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrb.class, PField_Orb.class).noTarget();
 
     public PMod_PerOrb(PSkillSaveData content) {
         super(DATA, content);

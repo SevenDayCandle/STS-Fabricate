@@ -16,7 +16,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     public static final PSkillData<PField_CardModifyTag> DATA = PMove_Modify.register(PMove_ModifyTag.class, PField_CardModifyTag.class)
             .setAmounts(DEFAULT_EXTRA_MIN, PCLAffinity.MAX_LEVEL)
             .setExtra(0, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ModifyTag() {
         this(1, 1);

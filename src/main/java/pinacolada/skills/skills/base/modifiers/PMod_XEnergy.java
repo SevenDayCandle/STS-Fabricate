@@ -19,7 +19,7 @@ import pinacolada.utilities.GameUtilities;
 public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMod_XEnergy.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMod_XEnergy(PSkillSaveData content) {
         super(DATA, content);

@@ -21,7 +21,7 @@ import java.util.List;
 public class PMove_ChannelOrb extends PMove<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PMove_ChannelOrb.class, PField_Orb.class)
             .setExtra(-1, DEFAULT_MAX)
-            .selfTarget();
+            .noTarget();
 
     public PMove_ChannelOrb() {
         this(1);

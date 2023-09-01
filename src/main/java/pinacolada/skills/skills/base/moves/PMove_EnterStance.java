@@ -22,7 +22,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_EnterStance extends PMove<PField_Stance> {
     public static final PSkillData<PField_Stance> DATA = register(PMove_EnterStance.class, PField_Stance.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PMove_EnterStance() {
         super(DATA);

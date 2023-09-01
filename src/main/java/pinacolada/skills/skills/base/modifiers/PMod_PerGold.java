@@ -10,7 +10,7 @@ import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
 public class PMod_PerGold extends PMod_Per<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerGold.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerGold.class, PField_Not.class).noTarget();
 
     public PMod_PerGold(PSkillSaveData content) {
         super(DATA, content);

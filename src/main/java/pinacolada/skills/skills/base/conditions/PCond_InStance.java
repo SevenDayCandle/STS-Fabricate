@@ -20,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnStanceChangedSubscriber {
 
     public static final PSkillData<PField_Stance> DATA = register(PCond_InStance.class, PField_Stance.class, 1, 1)
-            .selfTarget();
+            .noTarget();
 
     public PCond_InStance() {
         super(DATA);
