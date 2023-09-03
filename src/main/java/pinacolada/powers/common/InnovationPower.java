@@ -2,18 +2,24 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnClickableUsedSubscriber;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.PCLSubscribingPower;
+import pinacolada.resources.PGR;
 
-public class InnovationPower extends PCLPower implements OnClickableUsedSubscriber {
-    public static final String POWER_ID = createFullID(InnovationPower.class);
+@VisiblePower
+public class InnovationPower extends PCLSubscribingPower implements OnClickableUsedSubscriber {
+    public static final PCLPowerData DATA = register(InnovationPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurnNext)
+            .setTooltip(PGR.core.tooltips.innovation);
 
-    public InnovationPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount);
+    public InnovationPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override
@@ -21,19 +27,5 @@ public class InnovationPower extends PCLPower implements OnClickableUsedSubscrib
         reducePower(1);
         this.flashWithoutSound();
         return false;
-    }
-
-    @Override
-    public void onInitialApplication() {
-        super.onInitialApplication();
-
-        CombatManager.subscribe(this);
-    }
-
-    @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
     }
 }

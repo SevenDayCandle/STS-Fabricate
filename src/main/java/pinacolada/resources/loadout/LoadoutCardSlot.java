@@ -16,14 +16,13 @@ import java.util.function.Predicate;
 
 // Copied and modified from STS-AnimatorMod
 public class LoadoutCardSlot extends LoadoutSlot<String, LoadoutCardSlot.Item> {
-    public static final int MAX_LIMIT = 6;
     public int amount;
     public int currentMax;
     public int max;
     public int min;
 
     public LoadoutCardSlot(PCLLoadoutData container) {
-        this(container, 0, MAX_LIMIT);
+        this(container, 0, container.loadout.maxItems);
     }
 
     public LoadoutCardSlot(PCLLoadoutData container, int min, int max) {
@@ -127,9 +126,6 @@ public class LoadoutCardSlot extends LoadoutSlot<String, LoadoutCardSlot.Item> {
         else {
             int maxCopies = selected.maxCopies();
             currentMax = Math.min(max, maxCopies >= min ? maxCopies : max);
-            if (currentMax <= 0) {
-                currentMax = MAX_LIMIT;
-            }
             this.amount = MathUtils.clamp(amount, min, currentMax);
         }
 
@@ -208,7 +204,7 @@ public class LoadoutCardSlot extends LoadoutSlot<String, LoadoutCardSlot.Item> {
             if (c instanceof PCLCard) {
                 return ((PCLCard) c).cardData.maxCopies;
             }
-            return MAX_LIMIT;
+            return Integer.MAX_VALUE;
         }
     }
 }

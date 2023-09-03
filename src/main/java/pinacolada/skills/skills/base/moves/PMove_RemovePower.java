@@ -7,7 +7,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -25,7 +25,7 @@ public class PMove_RemovePower extends PMove<PField_Power> {
         this(PCLCardTarget.Self);
     }
 
-    public PMove_RemovePower(PCLCardTarget target, PCLPowerHelper... powers) {
+    public PMove_RemovePower(PCLCardTarget target, PCLPowerData... powers) {
         super(DATA, target, 1);
         fields.setPower(powers);
     }
@@ -46,17 +46,17 @@ public class PMove_RemovePower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
     }
 
-    protected void removePower(List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
+    protected void removePower(List<? extends AbstractCreature> targets, PCLPowerData power, PCLActions order) {
         for (AbstractCreature t : targets) {
             order.removePower(t, t, power.ID);
         }
         // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerHelper.Intangible) {
+        if (power == PCLPowerData.Intangible) {
             for (AbstractCreature t : targets) {
                 order.removePower(t, t, IntangiblePower.POWER_ID);
             }
         }
-        else if (power == PCLPowerHelper.LockOn) {
+        else if (power == PCLPowerData.LockOn) {
             for (AbstractCreature t : targets) {
                 order.removePower(t, t, LockOnPower.POWER_ID);
             }
@@ -67,20 +67,20 @@ public class PMove_RemovePower extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
-            for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
+            for (PCLPowerData power : PCLPowerData.getAllData(false, false, p -> !p.isDebuff() ^ fields.debuff)) {
                 for (AbstractCreature t : targets) {
                     order.removePower(t, t, power.ID);
                 }
             }
         }
         else if (fields.random) {
-            PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
+            PCLPowerData power = GameUtilities.getRandomElement(fields.powers);
             if (power != null) {
                 removePower(targets, power, order);
             }
         }
         else {
-            for (PCLPowerHelper power : fields.powers) {
+            for (PCLPowerData power : fields.powers) {
                 removePower(targets, power, order);
             }
         }

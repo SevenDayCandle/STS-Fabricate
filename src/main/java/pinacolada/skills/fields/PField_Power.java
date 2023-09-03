@@ -3,8 +3,7 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
@@ -14,10 +13,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class PField_Power extends PField_Random {
-    public ArrayList<PCLPowerHelper> powers = new ArrayList<>();
+    public ArrayList<PCLPowerData> powers = new ArrayList<>();
     public boolean debuff;
 
-    public PField_Power addPower(PCLPowerHelper... powers) {
+    public PField_Power addPower(PCLPowerData... powers) {
         this.powers.addAll(Arrays.asList(powers));
         return this;
     }
@@ -69,13 +68,13 @@ public class PField_Power extends PField_Random {
         return this;
     }
 
-    public PField_Power setPower(Collection<PCLPowerHelper> powers) {
+    public PField_Power setPower(Collection<PCLPowerData> powers) {
         this.powers.clear();
         this.powers.addAll(powers);
         return this;
     }
 
-    public PField_Power setPower(PCLPowerHelper... powers) {
+    public PField_Power setPower(PCLPowerData... powers) {
         return setPower(Arrays.asList(powers));
     }
 

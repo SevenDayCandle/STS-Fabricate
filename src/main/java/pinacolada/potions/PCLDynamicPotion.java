@@ -1,5 +1,6 @@
 package pinacolada.potions;
 
+import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
@@ -45,5 +46,6 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
             addPowerMove(pe.makeCopy());
         }
 
+        this.targetRequired = this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
     }
 }

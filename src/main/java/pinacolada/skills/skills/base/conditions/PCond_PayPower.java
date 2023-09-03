@@ -14,7 +14,7 @@ import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -37,11 +37,11 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_PayPower(int amount, PCLPowerHelper... powers) {
+    public PCond_PayPower(int amount, PCLPowerData... powers) {
         this(PCLCardTarget.None, amount, powers);
     }
 
-    public PCond_PayPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public PCond_PayPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         super(DATA, target, amount);
         fields.setPower(powers);
     }
@@ -51,7 +51,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
         return evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)));
     }
 
-    private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
+    private boolean checkPowers(PCLPowerData po, AbstractCreature t) {
         return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID), Math.max(1, amount));
     }
 

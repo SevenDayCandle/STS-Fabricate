@@ -2,15 +2,20 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 
+@VisiblePower
 public class EnergizedPower extends PCLPower {
-    public static final String POWER_ID = createFullID(EnergizedPower.class);
+    public static final PCLPowerData DATA = register(EnergizedPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurnNext)
+            .setTooltip(PGR.core.tooltips.energized);
 
-    public EnergizedPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount);
+    public EnergizedPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override

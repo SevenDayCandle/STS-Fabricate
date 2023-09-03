@@ -7,12 +7,11 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
@@ -83,43 +82,43 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerOrb(amount, aff);
     }
 
-    public static PMod_PerPower bonusPerPower(PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPower(PCLPowerData... powers) {
         return bonusPerPower(1, powers);
     }
 
-    public static PMod_PerPower bonusPerPower(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPower(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerPower bonusPerPowerAny(PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerAny(PCLPowerData... powers) {
         return bonusPerPowerAny(1, powers);
     }
 
-    public static PMod_PerPower bonusPerPowerAny(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerAny(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerPower bonusPerPowerAoe(PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerAoe(PCLPowerData... powers) {
         return bonusPerPowerAoe(1, powers);
     }
 
-    public static PMod_PerPower bonusPerPowerAoe(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerAoe(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerPower bonusPerPowerSelf(PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerSelf(PCLPowerData... powers) {
         return bonusPerPowerSelf(1, powers);
     }
 
-    public static PMod_PerPower bonusPerPowerSelf(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerSelf(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Self).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerPower bonusPerPowerSingle(PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerSingle(PCLPowerData... powers) {
         return bonusPerPowerSingle(1, powers);
     }
 
-    public static PMod_PerPower bonusPerPowerSingle(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower bonusPerPowerSingle(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single).edit(f -> f.setNot(true));
     }
 
@@ -235,7 +234,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerCreatureHP(target, amount);
     }
 
-    public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerData... powers) {
         return new PMod_PerCreatureWith(amount, powers);
     }
 
@@ -251,15 +250,15 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return (PMod_PerDistinctPower) perDistinctPower(target, amount).edit(f -> f.debuff = true);
     }
 
-    public static PMod_PerDistinctPower perDistinctPower(PCLPowerHelper... powers) {
+    public static PMod_PerDistinctPower perDistinctPower(PCLPowerData... powers) {
         return perDistinctPower(1, powers);
     }
 
-    public static PMod_PerDistinctPower perDistinctPower(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerDistinctPower perDistinctPower(int amount, PCLPowerData... powers) {
         return new PMod_PerDistinctPower(amount, powers);
     }
 
-    public static PMod_PerDistinctPower perDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public static PMod_PerDistinctPower perDistinctPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PMod_PerDistinctPower(target, amount, powers);
     }
 
@@ -279,43 +278,43 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerParentAmount();
     }
 
-    public static PMod_PerPower perPower(PCLPowerHelper... powers) {
+    public static PMod_PerPower perPower(PCLPowerData... powers) {
         return perPower(1, powers);
     }
 
-    public static PMod_PerPower perPower(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower perPower(int amount, PCLPowerData... powers) {
         return new PMod_PerPower(amount, powers);
     }
 
-    public static PMod_PerPower perPowerAny(PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerAny(PCLPowerData... powers) {
         return perPowerAny(1, powers);
     }
 
-    public static PMod_PerPower perPowerAny(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerAny(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any);
     }
 
-    public static PMod_PerPower perPowerAoe(PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerAoe(PCLPowerData... powers) {
         return perPowerAoe(1, powers);
     }
 
-    public static PMod_PerPower perPowerAoe(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerAoe(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy);
     }
 
-    public static PMod_PerPower perPowerSelf(PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerSelf(PCLPowerData... powers) {
         return perPowerSelf(1, powers);
     }
 
-    public static PMod_PerPower perPowerSelf(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerSelf(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Self);
     }
 
-    public static PMod_PerPower perPowerSingle(PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerSingle(PCLPowerData... powers) {
         return perPowerSingle(1, powers);
     }
 
-    public static PMod_PerPower perPowerSingle(int amount, PCLPowerHelper... powers) {
+    public static PMod_PerPower perPowerSingle(int amount, PCLPowerData... powers) {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single);
     }
 

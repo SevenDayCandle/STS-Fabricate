@@ -3,7 +3,8 @@ package pinacolada.relics.pcl;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.common.CriticalPower;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.skills.PCond;
@@ -22,8 +23,8 @@ public class HomeRunBats extends PCLPointerRelic {
 
     public void setup() {
         addUseMove(PTrigger.when(1, PCond.onOtherCardPlayed(AbstractCard.CardType.ATTACK),
-                PBranchCond.branch(PCond.payPower(PCLCardTarget.Single, 8, PCLPowerHelper.Mark),
-                        PMove.gain(1, PCLPowerHelper.Critical),
-                        PMove.applyToSingle(8, PCLPowerHelper.Mark))));
+                PBranchCond.branch(PCond.payPower(PCLCardTarget.Single, 8, PCLPowerData.Mark),
+                        PMove.gain(1, CriticalPower.DATA),
+                        PMove.applyToSingle(8, PCLPowerData.Mark))));
     }
 }

@@ -56,7 +56,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.DelayedDamagePower;
 import pinacolada.powers.common.DrawMinusPower;
 import pinacolada.powers.common.EnergizedPower;
@@ -171,23 +171,23 @@ public final class PCLActions {
         return applyPower(power.owner, power.owner, power);
     }
 
-    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerHelper power) {
+    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerData power) {
         return add(new ApplyOrReducePowerAction(target, target, power, 1));
     }
 
-    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerHelper power, int amount) {
+    public ApplyOrReducePowerAction applyPower(AbstractCreature target, PCLPowerData power, int amount) {
         return add(new ApplyOrReducePowerAction(target, target, power, amount));
     }
 
-    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power) {
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerData power) {
         return add(new ApplyOrReducePowerAction(source, target, power, 1));
     }
 
-    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount) {
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerData power, int amount) {
         return add(new ApplyOrReducePowerAction(source, target, power, amount));
     }
 
-    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount, boolean temporary) {
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, PCLPowerData power, int amount, boolean temporary) {
         return add(new ApplyOrReducePowerAction(source, target, power, amount, temporary));
     }
 
@@ -311,10 +311,6 @@ public final class PCLActions {
         return add(new DealDamage(target, damageInfo, effect));
     }
 
-    public ApplyOrReducePowerAction dealDamageAtEndOfTurn(AbstractCreature source, AbstractCreature target, int amount, AbstractGameAction.AttackEffect effect) {
-        return applyPower(source, new DelayedDamagePower(target, amount, effect));
-    }
-
     public DealDamageToAll dealDamageToAll(AbstractCreature source, ArrayList<AbstractCreature> targets, int[] damageMatrix, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
         return add(new DealDamageToAll(source, targets, damageMatrix, damageType, effect.key));
     }
@@ -350,14 +346,6 @@ public final class PCLActions {
         return moveCard(card, player.drawPile, player.hand)
                 .setCardPosition(cardX, cardY)
                 .showEffect(true, false);
-    }
-
-    public ApplyOrReducePowerAction drawLessNextTurn(int amount) {
-        return applyPower(new DrawMinusPower(player, amount));
-    }
-
-    public ApplyOrReducePowerAction drawNextTurn(int amount) {
-        return applyPower(new DrawCardNextTurnPower(player, amount));
     }
 
     public EvokeOrb evokeOrb(int times) {
@@ -410,10 +398,6 @@ public final class PCLActions {
 
     public GainEnergyAction gainEnergy(int amount) {
         return add(new GainEnergyAction(amount));
-    }
-
-    public ApplyOrReducePowerAction gainEnergyNextTurn(int amount) {
-        return applyPower(new EnergizedPower(player, amount));
     }
 
     public GainGoldAction gainGold(int amount) {
@@ -699,8 +683,8 @@ public final class PCLActions {
         return add(new SpendEnergy(amount, canSpendLess));
     }
 
-    public SpreadPower spreadPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount) {
-        return add(new SpreadPower(source, target, power, amount));
+    public SpreadPower spreadPower(AbstractCreature source, AbstractCreature target, PCLPowerData power, int amount) {
+        return add(new SpreadPower(source, target, power.ID, amount));
     }
 
     public SpreadPower spreadPower(AbstractCreature source, AbstractCreature target, String power, int amount) {

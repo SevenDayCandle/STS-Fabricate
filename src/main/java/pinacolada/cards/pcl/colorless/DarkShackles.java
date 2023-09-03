@@ -6,7 +6,8 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.common.ShacklesPower;
 import pinacolada.skills.PMove;
 
 @VisibleCard
@@ -24,6 +25,6 @@ public class DarkShackles extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.applyToSingle(9, PCLPowerHelper.Shackles).setUpgrade(6));
+        addUseMove(PMove.applyToSingle(9, ShacklesPower.DATA).setUpgrade(6));
     }
 }

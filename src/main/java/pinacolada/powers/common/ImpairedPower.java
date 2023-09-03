@@ -1,43 +1,36 @@
 package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
+@VisiblePower
 public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber {
-    public static final String POWER_ID = createFullID(ImpairedPower.class);
+    public static final PCLPowerData DATA = register(ImpairedPower.class)
+            .setType(PowerType.DEBUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setTooltip(PGR.core.tooltips.impaired);
     public static final int MULTIPLIER = 50;
-    public boolean justApplied;
 
-    public ImpairedPower(AbstractCreature owner, int amount) {
-        this(owner, amount, false);
-    }
+    public ImpairedPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
+    };
 
-    public ImpairedPower(AbstractCreature owner, int amount, boolean isSourceMonster) {
-        super(owner, POWER_ID);
+    public ImpairedPower(AbstractCreature owner, AbstractCreature source, int amount, boolean isSourceMonster) {
+        super(DATA, owner, source, amount);
         justApplied = isSourceMonster;
-
-        initialize(amount, PowerType.DEBUFF, true);
-    }
+    };
 
     public static float getOrbMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
-    }
-
-    @Override
-    public void atStartOfTurnPostDraw() {
-        super.atStartOfTurnPostDraw();
-        if (justApplied) {
-            justApplied = false;
-        }
-        else {
-            reducePower(1);
-        }
-
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));
     }
 
     @Override

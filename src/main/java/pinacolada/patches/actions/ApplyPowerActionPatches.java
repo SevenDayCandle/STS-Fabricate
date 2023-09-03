@@ -27,7 +27,7 @@ public class ApplyPowerActionPatches {
 
         if (GameUtilities.isPCLPlayerClass()) {
             if (power instanceof com.megacrit.cardcrawl.powers.LockOnPower) {
-                return new PCLLockOnPower(power.owner, power.amount);
+                return new PCLLockOnPower(power.owner, source, power.amount);
             }
         }
         else {

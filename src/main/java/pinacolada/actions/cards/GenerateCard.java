@@ -110,7 +110,6 @@ public class GenerateCard extends PCLAction<AbstractCard> {
                 PCLActions.top.add(new AddCardToDeckAction(actualCard));
 
                 if (destination != null) {
-                    EUIUtils.logWarning(this, "Destination for the master deck will be ignored.");
                     destination = null;
                 }
 
@@ -184,7 +183,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
 
             complete(actualCard);
 
-            if (destination != null && cardGroup.group.remove(actualCard)) {
+            if (destination != null && destination != PCLCardSelection.Manual && cardGroup.group.remove(actualCard)) {
                 destination.add(cardGroup.group, actualCard, 0);
             }
         }

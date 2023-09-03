@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -22,7 +21,6 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.text.EUISmartText;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -30,20 +28,16 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
-import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,48 +52,33 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public static Random rng = null;
     protected final ArrayList<AbstractGameEffect> effects;
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
+    public final PCLPowerData data;
     protected PowerStrings powerStrings;
     public AbstractCreature source;
     public EUIHitbox hb;
     public EUIKeywordTooltip mainTip;
     public boolean enabled = true;
+    public boolean justApplied = false;
     public boolean hideAmount = false;
     public int baseAmount = 0;
-    public int maxAmount = 9999;
-
-    public PCLPower(AbstractCreature owner, PCLRelic relic) {
-        this(owner, null, relic);
-    }
-
-    public PCLPower(AbstractCreature owner, AbstractCreature source, PCLRelic relic) {
-        this(owner, source);
-        setupStrings(relic);
-    }
 
     // Should not call this constructor without setting strings up through one of the setupStrings methods
-    protected PCLPower(AbstractCreature owner, AbstractCreature source) {
+    protected PCLPower(PCLPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
+        this.data = data;
+        this.ID = data.ID;
         this.effects = ReflectionHacks.getPrivate(this, AbstractPower.class, "effect");
         this.owner = owner;
         this.source = source;
         hb = new EUIHitbox(HITBOX_SIZE, HITBOX_SIZE);
-    }
-
-    public PCLPower(AbstractCreature owner, PCLCardData cardData) {
-        this(owner, null, cardData);
-    }
-
-    public PCLPower(AbstractCreature owner, AbstractCreature source, PCLCardData cardData) {
-        this(owner, source);
-        setupStrings(cardData);
-    }
-
-    public PCLPower(AbstractCreature owner, String id) {
-        this(owner, null, id);
-    }
-
-    public PCLPower(AbstractCreature owner, AbstractCreature source, String id) {
-        this(owner, source);
-        setupStrings(id);
+        setup();
+        setupProperties(amount);
+        if (data.useRegionImage) {
+            loadRegion(data.imagePath);
+        }
+        else {
+            setupImages(data.imagePath);
+        }
+        setupDescription();
     }
 
     public static String createFullID(Class<? extends PCLPower> type) {
@@ -112,6 +91,18 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     public static String deriveID(String base) {
         return base + "Power";
+    }
+
+    protected static PCLPowerData register(Class<? extends AbstractPower> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLPowerData register(Class<? extends AbstractPower> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerPowerData(new PCLPowerData(type, resources));
+    }
+
+    protected static <T extends PCLPowerData> T registerPowerData(T cardData) {
+        return PCLPowerData.registerPCLData(cardData);
     }
 
     // Remove unrecognized characters and sequences from the description pulled from by the base game and other mods
@@ -174,6 +165,28 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     public float atDamageGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
         return atDamageGive(block, type, c);
+    }
+
+    public void atEndOfRound() {
+        if (data.endTurnBehavior == PCLPowerData.Behavior.SingleTurn) {
+            removePower();
+        }
+    }
+
+    public void atStartOfTurnPostDraw() {
+        switch (data.endTurnBehavior) {
+            case SingleTurnNext:
+                removePower();
+                break;
+            case TurnBased:
+                if (justApplied) {
+                    justApplied = false;
+                }
+                else {
+                    reducePower(1);
+                }
+                break;
+        }
     }
 
     protected void findTooltipsFromText(String text) {
@@ -270,52 +283,13 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return formatDescription(0, amount);
     }
 
-    public void initialize(int amount) {
-        initialize(amount, PowerType.BUFF, false);
-    }
-
-    protected void initialize(int amount, PowerType type, boolean turnBased) {
-        this.baseAmount = this.amount = Math.min(maxAmount, amount);
-        this.type = type;
-        this.isTurnBased = turnBased;
-        updateDescription();
-    }
-
     public boolean isPriorityTarget() {
         return false;
     }
 
     @Override
     public AbstractPower makeCopy() {
-        if (this instanceof InvisiblePower) {
-            EUIUtils.logError(this, "Do not clone powers which implement InvisiblePower");
-            return null;
-        }
-
-        Constructor<? extends PCLPower> c;
-        try {
-            c = EUIUtils.tryGetConstructor(getClass(), AbstractCreature.class, int.class);
-            if (c != null) {
-                return c.newInstance(owner, amount);
-            }
-            c = EUIUtils.tryGetConstructor(getClass(), AbstractCreature.class);
-            if (c != null) {
-                return c.newInstance(owner);
-            }
-            c = EUIUtils.tryGetConstructor(getClass(), AbstractCreature.class, AbstractCreature.class, int.class);
-            if (c != null) {
-                return c.newInstance(owner, source, amount);
-            }
-            c = EUIUtils.tryGetConstructor(getClass());
-            if (c != null) {
-                return c.newInstance();
-            }
-        }
-        catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return data.create(owner, source, amount);
     }
 
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
@@ -473,6 +447,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return this;
     }
 
+    public void setup() {
+
+    }
+
     protected void setupDescription() {
         this.name = powerStrings.NAME;
         String desc = getUpdatedDescription();
@@ -484,52 +462,32 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.description = sanitizePowerDescription(desc);
     }
 
-    protected void setupStrings(PCLRelic relic) {
-        this.ID = deriveID(relic.relicId);
-        this.region128 = this.region48 = relic.getPowerIcon();
-        // Vanilla rendering cannot render generated region128 properly
-        if (!EUIConfiguration.useEUITooltips.get()) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        this.powerStrings = new PowerStrings();
-        this.powerStrings.NAME = relic.getNameFromData();
-        this.powerStrings.DESCRIPTIONS = relic.getDescriptions();
-        setupDescription();
-    }
-
-    protected void setupStrings(PCLCardData cardData) {
-        this.ID = deriveID(cardData.ID);
-        this.region128 = this.region48 = cardData.getCardIcon();
-        // Vanilla rendering cannot render generated region128 properly
-        if (!EUIConfiguration.useEUITooltips.get()) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        this.powerStrings = new PowerStrings();
-        this.powerStrings.NAME = cardData.strings.NAME;
-        this.powerStrings.DESCRIPTIONS = cardData.strings.EXTENDED_DESCRIPTION;
-        setupDescription();
-    }
-
-    protected void setupStrings(String originalID) {
-        final String imagePath = PGR.getPowerImage(originalID);
+    public void setupImages(String imagePath) {
         if (Gdx.files.internal(imagePath).exists()) {
             this.img = EUIRM.getTexture(imagePath);
         }
         if (this.img == null) {
             this.img = PCLCoreImages.CardAffinity.unknown.texture();
         }
+    }
 
-        this.ID = originalID;
-        this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(originalID);
-        setupDescription();
+    public void setupProperties(int amount) {
+        this.baseAmount = this.amount = Math.min(data.maxAmount, amount);
+        this.type = data.type;
+        this.isTurnBased = data.endTurnBehavior == PCLPowerData.Behavior.TurnBased;
+        this.isPostActionPower = data.isPostActionPower;
+        this.justApplied = GameUtilities.isPlayerTurn(false);
+        this.canGoNegative = data.minAmount < 0;
+        this.powerStrings = data.strings;
+        updateDescription();
     }
 
     public void stackPower(int stackAmount, boolean updateBaseAmount) {
-        if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount) {
-            baseAmount = maxAmount;
+        if (updateBaseAmount && (baseAmount += stackAmount) > data.maxAmount) {
+            baseAmount = data.maxAmount;
         }
-        if ((amount + stackAmount) > maxAmount) {
-            stackAmount = maxAmount - amount;
+        if ((amount + stackAmount) > data.maxAmount) {
+            stackAmount = data.maxAmount - amount;
         }
 
         final int previous = amount;

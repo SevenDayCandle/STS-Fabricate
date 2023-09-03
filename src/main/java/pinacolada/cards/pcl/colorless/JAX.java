@@ -5,8 +5,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
 @VisibleCard
@@ -24,6 +23,6 @@ public class JAX extends PCLCard {
 
     public void setup(Object input) {
         addUseMove(PMove.loseHp(PCLCardTarget.Self, 3));
-        addUseMove(PMove.gain(2, PCLPowerHelper.Strength).setUpgrade(1));
+        addUseMove(PMove.gain(2, PCLPowerData.Strength).setUpgrade(1));
     }
 }

@@ -6,7 +6,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -22,7 +22,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
         this(1);
     }
 
-    public PMove_AddPowerBonus(int amount, PCLPowerHelper... powers) {
+    public PMove_AddPowerBonus(int amount, PCLPowerData... powers) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setPower(powers);
     }
@@ -43,14 +43,14 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (PCLPowerHelper power : fields.powers) {
-            order.addPowerEffectBonus(power.ID, amount, !power.isDebuff);
+        for (PCLPowerData power : fields.powers) {
+            order.addPowerEffectBonus(power.ID, amount, !power.isDebuff());
             // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-            if (power == PCLPowerHelper.Intangible) {
-                order.addPowerEffectBonus(IntangiblePower.POWER_ID, amount, !power.isDebuff);
+            if (power == PCLPowerData.Intangible) {
+                order.addPowerEffectBonus(IntangiblePower.POWER_ID, amount, !power.isDebuff());
             }
-            else if (power == PCLPowerHelper.LockOn) {
-                order.addPowerEffectBonus(LockOnPower.POWER_ID, amount, !power.isDebuff);
+            else if (power == PCLPowerData.LockOn) {
+                order.addPowerEffectBonus(LockOnPower.POWER_ID, amount, !power.isDebuff());
             }
         }
         super.use(info, order);

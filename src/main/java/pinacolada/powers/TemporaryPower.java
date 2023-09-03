@@ -9,29 +9,29 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class TemporaryPower extends PCLPower {
-    public static final String ID = createFullID(TemporaryPower.class);
+    public static final PCLPowerData DATA = new PCLPowerData(TemporaryPower.class, PGR.core).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn); // Do not register
 
     private final AbstractPower originalPower;
     private int sourceMaxAmount = Integer.MAX_VALUE;
     public int stabilizeTurns;
 
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower) {
-        super(owner, ID + sourcePower.ID);
+        super(DATA, owner, owner, sourcePower.amount);
         originalPower = sourcePower;
+        this.ID = DATA.ID + originalPower.ID;
         this.img = sourcePower.img;
-        this.amount = sourcePower.amount;
         this.region128 = this.region48 = sourcePower.region128 != null ? sourcePower.region128 : sourcePower.region48;
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(ID);
         if (sourcePower instanceof PCLPower) {
-            this.sourceMaxAmount = ((PCLPower) sourcePower).maxAmount;
+            this.sourceMaxAmount = ((PCLPower) sourcePower).data.maxAmount;
         }
         this.canGoNegative = true;
-        initialize(amount, sourcePower.type, true);
-
+        this.type = sourcePower.type;
         this.name = formatDescription(2, sourcePower.name);
         mainTip.icon = this.region128 != null ? this.region128 : img != null ? new TextureRegion(img) : null;
         updateDescription();
@@ -93,14 +93,14 @@ public class TemporaryPower extends PCLPower {
     @Override
     public void stackPower(int stackAmount, boolean updateBaseAmount) {
         int sourceAmount = GameUtilities.getPowerAmount(owner, originalPower.ID);
-        if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount) {
-            baseAmount = maxAmount;
+        if (updateBaseAmount && (baseAmount += stackAmount) > sourceMaxAmount) {
+            baseAmount = sourceMaxAmount;
         }
         if ((sourceAmount + stackAmount) > sourceMaxAmount) {
             stackAmount = sourceMaxAmount - sourceAmount;
         }
-        if ((amount + stackAmount) > maxAmount) {
-            stackAmount = maxAmount - amount;
+        if ((amount + stackAmount) > sourceMaxAmount) {
+            stackAmount = sourceMaxAmount - amount;
         }
 
         final int previous = amount;

@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.utility.NestedAction;
 import pinacolada.patches.actions.ApplyPowerActionPatches;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 
 public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     public AbstractPower power;
@@ -18,16 +18,16 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     public boolean canStack = true;
     public boolean skipIfZero = true;
 
-    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerHelper power) {
+    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerData power) {
         this(source, target, power, 1);
     }
 
-    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount) {
+    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerData power, int amount) {
         this(source, target, power.create(target, source, amount));
     }
 
-    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerHelper power, int amount, boolean temporary) {
-        this(source, target, power.create(target, source, amount, temporary));
+    public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerData power, int amount, boolean temporary) {
+        this(source, target, temporary ? power.createTemporary(target, source, amount) : power.create(target, source, amount));
     }
 
     public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, AbstractPower power) {

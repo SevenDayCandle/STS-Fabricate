@@ -1,42 +1,34 @@
-package pinacolada.powers.special;
+package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.VFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLEnum;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+@VisiblePower
 public class SelfImmolationPower extends PCLPower {
-    public static final String POWER_ID = createFullID(SelfImmolationPower.class);
-    public boolean justApplied;
+    public static final PCLPowerData DATA = register(SelfImmolationPower.class)
+            .setType(PowerType.DEBUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setTooltip(PGR.core.tooltips.selfImmolation);
 
-    public SelfImmolationPower(AbstractCreature owner, int amount) {
-        this(owner, amount, false);
-    }
-
-    public SelfImmolationPower(AbstractCreature owner, int amount, boolean justApplied) {
-        super(owner, POWER_ID);
-
-        this.amount = amount;
-        if (this.amount >= 9999) {
-            this.amount = 9999;
-        }
-        initialize(amount, PowerType.DEBUFF, true);
-        this.justApplied = justApplied;
-
-
-        updateDescription();
+    public SelfImmolationPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     private void applyDebuff(int amount) {
         if (amount > 0) {
             for (AbstractCreature cr : GameUtilities.getAllCharacters(true)) {
-                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
+                PCLActions.bottom.applyPower(new DelayedDamagePower(cr, owner, amount, PCLEnum.AttackEffect.CLAW));
             }
         }
     }

@@ -17,7 +17,7 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
@@ -67,19 +67,19 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckCreature(target, amount);
     }
 
-    public static PCond_CheckDistinctPower checkDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckDistinctPower checkDistinctPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PCond_CheckDistinctPower(target, amount, powers);
     }
 
-    public static PCond_CheckDistinctPower checkDistinctPowerAoe(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckDistinctPower checkDistinctPowerAoe(int amount, PCLPowerData... powers) {
         return new PCond_CheckDistinctPower(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PCond_CheckDistinctPower checkDistinctPowerSelf(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckDistinctPower checkDistinctPowerSelf(int amount, PCLPowerData... powers) {
         return new PCond_CheckDistinctPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PCond_CheckDistinctPower checkDistinctPowerSingle(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckDistinctPower checkDistinctPowerSingle(int amount, PCLPowerData... powers) {
         return new PCond_CheckDistinctPower(PCLCardTarget.Single, amount, powers);
     }
 
@@ -91,19 +91,19 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckOrb(amount, orbs);
     }
 
-    public static PCond_CheckPower checkPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckPower checkPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PCond_CheckPower(target, amount, powers);
     }
 
-    public static PCond_CheckPower checkPowerAoe(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckPower checkPowerAoe(int amount, PCLPowerData... powers) {
         return new PCond_CheckPower(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PCond_CheckPower checkPowerSelf(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckPower checkPowerSelf(int amount, PCLPowerData... powers) {
         return new PCond_CheckPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PCond_CheckPower checkPowerSingle(int amount, PCLPowerHelper... powers) {
+    public static PCond_CheckPower checkPowerSingle(int amount, PCLPowerData... powers) {
         return new PCond_CheckPower(PCLCardTarget.Single, amount, powers);
     }
 
@@ -343,11 +343,11 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_PayEnergy(amount);
     }
 
-    public static PCond_PayPower payPower(int amount, PCLPowerHelper... h) {
+    public static PCond_PayPower payPower(int amount, PCLPowerData... h) {
         return new PCond_PayPower(amount, h);
     }
 
-    public static PCond_PayPower payPower(PCLCardTarget target, int amount, PCLPowerHelper... h) {
+    public static PCond_PayPower payPower(PCLCardTarget target, int amount, PCLPowerData... h) {
         return new PCond_PayPower(target, amount, h);
     }
 

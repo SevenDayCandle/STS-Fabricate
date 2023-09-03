@@ -27,7 +27,6 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     }
 
     // Do not show errors for custom image paths
-    @Override
     public void loadImage(String path) {
         Texture t = EUIRM.getTexture(path, true, false);
         if (t == null) {
@@ -53,7 +52,14 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
             this.outlineImg = this.img = this.builder.portraitImage;
         }
         else {
-            loadImage(builder.imagePath);
+            String path = builder.imagePath;
+            Texture t = EUIRM.getTexture(path, true, false);
+            if (t == null) {
+                path = PCLCoreImages.CardAffinity.unknown.path();
+                t = EUIRM.getTexture(path, true, false);
+            }
+            this.img = t;
+            this.outlineImg = t;
         }
 
         setupMoves(this.builder);

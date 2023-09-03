@@ -10,17 +10,20 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.TemporaryPower;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbApplyFocusSubscriber {
-    public static final String POWER_ID = createFullID(MacroscopePower.class);
+    public static final PCLPowerData DATA = new PCLPowerData(MacroscopePower.class, PGR.core)
+            .setType(NeutralPowertypePatch.NEUTRAL)
+            .setLimits(-1, -1); // Do not register
 
     public MacroscopePower(AbstractCreature owner) {
-        super(owner, POWER_ID);
+        super(DATA, owner, owner, -1);
 
-        initialize(-1, NeutralPowertypePatch.NEUTRAL, false);
         owner.maxHealth = owner.maxHealth * Macroscope.MULTIPLIER;
         owner.currentHealth = owner.currentHealth * Macroscope.MULTIPLIER;
         owner.healthBarUpdatedEvent();

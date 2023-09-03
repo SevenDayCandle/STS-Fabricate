@@ -1,23 +1,28 @@
 package pinacolada.powers.replacement;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyLockOnSubscriber;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.PCLSubscribingPower;
+import pinacolada.powers.common.VitalityPower;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
 // Deliberately not extending LockOnPower or inheriting its ID because this power behaves slightly differently and we also want to avoid this being used in hardcoded base game checks in AbstractOrb
-public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscriber {
-    public static final String POWER_ID = createFullID(PCLLockOnPower.class);
+@VisiblePower
+public class PCLLockOnPower extends PCLSubscribingPower implements OnOrbApplyLockOnSubscriber {
+    public static final PCLPowerData DATA = register(PCLLockOnPower.class)
+            .setType(PowerType.DEBUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setTooltip(PGR.core.tooltips.lockOn);
     public static final int BASE = 50;
 
-    public PCLLockOnPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        this.loadRegion(PCLCoreTooltips.ICON_LOCKON);
-
-        initialize(amount, PowerType.DEBUFF, true);
+    public PCLLockOnPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     public static float getOrbMultiplier(boolean isPlayer) {
@@ -25,7 +30,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     }
 
     public static float getOrbMultiplierForDescription(boolean isPlayer) {
-        return BASE + (CombatManager.getBonus(POWER_ID, isPlayer));
+        return BASE + (CombatManager.getBonus(DATA.ID, isPlayer));
     }
 
     @Override
@@ -39,21 +44,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     }
 
     @Override
-    public void onInitialApplication() {
-        super.onInitialApplication();
-
-        CombatManager.subscribe(this);
-    }
-
-    @Override
     public float onOrbApplyLockOn(AbstractCreature target, float dmg) {
         return dmg * getOrbMultiplier(owner.isPlayer);
-    }
-
-    @Override
-    public void onRemove() {
-        super.onRemove();
-
-        CombatManager.unsubscribe(this);
     }
 }

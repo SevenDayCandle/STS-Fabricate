@@ -2,20 +2,24 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
+@VisiblePower
 public class ResistancePower extends PCLPower {
-    public static final String POWER_ID = createFullID(ResistancePower.class);
-    public static final float MULTIPLIER = 5;
-    public static final int MAX_AMOUNT = 15;
+    public static final PCLPowerData DATA = register(InvigoratedPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
+            .setTooltip(PGR.core.tooltips.resistance)
+            .setLimits(-15, 15);
+    public static final int MULTIPLIER = 5;
 
-    public ResistancePower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-        initialize(amount);
-        this.canGoNegative = true;
-        this.maxAmount = MAX_AMOUNT;
+    public ResistancePower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     public static float calculatePercentage(int amount) {
@@ -23,7 +27,7 @@ public class ResistancePower extends PCLPower {
     }
 
     public static float getMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));
     }
 
     @Override

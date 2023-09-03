@@ -38,6 +38,7 @@ import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
@@ -180,7 +181,7 @@ public class PGR {
 
     public static String getPng(String id, String subFolder) {
         String[] s = EUI.splitID(id);
-        return IMAGES_FOLDER + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
+        return s.length > 1 ? IMAGES_FOLDER + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png" : null;
     }
 
     public static PotionStrings getPotionStrings(String relicID) {
@@ -325,10 +326,10 @@ public class PGR {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisiblePower.class)) {
             try {
                 VisiblePower a = ct.getAnnotation(VisiblePower.class);
-                String field = a.id();
+                String field = a.data();
                 if (field != null) {
-                    String id = ReflectionHacks.getPrivateStatic(ct, field);
-                    BaseMod.addPower((Class<? extends AbstractPower>) ct, id);
+                    PCLPowerData data = ReflectionHacks.getPrivateStatic(ct, field);
+                    BaseMod.addPower((Class<? extends AbstractPower>) ct, data.ID);
                 }
                 else {
                     BaseMod.addPower((Class<? extends AbstractPower>) ct, PGR.core.createID(ct.getSimpleName()));

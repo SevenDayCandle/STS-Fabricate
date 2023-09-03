@@ -1,7 +1,7 @@
 package pinacolada.cards.pcl.glyphs;
 
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
 public class Glyph08 extends Glyph {
@@ -12,6 +12,6 @@ public class Glyph08 extends Glyph {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.applyToEnemies(3, PCLPowerHelper.Thorns, PCLPowerHelper.Artifact).setUpgrade(1));
+        addUseMove(PMove.applyToEnemies(3, PCLPowerData.Thorns, PCLPowerData.Artifact).setUpgrade(1));
     }
 }

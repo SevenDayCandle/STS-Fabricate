@@ -58,7 +58,7 @@ public class PCLLoadoutData {
     }
 
     public LoadoutCardSlot addCardSlot() {
-        return addCardSlot(0, LoadoutCardSlot.MAX_LIMIT);
+        return addCardSlot(0, 6);
     }
 
     public LoadoutCardSlot addCardSlot(int min, int max) {

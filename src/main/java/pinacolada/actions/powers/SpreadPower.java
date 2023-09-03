@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class SpreadPower extends PCLAction<AbstractPower> {
     public boolean showEffect = true;
     public boolean isFast = true;
 
-    public SpreadPower(AbstractCreature source, AbstractCreature target, PCLPowerHelper ph, int amount) {
+    public SpreadPower(AbstractCreature source, AbstractCreature target, PCLPowerData ph, int amount) {
         this(source, target, ph.ID, amount);
     }
 

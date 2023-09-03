@@ -10,7 +10,7 @@ import java.util.List;
 public enum PCLAttackType implements TooltipProvider {
     Normal(false, false, false, false),
     Brutal(false, false, false, false),
-    Immaterial(false, true, false, true),
+    Immaterial(false, true, true, true),
     Piercing(true, true, false, false),
     Ranged(false, true, true, false);
 

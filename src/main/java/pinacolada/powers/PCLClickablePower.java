@@ -24,32 +24,8 @@ public class PCLClickablePower extends PCLPower implements ClickableProvider {
     public PCLClickableUse triggerCondition;
     public boolean clickable;
 
-    protected PCLClickablePower(AbstractCreature owner, AbstractCreature source) {
-        super(owner, source);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, PCLRelic relic) {
-        super(owner, relic);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, AbstractCreature source, PCLRelic relic) {
-        super(owner, source, relic);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, PCLCardData cardData) {
-        super(owner, cardData);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, AbstractCreature source, PCLCardData cardData) {
-        super(owner, source, cardData);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, String id) {
-        super(owner, id);
-    }
-
-    public PCLClickablePower(AbstractCreature owner, AbstractCreature source, String id) {
-        super(owner, source, id);
+    public PCLClickablePower(PCLPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
+        super(data, owner, source, amount);
     }
 
     @Override

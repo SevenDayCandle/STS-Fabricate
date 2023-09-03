@@ -47,12 +47,14 @@ public class PMove_Create extends PMove_GenerateCard {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String base = fields.groupTypes.size() > 0 ? TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), fields.groupTypes.get(0).name) : TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), PCLCardGroupHelper.Hand.name);
+        String groupName = fields.getDestinationString(fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).name : PCLCardGroupHelper.Hand.name);
+        String base = TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), groupName);
         return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
     }
 
     @Override
     public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
-        order.makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+        order.makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand)
+                .setDestination(fields.destination);
     }
 }

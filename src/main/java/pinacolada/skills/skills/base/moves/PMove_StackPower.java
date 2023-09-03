@@ -8,7 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -26,7 +26,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         this(PCLCardTarget.Self, 1);
     }
 
-    public PMove_StackPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public PMove_StackPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         super(DATA, target, amount, 1);
         fields.setPower(powers);
     }
@@ -55,9 +55,9 @@ public class PMove_StackPower extends PMove<PField_Power> {
                             : TEXT.act_gainAmount(getAmountRawString(), joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff() ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
                 default:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff() ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
             }
         }
         joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
@@ -72,19 +72,19 @@ public class PMove_StackPower extends PMove<PField_Power> {
             case Single:
             case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
-                        fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent ?
+                        fields.powers.size() > 0 && fields.powers.get(0).isDebuff() && !useParent ?
                                 TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
             default:
                 return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective))
-                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent
+                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff() && !useParent
                         ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
         }
     }
 
     @Override
     public boolean isDetrimental() {
-        return ((target.targetsSelf()) && EUIUtils.any(fields.powers, po -> po.isDebuff)) ||
-                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff));
+        return ((target.targetsSelf()) && EUIUtils.any(fields.powers, PCLPowerData::isDebuff)) ||
+                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff()));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     @Override
     public void onDrag(AbstractMonster m) {
         if (m != null) {
-            for (PCLPowerHelper power : fields.powers) {
+            for (PCLPowerData power : fields.powers) {
                 GameUtilities.getIntent(m).addModifier(power.ID, amount);
             }
         }
@@ -105,7 +105,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
-                PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
+                PCLPowerData power = GameUtilities.getRandomElement(fields.powers);
                 if (power != null) {
                     for (AbstractCreature target : getTargetList(info)) {
                         order.applyPower(info.source, target, power, amount);
@@ -113,7 +113,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
                 }
             }
             else {
-                for (PCLPowerHelper power : fields.powers) {
+                for (PCLPowerData power : fields.powers) {
                     for (AbstractCreature target : getTargetList(info)) {
                         order.applyPower(info.source, target, power, amount);
                     }
@@ -123,7 +123,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         else {
             for (int i = 0; i < amount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), amount);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon() && fields.debuff ^ !p.isDebuff()), amount);
                 }
             }
         }

@@ -92,11 +92,11 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         initializeImage();
     }
 
-    public static Collection<PCLCardData> getAllData() {
+    public static List<PCLCardData> getAllData() {
         return getAllData(false, true, (FuncT1<Boolean, PCLCardData>) null);
     }
 
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc) {
+    public static List<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc) {
         Stream<PCLCardData> stream = STATIC_DATA
                 .values()
                 .stream();
@@ -112,7 +112,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return stream.collect(Collectors.toList());
     }
 
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
+    public static List<PCLCardData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 

@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class PCLGenericData<T> {
     public final PCLResources<?, ?, ?, ?> resources;
     public final Class<? extends T> invokeClass;
-    private Constructor<? extends T> constructor;
+    protected Constructor<? extends T> constructor;
     public String ID;
 
     public PCLGenericData(String id, Class<? extends T> invokeClass, PCLResources<?, ?, ?, ?> resources) {

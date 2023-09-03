@@ -6,7 +6,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
 @VisibleCard
@@ -24,6 +24,6 @@ public class Apparition extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.gain(1, PCLPowerHelper.Intangible));
+        addUseMove(PMove.gain(1, PCLPowerData.Intangible));
     }
 }

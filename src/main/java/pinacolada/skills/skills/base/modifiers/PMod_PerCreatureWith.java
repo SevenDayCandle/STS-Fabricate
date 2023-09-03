@@ -6,7 +6,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -30,11 +30,11 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
         super(DATA);
     }
 
-    public PMod_PerCreatureWith(int amount, PCLPowerHelper... powerHelpers) {
+    public PMod_PerCreatureWith(int amount, PCLPowerData... powerHelpers) {
         this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
-    public PMod_PerCreatureWith(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers) {
+    public PMod_PerCreatureWith(PCLCardTarget target, int amount, PCLPowerData... powerHelpers) {
         super(DATA, target, amount);
         fields.setPower(powerHelpers);
     }

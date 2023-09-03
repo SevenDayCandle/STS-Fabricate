@@ -18,7 +18,6 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.potions.StrengthPotion;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -37,7 +36,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -344,16 +342,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return !super.grayscale;
     }
 
-    public void loadImage(String path) {
-        Texture t = EUIRM.getTexture(path, true, false);
-        if (t == null) {
-            path = PCLCoreImages.CardAffinity.unknown.path();
-            t = EUIRM.getTexture(path, true, false);
-        }
-        this.img = t;
-        this.outlineImg = t;
-    }
-
     @Override
     public PCLRelic makeCopy() {
         try {
@@ -536,7 +524,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     public void setupImages(String imagePath) {
-        loadImage(imagePath);
+        Texture t = EUIRM.getTexture(imagePath, true, false);
+        if (t == null) {
+            imagePath = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(imagePath, true, false);
+        }
+        this.img = t;
+        this.outlineImg = t;
     }
 
     protected boolean tryRetain(boolean callOnEquip) {

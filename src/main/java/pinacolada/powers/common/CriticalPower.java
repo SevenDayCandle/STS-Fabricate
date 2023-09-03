@@ -5,18 +5,23 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
+@VisiblePower
 public class CriticalPower extends PCLPower {
-    public static final String POWER_ID = createFullID(CriticalPower.class);
+    public static final PCLPowerData DATA = register(CriticalPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
+            .setTooltip(PGR.core.tooltips.critical);
     public static final int MULTIPLIER = 100;
 
-    public CriticalPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount, PowerType.BUFF, true);
+    public CriticalPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     public static float calculateDamage(float damage, float multiplier) {
@@ -24,7 +29,7 @@ public class CriticalPower extends PCLPower {
     }
 
     public static float getMultiplier(int stacks) {
-        return (stacks + 1) * (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+        return (stacks + 1) * (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));
     }
 
     @Override

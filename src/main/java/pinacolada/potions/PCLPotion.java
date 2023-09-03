@@ -137,8 +137,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public void initialize() {
         skills = new Skills();
         setup();
-        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
-        this.targetRequired = isThrown;
+        this.targetRequired = this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
         initializeTips();
     }
 

@@ -6,7 +6,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -26,11 +26,11 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
         super(DATA);
     }
 
-    public PMod_PerDistinctPower(int amount, PCLPowerHelper... powerHelpers) {
+    public PMod_PerDistinctPower(int amount, PCLPowerData... powerHelpers) {
         this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
-    public PMod_PerDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers) {
+    public PMod_PerDistinctPower(PCLCardTarget target, int amount, PCLPowerData... powerHelpers) {
         super(DATA, target, amount);
         fields.setPower(powerHelpers);
     }

@@ -6,32 +6,9 @@ import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
 import pinacolada.relics.PCLRelic;
 
 public class PCLSubscribingPower extends PCLPower implements PCLCombatSubscriber {
-    protected PCLSubscribingPower(AbstractCreature owner, AbstractCreature source) {
-        super(owner, source);
-    }
 
-    public PCLSubscribingPower(AbstractCreature owner, PCLRelic relic) {
-        super(owner, relic);
-    }
-
-    public PCLSubscribingPower(AbstractCreature owner, AbstractCreature source, PCLRelic relic) {
-        super(owner, source, relic);
-    }
-
-    public PCLSubscribingPower(AbstractCreature owner, PCLCardData cardData) {
-        super(owner, cardData);
-    }
-
-    public PCLSubscribingPower(AbstractCreature owner, AbstractCreature source, PCLCardData cardData) {
-        super(owner, source, cardData);
-    }
-
-    public PCLSubscribingPower(AbstractCreature owner, String id) {
-        super(owner, id);
-    }
-
-    public PCLSubscribingPower(AbstractCreature owner, AbstractCreature source, String id) {
-        super(owner, source, id);
+    public PCLSubscribingPower(PCLPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
+        super(data, owner, source, amount);
     }
 
     public void onInitialApplication() {

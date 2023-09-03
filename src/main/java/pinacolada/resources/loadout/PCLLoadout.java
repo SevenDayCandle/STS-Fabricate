@@ -34,6 +34,7 @@ import java.util.*;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
+    public static final int MAX_LIMIT = 6;
     public static final int DEFAULT_CARD_SLOTS = 6;
     public static final int DEFAULT_RELIC_SLOTS = 2;
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
@@ -49,6 +50,7 @@ public abstract class PCLLoadout {
     public int preset;
     public int unlockLevel = 0;
     public int maxValue;
+    public int maxItems;
     public int minCards;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
@@ -58,14 +60,15 @@ public abstract class PCLLoadout {
     public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
 
     public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel) {
-        this(color, id, unlockLevel, MAX_VALUE, MIN_CARDS);
+        this(color, id, unlockLevel, MAX_VALUE, MIN_CARDS, MAX_LIMIT);
     }
 
-    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minCards) {
+    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minCards, int maxItems) {
         this.ID = id;
         this.unlockLevel = unlockLevel;
         this.color = color;
         this.maxValue = maxValue;
+        this.maxItems = maxItems;
         this.minCards = minCards;
     }
 
@@ -535,14 +538,14 @@ public abstract class PCLLoadout {
             data.values.put(type, 0);
         }
 
-        LoadoutCardSlot strikeSlot = data.addCardSlot(1, LoadoutCardSlot.MAX_LIMIT);
-        LoadoutCardSlot defendSlot = data.addCardSlot(1, LoadoutCardSlot.MAX_LIMIT);
+        LoadoutCardSlot strikeSlot = data.addCardSlot(1, maxItems);
+        LoadoutCardSlot defendSlot = data.addCardSlot(1, maxItems);
         addBasicStrikes(strikeSlot);
         addBasicDefends(defendSlot);
 
         // 2 slots are taken by strikes/defends by default
         for (int i = 2; i < getSlotsForCard(); i++) {
-            LoadoutCardSlot slot = data.addCardSlot(0, LoadoutCardSlot.MAX_LIMIT);
+            LoadoutCardSlot slot = data.addCardSlot(0, maxItems);
             addLoadoutCards(slot);
         }
 

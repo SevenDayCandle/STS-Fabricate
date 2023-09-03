@@ -4,22 +4,21 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 
+@VisiblePower
 public class DeflectionPower extends PCLPower {
-    public static final String POWER_ID = createFullID(DeflectionPower.class);
+    public static final PCLPowerData DATA = register(DeflectionPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setTooltip(PGR.core.tooltips.deflection);
 
-    public DeflectionPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount, PowerType.BUFF, false);
-    }
-
-    @Override
-    public void atEndOfTurn(boolean isPlayer) {
-        super.atEndOfTurn(isPlayer);
-        reducePower(1);
+    public DeflectionPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override

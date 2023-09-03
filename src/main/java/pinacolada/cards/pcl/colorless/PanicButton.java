@@ -6,7 +6,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
 @VisibleCard
@@ -26,6 +26,6 @@ public class PanicButton extends PCLCard {
 
     public void setup(Object input) {
         addBlockMove();
-        addUseMove(PMove.gain(2, PCLPowerHelper.NoBlock));
+        addUseMove(PMove.gain(2, PCLPowerData.NoBlock));
     }
 }

@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
@@ -26,6 +26,6 @@ public class Curse_Shame extends PCLCard {
 
     @Override
     public void setup(Object input) {
-        addUseMove(PCond.onTurnEnd(), PMove.gain(1, PCLPowerHelper.Frail));
+        addUseMove(PCond.onTurnEnd(), PMove.gain(1, PCLPowerData.Frail));
     }
 }

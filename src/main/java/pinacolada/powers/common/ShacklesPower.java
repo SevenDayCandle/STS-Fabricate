@@ -3,19 +3,22 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 
+@VisiblePower
 public class ShacklesPower extends PCLPower {
-    public static final String POWER_ID = createFullID(ShacklesPower.class);
+    public static final PCLPowerData DATA = register(ShacklesPower.class)
+            .setType(PowerType.DEBUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn)
+            .setTooltip(PGR.core.tooltips.shackles);
 
-    public ShacklesPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        this.loadRegion(PCLCoreTooltips.ICON_SHACKLE);
-
-        initialize(amount, PowerType.DEBUFF, false);
+    public ShacklesPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override

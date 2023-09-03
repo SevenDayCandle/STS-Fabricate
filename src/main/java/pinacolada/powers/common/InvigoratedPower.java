@@ -2,18 +2,23 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
+@VisiblePower
 public class InvigoratedPower extends PCLPower {
-    public static final String POWER_ID = createFullID(InvigoratedPower.class);
+    public static final PCLPowerData DATA = register(InvigoratedPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setTooltip(PGR.core.tooltips.invigorated);
     public static final int MULTIPLIER = 25;
 
-    public InvigoratedPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount, PowerType.BUFF, true);
+    public InvigoratedPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     public static float calculateDamage(float damage, float multiplier) {
@@ -21,19 +26,12 @@ public class InvigoratedPower extends PCLPower {
     }
 
     public static float getMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));
     }
 
     @Override
     public float atDamageGive(float damage, DamageInfo.DamageType type) {
         return type == DamageInfo.DamageType.NORMAL ? calculateDamage(damage, getMultiplier()) : damage;
-    }
-
-    @Override
-    public void atEndOfRound() {
-        super.atEndOfRound();
-
-        reducePower(1);
     }
 
     @Override

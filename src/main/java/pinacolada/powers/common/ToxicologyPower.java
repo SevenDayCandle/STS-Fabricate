@@ -7,23 +7,28 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.PoisonPower;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+@VisiblePower
 public class ToxicologyPower extends PCLPower {
-    public static final String POWER_ID = createFullID(ToxicologyPower.class);
+    public static final PCLPowerData DATA = register(ToxicologyPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
+            .setTooltip(PGR.core.tooltips.toxicology);
 
-    public ToxicologyPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount);
+    public ToxicologyPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source) {
         super.onApplyPower(power, target, source);
 
-        if (GameUtilities.isPlayer(source) && (power.ID.equals(PoisonPower.POWER_ID) || power.ID.equals(BruisedPower.POWER_ID) || power.ID.equals(BlindedPower.POWER_ID) || power.ID.equals(ShacklesPower.POWER_ID))) {
+        if (GameUtilities.isPlayer(source) && (power.ID.equals(PoisonPower.POWER_ID) || power.ID.equals(BruisedPower.DATA.ID) || power.ID.equals(BlindedPower.DATA.ID) || power.ID.equals(ShacklesPower.DATA.ID))) {
             power.amount += this.amount;
 
             final AbstractGameAction action = AbstractDungeon.actionManager.currentAction;

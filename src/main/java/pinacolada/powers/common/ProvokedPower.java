@@ -1,4 +1,4 @@
-package pinacolada.powers.special;
+package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -8,16 +8,24 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnMonsterMoveSubscriber;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+@VisiblePower
 public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
+    public static final PCLPowerData DATA = register(ProvokedPower.class)
+            .setType(PowerType.DEBUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setPriority(99)
+            .setTooltip(PGR.core.tooltips.provoked);
     public static final int ATTACK_MULTIPLIER = 50;
-    public static final String POWER_ID = createFullID(ProvokedPower.class);
     private byte moveByte;
     private AbstractMonster.Intent moveIntent;
     private EnemyMoveInfo move;
@@ -25,10 +33,9 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
     protected int lastMultiplier;
     protected boolean lastIsMultiDamage;
 
-    public ProvokedPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
 
-        initialize(amount, PowerType.DEBUFF, true);
+    public ProvokedPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override

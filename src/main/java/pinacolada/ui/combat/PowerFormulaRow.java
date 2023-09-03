@@ -15,7 +15,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -70,25 +70,12 @@ public class PowerFormulaRow extends EUIHoverable {
             item = new PowerFormulaItem(hitbox, po.owner instanceof AbstractPlayer, po.img, result);
         }
 
-
-        PCLPowerHelper helper = PCLPowerHelper.get(po.ID);
-        if (helper != null) {
-            if (helper.isPercentageBonus) {
-                item.setMultiplier(result / input);
-            }
-            else {
-                item.setAddition(result - input);
-            }
+        // Assume that powers that have % relate to power multipliers
+        if (isMultiplicative(po)) {
+            item.setMultiplier(result / input);
         }
         else {
-            // Assume that powers that have % relate to power multipliers
-            // Only do string searching if absolutely necessary.
-            if (isMultiplicative(po)) {
-                item.setMultiplier(result / input);
-            }
-            else {
-                item.setAddition(result - input);
-            }
+            item.setAddition(result - input);
         }
         powers.add(item);
         resultHb.setOffset(resultHb.width * getOffsetCx(powers.size()), -0.5f);

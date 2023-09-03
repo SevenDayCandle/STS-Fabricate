@@ -15,11 +15,10 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
-import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
@@ -46,55 +45,55 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         super(data, target, amount, extra);
     }
 
-    public static PMove_AddPowerBonus addPowerBonus(int amount, PCLPowerHelper... p) {
+    public static PMove_AddPowerBonus addPowerBonus(int amount, PCLPowerData... p) {
         return new PMove_AddPowerBonus(amount, p);
     }
 
-    public static PMove_StackPower apply(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower apply(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PMove_StackPower(target, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PMove_StackTemporaryPower(target, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerData... powers) {
         return applyTemporary(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToEveryone(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower applyTemporaryToEveryone(int amount, PCLPowerData... powers) {
         return applyTemporary(PCLCardTarget.All, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToRandom(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower applyTemporaryToRandom(int amount, PCLPowerData... powers) {
         return applyTemporary(PCLCardTarget.RandomEnemy, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToSingle(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower applyTemporaryToSingle(int amount, PCLPowerData... powers) {
         return applyTemporary(PCLCardTarget.Single, amount, powers);
     }
 
-    public static PMove_StackPower applyToAllies(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToAllies(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.AllAlly, amount, powers);
     }
 
-    public static PMove_StackPower applyToEnemies(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToEnemies(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PMove_StackPower applyToEveryone(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToEveryone(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.All, amount, powers);
     }
 
-    public static PMove_StackPower applyToRandom(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToRandom(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.RandomEnemy, amount, powers);
     }
 
-    public static PMove_StackPower applyToSingle(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToSingle(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.Single, amount, powers);
     }
 
-    public static PMove_StackPower applyToTeam(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower applyToTeam(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.Team, amount, powers);
     }
 
@@ -256,7 +255,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return (PMove_Fetch) new PMove_Fetch(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
-    public static PMove_StackPower gain(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower gain(int amount, PCLPowerData... powers) {
         return new PMove_StackPower(PCLCardTarget.Self, amount, powers);
     }
 
@@ -288,7 +287,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_GainOrbSlots(amount);
     }
 
-    public static PMove_StackPower gainPlayer(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackPower gainPlayer(int amount, PCLPowerData... powers) {
         return apply(PCLCardTarget.None, amount, powers);
     }
 
@@ -300,11 +299,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_GainTempHP(target, amount);
     }
 
-    public static PMove_StackTemporaryPower gainTemporary(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower gainTemporary(int amount, PCLPowerData... powers) {
         return new PMove_StackTemporaryPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower gainTemporaryPlayer(int amount, PCLPowerHelper... powers) {
+    public static PMove_StackTemporaryPower gainTemporaryPlayer(int amount, PCLPowerData... powers) {
         return new PMove_StackTemporaryPower(PCLCardTarget.None, amount, powers);
     }
 
@@ -456,11 +455,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_ReduceCooldown(amount, cooldown, groups);
     }
 
-    public static PMove_RemovePower remove(PCLCardTarget target, PCLPowerHelper... powers) {
+    public static PMove_RemovePower remove(PCLCardTarget target, PCLPowerData... powers) {
         return new PMove_RemovePower(target, powers);
     }
 
-    public static PMove_RemovePower removeSelf(PCLPowerHelper... powers) {
+    public static PMove_RemovePower removeSelf(PCLPowerData... powers) {
         return new PMove_RemovePower(PCLCardTarget.Self, powers);
     }
 
@@ -522,7 +521,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_Transform(cardData.ID);
     }
 
-    public static PMove_SpreadPower spreadPower(PCLCardTarget target, PCLPowerHelper... helpers) {
+    public static PMove_SpreadPower spreadPower(PCLCardTarget target, PCLPowerData... helpers) {
         return new PMove_SpreadPower(target, helpers);
     }
 

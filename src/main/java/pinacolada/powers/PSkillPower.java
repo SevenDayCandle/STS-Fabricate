@@ -16,6 +16,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PSkillPower extends PCLClickablePower implements TriggerConnection {
+    public static final PCLPowerData DATA = new PCLPowerData(PSkillPower.class, PGR.core); // Do not register
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
     public PSkillPower(AbstractCreature owner, int turns, PTrigger... effects) {
@@ -35,7 +37,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     }
 
     public PSkillPower(AbstractCreature owner, int turns, List<PTrigger> effects) {
-        super(owner, owner);
+        super(DATA, owner, owner, turns);
         this.powerStrings = new PowerStrings();
 
         for (PTrigger effect : effects) {
@@ -65,12 +67,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         }
 
         setupDescription();
-        if (turns > 0) {
-            initialize(turns, getPowerType(), true);
-        }
-        else {
-            initialize(-1, getPowerType(), false);
-        }
+        setupCustomProperties(turns);
     }
 
     public static String createPowerID(PSkill<?> effect) {
@@ -322,5 +319,16 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         for (PTrigger effect : ptriggers) {
             effect.refresh(info, true);
         }
+    }
+
+    public void setupCustomProperties(int turns) {
+        if (turns > 0) {
+            isTurnBased = true;
+            amount = turns;
+        }
+        else {
+            isTurnBased = false;
+        }
+        type = getPowerType();
     }
 }

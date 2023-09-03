@@ -12,7 +12,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -106,15 +106,15 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", potionIDs);
     }
 
-    public static String getPowerAndString(ArrayList<PCLPowerHelper> powers) {
+    public static String getPowerAndString(ArrayList<PCLPowerData> powers) {
         return PCLCoreStrings.joinWithAnd(PField::safeInvokeTip, powers);
     }
 
-    public static String getPowerOrString(ArrayList<PCLPowerHelper> powers) {
+    public static String getPowerOrString(ArrayList<PCLPowerData> powers) {
         return PCLCoreStrings.joinWithOr(PField::safeInvokeTip, powers);
     }
 
-    public static String getPowerString(ArrayList<PCLPowerHelper> powers) {
+    public static String getPowerString(ArrayList<PCLPowerData> powers) {
         return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, powers) : getPowerAndString(powers);
     }
 

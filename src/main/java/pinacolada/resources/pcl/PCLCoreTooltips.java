@@ -14,64 +14,17 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLLockOnPower;
-import pinacolada.powers.special.ProvokedPower;
-import pinacolada.powers.special.SelfImmolationPower;
-import pinacolada.powers.special.SilencedPower;
+import pinacolada.powers.common.ProvokedPower;
+import pinacolada.powers.common.SelfImmolationPower;
+import pinacolada.powers.common.SilencedPower;
 import pinacolada.resources.AbstractTooltips;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
 public class PCLCoreTooltips extends AbstractTooltips {
-    public static final String ICON_AFTER_IMAGE = "afterImage";
-    public static final String ICON_ARTIFACT = "artifact";
-    public static final String ICON_BLUR = "blur";
-    public static final String ICON_BUFFER = "buffer";
-    public static final String ICON_CHOKED = "choke";
-    public static final String ICON_CONFUSION = "confusion";
-    public static final String ICON_CONSTRICTED = "constricted";
-    public static final String ICON_CORPSE_EXPLOSION = "cExplosion";
-    public static final String ICON_CURLUP = "closeUp";
-    public static final String ICON_DEXTERITY = "dexterity";
-    public static final String ICON_DOUBLE_DAMAGE = "doubleDamage";
-    public static final String ICON_DUPLICATION = "doubleTap";
-    public static final String ICON_ENTANGLE = "entangle";
-    public static final String ICON_ENVENOM = "envenom";
-    public static final String ICON_EQUILIBRIUM = "retain";
-    public static final String ICON_FLIGHT = "flight";
-    public static final String ICON_FOCUS = "focus";
-    public static final String ICON_FORESIGHT = "wireheading";
-    public static final String ICON_FRAIL = "frail";
-    public static final String ICON_FREEATTACK = "swivel";
-    public static final String ICON_INTANGIBLE = "intangible";
-    public static final String ICON_INVINCIBLE = "heartDef";
-    public static final String ICON_JUGGERNAUT = "juggernaut";
-    public static final String ICON_LOCKON = "lockon";
-    public static final String ICON_MALLEABLE = "malleable";
-    public static final String ICON_MANTRA = "mantra";
-    public static final String ICON_MARKED = "pressure_points";
-    public static final String ICON_METALLICIZE = "armor";
-    public static final String ICON_NEXT_TURN_BLOCK = "defenseNext";
-    public static final String ICON_NEXT_TURN_DRAW = "carddraw";
-    public static final String ICON_NEXT_TURN_DRAW_LESS = "lessdraw";
-    public static final String ICON_NO_BLOCK = "noBlock";
-    public static final String ICON_NO_DRAW = "noDraw";
-    public static final String ICON_NOXIOUSFUMES = "fumes";
-    public static final String ICON_PLATEDARMOR = "platedarmor";
-    public static final String ICON_POISON = "poison";
-    public static final String ICON_REBOUND = "rebound";
-    public static final String ICON_REGEN = "regen";
-    public static final String ICON_RITUAL = "ritual";
-    public static final String ICON_SHACKLE = "shackle";
-    public static final String ICON_SLOW = "slow";
-    public static final String ICON_STRENGTH = "strength";
-    public static final String ICON_THORNS = "thorns";
-    public static final String ICON_THOUSAND_CUTS = "thousandCuts";
-    public static final String ICON_VIGOR = "vigor";
-    public static final String ICON_WEAK = "weak";
-    public static final String ICON_VULNERABLE = "vulnerable";
-
     public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID(PCLAffinity.Blue.getAffinitySymbol()).forceIcon(true);
     public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID(PCLAffinity.Green.getAffinitySymbol()).forceIcon(true);
     public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID(PCLAffinity.Orange.getAffinitySymbol()).forceIcon(true);
@@ -263,6 +216,13 @@ public class PCLCoreTooltips extends AbstractTooltips {
     }
 
     public void initializeIcons() {
+        critical.formatDescription(CriticalPower.MULTIPLIER);
+        fortified.formatDescription(FortifiedPower.MULTIPLIER);
+        impaired.formatDescription(ImpairedPower.MULTIPLIER);
+        invigorated.formatDescription(InvigoratedPower.MULTIPLIER);
+        lockOn.formatDescription(PCLLockOnPower.BASE);
+        provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
+
         for (PCLCardTag tag : PCLCardTag.values()) {
             tag.getTooltip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
         }
@@ -308,82 +268,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
         gold.setIcon(PCLCoreImages.Tooltips.gold.texture(), 6);
         orbSlot.setIcon(PCLCoreImages.Tooltips.orbSlot.texture(), 6);
 
-        afterImage.setIconFromPowerRegion(ICON_AFTER_IMAGE);
-        artifact.setIconFromPowerRegion(ICON_ARTIFACT);
-        blur.setIconFromPowerRegion(ICON_BLUR);
-        buffer.setIconFromPowerRegion(ICON_BUFFER);
-        choked.setIconFromPowerRegion(ICON_CHOKED);
-        confused.setIconFromPowerRegion(ICON_CONFUSION);
-        constricted.setIconFromPowerRegion(ICON_CONSTRICTED);
-        corpseExplosion.setIconFromPowerRegion(ICON_CORPSE_EXPLOSION);
-        curlUp.setIconFromPowerRegion(ICON_CURLUP);
-        dexterity.setIconFromPowerRegion(ICON_DEXTERITY);
-        doubleDamage.setIconFromPowerRegion(ICON_DOUBLE_DAMAGE);
-        duplication.setIconFromPowerRegion(ICON_DUPLICATION);
-        entangled.setIconFromPowerRegion(ICON_ENTANGLE);
-        envenom.setIconFromPowerRegion(ICON_ENVENOM);
-        equilibrium.setIconFromPowerRegion(ICON_EQUILIBRIUM);
-        flight.setIconFromPowerRegion(ICON_FLIGHT);
-        frail.setIconFromPowerRegion(ICON_FRAIL);
-        freeAttack.setIconFromPowerRegion(ICON_FREEATTACK);
-        focus.setIconFromPowerRegion(ICON_FOCUS);
-        foresight.setIconFromPowerRegion(ICON_FORESIGHT);
-        intangible.setIconFromPowerRegion(ICON_INTANGIBLE);
-        invincible.setIconFromPowerRegion(ICON_INVINCIBLE);
-        juggernaut.setIconFromPowerRegion(ICON_JUGGERNAUT);
-        lockOn.setIconFromPowerRegion(ICON_LOCKON);
-        malleable.setIconFromPowerRegion(ICON_MALLEABLE);
-        mantra.setIconFromPowerRegion(ICON_MANTRA);
-        mark.setIconFromPowerRegion(ICON_MARKED);
-        metallicize.setIconFromPowerRegion(ICON_METALLICIZE);
-        nextTurnBlock.setIconFromPowerRegion(ICON_NEXT_TURN_BLOCK);
-        nextTurnDraw.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW);
-        nextTurnDrawMinus.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW_LESS);
-        noBlock.setIconFromPowerRegion(ICON_NO_BLOCK);
-        noDraw.setIconFromPowerRegion(ICON_NO_DRAW);
-        noxiousFumes.setIconFromPowerRegion(ICON_NOXIOUSFUMES);
-        platedArmor.setIconFromPowerRegion(ICON_PLATEDARMOR);
-        poison.setIconFromPowerRegion(ICON_POISON);
-        rebound.setIconFromPowerRegion(ICON_REBOUND);
-        regeneration.setIconFromPowerRegion(ICON_REGEN);
-        ritual.setIconFromPowerRegion(ICON_RITUAL);
-        shackles.setIconFromPowerRegion(ICON_SHACKLE);
-        slow.setIconFromPowerRegion(ICON_SLOW);
-        strength.setIconFromPowerRegion(ICON_STRENGTH);
-        thorns.setIconFromPowerRegion(ICON_THORNS);
-        thousandCuts.setIconFromPowerRegion(ICON_THOUSAND_CUTS);
-        vigor.setIconFromPowerRegion(ICON_VIGOR);
-        weak.setIconFromPowerRegion(ICON_WEAK);
-        vulnerable.setIconFromPowerRegion(ICON_VULNERABLE);
-
-        bruised.setIconFromPath(PGR.getPowerImage(BruisedPower.POWER_ID));
-        blinded.setIconFromPath(PGR.getPowerImage(BlindedPower.POWER_ID));
-        deflection.setIconFromPath(PGR.getPowerImage(DeflectionPower.POWER_ID));
-        critical.setIconFromPath(PGR.getPowerImage(CriticalPower.POWER_ID));
-        delayedDamage.setIconFromPath(PGR.getPowerImage(DelayedDamagePower.POWER_ID));
-        energized.setIconFromPath(PGR.getPowerImage(EnergizedPower.POWER_ID));
-        fortified.setIconFromPath(PGR.getPowerImage(FortifiedPower.POWER_ID));
-        impaired.setIconFromPath(PGR.getPowerImage(ImpairedPower.POWER_ID));
-        innovation.setIconFromPath(PGR.getPowerImage(InnovationPower.POWER_ID));
-        invigorated.setIconFromPath(PGR.getPowerImage(InvigoratedPower.POWER_ID));
-        provoked.setIconFromPath(PGR.getPowerImage(ProvokedPower.POWER_ID));
-        resistance.setIconFromPath(PGR.getPowerImage(ResistancePower.POWER_ID));
-        selfImmolation.setIconFromPath(PGR.getPowerImage(SelfImmolationPower.POWER_ID));
-        silenced.setIconFromPath(PGR.getPowerImage(SilencedPower.POWER_ID));
-        sorcery.setIconFromPath(PGR.getPowerImage(SorceryPower.POWER_ID));
-        supercharged.setIconFromPath(PGR.getPowerImage(SuperchargedPower.POWER_ID));
-        sorcery.setIconFromPath(PGR.getPowerImage(SorceryPower.POWER_ID));
-        toxicology.setIconFromPath(PGR.getPowerImage(ToxicologyPower.POWER_ID));
-        vitality.setIconFromPath(PGR.getPowerImage(VitalityPower.POWER_ID));
-        warding.setIconFromPath(PGR.getPowerImage(WardingPower.POWER_ID));
-
-        critical.formatDescription(CriticalPower.MULTIPLIER);
-        fortified.formatDescription(FortifiedPower.MULTIPLIER);
-        impaired.formatDescription(ImpairedPower.MULTIPLIER);
-        invigorated.formatDescription(InvigoratedPower.MULTIPLIER);
-        lockOn.formatDescription(PCLLockOnPower.BASE);
-        provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
-
+        PCLPowerData.loadIconsIntoKeywords();
         EUIKeywordTooltip.updateTooltipIcons();
 
         // Refresh the descriptions of all cards to account for loaded icons

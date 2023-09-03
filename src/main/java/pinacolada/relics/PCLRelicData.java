@@ -12,10 +12,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,11 +50,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         this.initializeImage();
     }
 
-    public static Collection<PCLRelicData> getAllData() {
+    public static List<PCLRelicData> getAllData() {
         return getAllData(false, true, (FuncT1<Boolean, PCLRelicData>) null);
     }
 
-    public static Collection<PCLRelicData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLRelicData> filterFunc) {
+    public static List<PCLRelicData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLRelicData> filterFunc) {
         Stream<PCLRelicData> stream = STATIC_DATA
                 .values()
                 .stream();
@@ -73,7 +70,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return stream.collect(Collectors.toList());
     }
 
-    public static Collection<PCLRelicData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
+    public static List<PCLRelicData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 
@@ -81,7 +78,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return STATIC_DATA.get(cardID);
     }
 
-    public static Collection<PCLRelicData> getTemplates() {
+    public static List<PCLRelicData> getTemplates() {
         return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
     }
 

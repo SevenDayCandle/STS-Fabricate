@@ -8,7 +8,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -29,12 +29,12 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
         super(DATA, PCLCardTarget.Self, 1);
     }
 
-    public PCond_CheckDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+    public PCond_CheckDistinctPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         super(DATA, target, amount);
         fields.setPower(powers);
     }
 
-    public PCond_CheckDistinctPower(PCLCardTarget target, int amount, List<PCLPowerHelper> powers) {
+    public PCond_CheckDistinctPower(PCLCardTarget target, int amount, List<PCLPowerData> powers) {
         super(DATA, target, amount);
         fields.setPower(powers);
     }

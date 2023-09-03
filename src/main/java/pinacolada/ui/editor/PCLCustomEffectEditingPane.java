@@ -34,7 +34,7 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -689,8 +689,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size), items);
     }
 
-    public void registerPower(List<PCLPowerHelper> items) {
-        registerDropdown(initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers), items);
+    public void registerPower(List<PCLPowerData> items) {
+        // TODO add custom powers
+        registerDropdown(initializeSmartSearchable(PCLPowerData.getAllData(), PGR.core.strings.cedit_powers), items);
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {

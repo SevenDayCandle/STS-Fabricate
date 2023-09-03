@@ -16,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 // Copied and modified from STS-AnimatorMod
 public class FakeLoadout extends PCLLoadout {
     public FakeLoadout() {
-        super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0, -1, 1);
+        super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0, -1, 1, 9999);
     }
 
     @Override

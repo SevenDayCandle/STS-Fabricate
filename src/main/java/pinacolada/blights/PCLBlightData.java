@@ -12,10 +12,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,11 +44,11 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
         this.initializeImage();
     }
 
-    public static Collection<PCLBlightData> getAllData() {
+    public static List<PCLBlightData> getAllData() {
         return getAllData(false, true, (FuncT1<Boolean, PCLBlightData>) null);
     }
 
-    public static Collection<PCLBlightData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLBlightData> filterFunc) {
+    public static List<PCLBlightData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLBlightData> filterFunc) {
         Stream<PCLBlightData> stream = STATIC_DATA
                 .values()
                 .stream();
@@ -67,7 +64,7 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
         return stream.collect(Collectors.toList());
     }
 
-    public static Collection<PCLBlightData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
+    public static List<PCLBlightData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
         return getAllData(false, true, a -> a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 

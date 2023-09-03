@@ -3,16 +3,21 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 
+@VisiblePower
 public class WardingPower extends PCLPower {
-    public static final String POWER_ID = createFullID(WardingPower.class);
+    public static final PCLPowerData DATA = register(WardingPower.class)
+            .setType(PowerType.BUFF)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
+            .setTooltip(PGR.core.tooltips.warding);
 
-    public WardingPower(AbstractCreature owner, int amount) {
-        super(owner, POWER_ID);
-
-        initialize(amount);
+    public WardingPower(AbstractCreature owner, AbstractCreature source, int amount) {
+        super(DATA, owner, source, amount);
     }
 
     @Override

@@ -13,7 +13,7 @@ import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -36,7 +36,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
         super(DATA);
     }
 
-    public PMod_PayPerPower(int amount, PCLPowerHelper... orbs) {
+    public PMod_PayPerPower(int amount, PCLPowerData... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setPower(orbs);
     }

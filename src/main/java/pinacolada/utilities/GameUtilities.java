@@ -90,7 +90,7 @@ import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPower;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PSkillPower;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelicData;
@@ -123,13 +123,13 @@ public class GameUtilities {
                 cards);
     }
 
-    public static void applyPowerInstantly(Iterable<? extends AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks) {
+    public static void applyPowerInstantly(Iterable<? extends AbstractCreature> targets, PCLPowerData powerHelper, int stacks) {
         for (AbstractCreature target : targets) {
             applyPowerInstantly(target, powerHelper, stacks);
         }
     }
 
-    public static void applyPowerInstantly(AbstractCreature target, PCLPowerHelper powerHelper, int stacks) {
+    public static void applyPowerInstantly(AbstractCreature target, PCLPowerData powerHelper, int stacks) {
         applyPowerInstantly(target, powerHelper.create(target, player, stacks), stacks);
     }
 
@@ -1626,17 +1626,17 @@ public class GameUtilities {
     }
 
     public static boolean isCommonBuff(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
-        return helper != null && helper.isCommon && !helper.isDebuff;
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
+        return helper != null && helper.isCommon && helper.type == AbstractPower.PowerType.BUFF;
     }
 
     public static boolean isCommonDebuff(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
-        return helper != null && helper.isCommon && helper.isDebuff;
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
+        return helper != null && helper.isCommon && helper.type == AbstractPower.PowerType.DEBUFF;
     }
 
     public static boolean isCommonPower(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
         return helper != null && helper.isCommon;
     }
 
@@ -1675,8 +1675,8 @@ public class GameUtilities {
     }
 
     public static boolean isPCLBuff(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
-        return helper != null && !helper.isDebuff;
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
+        return helper != null && helper.type == AbstractPower.PowerType.BUFF;
     }
 
     // PCL check that includes colorless/curse
@@ -1685,8 +1685,8 @@ public class GameUtilities {
     }
 
     public static boolean isPCLDebuff(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
-        return helper != null && helper.isDebuff;
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
+        return helper != null && helper.type == AbstractPower.PowerType.DEBUFF;
     }
 
     // PCL check that excludes colorless/curse
@@ -1703,7 +1703,7 @@ public class GameUtilities {
     }
 
     public static boolean isPCLPower(AbstractPower power) {
-        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        PCLPowerData helper = PCLPowerData.getStaticData(power.ID);
         return helper != null;
     }
 
