@@ -44,13 +44,6 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
     }
 
     @Override
-    public void atEndOfTurn(boolean isPlayer) {
-        super.atEndOfTurn(isPlayer);
-
-        reducePower(1);
-    }
-
-    @Override
     public String getUpdatedDescription() {
         return formatDescription(0, ATTACK_MULTIPLIER);
     }

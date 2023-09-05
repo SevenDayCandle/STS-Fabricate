@@ -14,6 +14,7 @@ public class WardingPower extends PCLPower {
     public static final PCLPowerData DATA = register(WardingPower.class)
             .setType(PowerType.BUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
+            .setIsCommon(true)
             .setTooltip(PGR.core.tooltips.warding);
 
     public WardingPower(AbstractCreature owner, AbstractCreature source, int amount) {

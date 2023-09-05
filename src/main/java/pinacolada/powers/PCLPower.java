@@ -168,14 +168,8 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     public void atEndOfRound() {
-        if (data.endTurnBehavior == PCLPowerData.Behavior.SingleTurn) {
-            removePower();
-        }
-    }
-
-    public void atStartOfTurnPostDraw() {
         switch (data.endTurnBehavior) {
-            case SingleTurnNext:
+            case SingleTurn:
                 removePower();
                 break;
             case TurnBased:
@@ -186,6 +180,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                     reducePower(1);
                 }
                 break;
+        }
+    }
+
+    public void atStartOfTurnPostDraw() {
+        if (data.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext) {
+            removePower();
         }
     }
 
@@ -479,7 +479,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.justApplied = GameUtilities.isPlayerTurn(false);
         this.canGoNegative = data.minAmount < 0;
         this.powerStrings = data.strings;
-        updateDescription();
     }
 
     public void stackPower(int stackAmount, boolean updateBaseAmount) {

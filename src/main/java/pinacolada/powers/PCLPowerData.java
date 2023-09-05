@@ -1,6 +1,10 @@
 package pinacolada.powers;
 
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.*;
@@ -9,8 +13,10 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.common.*;
 import pinacolada.powers.common.EnergizedPower;
 import pinacolada.powers.replacement.PCLConstrictedPower;
@@ -21,6 +27,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -29,6 +36,7 @@ import java.util.stream.Stream;
 
 import static extendedui.EUIUtils.array;
 
+@JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
 public class PCLPowerData extends PCLGenericData<AbstractPower> implements KeywordProvider {
     private static final Map<String, PCLPowerData> STATIC_DATA = new HashMap<>();
     public static final String ICON_AFTER_IMAGE = "afterImage";
@@ -81,31 +89,31 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
 
     public static final PCLPowerData Choked = registerBaseBuff(ChokePower.class, ChokePower.POWER_ID, PGR.core.tooltips.choked).setImageRegion(ICON_CHOKED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Confused = registerBaseDebuff(ConfusionPower.class, ConfusionPower.POWER_ID, PGR.core.tooltips.confused).setImageRegion(ICON_CONFUSION).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Constricted = registerBaseDebuff(ConstrictedPower.class, ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted).setImageRegion(ICON_CONSTRICTED).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Constricted = registerBaseDebuffCommon(ConstrictedPower.class, ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted).setImageRegion(ICON_CONSTRICTED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData CorpseExplosion = registerBaseDebuff(CorpseExplosionPower.class, CorpseExplosionPower.POWER_ID, PGR.core.tooltips.corpseExplosion).setImageRegion(ICON_CORPSE_EXPLOSION).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Entangled = registerBaseDebuff(EntanglePower.class, EntanglePower.POWER_ID, PGR.core.tooltips.entangled).setImageRegion(ICON_ENTANGLE).setEndTurnBehavior(Behavior.SingleTurn);
-    public static final PCLPowerData Frail = registerBaseDebuff(FrailPower.class, FrailPower.POWER_ID, PGR.core.tooltips.frail).setImageRegion(ICON_FRAIL).setEndTurnBehavior(Behavior.TurnBased);
-    public static final PCLPowerData LockOn = registerBaseDebuff(com.megacrit.cardcrawl.powers.LockOnPower.class, LockOnPower.POWER_ID, PGR.core.tooltips.lockOn).setImageRegion(ICON_LOCKON).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
+    public static final PCLPowerData Frail = registerBaseDebuffCommon(FrailPower.class, FrailPower.POWER_ID, PGR.core.tooltips.frail).setImageRegion(ICON_FRAIL).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData LockOn = registerBaseDebuffCommon(com.megacrit.cardcrawl.powers.LockOnPower.class, LockOnPower.POWER_ID, PGR.core.tooltips.lockOn).setImageRegion(ICON_LOCKON).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData Mark = registerBaseDebuff(MarkPower.class, MarkPower.POWER_ID, PGR.core.tooltips.mark).setImageRegion(ICON_MARKED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData NoBlock = registerBaseDebuff(NoBlockPower.class, NoBlockPower.POWER_ID, PGR.core.tooltips.noBlock).setImageRegion(ICON_NO_BLOCK).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData NoDraw = registerBaseDebuff(NoDrawPower.class, NoDrawPower.POWER_ID, PGR.core.tooltips.noDraw).setImageRegion(ICON_NO_DRAW).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
-    public static final PCLPowerData Poison = registerBaseDebuff(PoisonPower.class, PoisonPower.POWER_ID, PGR.core.tooltips.poison).setImageRegion(ICON_POISON).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Poison = registerBaseDebuffCommon(PoisonPower.class, PoisonPower.POWER_ID, PGR.core.tooltips.poison).setImageRegion(ICON_POISON).setEndTurnBehavior(Behavior.TurnBased);
     public static final PCLPowerData Slow = registerBaseDebuff(SlowPower.class, SlowPower.POWER_ID, PGR.core.tooltips.slow).setImageRegion(ICON_SLOW).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Vulnerable = registerBaseDebuff(VulnerablePower.class, VulnerablePower.POWER_ID, PGR.core.tooltips.vulnerable).setImageRegion(ICON_VULNERABLE).setEndTurnBehavior(Behavior.TurnBased);
-    public static final PCLPowerData Weak = registerBaseDebuff(WeakPower.class, WeakPower.POWER_ID, PGR.core.tooltips.weak).setImageRegion(ICON_WEAK).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Vulnerable = registerBaseDebuffCommon(VulnerablePower.class, VulnerablePower.POWER_ID, PGR.core.tooltips.vulnerable).setImageRegion(ICON_VULNERABLE).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Weak = registerBaseDebuffCommon(WeakPower.class, WeakPower.POWER_ID, PGR.core.tooltips.weak).setImageRegion(ICON_WEAK).setEndTurnBehavior(Behavior.TurnBased);
 
     public static final PCLPowerData AfterImage = registerBaseBuff(AfterImagePower.class, AfterImagePower.POWER_ID, PGR.core.tooltips.afterImage).setImageRegion(ICON_AFTER_IMAGE).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Artifact = registerBaseBuff(ArtifactPower.class, ArtifactPower.POWER_ID, PGR.core.tooltips.artifact).setImageRegion(ICON_ARTIFACT).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Blur = registerBaseBuff(BlurPower.class, BlurPower.POWER_ID, PGR.core.tooltips.blur).setImageRegion(ICON_BLUR).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Artifact = registerBaseBuffCommon(ArtifactPower.class, ArtifactPower.POWER_ID, PGR.core.tooltips.artifact).setImageRegion(ICON_ARTIFACT).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Blur = registerBaseBuffCommon(BlurPower.class, BlurPower.POWER_ID, PGR.core.tooltips.blur).setImageRegion(ICON_BLUR).setEndTurnBehavior(Behavior.TurnBased);
     public static final PCLPowerData Buffer = registerBaseBuff(BufferPower.class, BufferPower.POWER_ID, PGR.core.tooltips.buffer).setImageRegion(ICON_BUFFER).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData CurlUp = registerBaseBuff(PCLCurlUpPower.class, PCLCurlUpPower.POWER_ID, PGR.core.tooltips.curlUp).setImageRegion(ICON_CURLUP).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
-    public static final PCLPowerData Dexterity = registerBaseBuff(DexterityPower.class, DexterityPower.POWER_ID, PGR.core.tooltips.dexterity).setImageRegion(ICON_DEXTERITY).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Dexterity = registerBaseBuffCommon(DexterityPower.class, DexterityPower.POWER_ID, PGR.core.tooltips.dexterity).setImageRegion(ICON_DEXTERITY).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData DoubleDamage = registerBaseBuff(DoubleDamagePower.class, DoubleDamagePower.POWER_ID, PGR.core.tooltips.doubleDamage).setImageRegion(ICON_DOUBLE_DAMAGE).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData Duplication = registerBaseBuff(DuplicationPower.class, DuplicationPower.POWER_ID, PGR.core.tooltips.duplication).setImageRegion(ICON_DUPLICATION).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Envenom = registerBaseBuff(EnvenomPower.class, EnvenomPower.POWER_ID, PGR.core.tooltips.envenom).setImageRegion(ICON_ENVENOM).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Equilibrium = registerBaseBuff(EquilibriumPower.class, EquilibriumPower.POWER_ID, PGR.core.tooltips.equilibrium).setImageRegion(ICON_EQUILIBRIUM).setEndTurnBehavior(Behavior.TurnBased);
     public static final PCLPowerData Flight = registerBaseBuff(FlightPower.class, FlightPower.POWER_ID, PGR.core.tooltips.flight).setImageRegion(ICON_FLIGHT).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Focus = registerBaseBuff(FocusPower.class, FocusPower.POWER_ID, PGR.core.tooltips.focus).setImageRegion(ICON_FOCUS).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Focus = registerBaseBuffCommon(FocusPower.class, FocusPower.POWER_ID, PGR.core.tooltips.focus).setImageRegion(ICON_FOCUS).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Foresight = registerBaseBuff(ForesightPower.class, ForesightPower.POWER_ID, PGR.core.tooltips.foresight).setImageRegion(ICON_FORESIGHT).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData FreeAttack = registerBaseBuff(FreeAttackPower.class, FreeAttackPower.POWER_ID, PGR.core.tooltips.freeAttack).setImageRegion(ICON_FREEATTACK).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Intangible = registerBaseBuff(IntangiblePlayerPower.class, IntangiblePlayerPower.POWER_ID, PGR.core.tooltips.intangible).setImageRegion(ICON_INTANGIBLE).setEndTurnBehavior(Behavior.TurnBased);
@@ -113,18 +121,18 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData Juggernaut = registerBaseBuff(JuggernautPower.class, JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut).setImageRegion(ICON_JUGGERNAUT).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Malleable = registerBaseBuff(MalleablePower.class, MalleablePower.POWER_ID, PGR.core.tooltips.malleable).setImageRegion(ICON_MALLEABLE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Mantra = registerBaseBuff(MantraPower.class, MantraPower.POWER_ID, PGR.core.tooltips.mantra).setImageRegion(ICON_MANTRA).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Metallicize = registerBaseBuff(MetallicizePower.class, MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize).setImageRegion(ICON_METALLICIZE).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData NextTurnBlock = registerBaseBuff(NextTurnBlockPower.class, NextTurnBlockPower.POWER_ID, PGR.core.tooltips.nextTurnBlock).setImageRegion(ICON_NEXT_TURN_BLOCK).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
-    public static final PCLPowerData NextTurnDraw = registerBaseBuff(DrawCardNextTurnPower.class, DrawCardNextTurnPower.POWER_ID, PGR.core.tooltips.nextTurnDraw).setImageRegion(ICON_NEXT_TURN_DRAW).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
+    public static final PCLPowerData Metallicize = registerBaseBuffCommon(MetallicizePower.class, MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize).setImageRegion(ICON_METALLICIZE).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData NextTurnBlock = registerBaseBuffCommon(NextTurnBlockPower.class, NextTurnBlockPower.POWER_ID, PGR.core.tooltips.nextTurnBlock).setImageRegion(ICON_NEXT_TURN_BLOCK).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
+    public static final PCLPowerData NextTurnDraw = registerBaseBuffCommon(DrawCardNextTurnPower.class, DrawCardNextTurnPower.POWER_ID, PGR.core.tooltips.nextTurnDraw).setImageRegion(ICON_NEXT_TURN_DRAW).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
     public static final PCLPowerData NoxiousFumes = registerBaseBuff(NoxiousFumesPower.class, NoxiousFumesPower.POWER_ID, PGR.core.tooltips.noxiousFumes).setImageRegion(ICON_NOXIOUSFUMES).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
-    public static final PCLPowerData PlatedArmor = registerBaseBuff(PlatedArmorPower.class, PlatedArmorPower.POWER_ID, PGR.core.tooltips.platedArmor).setImageRegion(ICON_PLATEDARMOR).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
+    public static final PCLPowerData PlatedArmor = registerBaseBuffCommon(PlatedArmorPower.class, PlatedArmorPower.POWER_ID, PGR.core.tooltips.platedArmor).setImageRegion(ICON_PLATEDARMOR).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Rebound = registerBaseBuff(ReboundPower.class, ReboundPower.POWER_ID, PGR.core.tooltips.rebound).setImageRegion(ICON_REBOUND).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Regen = registerBaseBuff(RegenPower.class, RegenPower.POWER_ID, PGR.core.tooltips.regeneration).setImageRegion(ICON_REGEN).setEndTurnBehavior(Behavior.TurnBased);
-    public static final PCLPowerData Ritual = registerBaseBuff(RitualPower.class, RitualPower.POWER_ID, PGR.core.tooltips.ritual).setImageRegion(ICON_RITUAL).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Strength = registerBaseBuff(StrengthPower.class, StrengthPower.POWER_ID, PGR.core.tooltips.strength).setImageRegion(ICON_STRENGTH).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Thorns = registerBaseBuff(ThornsPower.class, ThornsPower.POWER_ID, PGR.core.tooltips.thorns).setImageRegion(ICON_THORNS).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Regen = registerBaseBuff(RegenPower.class, RegenPower.POWER_ID, PGR.core.tooltips.regeneration).setImageRegion(ICON_REGEN).setEndTurnBehavior(Behavior.TurnBased).setIsMetascaling(true);
+    public static final PCLPowerData Ritual = registerBaseBuffCommon(RitualPower.class, RitualPower.POWER_ID, PGR.core.tooltips.ritual).setImageRegion(ICON_RITUAL).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Strength = registerBaseBuffCommon(StrengthPower.class, StrengthPower.POWER_ID, PGR.core.tooltips.strength).setImageRegion(ICON_STRENGTH).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Thorns = registerBaseBuffCommon(ThornsPower.class, ThornsPower.POWER_ID, PGR.core.tooltips.thorns).setImageRegion(ICON_THORNS).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData ThousandCuts = registerBaseBuff(ThousandCutsPower.class, ThousandCutsPower.POWER_ID, PGR.core.tooltips.thousandCuts).setImageRegion(ICON_THOUSAND_CUTS).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
-    public static final PCLPowerData Vigor = registerBaseBuff(VigorPower.class, VigorPower.POWER_ID, PGR.core.tooltips.vigor).setImageRegion(ICON_VIGOR).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Vigor = registerBaseBuffCommon(VigorPower.class, VigorPower.POWER_ID, PGR.core.tooltips.vigor).setImageRegion(ICON_VIGOR).setEndTurnBehavior(Behavior.Permanent);
 
     public static final PCLPowerData Blinded = BlindedPower.DATA;
     public static final PCLPowerData Bruised = BruisedPower.DATA;
@@ -191,16 +199,13 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public static Collection<PCLPowerData> getAllData() {
-        return getAllData(false, true, (FuncT1<Boolean, PCLPowerData>) null);
+        return getAllData(true, (FuncT1<Boolean, PCLPowerData>) null);
     }
 
-    public static List<PCLPowerData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLPowerData> filterFunc) {
+    public static List<PCLPowerData> getAllData(boolean sort, FuncT1<Boolean, PCLPowerData> filterFunc) {
         Stream<PCLPowerData> stream = STATIC_DATA
                 .values()
                 .stream();
-        if (!showHidden) {
-            stream = stream.filter(a -> a.invokeClass.isAnnotationPresent(VisibleRelic.class));
-        }
         if (filterFunc != null) {
             stream = stream.filter(filterFunc::invoke);
         }
@@ -215,7 +220,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public static PCLPowerData getRandom(FuncT1<Boolean, PCLPowerData> filterFunc) {
-        List<PCLPowerData> powers = getAllData(false, false, filterFunc);
+        List<PCLPowerData> powers = getAllData(false, filterFunc);
         return GameUtilities.getRandomElement(powers);
     }
 
@@ -332,7 +337,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public void loadImageIntoTooltip() {
-        if (tooltip != null && tooltip.icon != null) {
+        if (tooltip != null && tooltip.icon == null) {
             if (useRegionImage) {
                 tooltip.setIconFromPowerRegion(imagePath);
             }
@@ -409,5 +414,18 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         SingleTurn,
         SingleTurnNext,
         TurnBased,
+        Special
+    }
+
+    public static class PCLPowerDataAdapter extends TypeAdapter<PCLPowerData> {
+        @Override
+        public PCLPowerData read(JsonReader in) throws IOException {
+            return getStaticData(in.nextString());
+        }
+
+        @Override
+        public void write(JsonWriter writer, PCLPowerData value) throws IOException {
+            writer.value(value.ID);
+        }
     }
 }

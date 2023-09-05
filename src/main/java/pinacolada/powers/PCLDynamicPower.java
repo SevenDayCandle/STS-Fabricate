@@ -1,84 +1,41 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIConfiguration;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.interfaces.markers.TriggerConnection;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.PCLRenderHelpers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+public class PCLDynamicPower extends PCLClickablePower implements PointerProvider, TriggerConnection, FabricateItem {
 
-public class PSkillPower extends PCLClickablePower implements TriggerConnection {
-    public static final PCLPowerData DATA = new PCLPowerData(PSkillPower.class, PGR.core)
-            .setEndTurnBehavior(PCLPowerData.Behavior.Special); // Do not register
-    public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
+    public PCLDynamicPowerData builder;
+    public PSkillContainer skills = new PSkillContainer();
 
-    public PSkillPower(AbstractCreature owner, int turns, PTrigger... effects) {
-        this(owner, turns, Arrays.asList(effects));
-    }
-
-    public PSkillPower(AbstractCreature owner, int turns, List<PTrigger> effects) {
-        super(DATA, owner, owner, turns);
-        this.powerStrings = new PowerStrings();
-
-        for (PTrigger effect : effects) {
-            PTrigger effectCopy = effect.makeCopy();
-            this.ptriggers.add(effectCopy);
-            effectCopy.controller = this;
-            effectCopy.forceResetUses();
-
-            if (this.powerStrings.NAME == null) {
-                this.ID = createPowerID(effect);
-                if (effectCopy.sourceCard instanceof EditorCard) {
-                    // Vanilla rendering will require a smaller icon with a fixed size
-                    Texture portraitTexture = ((EditorCard) effectCopy.sourceCard).getPortraitImageTexture();
-                    this.region128 = this.region48 = PCLRenderHelpers.generateIcon(portraitTexture);
-                    this.powerStrings.NAME = effectCopy.sourceCard.name;
-                }
-                else {
-                    this.img = PCLCoreImages.CardAffinity.unknown.texture();
-                    this.powerStrings.NAME = effectCopy.source != null ? effectCopy.source.getName() : effectCopy.effectID != null ? effectCopy.effectID : this.getClass().getSimpleName();
-                }
-            }
-
-            PCLClickableUse use = effectCopy.getClickable(this);
-            if (use != null) {
-                triggerCondition = use;
-            }
-        }
-
-        setupDescription();
-        setupCustomProperties(turns);
-    }
-
-    public static String createPowerID(PSkill<?> effect) {
-        return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
+    public PCLDynamicPower(PCLDynamicPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
+        super(data, owner, source, amount);
+        this.builder = data;
     }
 
     @Override
     public float atDamageFinalGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageGiveLast(info, damage);
         }
         return damage;
@@ -98,7 +55,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     public float atDamageFinalReceive(float damage, DamageInfo.DamageType type) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveLast(info, damage, type);
         }
         return super.atDamageFinalReceive(damage, type);
@@ -108,7 +65,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     public float atDamageFinalReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveLast(info, damage, type);
         }
         return super.atDamageFinalReceive(damage, type, card);
@@ -117,7 +74,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     @Override
     public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageGiveFirst(info, damage);
         }
         return damage;
@@ -137,7 +94,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     public float atDamageReceive(float damage, DamageInfo.DamageType type) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(null, owner, owner);
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveFirst(info, damage, type);
         }
         return super.atDamageReceive(damage, type);
@@ -147,20 +104,10 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveFirst(info, damage, type);
         }
         return super.atDamageReceive(damage, type, card);
-    }
-
-    public void atStartOfTurn() {
-        super.atStartOfTurn();
-        for (PTrigger effect : ptriggers) {
-            effect.resetUses();
-        }
-        if (isTurnBased) {
-            reducePower(1);
-        }
     }
 
     @Override
@@ -173,7 +120,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, owner, owner);
         refreshTriggers(info);
         boolean canPlay = true;
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             canPlay = canPlay & effect.canPlay(info, effect);
         }
         return canPlay;
@@ -184,40 +131,42 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         return owner;
     }
 
-    public PowerType getPowerType() {
-        for (PTrigger trigger : ptriggers) {
-            if (trigger.isDetrimental()) {
-                return PowerType.DEBUFF;
-            }
-        }
-        return PowerType.BUFF;
+    @Override
+    public PCLDynamicPowerData getDynamicData() {
+        return builder;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
     protected ColoredString getSecondaryAmount(Color c) {
-        for (PTrigger trigger : ptriggers) {
-            int uses = trigger.getUses();
-            if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
-                return new ColoredString(uses, uses > 0 && (trigger.fields.forced || uses >= trigger.amount) ? Color.GREEN : Color.GRAY, c.a);
+        for (PSkill<?> effect : getEffects()) {
+            if (effect instanceof PTrigger) {
+                int uses = ((PTrigger) effect).getUses();
+                if (!(effect instanceof PTrigger_Interactable) && uses >= 0) {
+                    return new ColoredString(uses, uses > 0 && (((PTrigger) effect).fields.forced || uses >= effect.amount) ? Color.GREEN : Color.GRAY, c.a);
+                }
             }
         }
         return null;
     }
 
     @Override
-    public String getUpdatedDescription() {
-        this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, PSkill::getPowerText).toArray(new String[]{});
-        return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
+    public PSkillContainer getSkills() {
+        return skills;
     }
 
     @Override
-    public AbstractPower makeCopy() {
-        return new PSkillPower(owner, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
+    public String getUpdatedDescription() {
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerText, getEffects()));
     }
 
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             block = effect.modifyBlockFirst(info, block);
         }
         return block;
@@ -235,7 +184,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     public float modifyBlockLast(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             block = effect.modifyBlockLast(info, block);
         }
         return block;
@@ -243,7 +192,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     public float modifyHeal(PCLUseInfo info, float damage, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyHeal(info, damage);
         }
         return damage;
@@ -251,7 +200,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     public float modifyHitCount(PCLUseInfo info, float damage, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyHitCount(info, damage);
         }
         return damage;
@@ -259,7 +208,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     public float modifyRightCount(PCLUseInfo info, float damage, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyRightCount(info, damage);
         }
         return damage;
@@ -267,17 +216,10 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     public float modifySkillBonus(PCLUseInfo info, float damage, AbstractCard c) {
         refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             damage = effect.modifySkillBonus(info, damage);
         }
         return damage;
-    }
-
-    @Override
-    public void onActivate() {
-        if (!GameUtilities.isDeadOrEscaped(owner)) {
-            flash();
-        }
     }
 
     // Update this power's effects whenever you play a card
@@ -287,45 +229,35 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         super.onAfterUseCard(card, act);
     }
 
+
     public void onInitialApplication() {
         super.onInitialApplication();
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             effect.subscribeChildren();
         }
     }
 
     public void onRemove() {
         super.onRemove();
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             effect.unsubscribeChildren();
         }
     }
 
     @Override
     protected void onSamePowerApplied(AbstractPower power) {
-        PSkillPower po = EUIUtils.safeCast(power, PSkillPower.class);
+        PCLDynamicPower po = EUIUtils.safeCast(power, PCLDynamicPower.class);
         if (po != null && this.ID.equals(po.ID)) {
-            // The effects of identical cards will always be in the same order
-            for (int i = 0; i < Math.min(ptriggers.size(), po.ptriggers.size()); i++) {
-                ptriggers.get(i).stack(po.ptriggers.get(i));
+            // The effects of identical powers should always be in the same order
+            for (int i = 0; i < Math.min(getEffects().size(), po.getEffects().size()); i++) {
+                getEffects().get(i).stack(po.getEffects().get(i));
             }
         }
     }
 
     public void refreshTriggers(PCLUseInfo info) {
-        for (PTrigger effect : ptriggers) {
+        for (PSkill<?> effect : getEffects()) {
             effect.refresh(info, true);
         }
-    }
-
-    public void setupCustomProperties(int turns) {
-        if (turns > 0) {
-            isTurnBased = true;
-            amount = turns;
-        }
-        else {
-            isTurnBased = false;
-        }
-        type = getPowerType();
     }
 }

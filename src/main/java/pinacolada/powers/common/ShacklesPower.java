@@ -15,15 +15,12 @@ public class ShacklesPower extends PCLPower {
     public static final PCLPowerData DATA = register(ShacklesPower.class)
             .setType(PowerType.DEBUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn)
+            .setIsCommon(true)
+            .setImageRegion(PCLPowerData.ICON_SHACKLE)
             .setTooltip(PGR.core.tooltips.shackles);
 
     public ShacklesPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(DATA, owner, source, amount);
-    }
-
-    @Override
-    public void atEndOfTurn(boolean isPlayer) {
-        removePower();
     }
 
     @Override

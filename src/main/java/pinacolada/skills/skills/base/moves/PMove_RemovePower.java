@@ -67,7 +67,7 @@ public class PMove_RemovePower extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
-            for (PCLPowerData power : PCLPowerData.getAllData(false, false, p -> !p.isDebuff() ^ fields.debuff)) {
+            for (PCLPowerData power : PCLPowerData.getAllData(false, p -> !p.isDebuff() ^ fields.debuff)) {
                 for (AbstractCreature t : targets) {
                     order.removePower(t, t, power.ID);
                 }

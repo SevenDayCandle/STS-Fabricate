@@ -34,18 +34,6 @@ public class SelfImmolationPower extends PCLPower {
     }
 
     @Override
-    public void atStartOfTurnPostDraw() {
-        super.atStartOfTurnPostDraw();
-        if (justApplied) {
-            justApplied = false;
-        }
-        else {
-            reducePower(1);
-        }
-
-    }
-
-    @Override
     public void onInitialApplication() {
         super.onInitialApplication();
 

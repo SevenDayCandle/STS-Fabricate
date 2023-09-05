@@ -23,12 +23,6 @@ public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowe
     }
 
     @Override
-    public void atEndOfRound() {
-        super.atEndOfRound();
-        reducePower(1);
-    }
-
-    @Override
     public boolean tryApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action) {
         return !GameUtilities.isPCLBuff(power) || (power.owner != owner && target != owner);
     }

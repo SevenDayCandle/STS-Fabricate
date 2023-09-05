@@ -8,7 +8,6 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -17,13 +16,14 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.Skills;
+import pinacolada.skills.PSkillContainer;
+import pinacolada.skills.PSkillPowerContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
-    public Skills skills;
+    public PSkillPowerContainer skills;
     public PCLClickableUse triggerCondition;
 
     public PCLPointerRelic(PCLRelicData data) {
@@ -192,7 +192,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public Skills getSkills() {
+    public PSkillPowerContainer getSkills() {
         return skills;
     }
 
@@ -258,7 +258,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     protected void preSetup(PCLRelicData data) {
-        skills = new Skills();
+        skills = new PSkillPowerContainer();
         setup();
     }
 
@@ -269,7 +269,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     public void reset() {
-        skills = new Skills();
+        skills = new PSkillPowerContainer();
         setup();
         usedUp = false;
     }

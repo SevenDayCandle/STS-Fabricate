@@ -38,6 +38,7 @@ import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
@@ -459,5 +460,6 @@ public class PGR {
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
         PCLCustomPotionSlot.initialize();
+        PCLCustomPowerSlot.initialize();
     }
 }

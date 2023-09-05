@@ -13,6 +13,7 @@ public class BruisedPower extends PCLPower {
     public static final PCLPowerData DATA = register(BruisedPower.class)
             .setType(PowerType.DEBUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setIsCommon(true)
             .setTooltip(PGR.core.tooltips.bruised);
 
     public BruisedPower(AbstractCreature owner, AbstractCreature source, int amount) {

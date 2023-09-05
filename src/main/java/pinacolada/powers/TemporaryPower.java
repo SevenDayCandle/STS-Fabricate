@@ -14,7 +14,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class TemporaryPower extends PCLPower {
-    public static final PCLPowerData DATA = new PCLPowerData(TemporaryPower.class, PGR.core).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn); // Do not register
+    public static final PCLPowerData DATA = new PCLPowerData(TemporaryPower.class, PGR.core).setEndTurnBehavior(PCLPowerData.Behavior.Special); // Do not register
 
     private final AbstractPower originalPower;
     private int sourceMaxAmount = Integer.MAX_VALUE;

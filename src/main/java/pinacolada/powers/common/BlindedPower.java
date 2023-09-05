@@ -13,6 +13,7 @@ public class BlindedPower extends PCLPower {
     public static final PCLPowerData DATA = register(BlindedPower.class)
             .setType(PowerType.DEBUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setIsCommon(true)
             .setTooltip(PGR.core.tooltips.blinded);
 
     public BlindedPower(AbstractCreature owner, AbstractCreature source, int amount) {

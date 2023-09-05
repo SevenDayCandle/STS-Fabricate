@@ -13,6 +13,7 @@ public class FortifiedPower extends PCLPower {
     public static final PCLPowerData DATA = register(FortifiedPower.class)
             .setType(PowerType.BUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setIsCommon(true)
             .setTooltip(PGR.core.tooltips.fortified);
     public static final int MULTIPLIER = 25;
 
@@ -26,13 +27,6 @@ public class FortifiedPower extends PCLPower {
 
     public static float getMultiplier() {
         return (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));
-    }
-
-    @Override
-    public void atEndOfRound() {
-        super.atEndOfRound();
-
-        reducePower(1);
     }
 
     @Override

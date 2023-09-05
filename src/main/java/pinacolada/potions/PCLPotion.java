@@ -22,7 +22,6 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -31,7 +30,8 @@ import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.Skills;
+import pinacolada.skills.PSkillContainer;
+import pinacolada.skills.PSkillPowerContainer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import java.util.List;
 public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider, CustomSavable<PCLCollectibleSaveData> {
     public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public final PCLPotionData potionData;
-    public Skills skills;
+    public PSkillPowerContainer skills;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
@@ -111,7 +111,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public Skills getSkills() {
+    public PSkillPowerContainer getSkills() {
         return skills;
     }
 
@@ -135,7 +135,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void initialize() {
-        skills = new Skills();
+        skills = new PSkillPowerContainer();
         setup();
         this.targetRequired = this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
         initializeTips();

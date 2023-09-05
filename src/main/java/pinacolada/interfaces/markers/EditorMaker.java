@@ -8,6 +8,7 @@ import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public interface EditorMaker {
     default EditorMaker addPPower(PTrigger effect) {
@@ -83,9 +84,9 @@ public interface EditorMaker {
 
     AbstractCard.CardColor getCardColor();
 
-    ArrayList<PSkill<?>> getMoves();
+    List<PSkill<?>> getMoves();
 
-    ArrayList<PTrigger> getPowers();
+    List<PTrigger> getPowers();
 
     <T extends EditorMaker> T makeCopy();
 }

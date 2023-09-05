@@ -11,7 +11,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 @VisiblePower
 public class ResistancePower extends PCLPower {
-    public static final PCLPowerData DATA = register(InvigoratedPower.class)
+    public static final PCLPowerData DATA = register(ResistancePower.class)
             .setType(PowerType.BUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
             .setTooltip(PGR.core.tooltips.resistance)

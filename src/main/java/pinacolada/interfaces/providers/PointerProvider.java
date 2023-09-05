@@ -25,13 +25,14 @@ import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.Skills;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
@@ -185,16 +186,16 @@ public interface PointerProvider {
 
     // An integer mapping to individual PSkills from anywhere in the Skills tree
     default UniqueList<PSkill<?>> getPointers() {
-        return getSkills().effectTextMapping;
+        return getSkills().getPointers();
     }
 
     default PTrigger getPowerEffect(int i) {
-        ArrayList<PTrigger> effects = getPowerEffects();
+        List<PTrigger> effects = getPowerEffects();
         return effects != null && effects.size() > i ? effects.get(i) : null;
     }
 
-    default ArrayList<PTrigger> getPowerEffects() {
-        return getSkills().powerEffects;
+    default List<PTrigger> getPowerEffects() {
+        return getSkills().getPowerEffects();
     }
 
     default AbstractCreature getSourceCreature() {
@@ -399,5 +400,5 @@ public interface PointerProvider {
 
     String getName();
 
-    Skills getSkills();
+    PSkillContainer getSkills();
 }

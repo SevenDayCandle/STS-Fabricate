@@ -18,6 +18,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbApplyFocusSubscriber {
     public static final PCLPowerData DATA = new PCLPowerData(MacroscopePower.class, PGR.core)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Special)
             .setType(NeutralPowertypePatch.NEUTRAL)
             .setLimits(-1, -1); // Do not register
 

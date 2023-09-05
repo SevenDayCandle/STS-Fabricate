@@ -14,6 +14,7 @@ public class InvigoratedPower extends PCLPower {
     public static final PCLPowerData DATA = register(InvigoratedPower.class)
             .setType(PowerType.BUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
+            .setIsCommon(true)
             .setTooltip(PGR.core.tooltips.invigorated);
     public static final int MULTIPLIER = 25;
 

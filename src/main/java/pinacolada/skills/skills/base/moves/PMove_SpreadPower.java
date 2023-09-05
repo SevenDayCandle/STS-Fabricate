@@ -75,7 +75,7 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
-            for (PCLPowerData power : PCLPowerData.getAllData(false, false, PCLPowerData::isCommon)) {
+            for (PCLPowerData power : PCLPowerData.getAllData(false, PCLPowerData::isCommon)) {
                 spreadPower(info.source, targets, power, order);
             }
         }

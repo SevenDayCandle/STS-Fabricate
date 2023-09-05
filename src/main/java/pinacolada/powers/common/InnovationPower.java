@@ -15,7 +15,7 @@ import pinacolada.resources.PGR;
 public class InnovationPower extends PCLSubscribingPower implements OnClickableUsedSubscriber {
     public static final PCLPowerData DATA = register(InnovationPower.class)
             .setType(PowerType.BUFF)
-            .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurnNext)
+            .setEndTurnBehavior(PCLPowerData.Behavior.Permanent)
             .setTooltip(PGR.core.tooltips.innovation);
 
     public InnovationPower(AbstractCreature owner, AbstractCreature source, int amount) {

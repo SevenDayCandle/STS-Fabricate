@@ -20,7 +20,7 @@ import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.powers.PSkillPower;
 import pinacolada.powers.PSpecialCardPower;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.Skills;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
@@ -86,7 +86,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
     }
 
     @Override
-    public Skills getSkills() {
+    public PSkillContainer getSkills() {
         return card != null ? card.skills : null;
     }
 

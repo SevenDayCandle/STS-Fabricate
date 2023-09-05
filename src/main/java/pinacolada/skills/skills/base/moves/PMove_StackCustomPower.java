@@ -59,7 +59,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
         if (source != null) {
-            ArrayList<PTrigger> powerEffects = source.getPowerEffects();
+            List<PTrigger> powerEffects = source.getPowerEffects();
             for (Integer i : fields.indexes) {
                 if (i >= 0 && powerEffects.size() > i) {
                     PTrigger poEff = powerEffects.get(i);
@@ -109,7 +109,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        ArrayList<PTrigger> powerEffects = source.getPowerEffects();
+        List<PTrigger> powerEffects = source.getPowerEffects();
         for (Integer i : fields.indexes) {
             if (i >= 0 && powerEffects.size() > i) {
                 PTrigger poEff = powerEffects.get(i);
