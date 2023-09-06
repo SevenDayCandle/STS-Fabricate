@@ -48,7 +48,7 @@ public class PCLValueEditor extends EUIHoverable {
         this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 1.5f))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.BLUE_TEXT_COLOR)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(title);
 
         this.onUpdate = onUpdate;

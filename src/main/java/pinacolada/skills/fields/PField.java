@@ -12,6 +12,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

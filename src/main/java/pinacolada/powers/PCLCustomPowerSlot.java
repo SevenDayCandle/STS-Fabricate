@@ -5,26 +5,22 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCustomCardSlot;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
-import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
 public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerData, PCLDynamicPower> {
     private static final TypeToken<PCLCustomPowerSlot> TTOKEN = new TypeToken<PCLCustomPowerSlot>() {
     };
-    private static final ArrayList<PCLCustomPowerSlot> CUSTOM_POWERS = new ArrayList<>();
+    private static final HashMap<String, PCLCustomPowerSlot> CUSTOM_POWERS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_POWER_ID = "PCLW";
     public static final String SUBFOLDER = "powers";
@@ -82,56 +78,69 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         PROVIDERS.add(provider);
     }
 
-    public static PCLCustomPowerSlot get(String id) {
-        for (PCLCustomPowerSlot slot : CUSTOM_POWERS) {
-            if (slot.ID.equals(id)) {
-                return slot;
-            }
-        }
-        return null;
+    public static void addSlot(PCLCustomPowerSlot slot) {
+        CUSTOM_POWERS.put(slot.ID, slot);
+        slot.commitBuilder();
+        slot.registerTooltip();
     }
 
-    public static ArrayList<PCLCustomPowerSlot> getAll() {
+    public static void editSlot(PCLCustomPowerSlot slot, String oldID) {
+        CUSTOM_POWERS.remove(oldID);
+        CUSTOM_POWERS.put(slot.ID, slot);
+        EUIKeywordTooltip.removeTemp(oldID);
+        slot.commitBuilder();
+        slot.registerTooltip();
+    }
+
+    public static PCLCustomPowerSlot get(String id) {
+        return CUSTOM_POWERS.get(id);
+    }
+
+    public static HashMap<String, PCLCustomPowerSlot> getAll() {
         return CUSTOM_POWERS;
     }
 
+    /*
+    * Clear out custom powers and registered tooltips from those powers, then reload custom items from the custom folders
+    * */
     public static void initialize() {
+        for (String id : CUSTOM_POWERS.keySet()) {
+            EUIKeywordTooltip.removeTemp(id);
+        }
         CUSTOM_POWERS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
         }
-        if (PGR.debugPotions != null) {
-            PGR.debugPotions.refresh();
-        }
     }
 
     public static boolean isIDDuplicate(String input) {
-        return isIDDuplicate(input, CUSTOM_POWERS);
+        return isIDDuplicateByKey(input, CUSTOM_POWERS.keySet());
     }
 
     private static void loadFolder(FileHandle folder) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSinglePotionImpl(f);
+            loadSinglePowerImpl(f);
         }
     }
 
-    private static void loadSinglePotionImpl(FileHandle f) {
+    private static void loadSinglePowerImpl(FileHandle f) {
         String path = f.path();
         try {
             String jsonString = f.readString();
             PCLCustomPowerSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
-            CUSTOM_POWERS.add(slot);
+            slot.registerTooltip();
+            CUSTOM_POWERS.put(slot.ID, slot);
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Potion: " + path);
+            EUIUtils.logError(PCLCustomPowerSlot.class, "Could not load Custom Potion: " + path);
         }
     }
 
     protected static String makeNewID() {
-        return makeNewID(getBaseIDPrefix(BASE_POWER_ID, AbstractCard.CardColor.COLORLESS), CUSTOM_POWERS);
+        return makeNewIDByKey(getBaseIDPrefix(BASE_POWER_ID, AbstractCard.CardColor.COLORLESS), CUSTOM_POWERS.keySet());
     }
 
     public void commitBuilder() {
@@ -143,7 +152,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         FileHandle writer = Gdx.files.local(filePath);
         if (writer.exists() && !newFilePath.equals(filePath)) {
             writer.moveTo(Gdx.files.local(newFilePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Potion: " + filePath + ", New: " + newFilePath);
+            EUIUtils.logInfo(PCLCustomPowerSlot.class, "Moved Custom Potion: " + filePath + ", New: " + newFilePath);
         }
         writer = Gdx.files.local(newFilePath);
 
@@ -151,7 +160,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         FileHandle imgWriter = Gdx.files.local(imagePath);
         if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
             imgWriter.moveTo(Gdx.files.local(newImagePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Potion Image: " + imagePath + ", New: " + newImagePath);
+            EUIUtils.logInfo(PCLCustomPowerSlot.class, "Moved Custom Potion Image: " + imagePath + ", New: " + newImagePath);
         }
 
         filePath = newFilePath;
@@ -229,6 +238,14 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         effects = tempForms.toArray(new String[][]{});
     }
 
+    public void registerTooltip() {
+        PCLDynamicPowerData first = getBuilder(0);
+        if (first != null) {
+            first.updateTooltip();
+            EUIKeywordTooltip.registerIDTemp(ID, first.tooltip);
+        }
+    }
+
     public void setupBuilder(String fp) {
         builders = new ArrayList<>();
 
@@ -247,7 +264,8 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     public void wipeBuilder() {
-        CUSTOM_POWERS.remove(this);
+        CUSTOM_POWERS.remove(this.ID);
+        EUIKeywordTooltip.removeTemp(this.ID);
         FileHandle writer = getImageHandle();
         writer.delete();
         EUIUtils.logInfo(PCLCustomPowerSlot.class, "Deleted Custom Power Image: " + imagePath);

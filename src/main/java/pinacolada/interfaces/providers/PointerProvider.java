@@ -275,7 +275,7 @@ public interface PointerProvider {
                         }
                     }
                     String key = sub.toString();
-                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(key);
                     sb.append(tip != null ? tip.title : key);
                     break;
                 case '{':
@@ -291,6 +291,10 @@ public interface PointerProvider {
     }
 
     default String makePowerString(String baseString) {
+        return makePowerString(baseString, false);
+    }
+
+    default String makePowerString(String baseString, boolean filterUpgrades) {
         if (baseString == null) {
             return "";
         }
@@ -312,9 +316,14 @@ public interface PointerProvider {
                     if (EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         if (move != null) {
-                            String s = move.getAttributeString(baseString.charAt(i + 1));
-                            if (!s.isEmpty()) {
-                                sb.append("#b").append(s);
+                            if (filterUpgrades && move.getUpgrade() != 0) {
+                                i += 1; // Assume that a space comes after the pointer token
+                            }
+                            else {
+                                String s = move.getAttributeString(baseString.charAt(i + 1));
+                                if (!s.isEmpty()) {
+                                    sb.append("#b").append(s);
+                                }
                             }
                         }
                         i += 3;
@@ -359,7 +368,7 @@ public interface PointerProvider {
                             }
                         }
                         String key = sub.toString();
-                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
+                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(key);
                         // Energy tip is a special case that can be rendered as an icon in the base game
                         sb.append(tip != null ?
                                 (EUI.ENERGY_ID.equals(tip.ID) ? EUI.ENERGY_TIP : tip.title)

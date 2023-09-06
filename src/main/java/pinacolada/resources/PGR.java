@@ -462,11 +462,12 @@ public class PGR {
         BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
     }
 
+    // Powers must be initialized before other customs because they are factored into checks
     public static void reloadCustoms() {
         PCLCustomLoadoutInfo.initialize();
+        PCLCustomPowerSlot.initialize();
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
         PCLCustomPotionSlot.initialize();
-        PCLCustomPowerSlot.initialize();
     }
 }

@@ -30,7 +30,7 @@ import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
 public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, ?>, U extends EditorMaker> extends PCLEffectWithCallback<Object> {
     public static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
-    public static final float CARD_X = Settings.WIDTH * 0.11f;
+    public static final float CARD_X = Settings.WIDTH * 0.10f;
     public static final float CARD_Y = Settings.HEIGHT * 0.76f;
     public static final float START_X = Settings.WIDTH * (0.24f);
     public static final float START_Y = Settings.HEIGHT * (0.93f);
@@ -38,6 +38,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float BUTTON_WIDTH = Settings.WIDTH * (0.16f);
     public static final float LABEL_WIDTH = Settings.WIDTH * (0.20f);
     public static final float BUTTON_CY = BUTTON_HEIGHT * 1.5f;
+    public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
     public static final int EFFECT_COUNT = 3;
     public final T currentSlot;
     public final boolean fromInGame;

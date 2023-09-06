@@ -446,7 +446,16 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static class PCLPowerDataAdapter extends TypeAdapter<PCLPowerData> {
         @Override
         public PCLPowerData read(JsonReader in) throws IOException {
-            return getStaticData(in.nextString());
+            String key = in.nextString();
+            PCLPowerData data = getStaticData(key);
+            if (data != null) {
+                return data;
+            }
+            PCLCustomPowerSlot slot = PCLCustomPowerSlot.get(key);
+            if (slot != null) {
+                return slot.getBuilder(0);
+            }
+            return null;
         }
 
         @Override

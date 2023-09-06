@@ -1,12 +1,12 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -21,6 +21,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
+@JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
 public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     private static final TypeToken<HashMap<Settings.GameLanguage, PowerStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PowerStrings>>() {
     };
@@ -121,11 +122,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         return PGR.core.cardColor;
     }
 
-    public String getEffectText() {
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerText, moves));
-    }
-
-    public String getEffectTextWithLevel(int level) {
+    public String getEffectTextForPreview(int level) {
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
             if (move != null) {
@@ -138,6 +135,10 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
             }
         }
         return StringUtils.capitalize(sj.toString());
+    }
+
+    public String getEffectTextForTip() {
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerTextForTooltip, moves));
     }
 
     @Override
@@ -171,7 +172,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public PCLPowerRenderable makeRenderableWithLevel(int level) {
-        return new PCLPowerRenderable(this, new EUIKeywordTooltip(getName(), getEffectTextWithLevel(level)));
+        return new PCLPowerRenderable(this, new EUIKeywordTooltip(getName(), getEffectTextForPreview(level)));
     }
 
     public PCLDynamicPowerData setID(String fullID) {
@@ -230,12 +231,13 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         return setText(getStringsForLanguage(language));
     }
 
-    public PCLDynamicPowerData updateTooltipText() {
+    public PCLDynamicPowerData updateTooltip() {
+        tooltip.title = strings.NAME;
         if (this.strings.DESCRIPTIONS.length > 0) {
             tooltip.setDescription(this.strings.DESCRIPTIONS[0]);
         }
         else {
-            tooltip.setDescription(getEffectText());
+            tooltip.setDescription(getEffectTextForTip());
         }
         return this;
     }

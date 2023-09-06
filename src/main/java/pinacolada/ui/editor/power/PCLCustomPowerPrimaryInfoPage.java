@@ -60,7 +60,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cedit_primaryInfo);
 
         idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
-                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
+                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(this::validifyCardID)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
                 .setHeaderSpacing(1.1f)
@@ -77,7 +77,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         idWarning.setActive(false);
 
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
-                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
+                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
                     effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
@@ -120,7 +120,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(PCLPowerData.Behavior.values())
                 .setTooltip(PGR.core.strings.power_turnBehavior, PGR.core.strings.cetut_powerTurnBehavior);
-        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(START_X, screenH(0.41f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);

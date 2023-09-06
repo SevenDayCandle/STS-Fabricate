@@ -26,7 +26,6 @@ public class TemporaryPower extends PCLPower {
         this.ID = DATA.ID + originalPower.ID;
         this.img = sourcePower.img;
         this.region128 = this.region48 = sourcePower.region128 != null ? sourcePower.region128 : sourcePower.region48;
-        this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(ID);
         if (sourcePower instanceof PCLPower) {
             this.sourceMaxAmount = ((PCLPower) sourcePower).data.maxAmount;
         }

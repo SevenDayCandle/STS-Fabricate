@@ -145,12 +145,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(currentColor);
             currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
-                        AbstractCard newCard = slot.make();
-                        currentSlots.put(newCard, slot);
-                        PCLCustomCardSlot.getCards(currentColor).add(slot);
-                        EUI.customHeader.originalGroup.add(newCard);
+                        PCLCustomCardSlot.addSlot(slot);
+                        putCardInList(slot);
                         refreshGrid();
-                        slot.commitBuilder();
                     });
         }
     }
@@ -160,12 +157,8 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot);
             currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
-                        slot.commitBuilder();
-                        AbstractCard newCard = slot.make();
-                        currentSlots.put(newCard, slot);
-                        PCLCustomCardSlot.getCards(currentColor).add(slot);
-                        EUI.customHeader.originalGroup.add(newCard);
-                        slot.commitBuilder();
+                        PCLCustomCardSlot.addSlot(slot);
+                        putCardInList(slot);
                         refreshGrid();
                     });
         }
@@ -180,11 +173,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                             open(null, co, this.onClose);
                             currentDialog = new PCLCustomCardEditCardScreen(slot)
                                     .setOnSave(() -> {
-                                        slot.commitBuilder();
+                                        PCLCustomCardSlot.addSlot(slot);
                                         AbstractCard newCard = slot.make();
                                         currentSlots.put(newCard, slot);
-                                        PCLCustomCardSlot.getCards(co).add(slot);
-                                        slot.commitBuilder();
                                     });
                         }
                     });
@@ -196,11 +187,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
-                        AbstractCard newCard = cardSlot.make();
                         EUI.customHeader.originalGroup.remove(card);
                         currentSlots.remove(card);
-                        currentSlots.put(newCard, cardSlot);
-                        EUI.customHeader.originalGroup.add(newCard);
+                        putCardInList(cardSlot);
                         refreshGrid();
                     });
         }
@@ -296,6 +285,12 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 openButton.makeTour(true),
                 loadExistingButton.makeTour(true),
                 reloadButton.makeTour(true));
+    }
+
+    private void putCardInList(PCLCustomCardSlot slot) {
+        AbstractCard newCard = slot.make();
+        currentSlots.put(newCard, slot);
+        EUI.customHeader.originalGroup.add(newCard);
     }
 
     public void refreshGrid() {

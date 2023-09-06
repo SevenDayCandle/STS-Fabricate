@@ -32,6 +32,10 @@ public abstract class PCLCustomLoadable implements Serializable {
         return EUIUtils.any(items, c -> c.ID.equals(input));
     }
 
+    protected static boolean isIDDuplicateByKey(String input, Iterable<String> items) {
+        return EUIUtils.any(items, c -> c.equals(input));
+    }
+
     protected static String makeNewID(String baseIDPrefix, Iterable<? extends PCLCustomLoadable> items) {
         StringBuilder sb = new StringBuilder(baseIDPrefix);
         for (int i = 0; i < ID_SIZE; i++) {
@@ -39,6 +43,18 @@ public abstract class PCLCustomLoadable implements Serializable {
         }
 
         while (isIDDuplicate(sb.toString(), items)) {
+            sb.append(makeRandomCharIndex());
+        }
+        return sb.toString();
+    }
+
+    protected static String makeNewIDByKey(String baseIDPrefix, Iterable<String> items) {
+        StringBuilder sb = new StringBuilder(baseIDPrefix);
+        for (int i = 0; i < ID_SIZE; i++) {
+            sb.append(makeRandomCharIndex());
+        }
+
+        while (isIDDuplicateByKey(sb.toString(), items)) {
             sb.append(makeRandomCharIndex());
         }
         return sb.toString();

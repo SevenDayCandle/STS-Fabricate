@@ -71,7 +71,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         setupCustomProperties(turns);
     }
 
-    public static String createPowerID(PSkill<?> effect) {
+    public static String createPowerID(PTrigger effect) {
         return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
     }
 

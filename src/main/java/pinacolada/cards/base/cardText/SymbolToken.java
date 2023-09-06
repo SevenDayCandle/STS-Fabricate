@@ -54,7 +54,7 @@ public class SymbolToken extends PCLTextToken {
                     final String key = builder.toString();
                     SymbolToken token = tokenCache.get(key);
                     if (token == null) {
-                        final EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(key);
+                        final EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByIDTemp(key);
                         if (tooltip != null) {
                             token = new SymbolToken(tooltip);
                             tokenCache.put(key, token);

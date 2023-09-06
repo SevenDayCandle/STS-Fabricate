@@ -126,12 +126,11 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             PCLCustomPowerSlot slot = new PCLCustomPowerSlot();
             currentDialog = new PCLCustomPowerEditPowerScreen(slot)
                     .setOnSave(() -> {
+                        PCLCustomPowerSlot.addSlot(slot);
                         PCLPowerRenderable newPower = slot.makeRenderable();
                         currentSlots.put(newPower, slot);
-                        PCLCustomPowerSlot.getAll().add(slot);
                         grid.group.group = PGR.powerHeader.originalGroup;
                         grid.add(newPower);
-                        slot.commitBuilder();
                         refreshGrid();
                     });
         }
@@ -142,43 +141,22 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             PCLCustomPowerSlot slot = new PCLCustomPowerSlot(cardSlot);
             currentDialog = new PCLCustomPowerEditPowerScreen(slot)
                     .setOnSave(() -> {
-                        slot.commitBuilder();
+                        PCLCustomPowerSlot.addSlot(slot);
                         PCLPowerRenderable newPower = slot.makeRenderable();
                         currentSlots.put(newPower, slot);
-                        PCLCustomPowerSlot.getAll().add(slot);
                         grid.group.group = PGR.powerHeader.originalGroup;
                         grid.add(newPower);
-                        slot.commitBuilder();
                         refreshGrid();
-                    });
-        }
-    }
-
-    public void duplicateToColor(PCLPowerRenderable card, PCLCustomPowerSlot cardSlot) {
-        if (currentDialog == null && cardSlot != null) {
-            currentDialog = new PCLCustomCardCopyConfirmationEffect(getAllColors())
-                    .addCallback((co) -> {
-                        if (co != null) {
-                            PCLCustomPowerSlot slot = new PCLCustomPowerSlot(cardSlot);
-                            open(null, co, this.onClose);
-                            currentDialog = new PCLCustomPowerEditPowerScreen(slot)
-                                    .setOnSave(() -> {
-                                        slot.commitBuilder();
-                                        PCLPowerRenderable newPower = slot.makeRenderable();
-                                        currentSlots.put(newPower, slot);
-                                        PCLCustomPowerSlot.getAll().add(slot);
-                                        slot.commitBuilder();
-                                    });
-                        }
                     });
         }
     }
 
     public void edit(PCLPowerRenderable card, PCLCustomPowerSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
+            String prev = cardSlot.ID;
             currentDialog = new PCLCustomPowerEditPowerScreen(cardSlot)
                     .setOnSave(() -> {
-                        cardSlot.commitBuilder();
+                        PCLCustomPowerSlot.editSlot(cardSlot, prev);
                         PCLPowerRenderable newPower = cardSlot.makeRenderable();
                         grid.group.group = PGR.powerHeader.originalGroup;
                         grid.remove(card);
@@ -188,20 +166,6 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
                         refreshGrid();
                     });
         }
-    }
-
-    private ArrayList<AbstractCard.CardColor> getAllColors() {
-        ArrayList<AbstractCard.CardColor> list = new ArrayList<>();
-
-        // Base game colors are not tracked in getCardColors
-        list.add(AbstractCard.CardColor.COLORLESS);
-        list.add(AbstractCard.CardColor.RED);
-        list.add(AbstractCard.CardColor.GREEN);
-        list.add(AbstractCard.CardColor.BLUE);
-        list.add(AbstractCard.CardColor.PURPLE);
-
-        list.addAll(BaseMod.getCardColors().stream().sorted(Comparator.comparing(EUIGameUtils::getColorName)).collect(Collectors.toList()));
-        return list;
     }
 
     private void onPowerClicked(PCLPowerRenderable relic) {
@@ -223,7 +187,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
         EUI.actingColor = cardColor;
         currentSlots.clear();
         grid.clear();
-        for (PCLCustomPowerSlot slot : PCLCustomPowerSlot.getAll()) {
+        for (PCLCustomPowerSlot slot : PCLCustomPowerSlot.getAll().values()) {
             PCLPowerRenderable relic = slot.makeRenderable();
             currentSlots.put(relic, slot);
             grid.add(relic);

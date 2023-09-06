@@ -2,6 +2,7 @@ package pinacolada.augments;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.markers.KeywordProvider;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PCLAugmentRenderable implements KeywordProvider {
-    public static final float BASE_SCALE = 0.6f;
+    public static final float BASE_SCALE = Settings.scale * 0.6f;
 
     public final PCLAugment augment;
     public Hitbox hb;

@@ -28,8 +28,6 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData> {
-    public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
-
     protected EUIToggle upgradeToggle;
     protected PCLDynamicPotion preview;
     protected PCLCustomImageEffect imageEditor;
@@ -94,7 +92,7 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f)
-                .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT * 2);
+                .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT * 2);
         previewDescription.label.setSmartText(true);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))

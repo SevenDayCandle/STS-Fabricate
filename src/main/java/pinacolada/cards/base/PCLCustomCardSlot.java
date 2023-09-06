@@ -121,6 +121,11 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         PROVIDERS.add(provider);
     }
 
+    public static void addSlot(PCLCustomCardSlot slot) {
+        PCLCustomCardSlot.getCards(slot.slotColor).add(slot);
+        slot.commitBuilder();
+    }
+
     // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
     public static boolean canFullyCopyCard(AbstractCard card) {
         if (card instanceof PCLCard) {

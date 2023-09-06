@@ -132,7 +132,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                         }
                     }
                     String key = sub.toString();
-                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(key);
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(key);
                     if (tip != null) {
                         String[] split = EUIUtils.splitString(" ", tip.title);
                         for (String s : split) {
@@ -201,7 +201,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                     continue;
                 }
                 foundIcon = false;
-                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(EUIUtils.invokeBuilder(builder));
+                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByIDTemp(EUIUtils.invokeBuilder(builder));
                 if (tooltip != null) {
                     tooltips.add(tooltip);
                 }

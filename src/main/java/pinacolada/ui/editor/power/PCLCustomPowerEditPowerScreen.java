@@ -3,7 +3,6 @@ package pinacolada.ui.editor.power;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.spine.Slot;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -15,12 +14,11 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerRenderable;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFormEditor;
@@ -31,7 +29,6 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomPowerEditPowerScreen extends PCLCustomEditEntityScreen<PCLCustomPowerSlot, PCLDynamicPowerData> {
-    public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
 
     protected EUIToggle upgradeToggle;
     protected PCLPowerRenderable preview;
@@ -101,7 +98,7 @@ public class PCLCustomPowerEditPowerScreen extends PCLCustomEditEntityScreen<PCL
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f)
-                .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT * 2);
+                .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT * 2);
         previewDescription.label.setSmartText(true);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
@@ -125,12 +122,14 @@ public class PCLCustomPowerEditPowerScreen extends PCLCustomEditEntityScreen<PCL
     }
 
     protected void rebuildItem() {
-        preview = getBuilder().makeRenderableWithLevel(upgraded ? 2 : 1);
+        int upgradeAmount = upgraded ? 2 : 1;
+        preview = getBuilder().makeRenderableWithLevel(upgradeAmount);
         preview.scale = 1f;
         preview.currentX = preview.targetX = CARD_X;
         preview.currentY = preview.targetY = RELIC_Y;
         preview.hb.move(preview.currentX, preview.currentY);
-        previewDescription.setLabel(preview.power.tooltip.description);
+        previewDescription.setLabel(!StringUtils.isEmpty(preview.mainTooltip.description) ? preview.mainTooltip.description : getBuilder().getEffectTextForPreview(upgradeAmount));
+        preview.amountText = String.valueOf(upgradeAmount);
     }
 
     public void renderInnerElements(SpriteBatch sb) {

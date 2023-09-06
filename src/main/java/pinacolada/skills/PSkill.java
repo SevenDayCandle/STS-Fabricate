@@ -808,6 +808,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return getText();
     }
 
+    public String getPowerTextForTooltip() {
+        if (source != null) {
+            return source.makePowerString(getText(), true);
+        }
+        return getText();
+    }
+
     public int getQualifierRange() {
         return fields.getQualiferRange();
     }

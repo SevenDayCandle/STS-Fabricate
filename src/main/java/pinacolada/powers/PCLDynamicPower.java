@@ -30,6 +30,7 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
     public PCLDynamicPower(PCLDynamicPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
         super(data, owner, source, amount);
         this.builder = data;
+        setupBuilder(builder);
     }
 
     @Override
@@ -161,6 +162,9 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
 
     @Override
     public String getUpdatedDescription() {
+        if (skills == null) {
+            return EUIUtils.EMPTY_STRING;
+        }
         return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerText, getEffects()));
     }
 
@@ -229,6 +233,16 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
         super.onAfterUseCard(card, act);
     }
 
+    // Update skill amounts whenever stacks change
+    protected void onAmountChanged(int previousAmount, int difference) {
+        if (difference != 0) {
+            for (PSkill<?> effect : getEffects()) {
+                effect.setAmountFromCard();
+            }
+            updateDescription();
+        }
+    }
+
 
     public void onInitialApplication() {
         super.onInitialApplication();
@@ -244,20 +258,21 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
         }
     }
 
-    @Override
-    protected void onSamePowerApplied(AbstractPower power) {
-        PCLDynamicPower po = EUIUtils.safeCast(power, PCLDynamicPower.class);
-        if (po != null && this.ID.equals(po.ID)) {
-            // The effects of identical powers should always be in the same order
-            for (int i = 0; i < Math.min(getEffects().size(), po.getEffects().size()); i++) {
-                getEffects().get(i).stack(po.getEffects().get(i));
-            }
-        }
-    }
-
     public void refreshTriggers(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
             effect.refresh(info, true);
         }
+    }
+
+    public void setupBuilder(PCLDynamicPowerData data) {
+        for (PSkill<?> skill : data.moves) {
+            addUseMove(skill.makeCopy());
+        }
+        updateDescription();
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return amount;
     }
 }

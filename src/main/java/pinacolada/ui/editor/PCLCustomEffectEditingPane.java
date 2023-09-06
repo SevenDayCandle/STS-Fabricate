@@ -34,6 +34,9 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLDynamicPower;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
@@ -62,6 +65,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
     protected static ArrayList<AbstractPotion> availablePotions;
+    protected static ArrayList<PCLPowerData> availablePowers;
     protected static ArrayList<AbstractRelic> availableRelics;
     private PSkill<?> lastEffect;
     private float additionalHeight;
@@ -92,6 +96,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static void invalidateItems() {
         availableCards = null;
         availablePotions = null;
+        availablePowers = null;
         availableRelics = null;
     }
 
@@ -225,6 +230,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return availablePotions;
     }
 
+    protected ArrayList<PCLPowerData> getAvailablePowers() {
+        if (availablePowers == null) {
+            availablePowers = new ArrayList<>(PCLPowerData.getAllData());
+            availablePowers.addAll(EUIUtils.map(PCLCustomPowerSlot.getAll().values(), slot -> slot.getBuilder(0)));
+            availablePowers.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        }
+        return availablePowers;
+    }
+
     protected ArrayList<AbstractRelic> getAvailableRelics() {
         if (availableRelics == null) {
             AbstractCard.CardColor cardColor = getColor();
@@ -307,6 +321,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return editor.getTitle();
+    }
+
+    public String getSmartSearchableLabel(TooltipProvider item) {
+        EUITooltip tip = item.getTooltip();
+        return tip instanceof EUIKeywordTooltip && ((EUIKeywordTooltip) tip).icon != null ? tip.getTitleOrIconForced() + " " + tip.title : tip.title;
     }
 
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
@@ -405,11 +424,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(Collection<T> items, String title) {
+        return initializeSmartSearchable(items, title, this::getSmartSearchableLabel);
+    }
+
+    public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(Collection<T> items, String title, FuncT1<String, T> labelFunc) {
         EUISearchableDropdown<T> dropdown = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
-                .setLabelFunctionForOption(item -> {
-                    EUITooltip tip = item.getTooltip();
-                    return tip instanceof EUIKeywordTooltip && ((EUIKeywordTooltip) tip).icon != null ? tip.getTitleOrIconForced() + " " + tip.title : tip.title;
-                }, true)
+                .setLabelFunctionForOption(labelFunc, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
@@ -690,8 +710,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPower(List<PCLPowerData> items) {
-        // TODO add custom powers
-        registerDropdown(initializeSmartSearchable(PCLPowerData.getAllData(), PGR.core.strings.cedit_powers), items);
+        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, pd -> pd instanceof PCLDynamicPowerData ? pd.getName() : getSmartSearchableLabel(pd)), items);
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {

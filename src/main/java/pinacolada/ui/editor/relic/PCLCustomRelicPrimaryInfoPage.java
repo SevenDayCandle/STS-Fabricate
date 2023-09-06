@@ -58,7 +58,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cedit_primaryInfo);
 
         idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
-                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
+                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(this::validifyCardID)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
                 .setHeaderSpacing(1.1f)
@@ -75,7 +75,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idWarning.setActive(false);
 
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
-                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
+                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
                     effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
