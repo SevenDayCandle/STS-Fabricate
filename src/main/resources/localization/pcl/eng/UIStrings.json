@@ -140,7 +140,8 @@
 												"Rename Loadout",
 												"Delete Loadout",
 												"Invert",
-												"Every X"
+												"Every X",
+												"Min/Max Stacks"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -204,7 +205,12 @@
 												"You will only encounter one copy of this #yBlight in each run.",
 												"An #yAugment's category determines the types of cards that it can be slotted in to.",
 												"Cards cannot have more than one #yAugment with the same sub-category.",
-												"An #yAugment's tier denotes how rare that #yAugment is."
+												"An #yAugment's tier denotes how rare that #yAugment is.",
+												"#yType determines how this power is treated by #yArtifact and other effects.",
+												"#yTurn #yBehavior determines how this power's stacks change when a turn ends.",
+												"#yPriority determines when the power is factored into combat calculations. Lower priority values cause the power to be taken into consideration sooner.",
+												"Determines the minimum and maximum amount of stacks that this power can have.",
+												"If checked, this power can be chosen by effects that apply powers at random."
 								]
 				},
 				"pcl:CardPile": {
@@ -403,6 +409,8 @@
 												"View, create, or edit custom potions to use in Custom Runs.",
 												"Blight Weaver",
 												"View, create, or edit custom blights to use in Custom Runs.",
+												"Power Maker",
+												"View, create, or edit custom powers to use with other custom items.",
 												"Augment Database",
 												"Discover various Augments that can be used to enhance your cards.",
 												"Augment Factory",
@@ -476,6 +484,20 @@
 												"If checked, all popup views for relics will be rendered with Fabricate, even if those items were not made with Fabricate. This setting may cause conflicts with mods that modify base game popup views.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods."
 								]
+				},
+				"pcl:Power": {
+					"TEXT": [
+						"Turn Behavior",
+						"Priority",
+						"Standard",
+						"Neutral",
+						"Permanent",
+						"Turn-Based",
+						"Single Turn",
+						"Single Turn Next",
+						"Instant",
+						"Custom Behavior"
+					]
 				},
 				"pcl:Rewards": {
 								"TEXT": [

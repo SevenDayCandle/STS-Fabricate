@@ -1,8 +1,10 @@
 package pinacolada.patches.screens;
 
+import com.badlogic.gdx.graphics.Color;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuPanelScreen;
 import extendedui.patches.screens.MenuPanelScreenPatches;
@@ -27,6 +29,8 @@ public class CustomEditorMenuScreenPatches {
         available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_BLUE, PCLCoreImages.Menu.menuRelic.texture(), PGR.core.strings.menu_relic, PGR.core.strings.menu_relicDesc, () -> PGR.customRelics.open(null, PCLCustomRelicSelectorScreen.currentColor, () -> {
         })));
         available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_RED, PCLCoreImages.Menu.menuPotion.texture(), PGR.core.strings.menu_potion, PGR.core.strings.menu_potionDesc, () -> PGR.customPotions.open(null, PCLCustomPotionSelectorScreen.currentColor, () -> {
+        })));
+        available.add(new EUIMainMenuPanelButton(new Color(0.6f, 0.7f, 0.5f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuPower.texture(), PGR.core.strings.menu_power, PGR.core.strings.menu_powerDesc, () -> PGR.customPowers.open(null, AbstractCard.CardColor.COLORLESS, () -> {
         })));
         return available;
     }

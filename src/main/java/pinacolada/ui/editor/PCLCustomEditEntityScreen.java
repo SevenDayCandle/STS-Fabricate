@@ -94,7 +94,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
         currentPowers.clear();
         currentPowers.addAll(getBuilder().getPowers());
-        while (currentPowers.size() < EFFECT_COUNT) {
+        while (currentPowers.size() < getPowerLimit()) {
             currentPowers.add(null);
         }
 
@@ -120,6 +120,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public int getPowerCount() {
         return powerPages.size();
+    }
+
+    public int getPowerLimit() {
+        return EFFECT_COUNT;
     }
 
     protected void makeEffectPage(int index) {

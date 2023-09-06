@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -314,6 +315,14 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return new TemporaryPower(owner, po);
     }
 
+    public String getName() {
+        return strings.NAME;
+    }
+
+    public String getText() {
+        return tooltip != null ? tooltip.description : strings.DESCRIPTIONS.length > 0 ? strings.DESCRIPTIONS[0] : EUIUtils.EMPTY_STRING;
+    }
+
     @Override
     public EUIKeywordTooltip getTooltip() {
         return tooltip;
@@ -411,10 +420,27 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
 
     public enum Behavior {
         Permanent,
+        TurnBased,
         SingleTurn,
         SingleTurnNext,
-        TurnBased,
-        Special
+        Instant,
+        Special;
+
+        public String getText() {
+            switch (this) {
+                case Permanent:
+                    return PGR.core.strings.power_permanent;
+                case TurnBased:
+                    return PGR.core.strings.power_turnBased;
+                case SingleTurn:
+                    return PGR.core.strings.power_singleTurn;
+                case SingleTurnNext:
+                    return PGR.core.strings.power_singleTurnNext;
+                case Instant:
+                    return PGR.core.strings.power_instant;
+            }
+            return PGR.core.strings.power_custom;
+        }
     }
 
     public static class PCLPowerDataAdapter extends TypeAdapter<PCLPowerData> {

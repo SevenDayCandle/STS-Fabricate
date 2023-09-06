@@ -1,6 +1,5 @@
 package pinacolada.powers;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -9,14 +8,10 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.localization.PowerStrings;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
-import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.potions.PCLDynamicPotion;
-import pinacolada.potions.PCLPotionData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -24,10 +19,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     private static final TypeToken<HashMap<Settings.GameLanguage, PowerStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PowerStrings>>() {
@@ -37,19 +29,21 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     public Texture portraitImage;
 
     public PCLDynamicPowerData(String cardID) {
-        super(PCLDynamicPower.class, PGR.core, cardID);
+        this(PGR.core, cardID);
     }
 
-    public PCLDynamicPowerData(String cardID, PCLResources<?, ?, ?, ?> resources) {
+    public PCLDynamicPowerData(PCLResources<?, ?, ?, ?> resources, String cardID) {
         super(PCLDynamicPower.class, resources, cardID);
+        this.tooltip = new EUIKeywordTooltip(strings.NAME);
     }
 
     public PCLDynamicPowerData(PCLResources<?, ?, ?, ?> resources, String cardID, PowerStrings strings) {
         super(PCLDynamicPower.class, resources, cardID, strings);
+        this.tooltip = new EUIKeywordTooltip(strings.NAME);
     }
 
     public PCLDynamicPowerData(PCLPowerData original) {
-        this(original.ID, original.resources);
+        this(original.resources, original.ID);
 
         setImagePath(original.imagePath);
         setEndTurnBehavior(original.endTurnBehavior);
@@ -62,7 +56,15 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public PCLDynamicPowerData(PCLDynamicPowerData original) {
-        this(original.ID, original.resources);
+        this(original.resources, original.ID);
+        setImagePath(original.imagePath);
+        setEndTurnBehavior(original.endTurnBehavior);
+        setIsCommon(original.isCommon);
+        setIsMetascaling(original.isMetascaling);
+        setIsPostActionPower(original.isPostActionPower);
+        setLimits(original.minAmount, original.maxAmount);
+        setPriority(original.priority);
+        setType(original.type);
         setImage(original.portraitImage);
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
@@ -76,6 +78,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         safeLoadValue(() -> setIsPostActionPower(data.isPostActionPower));
         safeLoadValue(() -> setLimits(data.minValue, data.maxValue));
         safeLoadValue(() -> setPriority(data.priority));
+        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(effects, PSkill::get), true, true));
     }
 
@@ -118,6 +121,25 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         return PGR.core.cardColor;
     }
 
+    public String getEffectText() {
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerText, moves));
+    }
+
+    public String getEffectTextWithLevel(int level) {
+        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+        for (PSkill<?> move : moves) {
+            if (move != null) {
+                move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
+                String pText = move.getPowerText();
+                if (!StringUtils.isEmpty(pText)) {
+                    sj.add(pText);
+                }
+                move.recurse(m -> m.setTemporaryAmount(m.baseAmount));
+            }
+        }
+        return StringUtils.capitalize(sj.toString());
+    }
+
     @Override
     public ArrayList<PSkill<?>> getMoves() {
         return moves;
@@ -142,6 +164,14 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     @Override
     public PCLDynamicPowerData makeCopy() {
         return new PCLDynamicPowerData(this);
+    }
+
+    public PCLPowerRenderable makeRenderable() {
+        return new PCLPowerRenderable(this);
+    }
+
+    public PCLPowerRenderable makeRenderableWithLevel(int level) {
+        return new PCLPowerRenderable(this, new EUIKeywordTooltip(getName(), getEffectTextWithLevel(level)));
     }
 
     public PCLDynamicPowerData setID(String fullID) {
@@ -198,5 +228,15 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
 
     public PCLDynamicPowerData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
+    }
+
+    public PCLDynamicPowerData updateTooltipText() {
+        if (this.strings.DESCRIPTIONS.length > 0) {
+            tooltip.setDescription(this.strings.DESCRIPTIONS[0]);
+        }
+        else {
+            tooltip.setDescription(getEffectText());
+        }
+        return this;
     }
 }

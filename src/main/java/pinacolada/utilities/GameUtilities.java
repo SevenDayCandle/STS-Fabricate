@@ -41,6 +41,7 @@ import com.megacrit.cardcrawl.relics.Orichalcum;
 import com.megacrit.cardcrawl.relics.PrismaticShard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
+import com.megacrit.cardcrawl.screens.SingleRelicViewPopup;
 import com.megacrit.cardcrawl.screens.stats.AchievementGrid;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -2133,6 +2134,17 @@ public class GameUtilities {
     public static void setUnplayableThisTurn(AbstractCard card) {
         CombatManager.unplayableCards().add(card.uuid);
         CombatManager.onTagChanged(card, PCLCardTag.Unplayable, 1);
+    }
+
+    public static String textForPowerType(AbstractPower.PowerType type) {
+        switch (type) {
+            case BUFF:
+                return PGR.core.tooltips.buff.title;
+            case DEBUFF:
+                return PGR.core.tooltips.debuff.title;
+            default:
+                return PGR.core.strings.power_neutral;
+        }
     }
 
     public static String toInternalAtlasBetaPath(String path) {

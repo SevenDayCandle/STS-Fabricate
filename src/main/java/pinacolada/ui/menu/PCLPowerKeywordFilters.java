@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -22,27 +23,27 @@ import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.ItemGroup;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.EUIExporterPCLAugmentRow;
-import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.augments.PCLAugmentCategorySub;
-import pinacolada.augments.PCLAugmentRenderable;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderable, CustomFilterModule<PCLAugmentRenderable>> {
-    public static final ArrayList<CustomFilterModule<PCLAugmentRenderable>> globalFilters = new ArrayList<>();
+public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, CustomFilterModule<PCLPowerRenderable>> {
+    public static final ArrayList<CustomFilterModule<PCLPowerRenderable>> globalFilters = new ArrayList<>();
     public final HashSet<ModInfo> currentOrigins = new HashSet<>();
-    public final HashSet<PCLAugmentCategory> currentCategories = new HashSet<>();
-    public final HashSet<PCLAugmentCategorySub> currentSubCategories = new HashSet<>();
-    public final HashSet<Integer> currentTiers = new HashSet<>();
+    public final HashSet<PCLPowerData.Behavior> currentEndTurnBehaviors = new HashSet<>();
+    public final HashSet<Integer> currentPriorities = new HashSet<>();
+    public final HashSet<AbstractPower.PowerType> currentTypes = new HashSet<>();
     public final EUIDropdown<ModInfo> originsDropdown;
-    public final EUIDropdown<PCLAugmentCategory> categoryDropdown;
-    public final EUIDropdown<PCLAugmentCategorySub> subCategoryDropdown;
-    public final EUIDropdown<Integer> tierDropdown;
+    public final EUIDropdown<PCLPowerData.Behavior> endTurnBehaviorDropdown;
+    public final EUIDropdown<AbstractPower.PowerType> typeDropdown;
+    public final EUIDropdown<Integer> priorityDropdown;
 
-    public PCLAugmentKeywordFilters() {
+    public PCLPowerKeywordFilters() {
         super();
 
         originsDropdown = new EUIDropdown<ModInfo>(new EUIHitbox(0, 0, scale(240), scale(48)), c -> c == null ? EUIRM.strings.ui_basegame : c.Name)
@@ -54,51 +55,51 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 .setCanAutosizeButton(true)
                 .setItems(Loader.MODINFOS);
 
-        categoryDropdown = new EUIDropdown<PCLAugmentCategory>(new EUIHitbox(0, 0, scale(240), scale(48))
-                , PCLAugmentCategory::getName)
+        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(0, 0, scale(240), scale(48))
+                , PCLPowerData.Behavior::getText)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentCategories, costs))
+                .setOnChange(costs -> this.onFilterChanged(currentEndTurnBehaviors, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_category)
-                .setItems(PCLAugmentCategory.values())
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
+                .setItems(PCLPowerData.Behavior.values())
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
 
-        subCategoryDropdown = new EUIDropdown<PCLAugmentCategorySub>(new EUIHitbox(0, 0, scale(240), scale(48))
-                , PCLAugmentCategorySub::getName)
+        typeDropdown = new EUIDropdown<AbstractPower.PowerType>(new EUIHitbox(0, 0, scale(240), scale(48))
+                , GameUtilities::textForPowerType)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentSubCategories, costs))
+                .setOnChange(costs -> this.onFilterChanged(currentTypes, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_subCategory)
-                .setItems(PCLAugmentCategorySub.sortedValues())
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
+                .setItems(AbstractPower.PowerType.values())
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
 
-        tierDropdown = new EUIDropdown<Integer>(new EUIHitbox(0, 0, scale(240), scale(48))
+        priorityDropdown = new EUIDropdown<Integer>(new EUIHitbox(0, 0, scale(240), scale(48))
                 , String::valueOf)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentTiers, costs))
+                .setOnChange(costs -> this.onFilterChanged(currentPriorities, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_tier)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_priority)
                 .setItems(EUIUtils.range(1, 3))
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
     }
 
-    public static String getDescriptionForSort(PCLAugmentRenderable c) {
-        return c.augment.getText();
+    public static String getDescriptionForSort(PCLPowerRenderable c) {
+        return c.power.getText();
     }
 
-    public static String getNameForSort(PCLAugmentRenderable c) {
-        return c.augment.getName();
+    public static String getNameForSort(PCLPowerRenderable c) {
+        return c.power.getName();
     }
 
     @Override
     public boolean areFiltersEmpty() {
         return (currentName == null || currentName.isEmpty())
                 && (currentDescription == null || currentDescription.isEmpty())
-                && currentOrigins.isEmpty() && currentCategories.isEmpty()
-                && currentSubCategories.isEmpty() && currentTiers.isEmpty()
+                && currentOrigins.isEmpty() && currentPriorities.isEmpty()
+                && currentEndTurnBehaviors.isEmpty() && currentTypes.isEmpty()
                 && currentFilters.isEmpty() && currentNegateFilters.isEmpty()
                 && EUIUtils.all(getGlobalFilters(), CustomFilterModule::isEmpty);
     }
@@ -111,15 +112,15 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         currentName = null;
         currentDescription = null;
         originsDropdown.setSelectionIndices((int[]) null, false);
-        categoryDropdown.setSelectionIndices((int[]) null, false);
-        subCategoryDropdown.setSelectionIndices((int[]) null, false);
-        tierDropdown.setSelectionIndices((int[]) null, false);
+        endTurnBehaviorDropdown.setSelectionIndices((int[]) null, false);
+        typeDropdown.setSelectionIndices((int[]) null, false);
+        priorityDropdown.setSelectionIndices((int[]) null, false);
         nameInput.setLabel("");
         descriptionInput.setLabel("");
         doForFilters(CustomFilterModule::reset);
     }
 
-    public boolean evaluate(PCLAugmentRenderable c) {
+    public boolean evaluate(PCLPowerRenderable c) {
         //Name check
         if (currentName != null && !currentName.isEmpty()) {
             String name = getNameForSort(c);
@@ -142,17 +143,17 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         }
 
         //Category check
-        if (!evaluateItem(currentCategories, c.augment.data.category)) {
+        if (!evaluateItem(currentPriorities, c.power.priority)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentSubCategories, c.augment.data.categorySub)) {
+        if (!evaluateItem(currentEndTurnBehaviors, c.power.endTurnBehavior)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentTiers, c.augment.data.tier)) {
+        if (!evaluateItem(currentTypes, c.power.type)) {
             return false;
         }
 
@@ -170,21 +171,21 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         return customModule == null || customModule.isItemValid(c);
     }
 
-    public List<EUIKeywordTooltip> getAllTooltips(PCLAugmentRenderable c) {
+    public List<EUIKeywordTooltip> getAllTooltips(PCLPowerRenderable c) {
         return c.getTipsForFilters();
     }
 
     @Override
-    public ArrayList<CustomFilterModule<PCLAugmentRenderable>> getGlobalFilters() {
+    public ArrayList<CustomFilterModule<PCLPowerRenderable>> getGlobalFilters() {
         return globalFilters;
     }
 
-    public PCLAugmentKeywordFilters initializeForCustomHeader(ItemGroup<PCLAugmentRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
-        PGR.augmentHeader.setGroup(group).snapToGroup(snapToGroup);
+    public PCLPowerKeywordFilters initializeForCustomHeader(ItemGroup<PCLPowerRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
+        PGR.powerHeader.setGroup(group).snapToGroup(snapToGroup);
         initialize(button -> {
             PGR.augmentHeader.updateForFilters();
             onClick.invoke(button);
-        }, PGR.augmentHeader.originalGroup, color, isAccessedFromCardPool);
+        }, PGR.powerHeader.originalGroup, color, isAccessedFromCardPool);
         PGR.augmentHeader.updateForFilters();
         EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
         EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
@@ -192,12 +193,12 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     }
 
     @Override
-    protected void initializeImpl(ActionT1<FilterKeywordButton> onClick, ArrayList<PCLAugmentRenderable> cards, AbstractCard.CardColor color, boolean isAccessedFromCardPool) {
+    protected void initializeImpl(ActionT1<FilterKeywordButton> onClick, ArrayList<PCLPowerRenderable> cards, AbstractCard.CardColor color, boolean isAccessedFromCardPool) {
         HashSet<ModInfo> availableMods = new HashSet<>();
-        int maxTier = 1;
+        HashSet<Integer> availablePriorities = new HashSet<>();
         if (referenceItems != null) {
             currentTotal = getReferenceCount();
-            for (PCLAugmentRenderable augment : referenceItems) {
+            for (PCLPowerRenderable augment : referenceItems) {
                 for (EUIKeywordTooltip tooltip : getAllTooltips(augment)) {
                     if (tooltip.canFilter) {
                         currentFilterCounts.merge(tooltip, 1, Integer::sum);
@@ -205,23 +206,25 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 }
 
                 availableMods.add(EUIGameUtils.getModInfo(augment));
-                maxTier = Math.max(augment.augment.data.tier, maxTier);
+                availablePriorities.add(augment.power.priority);
             }
             doForFilters(m -> m.initializeSelection(referenceItems));
         }
 
         ArrayList<ModInfo> modInfos = new ArrayList<>(availableMods);
         modInfos.sort((a, b) -> a == null ? -1 : b == null ? 1 : StringUtils.compare(a.Name, b.Name));
+        ArrayList<Integer> priorities = new ArrayList<>(availablePriorities);
+        priorities.sort(Integer::compare);
         originsDropdown.setItems(modInfos);
-        tierDropdown.setItems(EUIUtils.range(1, maxTier));
+        priorityDropdown.setItems(priorities);
     }
 
     @Override
     public boolean isHoveredImpl() {
         return originsDropdown.areAnyItemsHovered()
-                || categoryDropdown.areAnyItemsHovered()
-                || subCategoryDropdown.areAnyItemsHovered()
-                || tierDropdown.areAnyItemsHovered()
+                || endTurnBehaviorDropdown.areAnyItemsHovered()
+                || typeDropdown.areAnyItemsHovered()
+                || priorityDropdown.areAnyItemsHovered()
                 || nameInput.hb.hovered
                 || descriptionInput.hb.hovered
                 || EUIUtils.any(getGlobalFilters(), CustomFilterModule::isHovered)
@@ -231,9 +234,9 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     @Override
     public void renderFilters(SpriteBatch sb) {
         originsDropdown.tryRender(sb);
-        categoryDropdown.tryRender(sb);
-        subCategoryDropdown.tryRender(sb);
-        tierDropdown.tryRender(sb);
+        endTurnBehaviorDropdown.tryRender(sb);
+        typeDropdown.tryRender(sb);
+        priorityDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         descriptionInput.tryRender(sb);
         doForFilters(m -> m.render(sb));
@@ -242,11 +245,11 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     @Override
     public void updateFilters() {
         float xPos = updateDropdown(originsDropdown, hb.x - SPACING * 3.65f);
-        xPos = updateDropdown(categoryDropdown, xPos);
-        xPos = updateDropdown(subCategoryDropdown, xPos);
-        xPos = updateDropdown(tierDropdown, xPos);
+        xPos = updateDropdown(typeDropdown, xPos);
+        xPos = updateDropdown(endTurnBehaviorDropdown, xPos);
+        xPos = updateDropdown(priorityDropdown, xPos);
         nameInput.setPosition(hb.x + SPACING * 5.15f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
         descriptionInput.setPosition(nameInput.hb.cX + nameInput.hb.width + SPACING * 2.95f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
-        doForFilters(CustomFilterModule<PCLAugmentRenderable>::update);
+        doForFilters(CustomFilterModule<PCLPowerRenderable>::update);
     }
 }

@@ -39,13 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
-    protected static final float START_X = screenW(0.25f);
-    protected static final float PAD_X = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
-    protected static final float PAD_Y = scale(10);
-    public static final int EFFECT_COUNT = 2;
-    public static final float MENU_WIDTH = scale(160);
-    public static final float MENU_HEIGHT = scale(40);
-    public static final float SPACING_WIDTH = screenW(0.02f);
     protected PCLCustomCardEditCardScreen effect;
     protected EUIButton addLoadoutButton;
     protected EUIButton editLoadoutButton;

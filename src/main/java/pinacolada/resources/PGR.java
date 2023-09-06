@@ -59,6 +59,7 @@ import pinacolada.ui.debug.PCLDebugPotionPanel;
 import pinacolada.ui.debug.PCLDebugRelicPanel;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
+import pinacolada.ui.editor.power.PCLCustomPowerSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
 import pinacolada.ui.menu.*;
 import pinacolada.utilities.GameUtilities;
@@ -89,10 +90,13 @@ public class PGR {
     public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomPotionSelectorScreen customPotions;
+    public static PCLCustomPowerSelectorScreen customPowers;
     public static PCLCustomRelicSelectorScreen customRelics;
     public static PCLCustomRunScreen customMode;
     public static PCLColorlessGroupLibraryModule colorlessGroups;
     public static PCLLoadoutScreen loadoutEditor;
+    public static PCLPowerKeywordFilters powerFilters;
+    public static PCLPowerSortHeader powerHeader;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
     public static PCLSingleRelicPopup relicPopup;
@@ -247,6 +251,7 @@ public class PGR {
         PGR.loadoutEditor = new PCLLoadoutScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
         PGR.customPotions = new PCLCustomPotionSelectorScreen();
+        PGR.customPowers = new PCLCustomPowerSelectorScreen();
         PGR.customRelics = new PCLCustomRelicSelectorScreen();
         PGR.customMode = new PCLCustomRunScreen();
         PGR.charSelectProvider = new PCLCharacterSelectOverlay();
@@ -257,6 +262,8 @@ public class PGR {
         PGR.augmentFilters = new PCLAugmentKeywordFilters();
         PGR.augmentHeader = new PCLAugmentSortHeader(null);
         PGR.augmentLibrary = new PCLAugmentLibraryScreen();
+        PGR.powerFilters = new PCLPowerKeywordFilters();
+        PGR.powerHeader = new PCLPowerSortHeader(null);
         PGR.blackScreen = new EUIImage(ImageMaster.WHITE_SQUARE_IMG, new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
                 .setColor(0, 0, 0, 0.8f);

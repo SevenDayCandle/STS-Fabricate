@@ -35,6 +35,7 @@ public class PCLCoreStrings extends AbstractStrings {
     private final UIStrings misc = getUIStrings("Misc");
     private final UIStrings options = getUIStrings("Options");
     private final UIStrings optionDesc = getUIStrings("OptionDescriptions");
+    private final UIStrings power = getUIStrings("Power");
     private final UIStrings rewards = getUIStrings("Rewards");
     private final UIStrings seriesui = getUIStrings("SeriesUI");
     private final UIStrings scp = getUIStrings("SingleCardPopupButtons");
@@ -124,6 +125,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_deleteLoadout = cedit.TEXT[76];
     public final String cedit_invert = cedit.TEXT[77];
     public final String cedit_every = cedit.TEXT[78];
+    public final String cedit_minMaxStacks = cedit.TEXT[79];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -185,6 +187,11 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_augmentCategory = cetut.TEXT[57];
     public final String cetut_augmentSubCategory = cetut.TEXT[58];
     public final String cetut_augmentTier = cetut.TEXT[59];
+    public final String cetut_powerType = cetut.TEXT[60];
+    public final String cetut_powerTurnBehavior = cetut.TEXT[61];
+    public final String cetut_powerPriority = cetut.TEXT[62];
+    public final String cetut_powerMinMaxStacks = cetut.TEXT[63];
+    public final String cetut_powerStandard = cetut.TEXT[64];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -304,10 +311,12 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String menu_potionDesc = menu.TEXT[6];
     public final String menu_blight = menu.TEXT[7];
     public final String menu_blightDesc = menu.TEXT[8];
-    public final String menu_augmentLibrary = menu.TEXT[9];
-    public final String menu_augmentLibraryDesc = menu.TEXT[10];
-    public final String menu_augmentCreator = menu.TEXT[11];
-    public final String menu_augmentCreatorDesc = menu.TEXT[12];
+    public final String menu_power = menu.TEXT[9];
+    public final String menu_powerDesc = menu.TEXT[10];
+    public final String menu_augmentLibrary = menu.TEXT[11];
+    public final String menu_augmentLibraryDesc = menu.TEXT[12];
+    public final String menu_augmentCreator = menu.TEXT[13];
+    public final String menu_augmentCreatorDesc = menu.TEXT[14];
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
@@ -367,6 +376,17 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String optionDesc_madnessReplacements = optionDesc.TEXT[11];
     public final String optionDesc_fabricatePopup = optionDesc.TEXT[12];
     public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[13];
+    // Power
+    public final String power_turnBehavior = power.TEXT[0];
+    public final String power_priority = power.TEXT[1];
+    public final String power_common = power.TEXT[2];
+    public final String power_neutral = power.TEXT[3];
+    public final String power_permanent = power.TEXT[4];
+    public final String power_turnBased = power.TEXT[5];
+    public final String power_singleTurn = power.TEXT[6];
+    public final String power_singleTurnNext = power.TEXT[7];
+    public final String power_instant = power.TEXT[8];
+    public final String power_custom = power.TEXT[9];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];

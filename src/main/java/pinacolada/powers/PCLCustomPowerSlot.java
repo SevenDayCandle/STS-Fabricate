@@ -15,6 +15,7 @@ import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import static extendedui.EUIUtils.array;
@@ -90,6 +91,10 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         return null;
     }
 
+    public static ArrayList<PCLCustomPowerSlot> getAll() {
+        return CUSTOM_POWERS;
+    }
+
     public static void initialize() {
         CUSTOM_POWERS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
@@ -101,7 +106,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         }
     }
 
-    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
+    public static boolean isIDDuplicate(String input) {
         return isIDDuplicate(input, CUSTOM_POWERS);
     }
 
@@ -192,6 +197,10 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
 
     public PCLDynamicPower make() {
         return getBuilder(0).create();
+    }
+
+    public PCLPowerRenderable makeRenderable() {
+        return getBuilder(0).makeRenderableWithLevel(0);
     }
 
     // Copy down the properties from all builders into this slot

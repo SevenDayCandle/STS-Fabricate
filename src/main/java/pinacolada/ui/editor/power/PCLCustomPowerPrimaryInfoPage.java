@@ -1,10 +1,11 @@
-package pinacolada.ui.editor.relic;
+package pinacolada.ui.editor.power;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
@@ -21,34 +22,35 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
+import pinacolada.ui.editor.PCLCustomUpgradableEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomRelicEditRelicScreen effect;
+public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
+    protected PCLCustomPowerEditPowerScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUITextBoxInput flavorInput; // TODO implement this once you have multi-line input available
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected EUIDropdown<AbstractRelic.RelicTier> tierDropdown;
-    protected EUIDropdown<AbstractRelic.LandingSound> sfxDropdown;
+    protected EUIDropdown<AbstractPower.PowerType> typeDropdown;
+    protected EUIDropdown<PCLPowerData.Behavior> endTurnBehaviorDropdown;
     protected EUILabel idWarning;
-    protected PCLValueEditor maxUpgrades;
-    protected PCLValueEditor branchUpgrades;
+    protected PCLCustomUpgradableEditor minMaxAmount;
+    protected PCLValueEditor priority;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomRelicPrimaryInfoPage(PCLCustomRelicEditRelicScreen effect) {
+    public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditPowerScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,
@@ -98,42 +100,37 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
-        tierDropdown = new EUIDropdown<AbstractRelic.RelicTier>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForRelicTier)
-                .setOnChange(rarities -> {
-                    if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setTier(rarities.get(0)));
+        typeDropdown = new EUIDropdown<AbstractPower.PowerType>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), GameUtilities::textForPowerType)
+                .setOnChange(types -> {
+                    if (!types.isEmpty()) {
+                        effect.modifyAllBuilders((e, i) -> e.setType(types.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(getEligibleRarities())
-                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
-        sfxDropdown = new EUIDropdown<AbstractRelic.LandingSound>(new EUIHitbox(tierDropdown.hb.x + tierDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
+                .setItems(AbstractPower.PowerType.values())
+                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType);
+        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setSfx(types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(types.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.relic_landingSound)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
                 .setCanAutosizeButton(true)
-                .setItems(AbstractRelic.LandingSound.values())
-                .setTooltip(EUIRM.strings.relic_landingSound, PGR.core.strings.cetut_landingSound);
-        maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
-                .setLimits(-1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
-                .setHasInfinite(true, true);
-        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
-                .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
+                .setItems(PCLPowerData.Behavior.values())
+                .setTooltip(PGR.core.strings.power_turnBehavior, PGR.core.strings.cetut_powerTurnBehavior);
+        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);
+        priority = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.power_priority, (val) -> effect.modifyAllBuilders((e, i) -> e.setPriority(val)))
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)
                 .setHasInfinite(true, true);
 
         refresh();
-    }
-
-    public static List<AbstractRelic.RelicTier> getEligibleRarities() {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractRelic.RelicTier.values()) : GameUtilities.getStandardRelicTiers();
     }
 
     @Override
@@ -145,9 +142,9 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
-    protected void modifyMaxUpgrades(int val) {
-        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
+    protected void modifyMaxUpgrades(int min, int max) {
+        effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
+        effect.upgradeToggle.setActive(max > 0);
     }
 
     @Override
@@ -156,46 +153,46 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
-                tierDropdown.makeTour(true),
-                sfxDropdown.makeTour(true));
+                typeDropdown.makeTour(true),
+                endTurnBehaviorDropdown.makeTour(true));
     }
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomRelicSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomPowerSlot.BASE_POWER_ID));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
-        tierDropdown.setSelection(effect.getBuilder().tier, false);
-        sfxDropdown.setSelection(effect.getBuilder().sfx, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        typeDropdown.setSelection(effect.getBuilder().type, false);
+        endTurnBehaviorDropdown.setSelection(effect.getBuilder().endTurnBehavior, false);
+        minMaxAmount.setValue(effect.getBuilder().minAmount, effect.getBuilder().maxAmount, false);
+        priority.setValue(effect.getBuilder().priority, false);
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        effect.upgradeToggle.setActive(effect.getBuilder().maxAmount > 0);
     }
 
     @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
-        tierDropdown.tryRender(sb);
-        sfxDropdown.tryRender(sb);
+        typeDropdown.tryRender(sb);
+        endTurnBehaviorDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
-        maxUpgrades.tryRender(sb);
-        branchUpgrades.tryRender(sb);
+        minMaxAmount.tryRender(sb);
+        priority.tryRender(sb);
     }
 
     @Override
     public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
-        tierDropdown.tryUpdate();
-        sfxDropdown.tryUpdate();
+        typeDropdown.tryUpdate();
+        endTurnBehaviorDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
-        maxUpgrades.tryUpdate();
-        branchUpgrades.tryUpdate();
+        minMaxAmount.tryUpdate();
+        priority.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {
@@ -205,8 +202,8 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     private void validifyCardID(String cardID) {
-        String fullID = PCLCustomRelicSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
-        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomRelicSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
+        String fullID = PCLCustomPowerSlot.BASE_POWER_ID + cardID;
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomPowerSlot.isIDDuplicate(fullID)) {
             idWarning.setActive(true);
             effect.saveButton.setInteractable(false);
         }
