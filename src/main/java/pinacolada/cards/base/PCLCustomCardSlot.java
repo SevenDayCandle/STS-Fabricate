@@ -31,8 +31,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     public static final String BASE_CARD_ID = "PCLC";
     public static final String SUBFOLDER = "cards";
 
-    protected transient String filePath;
-    protected transient String imagePath;
     public String loadout;
     public Integer maxUpgradeLevel = 1;
     public Integer maxCopies = -1;

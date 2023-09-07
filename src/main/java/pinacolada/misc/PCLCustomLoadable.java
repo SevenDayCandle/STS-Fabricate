@@ -81,10 +81,6 @@ public abstract class PCLCustomLoadable implements Serializable {
         return getBaseFolderPath() + "/" + ID + ".png";
     }
 
-    protected String makeMigrationImagePath() {
-        return FOLDER + "/" + ID + ".png";
-    }
-
     abstract protected String getSubfolderPath();
 
 }

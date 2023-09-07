@@ -25,8 +25,6 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     public static final String BASE_POWER_ID = "PCLW";
     public static final String SUBFOLDER = "powers";
 
-    protected transient String filePath;
-    protected transient String imagePath;
     public boolean isCommon;
     public boolean isMetascaling;
     public boolean isPostActionPower;

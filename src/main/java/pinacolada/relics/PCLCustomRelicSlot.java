@@ -29,8 +29,6 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public static final String BASE_RELIC_ID = "PCLR";
     public static final String SUBFOLDER = "relics";
 
-    protected transient String filePath;
-    protected transient String imagePath;
     public Integer maxUpgradeLevel = 0;
     public Integer branchUpgradeFactor = 0;
     public Integer[] counter = array(0);

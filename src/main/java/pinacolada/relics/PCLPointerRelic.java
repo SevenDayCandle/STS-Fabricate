@@ -272,6 +272,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         skills = new PSkillPowerContainer();
         setup();
         usedUp = false;
+        initializePCLTips();
     }
 
     public void setup() {

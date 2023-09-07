@@ -6,36 +6,38 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.screens.MasterDeckViewScreen;
 import extendedui.EUIGameUtils;
-import extendedui.ui.screens.RelicPoolScreen;
+import extendedui.ui.screens.PotionPoolScreen;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLPotion;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PGR;
+import pinacolada.ui.editor.potion.PCLCustomPotionEditPotionScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class RelicPoolScreenPatches {
+public class PotionPoolScreenPatches {
     protected static PCLEffectWithCallback<?> currentEffect;
-    public static RelicPoolScreen.DebugOption editRelic = new RelicPoolScreen.DebugOption(PGR.core.strings.misc_edit, RelicPoolScreenPatches::edit);
+    public static PotionPoolScreen.DebugOption editPotion = new PotionPoolScreen.DebugOption(PGR.core.strings.misc_edit, PotionPoolScreenPatches::edit);
 
-    public static void edit(RelicPoolScreen pool, AbstractRelic c) {
-        PCLCustomRelicSlot relicSlot = PCLCustomRelicSlot.get(c.relicId);
-        if (relicSlot != null) {
+    public static void edit(PotionPoolScreen pool, AbstractPotion c) {
+        PCLCustomPotionSlot potionSlot = PCLCustomPotionSlot.get(c.ID);
+        if (potionSlot != null) {
             if (EUIGameUtils.inGame()) {
                 AbstractDungeon.overlayMenu.cancelButton.hide();
             }
             GameUtilities.setTopPanelVisible(false);
-            currentEffect = new PCLCustomRelicEditRelicScreen(relicSlot, true)
+            currentEffect = new PCLCustomPotionEditPotionScreen(potionSlot, true)
                     .setOnSave(() -> {
-                        PCLCustomRelicSlot.editSlot(relicSlot, relicSlot.ID); // Card slot ID should never change
-                        for (AbstractRelic r : AbstractDungeon.player.relics) {
-                            if (r instanceof PCLPointerRelic && c.relicId.equals(r.relicId)) {
-                                ((PCLPointerRelic) r).reset();
+                        PCLCustomPotionSlot.editSlot(potionSlot, potionSlot.ID); // Card slot ID should never change
+                        for (AbstractPotion r : AbstractDungeon.player.potions) {
+                            if (r instanceof PCLPotion && c.ID.equals(r.ID)) {
+                                ((PCLPotion) r).initialize();
                             }
                         }
                     })
@@ -49,29 +51,21 @@ public class RelicPoolScreenPatches {
 
     }
 
-    @SpirePatch(clz = RelicPoolScreen.class, method = "getOptions")
-    public static class RelicPoolScreenPatches_GetOptions {
+    @SpirePatch(clz = PotionPoolScreen.class, method = "getOptions")
+    public static class PotionPoolScreenPatches_GetOptions {
         @SpirePostfixPatch
-        public static ArrayList<RelicPoolScreen.DebugOption> postfix(ArrayList<RelicPoolScreen.DebugOption> retVal, AbstractRelic c) {
-            if (PCLCustomRelicSlot.get(c.relicId) != null) {
-                retVal.add(editRelic);
+        public static ArrayList<PotionPoolScreen.DebugOption> postfix(ArrayList<PotionPoolScreen.DebugOption> retVal, AbstractPotion c) {
+            if (PCLCustomPotionSlot.get(c.ID) != null) {
+                retVal.add(editPotion);
             }
             return retVal;
         }
     }
 
-    @SpirePatch(clz = RelicPoolScreen.class, method = "removeRelicFromPool")
-    public static class RelicPoolScreenPatches_RemoveRelicFromPool {
-        @SpirePostfixPatch
-        public static void postfix(RelicPoolScreen __instance, AbstractRelic c) {
-            PGR.dungeon.banRelic(c.relicId);
-        }
-    }
-
-    @SpirePatch(clz = RelicPoolScreen.class, method = "update")
-    public static class RelicPoolScreenPatches_Update {
+    @SpirePatch(clz = PotionPoolScreen.class, method = "update")
+    public static class PotionPoolScreenPatches_Update {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(RelicPoolScreen __instance) {
+        public static SpireReturn<Void> prefix(PotionPoolScreen __instance) {
             if (currentEffect != null) {
                 PGR.blackScreen.update();
                 currentEffect.update();
@@ -85,10 +79,10 @@ public class RelicPoolScreenPatches {
         }
     }
 
-    @SpirePatch(clz = RelicPoolScreen.class, method = "render")
-    public static class RelicPoolScreenPatches_Render {
+    @SpirePatch(clz = PotionPoolScreen.class, method = "render")
+    public static class PotionPoolScreenPatches_Render {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(RelicPoolScreen __instance, SpriteBatch sb) {
+        public static SpireReturn<Void> prefix(PotionPoolScreen __instance, SpriteBatch sb) {
             if (currentEffect != null) {
                 PGR.blackScreen.render(sb);
                 currentEffect.render(sb);

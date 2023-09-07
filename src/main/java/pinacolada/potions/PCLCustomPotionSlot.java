@@ -29,8 +29,6 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     public static final String BASE_POTION_ID = "PCLP";
     public static final String SUBFOLDER = "potions";
 
-    protected transient String filePath;
-    protected transient String imagePath;
     public Integer maxUpgradeLevel = 0;
     public Integer branchUpgradeFactor = 0;
     public Integer[] counter = array(0);
@@ -130,14 +128,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     }
 
     public static PCLCustomPotionSlot get(String id) {
-        for (ArrayList<PCLCustomPotionSlot> slots : CUSTOM_COLOR_LISTS.values()) {
-            for (PCLCustomPotionSlot slot : slots) {
-                if (slot.ID.equals(id)) {
-                    return slot;
-                }
-            }
-        }
-        return null;
+        return CUSTOM_MAPPING.get(id);
     }
 
     public static String getBaseIDPrefix(AbstractCard.CardColor color) {
