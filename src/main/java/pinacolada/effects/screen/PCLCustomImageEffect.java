@@ -46,6 +46,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     public static final int CARD_IMG_WIDTH = 500;
     public static final int CARD_IMG_HEIGHT = 380;
+    public static final int POWER_IMG_SIZE = 84;
     public static final int RELIC_IMG_SIZE = 128;
     private final DraggableHitbox hb;
     private final EUILabel instructionsLabel;
@@ -144,6 +145,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     public static PCLCustomImageEffect forCard(Texture texture) {
         return new PCLCustomImageEffect(texture, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
+    }
+
+    public static PCLCustomImageEffect forPower(Texture texture) {
+        return new PCLCustomImageEffect(texture, POWER_IMG_SIZE, POWER_IMG_SIZE);
     }
 
     public static PCLCustomImageEffect forRelic(Texture texture) {

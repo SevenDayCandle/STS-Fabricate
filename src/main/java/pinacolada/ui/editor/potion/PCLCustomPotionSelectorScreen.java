@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
@@ -30,6 +31,7 @@ import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
 import pinacolada.potions.PCLPotionData;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 
 import java.awt.*;
@@ -141,12 +143,8 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             PCLCustomPotionSlot slot = new PCLCustomPotionSlot(currentColor);
             currentDialog = new PCLCustomPotionEditPotionScreen(slot)
                     .setOnSave(() -> {
-                        AbstractPotion newPotion = slot.make();
-                        currentSlots.put(newPotion, slot);
-                        PCLCustomPotionSlot.getPotions(currentColor).add(slot);
-                        grid.group.group = EUI.potionHeader.originalGroup;
-                        grid.add(newPotion);
-                        slot.commitBuilder();
+                        PCLCustomPotionSlot.addSlot(slot);
+                        putInList(slot);
                         refreshGrid();
                     });
         }
@@ -157,13 +155,8 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             PCLCustomPotionSlot slot = new PCLCustomPotionSlot(cardSlot);
             currentDialog = new PCLCustomPotionEditPotionScreen(slot)
                     .setOnSave(() -> {
-                        slot.commitBuilder();
-                        AbstractPotion newPotion = slot.getBuilder(0).create();
-                        currentSlots.put(newPotion, slot);
-                        PCLCustomPotionSlot.getPotions(currentColor).add(slot);
-                        grid.group.group = EUI.potionHeader.originalGroup;
-                        grid.add(newPotion);
-                        slot.commitBuilder();
+                        PCLCustomPotionSlot.addSlot(slot);
+                        putInList(slot);
                         refreshGrid();
                     });
         }
@@ -178,11 +171,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                             open(null, co, this.onClose);
                             currentDialog = new PCLCustomPotionEditPotionScreen(slot)
                                     .setOnSave(() -> {
-                                        slot.commitBuilder();
-                                        AbstractPotion newPotion = slot.getBuilder(0).create();
-                                        currentSlots.put(newPotion, slot);
-                                        PCLCustomPotionSlot.getPotions(co).add(slot);
-                                        slot.commitBuilder();
+                                        PCLCustomPotionSlot.addSlot(slot);
                                     });
                         }
                     });
@@ -191,15 +180,13 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
 
     public void edit(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
+            String oldID = cardSlot.ID;
             currentDialog = new PCLCustomPotionEditPotionScreen(cardSlot)
                     .setOnSave(() -> {
-                        cardSlot.commitBuilder();
-                        AbstractPotion newPotion = cardSlot.getBuilder(0).create();
-                        grid.group.group = EUI.potionHeader.originalGroup;
+                        PCLCustomPotionSlot.editSlot(cardSlot, oldID);
+                        putInList(cardSlot);
                         grid.remove(card);
                         currentSlots.remove(card);
-                        currentSlots.put(newPotion, cardSlot);
-                        grid.add(newPotion);
                         refreshGrid();
                     });
         }
@@ -234,12 +221,8 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                     PCLCustomPotionSlot slot = new PCLCustomPotionSlot((PCLPotion) card, currentColor);
                     currentDialog = new PCLCustomPotionEditPotionScreen(slot)
                             .setOnSave(() -> {
-                                slot.commitBuilder();
-                                AbstractPotion newPotion = slot.make();
-                                currentSlots.put(newPotion, slot);
-                                PCLCustomPotionSlot.getPotions(currentColor).add(slot);
-                                grid.group.group = EUI.potionHeader.originalGroup;
-                                grid.add(newPotion);
+                                PCLCustomPotionSlot.addSlot(slot);
+                                putInList(slot);
                                 refreshGrid();
                             });
                 }
@@ -280,6 +263,13 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
         refreshGrid();
     }
 
+    private void putInList(PCLCustomPotionSlot slot) {
+        AbstractPotion newPotion = slot.make();
+        currentSlots.put(newPotion, slot);
+        grid.group.group = EUI.potionHeader.originalGroup;
+        grid.add(newPotion);
+    }
+
     public void refreshGrid() {
         EUI.potionFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
@@ -295,7 +285,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                             grid.group.group = EUI.potionHeader.originalGroup;
                             grid.remove(card);
                             currentSlots.remove(card);
-                            v.wipeBuilder();
+                            PCLCustomPotionSlot.deleteSlot(v);
                             refreshGrid();
                         }
                     });

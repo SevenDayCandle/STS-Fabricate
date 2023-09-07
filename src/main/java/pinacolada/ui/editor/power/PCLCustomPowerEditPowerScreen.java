@@ -65,7 +65,7 @@ public class PCLCustomPowerEditPowerScreen extends PCLCustomEditEntityScreen<PCL
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        currentDialog = PCLCustomImageEffect.forRelic(image)
+        currentDialog = PCLCustomImageEffect.forPower(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));

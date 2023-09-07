@@ -23,6 +23,7 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
@@ -143,13 +144,8 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             PCLCustomRelicSlot slot = new PCLCustomRelicSlot(currentColor);
             currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                     .setOnSave(() -> {
-                        AbstractRelic newRelic = slot.make();
-                        newRelic.isSeen = true;
-                        currentSlots.put(newRelic, slot);
-                        PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                        grid.group.group = EUI.relicHeader.originalGroup;
-                        grid.add(newRelic);
-                        slot.commitBuilder();
+                        PCLCustomRelicSlot.addSlot(slot);
+                        putInList(slot);
                         refreshGrid();
                     });
         }
@@ -160,14 +156,8 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             PCLCustomRelicSlot slot = new PCLCustomRelicSlot(cardSlot);
             currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                     .setOnSave(() -> {
-                        slot.commitBuilder();
-                        AbstractRelic newRelic = slot.getBuilder(0).create();
-                        newRelic.isSeen = true;
-                        currentSlots.put(newRelic, slot);
-                        PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                        grid.group.group = EUI.relicHeader.originalGroup;
-                        grid.add(newRelic);
-                        slot.commitBuilder();
+                        PCLCustomRelicSlot.addSlot(slot);
+                        putInList(slot);
                         refreshGrid();
                     });
         }
@@ -182,12 +172,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                             open(null, co, this.onClose);
                             currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                                     .setOnSave(() -> {
-                                        slot.commitBuilder();
-                                        AbstractRelic newRelic = slot.getBuilder(0).create();
-                                        newRelic.isSeen = true;
-                                        currentSlots.put(newRelic, slot);
-                                        PCLCustomRelicSlot.getRelics(co).add(slot);
-                                        slot.commitBuilder();
+                                        PCLCustomRelicSlot.addSlot(slot);
                                     });
                         }
                     });
@@ -196,16 +181,13 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
 
     public void edit(AbstractRelic card, PCLCustomRelicSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
+            String oldID = cardSlot.ID;
             currentDialog = new PCLCustomRelicEditRelicScreen(cardSlot)
                     .setOnSave(() -> {
-                        cardSlot.commitBuilder();
-                        AbstractRelic newRelic = cardSlot.getBuilder(0).create();
-                        newRelic.isSeen = true;
-                        grid.group.group = EUI.relicHeader.originalGroup;
+                        PCLCustomRelicSlot.editSlot(cardSlot, oldID);
+                        putInList(cardSlot);
                         grid.remove(card);
                         currentSlots.remove(card);
-                        currentSlots.put(newRelic, cardSlot);
-                        grid.add(newRelic);
                         refreshGrid();
                     });
         }
@@ -242,13 +224,8 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     PCLCustomRelicSlot slot = new PCLCustomRelicSlot((PCLPointerRelic) card, currentColor);
                     currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                             .setOnSave(() -> {
-                                slot.commitBuilder();
-                                AbstractRelic newRelic = slot.make();
-                                newRelic.isSeen = true;
-                                currentSlots.put(newRelic, slot);
-                                PCLCustomRelicSlot.getRelics(currentColor).add(slot);
-                                grid.group.group = EUI.relicHeader.originalGroup;
-                                grid.add(newRelic);
+                                PCLCustomRelicSlot.addSlot(slot);
+                                putInList(slot);
                                 refreshGrid();
                             });
                 }
@@ -291,6 +268,14 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         refreshGrid();
     }
 
+    private void putInList(PCLCustomRelicSlot slot) {
+        AbstractRelic newRelic = slot.make();
+        newRelic.isSeen = true;
+        currentSlots.put(newRelic, slot);
+        grid.group.group = EUI.relicHeader.originalGroup;
+        grid.add(newRelic);
+    }
+
     public void refreshGrid() {
         EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
             grid.moveToTop();
@@ -306,7 +291,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                             grid.group.group = EUI.relicHeader.originalGroup;
                             grid.remove(card);
                             currentSlots.remove(card);
-                            v.wipeBuilder();
+                            PCLCustomRelicSlot.deleteSlot(v);
                             refreshGrid();
                         }
                     });

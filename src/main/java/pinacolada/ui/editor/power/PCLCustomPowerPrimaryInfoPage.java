@@ -109,8 +109,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setItems(AbstractPower.PowerType.values())
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType);
-        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
+        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLPowerData.Behavior::getText)
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
                         effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(types.get(0)));
@@ -120,11 +119,11 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(PCLPowerData.Behavior.values())
                 .setTooltip(PGR.core.strings.power_turnBehavior, PGR.core.strings.cetut_powerTurnBehavior);
-        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(START_X, screenH(0.41f), MENU_WIDTH / 4, MENU_HEIGHT)
+        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(screenW(0.26f), screenH(0.41f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);
-        priority = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        priority = new PCLValueEditor(new EUIHitbox(screenW(0.36f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.power_priority, (val) -> effect.modifyAllBuilders((e, i) -> e.setPriority(val)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)

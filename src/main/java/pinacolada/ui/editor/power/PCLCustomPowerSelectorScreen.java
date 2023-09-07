@@ -210,7 +210,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
                             grid.group.group = PGR.powerHeader.originalGroup;
                             grid.remove(card);
                             currentSlots.remove(card);
-                            v.wipeBuilder();
+                            PCLCustomPowerSlot.deleteSlot(v);
                             refreshGrid();
                         }
                     });

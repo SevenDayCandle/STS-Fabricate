@@ -23,7 +23,8 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotionData, PCLDynamicPotion> {
     private static final TypeToken<PCLCustomPotionSlot> TTOKEN = new TypeToken<PCLCustomPotionSlot>() {
     };
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomPotionSlot>> CUSTOM_POTIONS = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomPotionSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
+    private static final HashMap<String, PCLCustomPotionSlot> CUSTOM_MAPPING = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_POTION_ID = "PCLP";
     public static final String SUBFOLDER = "potions";
@@ -100,6 +101,12 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         PROVIDERS.add(provider);
     }
 
+    public static void addSlot(PCLCustomPotionSlot slot) {
+        CUSTOM_COLOR_LISTS.get(slot.slotColor).add(slot);
+        CUSTOM_MAPPING.put(slot.ID, slot);
+        slot.commitBuilder();
+    }
+
     // Only allow a potion to be copied into a custom slot if it is a PCLPotion and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
     public static boolean canFullyCopy(AbstractPotion potion) {
         if (potion instanceof PCLPotion) {
@@ -108,8 +115,22 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         return false;
     }
 
+    public static void deleteSlot(PCLCustomPotionSlot slot) {
+        CUSTOM_COLOR_LISTS.get(slot.slotColor).remove(slot);
+        CUSTOM_MAPPING.remove(slot.ID);
+        slot.wipeBuilder();
+    }
+
+    public static void editSlot(PCLCustomPotionSlot slot, String oldID) {
+        if (!oldID.equals(slot.ID)) {
+            CUSTOM_MAPPING.remove(oldID);
+            CUSTOM_MAPPING.put(slot.ID, slot);
+        }
+        slot.commitBuilder();
+    }
+
     public static PCLCustomPotionSlot get(String id) {
-        for (ArrayList<PCLCustomPotionSlot> slots : CUSTOM_POTIONS.values()) {
+        for (ArrayList<PCLCustomPotionSlot> slots : CUSTOM_COLOR_LISTS.values()) {
             for (PCLCustomPotionSlot slot : slots) {
                 if (slot.ID.equals(id)) {
                     return slot;
@@ -125,16 +146,16 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
 
     public static ArrayList<PCLCustomPotionSlot> getPotions(AbstractCard.CardColor color) {
         if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_POTIONS.values());
+            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
         }
-        if (!CUSTOM_POTIONS.containsKey(color)) {
-            CUSTOM_POTIONS.put(color, new ArrayList<>());
+        if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+            CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
-        return CUSTOM_POTIONS.get(color);
+        return CUSTOM_COLOR_LISTS.get(color);
     }
 
     public static void initialize() {
-        CUSTOM_POTIONS.clear();
+        CUSTOM_COLOR_LISTS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
@@ -172,7 +193,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         return makeNewID(getBaseIDPrefix(color), getPotions(color));
     }
 
-    public void commitBuilder() {
+    protected void commitBuilder() {
         recordBuilder();
         String newFilePath = makeFilePath();
         String newImagePath = makeImagePath();
@@ -238,7 +259,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     }
 
     // Copy down the properties from all builders into this slot
-    public void recordBuilder() {
+    protected void recordBuilder() {
         ArrayList<String> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
@@ -270,7 +291,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         forms = tempForms.toArray(new String[]{});
     }
 
-    public void setupBuilder(String fp) {
+    protected void setupBuilder(String fp) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
 
@@ -289,8 +310,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Potion: " + filePath);
     }
 
-    public void wipeBuilder() {
-        CUSTOM_POTIONS.get(slotColor).remove(this);
+    protected void wipeBuilder() {
         FileHandle writer = getImageHandle();
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Potion Image: " + imagePath);

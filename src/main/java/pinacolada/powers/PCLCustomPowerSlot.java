@@ -84,10 +84,18 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         slot.registerTooltip();
     }
 
+    public static void deleteSlot(PCLCustomPowerSlot slot) {
+        CUSTOM_POWERS.remove(slot.ID);
+        EUIKeywordTooltip.removeTemp(slot.ID);
+        slot.wipeBuilder();
+    }
+
     public static void editSlot(PCLCustomPowerSlot slot, String oldID) {
-        CUSTOM_POWERS.remove(oldID);
-        CUSTOM_POWERS.put(slot.ID, slot);
-        EUIKeywordTooltip.removeTemp(oldID);
+        if (!oldID.equals(slot.ID)) {
+            CUSTOM_POWERS.remove(oldID);
+            CUSTOM_POWERS.put(slot.ID, slot);
+            EUIKeywordTooltip.removeTemp(oldID);
+        }
         slot.commitBuilder();
         slot.registerTooltip();
     }
@@ -143,7 +151,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         return makeNewIDByKey(getBaseIDPrefix(BASE_POWER_ID, AbstractCard.CardColor.COLORLESS), CUSTOM_POWERS.keySet());
     }
 
-    public void commitBuilder() {
+    protected void commitBuilder() {
         recordBuilder();
         String newFilePath = makeFilePath();
         String newImagePath = makeImagePath();
@@ -213,7 +221,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     // Copy down the properties from all builders into this slot
-    public void recordBuilder() {
+    protected void recordBuilder() {
         ArrayList<String[]> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
@@ -238,7 +246,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         effects = tempForms.toArray(new String[][]{});
     }
 
-    public void registerTooltip() {
+    protected void registerTooltip() {
         PCLDynamicPowerData first = getBuilder(0);
         if (first != null) {
             first.updateTooltip();
@@ -246,7 +254,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         }
     }
 
-    public void setupBuilder(String fp) {
+    protected void setupBuilder(String fp) {
         builders = new ArrayList<>();
 
         for (String[] f : effects) {
@@ -263,9 +271,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         EUIUtils.logInfo(PCLCustomPowerSlot.class, "Loaded Custom Power: " + filePath);
     }
 
-    public void wipeBuilder() {
-        CUSTOM_POWERS.remove(this.ID);
-        EUIKeywordTooltip.removeTemp(this.ID);
+    protected void wipeBuilder() {
         FileHandle writer = getImageHandle();
         writer.delete();
         EUIUtils.logInfo(PCLCustomPowerSlot.class, "Deleted Custom Power Image: " + imagePath);

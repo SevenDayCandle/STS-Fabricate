@@ -14,7 +14,6 @@ import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +23,8 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicData, PCLDynamicRelic> {
     private static final TypeToken<PCLCustomRelicSlot> TTOKEN = new TypeToken<PCLCustomRelicSlot>() {
     };
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomRelicSlot>> CUSTOM_RELICS = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomRelicSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
+    private static final HashMap<String, PCLCustomRelicSlot> CUSTOM_MAPPING = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_RELIC_ID = "PCLR";
     public static final String SUBFOLDER = "relics";
@@ -97,6 +97,12 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         PROVIDERS.add(provider);
     }
 
+    public static void addSlot(PCLCustomRelicSlot slot) {
+        CUSTOM_COLOR_LISTS.get(slot.slotColor).add(slot);
+        CUSTOM_MAPPING.put(slot.ID, slot);
+        slot.commitBuilder();
+    }
+
     // Only allow a relic to be copied into a custom slot if it is a PCLPointerRelic and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
     public static boolean canFullyCopy(AbstractRelic relic) {
         if (relic instanceof PCLPointerRelic) {
@@ -105,15 +111,22 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return false;
     }
 
-    public static PCLCustomRelicSlot get(String id) {
-        for (ArrayList<PCLCustomRelicSlot> slots : CUSTOM_RELICS.values()) {
-            for (PCLCustomRelicSlot slot : slots) {
-                if (slot.ID.equals(id)) {
-                    return slot;
-                }
-            }
+    public static void deleteSlot(PCLCustomRelicSlot slot) {
+        CUSTOM_COLOR_LISTS.get(slot.slotColor).remove(slot);
+        CUSTOM_MAPPING.remove(slot.ID);
+        slot.wipeBuilder();
+    }
+
+    public static void editSlot(PCLCustomRelicSlot slot, String oldID) {
+        if (!oldID.equals(slot.ID)) {
+            CUSTOM_MAPPING.remove(oldID);
+            CUSTOM_MAPPING.put(slot.ID, slot);
         }
-        return null;
+        slot.commitBuilder();
+    }
+
+    public static PCLCustomRelicSlot get(String id) {
+        return CUSTOM_MAPPING.get(id);
     }
 
     public static String getBaseIDPrefix(AbstractCard.CardColor color) {
@@ -122,16 +135,16 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
     public static ArrayList<PCLCustomRelicSlot> getRelics(AbstractCard.CardColor color) {
         if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_RELICS.values());
+            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
         }
-        if (!CUSTOM_RELICS.containsKey(color)) {
-            CUSTOM_RELICS.put(color, new ArrayList<>());
+        if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+            CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
-        return CUSTOM_RELICS.get(color);
+        return CUSTOM_COLOR_LISTS.get(color);
     }
 
     public static void initialize() {
-        CUSTOM_RELICS.clear();
+        CUSTOM_COLOR_LISTS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
@@ -169,7 +182,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return makeNewID(getBaseIDPrefix(color), getRelics(color));
     }
 
-    public void commitBuilder() {
+    protected void commitBuilder() {
         recordBuilder();
         String newFilePath = makeFilePath();
         String newImagePath = makeImagePath();
@@ -235,7 +248,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     // Copy down the properties from all builders into this slot
-    public void recordBuilder() {
+    protected void recordBuilder() {
         ArrayList<String> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
@@ -263,7 +276,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         forms = tempForms.toArray(new String[]{});
     }
 
-    public void setupBuilder(String fp) {
+    protected void setupBuilder(String fp) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
 
@@ -282,8 +295,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Relic: " + filePath);
     }
 
-    public void wipeBuilder() {
-        CUSTOM_RELICS.get(slotColor).remove(this);
+    protected void wipeBuilder() {
         FileHandle writer = getImageHandle();
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic Image: " + imagePath);

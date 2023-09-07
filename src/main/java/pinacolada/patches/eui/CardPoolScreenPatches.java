@@ -35,7 +35,7 @@ public class CardPoolScreenPatches {
                 c.unhover();
                 currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
                         .setOnSave(() -> {
-                            cardSlot.commitBuilder();
+                            PCLCustomCardSlot.editSlot(cardSlot, cardSlot.ID); // Card slot ID should never change
                             if (c instanceof EditorCard) {
                                 ((EditorCard) c).fullReset();
                                 ((EditorCard) pool.cardGrid.getUpgrade(c)).fullReset();
@@ -63,7 +63,7 @@ public class CardPoolScreenPatches {
                 GameUtilities.setTopPanelVisible(false);
                 currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
                         .setOnSave(() -> {
-                            cardSlot.commitBuilder();
+                            PCLCustomCardSlot.editSlot(cardSlot, cardSlot.ID); // Card slot ID should never change
                             for (AbstractCard ca : GameUtilities.getAllCopies(cardSlot.ID)) {
                                 if (ca instanceof EditorCard) {
                                     ((EditorCard) ca).fullReset();
