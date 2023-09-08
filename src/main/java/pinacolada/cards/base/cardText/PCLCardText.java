@@ -366,7 +366,7 @@ public class PCLCardText {
             ((PCLCard) card.cardsToPreview).cardText.badgeAlphaOffset = badgeAlphaOffset;
         }
 
-        if (card.renderTip && !card.isPopup) {
+        if (card.canRenderTip() && !card.isPopup) {
             if (badgeAlphaOffset < badgeAlphaTargetOffset) {
                 badgeAlphaOffset += EUI.delta(0.33f);
                 if (badgeAlphaOffset > badgeAlphaTargetOffset) {

@@ -46,6 +46,6 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
             addPowerMove(pe.makeCopy());
         }
 
-        this.targetRequired = this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
+        initializeTargetRequired();
     }
 }

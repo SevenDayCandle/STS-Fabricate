@@ -21,35 +21,24 @@ public class FakeLoadout extends PCLLoadout {
 
     @Override
     public void addBasicDefends(LoadoutCardSlot slot) {
-        if (!GameUtilities.isColorlessCardColor(color)) {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
-                if (c.hasTag(AbstractCard.CardTags.STARTER_STRIKE)) {
-                    slot.addItem(c.cardID, 0);
-                }
-            }
-        }
+        addLoadoutCardsImpl(slot);
     }
 
     @Override
     public void addBasicStrikes(LoadoutCardSlot slot) {
-        if (!GameUtilities.isColorlessCardColor(color)) {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
-                if (c.hasTag(AbstractCard.CardTags.STARTER_DEFEND)) {
-                    slot.addItem(c.cardID, 0);
-                }
-            }
-        }
+        addLoadoutCardsImpl(slot);
     }
 
     @Override
     public void addLoadoutCards(LoadoutCardSlot slot) {
+        addLoadoutCardsImpl(slot);
+    }
+
+    protected void addLoadoutCardsImpl(LoadoutCardSlot slot) {
         if (!GameUtilities.isColorlessCardColor(color)) {
             for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
                 switch (c.rarity) {
                     case BASIC:
-                        if ((c.hasTag(AbstractCard.CardTags.STARTER_STRIKE) || c.hasTag(AbstractCard.CardTags.STARTER_DEFEND))) {
-                            break;
-                        }
                     case COMMON:
                     case UNCOMMON:
                     case RARE:
@@ -153,10 +142,10 @@ public class FakeLoadout extends PCLLoadout {
 
     protected void setDefaultCardsForData(PCLLoadoutData data) {
         data.getCardSlot(0).select(0, 4).markAllSeen();
-        data.getCardSlot(1).select(0, 4).markAllSeen();
-        data.getCardSlot(2).select(0, 1).markCurrentSeen();
-        data.getCardSlot(3).select(1, 1).markCurrentSeen();
-        data.getCardSlot(4).select(2, 1).markCurrentSeen();
+        data.getCardSlot(1).select(1, 4).markAllSeen();
+        data.getCardSlot(2).select(2, 1).markCurrentSeen();
+        data.getCardSlot(3).select(3, 1).markCurrentSeen();
+        data.getCardSlot(4).select(4, 1).markCurrentSeen();
         data.getCardSlot(5).clear();
     }
 }

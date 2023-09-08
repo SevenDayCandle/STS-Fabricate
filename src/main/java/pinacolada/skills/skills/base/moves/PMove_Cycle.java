@@ -48,10 +48,4 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
-    }
 }

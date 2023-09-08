@@ -538,8 +538,8 @@ public abstract class PCLLoadout {
             data.values.put(type, 0);
         }
 
-        LoadoutCardSlot strikeSlot = data.addCardSlot(1, maxItems);
-        LoadoutCardSlot defendSlot = data.addCardSlot(1, maxItems);
+        LoadoutCardSlot strikeSlot = data.addCardSlot(0, maxItems);
+        LoadoutCardSlot defendSlot = data.addCardSlot(0, maxItems);
         addBasicStrikes(strikeSlot);
         addBasicDefends(defendSlot);
 

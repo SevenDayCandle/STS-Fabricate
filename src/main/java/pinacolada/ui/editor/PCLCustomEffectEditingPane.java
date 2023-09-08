@@ -485,6 +485,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                     .setActive(targets.getAllItems().size() > 1);
             piles.setItems(PSkill.getEligiblePiles(node.skill))
                     .setActive(piles.getAllItems().size() > 1);
+            destinations.setItems(PSkill.getEligibleDestinations(node.skill))
+                    .setActive(destinations.getAllItems().size() >= 1);
             origins.setItems(PSkill.getEligibleOrigins(node.skill))
                     .setActive(origins.getAllItems().size() >= 1);
             piles.setItems(PSkill.getEligiblePiles(node.skill))

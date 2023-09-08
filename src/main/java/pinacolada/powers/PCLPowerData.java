@@ -423,7 +423,6 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         TurnBased,
         SingleTurn,
         SingleTurnNext,
-        Instant,
         Special;
 
         public String getText() {
@@ -436,8 +435,6 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurn;
                 case SingleTurnNext:
                     return PGR.core.strings.power_singleTurnNext;
-                case Instant:
-                    return PGR.core.strings.power_instant;
             }
             return PGR.core.strings.power_custom;
         }

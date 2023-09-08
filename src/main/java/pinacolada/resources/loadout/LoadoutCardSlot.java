@@ -125,7 +125,12 @@ public class LoadoutCardSlot extends LoadoutSlot<String, LoadoutCardSlot.Item> {
         }
         else {
             int maxCopies = selected.maxCopies();
-            currentMax = Math.min(max, maxCopies >= min ? maxCopies : max);
+            if (maxCopies < 1) { // Infinite copies allowed
+                currentMax = max;
+            }
+            else {
+                currentMax = Math.min(max, maxCopies >= min ? maxCopies : max);
+            }
             this.amount = MathUtils.clamp(amount, min, currentMax);
         }
 

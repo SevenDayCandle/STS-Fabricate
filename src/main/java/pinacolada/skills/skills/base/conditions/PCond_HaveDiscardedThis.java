@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -14,6 +15,8 @@ import java.util.List;
 @VisibleSkill
 public class PCond_HaveDiscardedThis extends PCond_HaveCardThis {
     public static final PSkillData<PField_CardGeneric> DATA = register(PCond_HaveDiscardedThis.class, PField_CardGeneric.class)
+            .setOrigins(PCLCardSelection.Manual)
+            .setDestinations(PCLCardSelection.Manual)
             .noTarget();
 
     public PCond_HaveDiscardedThis() {

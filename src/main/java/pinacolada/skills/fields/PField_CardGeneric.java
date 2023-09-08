@@ -53,8 +53,8 @@ public class PField_CardGeneric extends PField_Not {
         int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
 
 
-        // Set automatic selection when self targeting, using parent, or if the action is forced and we must select every available card
-        if ((!skill.useParent && groupTypes.isEmpty()) || (forced && (skill.useParent || skill.baseAmount <= 0))) {
+        // Set automatic selection when self targeting, or if the action is forced and we must select every available card
+        if ((!skill.useParent && groupTypes.isEmpty() && allowSelf) || (forced && (skill.useParent || skill.baseAmount <= 0))) {
             return action.invoke(skill.getName(), skill.target.getTarget(info), choiceSize, PCLCardSelection.Random, g)
                     .setDestination(destination);
         }
@@ -154,10 +154,6 @@ public class PField_CardGeneric extends PField_Not {
         return !EUIUtils.isNullOrEmpty(groupTypes);
     }
 
-    public boolean isHandOnly() {
-        return groupTypes.size() == 1 && groupTypes.get(0) == PCLCardGroupHelper.Hand;
-    }
-
     public boolean isRandom() {
         return origin == PCLCardSelection.Random;
     }
@@ -219,6 +215,11 @@ public class PField_CardGeneric extends PField_Not {
     public PField_CardGeneric setTemporaryGroups(ArrayList<PCLCardGroupHelper> cardGroups) {
         this.groupTypes = cardGroups;
         return this;
+    }
+
+    public boolean shouldHideGroupNames() {
+        return groupTypes.size() == 1
+                && (groupTypes.get(0) == PCLCardGroupHelper.Hand || skill.getEligibleOrigins().size() <= 1);
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

@@ -385,8 +385,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String power_turnBased = power.TEXT[5];
     public final String power_singleTurn = power.TEXT[6];
     public final String power_singleTurnNext = power.TEXT[7];
-    public final String power_instant = power.TEXT[8];
-    public final String power_custom = power.TEXT[9];
+    public final String power_custom = power.TEXT[8];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];

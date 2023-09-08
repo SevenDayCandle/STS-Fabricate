@@ -153,21 +153,19 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    private void banItems(AbstractPlayerData<?, ?> data) {
+    public void banCardsFromPool() {
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
 
         if (CardCrawlGame.trial instanceof PCLCustomTrial) {
             bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
-            bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+            for (CardGroup group : groups) {
+                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
+            }
         }
         else if (data != null) {
             bannedCards.addAll(data.config.bannedCards.get());
-            bannedRelics.addAll(data.config.bannedRelics.get());
-        }
-
-        if (data != null) {
             for (CardGroup group : groups) {
                 group.group.removeIf(card ->
                 {
@@ -195,28 +193,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     return true;
                 });
             }
-
-            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-                relicPool.removeIf(relic -> {
-                    if (bannedRelics.contains(relic)) {
-                        return true;
-                    }
-                    for (PCLLoadout loadout : data.loadouts.values()) {
-                        if (loadout.isRelicFromLoadout(relic) && loadout.isLocked()) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-            }
-        }
-        else {
-            for (CardGroup group : groups) {
-                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
-            }
-            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-                relicPool.removeIf(relic -> bannedRelics.contains(relic));
-            }
         }
     }
 
@@ -224,6 +200,32 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         removeRelic(relicID);
         bannedRelics.add(relicID);
         log("Banned " + relicID + ", Total: " + bannedRelics.size());
+    }
+
+    // Ban relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
+    public void banRelicsFromPools() {
+        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
+            bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> bannedRelics.contains(relic));
+            }
+        }
+        else if (data != null) {
+            bannedRelics.addAll(data.config.bannedRelics.get());
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> {
+                    if (bannedRelics.contains(relic)) {
+                        return true;
+                    }
+                    for (PCLLoadout loadout : data.loadouts.values()) {
+                        if (loadout.isRelicFromLoadout(relic) && (!loadout.isEnabled())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+        }
     }
 
     public boolean canJumpAnywhere() {
@@ -488,7 +490,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             }
         }
 
-        banItems(data);
+        banCardsFromPool();
     }
 
     private void initializeCharacterBlight(String id) {

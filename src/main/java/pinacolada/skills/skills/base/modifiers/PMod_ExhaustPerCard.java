@@ -43,4 +43,9 @@ public class PMod_ExhaustPerCard extends PMod_Do {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.ExhaustPile;
+    }
 }

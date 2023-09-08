@@ -7,6 +7,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.piles.ReshuffleFromPile;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -49,15 +50,7 @@ public class PMove_Reshuffle extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        if (fields.destination == PCLCardSelection.Manual) {
-            return super.getSubText(perspective);
-        }
-        String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
-        return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
-                fields.isHandOnly() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), dest) :
-                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)
-                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard, dest);
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.DrawPile;
     }
-
 }

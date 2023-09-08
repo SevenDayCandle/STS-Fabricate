@@ -1,12 +1,16 @@
 package pinacolada.patches.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
+import javassist.CannotCompileException;
+import javassist.expr.ExprEditor;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardReward.PCLCardRewardScreen;
 
@@ -79,6 +83,25 @@ public class CardRewardScreenPatches {
         @SpirePostfixPatch
         public static void postfix(CardRewardScreen __instance, AbstractCard hoveredCard) {
             PGR.rewardScreen.onCardObtained(hoveredCard);
+        }
+    }
+
+    @SpirePatch(clz = CardRewardScreen.class, method = "renderCardReward")
+    public static class CardRewardScreen_RenderCardReward {
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.MethodCall m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractCard.class.getName())) {
+                        if (m.getMethodName().equals("render")) {
+                            m.replace("{ pinacolada.resources.PGR.rewardScreen.renderCardReward($1, $0);}");
+                        }
+                        else if (m.getMethodName().equals("renderCardTip")) {
+                            m.replace("{ if (pinacolada.resources.PGR.rewardScreen.renderCardRewardTip($1, $0)) $proceed($$); }");
+                        }
+                    }
+                }
+            };
         }
     }
 }

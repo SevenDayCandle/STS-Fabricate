@@ -43,9 +43,4 @@ public class PMod_CyclePerCard extends PMod_Do {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
-
-    @Override
-    public String getMoveString(boolean addPeriod) {
-        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
-    }
 }

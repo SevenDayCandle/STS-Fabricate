@@ -48,7 +48,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
-        SelectFromPile action = fields.createAction(getAction(), info, extra, false).setAnyNumber(true);
+        SelectFromPile action = fields.createAction(getAction(), info, extra, true).setAnyNumber(true);
         if (isForced()) {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
         }
@@ -63,9 +63,15 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return getActionTooltip().title;
     }
 
+    public PCLCardGroupHelper getDestinationGroup() {
+        return null;
+    }
+
     @Override
     public String getAmountRawOrAllString() {
-        return baseAmount <= 0 ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any) : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getRangeToAmountRawString();
+        return baseAmount <= 0 ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any)
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : isForced() ? getAmountRawString() : getRangeToAmountRawString();
     }
 
     @Override
@@ -78,8 +84,17 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
 
     public String getMoveString(boolean addPeriod) {
         String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
-        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
+        if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
+            return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
+                    fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), cardString) :
+                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+                                    : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+        }
+        String dest = fields.getDestinationString(getDestinationGroup().name);
+        return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
+                fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), cardString, dest) :
+                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString(), dest)
+                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard, dest);
     }
 
     @Override
@@ -106,7 +121,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
 
     // Useparent on the child should also cause a "forced" filter
     protected boolean isForced() {
-        return fields.forced || isChildEffectUsingParent();
+        return fields.forced || isChildEffectUsingParent() || fields.origin != PCLCardSelection.Manual;
     }
 
     @Override

@@ -43,4 +43,9 @@ public class PMod_DiscardPerCard extends PMod_Do {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.DiscardPile;
+    }
 }

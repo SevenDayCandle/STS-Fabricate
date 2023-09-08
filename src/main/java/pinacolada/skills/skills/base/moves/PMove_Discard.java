@@ -46,4 +46,9 @@ public class PMove_Discard extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.DiscardPile;
+    }
 }

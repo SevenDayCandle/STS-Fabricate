@@ -48,6 +48,10 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         return getActionTooltip().title;
     }
 
+    public PCLCardGroupHelper getDestinationGroup() {
+        return null;
+    }
+
     @Override
     public String getAmountRawOrAllString() {
         return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
@@ -63,10 +67,17 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
-                fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
-                        fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
-                                : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+        if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
+            return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
+                    fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
+                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
+                                    : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+        }
+        String dest = fields.getDestinationString(getDestinationGroup().name);
+        return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
+                fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fcs, dest) :
+                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString(), dest)
+                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard, dest);
     }
 
     @Override
@@ -97,6 +108,4 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();
 
     public abstract EUITooltip getActionTooltip();
-
-
 }

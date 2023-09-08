@@ -176,34 +176,16 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         randomSelection.setActive(false);
         if (dialog != null) {
             bannedRelics.clear();
-            RandomizedList<RelicInfo> possibleCards = new RandomizedList<>();
-            RandomizedList<RelicInfo> possibleColorless = new RandomizedList<>();
-            for (RelicInfo c : grid.group) {
-                if (EUIGameUtils.getRelicColor(c.relic.relicId) == AbstractCard.CardColor.COLORLESS) {
-                    possibleColorless.add(c);
-                }
-                else {
-                    possibleCards.add(c);
-                }
-            }
+            RandomizedList<RelicInfo> possibleCards = new RandomizedList<>(grid.group.group);
 
-            while (possibleCards.size() > dialog.getCardCount()) {
+            while (possibleCards.size() > dialog.getCount()) {
                 RelicInfo c = possibleCards.retrieveUnseeded(true);
-                if (c != null) {
-                    toggleRelicImpl(c, bannedRelics.contains(c.relic.relicId));
-                }
-            }
-            while (possibleColorless.size() > dialog.getColorlessCount()) {
-                RelicInfo c = possibleColorless.retrieveUnseeded(true);
                 if (c != null) {
                     toggleRelicImpl(c, bannedRelics.contains(c.relic.relicId));
                 }
             }
 
             for (RelicInfo c : possibleCards) {
-                updateRelicAlpha(c);
-            }
-            for (RelicInfo c : possibleColorless) {
                 updateRelicAlpha(c);
             }
 

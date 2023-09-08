@@ -46,4 +46,9 @@ public class PMove_Exhaust extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.ExhaustPile;
+    }
 }

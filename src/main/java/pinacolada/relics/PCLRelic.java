@@ -24,6 +24,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -434,11 +435,24 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
-        renderRelicImage(sb,
-                this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
-                -64f,
-                -64f,
-                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
+        float scaleMult = AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f;
+        if (this.isSeen) {
+            renderRelicImage(sb,
+                    Color.WHITE,
+                    -64f,
+                    -64f,
+                    scaleMult);
+        }
+        else {
+            EUIRenderHelpers.drawSilhouette(sb, Color.LIGHT_GRAY, s -> {
+                renderRelicImage(s,
+                         this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
+                        -64f,
+                        -64f,
+                        scaleMult);
+            });
+        }
+
         if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
             if (!this.isSeen) {
                 renderUnseenTip();

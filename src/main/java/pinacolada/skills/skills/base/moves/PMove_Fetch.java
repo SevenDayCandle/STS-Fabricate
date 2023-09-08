@@ -46,4 +46,9 @@ public class PMove_Fetch extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.fetch;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.Hand;
+    }
 }

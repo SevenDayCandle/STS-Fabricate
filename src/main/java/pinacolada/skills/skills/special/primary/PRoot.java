@@ -1,11 +1,13 @@
 package pinacolada.skills.skills.special.primary;
 
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -37,14 +39,21 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
+        if (source instanceof AbstractRelic) {
+            return TEXT.cond_atStartOfCombat();
+        }
+        if (source instanceof AbstractPower) {
+            return TEXT.cond_when(PGR.core.tooltips.create.past());
+        }
+        return EMPTY_STRING;
     }
 
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
+    // For powers, this activates when the power is first applied
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        if (source instanceof AbstractRelic) {
+        if (source instanceof AbstractRelic || source instanceof AbstractPower) {
             return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? COLON_SEPARATOR + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
         return childEffect != null ? childEffect.getText(perspective, addPeriod) : "";

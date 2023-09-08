@@ -43,4 +43,9 @@ public class PMod_FetchPerCard extends PMod_Do {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.fetch;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.Hand;
+    }
 }

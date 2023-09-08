@@ -45,13 +45,7 @@ public class PMod_ReshufflePerCard extends PMod_Do {
     }
 
     @Override
-    public String getMoveString(boolean addPeriod) {
-        if (fields.destination == PCLCardSelection.Manual) {
-            return super.getMoveString(addPeriod);
-        }
-        String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
-        String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
-        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString(), dest)
-                : TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), cardString, dest);
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.DrawPile;
     }
 }

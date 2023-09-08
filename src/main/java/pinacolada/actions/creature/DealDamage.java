@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
@@ -20,11 +21,11 @@ public class DealDamage extends PCLAction<AbstractCreature> {
 
     protected FuncT2<Float, AbstractCreature, AbstractCreature> onDamageEffect;
     protected AbstractOrb orb;
-    protected boolean applyPowerRemovalMultiplier;
     protected boolean applyPowers;
     protected boolean bypassBlock;
     protected boolean bypassThorns;
     protected boolean canKill = true;
+    protected boolean canRedirect;
     protected boolean hasPlayedEffect;
     protected boolean skipWait;
 
@@ -32,24 +33,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     protected Color enemyTint = null;
     protected float pitchMin = 0.95f;
     protected float pitchMax = 1.05f;
-
-    protected DealDamage(AbstractCreature target, DealDamage other) {
-        this(other.target, other.info, other.attackEffect);
-
-        copySettings(other);
-
-        this.card = other.card;
-        this.vfxColor = other.vfxColor;
-        this.enemyTint = other.enemyTint;
-        this.pitchMin = other.pitchMin;
-        this.pitchMax = other.pitchMax;
-        this.skipWait = other.skipWait;
-        this.applyPowers = other.applyPowers;
-        this.bypassBlock = other.bypassBlock;
-        this.bypassThorns = other.bypassThorns;
-        this.onDamageEffect = other.onDamageEffect;
-        this.hasPlayedEffect = other.hasPlayedEffect;
-    }
 
     public DealDamage(AbstractCreature target, DamageInfo info, AttackEffect effect) {
         this(null, target, info, effect);
@@ -63,11 +46,8 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         this.info = info;
         this.attackEffect = effect;
 
-        boolean isInvalid = target == null || GameUtilities.isDeadOrEscaped(target);
-        initialize(info.owner,
-                isInvalid ? GameUtilities.getRandomEnemy(true) : target,
-                isInvalid ? info.base : info.output);
-        this.applyPowers = card != null && isInvalid;
+        initialize(info.owner, target, info.output);
+        this.applyPowers = card != null;
     }
 
     public DealDamage(AbstractCreature target, DamageInfo info) {
@@ -89,18 +69,27 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
+    public DealDamage canRedirect(boolean value) {
+        this.canRedirect = value;
+
+        return this;
+    }
+
     @Override
     protected void firstUpdate() {
-        if (this.info.type != DamageInfo.DamageType.THORNS && this.shouldCancelAction()) {
-            complete(null);
-            return;
+        if (target == null || GameUtilities.isDeadOrEscaped(target)) {
+            if (canRedirect && GameUtilities.getEnemies(true).size() > 0) {
+                target = GameUtilities.getRandomEnemy(true);
+                applyPowers = applyPowers || card != null;
+                amount = info.base;
+            }
+            else {
+                complete(null);
+                return;
+            }
         }
 
-        if (GameUtilities.isDeadOrEscaped(target)) {
-            if (GameUtilities.getEnemies(true).size() > 0) {
-                PCLActions.top.add(new DealDamage(GameUtilities.getRandomEnemy(true), this));
-            }
-
+        if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction()) {
             complete(null);
             return;
         }
@@ -121,9 +110,10 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public DealDamage setOptions(boolean superFast, boolean canKill) {
+    public DealDamage setOptions(boolean superFast, boolean canKill, boolean canRedirect) {
         this.skipWait = superFast;
         this.canKill = canKill;
+        this.canRedirect = canRedirect;
         return this;
     }
 
@@ -170,17 +160,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     }
 
     @Override
-    protected boolean shouldCancelAction() {
-        return this.target == null || (this.source != null && this.source.isDying) || (this.info.owner != null && (this.info.owner.isDying || this.info.owner.halfDead));
-    }
-
-    @Override
     protected void updateInternal(float deltaTime) {
-        if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction()) {
-            complete(null);
-            return;
-        }
-
         PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
 
         if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f) {

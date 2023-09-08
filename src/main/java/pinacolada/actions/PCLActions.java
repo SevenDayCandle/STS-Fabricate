@@ -275,6 +275,7 @@ public final class PCLActions {
         ArrayList<DealDamage> actions = new ArrayList<>();
         for (int i = 0; i < card.hitCount; i++) {
             actions.add(add(new DealDamage(card, source, target, effect))
+                    .canRedirect(!card.pclTarget.targetsSingle())
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
         }
 
@@ -320,11 +321,11 @@ public final class PCLActions {
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
-        return dealDamage(player, null, baseDamage, damageType, effect);
+        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true);
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect) {
-        return dealDamage(player, null, baseDamage, damageType, effect);
+        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true);
     }
 
     public MoveCard discard(AbstractCard card, CardGroup group) {

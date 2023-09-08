@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -14,6 +15,8 @@ import java.util.List;
 @VisibleSkill
 public class PCond_HavePlayedThis extends PCond_HaveCardThis {
     public static final PSkillData<PField_CardGeneric> DATA = register(PCond_HavePlayedThis.class, PField_CardGeneric.class)
+            .setOrigins(PCLCardSelection.Manual)
+            .setDestinations(PCLCardSelection.Manual)
             .noTarget();
 
     public PCond_HavePlayedThis() {

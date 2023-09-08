@@ -243,11 +243,11 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
         }
     }
 
-
     public void onInitialApplication() {
         super.onInitialApplication();
         for (PSkill<?> effect : getEffects()) {
             effect.subscribeChildren();
+            effect.triggerOnStartOfBattleForRelic();
         }
     }
 

@@ -141,7 +141,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         }
         AbstractDungeon.generateSeeds();
 
-        PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>());
+        PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>(bannedRelics));
         if (allowLoadout) {
             trial.fakeLoadout = fakeLoadout;
         }

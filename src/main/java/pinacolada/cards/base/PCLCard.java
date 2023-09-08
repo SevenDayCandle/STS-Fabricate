@@ -138,7 +138,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public boolean isPopup = false;
     public boolean isPreview = false;
     public boolean isRightCountModified = false;
-    public boolean renderTip;
     public boolean showTypeText = true;
     public boolean upgradedHeal = false;
     public boolean upgradedHitCount = false;
@@ -525,6 +524,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public boolean canRenderGlow() {
         return transparency >= 0.7f && owner == null;
+    }
+
+    public boolean canRenderTip() {
+        return ReflectionHacks.getPrivate(this, AbstractCard.class, "renderTip");
     }
 
     @Override
@@ -1900,7 +1903,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public void renderCardTip(SpriteBatch sb) {
-        if (!Settings.hideCards && !isFlipped && !isLocked && isSeen && (isPopup || renderTip) && (AbstractDungeon.player == null || !AbstractDungeon.player.isDraggingCard || Settings.isTouchScreen)) {
+        if (!Settings.hideCards && !isFlipped && !isLocked && isSeen && (isPopup || canRenderTip()) && (AbstractDungeon.player == null || !AbstractDungeon.player.isDraggingCard || Settings.isTouchScreen)) {
             EUITooltip.queueTooltips(this);
         }
     }
@@ -2303,6 +2306,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.hb.move(current_x, current_y);
     }
 
+    public void setRenderTip(boolean val) {
+        ReflectionHacks.setPrivate(this, AbstractCard.class, "renderTip", val);
+    }
+
     protected void setTag(CardTags tag, boolean enable) {
         if (!enable) {
             tags.remove(tag);
@@ -2574,7 +2581,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         this.hovered = false;
-        this.renderTip = false;
+        setRenderTip(false);
     }
 
     public final void unloadSingleCardView() {
@@ -2587,7 +2594,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public void untip() {
         this.hoverDuration = 0f;
-        this.renderTip = false;
+        setRenderTip(false);
     }
 
     @Override
@@ -2596,7 +2603,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         if (EUIGameUtils.inGame() && AbstractDungeon.player != null && AbstractDungeon.player.hoveredCard != this && !AbstractDungeon.isScreenUp) {
             this.hovered = false;
-            this.renderTip = false;
+            setRenderTip(false);
         }
 
         // For selecting separate forms on the upgrade screen
@@ -2661,7 +2668,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (this.hb.hovered) {
             this.hover();
             this.hoverDuration += EUI.delta();
-            this.renderTip = this.hoverDuration > 0.2F && !Settings.hideCards;
+            setRenderTip(this.hoverDuration > 0.2F && !Settings.hideCards);
         }
         else {
             this.unhover();

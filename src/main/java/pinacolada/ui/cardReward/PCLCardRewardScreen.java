@@ -1,16 +1,19 @@
 package pinacolada.ui.cardReward;
 
+import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.CacheableCard;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -23,7 +26,9 @@ import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+import java.sql.Ref;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 // Copied and modified from STS-AnimatorMod
@@ -31,6 +36,7 @@ public class PCLCardRewardScreen extends EUIBase {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;
     protected final ArrayList<PCLCardRewardActionButton> buttons = new ArrayList<>();
     protected final ArrayList<PCLCardRewardBundle> bundles = new ArrayList<>();
+    protected final HashMap<AbstractCard, AbstractCard> upgrades = new HashMap<>();
     public static final HashSet<String> seenCards = new HashSet<>();
     private boolean shouldClose; // Needed to prevent comodification errors
     protected CardRewardActionProvider actionProvider;
@@ -61,6 +67,31 @@ public class PCLCardRewardScreen extends EUIBase {
         canReroll = actionProvider.canAct();
     }
 
+    public AbstractCard getActualCardToRender(AbstractCard c) {
+        if (SingleCardViewPopup.isViewingUpgrade && c.canUpgrade()) {
+            AbstractCard upgrade = upgrades.get(c);
+            if (upgrade == null) {
+                if (c instanceof CacheableCard) {
+                    upgrade = ((CacheableCard) c).getCachedUpgrade();
+                }
+                else {
+                    try {
+                        upgrade = c.makeSameInstanceOf();
+                        upgrade.upgrade();
+                        upgrade.displayUpgrades();
+                    }
+                    catch (Exception e) {
+                        EUIUtils.logError(this, "Why is your card crashing on upgrade :( " + c);
+                        upgrade = c;
+                    }
+                }
+                upgrades.put(c, upgrade);
+            }
+            return upgrade;
+        }
+        return c;
+    }
+
     public void close(boolean clearBundles) {
         EUI.countingPanel.close();
         upgradeToggle.toggle(false);
@@ -69,6 +100,7 @@ public class PCLCardRewardScreen extends EUIBase {
             bundles.clear();
             PCLCardRewardScreen.seenCards.clear();
         }
+        upgrades.clear();
     }
 
     public void onCardObtained(AbstractCard hoveredCard) {
@@ -98,6 +130,7 @@ public class PCLCardRewardScreen extends EUIBase {
         openForReroll(rItem);
         upgradeToggle.toggle(false);
         upgradeToggle.setActive(GameUtilities.isPCLPlayerClass() || PGR.config.showUpgradeOnCardRewards.get());
+        upgrades.clear();
     }
 
     protected void openForBundle(RewardItem rewardItem, ArrayList<AbstractCard> cards) {
@@ -160,6 +193,24 @@ public class PCLCardRewardScreen extends EUIBase {
                 banButton.tryRender(sb);
             }
         }
+    }
+
+    public void renderCardReward(SpriteBatch sb, AbstractCard c) {
+        AbstractCard toRender = getActualCardToRender(c);
+        if (toRender != c) {
+            GameUtilities.copyVisualProperties(toRender, c);
+        }
+        toRender.render(sb);
+    }
+
+    public boolean renderCardRewardTip(SpriteBatch sb, AbstractCard c) {
+        AbstractCard toRender = getActualCardToRender(c);
+        if (toRender != c) {
+            ReflectionHacks.setPrivate(toRender, AbstractCard.class, "renderTip", ReflectionHacks.getPrivate(c, AbstractCard.class, "renderTip"));
+            toRender.renderCardTip(sb);
+            return false;
+        }
+        return true;
     }
 
     public void renderImpl(SpriteBatch sb) {

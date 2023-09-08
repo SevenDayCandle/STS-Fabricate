@@ -44,11 +44,4 @@ public class PMove_Retain extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.retain;
     }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return useParent ? TEXT.act_retain(getInheritedThemString()) :
-                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
-                        : TEXT.act_retain(TEXT.subjects_thisCard);
-    }
 }
