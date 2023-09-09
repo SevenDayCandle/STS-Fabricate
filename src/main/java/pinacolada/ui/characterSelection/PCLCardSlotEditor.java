@@ -36,10 +36,10 @@ public class PCLCardSlotEditor extends EUIBase {
     protected AbstractCard card;
     protected Color nameColor;
     public LoadoutCardSlot slot;
-    public PCLLoadoutScreen loadoutEditor;
+    public PCLLoadoutCanvas canvas;
 
-    public PCLCardSlotEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
-        this.loadoutEditor = loadoutEditor;
+    public PCLCardSlotEditor(PCLLoadoutCanvas canvas, float cX, float cY) {
+        this.canvas = canvas;
 
         cardvalueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
@@ -81,7 +81,7 @@ public class PCLCardSlotEditor extends EUIBase {
             // Custom cards should not be treated as locked in this effect
             boolean add = !item.isBanned() && (!item.isLocked() || PCLCustomCardSlot.get(item.item) != null);
             if (add) {
-                for (PCLCardSlotEditor slot : loadoutEditor.cardEditors) {
+                for (PCLCardSlotEditor slot : canvas.cardEditors) {
                     if (slot.slot != this.slot && item.item.equals(slot.slot.getSelectedID()) && slot.slot.amount > 0) {
                         add = false;
                         break;
@@ -109,7 +109,7 @@ public class PCLCardSlotEditor extends EUIBase {
         cardvalueText.setLabel(value)
                 .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
 
-        loadoutEditor.updateValidation();
+        canvas.updateValidation();
     }
 
     @Override
@@ -163,7 +163,7 @@ public class PCLCardSlotEditor extends EUIBase {
             this.nameText.setLabel("");
             refreshValues();
         }).setInteractable(slot.canRemove()).setActive(true);
-        this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this)).setInteractable(change).setActive(true);
+        this.changeButton.setOnClick(() -> canvas.trySelectCard(this)).setInteractable(change).setActive(true);
         this.nameColor = card != null && slot.isIDBanned(card.cardID) ? Settings.RED_TEXT_COLOR : Settings.GOLD_COLOR;
         cardamountText.setFontColor(this.nameColor == Settings.RED_TEXT_COLOR ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
 
@@ -185,7 +185,7 @@ public class PCLCardSlotEditor extends EUIBase {
 
             if (nameText.hb.clicked) {
                 nameText.hb.clicked = false;
-                loadoutEditor.trySelectCard(this);
+                canvas.trySelectCard(this);
                 return;
             }
 

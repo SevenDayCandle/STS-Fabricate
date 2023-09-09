@@ -41,9 +41,6 @@ import java.util.ArrayList;
 public class PCLLoadoutScreen extends AbstractMenuScreen {
     private static final float SLOT_SPACING = screenH(0.05f);
     protected static final PCLLoadoutValidation val = new PCLLoadoutValidation();
-    protected final ArrayList<PCLCardSlotEditor> cardEditors = new ArrayList<>();
-    protected final ArrayList<PCLRelicSlotEditor> relicsEditors = new ArrayList<>();
-    protected final ArrayList<PCLAbilityEditor> abilityEditors = new ArrayList<>();
     protected final ArrayList<PCLBaseStatEditor> baseStatEditors = new ArrayList<>();
     protected final PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
     public final EUIContextMenu<ContextOption> contextMenu;
@@ -54,9 +51,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected AbstractPlayerData<?, ?> data;
     protected PCLEffect selectionEffect;
     protected EUILabel startingDeck;
-    protected EUILabel deckText;
-    protected EUILabel relicText;
-    protected EUILabel abilityText;
     protected EUILabel attributesText;
     protected EUIButton seriesButton;
     protected EUIButton[] presetButtons;
@@ -67,6 +61,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected EUITextBox cardscountText;
     protected EUITextBox cardsvalueText;
     protected EUITextBox hindrancevalueText;
+    protected PCLLoadoutCanvas canvas;
     protected int rightClickedSlot;
     public PCLBaseStatEditor activeEditor;
 
@@ -83,23 +78,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setSmartText(true, false)
                 .setColor(Settings.CREAM_COLOR);
 
-        deckText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
-                new EUIHitbox(screenW(0.1f), screenH(0.84f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.loadout_deckHeader)
-                .setFontScale(0.8f)
-                .setAlignment(0.5f, 0.01f);
-
-        relicText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
-                new EUIHitbox(screenW(0.1f), screenH(0.4f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.loadout_relicHeader)
-                .setFontScale(0.8f)
-                .setAlignment(0.5f, 0.01f);
-
-        abilityText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
-                new EUIHitbox(screenW(0.1f), screenH(0.2f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.csel_ability)
-                .setFontScale(0.8f)
-                .setAlignment(0.5f, 0.01f);
+        canvas = new PCLLoadoutCanvas(this);
 
         attributesText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
                 new EUIHitbox(screenW(0.57f), screenH(0.84f), buttonHeight, buttonHeight))
@@ -204,6 +183,10 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
     }
 
+    public PCLLoadoutData getCurrentPreset() {
+        return presets[preset];
+    }
+
     public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
@@ -241,18 +224,18 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             button.setActive(data != null);
         }
 
-        if (cardEditors.size() > 0 && relicsEditors.size() > 0) {
+        if (canvas.cardEditors.size() > 0 && canvas.relicsEditors.size() > 0) {
             EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
-                    new EUITourTooltip(deckText.hb, deckText.text, PGR.core.strings.loadout_tutorialCard)
-                            .setFlash(cardEditors.get(0).nameText.image),
-                    new EUITourTooltip(cardEditors.get(0).cardvalueText.hb, deckText.text, PGR.core.strings.loadout_tutorialValue)
-                            .setFlash(cardEditors.get(0).cardvalueText.image),
-                    cardEditors.get(0).decrementButton.makeTour(true),
-                    cardEditors.get(0).addButton.makeTour(true),
-                    cardEditors.get(0).clearButton.makeTour(true),
-                    cardEditors.get(0).changeButton.makeTour(true),
-                    new EUITourTooltip(relicText.hb, relicText.text, PGR.core.strings.loadout_tutorialRelic)
-                            .setFlash(relicsEditors.get(0).relicValueText.image),
+                    new EUITourTooltip(canvas.deckText.hb, canvas.deckText.text, PGR.core.strings.loadout_tutorialCard)
+                            .setFlash(canvas.cardEditors.get(0).nameText.image),
+                    new EUITourTooltip(canvas.cardEditors.get(0).cardvalueText.hb, canvas.deckText.text, PGR.core.strings.loadout_tutorialValue)
+                            .setFlash(canvas.cardEditors.get(0).cardvalueText.image),
+                    canvas.cardEditors.get(0).decrementButton.makeTour(true),
+                    canvas.cardEditors.get(0).addButton.makeTour(true),
+                    canvas.cardEditors.get(0).clearButton.makeTour(true),
+                    canvas.cardEditors.get(0).changeButton.makeTour(true),
+                    new EUITourTooltip(canvas.relicText.hb, canvas.relicText.text, PGR.core.strings.loadout_tutorialRelic)
+                            .setFlash(canvas.relicsEditors.get(0).relicValueText.image),
                     new EUITourTooltip(attributesText.hb, attributesText.text, PGR.core.strings.loadout_tutorialAttributes),
                     new EUITourTooltip(cardsvalueText.hb, PGR.core.strings.csel_deckEditor, PGR.core.strings.loadout_tutorialRequired)
                             .setFlash(cardsvalueText.image)
@@ -345,7 +328,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
     public void setSlotsActive(boolean active) {
         if (active) {
-            final PCLLoadoutData data = presets[preset];
+            final PCLLoadoutData data = getCurrentPreset();
             for (int i = 0; i < abilityEditors.size(); i++) {
                 final PCLAbilityEditor editor = abilityEditors.get(i);
                 editor.setActive(data.cardsSize() > i);
@@ -364,7 +347,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             for (PCLBaseStatEditor beditor : baseStatEditors) {
                 beditor.setLoadout(loadout, data);
             }
-            val.refresh(presets[preset]);
+            val.refresh(data);
         }
         else {
             for (PCLAbilityEditor editor : abilityEditors) {
@@ -444,9 +427,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
         startingDeck.updateImpl();
-        deckText.updateImpl();
-        relicText.updateImpl();
-        abilityText.updateImpl();
         attributesText.updateImpl();
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).updateImpl();
 
@@ -479,16 +459,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             cancelButton.updateImpl();
             clearButton.updateImpl();
             saveButton.updateImpl();
-
-            for (PCLCardSlotEditor editor : cardEditors) {
-                editor.tryUpdate();
-            }
-            for (PCLRelicSlotEditor editor : relicsEditors) {
-                editor.tryUpdate();
-            }
-            for (PCLAbilityEditor editor : abilityEditors) {
-                editor.tryUpdate();
-            }
+            canvas.updateImpl();
         }
 
         hindrancevalueText.tryUpdate();
