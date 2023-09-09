@@ -50,7 +50,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return childEffect != null ? childEffect.getText(perspective, addPeriod) : GameUtilities.EMPTY_STRING;
+        return childEffect != null ? childEffect.getText(perspective, addPeriod) : EUIUtils.EMPTY_STRING;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
             // If the value is not parseable, don't remove the numbers
             int value = EUIUtils.parseInt(input, 2);
             if (value == 1) {
-                input = GameUtilities.EMPTY_STRING;
+                input = EUIUtils.EMPTY_STRING;
             }
             input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         }

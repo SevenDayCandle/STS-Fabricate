@@ -14,7 +14,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,9 +80,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
 
     protected static RelicStrings getInitialStrings() {
         RelicStrings retVal = new RelicStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.NAME = EUIUtils.EMPTY_STRING;
         retVal.DESCRIPTIONS = new String[]{};
-        retVal.FLAVOR = GameUtilities.EMPTY_STRING;
+        retVal.FLAVOR = EUIUtils.EMPTY_STRING;
         return retVal;
     }
 
@@ -179,7 +178,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     }
 
     public PCLDynamicRelicData setText(String name, String[] descriptions) {
-        return setText(name, descriptions, GameUtilities.EMPTY_STRING);
+        return setText(name, descriptions, EUIUtils.EMPTY_STRING);
     }
 
     public PCLDynamicRelicData setText(String name, String[] descriptions, String flavor) {
@@ -195,7 +194,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     }
 
     public PCLDynamicRelicData setText(String name) {
-        return setText(name, new String[0], GameUtilities.EMPTY_STRING);
+        return setText(name, new String[0], EUIUtils.EMPTY_STRING);
     }
 
     public PCLDynamicRelicData setTextForLanguage() {

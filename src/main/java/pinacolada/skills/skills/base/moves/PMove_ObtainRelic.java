@@ -146,6 +146,6 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-        createRelic(PCLEffects.Queue::obtainRelic);
+        createRelic(GameUtilities::obtainRelicFromEvent);
     }
 }

@@ -88,13 +88,13 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
             return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
                     fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), cardString) :
                             fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
-                                    : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+                                    : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard());
         }
         String dest = fields.getDestinationString(getDestinationGroup().name);
         return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
                 fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), cardString, dest) :
                         fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString(), dest)
-                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard, dest);
+                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard(), dest);
     }
 
     @Override

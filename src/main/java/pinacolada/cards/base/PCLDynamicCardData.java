@@ -18,7 +18,6 @@ import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,9 +161,9 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
 
     protected static CardStrings getInitialStrings() {
         CardStrings retVal = new CardStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
-        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.NAME = EUIUtils.EMPTY_STRING;
+        retVal.DESCRIPTION = EUIUtils.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = EUIUtils.EMPTY_STRING;
         retVal.EXTENDED_DESCRIPTION = new String[]{};
         return retVal;
     }

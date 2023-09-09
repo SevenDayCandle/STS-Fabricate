@@ -1,13 +1,16 @@
 package pinacolada.powers;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.configuration.EUIConfiguration;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.utilities.PCLRenderHelpers;
 
 public abstract class PSpecialCardPower extends PCLClickablePower implements PCLCombatSubscriber {
     protected PSkill<?> move;
@@ -15,6 +18,7 @@ public abstract class PSpecialCardPower extends PCLClickablePower implements PCL
     public PSpecialCardPower(PCLPowerData data, AbstractCreature owner, AbstractCreature source, PSkill<?> move) {
         super(data, owner, source, move.amount);
         this.move = move;
+        setupImageRegion();
         setupDescription();
     }
 
@@ -44,5 +48,12 @@ public abstract class PSpecialCardPower extends PCLClickablePower implements PCL
     // Override this if you do not want automatic subscription on your power
     public void powerSubscribeTo() {
         subscribeToAll();
+    }
+
+    protected void setupImageRegion() {
+        if (move != null && move.sourceCard instanceof EditorCard) {
+            Texture portraitTexture = ((EditorCard) move.sourceCard).getPortraitImageTexture();
+            this.region128 = this.region48 = PCLRenderHelpers.generateIcon(portraitTexture);
+        }
     }
 }

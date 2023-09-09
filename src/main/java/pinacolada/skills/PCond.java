@@ -63,6 +63,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_BlockBreak blockBreak(PCLCardTarget target) {return new PCond_BlockBreak(target);}
 
+    public static PCond_CheckCreatureSummon checkAlly(PCLCardTarget target) {
+        return new PCond_CheckCreatureSummon(target);
+    }
+
     public static PCond_CheckCreature checkCreature(PCLCardTarget target, int amount) {
         return new PCond_CheckCreature(target, amount);
     }
@@ -484,7 +488,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public final String getWheneverYouString(Object impl) {
-        String subjectString = isFromCreature() ? TEXT.subjects_thisCard : TEXT.subjects_you;
+        String subjectString = isFromCreature() ? TEXT.subjects_thisCard() : TEXT.subjects_you;
         return EUIRM.strings.nounVerb(subjectString, impl);
     }
 

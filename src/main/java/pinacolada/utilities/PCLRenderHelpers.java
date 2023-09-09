@@ -33,7 +33,7 @@ import java.text.DecimalFormat;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLRenderHelpers extends EUIRenderHelpers {
-    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.##");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.##");
 
     public static String decimalFormat(float number) {
         return DECIMAL_FORMAT.format(number);

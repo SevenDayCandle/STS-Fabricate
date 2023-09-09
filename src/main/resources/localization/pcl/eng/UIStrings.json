@@ -261,8 +261,6 @@
 												"Are you sure you want to reset this character's tutorials?",
 												"Character Reference",
 												"View an archive of this character's mechanics",
-												"Edit Relic Pool",
-												"Choose which relics will appear in your runs.",
 												"Modifiers:",
 												"Abilities"
 								]
@@ -535,6 +533,9 @@
 												"Allow Random",
 												"Show card pool",
 												"Manage Colorless",
+												"Choose which colorless cards will appear in your runs.",
+												"Manage Relics",
+												"Choose which relics will appear in your runs. What relics are available depends on the selected loadouts.",
 												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes."
 								]
 				},
@@ -610,7 +611,7 @@
 												"their {0}",
 												"${0}@!1:them@:it$",
 												"${0}@!1:they@:it$",
-												"this card",
+												"this {0}",
 												"this",
 												"unblocked {0}",
 												"X",

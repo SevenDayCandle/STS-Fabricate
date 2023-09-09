@@ -63,7 +63,7 @@ public class TemporaryPower extends PCLPower {
     @Override
     public String getUpdatedDescription() {
         if (originalPower == null) {
-            return super.getUpdatedDescription();
+            return formatDescription(0, amount, powerStrings.NAME);
         }
         return amount < 0 ? formatDescription(1, -amount, originalPower.name) : formatDescription(0, amount, originalPower.name);
     }

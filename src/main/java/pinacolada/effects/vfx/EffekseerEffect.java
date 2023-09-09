@@ -9,19 +9,18 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLSFX;
 
 public class EffekseerEffect extends PCLEffect {
-    protected Vector2 position;
-    protected Vector3 rotation;
-    protected String sfxKey;
-    protected EffekseerEFK vfxKey;
-    protected float pitchMin = 1f;
-    protected float pitchMax = 1f;
-    protected float soundDelay = 0.5f;
-    protected float volume = 1f;
-    protected Integer handle;
-    protected Vector3 scale;
-    protected int forceEnd = -20;
-    protected boolean hasPlayed;
-
+    private final EffekseerEFK vfxKey;
+    private Integer handle;
+    private String sfxKey;
+    private Vector2 position;
+    private Vector3 rotation;
+    private Vector3 scale;
+    private boolean hasPlayed;
+    private float pitchMax = 1f;
+    private float pitchMin = 1f;
+    private float soundDelay = 0.5f;
+    private float volume = 1f;
+    private int forceEnd = -20;
 
     public EffekseerEffect(EffekseerEFK key, float x, float y) {
         super(0.5f, false);

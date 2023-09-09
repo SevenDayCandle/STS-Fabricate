@@ -5,6 +5,7 @@ import basemod.ReflectionHacks;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.RelicType;
 import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -64,8 +65,10 @@ import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
 import pinacolada.ui.menu.*;
 import pinacolada.utilities.GameUtilities;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import static pinacolada.utilities.GameUtilities.screenH;
 import static pinacolada.utilities.GameUtilities.screenW;
@@ -78,6 +81,10 @@ public class PGR {
     private static final String REWARDS_SUBFOLDER = "ui/rewards";
     public static final String BASE_PREFIX = "pcl";
     public static final PCLDungeon dungeon = PCLDungeon.register();
+    private final static HashMap<String, AugmentStrings> AUGMENT_STRINGS = new HashMap<>();
+    private final static HashMap<String, LoadoutStrings> LOADOUT_STRINGS = new HashMap<>();
+    private static final Type AUGMENT_TYPE = new TypeToken<Map<String, AugmentStrings>>() {}.getType();
+    private static final Type LOADOUT_TYPE = new TypeToken<Map<String, LoadoutStrings>>() {}.getType();
     public static PCLCoreResources core;
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;
@@ -106,6 +113,14 @@ public class PGR {
     public static PCLDebugRelicPanel debugRelics;
     public static EUIImage blackScreen;
 
+    public static void addAugmentStrings(String jsonString) {
+        PGR.AUGMENT_STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, AUGMENT_TYPE)));
+    }
+
+    public static void addLoadoutStrings(String jsonString) {
+        PGR.LOADOUT_STRINGS.putAll(new HashMap<String, LoadoutStrings>(EUIUtils.deserialize(jsonString, LOADOUT_TYPE)));
+    }
+
     public static String createID(String prefix, String suffix) {
         return prefix + ":" + suffix;
     }
@@ -115,7 +130,7 @@ public class PGR {
     }
 
     public static AugmentStrings getAugmentStrings(String stringID) {
-        return AugmentStrings.STRINGS.get(stringID);
+        return AUGMENT_STRINGS.get(stringID);
     }
 
     public static String getBlightImage(String id) {
@@ -161,7 +176,7 @@ public class PGR {
     }
 
     public static LoadoutStrings getLoadoutStrings(String stringID) {
-        return LoadoutStrings.STRINGS.get(stringID);
+        return LOADOUT_STRINGS.get(stringID);
     }
 
     public static String getMonsterImage(String id) {

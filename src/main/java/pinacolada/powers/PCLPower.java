@@ -72,12 +72,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         hb = new EUIHitbox(HITBOX_SIZE, HITBOX_SIZE);
         setup();
         setupProperties(amount);
-        if (data.useRegionImage) {
-            loadRegion(data.imagePath);
-        }
-        else {
-            setupImages(data.imagePath);
-        }
+        setupImages();
         setupDescription();
     }
 
@@ -287,6 +282,15 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return false;
     }
 
+    public void loadImagePath(String imagePath) {
+        if (Gdx.files.internal(imagePath).exists()) {
+            this.img = EUIRM.getTexture(imagePath);
+        }
+        if (this.img == null) {
+            this.img = PCLCoreImages.CardAffinity.unknown.texture();
+        }
+    }
+
     @Override
     public AbstractPower makeCopy() {
         return data.create(owner, source, amount);
@@ -462,12 +466,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.description = sanitizePowerDescription(desc);
     }
 
-    public void setupImages(String imagePath) {
-        if (Gdx.files.internal(imagePath).exists()) {
-            this.img = EUIRM.getTexture(imagePath);
+    protected void setupImages() {
+        if (data.useRegionImage) {
+            loadRegion(data.imagePath);
         }
-        if (this.img == null) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
+        else {
+            loadImagePath(data.imagePath);
         }
     }
 
@@ -512,7 +516,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     @Override
     public void updateDescription() {
         if (this instanceof InvisiblePower) {
-            this.description = GameUtilities.EMPTY_STRING;
+            this.description = EUIUtils.EMPTY_STRING;
             return;
         }
 

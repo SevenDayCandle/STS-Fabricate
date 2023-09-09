@@ -25,7 +25,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     public final PTrigger trigger;
     public final AbstractCard card;
     protected EUIKeywordTooltip triggerTip;
-    public PCLClickableUse triggerCondition;
+    private PCLClickableUse triggerCondition;
 
     public CardTriggerConnection(PTrigger trigger, AbstractCard card) {
         this.trigger = trigger;

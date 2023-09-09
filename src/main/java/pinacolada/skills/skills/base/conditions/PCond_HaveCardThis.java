@@ -38,14 +38,14 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_ifX(EUIRM.strings.verbNoun(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard));
+        return TEXT.cond_ifX(EUIRM.strings.verbNoun(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()));
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         // TODO proper grammar formattting for "Do X Y times" format
-        String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard);
+        String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
         return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;
     }
 

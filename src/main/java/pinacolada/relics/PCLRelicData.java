@@ -22,14 +22,14 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     private static final Map<String, PCLRelicData> STATIC_DATA = new HashMap<>();
     private static final ArrayList<PCLRelicData> TEMPLATES = new ArrayList<>();
 
-    public RelicStrings strings;
-    public String imagePath;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
-    public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
+    public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
     public Integer[] counter = array(0);
     public Integer[] counterUpgrade = array(0);
     public PCLLoadout loadout;
+    public RelicStrings strings;
+    public String imagePath;
     public boolean unique = false;
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;

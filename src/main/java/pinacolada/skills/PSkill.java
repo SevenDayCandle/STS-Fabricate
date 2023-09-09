@@ -958,31 +958,31 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return TEXT.subjects_your(target.getTitle().toLowerCase());
             case SelfAllEnemy:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_allEnemies());
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_allEnemies());
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
             case SelfSingle:
                 String base = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)) : TEXT.subjects_target;
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, base);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), base);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, base);
             case SelfSingleAlly:
                 String allyBase = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)) : TEXT.subjects_ally;
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, allyBase);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), allyBase);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, allyBase);
             case SelfPlayer:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_you);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_you);
                 }
                 return TEXT.subjects_you;
             case UseParent:
                 return TEXT.subjects_them(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:
                 if (isFromCreature()) {
-                    return TEXT.subjects_thisCard;
+                    return TEXT.subjects_thisCard();
                 }
             default:
                 return TEXT.subjects_you;
@@ -1039,29 +1039,29 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return PGR.core.strings.subjects_anyone;
             case SelfAllEnemy:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_allEnemies());
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_allEnemies());
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
             case SelfSingle:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_target);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_target);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_target);
             case SelfSingleAlly:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_ally);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_ally);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_ally);
             case SelfPlayer:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_you);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_you);
                 }
                 return TEXT.subjects_you;
             case UseParent:
                 return TEXT.subjects_they(parent != null && parent.target.targetsSingle() ? 2 : 1);
             case Self:
                 if (isFromCreature()) {
-                    return TEXT.subjects_thisCard;
+                    return TEXT.subjects_thisCard();
                 }
             default:
                 return PGR.core.strings.subjects_you;

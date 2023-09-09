@@ -37,10 +37,10 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     }.getType();
     private static final Type LOADOUT_TYPE = new TypeToken<Map<String, Map<String, LoadoutStrings>>>() {
     }.getType();
-    public static final String JSON_AUGMENTS = "AugmentStrings.json";
-    public static final String JSON_CARDS = "CardStrings.json";
-    public static final String JSON_KEYWORDS = "KeywordStrings.json";
-    public static final String JSON_LOADOUTS = "LoadoutStrings.json";
+    private static final String JSON_AUGMENTS = "AugmentStrings.json";
+    private static final String JSON_CARDS = "CardStrings.json";
+    private static final String JSON_KEYWORDS = "KeywordStrings.json";
+    private static final String JSON_LOADOUTS = "LoadoutStrings.json";
     protected final String id;
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
@@ -66,12 +66,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
         this.data = getData();
     }
 
-    public static void loadAugmentStrings(String jsonString) {
-        final Type typeToken = new TypeToken<Map<String, AugmentStrings>>() {
-        }.getType();
-        AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
-    }
-
     public static void loadGroupedCardStrings(String jsonString) {
         final Map<String, CardStrings> localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
         final Map<String, CardStrings> cardStrings = new HashMap<>();
@@ -93,12 +87,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
         }
 
         localizationStrings.putAll(cardStrings);
-    }
-
-    public static void loadLoadoutStrings(String jsonString) {
-        final Type typeToken = new TypeToken<Map<String, LoadoutStrings>>() {
-        }.getType();
-        LoadoutStrings.STRINGS.putAll(new HashMap<String, LoadoutStrings>(EUIUtils.deserialize(jsonString, typeToken)));
     }
 
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card is allowed when playing as a PCL character
@@ -188,7 +176,7 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     }
 
     protected void loadAugmentStrings() {
-        loadCustomNonBaseStrings(JSON_AUGMENTS, PCLResources::loadAugmentStrings);
+        loadCustomNonBaseStrings(JSON_AUGMENTS, PGR::addAugmentStrings);
     }
 
     protected void loadCustomCardStrings() {
@@ -226,7 +214,7 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     }
 
     protected void loadLoadoutStrings() {
-        loadCustomNonBaseStrings(JSON_LOADOUTS, PCLResources::loadLoadoutStrings);
+        loadCustomNonBaseStrings(JSON_LOADOUTS, PGR::addLoadoutStrings);
     }
 
     protected void postInitialize() {

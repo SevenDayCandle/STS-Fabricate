@@ -41,7 +41,6 @@ import com.megacrit.cardcrawl.relics.Orichalcum;
 import com.megacrit.cardcrawl.relics.PrismaticShard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
-import com.megacrit.cardcrawl.screens.SingleRelicViewPopup;
 import com.megacrit.cardcrawl.screens.stats.AchievementGrid;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -93,10 +92,7 @@ import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PSkillPower;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLDynamicRelicData;
-import pinacolada.relics.PCLPointerRelic;
-import pinacolada.relics.PCLRelicData;
+import pinacolada.relics.*;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -105,6 +101,7 @@ import pinacolada.skills.skills.base.moves.PMove_GainBlock;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.stances.PCLStanceHelper;
 
+import java.io.FilenameFilter;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -114,9 +111,9 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 public class GameUtilities {
-    protected static final String PORTRAIT_PATH = "images/1024Portraits/";
-    protected static final String BETA_PATH = "images/1024PortraitsBeta/";
-    public final static String EMPTY_STRING = "";
+    private static final String PORTRAIT_PATH = "images/1024Portraits/";
+    private static final String BETA_PATH = "images/1024PortraitsBeta/";
+    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -229,12 +226,26 @@ public class GameUtilities {
         return getRNG().random(100) < amount;
     }
 
+    public static void changeCardForm(AbstractCard card, int amount) {
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).changeForm(amount, card.timesUpgraded);
+            card.flash();
+        }
+    }
+
     public static void changeCardName(AbstractCard card, String newName) {
         final String previousName = card.name;
         card.name = card.name.replace(card.originalName, newName);
         card.originalName = newName;
         if (card.name.equals(previousName)) {
             card.name = newName;
+        }
+    }
+
+    public static void changeRelicForm(AbstractRelic relic, int amount) {
+        if (relic instanceof PCLRelic) {
+            ((PCLRelic) relic).setForm(amount);
+            relic.flash();
         }
     }
 
@@ -1795,8 +1806,8 @@ public class GameUtilities {
 
     public static CardStrings mockCardStrings() {
         CardStrings s = new CardStrings();
-        s.NAME = GameUtilities.EMPTY_STRING;
-        s.DESCRIPTION = GameUtilities.EMPTY_STRING;
+        s.NAME = EUIUtils.EMPTY_STRING;
+        s.DESCRIPTION = EUIUtils.EMPTY_STRING;
         s.EXTENDED_DESCRIPTION = new String[]{};
         return s;
     }
@@ -2236,6 +2247,15 @@ public class GameUtilities {
             for (AbstractPower p : c.powers) {
                 p.updateDescription();
             }
+        }
+    }
+
+    public static void upgradeRelic(AbstractRelic relic, int amount) {
+        if (relic instanceof PCLRelic) {
+            for (int i = 0; i < amount; i++) {
+                ((PCLRelic) relic).upgrade();
+            }
+            relic.flash();
         }
     }
 

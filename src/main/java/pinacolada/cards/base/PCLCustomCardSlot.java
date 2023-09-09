@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static extendedui.EUIUtils.array;
-import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardData, PCLDynamicCard> {
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {

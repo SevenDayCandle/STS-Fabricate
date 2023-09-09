@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.primary;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -15,8 +16,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
-
-import static pinacolada.utilities.GameUtilities.EMPTY_STRING;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
 @VisibleSkill
@@ -45,7 +44,7 @@ public class PRoot extends PPrimary<PField_Empty> {
         if (source instanceof AbstractPower) {
             return TEXT.cond_when(PGR.core.tooltips.create.past());
         }
-        return EMPTY_STRING;
+        return EUIUtils.EMPTY_STRING;
     }
 
     // This is a no-op on cards

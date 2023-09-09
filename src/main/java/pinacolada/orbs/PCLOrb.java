@@ -26,6 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 
 // Copied and modified from STS-AnimatorMod
 // TODO Make into a PointerProvider
+@Deprecated
 public abstract class PCLOrb extends AbstractOrb {
     public static final int IMAGE_SIZE = 96;
     protected final OrbStrings orbStrings;

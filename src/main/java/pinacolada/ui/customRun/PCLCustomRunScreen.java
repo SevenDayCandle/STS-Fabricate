@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.screens.CustomCardLibraryScreen;
@@ -37,7 +38,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public static final HashMap<String, AbstractCard.CardColor> COLOR_MOD_MAPPING = new HashMap<>();
     protected final PCLCustomRunCanvas canvas;
     protected CharacterOption currentOption;
-    protected String currentSeed = GameUtilities.EMPTY_STRING;
+    protected String currentSeed = EUIUtils.EMPTY_STRING;
     protected boolean initialized;
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();

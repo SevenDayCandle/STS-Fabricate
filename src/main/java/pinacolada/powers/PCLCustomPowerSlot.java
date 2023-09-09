@@ -15,7 +15,7 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerData, PCLDynamicPower> {
     private static final TypeToken<PCLCustomPowerSlot> TTOKEN = new TypeToken<PCLCustomPowerSlot>() {

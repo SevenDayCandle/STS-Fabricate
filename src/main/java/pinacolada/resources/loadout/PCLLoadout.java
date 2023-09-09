@@ -27,7 +27,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
@@ -45,7 +44,7 @@ public abstract class PCLLoadout {
     public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
     public final String ID;
-    protected String shortDescription = GameUtilities.EMPTY_STRING;
+    protected String shortDescription = EUIUtils.EMPTY_STRING;
     public AbstractCard.CardColor color;
     public int preset;
     public int unlockLevel = 0;

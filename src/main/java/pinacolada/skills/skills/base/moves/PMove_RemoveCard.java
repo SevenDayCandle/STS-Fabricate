@@ -60,7 +60,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
             return TEXT.act_removeFrom(TEXT.subjects_themX, TEXT.cpile_deck);
         }
         else if (fields.groupTypes.size() == 0) {
-            return TEXT.act_removeFrom(TEXT.subjects_thisCard, TEXT.cpile_deck);
+            return TEXT.act_removeFrom(TEXT.subjects_thisCard(), TEXT.cpile_deck);
         }
         String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)));
         return fields.groupTypes.size() == 1 && fields.groupTypes.get(0) == PCLCardGroupHelper.MasterDeck ? TEXT.act_removeFrom(cString, TEXT.cpile_deck) :

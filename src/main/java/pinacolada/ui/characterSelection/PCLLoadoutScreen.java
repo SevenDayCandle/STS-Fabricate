@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutScreen extends AbstractMenuScreen {
-    protected static final float SLOT_SPACING = screenH(0.05f);
+    private static final float SLOT_SPACING = screenH(0.05f);
     protected static final PCLLoadoutValidation val = new PCLLoadoutValidation();
     protected final ArrayList<PCLCardSlotEditor> cardEditors = new ArrayList<>();
     protected final ArrayList<PCLRelicSlotEditor> relicsEditors = new ArrayList<>();

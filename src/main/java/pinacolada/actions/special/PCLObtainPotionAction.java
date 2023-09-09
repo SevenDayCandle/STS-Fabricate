@@ -4,10 +4,10 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import pinacolada.actions.PCLAction;
 
-public class ObtainPotionAction extends PCLAction<AbstractPotion> {
+public class PCLObtainPotionAction extends PCLAction<AbstractPotion> {
     protected final AbstractPotion potion;
 
-    public ObtainPotionAction(AbstractPotion potion) {
+    public PCLObtainPotionAction(AbstractPotion potion) {
         super(ActionType.SPECIAL);
 
         this.potion = potion;

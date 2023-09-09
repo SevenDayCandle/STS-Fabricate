@@ -68,7 +68,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     protected float textScale;
     public PCLEffect playEffect;
     public EUIButton seriesButton;
-    public EUIButton relicsButton;
     public EUIButton loadoutEditorButton;
     public EUIButton infoButton;
     public EUIButton resetButton;
@@ -115,39 +114,32 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         final float textScale = 0.8f;
 
         resetButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, startingCardsListLabel.hb.y + scale(110)).setText("")
+                .setPosition(startingCardsListLabel.hb.cX, startingCardsListLabel.hb.y + scale(110))
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_resetTutorial)
                 .setTooltip(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialInfo)
                 .setColor(new Color(0.8f, 0.3f, 0.5f, 1))
                 .setOnClick(this::openResetDialog);
 
         infoButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, resetButton.hb.y + gapY).setText("")
+                .setPosition(startingCardsListLabel.hb.cX, resetButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_charTutorial)
                 .setTooltip(PGR.core.strings.csel_charTutorial, PGR.core.strings.csel_charTutorialInfo)
                 .setColor(new Color(0.5f, 0.3f, 0.8f, 1))
                 .setOnClick(this::openInfo);
 
         loadoutEditorButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, infoButton.hb.y + gapY).setText("")
+                .setPosition(startingCardsListLabel.hb.cX, infoButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_deckEditor)
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
-        relicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, loadoutEditorButton.hb.y + gapY).setText("")
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_relicPool)
-                .setTooltip(PGR.core.strings.csel_relicPool, PGR.core.strings.csel_relicPoolInfo)
-                .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
-                .setOnClick(this::openRelicsDialog);
-
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, relicsButton.hb.y + gapY).setText("")
+                .setPosition(startingCardsListLabel.hb.cX, loadoutEditorButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
-                .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
+                .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::openSeriesSelect);
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
@@ -191,40 +183,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
-    private ArrayList<AbstractRelic> getAvailableRelics() {
-        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
-
-        // Get additional relics that this character can use
-        String[] additional = data.getAdditionalRelicIDs();
-        if (additional != null) {
-            for (String id : additional) {
-                relics.add(RelicLibrary.getRelic(id));
-            }
-        }
-
-        // Get other non base-game relics
-        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
-            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
-                relics.add(r);
-            }
-        }
-
-        List<String> startingRelics = data.getStartingRelics();
-        relics.removeIf(r -> {
-            if (UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId)) {
-                return true;
-            }
-            for (PCLLoadout loadout : data.loadouts.values()) {
-                if (loadout.isRelicFromLoadout(r.relicId) && loadout.isLocked()) {
-                    return true;
-                }
-            }
-            return false;
-        });
-
-        return relics;
-    }
-
     protected float getInfoX() {
         return EUIClassUtils.getField(characterOption, "infoX");
     }
@@ -250,15 +208,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     private void openLoadoutEditor() {
         if (loadout != null && characterOption != null && data != null) {
             PGR.loadoutEditor.open(loadout, data, characterOption, () -> refresh(characterOption));
-        }
-    }
-
-    private void openRelicsDialog() {
-        if (data != null) {
-            currentDialog = new ViewInGameRelicPoolEffect(getAvailableRelics(), new HashSet<>(data.config.bannedRelics.get()))
-                    .addCallback((effect) -> {
-                        data.config.bannedRelics.set(effect.bannedRelics);
-                    });
         }
     }
 
@@ -303,7 +252,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             startingCardsLabel.setActive(true);
             startingCardsListLabel.setActive(true);
             seriesButton.setActive(true);
-            relicsButton.setActive(true);
             loadoutEditorButton.setActive(true);
             infoButton.setActive(true);
             resetButton.setActive(true);
@@ -321,7 +269,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
             EUITourTooltip.queueFirstView(PGR.config.tourCharSelect,
                     seriesButton.makeTour(true),
-                    relicsButton.makeTour(true),
                     loadoutEditorButton.makeTour(true),
                     infoButton.makeTour(true),
                     resetButton.makeTour(true));
@@ -329,7 +276,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         else {
             playEffect = null;
             seriesButton.setActive(false);
-            relicsButton.setActive(false);
             loadoutEditorButton.setActive(false);
             infoButton.setActive(false);
             resetButton.setActive(false);
@@ -427,7 +373,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     public void renderImpl(SpriteBatch sb) {
         seriesButton.tryRender(sb);
-        relicsButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
         infoButton.tryRender(sb);
         resetButton.tryRender(sb);
@@ -508,7 +453,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
         else {
             seriesButton.tryUpdate();
-            relicsButton.tryUpdate();
             loadoutEditorButton.tryUpdate();
             infoButton.tryUpdate();
             resetButton.tryUpdate();

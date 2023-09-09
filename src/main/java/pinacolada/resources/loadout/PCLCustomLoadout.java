@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import pinacolada.misc.LoadoutStrings;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;
 
@@ -25,8 +24,8 @@ public class PCLCustomLoadout extends PCLLoadout {
 
     public static LoadoutStrings getInitialStrings() {
         LoadoutStrings retVal = new LoadoutStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
-        retVal.AUTHOR = GameUtilities.EMPTY_STRING;
+        retVal.NAME = EUIUtils.EMPTY_STRING;
+        retVal.AUTHOR = EUIUtils.EMPTY_STRING;
         return retVal;
     }
 

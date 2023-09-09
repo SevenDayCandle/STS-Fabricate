@@ -7,13 +7,11 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUI;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.EUIBase;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.pcl.glyphs.Glyph;
-import pinacolada.relics.PCLRelicData;
-import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -83,7 +81,7 @@ public class GlyphBlight extends AbstractGlyphBlight {
 
         if (glyph != null) {
             glyph.drawScale = glyph.targetDrawScale = 0.8f;
-            glyph.current_x = glyph.target_x = InputHelper.mX + (((InputHelper.mX > (Settings.WIDTH * 0.5f)) ? -1.505f : 1.505f) * EUITooltip.BOX_W);
+            glyph.current_x = glyph.target_x = InputHelper.mX + (((InputHelper.mX > (Settings.WIDTH * 0.5f)) ? -1.505f : 1.505f) * EUIBase.scale(360f));
             glyph.current_y = glyph.target_y = InputHelper.mY - (AbstractCard.IMG_HEIGHT * 0.5f);
             EUI.addPostRender(glyph::render);
         }

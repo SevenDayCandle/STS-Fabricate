@@ -20,9 +20,9 @@ public class AnimatedParticleEffect extends VisualEffect {
     protected float colorSpeed = 1;
     protected float frameDelay;
     protected float frameTimer;
-    public AnimationMode mode;
-    public int frame;
-    public int totalFrames;
+    protected AnimationMode mode;
+    protected int frame;
+    protected int totalFrames;
 
     public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns) {
         this(texture, x, y, 0, 1, rows, columns, 0.03F);

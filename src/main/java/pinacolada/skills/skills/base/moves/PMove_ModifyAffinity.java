@@ -87,7 +87,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
             return useParent ? TEXT.act_setOf(PField.getGeneralAffinityString(), getInheritedThemString(), giveString) :
                     fields.hasGroups() ?
                             TEXT.act_setOfFrom(PField.getGeneralAffinityString(), EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
-                            TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard, giveString);
+                            TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard(), giveString);
         }
         return getBasicGiveString();
     }

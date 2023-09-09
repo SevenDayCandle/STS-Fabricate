@@ -39,13 +39,13 @@ import java.util.List;
 
 
 public class PCLCustomRunCanvas extends EUICanvas {
-    protected static final float SCREEN_X = Settings.WIDTH * 0.25f;
-    protected static final float SCREEN_Y = Settings.HEIGHT * 0.9f;
-    protected static final float GAP_Y = scale(160);
-    protected static final int ROW_SIZE = 10;
+    private static final float SCREEN_X = Settings.WIDTH * 0.25f;
+    private static final float SCREEN_Y = Settings.HEIGHT * 0.9f;
+    private static final float GAP_Y = scale(160);
+    private static final int ROW_SIZE = 10;
     // Dammit basegame why hardcoded strings -_-
-    protected static final String MOD_ENDLESS = "Endless";
-    protected static final String MOD_THE_ENDING = "The Ending";
+    private static final String MOD_ENDLESS = "Endless";
+    private static final String MOD_THE_ENDING = "The Ending";
 
     public final PCLCustomRunScreen screen;
     public final EUILabel titleLabel;

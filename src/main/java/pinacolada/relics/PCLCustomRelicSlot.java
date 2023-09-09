@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static extendedui.EUIUtils.array;
-import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicData, PCLDynamicRelic> {
     private static final TypeToken<PCLCustomRelicSlot> TTOKEN = new TypeToken<PCLCustomRelicSlot>() {

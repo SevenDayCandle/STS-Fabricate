@@ -8,11 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MathHelper;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -25,14 +22,9 @@ import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.PCLRenderHelpers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static pinacolada.relics.PCLRelic.getHiddenTooltip;
 
 public abstract class PCLBlight extends AbstractBlight implements KeywordProvider {
     public final PCLBlightData blightData;
@@ -40,7 +32,7 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     public EUIKeywordTooltip mainTooltip;
 
     public PCLBlight(PCLBlightData data) {
-        super(data.ID, data.strings.NAME, GameUtilities.EMPTY_STRING, "durian.png", true);
+        super(data.ID, data.strings.NAME, EUIUtils.EMPTY_STRING, "durian.png", true);
         this.blightData = data;
         setupImages();
         updateDescription();

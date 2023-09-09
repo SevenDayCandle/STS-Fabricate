@@ -120,9 +120,9 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     private static CardStrings getMockCardString() {
         CardStrings retVal = new CardStrings();
         retVal.NAME = "NAN";
-        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.EXTENDED_DESCRIPTION = new String[]{GameUtilities.EMPTY_STRING};
+        retVal.DESCRIPTION = EUIUtils.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = EUIUtils.EMPTY_STRING;
+        retVal.EXTENDED_DESCRIPTION = new String[]{EUIUtils.EMPTY_STRING};
         return retVal;
     }
 

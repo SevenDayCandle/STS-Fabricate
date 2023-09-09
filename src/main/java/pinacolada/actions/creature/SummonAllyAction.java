@@ -17,11 +17,11 @@ import pinacolada.utilities.GameUtilities;
 public class SummonAllyAction extends PCLAction<PCLCard> {
     public final PCLCard card;
     public PCLCardAlly ally;
-    public boolean requireTarget;
-    public boolean retainPowers;
-    public boolean delayForTurn = true;
-    public boolean showEffect = true;
-    public boolean summonCardOnly = true;
+    private boolean requireTarget;
+    private boolean retainPowers;
+    private boolean delayForTurn = true;
+    private boolean showEffect = true;
+    private boolean summonCardOnly = true;
 
     public SummonAllyAction(PCLCard card, PCLCardAlly slot) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);

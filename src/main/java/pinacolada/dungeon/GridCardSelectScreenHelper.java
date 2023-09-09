@@ -160,7 +160,7 @@ public class GridCardSelectScreenHelper {
                 AbstractCard card = cards.get(i);
 
                 // Because hand keeps setting the glow
-                if (cardGroup == AbstractDungeon.player.hand && !selectScreen.selectedCards.contains(card)) {
+                if (!selectScreen.selectedCards.contains(card)) {
                     card.stopGlowing();
                 }
 

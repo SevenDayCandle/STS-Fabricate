@@ -15,7 +15,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,7 +87,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
 
     protected static PotionStrings getInitialStrings() {
         PotionStrings retVal = new PotionStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.NAME = EUIUtils.EMPTY_STRING;
         retVal.DESCRIPTIONS = new String[]{};
         return retVal;
     }

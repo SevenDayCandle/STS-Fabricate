@@ -7,6 +7,7 @@ import extendedui.EUIUtils;
 import pinacolada.effects.PCLEffects;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class ObtainCustomRelicCommand extends ConsoleCommand {
     }
 
     protected void doAction(PCLRelic copy) {
-        PCLEffects.Queue.obtainRelic(copy);
+        GameUtilities.obtainRelicFromEvent(copy);
     }
 
     @Override

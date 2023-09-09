@@ -337,6 +337,10 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         this.imagePath = PGR.getPowerImage(ID);
     }
 
+    public boolean isBuff() {
+        return type == AbstractPower.PowerType.BUFF;
+    }
+
     public boolean isCommon() {
         return isCommon;
     }

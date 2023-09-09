@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
-import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 
 // Copied and modified from STS-AnimatorMod

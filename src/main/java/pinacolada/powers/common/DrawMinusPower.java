@@ -14,8 +14,9 @@ import pinacolada.resources.pcl.PCLCoreTooltips;
 public class DrawMinusPower extends PCLPower {
     public static final PCLPowerData DATA = register(DrawMinusPower.class)
             .setType(PowerType.DEBUFF)
+            .setImageRegion(PCLPowerData.ICON_NEXT_TURN_DRAW_LESS)
             .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurnNext)
-            .setTooltip(PGR.core.tooltips.bruised);
+            .setTooltip(PGR.core.tooltips.nextTurnDrawMinus);
 
     public DrawMinusPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(DATA, owner, source, amount);

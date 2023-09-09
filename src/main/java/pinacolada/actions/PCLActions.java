@@ -43,6 +43,7 @@ import pinacolada.actions.powers.AddPowerEffectBonus;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.powers.SpreadPower;
 import pinacolada.actions.special.ObtainRelicAction;
+import pinacolada.actions.special.PCLObtainPotionAction;
 import pinacolada.actions.special.ShowAndObtainCardAction;
 import pinacolada.actions.special.UsePotionAction;
 import pinacolada.actions.utility.*;
@@ -533,8 +534,8 @@ public final class PCLActions {
         return add(new MoveCards(destination, source, amount));
     }
 
-    public ObtainPotionAction obtainPotion(AbstractPotion potion) {
-        return add(new ObtainPotionAction(potion));
+    public PCLObtainPotionAction obtainPotion(AbstractPotion potion) {
+        return add(new PCLObtainPotionAction(potion));
     }
 
     public ObtainRelicAction obtainRelic(AbstractRelic relic) {

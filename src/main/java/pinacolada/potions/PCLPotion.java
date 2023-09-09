@@ -104,7 +104,6 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     // May be null before potion data is initialized
-    // Base will be multiplied by 2, then decreased by 1 (so 0 upgrades will give 0 upgrade bonuses without Sacred Bark and 1 with it)
     @Override
     public int getPotency(int i) {
         return auxiliaryData != null ? auxiliaryData.timesUpgraded + 1 : 1;

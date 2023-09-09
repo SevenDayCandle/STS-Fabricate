@@ -12,7 +12,6 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -194,6 +193,6 @@ public abstract class PCLAction<T> extends AbstractGameAction {
     }
 
     protected String updateMessageInternal(String message) {
-        return EUIUtils.format(message, amount) + (StringUtils.isNotEmpty(name) ? (" [" + name + "]") : GameUtilities.EMPTY_STRING);
+        return EUIUtils.format(message, amount) + (StringUtils.isNotEmpty(name) ? (" [" + name + "]") : EUIUtils.EMPTY_STRING);
     }
 }

@@ -874,16 +874,14 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
-        subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, m));
         PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
         if (pclCard != null) {
+            AbstractCreature target = CustomTargeting.getCardTarget(pclCard);
+            subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, target));
             pclCard.unfadeOut();
             pclCard.lighten(true);
-
-            AbstractCreature target = CustomTargeting.getCardTarget(pclCard);
             pclCard.calculateCardDamage(EUIUtils.safeCast(target, AbstractMonster.class));
             final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, target);
-
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
                 summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
             }
@@ -895,6 +893,7 @@ public class CombatManager extends EUIBase {
             return true;
         }
         else {
+            subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, m));
             return false;
         }
     }

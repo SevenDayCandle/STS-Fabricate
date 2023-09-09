@@ -155,7 +155,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
-                : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
+                : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
                 : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
     }
@@ -197,7 +197,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
-        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
+        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard()), null);
     }
 
     @Override

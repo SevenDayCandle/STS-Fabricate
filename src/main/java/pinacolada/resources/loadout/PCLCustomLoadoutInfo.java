@@ -13,7 +13,7 @@ import pinacolada.misc.PCLCustomLoadable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     private static final HashMap<String, PCLCustomLoadoutInfo> CUSTOM_LOADOUTS = new HashMap<>();

@@ -45,18 +45,18 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
             return useParent ? TEXT.act_setOf(giveString, getInheritedThemString(), getAmountRawString()) :
                     fields.hasGroups() ?
                             TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                            TEXT.act_setOf(giveString, TEXT.subjects_thisCard, getAmountRawString());
+                            TEXT.act_setOf(giveString, TEXT.subjects_thisCard(), getAmountRawString());
         }
         if (amount >= 0) {
             return useParent ? TEXT.act_increasePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
                     fields.hasGroups() ?
                             TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                            TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
+                            TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString());
         }
         return useParent ? TEXT.act_reducePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
                 fields.hasGroups() ?
                         TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                        TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
+                        TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString());
     }
 
     public String getBasicGiveString() {
@@ -73,7 +73,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedThemString()) :
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
+                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard());
     }
 
     public String getNumericalObjectText() {

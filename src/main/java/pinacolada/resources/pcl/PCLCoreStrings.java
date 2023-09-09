@@ -192,6 +192,24 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_powerPriority = cetut.TEXT[62];
     public final String cetut_powerMinMaxStacks = cetut.TEXT[63];
     public final String cetut_powerStandard = cetut.TEXT[64];
+    // Combat
+    public final String combat_current = combat.TEXT[0];
+    public final String combat_next = combat.TEXT[1];
+    public final String combat_uses = combat.TEXT[2];
+    public final String combat_rerolls = combat.TEXT[3];
+    public final String combat_controlPile = combat.TEXT[4];
+    public final String combat_controlPileDescription = combat.TEXT[5];
+    public final String combat_count = combat.TEXT[6];
+    public final String combat_effect = combat.TEXT[7];
+    public final String combat_nextLevelEffect = combat.TEXT[8];
+    public final String combat_active = combat.TEXT[9];
+    public final String combat_inactive = combat.TEXT[10];
+    public final String combat_disabled = combat.TEXT[11];
+    public final String combat_dodged = combat.TEXT[12];
+    public final String combat_afterlifeMet = combat.TEXT[13];
+    public final String combat_afterlifeRequirement = combat.TEXT[14];
+    public final String combat_rightClickRetarget = combat.TEXT[15];
+    public final String combat_turns = combat.TEXT[16];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -200,7 +218,20 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cpile_top = cardPile.TEXT[4];
     public final String cpile_bottom = cardPile.TEXT[5];
     public final String cpile_random = cardPile.TEXT[6];
-
+    // Character
+    public final String csel_leftText = charselect.TEXT[0];
+    public final String csel_deckEditor = charselect.TEXT[1];
+    public final String csel_deckEditorInfo = charselect.TEXT[2];
+    public final String csel_seriesEditor = charselect.TEXT[3];
+    public final String csel_seriesEditorInfo = charselect.TEXT[4];
+    public final String csel_resetTutorial = charselect.TEXT[5];
+    public final String csel_resetTutorialInfo = charselect.TEXT[6];
+    public final String csel_resetTutorialConfirm = charselect.TEXT[7];
+    public final String csel_charTutorial = charselect.TEXT[8];
+    public final String csel_charTutorialInfo = charselect.TEXT[9];
+    public final String csel_ascensionGlyph = charselect.TEXT[10];
+    public final String csel_ability = charselect.TEXT[11];
+    // Card type
     public final String ctype_allAlly = cardtype.TEXT[0];
     public final String ctype_allAllyEnemy = cardtype.TEXT[1];
     public final String ctype_randomAlly = cardtype.TEXT[2];
@@ -222,40 +253,6 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String ctype_turnStartLast = cardtype.TEXT[18];
     public final String ctype_turnEndFirst = cardtype.TEXT[19];
     public final String ctype_turnEndLast = cardtype.TEXT[20];
-
-    // Character
-    public final String csel_leftText = charselect.TEXT[0];
-    public final String csel_deckEditor = charselect.TEXT[1];
-    public final String csel_deckEditorInfo = charselect.TEXT[2];
-    public final String csel_seriesEditor = charselect.TEXT[3];
-    public final String csel_seriesEditorInfo = charselect.TEXT[4];
-    public final String csel_resetTutorial = charselect.TEXT[5];
-    public final String csel_resetTutorialInfo = charselect.TEXT[6];
-    public final String csel_resetTutorialConfirm = charselect.TEXT[7];
-    public final String csel_charTutorial = charselect.TEXT[8];
-    public final String csel_charTutorialInfo = charselect.TEXT[9];
-    public final String csel_relicPool = charselect.TEXT[10];
-    public final String csel_relicPoolInfo = charselect.TEXT[11];
-    public final String csel_ascensionGlyph = charselect.TEXT[12];
-    public final String csel_ability = charselect.TEXT[13];
-    // Combat
-    public final String combat_current = combat.TEXT[0];
-    public final String combat_next = combat.TEXT[1];
-    public final String combat_uses = combat.TEXT[2];
-    public final String combat_rerolls = combat.TEXT[3];
-    public final String combat_controlPile = combat.TEXT[4];
-    public final String combat_controlPileDescription = combat.TEXT[5];
-    public final String combat_count = combat.TEXT[6];
-    public final String combat_effect = combat.TEXT[7];
-    public final String combat_nextLevelEffect = combat.TEXT[8];
-    public final String combat_active = combat.TEXT[9];
-    public final String combat_inactive = combat.TEXT[10];
-    public final String combat_disabled = combat.TEXT[11];
-    public final String combat_dodged = combat.TEXT[12];
-    public final String combat_afterlifeMet = combat.TEXT[13];
-    public final String combat_afterlifeRequirement = combat.TEXT[14];
-    public final String combat_rightClickRetarget = combat.TEXT[15];
-    public final String combat_turns = combat.TEXT[16];
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];
@@ -419,7 +416,10 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String sui_selectRandom = seriesui.TEXT[18];
     public final String sui_showCardPool = seriesui.TEXT[19];
     public final String sui_showColorless = seriesui.TEXT[20];
-    public final String sui_totalInstructions = seriesui.TEXT[21];
+    public final String sui_showColorlessInfo = seriesui.TEXT[21];
+    public final String sui_relicPool = seriesui.TEXT[22];
+    public final String sui_relicPoolInfo = seriesui.TEXT[23];
+    public final String sui_totalInstructions = seriesui.TEXT[24];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -488,7 +488,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_theirX = subjects.TEXT[48];
     public final String subjects_themX = subjects.TEXT[49];
     public final String subjects_theyX = subjects.TEXT[50];
-    public final String subjects_thisCard = subjects.TEXT[51];
+    public final String subjects_thisX = subjects.TEXT[51];
     public final String subjects_this = subjects.TEXT[52];
     public final String subjects_unblockedX = subjects.TEXT[53];
     public final String subjects_x = subjects.TEXT[54];
@@ -1301,8 +1301,14 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_they(Object amount) {
         return EUIUtils.format(subjects_theyX, amount);
     }
+    public final String subjects_thisCard() {
+        return EUIUtils.format(subjects_thisX, subjects_card);
+    }
     public final String subjects_thisCombat(String base) {
         return EUIUtils.format(subjects_xThisCombat, base);
+    }
+    public final String subjects_thisRelic() {
+        return EUIUtils.format(subjects_thisX, subjects_relic);
     }
     public final String subjects_thisTurn(String base) {
         return EUIUtils.format(subjects_xThisTurn, base);

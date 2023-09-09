@@ -131,10 +131,6 @@ public final class PCLEffects {
         throw new RuntimeException("Enum value does not exist.");
     }
 
-    public ObtainRelicEffect obtainRelic(AbstractRelic relic) {
-        return add(new ObtainRelicEffect(relic));
-    }
-
     public FadingParticleEffect particle(Texture texture, float x, float y) {
         return add(FadingParticleEffect.obtain(texture, x, y));
     }

@@ -15,7 +15,6 @@ import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.tooltips.EUIPreview;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;
@@ -27,78 +26,42 @@ import java.util.Locale;
 public class PCLMainConfig extends AbstractConfig {
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
-    private static final String ASCENSIONGLYPH0 = PCLMainConfig.createFullID("AscensionGlyph0");
-    private static final String ASCENSIONGLYPH1 = PCLMainConfig.createFullID("AscensionGlyph1");
-    private static final String ASCENSIONGLYPH2 = PCLMainConfig.createFullID("AscensionGlyph2");
-    private static final String ABBREVIATED_EFFECTS = PCLMainConfig.createFullID("AbbreviateEffects");
-    private static final String CROP_CARD_PORTRAIT = PCLMainConfig.createFullID("UseCroppedPortrait");
-    private static final String DAMAGE_FORMULA_POSITION = PCLMainConfig.createFullID("DamageFormulaPosition");
-    private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLMainConfig.createFullID("DisplayCardTagDescription");
-    private static final String DISPLAY_CARD_TAG_TEXT = PCLMainConfig.createFullID("DisplayCardTagText");
-    private static final String ENABLE_CUSTOM_CARDS = PCLMainConfig.createFullID("EnableCustomCards");
-    private static final String ENABLE_CUSTOM_EVENTS = PCLMainConfig.createFullID("EnableCustomEvents");
-    private static final String ENABLE_CUSTOM_POTIONS = PCLMainConfig.createFullID("EnableCustomPotions");
-    private static final String ENABLE_CUSTOM_RELICS = PCLMainConfig.createFullID("EnableCustomRelics");
-    private static final String FABRICATE_POPUP = PCLMainConfig.createFullID("FabricatePopup");
-    private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
-    private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
-    private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
-    private static final String LOW_VRAM = PCLMainConfig.createFullID("LowVRAM");
-    private static final String MADNESS_REPLACEMENTS = PCLMainConfig.createFullID("MadnessReplacements");
-    private static final String REMOVE_LINE_BREAKS = PCLMainConfig.createFullID("RemoveLineBreaks");
-    private static final String REPLACE_CARDS_PCL = PCLMainConfig.createFullID("ReplaceCardsPCL");
-    private static final String SHOW_ESTIMATED_DAMAGE = PCLMainConfig.createFullID("ShowEstimatedDamage");
-    private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
-    private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
-    private static final String SHOW_UPGRADE_ON_CARD_REWARDS = PCLMainConfig.createFullID("ShowUpgradeOnCardRewards");
-    private static final String TOUR_CARDATTRIBUTE = PCLMainConfig.createFullID("TourCardAttribute");
-    private static final String TOUR_CARDPRIMARY = PCLMainConfig.createFullID("TourCardPrimary");
-    private static final String TOUR_CHARSELECT = PCLMainConfig.createFullID("TourCharSelect");
-    private static final String TOUR_EDITOREFFECT = PCLMainConfig.createFullID("TourEditorEffect");
-    private static final String TOUR_EDITORFORM = PCLMainConfig.createFullID("TourEditorForm");
-    private static final String TOUR_EDITORPOWER = PCLMainConfig.createFullID("TourEditorPower");
-    private static final String TOUR_ITEMSCREEN = PCLMainConfig.createFullID("TourItemScreen");
-    private static final String TOUR_LOADOUT = PCLMainConfig.createFullID("TourLoadout");
-    private static final String TOUR_RELICPRIMARY = PCLMainConfig.createFullID("TourRelicPrimary");
-    private static final String TOUR_SERIESSELECT = PCLMainConfig.createFullID("TourSeriesSelect");
-    private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
-    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
     private static ExtraModSettingsPanel.Category pclCategory;
     private HashSet<String> tips = null;
-    public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(ABBREVIATED_EFFECTS, false);
-    public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
-    public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
-    public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);
-    public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
-    public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
-    public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
-    public STSConfigItem<Boolean> fabricatePopup = new STSConfigItem<Boolean>(FABRICATE_POPUP, false);
-    public STSConfigItem<Boolean> lowVRAM = new STSConfigItem<Boolean>(LOW_VRAM, false);
-    public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
-    public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(REMOVE_LINE_BREAKS, false);
-    public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
-    public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(SHOW_ESTIMATED_DAMAGE, false);
-    public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
-    public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
-    public STSConfigItem<Boolean> showUpgradeOnCardRewards = new STSConfigItem<Boolean>(SHOW_UPGRADE_ON_CARD_REWARDS, false);
-    public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
-    public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(TOUR_CARDATTRIBUTE, false);
-    public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(TOUR_CARDPRIMARY, false);
-    public STSConfigItem<Boolean> tourCharSelect = new STSConfigItem<Boolean>(TOUR_CHARSELECT, false);
-    public STSConfigItem<Boolean> tourEditorEffect = new STSConfigItem<Boolean>(TOUR_EDITOREFFECT, false);
-    public STSConfigItem<Boolean> tourEditorForm = new STSConfigItem<Boolean>(TOUR_EDITORFORM, false);
-    public STSConfigItem<Boolean> tourEditorPower = new STSConfigItem<Boolean>(TOUR_EDITORPOWER, false);
-    public STSConfigItem<Boolean> tourItemScreen = new STSConfigItem<Boolean>(TOUR_ITEMSCREEN, false);
-    public STSConfigItem<Boolean> tourLoadout = new STSConfigItem<Boolean>(TOUR_LOADOUT, false);
-    public STSConfigItem<Boolean> tourRelicPrimary = new STSConfigItem<Boolean>(TOUR_RELICPRIMARY, false);
-    public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(TOUR_SERIESSELECT, false);
-    public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
-    public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
-    public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(ASCENSIONGLYPH2, 0);
-    public STSStringConfigItem lastCSVPath = new STSStringConfigItem(LAST_CSV_PATH, "");
-    public STSStringConfigItem lastImagePath = new STSStringConfigItem(LAST_IMAGE_PATH, "");
+    public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("AbbreviateEffects"), false);
+    public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("UseCroppedPortrait"), false);
+    public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("DisplayCardTagDescription"), false);
+    public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomCards"), false);
+    public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomEvents"), false);
+    public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomPotions"), false);
+    public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomRelics"), false);
+    public STSConfigItem<Boolean> fabricatePopup = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("FabricatePopup"), false);
+    public STSConfigItem<Boolean> lowVRAM = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("LowVRAM"), false);
+    public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("MadnessReplacements"), false);
+    public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("RemoveLineBreaks"), false);
+    public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ReplaceCardsPCL"), false);
+    public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowEstimatedDamage"), false);
+    public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowFormulaDisplay"), false);
+    public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowIrrelevantProperties"), false);
+    public STSConfigItem<Boolean> showUpgradeOnCardRewards = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowUpgradeOnCardRewards"), false);
+    public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("VanillaLibraryScreen"), false);
+    public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCardAttribute"), false);
+    public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCardPrimary"), false);
+    public STSConfigItem<Boolean> tourCharSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCharSelect"), false);
+    public STSConfigItem<Boolean> tourEditorEffect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourEditorEffect"), false);
+    public STSConfigItem<Boolean> tourEditorForm = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourEditorForm"), false);
+    public STSConfigItem<Boolean> tourEditorPower = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourEditorPower"), false);
+    public STSConfigItem<Boolean> tourItemScreen = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourItemScreen"), false);
+    public STSConfigItem<Boolean> tourLoadout = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourLoadout"), false);
+    public STSConfigItem<Boolean> tourRelicPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourRelicPrimary"), false);
+    public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourSeriesSelect"), false);
+    public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph0"), 0);
+    public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph1"), 0);
+    public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph2"), 0);
+    public STSStringConfigItem lastCSVPath = new STSStringConfigItem(PCLMainConfig.createFullID("LastCSVPath"), "");
+    public STSStringConfigItem lastImagePath = new STSStringConfigItem(PCLMainConfig.createFullID("LastImagePath"), "");
     public STSStringConfigItem lastSeed = new STSStringConfigItem(LAST_SEED_KEY, "");
-    public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(DAMAGE_FORMULA_POSITION, new Vector2(0.6f, 0.8f));
+    public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(PCLMainConfig.createFullID("DamageFormulaPosition"), new Vector2(0.6f, 0.8f));
 
     public PCLMainConfig() {
         super(MOD_ID);
@@ -116,8 +79,8 @@ public class PCLMainConfig extends AbstractConfig {
         if (tips == null) {
             tips = new HashSet<>();
 
-            if (config.has(HIDE_TIP_DESCRIPTION)) {
-                Collections.addAll(tips, config.getString(HIDE_TIP_DESCRIPTION).split("\\|"));
+            if (config.has(PCLMainConfig.createFullID("HideTipDescription"))) {
+                Collections.addAll(tips, config.getString(PCLMainConfig.createFullID("HideTipDescription")).split("\\|"));
             }
         }
 
@@ -138,7 +101,7 @@ public class PCLMainConfig extends AbstractConfig {
             tips.remove(id);
         }
 
-        config.setString(HIDE_TIP_DESCRIPTION, EUIUtils.joinStrings("|", tips));
+        config.setString(PCLMainConfig.createFullID("HideTipDescription"), EUIUtils.joinStrings("|", tips));
 
         if (flush) {
             save();

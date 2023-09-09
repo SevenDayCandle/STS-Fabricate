@@ -22,7 +22,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class PCLCardText {
     protected BitmapFont font;
     protected float scaleModifier;
     protected int lineIndex;
-    protected String overrideDescription = GameUtilities.EMPTY_STRING;
+    protected String overrideDescription = EUIUtils.EMPTY_STRING;
     public Color color;
     public float lineWidth = DESC_BOX_WIDTH;
     public float startX;

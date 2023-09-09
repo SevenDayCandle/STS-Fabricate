@@ -8,11 +8,15 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.MathHelper;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -27,14 +31,16 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.effects.PCLEffects;
+import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
+import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,10 +54,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUIButton resetPoolButton;
     public final EUIButton resetBanButton;
     public final EUIButton previewCards;
-    public final EUIButton colorless;
+    public final EUIButton colorlessButton;
     public final EUIButton cancel;
     public final EUIButton confirm;
     public final EUIButton loadoutEditor;
+    public final EUIButton relicsButton;
     public final EUITextBox typesAmount;
     public final EUITextBox previewCardsInfo;
     public final EUIContextMenu<ContextOption> contextMenu;
@@ -63,11 +70,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final HashSet<String> bannedCards = new HashSet<>();
     public final HashSet<String> bannedColorless = new HashSet<>();
     public final HashSet<String> selectedLoadouts = new HashSet<>();
-    protected PCLCard selectedCard;
-    protected ActionT0 onClose;
-    protected ViewInGameCardPoolEffect previewCardsEffect;
-    protected CharacterOption characterOption;
     protected AbstractPlayerData<?, ?> data;
+    protected ActionT0 onClose;
+    protected CharacterOption characterOption;
+    protected PCLCard selectedCard;
+    protected PCLEffect currentEffect;
     protected int totalCardsCache = 0;
     protected int totalColorlessCache = 0;
     public PCLCard currentSeriesCard;
@@ -98,6 +105,18 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnClick(this::openLoadoutEditor);
 
+        colorlessButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(loadoutEditor.hb.x, loadoutEditor.hb.y - scale(65), scale(150), scale(52)))
+                .setTooltip(PGR.core.strings.sui_showColorless, PGR.core.strings.sui_showColorlessInfo)
+                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.sui_showColorless)
+                .setColor(new Color(0.5f, 0.3f, 0.8f, 1))
+                .setOnClick(this::previewColorless);
+
+        relicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(colorlessButton.hb.x, colorlessButton.hb.y - scale(65), scale(150), scale(52)))
+                .setTooltip(PGR.core.strings.sui_relicPool, PGR.core.strings.sui_relicPoolInfo)
+                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.sui_relicPool)
+                .setColor(new Color(0.8f, 0.3f, 0.5f, 1))
+                .setOnClick(this::previewRelics);
+
         Color panelColor = new Color(0.08f, 0.08f, 0.08f, 1);
         previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, screenH(0.15f)))
                 .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
@@ -114,18 +133,13 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
-        colorless = EUIButton.createHexagonalButton(xPos, getY.invoke(7.1f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showColorless)
-                .setOnClick(this::previewColorless)
-                .setColor(Color.LIGHT_GRAY);
-
-        resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
+        resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.1f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetPool)
                 .setTooltip(PGR.core.strings.sui_resetPool, PGR.core.strings.sui_resetPoolDesc)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.ROYAL);
 
-        resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.7f), buttonWidth, buttonHeight)
+        resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetBan)
                 .setTooltip(PGR.core.strings.sui_resetBan, PGR.core.strings.sui_resetBanDesc)
                 .setOnClick(this::unbanAll)
@@ -334,6 +348,41 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         return loadoutMap.values();
     }
 
+    public ArrayList<AbstractRelic> getAvailableRelics() {
+        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
+
+        // Get additional relics that this character can use
+        String[] additional = data.getAdditionalRelicIDs();
+        if (additional != null) {
+            for (String id : additional) {
+                relics.add(RelicLibrary.getRelic(id));
+            }
+        }
+
+        // Get other non base-game relics
+        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
+            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
+                relics.add(r);
+            }
+        }
+
+        List<String> startingRelics = data.getStartingRelics();
+        relics.removeIf(r -> {
+            if (UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId)) {
+                return true;
+            }
+            for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+                PCLLoadout loadout = entry.getValue();
+                if (loadout.isRelicFromLoadout(r.relicId) && (loadout.isLocked() || (!selectedLoadouts.contains(loadout.ID) && currentSeriesCard != entry.getKey()))) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        return relics;
+    }
+
     public CardGroup getCardPool(PCLLoadout loadout) {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null) {
@@ -414,7 +463,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
                 new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
                         .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
-                loadoutEditor.makeTour(true)
+                loadoutEditor.makeTour(true),
+                colorlessButton.makeTour(true),
+                relicsButton.makeTour(true)
         );
     }
 
@@ -440,16 +491,21 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout) {
-        previewCardsEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
+        currentEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
-        PCLEffects.Manual.add(previewCardsEffect);
     }
 
     public void previewColorless() {
-        previewCardsEffect = new ViewInGameCardPoolEffect(getColorlessPool(), bannedColorless, this::forceUpdateText)
+        currentEffect = new ViewInGameCardPoolEffect(getColorlessPool(), bannedColorless, this::forceUpdateText)
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
-        PCLEffects.Manual.add(previewCardsEffect);
+    }
+
+    protected void previewRelics() {
+        currentEffect = new ViewInGameRelicPoolEffect(getAvailableRelics(), new HashSet<>(data.config.bannedRelics.get()))
+                .addCallback((effect) -> {
+                    data.config.bannedRelics.set(effect.bannedRelics);
+                });
     }
 
     public void proceed() {
@@ -465,18 +521,19 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         startingDeck.tryRender(sb);
         loadoutEditor.tryRender(sb);
+        colorlessButton.renderImpl(sb);
+        relicsButton.renderImpl(sb);
         resetPoolButton.tryRender(sb);
         resetBanButton.tryRender(sb);
         previewCards.renderImpl(sb);
-        colorless.renderImpl(sb);
         cancel.renderImpl(sb);
         confirm.renderImpl(sb);
 
         previewCardsInfo.renderImpl(sb);
         typesAmount.renderImpl(sb);
 
-        if (previewCardsEffect != null) {
-            previewCardsEffect.render(sb);
+        if (currentEffect != null) {
+            currentEffect.render(sb);
         }
         else {
             EUI.countingPanel.tryRender(sb);
@@ -592,11 +649,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         EUI.countingPanel.tryUpdate();
 
-        if (previewCardsEffect != null) {
-            previewCardsEffect.update();
+        if (currentEffect != null) {
+            currentEffect.update();
 
-            if (previewCardsEffect.isDone) {
-                previewCardsEffect = null;
+            if (currentEffect.isDone) {
+                currentEffect = null;
             }
             else {
                 return;
@@ -614,12 +671,13 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         startingDeck.tryUpdate();
         loadoutEditor.tryUpdate();
+        colorlessButton.tryUpdate();
+        relicsButton.tryUpdate();
 
         if (!isScreenDisabled) {
             resetPoolButton.tryUpdate();
             resetBanButton.tryUpdate();
             previewCards.updateImpl();
-            colorless.updateImpl();
             cancel.updateImpl();
             confirm.updateImpl();
             cardGrid.tryUpdate();
@@ -639,7 +697,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         Select(PGR.core.strings.sui_addToPool, (s, c) -> s.toggleCards(c, true)),
         UnbanAll(PGR.core.strings.sui_resetBan, (s, c) -> s.unbanCards(c, true)),
         ViewCards(PGR.core.strings.sui_viewPool, (screen, card) -> {
-            if (screen.previewCardsEffect == null) {
+            if (screen.currentEffect == null) {
                 screen.previewCardPool(card);
             }
         });

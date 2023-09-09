@@ -308,7 +308,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         String tooltipTitle = tooltip.title;
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
                 !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
+                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard());
     }
 
     public void makePreviews(RotatingList<EUIPreview> previews) {

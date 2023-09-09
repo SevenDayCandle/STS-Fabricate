@@ -12,13 +12,13 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.player.UpgradeRelicEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Relic;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,14 +44,19 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     protected void doEffect() {
-        int limit = fields.relicIDs.isEmpty() ? extra : AbstractDungeon.player.relics.size();
-        for (AbstractRelic r : AbstractDungeon.player.relics) {
-            if (fields.getFullRelicFilter().invoke(r)) {
-                PCLEffects.Queue.add(new UpgradeRelicEffect(r, amount));
-                limit -= 1;
-            }
-            if (limit <= 0) {
-                break;
+        if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
+            GameUtilities.upgradeRelic((AbstractRelic) source, amount);
+        }
+        else {
+            int limit = fields.relicIDs.isEmpty() ? extra : AbstractDungeon.player.relics.size();
+            for (AbstractRelic r : AbstractDungeon.player.relics) {
+                if (fields.getFullRelicFilter().invoke(r)) {
+                    GameUtilities.upgradeRelic(r, amount);
+                    limit -= 1;
+                }
+                if (limit <= 0) {
+                    break;
+                }
             }
         }
     }
@@ -63,7 +68,9 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String base = fields.relicIDs.isEmpty() ? EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString()) : fields.getFullRelicString();
+        String base = fields.relicIDs.isEmpty() ?
+                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString())
+                : fields.getFullRelicString();
         return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString()) : TEXT.act_upgrade(base);
     }
 

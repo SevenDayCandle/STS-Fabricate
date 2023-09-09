@@ -41,34 +41,8 @@ public class ControllableCardPile {
         cardButton = new EUIButton(PCLCoreImages.Core.controllableCardPile.texture(), hb)
                 .setBorder(PCLCoreImages.Core.controllableCardPileBorder.texture(), Color.WHITE)
                 .setLabel(FontHelper.energyNumFontBlue, 1f, "0")
-                .setOnClick(() -> {
-                    if (!AbstractDungeon.isScreenUp && currentCard != null && currentCard.canUse()) {
-                        currentCard.select();
-                    }
-                })
-                .setOnRightClick(() -> {
-                    if (GameUtilities.inBattle() && !AbstractDungeon.isScreenUp) {
-                        CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-                        for (CardController c : subscribers) {
-                            if (c.canUse()) {
-                                cardGroup.addToBottom(c.card);
-                                c.card.drawScale = c.card.targetDrawScale = 0.75f;
-                            }
-                        }
-                        if (cardGroup.size() > 0) {
-                            PCLActions.top.selectFromPile("", 1, cardGroup)
-                                    .setAnyNumber(false)
-                                    .addCallback(cards -> {
-                                        if (cards.size() > 0) {
-                                            CardController co = EUIUtils.find(subscribers, c -> c.card == cards.get(0));
-                                            if (co != null) {
-                                                setCurrentCard(co);
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
+                .setOnClick(this::onButtonClick)
+                .setOnRightClick(this::onButtonRightClick);
     }
 
     public CardController add(AbstractCard card) {
@@ -101,6 +75,36 @@ public class ControllableCardPile {
 
     public int getUsableCount() {
         return EUIUtils.count(subscribers, CardController::canUse);
+    }
+
+    protected void onButtonClick() {
+        if (!AbstractDungeon.isScreenUp && currentCard != null && currentCard.canUse()) {
+            currentCard.select();
+        }
+    }
+
+    protected void onButtonRightClick() {
+        if (GameUtilities.inBattle() && !AbstractDungeon.isScreenUp) {
+            CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+            for (CardController c : subscribers) {
+                if (c.canUse()) {
+                    cardGroup.addToBottom(c.card);
+                    c.card.drawScale = c.card.targetDrawScale = 0.75f;
+                }
+            }
+            if (cardGroup.size() > 0) {
+                PCLActions.top.selectFromPile("", 1, cardGroup)
+                        .setAnyNumber(false)
+                        .addCallback(cards -> {
+                            if (cards.size() > 0) {
+                                CardController co = EUIUtils.find(subscribers, c -> c.card == cards.get(0));
+                                if (co != null) {
+                                    setCurrentCard(co);
+                                }
+                            }
+                        });
+            }
+        }
     }
 
     public void postRender(SpriteBatch sb) {
@@ -214,10 +218,10 @@ public class ControllableCardPile {
             }
 
             if (PCLHotkeys.controlPileSelect.isJustPressed()) {
-                cardButton.onLeftClick.invoke(cardButton);
+                onButtonClick();
             }
             else if (PCLHotkeys.controlPileChange.isJustPressed()) {
-                cardButton.onRightClick.invoke(cardButton);
+                onButtonRightClick();
             }
         }
     }

@@ -17,7 +17,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
@@ -85,7 +84,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
 
     protected static PowerStrings getInitialStrings() {
         PowerStrings retVal = new PowerStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.NAME = EUIUtils.EMPTY_STRING;
         retVal.DESCRIPTIONS = new String[]{};
         return retVal;
     }

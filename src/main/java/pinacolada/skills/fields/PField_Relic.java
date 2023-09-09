@@ -93,6 +93,10 @@ public class PField_Relic extends PField_Random {
         return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
+    public boolean isFilterEmpty() {
+        return relicIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty();
+    }
+
     @Override
     public PField_Relic makeCopy() {
         return (PField_Relic) new PField_Relic()

@@ -13,7 +13,7 @@ import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
 public class WordToken extends PCLTextToken {
     protected EUIKeywordTooltip tooltip = null;
     protected ColoredString coloredString;
-    protected int extraLength;
+    private final int extraLength;
 
     protected WordToken(String text, int extraLength) {
         super(PCLTextTokenType.Text, text);
