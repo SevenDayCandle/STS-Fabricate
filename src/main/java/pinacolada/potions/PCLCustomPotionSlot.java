@@ -100,7 +100,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     }
 
     public static void addSlot(PCLCustomPotionSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).add(slot);
+        getPotions(slot.slotColor).add(slot);
         CUSTOM_MAPPING.put(slot.ID, slot);
         slot.commitBuilder();
     }
@@ -114,7 +114,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     }
 
     public static void deleteSlot(PCLCustomPotionSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).remove(slot);
+        getPotions(slot.slotColor).remove(slot);
         CUSTOM_MAPPING.remove(slot.ID);
         slot.wipeBuilder();
     }
@@ -173,6 +173,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
             PCLCustomPotionSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             getPotions(slot.slotColor).add(slot);
+            CUSTOM_MAPPING.put(slot.ID, slot);
         }
         catch (Exception e) {
             e.printStackTrace();

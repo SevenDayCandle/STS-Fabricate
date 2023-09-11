@@ -2,10 +2,9 @@ package pinacolada.ui.characterSelection;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutScreen extends AbstractMenuScreen {
-    private static final float SLOT_SPACING = screenH(0.05f);
     protected static final PCLLoadoutValidation val = new PCLLoadoutValidation();
     protected final ArrayList<PCLBaseStatEditor> baseStatEditors = new ArrayList<>();
     protected final PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
@@ -97,20 +95,20 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         for (int i = 0; i < presetButtons.length; i++) {
             //noinspection SuspiciousNameCombination
             presetButtons[i] = new EUIButton(EUIRM.images.squaredButton.texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
-                    .setPosition(screenW(0.45f) + ((i - 1f) * buttonHeight), screenH(1f) - (buttonHeight * 0.85f))
+                    .setPosition(screenW(0.6f) + ((i - 1f) * buttonHeight), screenH(1f) - (buttonHeight * 0.85f))
                     .setText(String.valueOf(i + 1))
                     .setOnClick(i, this::changePreset)
                     .setOnRightClick(i, this::rightClickPreset);
         }
 
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(buttonWidth * 0.75f, button_cY)
+                .setPosition(buttonWidth * 0.85f, button_cY)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::close);
 
         saveButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(screenW(1) - (buttonWidth * 0.75f), button_cY)
+                .setPosition(screenW(1) - (buttonWidth * 0.85f), button_cY)
                 .setColor(Color.FOREST)
                 .setText(GridCardSelectScreen.TEXT[0])
                 .setInteractable(false)
@@ -163,13 +161,13 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
     public void changePreset(int preset) {
         this.preset = preset;
-        setSlotsActive(true);
+        refresh();
     }
 
     public void clear() {
         PCLLoadoutData defaultData = loadout.getDefaultData(preset);
         presets[preset] = defaultData;
-        setSlotsActive(true);
+        refresh();
     }
 
     @Override
@@ -196,8 +194,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         this.data = data;
         this.loadout.onOpen(option);
 
-        setupAuxiliarySlots(loadout);
-
         for (int i = 0; i < loadout.presets.length; i++) {
             presets[i] = loadout.getPreset(i).makeCopy();
         }
@@ -217,6 +213,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         toggleViewUpgrades(false);
         changePreset(loadout.preset);
+        canvas.initialize(getCurrentPreset());
 
         seriesButton.setActive(data != null);
         startingDeck.setActive(data != null);
@@ -250,6 +247,14 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
     }
 
+    protected void refresh() {
+        for (PCLBaseStatEditor beditor : baseStatEditors) {
+            beditor.setLoadout(loadout, getCurrentPreset());
+        }
+        canvas.initialize(getCurrentPreset());
+        updateValidation();
+    }
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
@@ -265,11 +270,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             }
 
             startingDeck.renderImpl(sb);
-            deckText.renderImpl(sb);
-            relicText.renderImpl(sb);
-            if (abilityEditors.size() > 0) {
-                abilityText.renderImpl(sb);
-            }
+
             attributesText.renderImpl(sb);
 
             // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
@@ -284,18 +285,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             hindrancevalueText.tryRender(sb);
             cardscountText.tryRender(sb);
             cardsvalueText.tryRender(sb);
-
-            for (int i = abilityEditors.size() - 1; i >= 0; i--) {
-                abilityEditors.get(i).tryRender(sb);
-            }
-
-            for (int i = relicsEditors.size() - 1; i >= 0; i--) {
-                relicsEditors.get(i).tryRender(sb);
-            }
-
-            for (int i = cardEditors.size() - 1; i >= 0; i--) {
-                cardEditors.get(i).tryRender(sb);
-            }
+            canvas.tryRender(sb);
         }
 
         contextMenu.tryRender(sb);
@@ -326,99 +316,29 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         close();
     }
 
-    public void setSlotsActive(boolean active) {
-        if (active) {
-            final PCLLoadoutData data = getCurrentPreset();
-            for (int i = 0; i < abilityEditors.size(); i++) {
-                final PCLAbilityEditor editor = abilityEditors.get(i);
-                editor.setActive(data.cardsSize() > i);
-                editor.setSlot(editor.isActive ? data.getBlightSlot(i) : null);
-            }
-            for (int i = 0; i < cardEditors.size(); i++) {
-                final PCLCardSlotEditor editor = cardEditors.get(i);
-                editor.setActive(data.cardsSize() > i);
-                editor.setSlot(editor.isActive ? data.getCardSlot(i) : null);
-            }
-            for (int i = 0; i < relicsEditors.size(); i++) {
-                final PCLRelicSlotEditor reditor = relicsEditors.get(i);
-                reditor.setActive(data.relicsSize() > i);
-                reditor.setSlot(reditor.isActive ? data.getRelicSlot(i) : null);
-            }
-            for (PCLBaseStatEditor beditor : baseStatEditors) {
-                beditor.setLoadout(loadout, data);
-            }
-            val.refresh(data);
-        }
-        else {
-            for (PCLAbilityEditor editor : abilityEditors) {
-                editor.setActive(false);
-            }
-            for (PCLCardSlotEditor editor : cardEditors) {
-                editor.setActive(false);
-            }
-            for (PCLRelicSlotEditor editor : relicsEditors) {
-                editor.setActive(false);
-            }
-        }
-        updateValidation();
-    }
-
-    public void setupAuxiliarySlots(PCLLoadout loadout) {
-        abilityEditors.clear();
-        cardEditors.clear();
-        relicsEditors.clear();
-
-        float itemX = screenW(0.1f);
-        float curY = deckText.hb.y - SLOT_SPACING;
-
-        for (int i = 0; i < loadout.getSlotsForCard(); i++) {
-            cardEditors.add(new PCLCardSlotEditor(this, itemX, curY));
-            curY -= SLOT_SPACING;
-        }
-
-        curY -= SLOT_SPACING / 2;
-        relicText.hb.translate(relicText.hb.x, curY);
-        curY -= SLOT_SPACING;
-
-        for (int i = 0; i < loadout.getSlotsForRelic(); i++) {
-            relicsEditors.add(new PCLRelicSlotEditor(this, itemX, curY));
-            curY -= SLOT_SPACING;
-        }
-
-        curY -= SLOT_SPACING / 2;
-        abilityText.hb.translate(relicText.hb.x, curY);
-        curY -= SLOT_SPACING;
-        itemX += AbstractCard.IMG_WIDTH * 0.2f;
-
-        for (int i = 0; i < loadout.getSlotsForAbility(); i++) {
-            abilityEditors.add(new PCLAbilityEditor(this, itemX, curY));
-            curY -= SLOT_SPACING;
-        }
-    }
-
     public void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = value;
     }
 
     public void trySelectAbility(PCLAbilityEditor slot) {
-        selectionEffect = new PCLGenericSelectBlightEffect(EUIUtils.map(slot.getSelectables(), s -> s.item))
+        selectionEffect = new PCLGenericSelectBlightEffect(EUIUtils.mapAsNonnull(slot.getAvailableAbilitiesForSelection(), BlightHelper::getBlight))
                 .addCallback(a -> {
-                    AbstractBlight blight = slot.slot.getItem();
-                    if (a != null && (blight == null || !a.blightID.equals(blight.blightID))) {
-                        slot.slot.select(a);
+                    if (a != null && !a.blightID.equals(slot.slot.selected)) {
+                        slot.slot.select(a.blightID);
                     }
                 });
-        setSlotsActive(false);
     }
 
-    public void trySelectCard(PCLCardSlotEditor cardSlot) {
-        selectionEffect = new PCLCardSlotSelectionEffect(cardSlot);
-        setSlotsActive(false);
+    public PCLCardSlotSelectionEffect trySelectCard(PCLCardSlotEditor cardSlot) {
+        PCLCardSlotSelectionEffect effect = new PCLCardSlotSelectionEffect(cardSlot);
+        selectionEffect = effect;
+        return effect;
     }
 
-    public void trySelectRelic(PCLRelicSlotEditor relicSlot) {
-        selectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
-        setSlotsActive(false);
+    public PCLRelicSlotSelectionEffect trySelectRelic(PCLRelicSlotEditor relicSlot) {
+        PCLRelicSlotSelectionEffect effect = new PCLRelicSlotSelectionEffect(relicSlot);
+        selectionEffect = effect;
+        return effect;
     }
 
     @Override
@@ -435,7 +355,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
             if (selectionEffect.isDone) {
                 selectionEffect = null;
-                setSlotsActive(true);
             }
         }
         else {
@@ -460,22 +379,21 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             clearButton.updateImpl();
             saveButton.updateImpl();
             canvas.updateImpl();
+            hindrancevalueText.tryUpdate();
+            cardscountText.tryUpdate();
+            cardsvalueText.tryUpdate();
+            saveButton.tryUpdate();
         }
-
-        hindrancevalueText.tryUpdate();
-        cardscountText.tryUpdate();
-        cardsvalueText.tryUpdate();
-        saveButton.tryUpdate();
-
         contextMenu.tryUpdate();
     }
 
     public void updateValidation() {
-        val.refresh(presets[preset]);
+        val.refresh(getCurrentPreset());
 
         hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel));
         hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
-        cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1, getCurrentPreset().loadout.minTotalCards))
+                .setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         cardsvalueText
                 .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue < 0 ? PGR.core.strings.subjects_infinite : loadout.maxValue))
                 .setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
@@ -496,7 +414,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }),
         CopyFrom(PGR.core.strings.loadout_copyFrom, (screen, index) -> {
             screen.presets[screen.preset] = screen.presets[index];
-            screen.setSlotsActive(true);
+            screen.refresh();
         });
 
         public final String name;

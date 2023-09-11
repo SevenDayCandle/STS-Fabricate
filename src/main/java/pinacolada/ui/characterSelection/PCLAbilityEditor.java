@@ -5,14 +5,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLBlight;
@@ -21,11 +24,11 @@ import pinacolada.resources.loadout.LoadoutBlightSlot;
 
 import java.util.ArrayList;
 
-import static pinacolada.ui.characterSelection.PCLCardSlotEditor.BUTTON_SIZE;
 import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
+import static pinacolada.ui.characterSelection.PCLLoadoutCanvas.BUTTON_SIZE;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLAbilityEditor extends EUIBase {
+public class PCLAbilityEditor extends EUIHoverable {
     protected static final float CARD_SCALE = 0.75f;
     protected EUITextBox nameText;
     protected EUIButton changeButton;
@@ -33,56 +36,44 @@ public class PCLAbilityEditor extends EUIBase {
     protected EUIImage image;
     protected AbstractBlight item;
     public LoadoutBlightSlot slot;
-    public PCLLoadoutScreen loadoutEditor;
+    public PCLLoadoutCanvas canvas;
 
-    public PCLAbilityEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
-        this.loadoutEditor = loadoutEditor;
+    public PCLAbilityEditor(PCLLoadoutCanvas canvas) {
+        super(new EUIHitbox(AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT));
+        this.canvas = canvas;
 
-        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
 
         final float offY = BUTTON_SIZE / 4;
-        changeButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new EUIHitbox(nameText.hb.x + nameText.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new OriginRelativeHitbox(nameText.hb, BUTTON_SIZE, BUTTON_SIZE, nameText.hb.width, BUTTON_SIZE / 4))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
-        changeButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new EUIHitbox(changeButton.hb.x + changeButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new OriginRelativeHitbox(changeButton.hb, BUTTON_SIZE, BUTTON_SIZE, changeButton.hb.width, 0))
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
-
-        setSlot(null);
     }
 
-    public ArrayList<LoadoutBlightSlot.Item> getSelectables() {
-        final ArrayList<LoadoutBlightSlot.Item> relics = new ArrayList<>();
-        for (LoadoutBlightSlot.Item item : this.slot.items) {
-            boolean add = true;
-            item.item.isSeen = true;
-            for (PCLAbilityEditor slot : loadoutEditor.abilityEditors) {
-                if (slot.slot != this.slot && slot.slot.getItem() == item.item) {
-                    add = false;
+    public ArrayList<String> getAvailableAbilitiesForSelection() {
+        ArrayList<String> abilities = canvas.screen.loadout.getAvailableBlightIDs();
+        abilities.removeIf(a -> {
+                    for (PCLAbilityEditor editor : canvas.abilityEditors) {
+                        if (editor.slot != this.slot && a.equals(editor.slot.selected)) {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
-            }
-
-            if (add) {
-                relics.add(item);
-            }
-        }
-        relics.sort((a, b) -> {
-            if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(a.item.name, b.item.name);
-            }
-            return a.estimatedValue - b.estimatedValue;
-        });
-
-        return relics;
+        );
+        return abilities;
     }
 
     public void refreshValues() {
         int value = slot == null ? 0 : slot.getEstimatedValue();
-        loadoutEditor.updateValidation();
+        canvas.screen.updateValidation();
     }
 
     @Override
@@ -101,16 +92,55 @@ public class PCLAbilityEditor extends EUIBase {
         changeButton2.tryRender(sb);
     }
 
-    protected void selectNext() {
-        this.slot.next();
-        loadoutEditor.setSlotsActive(true);
+    protected void onSelect() {
+        this.item = BlightHelper.getBlight(slot.selected);
+        this.nameText.setLabel(item != null ? item.name : "").setActive(true);
+        this.changeButton.setOnClick(this::selectPrev).setActive(true);
+        this.changeButton2.setOnClick(this::selectNext).setActive(true);
+        if (item != null) {
+            this.image = new EUIImage(item.img, new OriginRelativeHitbox(nameText.hb, item.hb.width, item.hb.height, -item.hb.width, 0));
+            if (item instanceof PCLBlight) {
+                this.image.setScale(0.7f, 0.7f);
+            }
+            else {
+                this.image.setScale(1.4f, 1.4f);
+            }
+        }
+        else {
+            this.image = null;
+        }
         refreshValues();
     }
 
+    protected void selectNext() {
+        ArrayList<String> abilities = canvas.screen.loadout.getAvailableBlightIDs();
+        int base = abilities.indexOf(slot.selected);
+        int index = base;
+        String abAt = null;
+        do {
+            index = (abilities.indexOf(slot.selected) + 1) % abilities.size();
+            abAt = abilities.get(index);
+        } while (index != base && slot.selected.equals(abAt));
+        this.slot.select(abAt);
+        onSelect();
+        canvas.screen.updateValidation();
+    }
+
     protected void selectPrev() {
-        this.slot.previous();
-        loadoutEditor.setSlotsActive(true);
-        refreshValues();
+        ArrayList<String> abilities = canvas.screen.loadout.getAvailableBlightIDs();
+        int base = abilities.indexOf(slot.selected);
+        int index = base;
+        String abAt = null;
+        do {
+            index = abilities.indexOf(slot.selected) - 1;
+            if (index < 0) {
+                index = abilities.size() - 1;
+            }
+            abAt = abilities.get(index);
+        } while (index != base && slot.selected.equals(abAt));
+        this.slot.select(abAt);
+        onSelect();
+        canvas.screen.updateValidation();
     }
 
     public PCLAbilityEditor setSlot(LoadoutBlightSlot slot) {
@@ -122,27 +152,8 @@ public class PCLAbilityEditor extends EUIBase {
             return this;
         }
 
-        final boolean change = slot.items.size() > 1;
-
         this.slot = slot;
-        this.item = slot.getItem();
-        this.nameText.setLabel(item != null ? item.name : "").setActive(true);
-        this.changeButton.setOnClick(this::selectPrev).setActive(change);
-        this.changeButton2.setOnClick(this::selectNext).setActive(change);
-        if (item != null) {
-            this.image = new EUIImage(item.img, new EUIHitbox(nameText.hb.x - item.hb.width, nameText.hb.y, item.hb.width, item.hb.height));
-            if (item instanceof PCLBlight) {
-                this.image.setScale(0.7f, 0.7f);
-            }
-            else {
-                this.image.setScale(1.4f, 1.4f);
-            }
-        }
-        else {
-            this.image = null;
-        }
-
-        refreshValues();
+        onSelect();
         return this;
     }
 
@@ -160,7 +171,7 @@ public class PCLAbilityEditor extends EUIBase {
 
             if (nameText.hb.clicked) {
                 nameText.hb.clicked = false;
-                loadoutEditor.trySelectAbility(this);
+                canvas.screen.trySelectAbility(this);
                 return;
             }
 
@@ -170,7 +181,6 @@ public class PCLAbilityEditor extends EUIBase {
             nameText.setFontColor(Color.GOLD);
         }
 
-        item = slot.getItem();
         if (item != null && this.image != null) {
             image.updateImpl();
         }

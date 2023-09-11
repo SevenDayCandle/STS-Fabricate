@@ -121,7 +121,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     }
 
     public static void addSlot(PCLCustomCardSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).add(slot);
+        getCards(slot.slotColor).add(slot);
         CUSTOM_MAPPING.put(slot.ID, slot);
         slot.commitBuilder();
     }
@@ -135,7 +135,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     }
 
     public static void deleteSlot(PCLCustomCardSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).remove(slot);
+        getCards(slot.slotColor).remove(slot);
         CUSTOM_MAPPING.remove(slot.ID);
         slot.wipeBuilder();
     }

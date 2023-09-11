@@ -40,8 +40,6 @@ public abstract class PCLLoadout {
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
-    public static final int COMMON_LOADOUT_VALUE = 6;
-    public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
     public final String ID;
     protected String shortDescription = EUIUtils.EMPTY_STRING;
@@ -49,8 +47,8 @@ public abstract class PCLLoadout {
     public int preset;
     public int unlockLevel = 0;
     public int maxValue;
-    public int maxItems;
-    public int minCards;
+    public int maxCardsPerSlot;
+    public int minTotalCards;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
     public ArrayList<PCLCardData> defends = new ArrayList<>();
@@ -62,13 +60,13 @@ public abstract class PCLLoadout {
         this(color, id, unlockLevel, MAX_VALUE, MIN_CARDS, MAX_LIMIT);
     }
 
-    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minCards, int maxItems) {
+    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minTotalCards, int maxCardsPerSlot) {
         this.ID = id;
         this.unlockLevel = unlockLevel;
         this.color = color;
         this.maxValue = maxValue;
-        this.maxItems = maxItems;
-        this.minCards = minCards;
+        this.maxCardsPerSlot = maxCardsPerSlot;
+        this.minTotalCards = minTotalCards;
     }
 
     public static String createID(Class<? extends PCLLoadout> type) {
@@ -180,47 +178,6 @@ public abstract class PCLLoadout {
         return loadout;
     }
 
-    public void addBasicDefends(LoadoutCardSlot slot) {
-        for (PCLCardData card : getPlayerData().getCoreLoadout().defends) {
-            slot.addItem(card, 0);
-        }
-    }
-
-    public void addBasicStrikes(LoadoutCardSlot slot) {
-        for (PCLCardData card : getPlayerData().getCoreLoadout().strikes) {
-            slot.addItem(card, 0);
-        }
-    }
-
-    public void addLoadoutBlights(LoadoutBlightSlot r1) {
-    }
-
-    public void addLoadoutCards(LoadoutCardSlot slot) {
-        for (PCLCardData card : cardDatas) {
-            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
-                slot.addItem(card, COMMON_LOADOUT_VALUE);
-            }
-        }
-
-        for (PCLCardData card : getPlayerData().getCoreLoadout().cardDatas) {
-            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
-                slot.addItem(card, COMMON_LOADOUT_VALUE);
-            }
-        }
-
-        // Dynamically add non-special curses
-        for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL)) {
-            slot.addItem(data, CURSE_VALUE);
-        }
-    }
-
-    public void addLoadoutRelics(LoadoutRelicSlot r1) {
-        r1.addItem(new GenericDice(), 3);
-        r1.addItem(new Macroscope(), 5);
-        r1.addItem(new HeartShapedBox(), 8);
-        r1.markAllSeen();
-    }
-
     public void addStarterRelic(ArrayList<String> res, String id) {
         if (!UnlockTracker.isRelicSeen(id)) {
             UnlockTracker.markRelicAsSeen(id);
@@ -319,6 +276,47 @@ public abstract class PCLLoadout {
     public String getAuthor() {
         LoadoutStrings strings = PGR.getLoadoutStrings(ID);
         return strings != null ? strings.AUTHOR : "";
+    }
+
+    public ArrayList<String> getAvailableBlightIDs() {
+        return EUIUtils.arrayList();
+    }
+
+    public ArrayList<String> getAvailableCardIDs() {
+        ArrayList<String> values = new ArrayList<>();
+        PCLLoadout coreLoadout = getPlayerData().getCoreLoadout();
+        for (PCLCardData card : strikes) {
+            values.add(card.ID);
+        }
+        for (PCLCardData card : defends) {
+            values.add(card.ID);
+        }
+        for (PCLCardData card : cardDatas) {
+            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                values.add(card.ID);
+            }
+        }
+        for (PCLCardData card : coreLoadout.cardDatas) {
+            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                values.add(card.ID);
+            }
+        }
+        for (PCLCardData card : coreLoadout.strikes) {
+            values.add(card.ID);
+        }
+        for (PCLCardData card : coreLoadout.defends) {
+            values.add(card.ID);
+        }
+
+        // Dynamically add non-special curses
+        for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL)) {
+            values.add(data.ID);
+        }
+        return values;
+    }
+
+    public ArrayList<String> getAvailableRelicIDs() {
+        return EUIUtils.arrayList(GenericDice.DATA.ID, Macroscope.DATA.ID, HeartShapedBox.DATA.ID);
     }
 
     public int getBaseDraw() {
@@ -426,23 +424,11 @@ public abstract class PCLLoadout {
         return presets[preset] = getDefaultData(preset);
     }
 
-    public PCLResources<?, ?, ?, ?> getResources() {
+    public final PCLResources<?, ?, ?, ?> getResources() {
         return PGR.getResources(color);
     }
 
-    public int getSlotsForAbility() {
-        return 0;
-    }
-
-    public int getSlotsForCard() {
-        return DEFAULT_CARD_SLOTS;
-    }
-
-    public int getSlotsForRelic() {
-        return DEFAULT_RELIC_SLOTS;
-    }
-
-    public ArrayList<String> getStartingBlights() {
+    public final ArrayList<String> getStartingBlights() {
         final ArrayList<String> res = new ArrayList<>();
 
         AbstractPlayerData<?, ?> data = getPlayerData();
@@ -454,19 +440,17 @@ public abstract class PCLLoadout {
         }
 
         for (LoadoutBlightSlot rSlot : getPreset().blightSlots) {
-            if (rSlot.selected != null && rSlot.selected.item != null) {
-                res.add(rSlot.selected.item.blightID);
-            }
+            res.add(rSlot.selected);
         }
         return res;
     }
 
-    public ArrayList<String> getStartingDeck() {
+    public final ArrayList<String> getStartingDeck() {
         final ArrayList<String> cards = new ArrayList<>();
         for (LoadoutCardSlot slot : getPreset().cardSlots) {
-            String cardID = slot.getSelectedID();
+            String cardID = slot.selected;
             if (cardID != null) {
-                for (int i = 0; i < slot.amount; i++) {
+                for (int i = 0; i < slot.getAmount(); i++) {
                     cards.add(cardID);
                 }
             }
@@ -491,7 +475,7 @@ public abstract class PCLLoadout {
         return cards;
     }
 
-    public ArrayList<String> getStartingRelics() {
+    public final ArrayList<String> getStartingRelics() {
         final ArrayList<String> res = new ArrayList<>();
 
         AbstractPlayerData<?, ?> data = getPlayerData();
@@ -503,9 +487,7 @@ public abstract class PCLLoadout {
         }
 
         for (LoadoutRelicSlot rSlot : getPreset().relicSlots) {
-            if (rSlot.selected != null && rSlot.selected.item != null) {
-                res.add(rSlot.selected.item.relicId);
-            }
+            res.add(rSlot.selected);
         }
         return res;
     }
@@ -532,31 +514,9 @@ public abstract class PCLLoadout {
         return trophies;
     }
 
-    public void initializeData(PCLLoadoutData data) {
-        for (PCLBaseStatEditor.StatType type : PCLBaseStatEditor.StatType.values()) {
-            data.values.put(type, 0);
-        }
-
-        LoadoutCardSlot strikeSlot = data.addCardSlot(0, maxItems);
-        LoadoutCardSlot defendSlot = data.addCardSlot(0, maxItems);
-        addBasicStrikes(strikeSlot);
-        addBasicDefends(defendSlot);
-
-        // 2 slots are taken by strikes/defends by default
-        for (int i = 2; i < getSlotsForCard(); i++) {
-            LoadoutCardSlot slot = data.addCardSlot(0, maxItems);
-            addLoadoutCards(slot);
-        }
-
-        for (int i = 0; i < getSlotsForRelic(); i++) {
-            LoadoutRelicSlot r1 = data.addRelicSlot();
-            addLoadoutRelics(r1);
-        }
-
-        for (int i = 0; i < getSlotsForAbility(); i++) {
-            LoadoutBlightSlot r1 = data.addBlightSlot();
-            addLoadoutBlights(r1);
-        }
+    public boolean isCardBanned(String cardID) {
+        AbstractPlayerData<?, ?> playerData = getPlayerData();
+        return playerData != null && playerData.config.bannedCards.get().contains(cardID);
     }
 
     public boolean isCardFromLoadout(AbstractCard card) {
@@ -589,6 +549,11 @@ public abstract class PCLLoadout {
         return resources != null && resources.getUnlockLevel() < unlockLevel;
     }
 
+    public boolean isRelicBanned(String id) {
+        AbstractPlayerData<?, ?> playerData = getPlayerData();
+        return playerData != null && playerData.config.bannedRelics.get().contains(id);
+    }
+
     public boolean isRelicFromLoadout(String relicID) {
         PCLRelicData data = PCLRelicData.getStaticData(relicID);
         return data != null && data.loadout == this;
@@ -615,33 +580,26 @@ public abstract class PCLLoadout {
     }
 
     protected void setDefaultBlightsForData(PCLLoadoutData data) {
-        for (int i = 0; i < data.blightsSize(); i++) {
-            data.getBlightSlot(i).select(i);
+        ArrayList<String> relics = getAvailableBlightIDs();
+        if (relics.size() > 0) {
+            data.addBlightSlot(relics.get(0));
         }
     }
 
     protected void setDefaultCardsForData(PCLLoadoutData data) {
-        if (data.cardsSize() > 5) {
-            int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.getLoadout() != this));
-            data.getCardSlot(0).select(0, 4).markAllSeen();
-            data.getCardSlot(1).select(0, 4).markAllSeen();
-            data.getCardSlot(2).select(0, 1).markCurrentSeen();
-            data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
-            data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
-            data.getCardSlot(5).clear();
+        ArrayList<String> cards = getAvailableCardIDs();
+        if (cards.size() > 0) {
+            data.addCardSlot(cards.get(0), 4);
         }
-        else {
-            data.getCardSlot(0).select(0, 4).markAllSeen();
-            data.getCardSlot(1).select(0, 4).markAllSeen();
+        if (cards.size() > 1) {
+            data.addCardSlot(cards.get(1), 4);
         }
     }
 
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
-        if (data.relicsSize() > 0) {
-            data.getRelicSlot(0).select(0);
-            for (int i = 1; i < data.relicsSize(); i++) {
-                data.getRelicSlot(i).clear();
-            }
+        ArrayList<String> relics = getAvailableRelicIDs();
+        if (relics.size() > 0) {
+            data.addRelicSlot(relics.get(0));
         }
     }
 

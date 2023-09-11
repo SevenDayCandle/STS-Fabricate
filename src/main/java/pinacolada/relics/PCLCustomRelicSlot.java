@@ -96,7 +96,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static void addSlot(PCLCustomRelicSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).add(slot);
+        getRelics(slot.slotColor).add(slot);
         CUSTOM_MAPPING.put(slot.ID, slot);
         slot.commitBuilder();
     }
@@ -110,7 +110,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static void deleteSlot(PCLCustomRelicSlot slot) {
-        CUSTOM_COLOR_LISTS.get(slot.slotColor).remove(slot);
+        getRelics(slot.slotColor).remove(slot);
         CUSTOM_MAPPING.remove(slot.ID);
         slot.wipeBuilder();
     }
@@ -169,6 +169,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             PCLCustomRelicSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             getRelics(slot.slotColor).add(slot);
+            CUSTOM_MAPPING.put(slot.ID, slot);
         }
         catch (Exception e) {
             e.printStackTrace();

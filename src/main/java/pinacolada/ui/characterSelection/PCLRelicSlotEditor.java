@@ -4,29 +4,35 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-import static pinacolada.ui.characterSelection.PCLCardSlotEditor.BUTTON_SIZE;
 import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
+import static pinacolada.ui.characterSelection.PCLLoadoutCanvas.BUTTON_SIZE;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLRelicSlotEditor extends EUIBase {
+public class PCLRelicSlotEditor extends EUIHoverable {
     protected static final float CARD_SCALE = 0.75f;
     public static final float SPACING = 64f * Settings.scale;
     protected EUITextBox nameText;
@@ -36,68 +42,98 @@ public class PCLRelicSlotEditor extends EUIBase {
     protected EUIImage relicImage;
     protected AbstractRelic relic;
     public LoadoutRelicSlot slot;
-    public PCLLoadoutScreen loadoutEditor;
+    protected PCLLoadoutCanvas canvas;
 
-    public PCLRelicSlotEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
-        this.loadoutEditor = loadoutEditor;
+    public PCLRelicSlotEditor(PCLLoadoutCanvas canvas) {
+        super(new EUIHitbox(AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT));
+        this.canvas = canvas;
 
-        relicValueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
+        relicValueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width + SPACING, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(),new OriginRelativeHitbox(hb,AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT, hb.width + SPACING, 0))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
-
-        final float offY = BUTTON_SIZE / 4;
-        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new EUIHitbox(nameText.hb.x + nameText.hb.width, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        clearButton = new EUIButton(EUIRM.images.xButton.texture(), new OriginRelativeHitbox(nameText.hb, BUTTON_SIZE, BUTTON_SIZE, nameText.hb.width, BUTTON_SIZE / 4))
+                .setOnClick(() -> {
+                    canvas.queueDeleteRelicSlot(this);
+                })
                 .setTooltip(PGR.core.strings.loadout_remove, "")
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + offY, nameText.hb.y + offY, BUTTON_SIZE, BUTTON_SIZE))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new OriginRelativeHitbox(clearButton.hb, BUTTON_SIZE, BUTTON_SIZE, clearButton.hb.width, 0))
+                .setOnClick(this::trySelect)
                 .setTooltip(PGR.core.strings.loadout_change, "")
                 .setClickDelay(0.02f);
-
-        setSlot(null);
     }
 
-    public ArrayList<LoadoutRelicSlot.Item> getSelectableRelics() {
-        final ArrayList<LoadoutRelicSlot.Item> relics = new ArrayList<>();
-        for (LoadoutRelicSlot.Item item : this.slot.items) {
-            // Customs should not be treated as locked in this effect
-            boolean add = !item.isBanned() && (!item.isLocked() || PCLCustomRelicSlot.get(item.item.relicId) != null);
+    public ArrayList<String> getAvailableRelics() {
+        final ArrayList<String> relics = new ArrayList<>();
+
+        for (String relicID : canvas.screen.loadout.getAvailableRelicIDs()) {
+            boolean add = isRelicAllowed(relicID);
             if (add) {
-                // Custom relics may incorrectly be marked as not seen
-                item.item.isSeen = true;
-                for (PCLRelicSlotEditor slot : loadoutEditor.relicsEditors) {
-                    if (slot.slot != this.slot && slot.slot.getItem() == item.item) {
+                for (PCLRelicSlotEditor editor : canvas.relicsEditors) {
+                    if (editor.slot != this.slot && relicID.equals(editor.slot.selected)) {
                         add = false;
+                        break;
                     }
                 }
             }
 
-            if (add) {
-                relics.add(item);
+            if (add && RelicLibrary.getRelic(relicID) != null) {
+                relics.add(relicID);
             }
         }
+
         relics.sort((a, b) -> {
-            if (a.estimatedValue == b.estimatedValue) {
-                return StringUtils.compare(a.item.name, b.item.name);
+            int aEst = LoadoutRelicSlot.getLoadoutValue(a);
+            if (aEst < 0) {
+                aEst = -aEst * 1000;
             }
-            return a.estimatedValue - b.estimatedValue;
+            int bEst = LoadoutRelicSlot.getLoadoutValue(b);
+            if (bEst < 0) {
+                bEst = -bEst * 1000;
+            }
+            return aEst - bEst;
         });
 
         return relics;
+    }
+
+    protected boolean isRelicAllowed(String id) {
+        return !canvas.screen.loadout.isRelicBanned(id) && (!GameUtilities.isRelicLocked(id) || PCLCustomRelicSlot.get(id) != null);
+    }
+
+    private void onSelect() {
+        this.relic = RelicLibrary.getRelic(slot.selected);
+        this.nameText.setLabel(relic != null ? relic.name : "");
+        this.clearButton.setInteractable(slot.canRemove());
+        if (relic != null) {
+            this.relicImage = new EUIImage(relic.img, new OriginRelativeHitbox(relicValueText.hb,relic.hb.width, relic.hb.height, relicValueText.hb.width,0));
+            if (relic instanceof PCLRelic) {
+                this.relicImage.setScale(0.7f, 0.7f);
+            }
+            else {
+                this.relicImage.setScale(1.4f, 1.4f);
+            }
+        }
+        else {
+            this.relicImage = null;
+        }
+
+        refreshValues();
     }
 
     public void refreshValues() {
         int value = slot == null ? 0 : slot.getEstimatedValue();
         relicValueText.setLabel(value)
                 .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
-        loadoutEditor.updateValidation();
+        canvas.screen.updateValidation();
     }
 
     @Override
@@ -117,44 +153,23 @@ public class PCLRelicSlotEditor extends EUIBase {
         clearButton.tryRender(sb);
     }
 
+    protected void trySelect() {
+        canvas.screen.trySelectRelic(this).addCallback((ef) ->
+        {
+            if (ef != null && ef.getSelectedRelic() != null) {
+                slot.select(ef.getSelectedRelic().relicId);
+                onSelect();
+            }
+        });
+    }
+
     public PCLRelicSlotEditor setSlot(LoadoutRelicSlot slot) {
         if (slot == null) {
-            this.slot = null;
-            this.relic = null;
-            this.nameText.setActive(false);
-            this.relicValueText.setActive(false);
-            this.changeButton.setActive(false);
-            this.clearButton.setActive(false);
+            canvas.queueDeleteRelicSlot(this);
             return this;
         }
-
-        final boolean change = slot.items.size() > 1;
-
         this.slot = slot;
-        this.relic = slot.getItem();
-        this.nameText.setLabel(relic != null ? relic.name : "").setActive(true);
-        this.relicValueText.setActive(true);
-        this.clearButton.setOnClick(() -> {
-            this.slot.clear();
-            this.nameText.setLabel("");
-            this.relicImage = null;
-            refreshValues();
-        }).setInteractable(slot.canRemove()).setActive(relic != null);
-        this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this)).setActive(change);
-        if (relic != null) {
-            this.relicImage = new EUIImage(relic.img, new EUIHitbox(relicValueText.hb.x + relicValueText.hb.width, relicValueText.hb.y, relic.hb.width, relic.hb.height));
-            if (relic instanceof PCLRelic) {
-                this.relicImage.setScale(0.7f, 0.7f);
-            }
-            else {
-                this.relicImage.setScale(1.4f, 1.4f);
-            }
-        }
-        else {
-            this.relicImage = null;
-        }
-
-        refreshValues();
+        onSelect();
         return this;
     }
 
@@ -172,7 +187,7 @@ public class PCLRelicSlotEditor extends EUIBase {
 
             if (nameText.hb.clicked) {
                 nameText.hb.clicked = false;
-                loadoutEditor.trySelectRelic(this);
+                canvas.screen.trySelectRelic(this);
                 return;
             }
 
@@ -182,16 +197,13 @@ public class PCLRelicSlotEditor extends EUIBase {
             nameText.setFontColor(Color.GOLD);
         }
 
-        relic = slot.getItem();
         if (relic != null && this.relicImage != null) {
             relicImage.updateImpl();
         }
 
         relicValueText.tryUpdate();
 
+        clearButton.setInteractable(slot.canRemove()).updateImpl();
         changeButton.tryUpdate();
-        if (clearButton.isActive) {
-            clearButton.setInteractable(slot.canRemove()).updateImpl();
-        }
     }
 }

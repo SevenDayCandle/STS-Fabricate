@@ -53,8 +53,6 @@ public class RelicLibraryPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractRelic> prefix(String key) {
             if (PGR.isLoaded()) {
-                // TODO Replacements
-
                 // Allow getRelic to get custom relics too
                 PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(key);
                 if (slot != null) {

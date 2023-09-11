@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +74,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     public PCLDynamicPowerData(PCLCustomPowerSlot data, String[] effects) {
         this(data.ID);
         safeLoadValue(() -> setEndTurnBehavior(Behavior.valueOf(data.endTurnBehavior)));
+        safeLoadValue(() -> setType(AbstractPower.PowerType.valueOf(data.type)));
         safeLoadValue(() -> setIsCommon(data.isCommon));
         safeLoadValue(() -> setIsMetascaling(data.isMetascaling));
         safeLoadValue(() -> setIsPostActionPower(data.isPostActionPower));
@@ -137,7 +139,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public String getEffectTextForTip() {
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, PSkill::getPowerTextForTooltip, moves));
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null ? move.getPowerTextForTooltip() : null, moves));
     }
 
     @Override

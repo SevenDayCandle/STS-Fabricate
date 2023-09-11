@@ -64,11 +64,11 @@ public class PCLLoadoutValidation {
             cardsCount.v1 += slot.amount;
 
             if (slot.selected != null) {
-                if (slot.isInvalid()) {
+                if (slot.isBanned() || slot.isLocked()) {
                     allCardsSeen = false;
                 }
 
-                else if (slot.selected.estimatedValue < 0) {
+                else if (slot.getEstimatedValue() < 0) {
                     hindrances += slot.amount;
                 }
             }
@@ -92,7 +92,7 @@ public class PCLLoadoutValidation {
         values.putAll(data.values);
         totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
         totalValue.v2 = data.loadout.maxValue < 0 || totalValue.v1 <= data.loadout.maxValue;
-        cardsCount.v2 = cardsCount.v1 >= data.loadout.minCards;
+        cardsCount.v2 = cardsCount.v1 >= data.loadout.minTotalCards;
         isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
 
         return this;

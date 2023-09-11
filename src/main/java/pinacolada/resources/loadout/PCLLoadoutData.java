@@ -26,13 +26,30 @@ public class PCLLoadoutData {
 
     public PCLLoadoutData(PCLLoadout loadout) {
         this.loadout = loadout;
-        loadout.initializeData(this);
+        for (PCLBaseStatEditor.StatType type : PCLBaseStatEditor.StatType.values()) {
+            values.put(type, 0);
+        }
     }
 
     public PCLLoadoutData(PCLLoadout loadout, LoadoutInfo info) {
         this.loadout = loadout;
-        loadout.initializeData(this);
-        info.fill(this);
+        preset = info.preset;
+        values.putAll(EUIUtils.deserialize(info.values, TValue.getType()));
+        for (String blight : info.blights) {
+            if (blight != null) {
+                addBlightSlot(blight);
+            }
+        }
+        for (String blight : info.relics) {
+            if (blight != null) {
+                addRelicSlot(blight);
+            }
+        }
+        for (LoadoutInfo.LoadoutCardInfo blight : info.cards) {
+            if (blight != null && blight.id != null) {
+                addCardSlot(blight.id, blight.count);
+            }
+        }
     }
 
     public PCLLoadoutData(PCLLoadoutData other) {
@@ -40,47 +57,48 @@ public class PCLLoadoutData {
         preset = other.preset;
         values.putAll(other.values);
         for (LoadoutBlightSlot slot : other.blightSlots) {
-            blightSlots.add(slot.makeCopy(other));
+            blightSlots.add(new LoadoutBlightSlot(slot));
         }
         for (LoadoutCardSlot slot : other.cardSlots) {
-            cardSlots.add(slot.makeCopy(other));
+            cardSlots.add(new LoadoutCardSlot(slot));
         }
         for (LoadoutRelicSlot slot : other.relicSlots) {
-            relicSlots.add(slot.makeCopy(other));
+            relicSlots.add(new LoadoutRelicSlot(slot));
         }
     }
 
-    public LoadoutBlightSlot addBlightSlot() {
-        final LoadoutBlightSlot slot = new LoadoutBlightSlot(this);
+    public LoadoutBlightSlot addBlightSlot(String selection) {
+        final LoadoutBlightSlot slot = new LoadoutBlightSlot(this, selection);
         blightSlots.add(slot);
 
         return slot;
     }
 
-    public LoadoutCardSlot addCardSlot() {
-        return addCardSlot(0, 6);
+    public LoadoutCardSlot addCardSlot(String selection) {
+        final LoadoutCardSlot slot = new LoadoutCardSlot(this, selection);
+        cardSlots.add(slot);
+        return slot;
     }
 
-    public LoadoutCardSlot addCardSlot(int min, int max) {
-        final LoadoutCardSlot slot = new LoadoutCardSlot(this, min, max);
+    public LoadoutCardSlot addCardSlot(String selection, int amount) {
+        final LoadoutCardSlot slot = new LoadoutCardSlot(this, selection);
+        slot.setAmount(amount);
         cardSlots.add(slot);
 
         return slot;
     }
 
-    public LoadoutRelicSlot addRelicSlot() {
-        final LoadoutRelicSlot slot = new LoadoutRelicSlot(this);
+    public LoadoutRelicSlot addRelicSlot(String selection) {
+        final LoadoutRelicSlot slot = new LoadoutRelicSlot(this, selection);
         relicSlots.add(slot);
 
         return slot;
     }
 
-    public int blightsSize() {
-        return blightSlots.size();
-    }
-
-    public int cardsSize() {
-        return cardSlots.size();
+    public void clear() {
+        blightSlots.clear();
+        cardSlots.clear();
+        relicSlots.clear();
     }
 
     public LoadoutBlightSlot getBlightSlot(int index) {
@@ -103,10 +121,6 @@ public class PCLLoadoutData {
         return new PCLLoadoutData(this);
     }
 
-    public int relicsSize() {
-        return relicSlots.size();
-    }
-
     public PCLLoadoutValidation validate() {
         return PCLLoadoutValidation.createFrom(this);
     }
@@ -127,28 +141,9 @@ public class PCLLoadoutData {
             loadout = id;
             preset = data.preset;
             values = EUIUtils.serialize(data.values);
-            blights = EUIUtils.arrayMap(data.blightSlots, String.class, d -> d.selected != null ? d.selected.item.blightID : null);
-            cards = EUIUtils.arrayMap(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected.item, d.amount) : null);
-            relics = EUIUtils.arrayMap(data.relicSlots, String.class, d -> d.selected != null ? d.selected.item.relicId : null);
-        }
-
-        public void fill(PCLLoadoutData data) {
-            data.preset = preset;
-            data.values.putAll(EUIUtils.deserialize(values, TValue.getType()));
-            for (int i = 0; i < blights.length; i++) {
-                data.getBlightSlot(i).select(blights[i]);
-            }
-            for (int i = 0; i < relics.length; i++) {
-                data.getRelicSlot(i).select(relics[i]);
-            }
-            for (int i = 0; i < cards.length; i++) {
-                if (cards[i] != null) {
-                    data.getCardSlot(i).select(cards[i].id, cards[i].count);
-                }
-                else {
-                    data.getCardSlot(i).clear();
-                }
-            }
+            blights = EUIUtils.arrayMapAsNonnull(data.blightSlots, String.class, d -> d.selected);
+            cards = EUIUtils.arrayMapAsNonnull(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected, d.amount) : null);
+            relics = EUIUtils.arrayMapAsNonnull(data.relicSlots, String.class, d -> d.selected);
         }
 
         public static class LoadoutCardInfo implements Serializable {

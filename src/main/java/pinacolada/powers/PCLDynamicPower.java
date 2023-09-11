@@ -266,7 +266,9 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
 
     public void setupBuilder(PCLDynamicPowerData data) {
         for (PSkill<?> skill : data.moves) {
-            addUseMove(skill.makeCopy());
+            if (skill != null) {
+                addUseMove(skill.makeCopy());
+            }
         }
         updateDescription();
     }

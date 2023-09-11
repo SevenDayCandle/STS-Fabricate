@@ -22,6 +22,7 @@ import java.util.HashSet;
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID)
+            .setLoadoutValue(6)
             .setUnique(true);
 
     public GenericDice() {

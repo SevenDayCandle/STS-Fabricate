@@ -1,5 +1,6 @@
 package pinacolada.powers;
 
+import basemod.devcommands.power.Power;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
@@ -456,7 +457,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
             if (slot != null) {
                 return slot.getBuilder(0);
             }
-            return null;
+            EUIUtils.logError(PCLPowerDataAdapter.class, "Failed to read power " + key);
+            return PCLPowerData.Artifact;
         }
 
         @Override

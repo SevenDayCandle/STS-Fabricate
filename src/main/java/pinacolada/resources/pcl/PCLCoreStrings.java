@@ -1160,8 +1160,8 @@ public class PCLCoreStrings extends AbstractStrings {
         return EUIUtils.format(grid_chooseCards, amount);
     }
 
-    public final String loadout_cardsCount(Object value) {
-        return EUIUtils.format(loadout_cardsCount, value);
+    public final String loadout_cardsCount(Object value, Object req) {
+        return EUIUtils.format(loadout_cardsCount, value, req);
     }
     public final String loadout_hindranceValue(Object value) {
         return EUIUtils.format(loadout_hindranceValue, value);

@@ -5,22 +5,30 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.ui.characterSelection.PCLRelicSlotEditor;
 
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLRelicSlotSelectionEffect extends PCLEffect {
+public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicSlotSelectionEffect> {
     private static final EUITextBox cardValue_text = new
             EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(AbstractCard.IMG_WIDTH * 0.15f, AbstractCard.IMG_HEIGHT * 0.15f))
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
@@ -28,17 +36,15 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-    private final PCLRelicSlotEditor slot;
     private EUIRelicGrid grid;
     private AbstractRelic selectedRelic;
+    public final PCLRelicSlotEditor slot;
 
     public PCLRelicSlotSelectionEffect(PCLRelicSlotEditor slot) {
         super(0.7f, true);
 
-        this.selectedRelic = slot.slot.getItem();
         this.slot = slot;
-        ArrayList<LoadoutRelicSlot.Item> cards = slot.getSelectableRelics();
-        if (cards.isEmpty()) {
+        if (slot.getAvailableRelics().isEmpty()) {
             complete();
             return;
         }
@@ -48,22 +54,15 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                 .setOnClick(this::onRelicClicked)
                 .setOnRender(this::onRelicRender);
 
-        for (LoadoutRelicSlot.Item item : cards) {
-            item.item.currentX = InputHelper.mX;
-            item.item.currentY = InputHelper.mY;
-            grid.add(new RelicInfo(item.item));
+        for (String item : slot.getAvailableRelics()) {
+            AbstractRelic relic = RelicLibrary.getRelic(item);
+            if (relic != null) {
+                relic.currentX = InputHelper.mX;
+                relic.currentY = InputHelper.mY;
+                grid.add(new RelicInfo(relic));
+            }
         }
     }
-
-    @Override
-    protected void complete() {
-        super.complete();
-
-        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.slot.getItem().relicId)) {
-            slot.slot.select(selectedRelic);
-        }
-    }
-
     @Override
     protected void firstUpdate(float deltaTime) {
         super.firstUpdate(deltaTime);
@@ -79,12 +78,15 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         }
     }
 
+    public AbstractRelic getSelectedRelic() {
+        return selectedRelic;
+    }
+
     private void onRelicClicked(RelicInfo relic) {
         if (selectedRelic != null) {
             selectedRelic.stopPulse();
 
             if (selectedRelic == relic.relic) {
-                slot.slot.select((AbstractRelic) null);
                 selectedRelic = null;
                 complete();
                 return;
@@ -93,22 +95,16 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
 
         selectedRelic = relic.relic;
         CardCrawlGame.sound.play("CARD_SELECT");
-        slot.slot.select(relic.relic);
-        relic.relic.beginLongPulse();
-        complete();
+        complete(this);
     }
 
     private void onRelicRender(SpriteBatch sb, RelicInfo relic) {
-        for (LoadoutRelicSlot.Item item : slot.slot.items) {
-            if (item.item.relicId.equals(relic.relic.relicId)) {
-                cardValue_text
-                        .setLabel(item.estimatedValue)
-                        .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
-                        .setPosition(relic.relic.hb.cX, relic.relic.hb.cY - (relic.relic.hb.height * 0.65f))
-                        .renderImpl(sb);
-                return;
-            }
-        }
+        int estimateValue = relic.relic instanceof PCLRelic ? ((PCLRelic) relic.relic).relicData.loadoutValue : PCLRelicData.getValueForRarity(relic.relic.tier);
+        cardValue_text
+                .setLabel(estimateValue)
+                .setFontColor(estimateValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
+                .setPosition(relic.relic.hb.cX, relic.relic.hb.cY - (relic.relic.hb.height * 0.65f))
+                .renderImpl(sb);
     }
 
     @Override

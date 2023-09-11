@@ -1,62 +1,57 @@
 package pinacolada.resources.loadout;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class LoadoutRelicSlot extends LoadoutSlot<AbstractRelic, LoadoutRelicSlot.Item> {
+public class LoadoutRelicSlot extends LoadoutSlot {
 
-    public LoadoutRelicSlot(PCLLoadoutData container) {
-        super(container);
+    public LoadoutRelicSlot(PCLLoadoutData container, String selected) {
+        super(container, selected);
+    }
+
+    public LoadoutRelicSlot(LoadoutRelicSlot other) {
+        super(other);
     }
 
     @Override
-    public ArrayList<LoadoutRelicSlot> getSlots() {
-        return container.relicSlots;
-    }
-
-    public LoadoutRelicSlot makeCopy(PCLLoadoutData container) {
-        final LoadoutRelicSlot copy = new LoadoutRelicSlot(container);
-        copy.items.addAll(items);
-        if (selected != null) {
-            copy.select(selected.item);
+    public int getEstimatedValue() {
+        if (selected == null) {
+            return 0;
         }
-
-        return copy;
+        return getLoadoutValue(selected);
     }
 
     @Override
-    public Item makeItem(AbstractRelic item, int estimateValue) {
-        return new Item(this, item, estimateValue);
+    public boolean isBanned() {
+        AbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        return playerData != null && playerData.config.bannedRelics.get().contains(selected);
     }
 
-    public static class Item extends LoadoutSlot.Item<AbstractRelic> {
+    @Override
+    public boolean isLocked() {
+        return GameUtilities.isRelicLocked(selected);
+    }
 
-        public Item(LoadoutRelicSlot slot, AbstractRelic relic, int estimatedValue) {
-            super(slot, relic, estimatedValue);
-        }
+    @Override
+    protected void onSelect(String item) {
+        UnlockTracker.markRelicAsSeen(selected);
+    }
 
-        @Override
-        public boolean matches(String id) {
-            return item.relicId.equals(id);
+    public static int getLoadoutValue(String item) {
+        PCLRelicData data = PCLRelicData.getStaticData(item);
+        if (data != null) {
+            return data.loadoutValue;
         }
-
-        public boolean isBanned() {
-            AbstractPlayerData<?, ?> playerData = slot.container.loadout.getPlayerData();
-            return playerData != null && playerData.config.bannedRelics.get().contains(item.relicId);
-        }
-
-        public boolean isLocked() {
-            return GameUtilities.isRelicLocked(item.relicId);
-        }
-
-        public void markAsSeen() {
-            if (!UnlockTracker.isRelicSeen(item.relicId)) {
-                UnlockTracker.markRelicAsSeen(item.relicId);
-            }
-        }
+        AbstractRelic r = RelicLibrary.getRelic(item);
+        return r != null ? PCLRelicData.getValueForRarity(r.tier) : 0;
     }
 }

@@ -185,8 +185,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
         this.confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
         this.confirmButton.isDisabled = false;
-        this.scrollBar.setOnScroll(this::onScroll);
-
     }
 
     public void close() {

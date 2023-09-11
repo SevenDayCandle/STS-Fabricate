@@ -34,6 +34,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;
     public int branchFactor = 0;
+    public int loadoutValue;
 
     public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -80,6 +81,21 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public static List<PCLRelicData> getTemplates() {
         return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
+    public static int getValueForRarity(AbstractRelic.RelicTier rarity) {
+        switch (rarity) {
+            case STARTER:
+                return 6;
+            case COMMON:
+            case SHOP:
+                return 14;
+            case UNCOMMON:
+                return 21;
+            case RARE:
+                return 28;
+        }
+        return 35;
     }
 
     protected static <T extends PCLRelicData> T registerData(T cardData) {
@@ -153,6 +169,15 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
+    public PCLRelicData setLoadoutValue(int value) {
+        this.loadoutValue = value;
+        return this;
+    }
+
+    protected void setLoadoutValueFromTier() {
+        this.loadoutValue = getValueForRarity(this.tier);
+    }
+
     public PCLRelicData setMaxForms(int maxForms) {
         this.maxForms = maxForms;
 
@@ -173,6 +198,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
         this.tier = tier;
         this.sfx = sfx;
+        setLoadoutValueFromTier();
         return this;
     }
 
@@ -183,6 +209,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public PCLRelicData setTier(AbstractRelic.RelicTier tier) {
         this.tier = tier;
+        setLoadoutValueFromTier();
         return this;
     }
 

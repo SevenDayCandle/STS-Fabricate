@@ -69,6 +69,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public boolean obtainableInCombat = true;
     public boolean removableFromDeck = true;
     public boolean unique = false;
+    public int loadoutValue;
     public int maxCopies;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
@@ -128,6 +129,20 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public static PCLCardData getStaticData(String cardID) {
         return STATIC_DATA.get(cardID);
+    }
+
+    public static int getValueForRarity(AbstractCard.CardRarity rarity) {
+        switch (rarity) {
+            case BASIC:
+                return 0;
+            case COMMON:
+                return 7;
+            case UNCOMMON:
+                return 15;
+            case CURSE:
+                return -7;
+        }
+        return 30;
     }
 
     protected static <T extends PCLCardData> T registerData(T cardData) {
@@ -652,6 +667,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
+    protected void setLoadoutValueFromRarity() {
+        this.loadoutValue = getValueForRarity(this.cardRarity);
+    }
+
     public PCLCardData setMagicNumber(int heal) {
         this.magicNumber[0] = heal;
         return this;
@@ -690,6 +709,22 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setMaxCopies(int maxCopies) {
         this.maxCopies = maxCopies;
 
+        return this;
+    }
+
+    protected PCLCardData setMaxCopiesFromLoadoutType() {
+        if (maxCopies == -1) {
+            switch (cardRarity) {
+                case COMMON:
+                    return setMaxCopies(cardType == PCLEnum.CardType.SUMMON ? 3 : 6);
+                case UNCOMMON:
+                    return setMaxCopies(cardType == PCLEnum.CardType.SUMMON ? 2 : 4);
+                case RARE:
+                    return setMaxCopies(cardType == PCLEnum.CardType.SUMMON ? 2 : 3);
+                default:
+                    return setMaxCopies(0);
+            }
+        }
         return this;
     }
 
@@ -759,19 +794,8 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
         cardRarity = rarity;
         cardType = type;
-
-        if (maxCopies == -1) {
-            switch (rarity) {
-                case COMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
-                case UNCOMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
-                case RARE:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
-                default:
-                    return setMaxCopies(0);
-            }
-        }
+        setMaxCopiesFromLoadoutType();
+        setLoadoutValueFromRarity();
 
         return this;
     }

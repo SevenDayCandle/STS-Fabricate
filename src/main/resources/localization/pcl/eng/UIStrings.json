@@ -377,7 +377,7 @@
 						"The base amount of [E] you are given each turn",
 						"Hindrance: {0}",
 						"Your Hindrance level is equal to the percentage of negative-valued cards in your deck (as a decimal) times #b-{0}.",
-						"Cards: {0}",
+						"Cards: {0}/{1}",
 						"Value: {0}/{1}",
 						"Invalid Loadout",
 						"Loadout value is over limit",
