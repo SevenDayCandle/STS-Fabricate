@@ -91,7 +91,7 @@ import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.powers.PSkillPower;
+import pinacolada.powers.PTriggerPower;
 import pinacolada.relics.*;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -723,8 +723,8 @@ public class GameUtilities {
                     if (isPowerBlockGranting(p)) {
                         amount += p.amount;
                     }
-                    else if (p instanceof PSkillPower) {
-                        amount += getEndOfTurnBlockFromTriggers(((PSkillPower) p).ptriggers);
+                    else if (p instanceof PTriggerPower) {
+                        amount += getEndOfTurnBlockFromTriggers(((PTriggerPower) p).ptriggers);
                     }
                 }
             }
@@ -2036,10 +2036,10 @@ public class GameUtilities {
     public static void playManually(AbstractCard card, AbstractMonster m) {
         card.applyPowers();
         card.calculateCardDamage(m);
+        CombatManager.lastCardPlayed = card;
         card.use(player, m);
         actionManager.cardsPlayedThisTurn.add(card);
         actionManager.cardsPlayedThisCombat.add(card);
-        CombatManager.playerSystem.setLastCardPlayed(card);
     }
 
     public static void refreshOrbs() {

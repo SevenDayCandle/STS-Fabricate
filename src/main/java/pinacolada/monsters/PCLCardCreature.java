@@ -17,7 +17,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.monsters.animations.PCLAllyAnimation;
-import pinacolada.powers.PSkillPower;
+import pinacolada.powers.PTriggerPower;
 import pinacolada.powers.PSpecialCardPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
@@ -111,7 +111,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         if (retainPowers) {
             ArrayList<AbstractPower> newPowers = new ArrayList<>();
             for (AbstractPower p : powers) {
-                if (p instanceof PSkillPower || p instanceof PSpecialCardPower) {
+                if (p instanceof PTriggerPower || p instanceof PSpecialCardPower) {
                     p.onRemove();
                 }
                 else {

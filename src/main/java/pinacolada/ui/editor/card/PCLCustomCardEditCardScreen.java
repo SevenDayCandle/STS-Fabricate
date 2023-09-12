@@ -173,6 +173,7 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         else {
             previewCard.changeForm(previewCard.getForm(), 1, 0);
             previewCard.displayUpgradesForSkills(false);
+            previewCard.initializeDescription();
         }
     }
 

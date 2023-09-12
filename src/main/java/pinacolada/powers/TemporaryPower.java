@@ -51,7 +51,7 @@ public class TemporaryPower extends PCLPower {
     }
 
     @Override
-    public void atStartOfTurn() {
+    public void atEndOfRound() {
         if (stabilizeTurns > 0) {
             stabilizeTurns -= 1;
         }

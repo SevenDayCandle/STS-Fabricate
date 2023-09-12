@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -31,7 +30,7 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count = EUIUtils.count(getCardPile(),
+        int count = EUIUtils.count(getCardPile(info, isUsing),
                 c -> fields.getFullCardFilter().invoke(c));
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
@@ -55,6 +54,6 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
 
     abstract public EUIKeywordTooltip getActionTooltip();
 
-    abstract public List<AbstractCard> getCardPile();
+    abstract public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing);
 
 }

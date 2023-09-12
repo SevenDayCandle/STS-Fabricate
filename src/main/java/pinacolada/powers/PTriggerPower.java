@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIConfiguration;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
@@ -28,16 +27,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PSkillPower extends PCLClickablePower implements TriggerConnection {
-    public static final PCLPowerData DATA = new PCLPowerData(PSkillPower.class, PGR.core)
+public class PTriggerPower extends PCLClickablePower implements TriggerConnection {
+    public static final PCLPowerData DATA = new PCLPowerData(PTriggerPower.class, PGR.core)
             .setEndTurnBehavior(PCLPowerData.Behavior.Special); // Do not register
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
-    public PSkillPower(AbstractCreature owner, int turns, PTrigger... effects) {
+    public PTriggerPower(AbstractCreature owner, int turns, PTrigger... effects) {
         this(owner, turns, Arrays.asList(effects));
     }
 
-    public PSkillPower(AbstractCreature owner, int turns, List<PTrigger> effects) {
+    public PTriggerPower(AbstractCreature owner, int turns, List<PTrigger> effects) {
         super(DATA, owner, owner, turns);
         this.powerStrings = new PowerStrings();
 
@@ -212,7 +211,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     @Override
     public AbstractPower makeCopy() {
-        return new PSkillPower(owner, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
+        return new PTriggerPower(owner, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
     }
 
     @Override
@@ -327,7 +326,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
 
     @Override
     protected void onSamePowerApplied(AbstractPower power) {
-        PSkillPower po = EUIUtils.safeCast(power, PSkillPower.class);
+        PTriggerPower po = EUIUtils.safeCast(power, PTriggerPower.class);
         if (po != null && this.ID.equals(po.ID)) {
             // The effects of identical cards will always be in the same order
             for (int i = 0; i < Math.min(ptriggers.size(), po.ptriggers.size()); i++) {

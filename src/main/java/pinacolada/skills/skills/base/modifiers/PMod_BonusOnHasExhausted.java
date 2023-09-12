@@ -5,6 +5,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -41,7 +42,7 @@ public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
+    public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing) {
         return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 }

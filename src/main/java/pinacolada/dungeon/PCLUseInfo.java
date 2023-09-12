@@ -122,7 +122,7 @@ public class PCLUseInfo {
         this.card = card;
         this.source = source;
         this.target = target;
-        this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
+        this.previousCard = CombatManager.lastCardPlayed;
         fillWithTargets();
         if (card != null) {
             this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);

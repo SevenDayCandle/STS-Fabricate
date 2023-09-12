@@ -185,30 +185,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
     }
 
-    protected void findTooltipsFromText(String text) {
-
-        boolean foundIcon = false;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-
-            if (foundIcon) {
-                if (']' != c) {
-                    builder.append(c);
-                    continue;
-                }
-                foundIcon = false;
-                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByIDTemp(EUIUtils.invokeBuilder(builder));
-                if (tooltip != null) {
-                    tooltips.add(tooltip);
-                }
-            }
-            else if ('[' == c) {
-                foundIcon = true;
-            }
-        }
-
-    }
-
     @Override
     public void flash() {
         this.effects.add(new PCLGainPowerEffect(this, true));
@@ -472,7 +448,15 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         mainTip = new EUIKeywordTooltip(name, desc);
         mainTip.icon = this.region128 != null ? this.region128 : img != null ? new TextureRegion(img) : null;
         tooltips.add(mainTip);
-        findTooltipsFromText(desc);
+        // Should not contain the tooltip associated with this power
+        if (data.tooltip != null) {
+            tooltips.add(data.tooltip);
+            EUITooltip.scanForTips(desc, tooltips);
+            tooltips.remove(data.tooltip);
+        }
+        else {
+            EUITooltip.scanForTips(desc, tooltips);
+        }
         // Base game descriptions don't support special characters
         this.description = sanitizePowerDescription(desc);
     }

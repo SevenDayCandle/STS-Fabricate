@@ -45,8 +45,8 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
-    public boolean meetsCondition(PCLUseInfo info) {
-        int count = EUIUtils.count(getCardPile(),
+    public boolean meetsCondition(PCLUseInfo info, boolean isUsing) {
+        int count = EUIUtils.count(getCardPile(info, isUsing),
                 c -> fields.getFullCardFilter().invoke(c));
         return extra == 0 ? count == 0 : fields.not ^ count >= extra;
     }
@@ -59,5 +59,5 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
 
     abstract public EUIKeywordTooltip getActionTooltip();
 
-    abstract public List<AbstractCard> getCardPile();
+    abstract public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing);
 }

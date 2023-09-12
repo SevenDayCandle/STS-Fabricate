@@ -44,7 +44,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount + (meetsCondition(info) ? amount : 0);
+        return be.baseAmount + (meetsCondition(info, isUsing) ? amount : 0);
     }
 
     @Override
@@ -57,5 +57,5 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getConditionText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
 
-    public abstract boolean meetsCondition(PCLUseInfo info);
+    public abstract boolean meetsCondition(PCLUseInfo info, boolean isUsing);
 }

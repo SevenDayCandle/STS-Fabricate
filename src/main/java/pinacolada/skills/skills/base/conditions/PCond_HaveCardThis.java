@@ -31,7 +31,7 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count = sourceCard != null ? EUIUtils.count(getCardPile(),
+        int count = sourceCard != null ? EUIUtils.count(getCardPile(info, isUsing),
                 c -> c.uuid == sourceCard.uuid) : 0;
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
@@ -57,5 +57,5 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
 
     abstract public EUIKeywordTooltip getActionTooltip();
 
-    abstract public List<AbstractCard> getCardPile();
+    abstract public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing);
 }

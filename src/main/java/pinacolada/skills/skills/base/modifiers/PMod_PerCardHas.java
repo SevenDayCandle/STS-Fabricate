@@ -5,7 +5,6 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -42,7 +41,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return EUIUtils.count(getCardPile(), c -> fields.getFullCardFilter().invoke(c));
+        return EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
     }
 
     @Override
@@ -63,5 +62,5 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     abstract public EUIKeywordTooltip getActionTooltip();
 
-    abstract public List<AbstractCard> getCardPile();
+    abstract public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing);
 }

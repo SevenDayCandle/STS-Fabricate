@@ -43,7 +43,7 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance> {
     }
 
     @Override
-    public boolean meetsCondition(PCLUseInfo info) {
+    public boolean meetsCondition(PCLUseInfo info, boolean isUsing) {
         return fields.random ^ (fields.stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(fields.stances, GameUtilities::inStance));
     }
 }

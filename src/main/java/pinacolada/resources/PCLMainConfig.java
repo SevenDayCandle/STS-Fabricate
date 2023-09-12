@@ -15,9 +15,9 @@ import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.tooltips.EUIPreview;
+import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.utilities.GameUtilities;
 
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -143,10 +143,10 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, PGR.core.strings.optionDesc_showUpgradeToggle);
         makeModToggle(fabricatePopup, PGR.core.strings.options_fabricatePopup, PGR.core.strings.optionDesc_fabricatePopup);
 
-        EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateCardDescriptions());
-        displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
-        abbreviateEffects.addListener(val -> this.updateCardDescriptions());
-        removeLineBreaks.addListener(val -> this.updateCardDescriptions());
+        EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateDescriptions());
+        displayCardTagDescription.addListener(val -> this.updateDescriptions());
+        abbreviateEffects.addListener(val -> this.updateDescriptions());
+        removeLineBreaks.addListener(val -> this.updateDescriptions());
     }
 
     public void load(int slot) {
@@ -200,8 +200,8 @@ public class PCLMainConfig extends AbstractConfig {
         tourSeriesSelect.addConfig(config);
     }
 
-    // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions
-    private void updateCardDescriptions() {
+    // Whenever this setting is updated, we need to force all cards and powers everywhere to refresh their descriptions
+    private void updateDescriptions() {
         EUIPreview.invalidate();
         for (AbstractCard c : CardLibrary.getAllCards()) {
             c.initializeDescription();
@@ -212,5 +212,7 @@ public class PCLMainConfig extends AbstractConfig {
                 c.initializeDescription();
             }
         }
+
+        PCLCustomPowerSlot.refreshTooltips();
     }
 }

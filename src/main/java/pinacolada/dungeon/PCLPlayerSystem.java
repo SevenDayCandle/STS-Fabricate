@@ -24,7 +24,6 @@ public class PCLPlayerSystem extends EUIBase {
     protected final LinkedHashMap<AbstractPlayer.PlayerClass, PCLPlayerMeter> meters = new LinkedHashMap<>();
     protected final ArrayList<PCLPlayerMeter> activeMeters = new ArrayList<>();
     protected PCLUseInfo info;
-    protected PCLCard lastCardPlayed = null;
 
     public PCLPlayerSystem() {
     }
@@ -89,10 +88,6 @@ public class PCLPlayerSystem extends EUIBase {
             }
         }
         return info;
-    }
-
-    public PCLCard getLastCardPlayed() {
-        return lastCardPlayed;
     }
 
     public PCLPlayerMeter getMeter(AbstractPlayer.PlayerClass playerClass) {
@@ -197,10 +192,6 @@ public class PCLPlayerSystem extends EUIBase {
         for (PCLPlayerMeter meter : getActiveMeters()) {
             meter.renderImpl(sb);
         }
-    }
-
-    public void setLastCardPlayed(AbstractCard card) {
-        lastCardPlayed = EUIUtils.safeCast(card, PCLCard.class);
     }
 
     public boolean tryUpdate(PCLCard card, AbstractCreature target, boolean draggingCard) {

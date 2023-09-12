@@ -395,9 +395,7 @@ public enum PCLCardTag implements TooltipProvider {
         switch (this) {
             case Retain:
                 card.retain = amount != 0;
-                if (amount < 0) {
-                    card.selfRetain = true;
-                }
+                card.selfRetain = amount < 0;
                 break;
             case Innate:
                 card.isInnate = amount != 0;

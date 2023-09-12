@@ -86,6 +86,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         CUSTOM_POWERS.remove(slot.ID);
         EUIKeywordTooltip.removeTemp(slot.ID);
         slot.wipeBuilder();
+        refreshTooltips(); // Must refresh all power tooltips in case any of them mention this power
     }
 
     public static void editSlot(PCLCustomPowerSlot slot, String oldID) {
@@ -95,7 +96,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             EUIKeywordTooltip.removeTemp(oldID);
         }
         slot.commitBuilder();
-        slot.registerTooltip();
+        refreshTooltips(); // Must refresh all power tooltips in case any of them mention this power
     }
 
     public static PCLCustomPowerSlot get(String id) {
@@ -118,6 +119,9 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
         }
+
+        // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured
+        refreshTooltips();
     }
 
     public static boolean isIDDuplicate(String input) {
@@ -147,6 +151,12 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
 
     protected static String makeNewID() {
         return makeNewIDByKey(getBaseIDPrefix(BASE_POWER_ID, AbstractCard.CardColor.COLORLESS), CUSTOM_POWERS.keySet());
+    }
+
+    public static void refreshTooltips() {
+        for (PCLCustomPowerSlot slot : CUSTOM_POWERS.values()) {
+            slot.registerTooltip();
+        }
     }
 
     protected void commitBuilder() {

@@ -105,6 +105,7 @@ public class CombatManager extends EUIBase {
     private static boolean shouldRefreshHand;
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
+    public static AbstractCard lastCardPlayed = null; // Needed for has played checks
     public static AbstractRoom room;
     public static UUID battleID;
     public static boolean isPlayerTurn;
@@ -166,8 +167,7 @@ public class CombatManager extends EUIBase {
         orbsEvokedThisTurn.clear();
         turnCount += 1;
         scriesThisTurn = 0;
-
-        playerSystem.setLastCardPlayed(null);
+        lastCardPlayed = null;
     }
 
     public static void atEndOfTurnPreEndTurnCards(boolean isPlayer) {
@@ -310,7 +310,7 @@ public class CombatManager extends EUIBase {
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
-        playerSystem.setLastCardPlayed(null);
+        lastCardPlayed = null;
         summons.initialize();
         maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
         blockRetained = 0;
@@ -787,7 +787,6 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onPlayCardPostActions(AbstractCard card, AbstractMonster m) {
-        CombatManager.playerSystem.setLastCardPlayed(card);
         if (PCLCardTag.Recast.has(card)) {
             PCLCardTag.Recast.tryProgress(card);
             DelayUse.turnStartLast(1,
@@ -887,6 +886,7 @@ public class CombatManager extends EUIBase {
             pclCard.lighten(true);
             pclCard.calculateCardDamage(EUIUtils.safeCast(finalTarget, AbstractMonster.class));
             final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, finalTarget);
+            lastCardPlayed = card; // Set last card played after the info generates
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
                 summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
             }
@@ -899,6 +899,7 @@ public class CombatManager extends EUIBase {
         }
         else {
             subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, m));
+            lastCardPlayed = card;
             return false;
         }
     }

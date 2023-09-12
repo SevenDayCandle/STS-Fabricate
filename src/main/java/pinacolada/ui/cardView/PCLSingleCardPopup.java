@@ -190,7 +190,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
             return "";
         }
         int currentCopies = (AbstractDungeon.player != null ? EUIUtils.count(AbstractDungeon.player.masterDeck.group, c -> c.cardID.equals(displayCard.cardID)) : -1);
-        int maxCopies = displayCard.cardData != null ? displayCard.cardData.maxCopies : 0;
+        int maxCopies = displayCard.cardData != null ? displayCard.cardData.maxCopies : -1;
 
         if (currentCopies >= 0 && maxCopies > 0) {
             return currentCopies + "/" + maxCopies;

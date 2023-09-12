@@ -158,13 +158,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
 
-        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
-            bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
-            for (CardGroup group : groups) {
-                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
-            }
-        }
-        else if (data != null) {
+        if (data != null) {
             bannedCards.addAll(data.config.bannedCards.get());
             for (CardGroup group : groups) {
                 group.group.removeIf(card ->
@@ -194,6 +188,14 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 });
             }
         }
+        else {
+            if (CardCrawlGame.trial instanceof PCLCustomTrial) {
+                bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
+            }
+            for (CardGroup group : groups) {
+                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
+            }
+        }
     }
 
     public void banRelic(String relicID) {
@@ -204,13 +206,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     // Ban relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
     public void banRelicsFromPools() {
-        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
-            bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
-            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-                relicPool.removeIf(relic -> bannedRelics.contains(relic));
-            }
-        }
-        else if (data != null) {
+        if (data != null) {
             bannedRelics.addAll(data.config.bannedRelics.get());
             for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
                 relicPool.removeIf(relic -> {
@@ -226,6 +222,14 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 });
             }
         }
+        else {
+            if (CardCrawlGame.trial instanceof PCLCustomTrial) {
+                bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+            }
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> bannedRelics.contains(relic));
+            }
+        }
     }
 
     public boolean canJumpAnywhere() {
@@ -238,16 +242,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     public boolean canObtainCopy(AbstractCard card) {
         final PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
-        if (!Settings.isEndless && pclCard != null && pclCard.cardData.maxCopies > 0) {
+        if (!Settings.isEndless && pclCard != null && pclCard.cardData.maxCopies >= 0) {
             return GameUtilities.getAllCopies(pclCard.cardID, AbstractDungeon.player.masterDeck).size() < pclCard.cardData.maxCopies;
-        }
-        return true;
-    }
-
-    public boolean canObtainMoreCopies(AbstractCard c) {
-        if (c instanceof PCLCard) {
-            final int copies = GameUtilities.getAllCopies(c.cardID, AbstractDungeon.player.masterDeck).size();
-            return copies < ((PCLCard) c).cardData.maxCopies;
         }
         return true;
     }
@@ -404,7 +400,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     }
 
     protected void importBaseData(PCLDungeon dungeon) {
+        loadouts.clear();
+        bannedCards.clear();
+        bannedRelics.clear();
+        augments.clear();
+        fragments.clear();
         ascensionGlyphCounters.clear();
+        valueDivisor = 1;
         if (dungeon != null) {
             eventLog = new HashMap<>(dungeon.eventLog);
             allowCustomCards = dungeon.allowCustomCards;
@@ -414,6 +416,20 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             highestScore = dungeon.highestScore;
             ascensionGlyphCounters.addAll(dungeon.ascensionGlyphCounters);
             rng = dungeon.rng;
+            bannedCards.addAll(dungeon.bannedCards);
+            bannedRelics.addAll(dungeon.bannedRelics);
+            augments.putAll(dungeon.augments);
+            fragments.putAll(dungeon.fragments);
+            totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
+            if (this.data != null) {
+                loadout = PCLLoadout.get(dungeon.startingLoadout);
+                for (String proxy : dungeon.loadoutIDs) {
+                    PCLLoadout loadout = PCLLoadout.get(proxy);
+                    if (loadout != null) {
+                        loadouts.add(loadout);
+                    }
+                }
+            }
         }
         else {
             eventLog = new HashMap<>();
@@ -423,6 +439,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
+            totalAugmentCount = 0;
             for (AbstractGlyphBlight glyph : AbstractPlayerData.GLYPHS) {
                 ascensionGlyphCounters.add(glyph.counter);
             }
@@ -474,11 +491,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 }
 
                 // Add character blights if applicable
-                Collection<String> blightIDs = loadout.getStartingBlights();
-                if (blightIDs != null) {
-                    for (String id : blightIDs) {
-                        initializeCharacterBlight(id);
-                    }
+                for (String id : loadout.getStartingBlights()) {
+                    initializeCharacterBlight(id);
                 }
 
                 // Add glyphs
@@ -657,31 +671,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         AbstractPlayer player = CombatManager.refreshPlayer();
         this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
         importBaseData(loaded);
-        loadouts.clear();
-        bannedCards.clear();
-        bannedRelics.clear();
-        augments.clear();
-        fragments.clear();
-        valueDivisor = 1;
-
-        if (loaded != null) {
-            bannedCards.addAll(loaded.bannedCards);
-            bannedRelics.addAll(loaded.bannedRelics);
-            augments.putAll(loaded.augments);
-            fragments.putAll(loaded.fragments);
-            totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
-
-            if (this.data != null) {
-                loadout = PCLLoadout.get(loaded.startingLoadout);
-                for (String proxy : loaded.loadoutIDs) {
-                    PCLLoadout loadout = PCLLoadout.get(proxy);
-                    if (loadout != null) {
-                        loadouts.add(loadout);
-                    }
-                }
-            }
-
-        }
 
         if (loadout == null && this.data != null) {
             loadout = this.data.selectedLoadout;
@@ -741,16 +730,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         final CardGroup pool = GameUtilities.getCardPool(rarity);
         if (pool != null) {
             pool.removeCard(card.cardID);
-        }
-    }
-
-    private void removeExtraCopies(AbstractCard card) {
-        final PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
-        if (!Settings.isEndless && pclCard != null && pclCard.cardData.maxCopies > 0) {
-            final int copies = GameUtilities.getAllCopies(pclCard.cardID, AbstractDungeon.player.masterDeck).size();
-            if (copies >= pclCard.cardData.maxCopies) {
-                removeCardFromPools(pclCard);
-            }
         }
     }
 

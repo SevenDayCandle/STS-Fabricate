@@ -9,7 +9,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.powers.PSkillPower;
+import pinacolada.powers.PTriggerPower;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
@@ -122,7 +122,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
         // If this skill is actually part of the power you are applying, we should be able to remove the power if it is an infinite power
         if (referencesSelf && baseAmount <= 0) {
-            String id = PSkillPower.createPowerID(triggers.get(triggers.size() - 1));
+            String id = PTriggerPower.createPowerID(triggers.get(triggers.size() - 1));
             for (AbstractCreature c : getTargetList(info)) {
                 order.removePower(c, c, id);
             }
@@ -130,7 +130,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         else {
             // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
             for (AbstractCreature c : getTargetList(info)) {
-                order.applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
+                order.applyPower(new PTriggerPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
             }
         }
 

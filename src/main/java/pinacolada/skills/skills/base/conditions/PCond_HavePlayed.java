@@ -5,11 +5,14 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @VisibleSkill
@@ -37,7 +40,12 @@ public class PCond_HavePlayed extends PCond_HaveCard {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
-        return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
+    public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing) {
+        List<AbstractCard> pile = fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
+        // This check should not count this card if it has just been played
+        if (isUsing && CombatManager.lastCardPlayed == info.card && pile.size() > 0 && pile.get(pile.size() - 1) == CombatManager.lastCardPlayed) {
+            return pile.subList(0, pile.size() - 1);
+        }
+        return pile;
     }
 }

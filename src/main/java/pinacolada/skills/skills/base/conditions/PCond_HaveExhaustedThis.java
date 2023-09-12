@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -9,41 +9,36 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardGeneric;
 
 import java.util.List;
 
-
 @VisibleSkill
-public class PMod_PerCardDiscarded extends PMod_PerCardHas {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDiscarded.class, PField_CardCategory.class)
+public class PCond_HaveExhaustedThis extends PCond_HaveCardThis {
+    public static final PSkillData<PField_CardGeneric> DATA = register(PCond_HaveExhaustedThis.class, PField_CardGeneric.class)
             .setOrigins(PCLCardSelection.Manual)
             .setDestinations(PCLCardSelection.Manual)
             .noTarget();
 
-    public PMod_PerCardDiscarded() {
-        this(1, 0);
+    public PCond_HaveExhaustedThis() {
+        this(1);
     }
 
-    public PMod_PerCardDiscarded(int amount, int extra) {
-        super(DATA, amount, extra);
+    public PCond_HaveExhaustedThis(int amount) {
+        super(DATA, amount);
     }
 
-    public PMod_PerCardDiscarded(PSkillSaveData content) {
+    public PCond_HaveExhaustedThis(PSkillSaveData content) {
         super(DATA, content);
-    }
-
-    public PMod_PerCardDiscarded(int amount) {
-        super(DATA, amount, 0);
     }
 
     @Override
     public EUIKeywordTooltip getActionTooltip() {
-        return PGR.core.tooltips.discard;
+        return PGR.core.tooltips.exhaust;
     }
 
     @Override
     public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing) {
-        return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
+        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 }

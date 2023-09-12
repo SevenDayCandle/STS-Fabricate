@@ -53,6 +53,9 @@ public class PTrigger_When extends PTrigger {
     // Restrict conditions that do not subscribe to anything and are not under a condition that does so
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(skill instanceof PCond) || skill instanceof PMultiBase || skill instanceof PCLCombatSubscriber || skill.parent instanceof PCond;
+        return !(skill instanceof PCond)
+                || skill instanceof PMultiBase
+                || skill instanceof PCLCombatSubscriber
+                || skill.hasParentType(PCond.class);
     }
 }

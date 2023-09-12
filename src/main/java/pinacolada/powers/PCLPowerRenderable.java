@@ -80,7 +80,16 @@ public class PCLPowerRenderable implements KeywordProvider {
         mainTooltip = tip;
         if (mainTooltip != null) {
             tips.add(mainTooltip);
-            EUITooltip.scanForTips(mainTooltip.description, tips);
+            // Prevent "duplicates"
+            if (power.tooltip != null && mainTooltip != power.tooltip) {
+                tips.add(power.tooltip);
+                EUITooltip.scanForTips(mainTooltip.description, tips);
+                tips.remove(power.tooltip);
+            }
+            else {
+                EUITooltip.scanForTips(mainTooltip.description, tips);
+            }
+
         }
     }
 

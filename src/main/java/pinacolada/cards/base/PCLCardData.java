@@ -70,7 +70,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public boolean removableFromDeck = true;
     public boolean unique = false;
     public int loadoutValue;
-    public int maxCopies;
+    public int maxCopies = -1;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
     public int branchFactor = 0;
@@ -88,7 +88,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
         super(cardID, invokeClass, resources);
         this.cardColor = resources.cardColor;
-        this.maxCopies = -1;
         this.strings = strings != null ? strings : new CardStrings();
         initializeImage();
     }
@@ -721,8 +720,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
                     return setMaxCopies(cardType == PCLEnum.CardType.SUMMON ? 2 : 4);
                 case RARE:
                     return setMaxCopies(cardType == PCLEnum.CardType.SUMMON ? 2 : 3);
-                default:
-                    return setMaxCopies(0);
             }
         }
         return this;

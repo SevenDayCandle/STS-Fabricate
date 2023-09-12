@@ -31,7 +31,7 @@ public class PMod_BonusOnStarter extends PMod_BonusOn<PField_Empty> {
     }
 
     @Override
-    public boolean meetsCondition(PCLUseInfo info) {
+    public boolean meetsCondition(PCLUseInfo info, boolean isUsing) {
         return info.isStarter;
     }
 }
