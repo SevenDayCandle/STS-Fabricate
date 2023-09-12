@@ -15,6 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
 
+import java.util.Collection;
 import java.util.List;
 
 @VisibleSkill
@@ -34,17 +35,12 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
         fields.setPower(powers);
     }
 
-    public PCond_CheckDistinctPower(PCLCardTarget target, int amount, List<PCLPowerData> powers) {
-        super(DATA, target, amount);
-        fields.setPower(powers);
-    }
-
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return ((fields.powers.isEmpty() ?
                 evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> po.type == targetType))) :
-                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> f.ID.equals(po.ID)))))));
+                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> f.equals(po.ID)))))));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cardmods.CostUntilPlayedModifier;
+import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyCost extends ModifyCard {
@@ -32,7 +32,7 @@ public class ModifyCost extends ModifyCard {
         super.selectCard(card);
 
         if (untilPlayed) {
-            CostUntilPlayedModifier.apply(card, getActualChange(card), !permanent);
+            TemporaryCostModifier.apply(card, getActualChange(card), !permanent, true);
         }
         else {
             if (permanent) {

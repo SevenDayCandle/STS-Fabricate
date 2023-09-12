@@ -742,6 +742,10 @@ public class CombatManager extends EUIBase {
         return subscriberInout(OnModifyBlockLastSubscriber.class, amount, (s, d) -> s.onModifyBlockLast(d, card));
     }
 
+    public static int onModifyCost(int amount, AbstractCard card) {
+        return subscriberInout(OnModifyCostSubscriber.class, amount, (s, d) -> s.onModifyCost(d, card));
+    }
+
     public static float onModifyDamageGiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
         return subscriberInout(OnModifyDamageGiveFirstSubscriber.class, amount, (s, d) -> s.onModifyDamageGiveFirst(d, type, source, target, card));
     }
@@ -877,11 +881,12 @@ public class CombatManager extends EUIBase {
         PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
         if (pclCard != null) {
             AbstractCreature target = CustomTargeting.getCardTarget(pclCard);
-            subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, target));
+            AbstractCreature finalTarget = target == null ? m : target; // Autoplaying cards won't set the target properly
+            subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, finalTarget));
             pclCard.unfadeOut();
             pclCard.lighten(true);
-            pclCard.calculateCardDamage(EUIUtils.safeCast(target, AbstractMonster.class));
-            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, target);
+            pclCard.calculateCardDamage(EUIUtils.safeCast(finalTarget, AbstractMonster.class));
+            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, finalTarget);
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
                 summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
             }

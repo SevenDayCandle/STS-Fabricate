@@ -230,6 +230,32 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return STATIC_DATA.get(cardID);
     }
 
+    public static PCLPowerData getStaticDataOrCustom(String key) {
+        PCLPowerData data = getStaticData(key);
+        if (data != null) {
+            return data;
+        }
+        PCLCustomPowerSlot slot = PCLCustomPowerSlot.get(key);
+        if (slot != null) {
+            return slot.getBuilder(0);
+        }
+        return null;
+    }
+
+    public static boolean isBuff(String key) {
+        PCLPowerData data = getStaticDataOrCustom(key);
+        return data != null && data.isBuff();
+    }
+    public static boolean isDebuff(String key) {
+        PCLPowerData data = getStaticDataOrCustom(key);
+        return data != null && data.isDebuff();
+    }
+
+    public static boolean isMetascaling(String key) {
+        PCLPowerData data = getStaticDataOrCustom(key);
+        return data != null && data.isMetascaling;
+    }
+
     public static void loadIconsIntoKeywords() {
         for (PCLPowerData data : STATIC_DATA.values()) {
             data.loadImageIntoTooltip();
@@ -342,10 +368,6 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return type == AbstractPower.PowerType.BUFF;
     }
 
-    public boolean isCommon() {
-        return isCommon;
-    }
-
     public boolean isDebuff() {
         return type == AbstractPower.PowerType.DEBUFF;
     }
@@ -449,13 +471,9 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         @Override
         public PCLPowerData read(JsonReader in) throws IOException {
             String key = in.nextString();
-            PCLPowerData data = getStaticData(key);
+            PCLPowerData data = getStaticDataOrCustom(key);
             if (data != null) {
                 return data;
-            }
-            PCLCustomPowerSlot slot = PCLCustomPowerSlot.get(key);
-            if (slot != null) {
-                return slot.getBuilder(0);
             }
             EUIUtils.logError(PCLPowerDataAdapter.class, "Failed to read power " + key);
             return PCLPowerData.Artifact;

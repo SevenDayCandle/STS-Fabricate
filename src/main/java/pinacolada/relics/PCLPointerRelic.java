@@ -73,6 +73,23 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public int atCostModify(PCLUseInfo info, int block) {
+        if (!usedUp) {
+            refresh(info);
+            for (PSkill<?> effect : getEffects()) {
+                block = effect.modifyCost(info, block);
+            }
+        }
+        return block;
+    }
+
+    @Override
+    public int atCostModify(int block, AbstractCard c) {
+        return atCostModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+    }
+
+
+    @Override
     public float atDamageLastModify(PCLUseInfo info, float damage) {
         if (!usedUp) {
             refresh(info);
@@ -262,6 +279,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         setup();
     }
 
+    // TODO single endpoint for calling refresh
     public void refresh(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
             effect.refresh(info, true);

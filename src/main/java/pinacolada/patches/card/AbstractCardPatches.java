@@ -12,6 +12,7 @@ import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
+import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
@@ -26,6 +27,9 @@ public class AbstractCardPatches {
     public static class AbstractCard_ApplyPowersToBlock {
         @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
         public static void insertPre(AbstractCard __instance, @ByRef float[] tmp) {
+            // Updating cost here because this gets called by all vanilla card calculation update methods
+            TemporaryCostModifier.tryRefresh(__instance, AbstractDungeon.player, __instance.cost);
+
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (r instanceof PCLRelic) {
                     tmp[0] = ((PCLRelic) r).atBlockModify(tmp[0], __instance);

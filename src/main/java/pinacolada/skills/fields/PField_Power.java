@@ -13,10 +13,17 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class PField_Power extends PField_Random {
-    public ArrayList<PCLPowerData> powers = new ArrayList<>();
+    public ArrayList<String> powers = new ArrayList<>();
     public boolean debuff;
 
     public PField_Power addPower(PCLPowerData... powers) {
+        for (PCLPowerData power : powers) {
+            this.powers.add(power.ID);
+        }
+        return this;
+    }
+
+    public PField_Power addPower(String... powers) {
         this.powers.addAll(Arrays.asList(powers));
         return this;
     }
@@ -43,7 +50,7 @@ public class PField_Power extends PField_Random {
     }
 
     public final FuncT1<Boolean, AbstractPower> getPowerFilter() {
-        return (c -> (powers.isEmpty() || EUIUtils.any(powers, power -> power.ID.equals(c.ID))));
+        return (c -> (powers.isEmpty() || EUIUtils.any(powers, power -> power.equals(c.ID))));
     }
 
     public String getPowerOrString() {
@@ -68,13 +75,17 @@ public class PField_Power extends PField_Random {
         return this;
     }
 
-    public PField_Power setPower(Collection<PCLPowerData> powers) {
+    public PField_Power setPower(Collection<String> powers) {
         this.powers.clear();
         this.powers.addAll(powers);
         return this;
     }
 
     public PField_Power setPower(PCLPowerData... powers) {
+        return setPower(EUIUtils.map(powers, po -> po.ID));
+    }
+
+    public PField_Power setPower(String... powers) {
         return setPower(Arrays.asList(powers));
     }
 

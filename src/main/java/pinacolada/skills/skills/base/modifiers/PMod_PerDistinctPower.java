@@ -53,7 +53,7 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return fields.powers.isEmpty() ?
                 sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == targetType)) :
-                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
+                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po) >= this.amount));
     }
 
     @Override

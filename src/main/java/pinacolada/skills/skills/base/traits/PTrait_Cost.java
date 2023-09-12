@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.traits;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -31,11 +32,6 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
-        GameUtilities.modifyCostForCombat(c, conditionMet ? amount : -amount, true);
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_costs("+X");
     }
@@ -52,8 +48,9 @@ public class PTrait_Cost extends PTrait<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return TEXT.act_zCosts(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), 2, getSubDescText(perspective));
+        if (hasParentType(PTrigger_Passive.class)) {
+            String subject = parent instanceof PFacetCond ? parent.getSubText(perspective) : PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            return TEXT.act_zCosts(subject, 2, getSubDescText(perspective));
         }
         return TEXT.act_costs(getSubDescText(perspective));
     }
@@ -61,6 +58,11 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     @Override
     public boolean isDetrimental() {
         return amount > 0;
+    }
+
+    @Override
+    public int modifyCost(PCLUseInfo info, int amount) {
+        return amount + this.amount;
     }
 
     @Override

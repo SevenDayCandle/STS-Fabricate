@@ -45,7 +45,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.powers.isEmpty() ?
                 sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
-                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID)))) / Math.max(1, this.amount);
+                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po)))) / Math.max(1, this.amount);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
         updateChildAmount(info, true);
         AbstractCreature sourceCreature = getSourceCreature();
         ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
-                EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power.ID))));
+                EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
         order.callback(new SequentialAction(actions), () -> {
             info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
             callback.invoke();

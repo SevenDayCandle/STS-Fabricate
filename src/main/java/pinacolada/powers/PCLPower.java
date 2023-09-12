@@ -154,6 +154,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return sb.toString();
     }
 
+    // Note that info.card and c may be DIFFERENT in the case of PCLMultiCard
     public float atDamageFinalGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
         return atDamageFinalGive(block, type, c);
     }
@@ -296,11 +297,21 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return data.create(owner, source, amount);
     }
 
+    // Note that info.card and c may be DIFFERENT in the case of PCLMultiCard
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
         return modifyBlock(block, c);
     }
 
-    public int modifyCost(AbstractCard card, int cost) {
+    public float modifyBlockLast(PCLUseInfo info, float block, AbstractCard c) {
+        return modifyBlockLast(block);
+    }
+
+    //
+    public int modifyCost(PCLUseInfo info, int cost, AbstractCard c) {
+        return modifyCost(cost, c);
+    }
+
+    public int modifyCost(int cost, AbstractCard c) {
         return cost;
     }
 
@@ -480,7 +491,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.type = data.type;
         this.isTurnBased = data.endTurnBehavior == PCLPowerData.Behavior.TurnBased;
         this.isPostActionPower = data.isPostActionPower;
-        this.justApplied = GameUtilities.isPlayerTurn(false);
+        this.justApplied = !GameUtilities.isPlayerTurn(false);
         this.canGoNegative = data.minAmount < 0;
         this.powerStrings = data.strings;
     }

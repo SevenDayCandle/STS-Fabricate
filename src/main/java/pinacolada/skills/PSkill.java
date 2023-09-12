@@ -1291,6 +1291,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this.childEffect != null ? this.childEffect.modifyBlockLast(info, amount) : amount;
     }
 
+    public int modifyCost(PCLUseInfo info, int cost) {
+        return this.childEffect != null ? this.childEffect.modifyCost(info, cost) : cost;
+    }
+
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         return this.childEffect != null ? this.childEffect.modifyDamageGiveFirst(info, amount) : amount;
     }

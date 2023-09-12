@@ -539,6 +539,14 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public int modifyCost(PCLUseInfo info, int amount) {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+            return this.childEffect.modifyCost(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyDamageGiveFirst(info, amount);

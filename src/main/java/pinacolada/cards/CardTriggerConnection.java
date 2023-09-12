@@ -20,7 +20,7 @@ import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
 public class CardTriggerConnection implements ClickableProvider, TriggerConnection, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber,
-                                              OnModifyBlockLastSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber,
+                                              OnModifyBlockLastSubscriber, OnModifyCostSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber,
                                               OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
     public final AbstractCard card;
@@ -93,6 +93,14 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     public float onModifyBlockLast(float amount, AbstractCard card) {
         if (canActivate(trigger)) {
             amount = trigger.modifyBlockLast(trigger.getInfo(getOwner()), amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public int onModifyCost(int amount, AbstractCard card) {
+        if (canActivate(trigger)) {
+            amount = trigger.modifyCost(trigger.getInfo(getOwner()), amount);
         }
         return amount;
     }

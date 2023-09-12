@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
@@ -161,6 +162,11 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
     }
 
     @Override
+    public AbstractCreature getSourceCreature() {
+        return owner != null ? owner : AbstractDungeon.player;
+    }
+
+    @Override
     public String getUpdatedDescription() {
         if (skills == null) {
             return EUIUtils.EMPTY_STRING;
@@ -186,12 +192,27 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
         return modifyBlockLast(CombatManager.playerSystem.getInfo(null, owner, owner), block, null);
     }
 
+    @Override
     public float modifyBlockLast(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
         for (PSkill<?> effect : getEffects()) {
             block = effect.modifyBlockLast(info, block);
         }
         return block;
+    }
+
+    @Override
+    public int modifyCost(int block, AbstractCard c) {
+        return modifyCost(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
+    }
+
+    @Override
+    public int modifyCost(PCLUseInfo info, int cost, AbstractCard c) {
+        refreshTriggers(info);
+        for (PSkill<?> effect : getEffects()) {
+            cost = effect.modifyCost(info, cost);
+        }
+        return cost;
     }
 
     public float modifyHeal(PCLUseInfo info, float damage, AbstractCard c) {
@@ -240,6 +261,13 @@ public class PCLDynamicPower extends PCLClickablePower implements PointerProvide
                 effect.setAmountFromCard();
             }
             updateDescription();
+        }
+    }
+
+    public void onDeath() {
+        super.onDeath();
+        for (PSkill<?> effect : getEffects()) {
+            effect.unsubscribeChildren();
         }
     }
 

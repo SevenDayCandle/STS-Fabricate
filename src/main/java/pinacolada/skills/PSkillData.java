@@ -10,6 +10,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
+import pinacolada.ui.editor.power.PCLCustomPowerEditPowerScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
 
 import java.util.*;
@@ -147,7 +148,7 @@ public class PSkillData<T extends PField> {
                 case Collectible:
                     return !(node.editor.screen instanceof PCLCustomCardEditCardScreen);
                 case Power:
-                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditRelicScreen;
+                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditRelicScreen || node.editor.screen instanceof PCLCustomPowerEditPowerScreen;
             }
             return true;
         }

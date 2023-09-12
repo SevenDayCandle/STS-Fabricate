@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIRelicGrid;
@@ -20,6 +21,8 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
@@ -59,6 +62,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
             if (relic != null) {
                 relic.currentX = InputHelper.mX;
                 relic.currentY = InputHelper.mY;
+                relic.isSeen = relic.isSeen || UnlockTracker.isRelicSeen(relic.relicId) || PCLCustomRelicSlot.get(relic.relicId) != null;
                 grid.add(new RelicInfo(relic));
             }
         }

@@ -141,6 +141,14 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return block;
     }
 
+    public int atCostModify(PCLUseInfo info, int block) {
+        return atCostModify(block, info.card);
+    }
+
+    public int atCostModify(int cost, AbstractCard c) {
+        return cost;
+    }
+
     public float atDamageLastModify(PCLUseInfo info, float block) {
         return atDamageLastModify(block, info.card);
     }

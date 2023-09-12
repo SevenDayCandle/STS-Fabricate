@@ -35,11 +35,6 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         fields.setPower(powers);
     }
 
-    public PCond_CheckPower(PCLCardTarget target, int amount, List<PCLPowerData> powers) {
-        super(DATA, target, amount);
-        fields.setPower(powers);
-    }
-
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
@@ -48,8 +43,8 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
                 evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
     }
 
-    private boolean checkPowers(PCLPowerData po, AbstractCreature t) {
-        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID));
+    private boolean checkPowers(String po, AbstractCreature t) {
+        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po));
     }
 
     @Override

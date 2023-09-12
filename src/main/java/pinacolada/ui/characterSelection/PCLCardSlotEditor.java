@@ -162,7 +162,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
     }
 
     protected boolean isCardAllowed(String id) {
-        return !canvas.screen.loadout.isCardBanned(id) && (!GameUtilities.isCardLocked(id) || PCLCustomCardSlot.get(id) != null);
+        return !canvas.screen.loadout.isCardBanned(id) && !GameUtilities.isCardLocked(id);
     }
 
     public PCLCardSlotEditor setSlot(LoadoutCardSlot slot) {
@@ -177,8 +177,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
     }
 
     protected void trySelect() {
-        canvas.screen.trySelectCard(this).addCallback((ef) ->
-        {
+        canvas.screen.trySelectCard(this).addCallback((ef) -> {
             if (ef != null && ef.getSelectedCard() != null) {
                 slot.select(ef.getSelectedCard().cardID, 1);
                 onSelect();
@@ -200,7 +199,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
 
             if (nameText.hb.clicked) {
                 nameText.hb.clicked = false;
-                canvas.screen.trySelectCard(this);
+                trySelect();
                 return;
             }
 

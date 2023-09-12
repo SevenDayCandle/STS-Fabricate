@@ -107,16 +107,16 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", potionIDs);
     }
 
-    public static String getPowerAndString(ArrayList<PCLPowerData> powers) {
-        return PCLCoreStrings.joinWithAnd(PField::safeInvokeTip, powers);
+    public static String getPowerAndString(ArrayList<String> powers) {
+        return PCLCoreStrings.joinWithAnd(PField::safeInvokeTipForPowerID, powers);
     }
 
-    public static String getPowerOrString(ArrayList<PCLPowerData> powers) {
-        return PCLCoreStrings.joinWithOr(PField::safeInvokeTip, powers);
+    public static String getPowerOrString(ArrayList<String> powers) {
+        return PCLCoreStrings.joinWithOr(PField::safeInvokeTipForPowerID, powers);
     }
 
-    public static String getPowerString(ArrayList<PCLPowerData> powers) {
-        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, powers) : getPowerAndString(powers);
+    public static String getPowerString(ArrayList<String> powers) {
+        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTipForPowerID, powers) : getPowerAndString(powers);
     }
 
     public static String getRelicIDAndString(ArrayList<String> relicIDs) {
@@ -151,6 +151,11 @@ public abstract class PField implements Serializable {
 
     protected static String safeInvokeTip(TooltipProvider provider) {
         return provider != null ? String.valueOf(provider.getTooltip()) : null;
+    }
+
+    protected static String safeInvokeTipForPowerID(String id) {
+        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(id);
+        return data != null ? safeInvokeTip(data) : id;
     }
 
     protected static String safeInvokeTipTitle(TooltipProvider provider) {

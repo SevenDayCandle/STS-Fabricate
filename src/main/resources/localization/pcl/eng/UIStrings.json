@@ -208,7 +208,7 @@
 												"An #yAugment's tier denotes how rare that #yAugment is.",
 												"#yType determines how this power is treated by #yArtifact and other effects.",
 												"#yTurn #yBehavior determines how this power's stacks change when a turn ends.",
-												"#yPriority determines when the power is factored into combat calculations. Lower priority values cause the power to be taken into consideration sooner.",
+												"#yPriority determines when the power is factored into combat calculations. Lower priority values cause the power to be taken into consideration sooner. Most base game powers have a priority value of #b5.",
 												"Determines the minimum and maximum amount of stacks that this power can have.",
 												"If checked, this power can be chosen by effects that apply powers at random."
 								]
@@ -381,8 +381,8 @@
 						"Value: {0}/{1}",
 						"Invalid Loadout",
 						"Loadout value is over limit",
-						"Loadout contains banned or locked cards",
-						"Loadout has less than 10 cards",
+						"Loadout contains cards not in the pool",
+						"Loadout does not have enough cards",
 						"Current loadout has not been unlocked. Please select an unlocked loadout.",
 						"You have unsaved changes to your loadout. Are you sure you want to exit without saving?",
 						"Reset",

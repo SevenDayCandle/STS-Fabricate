@@ -215,6 +215,7 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         return new PSkillPower(owner, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
     }
 
+    @Override
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
@@ -233,12 +234,27 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
         return modifyBlockLast(CombatManager.playerSystem.getInfo(null, owner, owner), block, null);
     }
 
+    @Override
     public float modifyBlockLast(PCLUseInfo info, float block, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
             block = effect.modifyBlockLast(info, block);
         }
         return block;
+    }
+
+    @Override
+    public int modifyCost(int block, AbstractCard c) {
+        return modifyCost(CombatManager.playerSystem.getInfo(c, owner, owner), block, c);
+    }
+
+    @Override
+    public int modifyCost(PCLUseInfo info, int cost, AbstractCard c) {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            cost = effect.modifyCost(info, cost);
+        }
+        return cost;
     }
 
     public float modifyHeal(PCLUseInfo info, float damage, AbstractCard c) {
@@ -285,6 +301,14 @@ public class PSkillPower extends PCLClickablePower implements TriggerConnection 
     public void onAfterUseCard(AbstractCard card, UseCardAction act) {
         refreshTriggers(CombatManager.playerSystem.getInfo(card, owner, owner));
         super.onAfterUseCard(card, act);
+    }
+
+
+    public void onDeath() {
+        super.onDeath();
+        for (PTrigger effect : ptriggers) {
+            effect.unsubscribeChildren();
+        }
     }
 
     public void onInitialApplication() {

@@ -166,7 +166,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return null;
+        return amount > 0 ? TEXT.act_choose(TEXT.subjects_x) : TEXT.cedit_multiEffect;
     }
 
     public String getSpecialData() {
@@ -259,6 +259,14 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public float modifyBlockLast(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
             amount = be.modifyBlockLast(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public int modifyCost(PCLUseInfo info, int amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyCost(info, amount);
         }
         return amount;
     }

@@ -711,8 +711,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size), items);
     }
 
-    public void registerPower(List<PCLPowerData> items) {
-        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, pd -> pd instanceof PCLDynamicPowerData ? pd.getName() : getSmartSearchableLabel(pd)), items);
+    public void registerPower(List<String> powerIDs) {
+        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, pd -> pd instanceof PCLDynamicPowerData ? pd.getName() : getSmartSearchableLabel(pd)),
+                powers -> {
+                    powerIDs.clear();
+                    powerIDs.addAll(EUIUtils.mapAsNonnull(powers, t -> t.ID));
+                },
+                powerIDs,
+                power -> power.ID
+        );
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {

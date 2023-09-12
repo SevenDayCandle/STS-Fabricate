@@ -47,18 +47,20 @@ public class PMove_RemovePower extends PMove<PField_Power> {
     }
 
     protected void removePower(List<? extends AbstractCreature> targets, PCLPowerData power, PCLActions order) {
-        for (AbstractCreature t : targets) {
-            order.removePower(t, t, power.ID);
-        }
-        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerData.Intangible) {
+        if (power != null) {
             for (AbstractCreature t : targets) {
-                order.removePower(t, t, IntangiblePower.POWER_ID);
+                order.removePower(t, t, power.ID);
             }
-        }
-        else if (power == PCLPowerData.LockOn) {
-            for (AbstractCreature t : targets) {
-                order.removePower(t, t, LockOnPower.POWER_ID);
+            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+            if (power == PCLPowerData.Intangible) {
+                for (AbstractCreature t : targets) {
+                    order.removePower(t, t, IntangiblePower.POWER_ID);
+                }
+            }
+            else if (power == PCLPowerData.LockOn) {
+                for (AbstractCreature t : targets) {
+                    order.removePower(t, t, LockOnPower.POWER_ID);
+                }
             }
         }
     }
@@ -74,13 +76,13 @@ public class PMove_RemovePower extends PMove<PField_Power> {
             }
         }
         else if (fields.random) {
-            PCLPowerData power = GameUtilities.getRandomElement(fields.powers);
-            if (power != null) {
-                removePower(targets, power, order);
-            }
+            String powerID = GameUtilities.getRandomElement(fields.powers);
+            PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
+            removePower(targets, power, order);
         }
         else {
-            for (PCLPowerData power : fields.powers) {
+            for (String powerID : fields.powers) {
+                PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
                 removePower(targets, power, order);
             }
         }

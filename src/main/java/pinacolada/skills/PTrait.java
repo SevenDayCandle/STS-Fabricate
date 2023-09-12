@@ -141,8 +141,9 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+        if (hasParentType(PTrigger_Passive.class)) {
+            String subject = parent instanceof PFacetCond ? parent.getSubText(perspective) : PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            return TEXT.act_zHas(subject, getSubDescText(perspective));
         }
         if (isVerbose()) {
             return TEXT.act_has(getSubDescText(perspective));

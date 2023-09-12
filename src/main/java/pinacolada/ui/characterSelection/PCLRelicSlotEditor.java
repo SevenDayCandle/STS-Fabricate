@@ -106,7 +106,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
     }
 
     protected boolean isRelicAllowed(String id) {
-        return !canvas.screen.loadout.isRelicBanned(id) && (!GameUtilities.isRelicLocked(id) || PCLCustomRelicSlot.get(id) != null);
+        return !canvas.screen.loadout.isRelicBanned(id) && !GameUtilities.isRelicLocked(id);
     }
 
     private void onSelect() {
@@ -187,7 +187,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
 
             if (nameText.hb.clicked) {
                 nameText.hb.clicked = false;
-                canvas.screen.trySelectRelic(this);
+                trySelect();
                 return;
             }
 

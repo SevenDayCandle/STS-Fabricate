@@ -53,6 +53,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.CardTriggerConnection;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
@@ -77,7 +78,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.PSkillPowerContainer;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PSpecialCond;
@@ -1397,6 +1397,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return amount;
     }
 
+    protected int modifyCost(PCLUseInfo info, int amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyCost(info, amount);
+        }
+        return amount;
+    }
+
     protected float modifyDamage(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyDamageGiveFirst(info, amount);
@@ -1774,6 +1781,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         addAttackResult(baseDamage, tempDamage);
         addDefendResult(baseBlock, tempBlock);
+
+        // Invoke cost updates
+        int baseCostChange = modifyCost(info, cost);
+        TemporaryCostModifier.tryRefresh(this, owner, baseCostChange);
 
         // Release damage display for rendering
         formulaDisplay = null;

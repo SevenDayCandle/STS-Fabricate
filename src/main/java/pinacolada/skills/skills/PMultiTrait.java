@@ -220,6 +220,14 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
+    public int modifyCost(PCLUseInfo info, int amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyCost(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
             amount = be.modifyDamageGiveFirst(info, amount);

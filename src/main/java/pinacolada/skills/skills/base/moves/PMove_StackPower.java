@@ -84,19 +84,19 @@ public class PMove_StackPower extends PMove<PField_Power> {
     @Override
     public boolean isDetrimental() {
         return ((target.targetsSelf()) && EUIUtils.any(fields.powers, PCLPowerData::isDebuff)) ||
-                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff()));
+                ((target.targetsEnemies()) && EUIUtils.any(fields.powers, PCLPowerData::isBuff));
     }
 
     @Override
     public boolean isMetascaling() {
-        return !isDetrimental() && EUIUtils.any(fields.powers, p -> p.isMetascaling);
+        return !isDetrimental() && EUIUtils.any(fields.powers, PCLPowerData::isMetascaling);
     }
 
     @Override
     public void onDrag(AbstractMonster m) {
         if (m != null) {
-            for (PCLPowerData power : fields.powers) {
-                GameUtilities.getIntent(m).addModifier(power.ID, amount);
+            for (String power : fields.powers) {
+                GameUtilities.getIntent(m).addModifier(power, amount);
             }
         }
     }
@@ -105,7 +105,8 @@ public class PMove_StackPower extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
-                PCLPowerData power = GameUtilities.getRandomElement(fields.powers);
+                String powerID = GameUtilities.getRandomElement(fields.powers);
+                PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
                 if (power != null) {
                     for (AbstractCreature target : getTargetList(info)) {
                         order.applyPower(info.source, target, power, amount);
@@ -113,7 +114,8 @@ public class PMove_StackPower extends PMove<PField_Power> {
                 }
             }
             else {
-                for (PCLPowerData power : fields.powers) {
+                for (String powerID : fields.powers) {
+                    PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
                     for (AbstractCreature target : getTargetList(info)) {
                         order.applyPower(info.source, target, power, amount);
                     }
@@ -123,7 +125,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         else {
             for (int i = 0; i < amount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon() && fields.debuff ^ !p.isDebuff()), amount);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount);
                 }
             }
         }

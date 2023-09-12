@@ -1628,8 +1628,9 @@ public class GameUtilities {
         return monster instanceof AbstractMonster && PCLIntentType.Attack.hasIntent(PCLIntentInfo.get((AbstractMonster) monster).getMoveIntent());
     }
 
+    // Custom cards should always be treated as seen
     public static boolean isCardLocked(String id) {
-        return UnlockTracker.isCardLocked(id) || !UnlockTracker.isCardSeen(id);
+        return UnlockTracker.isCardLocked(id) || (!UnlockTracker.isCardSeen(id) && PCLCustomCardSlot.get(id) == null);
     }
 
     // Both colorless and curse are character-independent
@@ -1745,8 +1746,9 @@ public class GameUtilities {
         return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }
 
+    // Custom relics should always be treated as seen
     public static boolean isRelicLocked(String id) {
-        return UnlockTracker.isRelicLocked(id) || !UnlockTracker.isRelicSeen(id);
+        return UnlockTracker.isRelicLocked(id) || (!UnlockTracker.isRelicSeen(id) && PCLCustomRelicSlot.get(id) == null);
     }
 
     public static boolean isRelicTierSpawnable(AbstractRelic.RelicTier tier) {

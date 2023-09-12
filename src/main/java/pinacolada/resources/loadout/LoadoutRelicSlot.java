@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
