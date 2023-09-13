@@ -114,6 +114,7 @@ public class GameUtilities {
     private static final String PORTRAIT_PATH = "images/1024Portraits/";
     private static final String BETA_PATH = "images/1024PortraitsBeta/";
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
+    public static final int CHAR_OFFSET = 97;
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -916,6 +917,37 @@ public class GameUtilities {
 
     public static int getMaxHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
         return creature.maxHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
+    }
+
+    public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor) {
+        StringBuilder sb = new StringBuilder(base);
+        sb.append("+");
+
+        if (maxUpgrades < 0 || maxUpgrades > 1) {
+            sb.append(timesUpgraded);
+        }
+
+        // Do not show appended characters for non-multiform or linear upgrade path cards
+        if (maxForms > 1 && branchFactor != 1) {
+            // For branch factors of 2 or more, show the "path" that was taken
+            if (branchFactor > 1) {
+                int minForm = form;
+                StringBuilder sb2 = new StringBuilder();
+                while (minForm > 0) {
+                    int eval = minForm - 1;
+                    char appendix = (char) ((eval % branchFactor) + CHAR_OFFSET);
+                    sb2.append(appendix);
+                    minForm = eval / branchFactor;
+                }
+                sb2.reverse();
+                sb.append(sb2);
+            }
+            else {
+                char appendix = (char) (form + CHAR_OFFSET);
+                sb.append(appendix);
+            }
+        }
+        return sb.toString();
     }
 
     public static AbstractCard.CardRarity getNextRarity(AbstractCard.CardRarity rarity) {

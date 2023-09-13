@@ -97,6 +97,10 @@ public interface PointerProvider {
         return added;
     }
 
+    default int branchFactor() {
+        return 0;
+    }
+
     default void clearSkills() {
         getSkills().clear();
     }
@@ -390,6 +394,14 @@ public interface PointerProvider {
         }
 
         return sb.toString();
+    }
+
+    default int maxForms() {
+        return 1;
+    }
+
+    default int maxUpgrades() {
+        return 0;
     }
 
     default int timesUpgraded() {

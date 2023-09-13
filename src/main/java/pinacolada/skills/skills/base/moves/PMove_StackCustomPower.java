@@ -16,17 +16,18 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CustomPower;
+import pinacolada.skills.fields.PField_Numeric;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @VisibleSkill
-public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements SummonOnlyMove {
+public class PMove_StackCustomPower extends PMove<PField_Numeric> implements SummonOnlyMove {
 
-    public static final PSkillData<PField_CustomPower> DATA = register(PMove_StackCustomPower.class, PField_CustomPower.class, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Numeric> DATA = register(PMove_StackCustomPower.class, PField_Numeric.class, -1, DEFAULT_MAX);
 
     public PMove_StackCustomPower() {
         this(PCLCardTarget.Self, 0);
@@ -92,6 +93,14 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         String subtext = getCapitalSubText(perspective, addPeriod);
         // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
         return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(perspective, addPeriod) : "");
+    }
+
+    // Indexes should correspond to the indexes of powers in the card being built
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.getPowerCount() - 1));
+        editor.registerDropdown(range, fields.indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false, false, false);
     }
 
     @Override

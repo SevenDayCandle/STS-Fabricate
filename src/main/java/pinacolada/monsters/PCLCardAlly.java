@@ -93,7 +93,11 @@ public class PCLCardAlly extends PCLCardCreature {
             }
 
             // Killed summons are treated as being Purged
-            PCLActions.bottom.purge(releasedCard).showEffect(false, false);
+            releasedCard.untip();
+            releasedCard.unhover();
+            releasedCard.unfadeOut();
+            CombatManager.PURGED_CARDS.addToTop(releasedCard);
+            CombatManager.onCardPurged(releasedCard);
         }
 
         // Health needs to be 1 so that the slot can be re-selected

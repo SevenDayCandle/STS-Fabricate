@@ -1,8 +1,9 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
@@ -15,6 +16,7 @@ import pinacolada.skills.fields.PField_Empty;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_ExhaustAlly extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_ExhaustAlly.class, PField_Empty.class)
             .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)

@@ -8,11 +8,12 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-public class PTrait_OrbFocus extends PTrait<PField_Empty> implements OnOrbApplyFocusSubscriber {
+public class PTrait_OrbFocus extends PTrait<PField_Orb> implements OnOrbApplyFocusSubscriber {
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_OrbFocus.class, PField_Empty.class);
+    public static final PSkillData<PField_Orb> DATA = register(PTrait_OrbFocus.class, PField_Orb.class);
 
     public PTrait_OrbFocus() {
         this(1);

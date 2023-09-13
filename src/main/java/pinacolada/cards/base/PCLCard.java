@@ -110,7 +110,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
-    public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
     public static Random rng = null;
     protected final transient float[] fakeGlowList = new float[4];
@@ -488,6 +487,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public PCLAttackType attackType() {
         return attackType;
+    }
+
+    @Override
+    public int branchFactor() {
+        return cardData.branchFactor;
     }
 
     // TODO only update when necessary (i.e. when phase or target changes)
@@ -1123,34 +1127,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         // In case cardData is somehow null, return a generic name
         String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : originalName;
         if (upgraded) {
-            StringBuilder sb = new StringBuilder(name);
-            sb.append("+");
-
-            if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
-                sb.append(this.timesUpgraded);
+            if (cardData != null) {
+                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, cardData.maxForms, maxUpgradeLevel, cardData.branchFactor);
             }
-
-            // Do not show appended characters for non-multiform or linear upgrade path cards
-            if (cardData != null && this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-                // For branch factors of 2 or more, show the "path" that was taken
-                if (this.cardData.branchFactor > 1) {
-                    int minForm = auxiliaryData.form;
-                    StringBuilder sb2 = new StringBuilder();
-                    while (minForm > 0) {
-                        int eval = minForm - 1;
-                        char appendix = (char) ((eval % this.cardData.branchFactor) + CHAR_OFFSET);
-                        sb2.append(appendix);
-                        minForm = eval / this.cardData.branchFactor;
-                    }
-                    sb2.reverse();
-                    sb.append(sb2);
-                }
-                else {
-                    char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-                    sb.append(appendix);
-                }
+            else {
+                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, 1, maxUpgradeLevel, 0);
             }
-            name = sb.toString();
         }
 
         return CardModifierManager.onRenderTitle(this, name);
@@ -1381,6 +1363,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         upgrade.upgrade();
         upgrade.displayUpgrades();
         return upgrade;
+    }
+
+    @Override
+    public int maxForms() {
+        return cardData.maxForms;
+    }
+
+    @Override
+    public int maxUpgrades() {
+        return maxUpgradeLevel;
     }
 
     protected float modifyBlock(PCLUseInfo info, float amount) {
@@ -1906,9 +1898,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    @Deprecated
     @Override
     public final void renderCardPreview(SpriteBatch sb) { /* Useless */ }
 
+    @Deprecated
     @Override
     public final void renderCardPreviewInSingleView(SpriteBatch sb) { /* Useless */ }
 
@@ -2019,6 +2013,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         render(sb, hovered, false, true);
     }
 
+    @Deprecated
     @SpireOverride
     protected void renderJokePortrait(SpriteBatch sb) {
         renderPortrait(sb);
@@ -2465,6 +2460,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnPurge(this));
     }
 
+    // Triggered when this card is manually reshuffled
     public void triggerOnReshuffle(CardGroup sourcePile) {
         doEffects(be -> be.triggerOnReshuffle(this, sourcePile));
     }
@@ -2478,6 +2474,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Because the actual trigger on scry LOOPS UNTIL THE ACTION IS DONE WTF
     public void triggerOnScryThatDoesntLoopOnEnd() {
         doEffects(be -> be.triggerOnScry(this));
+    }
+
+    // Triggered when this is shuffled along with the deck
+    public void triggerOnShuffle() {
+        doEffects(PSkill::triggerOnShuffle);
     }
 
     // Only called if the card is upgraded in battle through an action

@@ -71,6 +71,10 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         fields.setCardIDs(cardData);
     }
 
+    protected boolean canMakeCopy(AbstractCard card) {
+        return true;
+    }
+
     protected boolean generateSpecificCards() {
         return !fields.cardIDs.isEmpty();
     }
@@ -87,13 +91,12 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
         final int limit = Math.max(extra, amount);
         // When sourcing cards from the parent skill, make exact copies of the cards
-        // Skip ephemeral cards because this can cause infinite loops
         if (useParent && info != null) {
             List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null) {
                 ArrayList<AbstractCard> created = new ArrayList<>();
                 for (AbstractCard card : cards) {
-                    if (!card.purgeOnUse) {
+                    if (canMakeCopy(card)) {
                         for (int i = 0; i < limit; i++) {
                             created.add(card.makeStatEquivalentCopy());
                         }
@@ -105,8 +108,10 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         // For these actions, also treat the "forced" parameter as a self-target to allow users to create effects that create copies of the calling card in a specific pile
         else if (fields.forced && sourceCard != null) {
             ArrayList<AbstractCard> created = new ArrayList<>();
-            for (int i = 0; i < limit; i++) {
-                created.add(sourceCard.makeStatEquivalentCopy());
+            if (canMakeCopy(sourceCard)) {
+                for (int i = 0; i < limit; i++) {
+                    created.add(sourceCard.makeStatEquivalentCopy());
+                }
             }
             return created;
         }

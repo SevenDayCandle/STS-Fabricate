@@ -184,6 +184,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         }
     }
 
+    @Override
+    public int branchFactor() {
+        return relicData.branchFactor;
+    }
+
     public void fillPreviews(RotatingList<EUIPreview> list) {
         PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
@@ -245,6 +250,16 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     @Override
     public int getXValue() {
         return counter;
+    }
+
+    @Override
+    public int maxForms() {
+        return relicData.maxForms;
+    }
+
+    @Override
+    public int maxUpgrades() {
+        return relicData.maxUpgradeLevel;
     }
 
     @Override

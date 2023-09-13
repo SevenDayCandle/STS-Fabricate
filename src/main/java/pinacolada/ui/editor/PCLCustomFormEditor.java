@@ -33,8 +33,8 @@ public class PCLCustomFormEditor extends EUIBase {
                 new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, hb.width, hb.height))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
-                .setLabel(PGR.core.strings.cedit_editForm)
-                .setTooltip(PGR.core.strings.cedit_editForm, PGR.core.strings.cetut_primaryForm);
+                .setLabel(PGR.core.strings.cedit_form)
+                .setTooltip(PGR.core.strings.cedit_form, PGR.core.strings.cetut_primaryForm);
 
         formValues = new EUIDropdown<Integer>(hb)
                 .setOnChange(types -> {

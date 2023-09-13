@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.megacrit.cardcrawl.rewards.RewardItem.TEXT;
-import static pinacolada.cards.base.PCLCard.CHAR_OFFSET;
+import static pinacolada.utilities.GameUtilities.CHAR_OFFSET;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
     protected static EUITooltip hiddenTooltip;
@@ -249,23 +249,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
 
-    // RelicData will be null while super is being called
     public String getNameFromData() {
         String name = relicData.strings.NAME;
         if (auxiliaryData.timesUpgraded > 0) {
-            StringBuilder sb = new StringBuilder(name);
-            sb.append("+");
-
-            if (relicData.maxUpgradeLevel < 0 || relicData.maxUpgradeLevel > 1) {
-                sb.append(auxiliaryData.timesUpgraded);
-            }
-
-            // Do not show appended characters for non-multiform or linear upgrade path cards
-            if (relicData.maxForms > 1 && relicData.branchFactor != 1) {
-                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-                sb.append(appendix);
-            }
-            name = sb.toString();
+            return GameUtilities.getMultiformName(name, auxiliaryData.form, auxiliaryData.timesUpgraded, relicData.maxForms, relicData.maxUpgradeLevel, relicData.branchFactor);
         }
         return name;
     }

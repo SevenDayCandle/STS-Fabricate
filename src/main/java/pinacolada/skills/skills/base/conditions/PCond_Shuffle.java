@@ -33,12 +33,18 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.subjects_shuffleYourDeck) : TEXT.cond_onGeneric(TEXT.subjects_shuffle);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return getWheneverYouString(TEXT.subjects_shuffleYourDeck);
+        if (isBranch()) {
+            return getWheneverYouString(TEXT.subjects_shuffle);
+        }
+        if (isWhenClause()) {
+            return getWheneverYouString(TEXT.subjects_shuffleYourDeck);
+        }
+        return TEXT.cond_onGeneric(TEXT.subjects_shuffle);
     }
 
     @Override

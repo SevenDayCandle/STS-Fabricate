@@ -1719,6 +1719,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public void triggerOnShuffle() {
+        if (this instanceof OnShuffleSubscriber) {
+            ((OnShuffleSubscriber) this).onShuffle(true);
+        }
+        else if (this.childEffect != null) {
+            this.childEffect.triggerOnShuffle();
+        }
+    }
+
     public void triggerOnStartOfBattleForRelic() {
     }
 

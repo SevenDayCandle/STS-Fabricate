@@ -1,15 +1,16 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.base.moves.PMove_Modify;
 
+@VisibleSkill
 public class PMove_ModifyCardHP extends PMove_Modify<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyCardHP.class, PField_CardCategory.class)
             .pclOnly();

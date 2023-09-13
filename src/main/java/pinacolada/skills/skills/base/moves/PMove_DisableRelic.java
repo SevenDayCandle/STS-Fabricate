@@ -1,7 +1,8 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -10,11 +11,11 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
+@VisibleSkill
 public class PMove_DisableRelic extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_DisableRelic.class, PField_Empty.class, 1, 1)
             .setSourceTypes(PSkillData.SourceType.Collectible)
-            .noTarget()
-            .pclOnly();
+            .noTarget();
 
     public PMove_DisableRelic() {
         super(DATA, PCLCardTarget.None, 1);

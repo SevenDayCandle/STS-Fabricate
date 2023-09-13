@@ -34,7 +34,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
 
     @Override
     public boolean canActivate(PTrigger trigger) {
-        return EUIUtils.any(trigger.fields.groupTypes, g -> {
+        return trigger.fields.groupTypes.isEmpty() || EUIUtils.any(trigger.fields.groupTypes, g -> {
             CardGroup gr = g.getCardGroup();
             return gr != null && gr.contains(card);
         });

@@ -8,11 +8,21 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
+import java.util.ArrayList;
+
 public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     protected PCLDynamicRelicData builder;
+    protected ArrayList<PCLDynamicRelicData> forms;
 
     public PCLDynamicRelic(PCLDynamicRelicData data) {
         super(data);
+    }
+
+    protected void findForms() {
+        PCLCustomRelicSlot cSlot = PCLCustomRelicSlot.get(relicId);
+        if (cSlot != null) {
+            this.forms = cSlot.builders;
+        }
     }
 
     // Use descriptions from the relicData because DESCRIPTIONS in AbstractRelic will contain the wrong value
@@ -47,6 +57,7 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         super.preSetup(builder);
 
         this.builder = (PCLDynamicRelicData) builder; // Should always be PCLDynamicRelicData
+        findForms();
 
         if (this.builder.portraitImage != null) {
             this.outlineImg = this.img = this.builder.portraitImage;
@@ -73,11 +84,27 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     }
 
     @Override
+    public PCLRelic setForm(int form) {
+        PCLDynamicRelicData lastBuilder = null;
+        this.auxiliaryData.form = form;
+        if (forms != null && forms.size() > form) {
+            lastBuilder = forms.get(form);
+        }
+        if (lastBuilder != null && lastBuilder != this.builder) {
+            this.builder = lastBuilder;
+            setupMoves(this.builder);
+        }
+        initializePCLTips();
+        return this;
+    }
+
+    @Override
     public void setupImages(String path) {
         // No-op, handle images in setupBuilder
     }
 
     public void setupMoves(PCLDynamicRelicData builder) {
+        clearSkills();
         for (PSkill<?> effect : builder.moves) {
             if (effect == null || effect.isBlank()) {
                 continue;

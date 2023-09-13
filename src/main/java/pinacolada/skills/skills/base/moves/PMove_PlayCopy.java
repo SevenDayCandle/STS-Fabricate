@@ -36,6 +36,12 @@ public class PMove_PlayCopy extends PMove_GenerateCard {
         return PGR.core.tooltips.play;
     }
 
+    // Prevent ephemeral cards from being copied to avoid infinite loops
+    @Override
+    protected boolean canMakeCopy(AbstractCard card) {
+        return !card.purgeOnUse;
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));

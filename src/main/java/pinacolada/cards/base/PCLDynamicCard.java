@@ -53,12 +53,11 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         }
     }
 
-    public PCLDynamicCard findForms() {
+    protected void findForms() {
         PCLCustomCardSlot cSlot = PCLCustomCardSlot.get(cardID);
         if (cSlot != null) {
             this.forms = cSlot.builders;
         }
-        return this;
     }
 
     public void fullReset() {

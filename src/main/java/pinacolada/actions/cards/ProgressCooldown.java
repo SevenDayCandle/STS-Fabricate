@@ -50,6 +50,9 @@ public class ProgressCooldown extends GenericCardSelection {
                 }
             }
         }
+        if (c instanceof CooldownProvider) {
+            cooldowns.add((CooldownProvider) c);
+        }
         for (SkillModifier sk : SkillModifier.getAll(c)) {
             PSkill<?> s = sk.getSkill();
             if (s instanceof CooldownProvider) {
