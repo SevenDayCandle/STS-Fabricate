@@ -19,6 +19,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Relic;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -44,19 +45,21 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
 
     protected void doEffect() {
         if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
-            AbstractDungeon.player.loseRelic(((AbstractRelic) source).relicId);
+            GameUtilities.removeRelics((AbstractRelic) source);
         }
         else {
             int limit = fields.relicIDs.isEmpty() ? amount : AbstractDungeon.player.relics.size();
+            ArrayList<AbstractRelic> toRemove = new ArrayList<>();
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (fields.getFullRelicFilter().invoke(r)) {
-                    AbstractDungeon.player.loseRelic(r.relicId);
+                    toRemove.add(r);
                     limit -= 1;
                 }
                 if (limit <= 0) {
                     break;
                 }
             }
+            GameUtilities.removeRelics(toRemove);
         }
     }
 

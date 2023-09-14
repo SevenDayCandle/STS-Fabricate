@@ -2077,6 +2077,20 @@ public class GameUtilities {
         card.isBlockModified = false;
     }
 
+    public static void removeRelics(AbstractRelic... r) {
+        removeRelics(Arrays.asList(r));
+    }
+
+    public static void removeRelics(Collection<AbstractRelic> relics) {
+        player.relics.removeAll(relics);
+        for (AbstractRelic r : relics) {
+            r.onUnequip();
+        }
+        if (relics.size() > 0) {
+            player.reorganizeRelics();
+        }
+    }
+
     public static boolean requiresTarget(AbstractCard card) {
         return card.target == AbstractCard.CardTarget.ENEMY || card.target == AbstractCard.CardTarget.SELF_AND_ENEMY || card.type == PCLEnum.CardType.SUMMON;
     }
