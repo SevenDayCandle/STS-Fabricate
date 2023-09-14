@@ -154,8 +154,8 @@
 												"An item's form can be changed when manually upgrading it. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this item's portrait",
 												"Flags qualify cards for certain checks (e.g. counting as a #yStrike for {#y:Perfected Strike}).",
-												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation. | Tags are rendered on the top-right corner of the card by default, but this can be toggled with the {Display Card Tags in description} setting.",
-												"In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
+												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation.",
+												"Tags are rendered on the top-right corner of the card by default, but this can be toggled with the {Display Card Tags in description} setting. | In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
 												"Affinities are card properties that are used in different ways by different characters. They can also be used as a card filter for effects.",
 												"Conditions determine whether the node directly below it can take effect or not.",
 												"Effects activate when a card, relic, or potion is used, unless specified otherwise by a condition.",
@@ -186,7 +186,11 @@
 												"If checked, the user will not be able to cancel this effect.",
 												"If checked, the user will only be able to select cards matching this filter.",
 												"#yPassives modify the attributes of cards or #yOrbs while their condition is met. | Greyed-out effects will have no effect.",
-												"#yWhens activate when the specified events occur. | Greyed-out conditions will have no effect unless they are chained after a valid condition.",
+												"#yWhens activate when events specified by their conditions occur while this object exists. | Greyed-out conditions will have no effect unless they are chained after a valid condition.",
+												"#yInteractables are activated by clicking on the object with this effect.",
+												"Activates when this item is acquired in the player's inventory. | Greyed-out effects will have no effect.",
+												"Activates when this item is removed from the player's inventory. | Greyed-out effects will have no effect.",
+												"Activates if this item exists at the end of a combat. | Greyed-out effects will have no effect.",
 												"If checked, this modifier's amount will add itself onto the effect's base value instead of multiplying that value.",
 												"#oLeft-Click a node to edit it. Hold and drag it onto another node to assign it as a child to the target node. | To add effects, click one of the node buttons from the top bar to add it to the root, or drag it onto an existing node to add it as a child to that node.",
 												"{#o:Click this to add a Primary node here.}",
@@ -211,7 +215,11 @@
 												"#yTurn #yBehavior determines how this power's stacks change when a turn ends.",
 												"#yPriority determines when the power is factored into combat calculations. Lower priority values cause the power to be taken into consideration sooner. Most base game powers have a priority value of #b5.",
 												"Determines the minimum and maximum amount of stacks that this power can have.",
-												"If checked, this power can be chosen by effects that apply powers at random."
+												"If checked, this power can be chosen by effects that apply powers at random.",
+												"Determines what card piles this effect may source its cards from.",
+												"#yOrigin determines the position in the chosen piles that cards are chosen from.",
+												"#yDestination determines the position in this effect's target pile that cards will be placed into.",
+												"Determines the targets that this effect will be actioned on. This target is independent of the card's actual targeting (with the exception of the primary damage effect), but single-target effects require the card's targeting to be single-target as well."
 								]
 				},
 				"pcl:CardPile": {

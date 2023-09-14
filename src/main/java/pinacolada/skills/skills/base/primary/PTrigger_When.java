@@ -1,5 +1,7 @@
 package pinacolada.skills.skills.base.primary;
 
+import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -12,6 +14,9 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PTrigger;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @VisibleSkill
 public class PTrigger_When extends PTrigger {
@@ -28,7 +33,7 @@ public class PTrigger_When extends PTrigger {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return capital(TEXT.cond_when(TEXT.subjects_x), true);
+        return StringUtils.capitalize(TEXT.cond_when(TEXT.subjects_x));
     }
 
     @Override
@@ -57,5 +62,13 @@ public class PTrigger_When extends PTrigger {
                 || skill instanceof PMultiBase
                 || skill instanceof PCLCombatSubscriber
                 || skill.hasParentType(PCond.class);
+    }
+
+    @Override
+    public PTrigger_When scanForTips(String source) {
+        if (tips == null) {
+            tips = Collections.singletonList(new EUIKeywordTooltip(StringUtils.capitalize(TEXT.cond_when(TEXT.subjects_x)), TEXT.cetut_when));
+        }
+        return this;
     }
 }

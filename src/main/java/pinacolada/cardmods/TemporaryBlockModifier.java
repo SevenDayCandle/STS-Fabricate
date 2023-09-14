@@ -49,7 +49,8 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
         return new TemporaryBlockModifier(change, temporary, untilPlayed);
     }
 
-    public float modifyBlock(float block, AbstractCard card) {
+    @Override
+    public float modifyBaseBlock(float block, AbstractCard card) {
         return block + change;
     }
 

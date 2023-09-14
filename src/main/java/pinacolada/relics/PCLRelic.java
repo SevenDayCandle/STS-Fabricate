@@ -50,8 +50,8 @@ import static com.megacrit.cardcrawl.rewards.RewardItem.TEXT;
 import static pinacolada.utilities.GameUtilities.CHAR_OFFSET;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
-    protected static EUITooltip hiddenTooltip;
-    protected static EUITooltip sapphireTooltip;
+    private static EUITooltip hiddenTooltip;
+    private static EUITooltip sapphireTooltip;
 
     public static AbstractPlayer player;
     public static Random rng;

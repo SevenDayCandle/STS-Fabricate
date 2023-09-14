@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.primary;
 
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.ClickableProvider;
@@ -11,6 +12,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PTrigger;
+
+import java.util.Collections;
 
 @VisibleSkill
 public class PTrigger_Interactable extends PTrigger {
@@ -45,6 +48,14 @@ public class PTrigger_Interactable extends PTrigger {
         String sub = amount > 1 || fields.not ? super.getSubText(perspective) : "";
         String main = source != null && source.getEffects().contains(this) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         return sub.isEmpty() ? main : sub + COMMA_SEPARATOR + main;
+    }
+
+    @Override
+    public PTrigger_Interactable scanForTips(String source) {
+        if (tips == null) {
+            tips = Collections.singletonList(new EUIKeywordTooltip(PGR.core.tooltips.interactable.title, TEXT.cetut_interactable));
+        }
+        return this;
     }
 
     // No-Op, should not subscribe children

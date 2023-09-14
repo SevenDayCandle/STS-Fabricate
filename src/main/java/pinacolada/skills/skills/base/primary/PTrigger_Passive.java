@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.primary;
 
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -12,6 +13,8 @@ import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
+
+import java.util.Collections;
 
 @VisibleSkill
 public class PTrigger_Passive extends PTrigger {
@@ -46,6 +49,14 @@ public class PTrigger_Passive extends PTrigger {
                 skill instanceof PFacetCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PTrait;
+    }
+
+    @Override
+    public PTrigger_Passive scanForTips(String source) {
+        if (tips == null) {
+            tips = Collections.singletonList(new EUIKeywordTooltip(TEXT.cond_passive(), TEXT.cetut_passive));
+        }
+        return this;
     }
 
     // No-Op, should not subscribe children

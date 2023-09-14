@@ -63,13 +63,13 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.4f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 3.16f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
-    protected static ArrayList<AbstractCard> availableCards;
-    protected static ArrayList<AbstractPotion> availablePotions;
-    protected static ArrayList<PCLPowerData> availablePowers;
-    protected static ArrayList<AbstractRelic> availableRelics;
+    private static ArrayList<AbstractCard> availableCards;
+    private static ArrayList<AbstractPotion> availablePotions;
+    private static ArrayList<PCLPowerData> availablePowers;
+    private static ArrayList<AbstractRelic> availableRelics;
     private PSkill<?> lastEffect;
     private float additionalHeight;
-    protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
+    private final ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill<?>> effects;
     protected EUIDropdown<PCLCardGroupHelper> piles;
     protected EUIDropdown<PCLCardSelection> destinations;
@@ -379,7 +379,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 editor.updateRootEffect();
             }
         })
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
+                .setTooltip(EUIRM.strings.ui_amount, PGR.core.strings.cetut_amount);
         extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.7f : MENU_WIDTH * 0.5f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
@@ -387,7 +388,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 editor.updateRootEffect();
             }
         })
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_extraValue, PGR.core.strings.cetut_amount);
 
         targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardTarget::getTitle)
@@ -395,11 +397,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
-                .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
+                .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor))
+                .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_effectTarget);
 
-        destinations = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_destinations, false);
-        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false);
-        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true);
+        destinations = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_destinations, false)
+                .setTooltip(PGR.core.strings.cedit_destinations, PGR.core.strings.cetut_destination);
+        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false)
+                .setTooltip(PGR.core.strings.cedit_origins, PGR.core.strings.cetut_origin);
+        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true)
+                .setTooltip(PGR.core.strings.cedit_pile, PGR.core.strings.cetut_pile);
     }
 
     protected void modifyTargets(List<PCLCardTarget> targets) {
@@ -661,7 +667,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 },
                 cardIDs,
                 card -> card.ID
-        );
+        )
+                .setTooltip(PGR.core.strings.sui_seriesUI, "");
     }
 
     public <V> void registerLoadout(List<String> cardIDs, ActionT1<List<PCLLoadout>> onChangeImpl) {
@@ -669,11 +676,13 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 onChangeImpl,
                 cardIDs,
                 card -> card.ID
-        );
+        )
+                .setTooltip(PGR.core.strings.sui_seriesUI, "");
     }
 
     public void registerOrb(List<PCLOrbHelper> items) {
-        registerDropdown(initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title), items);
+        registerDropdown(initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title), items)
+                .setTooltip(PGR.core.tooltips.orb);
     }
 
     public void registerOrigin(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl) {
@@ -704,11 +713,13 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPotionRarity(List<AbstractPotion.PotionRarity> items) {
-        registerDropdown(initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]), items);
+        registerDropdown(initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]), items)
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_potionRarity);
     }
 
     public void registerPotionSize(List<AbstractPotion.PotionSize> items) {
-        registerDropdown(initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size), items);
+        registerDropdown(initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size), items)
+                .setTooltip(EUIRM.strings.potion_size, PGR.core.strings.cetut_potionSize);
     }
 
     public void registerPower(List<String> powerIDs) {
@@ -723,7 +734,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {
-        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]), items);
+        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]), items)
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
     }
 
     public void registerRelic(List<String> relicIDs) {
@@ -746,19 +758,23 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerRelicRarity(List<AbstractRelic.RelicTier> items) {
-        registerDropdown(initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]), items);
+        registerDropdown(initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]), items)
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
     }
 
     public void registerStance(List<PCLStanceHelper> items) {
-        registerDropdown(initializeSmartSearchable(PCLStanceHelper.getAll(getColor()), PGR.core.tooltips.stance.title), items);
+        registerDropdown(initializeSmartSearchable(PCLStanceHelper.getAll(getColor()), PGR.core.tooltips.stance.title), items)
+                .setTooltip(PGR.core.tooltips.stance);
     }
 
     public void registerTag(List<PCLCardTag> items) {
-        registerDropdown(initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags), items);
+        registerDropdown(initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags), items)
+                .setTooltip(PGR.core.strings.cedit_tags, PGR.core.strings.cetut_attrTags1);
     }
 
     public void registerType(List<AbstractCard.CardType> items) {
-        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(getColor()), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]), items);
+        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(getColor()), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]), items)
+                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
     }
 
     @Override

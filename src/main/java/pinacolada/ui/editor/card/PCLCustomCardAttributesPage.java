@@ -80,7 +80,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
                 .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(new Integer[]{}, new Integer[]{})))
-                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
+                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
         targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(this::modifyTargets)
@@ -114,27 +114,27 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         costEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , CardLibSortHeader.TEXT[3], (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setCostsForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(-2, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(CardLibSortHeader.TEXT[3], PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         damageEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_damage, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setDamageForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(PGR.core.strings.cedit_damage, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         blockEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_block, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setBlockForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(PGR.core.strings.cedit_block, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(PGR.core.strings.cedit_hitCount, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setRightCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.tooltips.counter.title, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))

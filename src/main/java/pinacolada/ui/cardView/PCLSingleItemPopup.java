@@ -30,6 +30,7 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static extendedui.ui.tooltips.EUITooltip.BOX_RENDER_OFFSET;
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
 
 public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
@@ -37,7 +38,6 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     protected static final float DESC_LINE_SPACING = 30.0F * Settings.scale;
     protected static final float DESC_LINE_WIDTH = 418.0F * Settings.scale;
     protected static final float IMAGE_Y = (float) Settings.HEIGHT / 2.0F - 64.0F + 76.0F * Settings.scale;
-    static final float BOX_EDGE_H = 32f * Settings.scale;
     public static final float POPUP_TOOLTIP_Y_BASE = Settings.HEIGHT * 0.85f;
     protected final ArrayList<EUITooltip> tooltips = new ArrayList<>();
     protected final EUIHitbox popupHb;
@@ -176,7 +176,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
                 continue;
             }
             float projected = y - tip.getTotalHeight();
-            y -= tip.render(sb, TIP_RENDER_X, y, i) + BOX_EDGE_H * 3.15f;
+            y -= tip.render(sb, TIP_RENDER_X, y, i) + BOX_RENDER_OFFSET;
         }
 
         if (preview != null) {

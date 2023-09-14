@@ -51,7 +51,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     protected boolean isLoaded;
     public V tooltips;
     public W strings;
-    public HashMap<STSConfigItem<Boolean>, PCLCreatureData> tutorials;
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images) {
         this(id, color, playerClass, images, true);

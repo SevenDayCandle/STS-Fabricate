@@ -2002,16 +2002,6 @@ public class GameUtilities {
             int targetValue = tag.add(card, value);
             PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
             if (pCard != null) {
-                // Save the tag permanently on the card
-                if (pCard.auxiliaryData != null) {
-                    if (targetValue != 0) {
-                        pCard.auxiliaryData.addTag(tag);
-                    }
-                    else {
-                        pCard.auxiliaryData.addTagToRemove(tag);
-                    }
-                }
-
                 // If tags are in the description, we need to update the card description to get it to show up
                 if (PGR.config.displayCardTagDescription.get()) {
                     pCard.initializeDescription();

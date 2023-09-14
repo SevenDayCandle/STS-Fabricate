@@ -51,7 +51,8 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
         return new TemporaryDamageModifier(change, temporary, untilPlayed);
     }
 
-    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+    @Override
+    public float modifyBaseDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         return damage + change;
     }
 

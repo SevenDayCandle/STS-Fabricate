@@ -83,11 +83,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final int DEFAULT_EXTRA_MIN = -1; // Denotes infinity for tags and certain skills
     public static final PCLCoreStrings TEXT = PGR.core.strings;
     public final PSkillData<T> data;
+    protected List<EUIKeywordTooltip> tips;
     protected PSkill<?> childEffect;
     protected UUID uuid = UUID.randomUUID();
     public AbstractCard sourceCard;
     public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
-    public ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public PCLCardTarget target = PCLCardTarget.None;
     public PSkill<?> parent;
     public PointerProvider source;
@@ -1097,7 +1097,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     @Override
     public List<EUIKeywordTooltip> getTips() {
-        return tips;
+        return tips != null ? tips : Collections.emptyList();
     }
 
     public final UUID getUUID() {
@@ -1442,8 +1442,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     }
 
-    public final PSkill<T> scanForTips(String source) {
-        tips.clear();
+    public PSkill<T> scanForTips(String source) {
+        if (tips == null) {
+            tips = new ArrayList<>();
+        }
+        else {
+            tips.clear();
+        }
         EUITooltip.scanForTips(source, tips);
         return this;
     }
