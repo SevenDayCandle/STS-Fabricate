@@ -10,6 +10,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.potions.PCLPotion;
+import pinacolada.powers.PCLDynamicPower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -45,17 +46,21 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
 
     protected void doEffect() {
         // TODO choose form randomly or through choice
-        int index = fields.indexes.get(0);
-        if (source instanceof PCLCard) {
-            ((PCLCard) source).changeForm(index, ((PCLCard) source).timesUpgraded);
+        if (fields.indexes.size() > 0) {
+            int index = fields.indexes.get(0);
+            if (source instanceof PCLCard) {
+                ((PCLCard) source).changeForm(index, ((PCLCard) source).timesUpgraded);
+            }
+            else if (source instanceof PCLRelic) {
+                ((PCLRelic) source).setForm(index);
+            }
+            else if (source instanceof PCLPotion) {
+                ((PCLPotion) source).setForm(index);
+            }
+            else if (source instanceof PCLDynamicPower) {
+                ((PCLDynamicPower) source).setForm(index);
+            }
         }
-        else if (source instanceof PCLRelic) {
-            ((PCLRelic) source).setForm(index);
-        }
-        else if (source instanceof PCLPotion) {
-            ((PCLPotion) source).setForm(index);
-        }
-        // TODO power form
     }
 
     protected String getSourceName(int index) {

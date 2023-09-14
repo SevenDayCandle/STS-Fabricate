@@ -270,8 +270,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                         }
                         catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
-                            EUIUtils.logError(targetClass, "Failed to load effect class for " + cl);
+                            EUIUtils.logError(targetClass, "Failed to load effect class for " + cl + ": " + e.getLocalizedMessage());
                         }
+                    }
+                    else {
+                        EUIUtils.logError(targetClass, "Constructor is missing " + cl);
                     }
                     return null;
                 })

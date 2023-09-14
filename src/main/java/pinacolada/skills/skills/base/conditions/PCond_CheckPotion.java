@@ -17,6 +17,10 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
     public static final PSkillData<PField_Potion> DATA = register(PCond_CheckPotion.class, PField_Potion.class)
             .noTarget();
 
+    public PCond_CheckPotion() {
+        super(DATA, PCLCardTarget.None, 1);
+    }
+
     public PCond_CheckPotion(PSkillSaveData content) {
         super(DATA, content);
     }

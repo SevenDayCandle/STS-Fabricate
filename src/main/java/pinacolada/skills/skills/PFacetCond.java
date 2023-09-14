@@ -25,4 +25,13 @@ public abstract class PFacetCond<T extends PField> extends PCond<T> {
     public PFacetCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
+
+    // Child effects use this skill's subtext directly in their description when used in powers
+    @Override
+    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+        if ((isWhenClause() || isPassiveClause()) && childEffect != null) {
+            return childEffect.getText(perspective, addPeriod);
+        }
+        return super.getText(perspective, addPeriod);
+    }
 }

@@ -524,7 +524,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyBlockFirst(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyBlockFirst(info, amount);
         }
         return amount;
@@ -532,7 +532,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyBlockLast(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyBlockLast(info, amount);
         }
         return amount;
@@ -540,7 +540,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public int modifyCost(PCLUseInfo info, int amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyCost(info, amount);
         }
         return amount;
@@ -548,7 +548,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyDamageGiveFirst(info, amount);
         }
         return amount;
@@ -556,7 +556,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyDamageGiveLast(info, amount);
         }
         return amount;
@@ -564,7 +564,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyDamageReceiveFirst(info, amount, type);
         }
         return amount;
@@ -572,7 +572,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyDamageReceiveLast(info, amount, type);
         }
         return amount;
@@ -580,7 +580,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyHeal(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyHeal(info, amount);
         }
         return amount;
@@ -588,7 +588,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyHitCount(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyHitCount(info, amount);
         }
         return amount;
@@ -596,7 +596,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyOrbIncoming(info, amount);
         }
         return amount;
@@ -604,7 +604,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyOrbOutgoing(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyOrbOutgoing(info, amount);
         }
         return amount;
@@ -612,7 +612,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifyRightCount(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifyRightCount(info, amount);
         }
         return amount;
@@ -620,7 +620,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public float modifySkillBonus(PCLUseInfo info, float amount) {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
+        if (this.childEffect != null && checkCondition(info, false, null)) {
             return this.childEffect.modifySkillBonus(info, amount);
         }
         return amount;

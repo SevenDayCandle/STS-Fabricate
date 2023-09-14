@@ -22,6 +22,10 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     public static final PSkillData<PField_Orb> DATA = register(PCond_CheckOrb.class, PField_Orb.class)
             .noTarget();
 
+    public PCond_CheckOrb() {
+        super(DATA, PCLCardTarget.None, 1);
+    }
+
     public PCond_CheckOrb(PSkillSaveData content) {
         super(DATA, content);
     }
@@ -41,7 +45,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.orb.title);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_trigger(PGR.core.tooltips.orb.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.orb.title);
     }
 
     @Override
