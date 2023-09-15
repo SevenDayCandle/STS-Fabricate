@@ -1373,26 +1373,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public final ArrayList<PCLAffinity> parseAffinities(String source) {
-        return EUIUtils.mapAsNonnull(split(source), PCLAffinity::valueOf);
-    }
-
-    public final ArrayList<PCLCardGroupHelper> parseCardGroups(String source) {
-        return EUIUtils.mapAsNonnull(split(source), PCLCardGroupHelper::get);
-    }
-
-    public final ArrayList<AbstractCard.CardRarity> parseRarities(String source) {
-        return EUIUtils.mapAsNonnull(split(source), AbstractCard.CardRarity::valueOf);
-    }
-
-    public final ArrayList<PCLCardTag> parseTags(String source) {
-        return EUIUtils.mapAsNonnull(split(source), PCLCardTag::get);
-    }
-
-    public final ArrayList<AbstractCard.CardType> parseTypes(String source) {
-        return EUIUtils.mapAsNonnull(split(source), AbstractCard.CardType::valueOf);
-    }
-
     public final String plural(EUIKeywordTooltip obj) {
         return PCLCoreStrings.plural(obj, getRawString(EFFECT_CHAR));
     }

@@ -59,15 +59,7 @@
 								}
 				},
 				"SPECIAL": {
-								"pcl:AffinityToken": {"NAME": "Affinity Token"},
-								"pcl:AffinityToken_Red": {"NAME": "Red Affinity"},
-								"pcl:AffinityToken_Green": {"NAME": "Green Affinity"},
-								"pcl:AffinityToken_Blue": {"NAME": "Blue Affinity"},
-								"pcl:AffinityToken_Orange": {"NAME": "Orange Affinity"},
-								"pcl:AffinityToken_Yellow": {"NAME": "Yellow Affinity"},
-								"pcl:AffinityToken_Purple": {"NAME": "Purple Affinity"},
-								"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
-								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"},
+								"pcl:AffinityToken": {"NAME": "Affinity"},
 								"pcl:MysteryCard": {
 												"EXTENDED_DESCRIPTION": [
 																"At the start of combat: Transforms into a random {0}",

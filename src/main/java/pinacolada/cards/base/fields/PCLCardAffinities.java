@@ -15,18 +15,15 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import static pinacolada.cards.base.fields.PCLAffinity.General;
-import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
 
 public class PCLCardAffinities {
-    private static final ColoredTexture upgradeCircle = new ColoredTexture(PCLCoreImages.Core.circle.texture(), Settings.GREEN_RELIC_COLOR);
-    public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
-    protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
+    protected PCLCardAffinity[] list = new PCLCardAffinity[PCLAffinity.getCount()];
     public PCLCardAffinity star = null;
     public boolean collapseDuplicates = false;
+    public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     public transient AbstractCard card;
 
     public PCLCardAffinities(AbstractCard card) {
@@ -49,7 +46,6 @@ public class PCLCardAffinities {
             int star = Math.min(levelLimit, other.getLevel(PCLAffinity.Star));
             if (star > 0) {
                 addStar(star);
-                //Add(star, star, star, star, star, star);
             }
             else {
                 for (PCLCardAffinity item : other.list) {
@@ -83,7 +79,7 @@ public class PCLCardAffinities {
             return addStar(level);
         }
 
-        PCLCardAffinity a = list[affinity.id];
+        PCLCardAffinity a = list[affinity.ID];
         if (a != null) {
             a.level = Math.max(0, a.level + level);
             this.updateSortedList();
@@ -91,7 +87,7 @@ public class PCLCardAffinities {
         }
 
         a = new PCLCardAffinity(affinity, Math.max(0, level));
-        list[affinity.id] = a;
+        list[affinity.ID] = a;
 
         this.updateSortedList();
         return a;
@@ -116,7 +112,7 @@ public class PCLCardAffinities {
     }
 
     public void clear() {
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
+        list = new PCLCardAffinity[PCLAffinity.getCount()];
         star = null;
         this.updateSortedList();
     }
@@ -172,11 +168,11 @@ public class PCLCardAffinities {
             return (createIfNull && star == null) ? setStar(0) : star;
         }
 
-        if (affinity.id < 0 || affinity.id >= TOTAL_AFFINITIES) {
+        if (affinity.ID < 0 || affinity.ID >= PCLAffinity.getCount()) {
             return null;
         }
 
-        PCLCardAffinity a = list[affinity.id];
+        PCLCardAffinity a = list[affinity.ID];
         return a == null && createIfNull ? set(affinity, 0) : a;
     }
 
@@ -233,11 +229,11 @@ public class PCLCardAffinities {
         if (affinity == PCLAffinity.Star) {
             return star;
         }
-        else if (affinity.id < 0 || affinity.id >= TOTAL_AFFINITIES) {
+        else if (affinity.ID < 0 || affinity.ID >= PCLAffinity.getCount()) {
             return null;
         }
 
-        return list[affinity.id];
+        return list[affinity.ID];
     }
 
     public PCLCardAffinity getHighest() {
@@ -248,7 +244,7 @@ public class PCLCardAffinities {
 
     public PCLCardAffinity getHighest(FuncT1<Boolean, PCLCardAffinity> filter) {
         final int star = this.star != null ? this.star.level : 0;
-        final PCLCardAffinity a = EUIUtils.max(EUIUtils.filter(list, filter::invoke), af -> af);
+        final PCLCardAffinity a = EUIUtils.max(EUIUtils.filter(list, filter), af -> af);
         return a != null && a.level >= star ? a : this.star;
     }
 
@@ -298,11 +294,11 @@ public class PCLCardAffinities {
             star = null;
         }
 
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
+        list = new PCLCardAffinity[PCLAffinity.getCount()];
         for (PCLCardAffinity a : affinities.list) {
             if (a != null) {
                 PCLCardAffinity t = new PCLCardAffinity(a.type, a.level);
-                list[t.type.id] = t;
+                list[t.type.ID] = t;
             }
         }
 
@@ -318,11 +314,11 @@ public class PCLCardAffinities {
             star = null;
         }
 
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
+        list = new PCLCardAffinity[PCLAffinity.getCount()];
         for (PCLCardDataAffinity a : affinities.list) {
             if (a != null) {
                 PCLCardAffinity t = new PCLCardAffinity(a.type, a.get(form));
-                list[t.type.id] = t;
+                list[t.type.ID] = t;
             }
         }
 
@@ -336,18 +332,6 @@ public class PCLCardAffinities {
         }
 
         this.updateSortedList();
-        return this;
-    }
-
-    public PCLCardAffinities initialize(Integer[] base) {
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
-        for (int i = 0; i < PCLAffinity.basic().length; i++) {
-            PCLCardAffinity t = new PCLCardAffinity(PCLAffinity.all()[i], base[i]);
-            list[t.type.id] = t;
-        }
-
-        star = new PCLCardAffinity(PCLAffinity.Star, base[TOTAL_AFFINITIES]);
-
         return this;
     }
 
@@ -392,16 +376,6 @@ public class PCLCardAffinities {
 
     }
 
-    public void set(int red, int green, int blue, int orange, int light, int dark, int silver) {
-        set(PCLAffinity.Red, red);
-        set(PCLAffinity.Green, green);
-        set(PCLAffinity.Blue, blue);
-        set(PCLAffinity.Orange, orange);
-        set(PCLAffinity.Yellow, light);
-        set(PCLAffinity.Purple, dark);
-        set(PCLAffinity.Silver, silver);
-    }
-
     public PCLCardAffinity set(PCLAffinity affinity, int level) {
         if (level < 0) {
             level = 0;
@@ -411,7 +385,11 @@ public class PCLCardAffinities {
             return star;
         }
 
-        PCLCardAffinity result = list[affinity.id];
+        if (affinity.ID >= list.length) {
+            list = Arrays.copyOf(list, affinity.ID + 1);
+        }
+
+        PCLCardAffinity result = list[affinity.ID];
         if (result != null) {
             result.level = level;
             this.updateSortedList();
@@ -419,7 +397,7 @@ public class PCLCardAffinities {
         }
 
         result = new PCLCardAffinity(affinity, level);
-        list[affinity.id] = result;
+        list[affinity.ID] = result;
 
         this.updateSortedList();
         return result;

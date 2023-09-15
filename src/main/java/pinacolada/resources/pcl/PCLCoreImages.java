@@ -1,6 +1,8 @@
 package pinacolada.resources.pcl;
 
+import com.badlogic.gdx.graphics.Texture;
 import extendedui.ui.TextureCache;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.AbstractImages;
 
 //TODO remove unused images
@@ -11,6 +13,30 @@ public class PCLCoreImages extends AbstractImages {
 
     public PCLCoreImages(String id) {
         super(id);
+    }
+
+    public Texture getAffinityTexture(PCLAffinity affinity) {
+        switch (affinity.ID) {
+            case PCLAffinity.ID_GENERAL:
+                return CardAffinity.general.texture();
+            case PCLAffinity.ID_STAR:
+                return CardAffinity.star.texture();
+            case PCLAffinity.ID_RED:
+                return CardAffinity.red.texture();
+            case PCLAffinity.ID_BLUE:
+                return CardAffinity.blue.texture();
+            case PCLAffinity.ID_GREEN:
+                return CardAffinity.green.texture();
+            case PCLAffinity.ID_ORANGE:
+                return CardAffinity.orange.texture();
+            case PCLAffinity.ID_YELLOW:
+                return CardAffinity.yellow.texture();
+            case PCLAffinity.ID_PURPLE:
+                return CardAffinity.purple.texture();
+            case PCLAffinity.ID_SILVER:
+                return CardAffinity.silver.texture();
+        }
+        return null;
     }
 
     public static class Core {
@@ -119,7 +145,13 @@ public class PCLCoreImages extends AbstractImages {
     }
 
     public static class CardAffinity {
-
+        public static final TextureCache blue = new TextureCache("images/pcl/cardui/affinities/A-B.png", true);
+        public static final TextureCache green = new TextureCache("images/pcl/cardui/affinities/A-G.png", true);
+        public static final TextureCache orange = new TextureCache("images/pcl/cardui/affinities/A-O.png", true);
+        public static final TextureCache purple = new TextureCache("images/pcl/cardui/affinities/A-P.png", true);
+        public static final TextureCache red = new TextureCache("images/pcl/cardui/affinities/A-R.png", true);
+        public static final TextureCache silver = new TextureCache("images/pcl/cardui/affinities/A-S.png", true);
+        public static final TextureCache yellow = new TextureCache("images/pcl/cardui/affinities/A-Y.png", true);
         public static final TextureCache general = new TextureCache("images/pcl/cardui/affinities/General.png", true);
         public static final TextureCache star = new TextureCache("images/pcl/cardui/affinities/Star.png", true);
         public static final TextureCache starBg = new TextureCache("images/pcl/cardui/affinities/Star_BG.png", true);

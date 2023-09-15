@@ -22,7 +22,7 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity> {
     }
 
     public int calculateRank() {
-        return this.level * 1000 - this.type.id;
+        return this.level * 1000 - this.type.ID;
     }
 
     @Override

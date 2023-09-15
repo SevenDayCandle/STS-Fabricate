@@ -1,10 +1,10 @@
 package pinacolada.cards.base;
 
+import com.badlogic.gdx.graphics.Texture;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.fields.PField;
@@ -15,6 +15,8 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 public class ChoiceCardData<T> extends PCLDynamicCardData {
+    private static final String ID = PGR.core.createID(ChoiceCardData.class.getSimpleName());
+    private static final String IMAGE = PGR.getCardImage(ID);
     public final boolean fromCustom;
     public final T object;
 
@@ -32,14 +34,28 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
         this.fromCustom = card instanceof PCLDynamicCardData;
     }
 
+    protected ChoiceCardData(String id, T object) {
+        super(id);
+        this.object = object;
+        this.showTypeText = false;
+        this.fromCustom = false;
+    }
+
     public static ChoiceCardData<PCLAffinity> affinity(PCLAffinity affinity) {
-        ChoiceCardData<PCLAffinity> builder = new ChoiceCardData<PCLAffinity>(AffinityToken.getCardData(affinity), affinity);
-        String img = AffinityToken.getCardData(affinity).getImagePath(GameUtilities.getActingColor());
-        if (img != null) {
-            builder.portraitForeground = new ColoredTexture(EUIRM.getTexture(img, true));
+        String symbol = affinity.getAffinitySymbol();
+        ChoiceCardData<PCLAffinity> builder = new ChoiceCardData<PCLAffinity>(symbol, affinity);
+        Texture img = EUIRM.getTexture(PGR.getCardImage(PGR.getResources(GameUtilities.getActingColor()).createID(symbol)), true);
+        if (img == null) {
+            img = EUIRM.getTexture(PGR.getCardImage(PGR.core.createID(symbol)), true);
         }
-        builder.portraitImage = new ColoredTexture(EUIRM.getTexture(PGR.getCardImage(builder.ID), true), affinity.getAlternateColor(0.55f));
-        builder.imagePath = AffinityToken.backgroundPath();
+        if (img == null) {
+            img = EUIRM.getTexture(PGR.getCardImage(PGR.core.createID(PCLAffinity.General.symbol)), true);
+        }
+        if (img != null) {
+            builder.portraitForeground = new ColoredTexture(img);
+        }
+        builder.portraitImage = new ColoredTexture(EUIRM.getTexture(IMAGE, true), affinity.getAlternateColor(0.55f));
+        builder.imagePath = IMAGE;
         return builder;
     }
 

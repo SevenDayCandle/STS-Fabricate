@@ -7,12 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
-
-
 public class PCLCardDataAffinityGroup implements Serializable {
     static final long serialVersionUID = 1L;
-    protected PCLCardDataAffinity[] list = new PCLCardDataAffinity[TOTAL_AFFINITIES];
+    protected PCLCardDataAffinity[] list = new PCLCardDataAffinity[PCLAffinity.getCount()];
     public PCLCardDataAffinity star = null;
 
     public PCLCardDataAffinityGroup() {
@@ -25,7 +22,7 @@ public class PCLCardDataAffinityGroup implements Serializable {
         }
         for (PCLCardDataAffinity a : other.list) {
             if (a != null) {
-                list[a.type.id] = a.makeCopy();
+                list[a.type.ID] = a.makeCopy();
             }
         }
     }
@@ -35,11 +32,11 @@ public class PCLCardDataAffinityGroup implements Serializable {
             return star;
         }
 
-        if (affinity.id < 0 || affinity.id >= TOTAL_AFFINITIES) {
+        if (affinity.ID < 0 || affinity.ID >= PCLAffinity.getCount()) {
             return null;
         }
 
-        return list[affinity.id];
+        return list[affinity.ID];
     }
 
     public ArrayList<PCLAffinity> getAffinities() {
@@ -137,11 +134,14 @@ public class PCLCardDataAffinityGroup implements Serializable {
     }
 
     public PCLCardDataAffinity set(PCLCardDataAffinity affinity) {
-        if (affinity.type.id < 0) {
+        if (affinity.type.ID < 0) {
             star = affinity;
         }
         else {
-            list[affinity.type.id] = affinity;
+            if (affinity.type.ID >= list.length) {
+                list = Arrays.copyOf(list, affinity.type.ID + 1);
+            }
+            list[affinity.type.ID] = affinity;
         }
         return affinity;
     }

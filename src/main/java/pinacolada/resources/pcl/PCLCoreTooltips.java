@@ -25,15 +25,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
 public class PCLCoreTooltips extends AbstractTooltips {
-    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID(PCLAffinity.Blue.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID(PCLAffinity.Green.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID(PCLAffinity.Orange.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID(PCLAffinity.Purple.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID(PCLAffinity.Red.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID(PCLAffinity.Silver.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID(PCLAffinity.Yellow.getAffinitySymbol()).forceIcon(true);
-    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByID(EUI.ENERGY_ID).setCanAdd(false).forceIcon(true);
-    public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
+    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByID(EUI.ENERGY_ID);
 
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").setCanAdd(false).canHighlight(false);
@@ -64,8 +56,8 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip woundCard = EUIKeywordTooltip.findByID("Wound").setPreviewFunc(() -> makePreview(Wound.ID)).setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip voidCard = EUIKeywordTooltip.findByID("Void").setPreviewFunc(() -> makePreview(VoidCard.ID)).setCanAdd(false).canHighlight(false);
 
-    public EUIKeywordTooltip affinityGeneral = EUIKeywordTooltip.findByID("Affinity");
-    public EUIKeywordTooltip affinityUnknown = EUIKeywordTooltip.findByID("Unknown Affinity");
+    public EUIKeywordTooltip affinityGeneral = EUIKeywordTooltip.findByID("A-W");
+    public EUIKeywordTooltip affinityUnknown = EUIKeywordTooltip.findByID("A-U");
     public EUIKeywordTooltip afterImage = EUIKeywordTooltip.findByID("After Image");
     public EUIKeywordTooltip afterlife = EUIKeywordTooltip.findByID("Afterlife");
     public EUIKeywordTooltip artifact = EUIKeywordTooltip.findByID("Artifact");
@@ -200,9 +192,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip gold = new EUIKeywordTooltip(RewardItem.TEXT[1].trim());
 
     public PCLCoreTooltips() {
-        EUIKeywordTooltip.registerID(PCLAffinity.Star.getAffinitySymbol(), multicolor);
-        EUIKeywordTooltip.registerID(PCLAffinity.General.getAffinitySymbol(), affinityGeneral);
-        EUIKeywordTooltip.registerID(PCLAffinity.Unknown.getAffinitySymbol(), affinityUnknown);
         EUIKeywordTooltip.registerID("THP", tempHP);
         EUIKeywordTooltip.registerID("Gold", gold);
     }
@@ -223,10 +212,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
         lockOn.formatDescription(PCLLockOnPower.BASE);
         provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
 
-        for (PCLCardTag tag : PCLCardTag.values()) {
-            tag.getTooltip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
-        }
-
         ranged.setIcon(PCLCoreImages.Tooltips.ranged.texture());
         piercing.setIcon(PCLCoreImages.Tooltips.piercing.texture());
         immaterialDamage.setIcon(PCLCoreImages.Tooltips.magic.texture());
@@ -241,18 +226,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
         multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture()).setIconSizeMulti(0.85f, 0.85f);
         turnEnd.setIcon(PCLCoreImages.CardIcons.priorityMinus.texture()).setIconSizeMulti(0.85f, 0.85f);
         turnStart.setIcon(PCLCoreImages.CardIcons.priorityPlus.texture()).setIconSizeMulti(0.85f, 0.85f);
-        energy.setIconFunc(EUI::getEnergyIcon);
-
-        affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion);
-        affinityGreen.setIconFunc(PCLAffinity.Green::getTextureRegion);
-        affinityBlue.setIconFunc(PCLAffinity.Blue::getTextureRegion);
-        affinityOrange.setIconFunc(PCLAffinity.Orange::getTextureRegion);
-        affinityYellow.setIconFunc(PCLAffinity.Yellow::getTextureRegion);
-        affinityPurple.setIconFunc(PCLAffinity.Purple::getTextureRegion);
-        affinitySilver.setIconFunc(PCLAffinity.Silver::getTextureRegion);
-        affinityGeneral.setIcon(PCLAffinity.General.getDefaultIcon().texture());
-        affinityUnknown.setIcon(PCLAffinity.Unknown.getDefaultIcon().texture());
-        multicolor.setIcon(PCLAffinity.Star.getDefaultIcon().texture());
 
         attack.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.ATTACK));
         skill.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.SKILL));
@@ -268,6 +241,10 @@ public class PCLCoreTooltips extends AbstractTooltips {
         gold.setIcon(PCLCoreImages.Tooltips.gold.texture(), 6);
         orbSlot.setIcon(PCLCoreImages.Tooltips.orbSlot.texture(), 6);
 
+        for (PCLCardTag tag : PCLCardTag.values()) {
+            tag.getTooltip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
+        }
+        PCLAffinity.loadIconsIntoKeywords();
         PCLPowerData.loadIconsIntoKeywords();
         EUIKeywordTooltip.updateTooltipIcons();
 

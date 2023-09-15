@@ -1476,7 +1476,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
             if (data.modifiedAffinities != null) {
                 for (PCLAffinity affinity : PCLAffinity.basic()) {
-                    affinities.add(affinity, data.modifiedAffinities[affinity.id]);
+                    affinities.add(affinity, data.modifiedAffinities[affinity.ID]);
                 }
             }
             if (data.augments != null) {

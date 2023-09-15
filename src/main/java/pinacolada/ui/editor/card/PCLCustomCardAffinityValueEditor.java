@@ -17,8 +17,7 @@ import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
-
-import static pinacolada.cards.base.fields.PCLAffinity.MAX_LEVEL;
+import pinacolada.skills.PSkill;
 
 public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
     protected static final float ICON_SIZE = 36f * Settings.scale;
@@ -119,9 +118,9 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
     }
 
     public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update) {
-        this.value = MathUtils.clamp(value, 0, MAX_LEVEL);
+        this.value = MathUtils.clamp(value, 0, PSkill.DEFAULT_MAX);
         displayValue.setLabel(this.value);
-        this.value2 = MathUtils.clamp(valueSecondary, -this.value, MAX_LEVEL - this.value);
+        this.value2 = MathUtils.clamp(valueSecondary, -this.value, PSkill.DEFAULT_MAX - this.value);
         displayValue2.setLabel(this.value2);
         if (update) {
             onUpdate.invoke(affinity, this.value, this.value2);
@@ -135,8 +134,8 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
         super.updateImpl();
         decreaseButton.setInteractable(value > 0).tryUpdate();
         decreaseButton2.setInteractable(value + value2 > 0).tryUpdate();
-        increaseButton.setInteractable(value < MAX_LEVEL).tryUpdate();
-        increaseButton2.setInteractable(value + value2 < MAX_LEVEL).tryUpdate();
+        increaseButton.setInteractable(value < PSkill.DEFAULT_MAX).tryUpdate();
+        increaseButton2.setInteractable(value + value2 < PSkill.DEFAULT_MAX).tryUpdate();
         displayValue.tryUpdate();
         displayValue2.tryUpdate();
         affinityImage.tryUpdate();

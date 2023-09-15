@@ -47,20 +47,6 @@ public class PCLAugmentWeights {
         }
     }
 
-    protected int getAffinityBaseLevel(PCLCardAffinity aff) {
-        switch (aff.type) {
-            case Red:
-            case Green:
-            case Blue:
-            case Orange:
-                return aff.level * 4;
-            case Yellow:
-            case Purple:
-                return aff.level * 2;
-        }
-        return aff.level;
-    }
-
     public HashMap<PCLAugmentData, Integer> getPerAugmentWeights() {
         HashMap<PCLAugmentData, Integer> dataMap = new HashMap<>();
         for (PCLAugmentData data : PCLAugmentData.getValues()) {

@@ -20,7 +20,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity> {
     public static final PSkillData<PField_CardModifyAffinity> DATA = PMove_Modify.register(PMove_ModifyAffinity.class, PField_CardModifyAffinity.class)
-            .setAmounts(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
             .noTarget()
             .pclOnly();

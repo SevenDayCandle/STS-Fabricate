@@ -33,7 +33,7 @@ import static pinacolada.ui.AffinityKeywordButton.ICON_SIZE;
 
 public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterModule {
     public static HashSet<PCLLoadout> currentSeries = new HashSet<>();
-    public static ArrayList<PCLCardAffinity> currentAffinities = EUIUtils.map(PCLAffinity.values(), PCLCardAffinity::new);
+    public static ArrayList<PCLCardAffinity> currentAffinities = EUIUtils.map(PCLAffinity.basic(), PCLCardAffinity::new);
     public final ArrayList<AffinityKeywordButton> affinityButtons = new ArrayList<>();
     public final EUILabel affinitiesSectionLabel;
     public final EUISearchableDropdown<PCLLoadout> seriesDropdown;

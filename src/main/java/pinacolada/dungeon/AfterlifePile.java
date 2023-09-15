@@ -94,7 +94,7 @@ public class AfterlifePile {
         final boolean[] required = getRequiredAffinities(currentCard, cards);
 
         return booleanArrayMet(required) ? PGR.core.strings.combat_afterlifeMet : EUIUtils.format(PGR.core.strings.combat_afterlifeRequirement,
-                EUIUtils.joinStringsMap(", ", af -> af.getTooltip().getTitleOrIcon(), EUIUtils.filter(PCLAffinity.basic(), af -> required[af.id])));
+                EUIUtils.joinStringsMap(", ", af -> af.getTooltip().getTitleOrIcon(), EUIUtils.filter(PCLAffinity.basic(), af -> required[af.ID])));
     }
 
     @SafeVarargs
@@ -106,12 +106,12 @@ public class AfterlifePile {
         }
         if (pAffinities.hasStar()) {
             for (PCLAffinity af : PCLAffinity.basic()) {
-                requiredAffinities[af.id] = true;
+                requiredAffinities[af.ID] = true;
             }
         }
         else {
             for (PCLCardAffinity cf : pAffinities.getCardAffinities(true)) {
-                requiredAffinities[cf.type.id] = true;
+                requiredAffinities[cf.type.ID] = true;
             }
         }
 
@@ -124,7 +124,7 @@ public class AfterlifePile {
                     }
                     else {
                         for (PCLCardAffinity cf : GameUtilities.getPCLCardAffinities(c2).getCardAffinities(false)) {
-                            requiredAffinities[cf.type.id] = requiredAffinities[cf.type.id] & cf.level == 0;
+                            requiredAffinities[cf.type.ID] = requiredAffinities[cf.type.ID] & cf.level == 0;
                         }
                     }
                 }

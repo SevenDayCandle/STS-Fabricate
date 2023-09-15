@@ -7,6 +7,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModifyTag;
@@ -14,7 +15,7 @@ import pinacolada.skills.fields.PField_CardModifyTag;
 @VisibleSkill
 public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     public static final PSkillData<PField_CardModifyTag> DATA = PMove_Modify.register(PMove_ModifyTag.class, PField_CardModifyTag.class)
-            .setAmounts(DEFAULT_EXTRA_MIN, PCLAffinity.MAX_LEVEL)
+            .setAmounts(DEFAULT_EXTRA_MIN, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
             .noTarget();
 

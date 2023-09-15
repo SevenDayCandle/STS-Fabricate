@@ -1,36 +1,44 @@
 {
+	"A-A":	{
+		"DESCRIPTION": "Counts as every #yAffinity. #yAffinities appear above a card's name.",
+		"NAME": "Multicolor Affinity"
+	},
 	"A-B":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Blue Affinity"
 	},
 	"A-G":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Green Affinity"
 	},
 	"A-O":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Orange Affinity"
 	},
 	"A-P":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Purple Affinity"
 	},
 	"A-R":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Red Affinity"
 	},
 	"A-S":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Silver Affinity"
 	},
-	"A-Y":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
-		"NAME": "Yellow Affinity"
+	"A-U":	{
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
+		"NAME": "Unknown Affinity"
 	},
-	"Affinity":	{
-		"DESCRIPTION": "Affinities appear above a card's name.",
+	"A-W":	{
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Affinity",
 		"PLURAL": "${0}@>1:Affinities@:Affinity$"
+	},
+	"A-Y":	{
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
+		"NAME": "Yellow Affinity"
 	},
 	"After Image":	{
 		"DESCRIPTION": "Gain [Block] whenever you play a card.",
@@ -315,10 +323,6 @@
 		"DESCRIPTION": "Gain [Block] at the start of your turn.",
 		"NAME": "Metallicize"
 	},
-	"Multicolor":	{
-		"DESCRIPTION": "Counts as every #yAffinity.",
-		"NAME": "Multicolor"
-	},
 	"Multiform":	{
 		"DESCRIPTION": "You may change this card's form in the pop-up viewer from your master deck outside of combat.",
 		"NAME": "Multiform"
@@ -548,10 +552,6 @@
 	"Unique":	{
 		"DESCRIPTION": "You can only have one copy of this card in your deck. Additional copies will #yUpgrade this card instead.",
 		"NAME": "Unique"
-	},
-	"Unknown Affinity":	{
-		"DESCRIPTION": "At the start of battle, this #yAffinity becomes another random #yAffinity.",
-		"NAME": "Unknown Affinity"
 	},
 	"Vigor":	{
 		"DESCRIPTION": "The next Attack played deals additional damage per hit.",

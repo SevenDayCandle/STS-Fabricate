@@ -20,14 +20,6 @@ public class SymbolToken extends PCLTextToken {
     public static final char TOKEN1 = '[';
     public static final char TOKEN2 = '†';
 
-    // Called before force icon can be set on the tooltips
-    static {
-        tokenCache.put(EUI.ENERGY_ID, new SymbolToken(EUI.ENERGY_TIP)); // Energy
-        for (PCLAffinity affinity : PCLAffinity.values()) {
-            tokenCache.put(affinity.getPowerSymbol(), new SymbolToken(affinity.getFormattedPowerSymbol()));
-        }
-    }
-
     protected EUIKeywordTooltip tooltip;
 
     private SymbolToken(String text) {
