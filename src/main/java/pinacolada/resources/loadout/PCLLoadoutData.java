@@ -76,6 +76,7 @@ public class PCLLoadoutData {
 
     public LoadoutCardSlot addCardSlot(String selection) {
         final LoadoutCardSlot slot = new LoadoutCardSlot(this, selection);
+        slot.onSelect(selection);
         cardSlots.add(slot);
         return slot;
     }

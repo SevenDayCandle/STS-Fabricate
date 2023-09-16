@@ -91,6 +91,7 @@ public class LoadoutCardSlot extends LoadoutSlot {
 
     public LoadoutCardSlot select(String item, int amount) {
         selected = item;
+        onSelect(item);
         updateCurrentMax();
         return this;
     }

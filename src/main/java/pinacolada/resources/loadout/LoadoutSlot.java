@@ -14,6 +14,7 @@ public abstract class LoadoutSlot {
     public LoadoutSlot(PCLLoadoutData container, String selected) {
         this.container = container;
         this.selected = selected;
+        onSelect(selected);
     }
 
     public LoadoutSlot(LoadoutSlot other) {

@@ -17,6 +17,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutCardSlot;
@@ -93,6 +94,9 @@ public class PCLCardSlotEditor extends EUIHoverable {
 
     private void onSelect() {
         this.card = CardLibrary.getCard(slot.selected);
+        if (this.card instanceof PCLCard) {
+            ((PCLCard) this.card).affinities.updateSortedList();
+        }
         this.nameText.setLabel(card != null ? card.name : "").setActive(true);
         this.cardamountText.setActive(card != null);
         this.addButton.setInteractable(slot.canAdd());

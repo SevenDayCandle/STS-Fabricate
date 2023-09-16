@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -35,7 +36,7 @@ public class PCond_HP extends PPassiveCond<PField_Not> implements OnCreatureHeal
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.not ? (t.currentHealth + TempHPField.tempHp.get(t)) <= amount : (t.currentHealth + TempHPField.tempHp.get(t)) >= amount);
+        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(t.currentHealth + TempHPField.tempHp.get(t)));
     }
 
     @Override

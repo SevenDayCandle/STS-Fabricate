@@ -18,6 +18,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -31,6 +32,7 @@ import com.megacrit.cardcrawl.relics.Calipers;
 import com.megacrit.cardcrawl.relics.PenNib;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -192,11 +194,6 @@ public class CombatManager extends EUIBase {
 
         if (blockRetained > 0 && !AbstractDungeon.player.hasPower(BarricadePower.POWER_ID) && !AbstractDungeon.player.hasPower(BlurPower.POWER_ID)) {
             blockRetained = 0;
-        }
-
-        if (energySuspended != 0) {
-            player.energy.use(energySuspended);
-            energySuspended = 0;
         }
     }
 
@@ -423,7 +420,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean hasEnoughEnergyForCard(AbstractCard card) {
-        boolean canPass = PCLCardTag.Suspensive.has(card) && card.costForTurn + energySuspended - player.energy.energy <= player.energy.energyMaster;
+        boolean canPass = PCLCardTag.Suspensive.has(card) && card.costForTurn + energySuspended - EnergyPanel.totalCount <= player.energy.energy;
         return subscriberInout(OnTrySpendEnergySubscriber.class, canPass, (s, d) -> s.canSpendEnergy(card, d));
     }
 
@@ -669,7 +666,12 @@ public class CombatManager extends EUIBase {
     }
 
     public static int onEnergyRecharge(int previousEnergy, int currentEnergy) {
-        return subscriberInout(OnEnergyRechargeSubscriber.class, currentEnergy, (s, d) -> s.onEnergyRecharge(previousEnergy, currentEnergy));
+        int res = subscriberInout(OnEnergyRechargeSubscriber.class, currentEnergy, (s, d) -> s.onEnergyRecharge(previousEnergy, currentEnergy));
+        if (energySuspended != 0) {
+            res -= energySuspended;
+            energySuspended = 0;
+        }
+        return res;
     }
 
     public static void onEvokeOrb(AbstractOrb orb) {
@@ -867,8 +869,8 @@ public class CombatManager extends EUIBase {
         }
 
         // Suspensive
-        if (cost > p.energy.energy) {
-            energySuspended += cost - p.energy.energy;
+        if (PCLCardTag.Suspensive.has(card) && cost > EnergyPanel.totalCount) {
+            energySuspended += cost - EnergyPanel.totalCount;
         }
 
         return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, d));

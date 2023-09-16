@@ -326,15 +326,6 @@ public class PCLCardAffinities {
         return this;
     }
 
-    public PCLCardAffinities initialize(PCLAffinity affinity, int base, int upgrade, int scaling) {
-        if (base > 0 || upgrade > 0 || scaling > 0 || get(affinity, false) != null) {
-            PCLCardAffinity a = set(affinity, base);
-        }
-
-        this.updateSortedList();
-        return this;
-    }
-
     public void render(SpriteBatch sb, AbstractCard card, float x, float y, float size, float step) {
         int max = sorted.size();
         final int half = max / 2;

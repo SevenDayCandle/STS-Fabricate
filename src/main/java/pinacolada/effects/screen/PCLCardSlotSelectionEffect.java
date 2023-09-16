@@ -53,10 +53,13 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
 
         for (String item : slot.getAvailableCards()) {
             AbstractCard card = CardLibrary.getCard(item);
-            if (item != null) {
+            if (card != null) {
                 card.current_x = InputHelper.mX;
                 card.current_y = InputHelper.mY;
                 grid.addCard(card);
+                if (card instanceof PCLCard) {
+                    ((PCLCard) card).affinities.updateSortedList();
+                }
             }
         }
 

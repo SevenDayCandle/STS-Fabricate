@@ -7,11 +7,14 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 
+import static pinacolada.powers.PCLPowerData.DEFAULT_POWER_MAX;
+
 @VisiblePower
 public class EnergizedPower extends PCLPower {
     public static final PCLPowerData DATA = register(EnergizedPower.class)
             .setType(PowerType.BUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurnNext)
+            .setLimits(-DEFAULT_POWER_MAX, DEFAULT_POWER_MAX)
             .setTooltip(PGR.core.tooltips.energized);
 
     public EnergizedPower(AbstractCreature owner, AbstractCreature source, int amount) {
@@ -20,7 +23,12 @@ public class EnergizedPower extends PCLPower {
 
     @Override
     public void onEnergyRecharge() {
-        AbstractDungeon.player.gainEnergy(this.amount);
+        if (this.amount < 0) {
+            AbstractDungeon.player.loseEnergy(-this.amount);
+        }
+        else {
+            AbstractDungeon.player.gainEnergy(this.amount);
+        }
         removePower();
         this.flash();
     }

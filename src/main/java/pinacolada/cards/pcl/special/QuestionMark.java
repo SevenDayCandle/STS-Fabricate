@@ -16,4 +16,23 @@ public class QuestionMark extends PCLCard {
     public QuestionMark() {
         super(DATA);
     }
+
+    // Need to copy base properties to avoid LOOP DEE LOOP in da merchant
+    public PCLCard makeCopy() {
+        PCLCard copy = super.makeCopy();
+        copy.cardID = this.cardID;
+        copy.color = this.color;
+        copy.type = this.type;
+        copy.rarity = this.rarity;
+        return copy;
+    }
+
+    public PCLCard makeStatEquivalentCopy() {
+        PCLCard copy = super.makeStatEquivalentCopy();
+        copy.cardID = this.cardID;
+        copy.color = this.color;
+        copy.type = this.type;
+        copy.rarity = this.rarity;
+        return copy;
+    }
 }

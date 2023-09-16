@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -421,7 +422,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public boolean checkConditionOutsideOfBattle() {
-        return false;
+        return checkCondition(generateInfo(null), false, null);
     }
 
     @Override

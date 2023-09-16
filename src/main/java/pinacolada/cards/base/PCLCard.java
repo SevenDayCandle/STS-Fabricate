@@ -1259,30 +1259,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return cardData.create(0, 0);
     }
 
-    public PCLCard makePopupCopy() {
-        PCLCard copy = makeStatEquivalentCopy();
-        copy.current_x = (float) Settings.WIDTH / 2f;
-        copy.current_y = (float) Settings.HEIGHT / 2f;
-        copy.drawScale = copy.targetDrawScale = 2f;
-        copy.isPopup = true;
-        return copy;
-    }
-
-    public String makePowerString() {
-        return makePowerString(getEffectStrings());
-    }
-
-    public PCLCard makeSetAugmentPreview(PCLAugment augment) {
-        PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
-        upgrade.addAugment(augment.makeCopy(), false);
-        upgrade.isPreview = true;
-        return upgrade;
-    }
-
-    // Custom implementation to avoid unnecessary text re-initializations
-    @Override
-    public PCLCard makeStatEquivalentCopy() {
-        PCLCard copy = cardData.create(auxiliaryData.form, timesUpgraded);
+    protected PCLCard makeCopyProperties(PCLCard copy) {
         copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
 
         copy.name = this.name;
@@ -1351,8 +1328,34 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         copy.initializeDescription();
-
         return copy;
+    }
+
+    public PCLCard makePopupCopy() {
+        PCLCard copy = makeStatEquivalentCopy();
+        copy.current_x = (float) Settings.WIDTH / 2f;
+        copy.current_y = (float) Settings.HEIGHT / 2f;
+        copy.drawScale = copy.targetDrawScale = 2f;
+        copy.isPopup = true;
+        return copy;
+    }
+
+    public String makePowerString() {
+        return makePowerString(getEffectStrings());
+    }
+
+    public PCLCard makeSetAugmentPreview(PCLAugment augment) {
+        PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
+        upgrade.addAugment(augment.makeCopy(), false);
+        upgrade.isPreview = true;
+        return upgrade;
+    }
+
+    // Custom implementation to avoid unnecessary text re-initializations
+    @Override
+    public PCLCard makeStatEquivalentCopy() {
+        PCLCard copy = cardData.create(auxiliaryData.form, timesUpgraded);
+        return makeCopyProperties(copy);
     }
 
     public PCLCard makeUpgradePreview(int form) {

@@ -355,7 +355,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             // Try to get a card from a different rarity pool. If you exhaust all the pools, fall back on the colorless pool
             // Note that the basic and special rarities have no pools so we ignore them
             if (rarity != null) {
-                EUIUtils.logInfo(null, "No cards found for Rarity " + rarity);
+                EUIUtils.logInfoIfDebug(this, "No cards found for Rarity " + rarity);
                 return getRandomCard(getNextRarity(rarity), filterFunc, rng, allowOtherRarities);
             }
         }
@@ -472,9 +472,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             loadout = fake = ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout;
         }
 
+        // Card pool gets reset when going to a new act
+        loadCustomCards(player);
         if (isActuallyStartingRun) {
-            loadCustomCards(player);
-
             if (fake != null) {
                 for (LoadoutRelicSlot rSlot : fake.getPreset().relicSlots) {
                     if (rSlot.selected != null) {

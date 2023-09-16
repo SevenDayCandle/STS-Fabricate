@@ -131,6 +131,10 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return getBaseIDPrefix(BASE_RELIC_ID, color);
     }
 
+    public static ArrayList<PCLCustomRelicSlot> getRelics() {
+        return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
+    }
+
     public static ArrayList<PCLCustomRelicSlot> getRelics(AbstractCard.CardColor color) {
         if (color == null) {
             return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());

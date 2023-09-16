@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -33,7 +34,7 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.not ? (t.currentHealth + TempHPField.tempHp.get(t)) * 100 / t.maxHealth <= amount : (t.currentHealth + TempHPField.tempHp.get(t)) * 100 / t.maxHealth >= amount);
+        return evaluateTargets(info, t -> fields.doesValueMatchThreshold((t.currentHealth + TempHPField.tempHp.get(t)) * 100 / t.maxHealth));
     }
 
     @Override

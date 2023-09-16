@@ -160,7 +160,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     }
 
     public static ArrayList<PCLCustomCardSlot> getCards() {
-        return getCards(null);
+        return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
     }
 
     /**

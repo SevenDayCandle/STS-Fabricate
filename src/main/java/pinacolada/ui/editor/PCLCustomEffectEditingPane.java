@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
@@ -26,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -34,6 +36,7 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLDynamicPower;
 import pinacolada.powers.PCLDynamicPowerData;
@@ -208,13 +211,21 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected ArrayList<AbstractCard> getAvailableCards() {
         if (availableCards == null) {
-            AbstractCard.CardColor cardColor = getColor();
-            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
-                    EUIUtils.filterInPlace(CardLibrary.getAllCards(),
-                            c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
-            if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
+            if (PGR.config.showIrrelevantProperties.get()) {
+                boolean isPCLColor = GameUtilities.isPCLOnlyCardColor(getColor());
+                // Filter template replacements
+                availableCards = EUIUtils.filter(CardLibrary.cards.values(), c -> !PGR.core.filterColorless(c));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), PCLCustomCardSlot::make));
+            }
+            else {
+                AbstractCard.CardColor cardColor = getColor();
+                availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
+                        EUIUtils.filterInPlace(CardLibrary.getAllCards(),
+                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
+                }
             }
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
@@ -223,7 +234,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected ArrayList<AbstractPotion> getAvailablePotions() {
         if (availablePotions == null) {
-            AbstractCard.CardColor cardColor = getColor();
             availablePotions = new ArrayList<>(GameUtilities.getPotions(null));
             availablePotions.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
@@ -241,12 +251,18 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected ArrayList<AbstractRelic> getAvailableRelics() {
         if (availableRelics == null) {
-            AbstractCard.CardColor cardColor = getColor();
-            availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
-            availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
-            if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
-                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
+            if (PGR.config.showIrrelevantProperties.get()) {
+                availableRelics = EUIGameUtils.getAllRelics();
+                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
+            }
+            else {
+                AbstractCard.CardColor cardColor = getColor();
+                availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
+                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
+                    availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
+                }
             }
             availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }

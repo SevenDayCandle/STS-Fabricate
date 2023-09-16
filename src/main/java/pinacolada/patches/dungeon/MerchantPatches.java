@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.shop.Merchant;
+import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PGR;
 
 // Copied and modified from STS-AnimatorMod
@@ -18,15 +19,49 @@ public class MerchantPatches {
         private static CardGroup uncommon;
         private static CardGroup rare;
 
-        protected static CardGroup getReplacement(CardGroup group) {
+        private static CardGroup getReplacement(CardGroup group) {
             final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
             for (AbstractCard c : group.group) {
-                if (!PGR.dungeon.tryCancelCardReward(c)) {
+                if (!PGR.dungeon.tryCancelCardReward(c) && PGR.dungeon.canObtainCopy(c)) {
                     replacement.group.add(c);
                 }
             }
+            // The pool must have at least two attack/skill/powers because LOOP DEE LOOP DEE LOOP
+            int attackCount = 0;
+            int skillCount = 0;
+            int powerCount = 0;
+            for (AbstractCard c : replacement.group) {
+                if (c.type == AbstractCard.CardType.ATTACK) {
+                    attackCount += 1;
+                }
+                else if (c.type == AbstractCard.CardType.SKILL) {
+                    skillCount += 1;
+                }
+                else if (c.type == AbstractCard.CardType.POWER) {
+                    powerCount += 1;
+                }
+            }
+            while (attackCount < 2) {
+                replacement.group.add(makeTempCard(AbstractCard.CardType.ATTACK));
+                attackCount += 1;
+            }
+            while (skillCount < 2) {
+                replacement.group.add(makeTempCard(AbstractCard.CardType.SKILL));
+                skillCount += 1;
+            }
+            while (powerCount < 2) {
+                replacement.group.add(makeTempCard(AbstractCard.CardType.POWER));
+                powerCount += 1;
+            }
 
             return replacement;
+        }
+
+        // Must change the card color to curse because colorless will apparently cause LOOP DEE LOOP
+        private static AbstractCard makeTempCard(AbstractCard.CardType type) {
+            AbstractCard c = AbstractDungeonPatches.makeTempCard(type);
+            c.color = AbstractCard.CardColor.CURSE;
+            return c;
         }
 
         @SpirePostfixPatch

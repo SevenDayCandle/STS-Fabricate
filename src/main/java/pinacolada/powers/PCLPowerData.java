@@ -41,6 +41,7 @@ import static extendedui.EUIUtils.array;
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
 public class PCLPowerData extends PCLGenericData<AbstractPower> implements KeywordProvider {
     private static final Map<String, PCLPowerData> STATIC_DATA = new HashMap<>();
+    public static final int DEFAULT_POWER_MAX = 9999;
     public static final String ICON_AFTER_IMAGE = "afterImage";
     public static final String ICON_ARTIFACT = "artifact";
     public static final String ICON_BLUR = "blur";
@@ -167,7 +168,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public boolean isMetascaling;
     public boolean isPostActionPower;
     public boolean useRegionImage;
-    public int maxAmount = 9999;
+    public int maxAmount = DEFAULT_POWER_MAX;
     public int minAmount = 0;
     public int priority = 5;
 

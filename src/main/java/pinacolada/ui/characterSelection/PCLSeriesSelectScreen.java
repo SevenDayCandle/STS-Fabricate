@@ -449,6 +449,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         this.onClose = onClose;
         this.characterOption = characterOption;
         this.data = data;
+        EUI.actingColor = data.resources.cardColor;
 
         createCards(data);
         cardGrid.addCards(getAllCards());

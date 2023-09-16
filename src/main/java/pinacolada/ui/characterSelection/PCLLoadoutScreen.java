@@ -193,6 +193,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         this.characterOption = option;
         this.data = data;
         this.loadout.onOpen(option);
+        EUI.actingColor = data != null ? data.resources.cardColor : option.c.getCardColor();
 
         for (int i = 0; i < loadout.presets.length; i++) {
             presets[i] = loadout.getPreset(i).makeCopy();
