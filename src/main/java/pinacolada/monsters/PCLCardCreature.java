@@ -17,8 +17,10 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.monsters.animations.PCLAllyAnimation;
+import pinacolada.powers.PCLPower;
 import pinacolada.powers.PTriggerPower;
 import pinacolada.powers.PSpecialCardPower;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.delay.DelayTiming;
@@ -40,7 +42,10 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
 
     public void acquireTarget() {
         if (card.pclTarget.targetsRandom()) {
-            target = GameUtilities.getRandomEnemy(true);
+            target = EUIUtils.find(GameUtilities.getEnemies(true), m -> EUIUtils.any(m.powers, po -> po instanceof PCLPower && ((PCLPower) po).isPriorityTarget()));
+            if (target == null) {
+                target = GameUtilities.getRandomEnemy(true);
+            }
         }
         if (target == null || GameUtilities.isDeadOrEscaped(target)) {
             target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);

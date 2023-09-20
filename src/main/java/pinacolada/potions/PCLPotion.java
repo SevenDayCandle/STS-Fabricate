@@ -204,10 +204,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         updateEffect();
         if (this.hb.hovered) {
             EUITooltip.queueTooltips(this);
-            this.scale = 1.5F * Settings.scale;
+            this.scale = 1.25F * Settings.scale;
         }
         else {
-            this.scale = MathHelper.scaleLerpSnap(this.scale, 1.2F * Settings.scale);
+            this.scale = MathHelper.scaleLerpSnap(this.scale, Settings.scale);
         }
 
         this.renderOutline(sb, useOutlineColor ? this.labOutlineColor : Settings.HALF_TRANSPARENT_BLACK_COLOR);

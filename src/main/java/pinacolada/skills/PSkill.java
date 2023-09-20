@@ -1540,6 +1540,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         fields.setupEditor(editor);
     }
 
+    public boolean shouldActAsAll() {
+        return baseAmount <= 0 && getUpgrade() <= 0;
+    }
+
     public boolean shouldUseWhenText() {
         return true;
     }

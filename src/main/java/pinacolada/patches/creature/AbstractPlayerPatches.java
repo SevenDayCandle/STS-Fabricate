@@ -39,10 +39,6 @@ public class AbstractPlayerPatches {
     @SpirePatch(clz = AbstractPlayer.class, method = "useCard")
     public static class AbstractPlayer_UseCard {
 
-        public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
-            p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
-        }
-
         @SpireInsertPatch(locator = Locator.class, localvars = {"c", "monster"})
         public static void insert(AbstractPlayer __instance, AbstractCard c, AbstractMonster monster) {
             CombatManager.onPlayCardPostActions(c, monster);
@@ -56,7 +52,7 @@ public class AbstractPlayerPatches {
                         m.replace("{ if (!pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.use($0, $1, $2)) $proceed($$); }");
                     }
                     else if (m.getClassName().equals(EnergyManager.class.getName()) && m.getMethodName().equals("use")) {
-                        m.replace("{ pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.energy(c, this, $1); }");
+                        m.replace("{ $_ = $proceed(pinacolada.dungeon.CombatManager.onTrySpendEnergy(c, this, $1)); }");
                     }
                 }
             };

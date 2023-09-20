@@ -16,6 +16,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.CustomFilterModule;
 import extendedui.ui.cardFilter.FilterKeywordButton;
 import extendedui.ui.cardFilter.GenericFilters;
+import extendedui.ui.cardFilter.GenericFiltersObject;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -23,6 +24,8 @@ import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.ItemGroup;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.EUIExporterPCLAugmentRow;
+import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
@@ -32,12 +35,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, CustomFilterModule<PCLPowerRenderable>> {
+public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, PCLPowerKeywordFilters.PowerFilters, CustomFilterModule<PCLPowerRenderable>> {
     public static final ArrayList<CustomFilterModule<PCLPowerRenderable>> globalFilters = new ArrayList<>();
-    public final HashSet<ModInfo> currentOrigins = new HashSet<>();
-    public final HashSet<PCLPowerData.Behavior> currentEndTurnBehaviors = new HashSet<>();
-    public final HashSet<Integer> currentPriorities = new HashSet<>();
-    public final HashSet<AbstractPower.PowerType> currentTypes = new HashSet<>();
     public final EUIDropdown<ModInfo> originsDropdown;
     public final EUIDropdown<PCLPowerData.Behavior> endTurnBehaviorDropdown;
     public final EUIDropdown<AbstractPower.PowerType> typeDropdown;
@@ -48,7 +47,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
 
         originsDropdown = new EUIDropdown<ModInfo>(new EUIHitbox(0, 0, scale(240), scale(48)), c -> c == null ? EUIRM.strings.ui_basegame : c.Name)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentOrigins, costs))
+                .setOnChange(costs -> this.onFilterChanged(filters.currentOrigins, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.ui_origins)
                 .setIsMultiSelect(true)
@@ -58,7 +57,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
         endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(0, 0, scale(240), scale(48))
                 , PCLPowerData.Behavior::getText)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentEndTurnBehaviors, costs))
+                .setOnChange(costs -> this.onFilterChanged(filters.currentEndTurnBehaviors, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
                 .setItems(PCLPowerData.Behavior.values())
@@ -68,7 +67,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
         typeDropdown = new EUIDropdown<AbstractPower.PowerType>(new EUIHitbox(0, 0, scale(240), scale(48))
                 , GameUtilities::textForPowerType)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentTypes, costs))
+                .setOnChange(costs -> this.onFilterChanged(filters.currentTypes, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setItems(AbstractPower.PowerType.values())
@@ -78,7 +77,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
         priorityDropdown = new EUIDropdown<Integer>(new EUIHitbox(0, 0, scale(240), scale(48))
                 , String::valueOf)
                 .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(currentPriorities, costs))
+                .setOnChange(costs -> this.onFilterChanged(filters.currentPriorities, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_priority)
                 .setItems(EUIUtils.range(1, 3))
@@ -95,75 +94,60 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
     }
 
     @Override
-    public boolean areFiltersEmpty() {
-        return (currentName == null || currentName.isEmpty())
-                && (currentDescription == null || currentDescription.isEmpty())
-                && currentOrigins.isEmpty() && currentPriorities.isEmpty()
-                && currentEndTurnBehaviors.isEmpty() && currentTypes.isEmpty()
-                && currentFilters.isEmpty() && currentNegateFilters.isEmpty()
-                && EUIUtils.all(getGlobalFilters(), CustomFilterModule::isEmpty);
-    }
-
-    @Override
-    public void clearFilters(boolean shouldInvoke, boolean shouldClearColors) {
-        currentOrigins.clear();
-        currentFilters.clear();
-        currentNegateFilters.clear();
-        currentName = null;
-        currentDescription = null;
+    public void clear(boolean shouldInvoke, boolean shouldClearColors) {
+        super.clear(shouldInvoke, shouldClearColors);
         originsDropdown.setSelectionIndices((int[]) null, false);
         endTurnBehaviorDropdown.setSelectionIndices((int[]) null, false);
         typeDropdown.setSelectionIndices((int[]) null, false);
         priorityDropdown.setSelectionIndices((int[]) null, false);
         nameInput.setLabel("");
         descriptionInput.setLabel("");
-        doForFilters(CustomFilterModule::reset);
     }
 
     public boolean evaluate(PCLPowerRenderable c) {
         //Name check
-        if (currentName != null && !currentName.isEmpty()) {
+        if (filters.currentName != null && !filters.currentName.isEmpty()) {
             String name = getNameForSort(c);
-            if (name == null || !name.toLowerCase().contains(currentName.toLowerCase())) {
+            if (name == null || !name.toLowerCase().contains(filters.currentName.toLowerCase())) {
                 return false;
             }
         }
 
         //Description check
-        if (currentDescription != null && !currentDescription.isEmpty()) {
+        if (filters.currentDescription != null && !filters.currentDescription.isEmpty()) {
             String desc = getDescriptionForSort(c);
-            if (desc == null || !desc.toLowerCase().contains(currentDescription.toLowerCase())) {
+            if (desc == null || !desc.toLowerCase().contains(filters.currentDescription.toLowerCase())) {
                 return false;
             }
         }
 
         //Origin check
-        if (!evaluateItem(currentOrigins, EUIGameUtils.getModInfo(c))) {
+        if (!evaluateItem(filters.currentOrigins, EUIGameUtils.getModInfo(c))) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentPriorities, c.power.priority)) {
+        if (!evaluateItem(filters.currentPriorities, c.power.priority)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentEndTurnBehaviors, c.power.endTurnBehavior)) {
+        if (!evaluateItem(filters.currentEndTurnBehaviors, c.power.endTurnBehavior)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(currentTypes, c.power.type)) {
+        if (!evaluateItem(filters.currentTypes, c.power.type)) {
             return false;
         }
 
         //Tooltips check
-        if (!currentFilters.isEmpty() && (!getAllTooltips(c).containsAll(currentFilters))) {
+        if (!filters.currentFilters.isEmpty() && (!getAllTooltips(c).containsAll(filters.currentFilters))) {
             return false;
         }
 
         //Negate Tooltips check
-        if (!currentNegateFilters.isEmpty() && (EUIUtils.any(getAllTooltips(c), currentNegateFilters::contains))) {
+        if (!filters.currentNegateFilters.isEmpty() && (EUIUtils.any(getAllTooltips(c), filters.currentNegateFilters::contains))) {
             return false;
         }
 
@@ -243,6 +227,11 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
     }
 
     @Override
+    protected PowerFilters getFilterObject() {
+        return new PowerFilters();
+    }
+
+    @Override
     public void updateFilters() {
         float xPos = updateDropdown(originsDropdown, hb.x - SPACING * 3.65f);
         xPos = updateDropdown(typeDropdown, xPos);
@@ -251,5 +240,30 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, C
         nameInput.setPosition(hb.x + SPACING * 5.15f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
         descriptionInput.setPosition(nameInput.hb.cX + nameInput.hb.width + SPACING * 2.95f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
         doForFilters(CustomFilterModule<PCLPowerRenderable>::update);
+    }
+
+    public static class PowerFilters extends GenericFiltersObject {
+        public final HashSet<PCLPowerData.Behavior> currentEndTurnBehaviors = new HashSet<>();
+        public final HashSet<Integer> currentPriorities = new HashSet<>();
+        public final HashSet<AbstractPower.PowerType> currentTypes = new HashSet<>();
+
+        public void clear(boolean shouldClearColors) {
+            super.clear(shouldClearColors);
+            currentEndTurnBehaviors.clear();
+            currentPriorities.clear();
+            currentTypes.clear();
+        }
+
+        public void cloneFrom(PowerFilters other) {
+            super.cloneFrom(other);
+            EUIUtils.replaceContents(currentEndTurnBehaviors, other.currentEndTurnBehaviors);
+            EUIUtils.replaceContents(currentPriorities, other.currentPriorities);
+            EUIUtils.replaceContents(currentTypes, other.currentTypes);
+        }
+
+        public boolean isEmpty() {
+            return super.isEmpty() && currentEndTurnBehaviors.isEmpty()
+                    && currentPriorities.isEmpty() && currentTypes.isEmpty();
+        }
     }
 }

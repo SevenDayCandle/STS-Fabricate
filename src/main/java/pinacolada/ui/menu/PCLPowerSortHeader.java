@@ -32,7 +32,7 @@ public class PCLPowerSortHeader extends GenericSortHeader<PCLPowerRenderable> {
     }
 
     @Override
-    public GenericFilters<PCLPowerRenderable, ?> getFilters() {
+    public GenericFilters<PCLPowerRenderable, ?, ?> getFilters() {
         return PGR.powerFilters;
     }
 

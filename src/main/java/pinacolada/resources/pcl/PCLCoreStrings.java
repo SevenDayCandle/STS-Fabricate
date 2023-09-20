@@ -200,6 +200,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_origin = cetut.TEXT[70];
     public final String cetut_destination = cetut.TEXT[71];
     public final String cetut_effectTarget = cetut.TEXT[72];
+    public final String cetut_amountPower = cetut.TEXT[73];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

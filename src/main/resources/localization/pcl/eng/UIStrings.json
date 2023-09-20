@@ -219,7 +219,8 @@
 												"Determines what card piles this effect may source its cards from.",
 												"#yOrigin determines the position in the chosen piles that cards are chosen from.",
 												"#yDestination determines the position in this effect's target pile that cards will be placed into.",
-												"Determines the targets that this effect will be actioned on. This target is independent of the card's actual targeting (with the exception of the primary damage effect), but single-target effects require the card's targeting to be single-target as well."
+												"Determines the targets that this effect will be actioned on. This target is independent of the card's actual targeting (with the exception of the primary damage effect), but single-target effects require the card's targeting to be single-target as well.",
+												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per stack of this power (negative power stacks will decrease from the total value)."
 								]
 				},
 				"pcl:CardPile": {

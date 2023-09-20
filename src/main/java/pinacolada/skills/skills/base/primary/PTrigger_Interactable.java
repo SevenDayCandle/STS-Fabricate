@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.primary;
 
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -46,7 +47,7 @@ public class PTrigger_Interactable extends PTrigger {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String sub = amount > 1 || fields.not ? super.getSubText(perspective) : "";
-        String main = source != null && source.getEffects().contains(this) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
+        String main = (source != null && source.getEffects().contains(this) && !(source instanceof AbstractPower)) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         return sub.isEmpty() ? main : sub + COMMA_SEPARATOR + main;
     }
 

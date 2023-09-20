@@ -28,7 +28,7 @@ public class PCLAugmentSortHeader extends GenericSortHeader<PCLAugmentRenderable
     }
 
     @Override
-    public GenericFilters<PCLAugmentRenderable, ?> getFilters() {
+    public GenericFilters<PCLAugmentRenderable, ?, ?> getFilters() {
         return PGR.augmentFilters;
     }
 

@@ -46,6 +46,9 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (isWhenClause()) {
+            if (fields.random) {
+                return getWheneverAreString(PGR.core.tooltips.fatal.title, perspective);
+            }
             return getWheneverString(PGR.core.tooltips.kill.present(), perspective);
         }
         if (fields.random) {
@@ -56,7 +59,9 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
-        useFromTrigger(generateInfo(getOwnerCreature(), monster));
+        if (GameUtilities.isFatal(monster, !fields.random)) {
+            useFromTrigger(generateInfo(getOwnerCreature(), monster));
+        }
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

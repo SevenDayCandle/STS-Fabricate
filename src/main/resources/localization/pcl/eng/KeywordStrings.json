@@ -11,6 +11,10 @@
 		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Green Affinity"
 	},
+	"A-K":	{
+		"DESCRIPTION": "#yAffinities appear above a card's name.",
+		"NAME": "Pink Affinity"
+	},
 	"A-O":	{
 		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Orange Affinity"

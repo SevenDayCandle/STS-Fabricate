@@ -62,9 +62,9 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String amountString = baseAmount <= 0 ? TEXT.subjects_all : getAmountRawString();
+        String amountString = shouldActAsAll() ? TEXT.subjects_all : getAmountRawString();
         String joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerAndString();
-        return capital(target == PCLCardTarget.Self ? (baseAmount <= 0 ? TEXT.act_remove(joinedString) : TEXT.act_pay(amountString, joinedString))
+        return capital(target == PCLCardTarget.Self ? (shouldActAsAll() ? TEXT.act_remove(joinedString) : TEXT.act_pay(amountString, joinedString))
                 : TEXT.act_removeFrom(EUIRM.strings.numNoun(amountString, joinedString), getTargetStringPerspective(perspective)), true);
     }
 

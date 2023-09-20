@@ -864,13 +864,14 @@ public class CombatManager extends EUIBase {
 
     public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost) {
         // Hardcoded base game logic
-        if (p.hasPower(CorruptionPower.POWER_ID) && card.type == AbstractCard.CardType.SKILL) {
-            cost = 0;
-        }
-
-        // Suspensive
-        if (PCLCardTag.Suspensive.has(card) && cost > EnergyPanel.totalCount) {
-            energySuspended += cost - EnergyPanel.totalCount;
+        if (card != null) {
+            if (p.hasPower(CorruptionPower.POWER_ID) && card.type == AbstractCard.CardType.SKILL) {
+                cost = 0;
+            }
+            // Suspensive
+            else if (PCLCardTag.Suspensive.has(card) && card.costForTurn > EnergyPanel.totalCount) {
+                energySuspended += cost - EnergyPanel.totalCount;
+            }
         }
 
         return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, d));

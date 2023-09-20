@@ -64,7 +64,17 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
     public void setupMoves(PCLDynamicPowerData data) {
         for (PSkill<?> skill : data.moves) {
             if (skill != null) {
-                addUseMove(skill.makeCopy());
+                PSkill<?> effect = skill.makeCopy();
+                addUseMove(effect);
+                if (effect instanceof PTrigger) {
+                    ((PTrigger) effect).controller = this;
+                    ((PTrigger) effect).forceResetUses();
+                }
+
+                PCLClickableUse use = effect.getClickable(this);
+                if (use != null) {
+                    triggerCondition = use;
+                }
             }
         }
         updateDescription();

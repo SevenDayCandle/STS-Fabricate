@@ -1773,7 +1773,6 @@ public class GameUtilities {
         return PlatedArmorPower.POWER_ID.equals(p.ID) || MetallicizePower.POWER_ID.equals(p.ID);
     }
 
-    // TODO use this in summon targeting checks
     public static boolean isPriorityTarget(AbstractCreature c) {
         return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }

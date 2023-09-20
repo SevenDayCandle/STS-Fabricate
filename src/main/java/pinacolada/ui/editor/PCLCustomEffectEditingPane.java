@@ -53,6 +53,7 @@ import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.ui.editor.card.PCLCustomCardPrimaryInfoPage;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
+import pinacolada.ui.editor.power.PCLCustomPowerEditPowerScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -374,6 +375,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected void initializeSelectors() {
         final AbstractCard.CardColor cardColor = getColor();
+        String cetutString = editor.screen instanceof PCLCustomPowerEditPowerScreen ? PGR.core.strings.cetut_amountPower : PGR.core.strings.cetut_amount;
         effects = (EUISearchableDropdown<PSkill<?>>) new EUISearchableDropdown<PSkill<?>>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect, node.parent != null ? node.parent.skill : null)))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty()) {
@@ -396,7 +398,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(EUIRM.strings.ui_amount, PGR.core.strings.cetut_amount);
+                .setTooltip(EUIRM.strings.ui_amount, cetutString);
         extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.7f : MENU_WIDTH * 0.5f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
@@ -405,7 +407,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_extraValue, PGR.core.strings.cetut_amount);
+                .setTooltip(PGR.core.strings.cedit_extraValue, cetutString);
 
         targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardTarget::getTitle)

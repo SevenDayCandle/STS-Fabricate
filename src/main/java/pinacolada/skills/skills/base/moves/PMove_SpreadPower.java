@@ -47,7 +47,7 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String powerString = fields.getPowerSubjectString();
-        String mainString = baseAmount <= 0 ? TEXT.act_spread(powerString, getTargetStringPerspective(perspective)) : TEXT.act_spreadAmount(getAmountRawString(), powerString, getTargetStringPerspective(perspective));
+        String mainString = shouldActAsAll() ? TEXT.act_spread(powerString, getTargetStringPerspective(perspective)) : TEXT.act_spreadAmount(getAmountRawString(), powerString, getTargetStringPerspective(perspective));
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 

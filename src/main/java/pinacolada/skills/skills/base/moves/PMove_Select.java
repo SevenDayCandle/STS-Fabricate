@@ -54,7 +54,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
 
     @Override
     public String getAmountRawOrAllString() {
-        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
+        return shouldActAsAll() ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
                 : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
     }
