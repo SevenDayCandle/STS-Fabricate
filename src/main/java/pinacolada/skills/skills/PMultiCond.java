@@ -403,6 +403,14 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        for (PSkill<?> effect : effects) {
+            effect.useOutsideOfBattle();
+        }
+    }
+
+    @Override
     public PMultiCond useParent(boolean value) {
         this.useParent = value;
         for (PSkill<?> effect : effects) {

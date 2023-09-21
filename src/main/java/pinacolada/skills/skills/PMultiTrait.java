@@ -423,6 +423,14 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         }
     }
 
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        for (PSkill<?> effect : effects) {
+            effect.useOutsideOfBattle();
+        }
+    }
+
     public PMultiTrait useParent(boolean value) {
         this.useParent = value;
         for (PSkill<?> effect : effects) {

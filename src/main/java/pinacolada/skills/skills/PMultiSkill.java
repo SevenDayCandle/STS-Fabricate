@@ -504,6 +504,14 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         use(info, order);
     }
 
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        for (PSkill<?> effect : effects) {
+            effect.useOutsideOfBattle();
+        }
+    }
+
     public PMultiSkill useParent(boolean value) {
         this.useParent = value;
         for (PSkill<?> effect : effects) {

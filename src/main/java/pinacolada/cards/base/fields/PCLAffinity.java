@@ -300,6 +300,24 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
                 return data;
             }
             EUIUtils.logError(PCLPowerData.PCLPowerDataAdapter.class, "Failed to read affinity " + key);
+            // Legacy migration
+            // TODO remove this after a few patches
+            switch (key) {
+                case "Blue":
+                    return Blue;
+                case "Green":
+                    return Green;
+                case "Orange":
+                    return Orange;
+                case "Purple":
+                    return Purple;
+                case "Silver":
+                    return Silver;
+                case "Star":
+                    return Star;
+                case "Yellow":
+                    return Yellow;
+            }
             return Red;
         }
 
