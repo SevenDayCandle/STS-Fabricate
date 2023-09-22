@@ -168,6 +168,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip strength = EUIKeywordTooltip.findByID("Strength");
     public EUIKeywordTooltip stun = EUIKeywordTooltip.findByID("Stun");
     public EUIKeywordTooltip summon = EUIKeywordTooltip.findByID("Summon");
+    public EUIKeywordTooltip summonSlot = EUIKeywordTooltip.findByID("Summon Slot");
     public EUIKeywordTooltip supercharged = EUIKeywordTooltip.findByID("Supercharged");
     public EUIKeywordTooltip suspensive = EUIKeywordTooltip.findByID("Suspensive");
     public EUIKeywordTooltip tempHP = EUIKeywordTooltip.findByID("Temporary HP");

@@ -83,6 +83,9 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
         String targetShortString = target.getShortString();
         if (targetShortString != null) {
+            if (scope > 1) {
+                targetShortString = targetShortString + "x" + scope;
+            }
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, PGR.core.tooltips.block);
         }
         return EUIRM.strings.numNoun(amountString, PGR.core.tooltips.block);

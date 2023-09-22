@@ -210,7 +210,9 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
             AbstractMonster enemy = GameUtilities.asMonster(target);
             if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy))) {
                 if (card.type == PCLEnum.CardType.SUMMON) {
-                    enemy = GameUtilities.getRandomSummon(false);
+                    if (enemy == null) {
+                        enemy = GameUtilities.getRandomSummon(false);
+                    }
                     if (enemy == null) {
                         enemy = GameUtilities.getRandomSummon(true);
                     }

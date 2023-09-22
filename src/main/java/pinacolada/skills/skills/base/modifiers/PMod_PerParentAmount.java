@@ -45,7 +45,7 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
 
     protected int getParentAmount(PSkill<?> skill) {
         if (skill instanceof PDelay || (fields.random && skill instanceof PCond)) {
-            return getParentAmount(skill.parent);
+            return getParentAmount(skill.getParent());
         }
         return skill != null ? skill.amount : 0;
     }

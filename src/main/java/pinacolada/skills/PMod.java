@@ -38,6 +38,16 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         super(data, target, amount, extra);
     }
 
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors) {
+        return PSkill.register(type, effectType, -1, DEFAULT_MAX, cardColors)
+                .setExtra(-1, DEFAULT_MAX);
+    }
+
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType) {
+        return PSkill.register(type, effectType, -1, DEFAULT_MAX)
+                .setExtra(-1, DEFAULT_MAX);
+    }
+
     public static PMod_BonusInStance bonusInStance(int amount, PCLStanceHelper s) {
         return new PMod_BonusInStance(amount, s);
     }
@@ -330,14 +340,12 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
-    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors) {
-        return PSkill.register(type, effectType, -1, DEFAULT_MAX, cardColors)
-                .setExtra(-1, DEFAULT_MAX);
+    public static PMod_Repeat repeat(int amount) {
+        return new PMod_Repeat(amount);
     }
 
-    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType) {
-        return PSkill.register(type, effectType, -1, DEFAULT_MAX)
-                .setExtra(-1, DEFAULT_MAX);
+    public static PMod_RepeatForTarget repeatTarget(PCLCardTarget target) {
+        return new PMod_RepeatForTarget(target);
     }
 
     public static PMod_ReshufflePerCard reshufflePer(int amount, PCLCardGroupHelper... groups) {

@@ -78,12 +78,12 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (target.targetsMulti()) {
-            ArrayList<AbstractCreature> targets = target.getTargets(info);
+            ArrayList<AbstractCreature> targets = target.getTargets(info, scope);
             int[] damage = getDamageMatrix(targets);
             order.dealDamageToAll(getSourceCreature(), targets, damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else {
-            order.dealDamage(getSourceCreature(), target.getTarget(info), amount, DamageInfo.DamageType.THORNS, fields.attackEffect)
+            order.dealDamage(getSourceCreature(), target.getTarget(info, scope), amount, DamageInfo.DamageType.THORNS, fields.attackEffect)
                     .canRedirect(!target.targetsSingle())
                     .isCancellable(target != PCLCardTarget.Self && target != PCLCardTarget.None);
         }

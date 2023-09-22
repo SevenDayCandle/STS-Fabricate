@@ -2,6 +2,7 @@ package pinacolada.dungeon;
 
 import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
+import basemod.interfaces.PostDungeonInitializeSubscriber;
 import basemod.interfaces.PreStartGameSubscriber;
 import basemod.interfaces.StartActSubscriber;
 import basemod.interfaces.StartGameSubscriber;
@@ -47,7 +48,7 @@ import java.util.*;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, StartActSubscriber {
+public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitializeSubscriber {
     public static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();
     public transient final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
@@ -447,7 +448,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    public void initializeCardPool(boolean isActuallyStartingRun) {
+    public void initializeCardPool() {
+        final AbstractPlayer player = CombatManager.refreshPlayer();
+        loadCustomCards(player);
+        banCardsFromPool();
+    }
+
+    private void initializeCharacterBlight(String id) {
+        for (AbstractBlight blight : player.blights) {
+            if (blight.blightID.equals(id)) {
+                return;
+            }
+        }
+        AbstractBlight blight = BlightHelper.getBlight(id);
+        if (blight != null) {
+            GameUtilities.obtainBlightWithoutEffect(blight);
+        }
+    }
+
+    public void initializeData() {
         loadouts.clear();
         final AbstractPlayer player = CombatManager.refreshPlayer();
         data = PGR.getPlayerData(player.chosenClass);
@@ -463,59 +482,23 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         if (data != null) {
-            loadCardsForData(data);
+            // Always include the selected loadout. If for some reason none exists, assign one at random
+            if (data.selectedLoadout == null) {
+                data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));
+            }
+            loadout = data.selectedLoadout;
+
+            for (PCLLoadout l : data.getEveryLoadout()) {
+                // Series must be unlocked and enabled to be present in-game
+                if (l == loadout || l.isEnabled()) {
+                    loadouts.add(l);
+                }
+            }
         }
 
         // Custom loadout
-        PCLLoadout fake = null;
         if (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout != null) {
-            loadout = fake = ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout;
-        }
-
-        // Card pool gets reset when going to a new act
-        loadCustomCards(player);
-        if (isActuallyStartingRun) {
-            if (fake != null) {
-                for (LoadoutRelicSlot rSlot : fake.getPreset().relicSlots) {
-                    if (rSlot.selected != null) {
-                        GameUtilities.obtainRelicFromEvent(RelicLibrary.getRelic(rSlot.selected).makeCopy());
-                    }
-                }
-
-                initializePotions();
-            }
-            else if (data != null) {
-                data.updateRelicsForDungeon();
-                if (Settings.isStandardRun()) {
-                    data.saveTrophies();
-                }
-
-                // Add character blights if applicable
-                for (String id : loadout.getStartingBlights()) {
-                    initializeCharacterBlight(id);
-                }
-
-                // Add glyphs
-                for (int i = 0; i < AbstractPlayerData.GLYPHS.size(); i++) {
-                    initializeGlyph(i);
-                }
-
-                initializePotions();
-            }
-        }
-
-        banCardsFromPool();
-    }
-
-    private void initializeCharacterBlight(String id) {
-        for (AbstractBlight blight : player.blights) {
-            if (blight.blightID.equals(id)) {
-                return;
-            }
-        }
-        AbstractBlight blight = BlightHelper.getBlight(id);
-        if (blight != null) {
-            GameUtilities.obtainBlightWithoutEffect(blight);
+            loadout = ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout;
         }
     }
 
@@ -547,18 +530,33 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCardsForData(AbstractPlayerData<?, ?> data) {
-        // Always include the selected loadout. If for some reason none exists, assign one at random
-        if (data.selectedLoadout == null) {
-            data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));
-        }
-        loadout = data.selectedLoadout;
-
-        for (PCLLoadout l : data.getEveryLoadout()) {
-            // Series must be unlocked and enabled to be present in-game
-            if (l == loadout || l.isEnabled()) {
-                loadouts.add(l);
+    private void initializeRun() {
+        if (loadout instanceof FakeLoadout) {
+            for (LoadoutRelicSlot rSlot : loadout.getPreset().relicSlots) {
+                if (rSlot.selected != null) {
+                    GameUtilities.obtainRelicFromEvent(RelicLibrary.getRelic(rSlot.selected).makeCopy());
+                }
             }
+
+            initializePotions();
+        }
+        else if (data != null) {
+            data.updateRelicsForDungeon();
+            if (Settings.isStandardRun()) {
+                data.saveTrophies();
+            }
+
+            // Add character blights if applicable
+            for (String id : loadout.getStartingBlights()) {
+                initializeCharacterBlight(id);
+            }
+
+            // Add glyphs
+            for (int i = 0; i < AbstractPlayerData.GLYPHS.size(); i++) {
+                initializeGlyph(i);
+            }
+
+            initializePotions();
         }
     }
 
@@ -706,19 +704,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     }
 
     @Override
-    public void receivePreStartGame() {
-        fullLog("PRE START GAME");
-    }
-
-    @Override
-    public void receiveStartAct() {
-        initializeCardPool(false);
-    }
-
-    @Override
-    public void receiveStartGame() {
-        initializeCardPool(true);
-        fullLog("INITIALIZE GAME");
+    public void receivePostDungeonInitialize() {
+        // Gets called after receiveStartGame
+        initializeRun();
     }
 
     private void removeCardFromPools(AbstractCard card) {

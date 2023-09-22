@@ -65,17 +65,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     };
     private static final TypeToken<ArrayList<String>> TStringToken = new TypeToken<ArrayList<String>>() {
     };
-    protected static final String CARD_SEPARATOR = "|";
-    protected static final String SUB_SEPARATOR = "<";
-    protected static final String BOUND_FORMAT = "¦{0}¦";
-    protected static final String CONDITION_FORMAT = "║{0}║";
-    protected static final String SINGLE_FORMAT = "1";
+    private static final String SUB_SEPARATOR = "<";
+    private static final String BOUND_FORMAT = "¦{0}¦";
+    private static final String CONDITION_FORMAT = "║{0}║";
+    private static final String SINGLE_FORMAT = "1";
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
     public static final String COLON_SEPARATOR = ": ";
     public static final String COMMA_SEPARATOR = ", ";
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';
+    public static final char SCOPE_CHAR = 'H';
     public static final char CAPITAL_CHAR = 'C';
     public static final char LOWER_CHAR = 'c';
     public static final int CHAR_OFFSET = 48;
@@ -101,8 +101,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public int extra = -1;
     public int baseExtra = extra;
     public int rootExtra = baseExtra;
-    public int[] upgrade = new int[]{0};
-    public int[] upgradeExtra = new int[]{0};
+    public int scope = 1;
+    public int baseScope = scope;
+    public int rootScope = baseScope;
+    public int[] upgrade;
+    public int[] upgradeExtra;
+    public int[] upgradeScope;
 
     public PSkill(PSkillData<T> data, PSkillSaveData saveData) {
         this.data = data;
@@ -400,6 +404,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.deserialize(source, TStringToken.getType());
     }
 
+    public static String zeroToRangeString(int input) {
+        return "0-" + input;
+    }
+
     public PSkill<T> addAmountForCombat(int amount) {
         this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
         return this;
@@ -407,6 +415,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public PSkill<T> addExtraForCombat(int amount) {
         this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
+        return this;
+    }
+
+    public PSkill<T> addScopeForCombat(int amount) {
+        this.baseScope = this.scope = MathUtils.clamp(this.scope + amount, 1, DEFAULT_MAX);
         return this;
     }
 
@@ -522,6 +535,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return getXValue();
             case EXTRA_CHAR:
                 return extra;
+            case SCOPE_CHAR:
+                return scope;
             default:
                 return baseAmount;
         }
@@ -534,7 +549,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case XVALUE_CHAR:
                 return getXString();
             case EXTRA_CHAR:
-                return wrapAmount(extra);
+                return wrapExtra(extra);
+            case SCOPE_CHAR:
+                return String.valueOf(scope);
             default:
                 return "?";
         }
@@ -632,6 +649,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return baseAmount + " (" + getUpgrade() + ")";
             case EXTRA_CHAR:
                 return baseExtra + " (" + getUpgradeExtra() + ")";
+            case SCOPE_CHAR:
+                return baseScope + " (" + getUpgradeScope() + ")";
             default:
                 return "";
         }
@@ -739,6 +758,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return PGR.core.strings.cedit_extraValue;
     }
 
+    public String getHeaderTextForScope() {
+        return PGR.core.strings.cedit_scope;
+    }
+
     public final PSkill<?> getHighestParent() {
         if (this.parent != null) {
             return this.parent.getHighestParent();
@@ -830,10 +853,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return fields.getQualifiers(info);
     }
 
-    public String getRangeToAmountRawString() {
-        return "0-" + getAmountRawString();
-    }
-
     public final String getRawString(char attributeID) {
         switch (attributeID) {
             case EFFECT_CHAR:
@@ -849,6 +868,67 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return getSubText(PCLCardTarget.Self);
+    }
+
+    public final int getScopeBaseFromCard() {
+        PCLCardValueSource scopeSource = getScopeSource();
+        if (this.sourceCard != null && scopeSource != null) {
+            switch (scopeSource) {
+                case Block:
+                    return sourceCard.baseBlock;
+                case Damage:
+                    return sourceCard.baseDamage;
+                case HitCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                case MagicNumber:
+                    return sourceCard.baseMagicNumber;
+                case SecondaryNumber:
+                    return sourceCard.baseHeal;
+                case RightCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                case XValue:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+            }
+        }
+        return scope;
+    }
+
+    public final int getScopeFromCard() {
+        PCLCardValueSource scopeSource = getScopeSource();
+        if (this.sourceCard != null) {
+            if (scopeSource != null) {
+                switch (scopeSource) {
+                    case Block:
+                        return sourceCard.block;
+                    case Damage:
+                        return sourceCard.damage;
+                    case HitCount:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                    case MagicNumber:
+                        return sourceCard.magicNumber;
+                    case SecondaryNumber:
+                        return sourceCard.heal;
+                    case RightCount:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                    case XValue:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                }
+            }
+
+            return rootScope + sourceCard.timesUpgraded * getUpgradeExtra();
+        }
+        if (source != null && scopeSource == PCLCardValueSource.XValue) {
+            return source.getXValue();
+        }
+        return rootScope;
+    }
+
+    public final String getScopeRawString() {
+        return source != null ? EUIUtils.format(BOUND_FORMAT, "H" + getCardPointer()) : String.valueOf(scope);
+    }
+
+    public PCLCardValueSource getScopeSource() {
+        return PCLCardValueSource.None;
     }
 
     /**
@@ -884,7 +964,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
-        return info != null ? target.getTargets(info) : new ArrayList<>();
+        return info != null ? target.getTargets(info, scope) : new ArrayList<>();
     }
 
     public final String getTargetOnString(PCLCardTarget target, String baseString) {
@@ -932,7 +1012,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getTargetString(PCLCardTarget target) {
-        return getTargetString(target, 1);
+        return getTargetString(target, scope);
     }
 
     public String getTargetString(PCLCardTarget target, int count) {
@@ -993,7 +1073,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getTargetStringPerspective(PCLCardTarget target) {
-        return getTargetString(getTargetForPerspective(target), 1);
+        return getTargetString(getTargetForPerspective(target), scope);
     }
 
     public final String getTargetStringSingular() {
@@ -1126,6 +1206,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
     }
 
+    public final int getUpgradeScope() {
+        if (upgradeScope == null || upgradeScope.length == 0) {
+            return 0;
+        }
+        return upgradeScope[Math.min(getUpgradeForm(), upgradeScope.length - 1)];
+    }
+
     public final String getXRawString() {
         return source != null ? EUIUtils.format(BOUND_FORMAT, "F" + getCardPointer()) : "";
     }
@@ -1171,6 +1258,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         this.rootExtra = this.baseExtra = this.extra = saveData.extra;
         this.upgrade = saveData.upgrade;
         this.upgradeExtra = saveData.upgradeExtra;
+        this.rootScope = this.baseScope = this.scope = saveData.scope;
+        this.upgradeScope = saveData.upgradeScope;
         this.fields = EUIUtils.deserialize(saveData.effectData, this.data.fieldType);
         this.fields.skill = this;
         this.useParent = saveData.useParent;
@@ -1259,8 +1348,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             copy.rootExtra = rootExtra;
             copy.baseExtra = baseExtra;
             copy.extra = extra;
-            copy.upgrade = upgrade.clone();
-            copy.upgradeExtra = upgradeExtra.clone();
+            copy.rootScope = rootScope;
+            copy.baseScope = baseScope;
+            copy.scope = scope;
+            if (upgrade != null) {
+                copy.upgrade = upgrade.clone();
+            }
+            if (upgradeExtra != null) {
+                copy.upgradeExtra = upgradeExtra.clone();
+            }
+            if (upgradeScope != null) {
+                copy.upgradeScope = upgradeScope.clone();
+            }
             copy.fields = (T) fields.makeCopy();
             copy.fields.skill = copy;
             copy.useParent = useParent;
@@ -1505,9 +1604,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         this.baseAmount = getAmountBaseFromCard();
         this.extra = getExtraFromCard();
         this.baseExtra = getExtraBaseFromCard();
+        this.scope = getScopeFromCard();
+        this.baseScope = getScopeBaseFromCard();
         if (this.childEffect != null) {
             this.childEffect.setSource(card);
         }
+        return this;
+    }
+
+    public PSkill<T> setScope(int amount, int upgrade) {
+        this.upgradeScope = new int[]{upgrade};
+        setScope(amount);
+        return this;
+    }
+
+    public PSkill<T> setScope(int amount) {
+        this.rootScope = this.baseScope = this.scope = MathUtils.clamp(amount, 1, DEFAULT_MAX);
         return this;
     }
 

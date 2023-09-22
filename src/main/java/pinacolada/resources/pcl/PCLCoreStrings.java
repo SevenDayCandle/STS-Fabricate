@@ -126,6 +126,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_invert = cedit.TEXT[77];
     public final String cedit_every = cedit.TEXT[78];
     public final String cedit_minMaxStacks = cedit.TEXT[79];
+    public final String cedit_scope = cedit.TEXT[80];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -201,6 +202,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_destination = cetut.TEXT[71];
     public final String cetut_effectTarget = cetut.TEXT[72];
     public final String cetut_amountPower = cetut.TEXT[73];
+    public final String cetut_scope = cetut.TEXT[74];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -845,143 +847,146 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_doThis(Object times) {
         return actFmt(11, times);
     }
+    public final String act_doThisFor(Object target) {
+        return actFmt(12, target);
+    }
     public final String act_enterStance(Object stance) {
-        return actFmt(12, stance);
+        return actFmt(13, stance);
     }
     public final String act_exitStance() {
-        return actFmt(13);
+        return actFmt(14);
     }
     public final String act_gainAmount(Object amount, Object power) {
-        return actFmt(14, amount, power);
+        return actFmt(15, amount, power);
     }
     public final String act_gainOrdinal(Object ordinal, Object power) {
-        return actFmt(15, ordinal, power);
+        return actFmt(16, ordinal, power);
     }
     public final String act_giveTarget(Object target, Object power) {
-        return actFmt(16, target, power);
+        return actFmt(17, target, power);
     }
     public final String act_giveTargetAmount(Object target, Object amount, Object power) {
-        return actFmt(17, target, amount, power);
+        return actFmt(18, target, amount, power);
     }
     public final String act_has(Object amount) {
-        return actFmt(18, amount);
+        return actFmt(19, amount);
     }
     public final String act_hasAmount(Object amount, Object power) {
-        return actFmt(19, amount, power);
-    }
-    public final String act_haveObject(Object amount, Object power) {
         return actFmt(20, amount, power);
     }
+    public final String act_haveObject(Object amount, Object power) {
+        return actFmt(21, amount, power);
+    }
     public final String act_increaseBy(Object power, Object amount) {
-        return actFmt(21, power, amount);
+        return actFmt(22, power, amount);
     }
     public final String act_increasePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(22, property, target, amount);
+        return actFmt(23, property, target, amount);
     }
     public final String act_increasePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(23, property, target, source, amount);
+        return actFmt(24, property, target, source, amount);
     }
     public final String act_lose(Object power) {
-        return actFmt(24, power);
+        return actFmt(25, power);
     }
     public final String act_loseAmount(Object amount, Object power) {
-        return actFmt(25, amount, power);
+        return actFmt(26, amount, power);
     }
     public final String act_move(Object amount, Object target) {
-        return actFmt(26, amount, target);
+        return actFmt(27, amount, target);
     }
     public final String act_moveTo(Object amount, Object dest, Object target) {
-        return actFmt(27, amount, dest, target);
+        return actFmt(28, amount, dest, target);
     }
     public final String act_reduceBy(Object power, Object amount) {
-        return actFmt(28, power, amount);
+        return actFmt(29, power, amount);
     }
     public final String act_reducePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(29, property, target, amount);
+        return actFmt(30, property, target, amount);
     }
     public final String act_reducePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(30, property, target, source, amount);
+        return actFmt(31, property, target, source, amount);
     }
     public final String act_remove(Object item) {
-        return actFmt(31, item);
+        return actFmt(32, item);
     }
     public final String act_removeFrom(Object item, Object target) {
-        return actFmt(32, item, target);
+        return actFmt(33, item, target);
     }
     public final String act_removeFromPlace(Object item, Object target, Object place) {
-        return actFmt(33, item, target, place);
-    }
-    public final String act_removeInPlace(Object item, Object target, Object place) {
         return actFmt(34, item, target, place);
     }
+    public final String act_removeInPlace(Object item, Object target, Object place) {
+        return actFmt(35, item, target, place);
+    }
     public final String act_select(Object amount) {
-        return actFmt(35, amount);
+        return actFmt(36, amount);
     }
-    public final String act_setOf(Object item, Object target, Object affinity4) {
-        return actFmt(36, item, target, affinity4);
+    public final String act_setOf(Object item, Object target, Object affinity5) {
+        return actFmt(37, item, target, affinity5);
     }
-    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity4) {
-        return actFmt(37, item, target, place, affinity4);
+    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity5) {
+        return actFmt(38, item, target, place, affinity5);
     }
     public final String act_setTo(Object item, Object affinity) {
-        return actFmt(38, item, affinity);
+        return actFmt(39, item, affinity);
     }
     public final String act_setTheLast(Object amount, Object item, Object affinity) {
-        return actFmt(39, amount, item, affinity);
+        return actFmt(40, amount, item, affinity);
     }
     public final String act_skipTurn() {
-        return actFmt(40);
+        return actFmt(41);
     }
     public final String act_stealFrom(Object amount, Object item, Object target) {
-        return actFmt(41, amount, item, target);
+        return actFmt(42, amount, item, target);
     }
     public final String act_stealX(Object amount, Object power) {
-        return actFmt(42, amount, power);
+        return actFmt(43, amount, power);
     }
     public final String act_take(Object amount, Object damage) {
-        return actFmt(43, amount, damage);
+        return actFmt(44, amount, damage);
     }
     public final String act_transform(Object subject, Object target) {
-        return actFmt(44, subject, target);
+        return actFmt(45, subject, target);
     }
     public final String act_use(Object target) {
-        return actFmt(45, target);
+        return actFmt(46, target);
     }
     public final String act_zCannot(Object target, Object action, Object object) {
-        return actFmt(46, target, action, object);
+        return actFmt(47, target, action, object);
     }
     public final String act_zCosts(Object object, Object ordinal, Object amount) {
-        return actFmt(47, object, ordinal, amount);
+        return actFmt(48, object, ordinal, amount);
     }
     public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(48, object, amount, bonus);
+        return actFmt(49, object, amount, bonus);
     }
     public final String act_zHas(Object object, Object amount) {
-        return actFmt(49, object, amount);
+        return actFmt(50, object, amount);
     }
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(50, object, ordinal, amount, bonus);
+        return actFmt(51, object, ordinal, amount, bonus);
     }
     public final String act_zTakes(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(50, object, ordinal, amount, bonus);
+        return actFmt(51, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(52, action, object, target);
+        return actFmt(53, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(53, action, amount, object, target);
+        return actFmt(54, action, amount, object, target);
     }
     public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(54, verb, amount, subject, target);
+        return actFmt(55, verb, amount, subject, target);
     }
     public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
-        return actFmt(55, verb, amount, subject, dest, target);
+        return actFmt(56, verb, amount, subject, dest, target);
     }
     public final String act_zToX(Object action, Object object, Object target) {
-        return actFmt(56, action, object, target);
+        return actFmt(57, action, object, target);
     }
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(57, verb, amount, subject, target);
+        return actFmt(58, verb, amount, subject, target);
     }
 
     public final String combat_controlPileDescriptionFull(String keyName) {

@@ -195,6 +195,21 @@ public class SummonPool extends EUIBase {
         }
     }
 
+    public void removeSummon(int amount) {
+        int curSize = summons.size();
+        for (int i = 0; i < amount; i++) {
+            if (summons.size() > 0) {
+                PCLCardAlly ally = summons.remove(summons.size() - 1);
+                if (ally.card != null) {
+                    PCLActions.bottom.withdrawAlly(ally);
+                }
+            }
+        }
+        for (PCLCardAlly summon : summons) {
+            repositionSummon(summon);
+        }
+    }
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         for (PCLCardAlly ally : summons) {

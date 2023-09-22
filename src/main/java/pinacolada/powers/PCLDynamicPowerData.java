@@ -139,7 +139,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public String getEffectTextForTip() {
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null ? move.getPowerTextForTooltip() : null, moves));
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null && !move.isBlank() ? move.getPowerTextForTooltip() : null, moves));
     }
 
     @Override

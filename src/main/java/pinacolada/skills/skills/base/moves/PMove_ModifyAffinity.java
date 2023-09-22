@@ -89,11 +89,11 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
                             TEXT.act_setOfFrom(PField.getGeneralAffinityString(), EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
                             TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard(), giveString);
         }
-        return getBasicGiveString();
+        return amount < 0 ? getBasicRemoveString() : getBasicGiveString();
     }
 
     @Override
-    public String wrapExtra(int input) {
+    public String wrapAmount(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

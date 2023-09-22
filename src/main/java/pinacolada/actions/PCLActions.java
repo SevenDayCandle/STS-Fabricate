@@ -20,7 +20,6 @@ import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
@@ -42,10 +41,7 @@ import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.AddPowerEffectBonus;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.powers.SpreadPower;
-import pinacolada.actions.special.ObtainRelicAction;
-import pinacolada.actions.special.PCLObtainPotionAction;
-import pinacolada.actions.special.ShowAndObtainCardAction;
-import pinacolada.actions.special.UsePotionAction;
+import pinacolada.actions.special.*;
 import pinacolada.actions.utility.*;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -58,9 +54,6 @@ import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.powers.common.DelayedDamagePower;
-import pinacolada.powers.common.DrawMinusPower;
-import pinacolada.powers.common.EnergizedPower;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
@@ -273,8 +266,12 @@ public final class PCLActions {
     }
 
     public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect) {
+        return dealCardDamage(card, card.hitCount, source, target, effect);
+    }
+
+    public ArrayList<DealDamage> dealCardDamage(PCLCard card, int times, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect) {
         ArrayList<DealDamage> actions = new ArrayList<>();
-        for (int i = 0; i < card.hitCount; i++) {
+        for (int i = 0; i < times; i++) {
             actions.add(add(new DealDamage(card, source, target, effect))
                     .canRedirect(!card.pclTarget.targetsSingle())
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
@@ -288,8 +285,12 @@ public final class PCLActions {
     }
 
     public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
+        return dealCardDamageToAll(card, card.hitCount, source, effect);
+    }
+
+    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, int times, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
         ArrayList<DealDamageToAll> actions = new ArrayList<>();
-        for (int i = 0; i < card.hitCount; i++) {
+        for (int i = 0; i < times; i++) {
             actions.add(add(new DealDamageToAll(card, source, card.multiDamageCreatures, card.multiDamage, card.damageTypeForTurn, effect, false))
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
         }
@@ -408,6 +409,10 @@ public final class PCLActions {
 
     public IncreaseMaxOrbAction gainOrbSlots(int slots) {
         return add(new IncreaseMaxOrbAction(slots));
+    }
+
+    public AddOrRemoveSummonSlotAction gainSummonSlots(int slots) {
+        return add(new AddOrRemoveSummonSlotAction(slots));
     }
 
     public GainTemporaryHP gainTemporaryHP(int amount) {

@@ -1,5 +1,6 @@
 package pinacolada.patches.dungeon;
 
+import basemod.BaseMod;
 import com.evacipated.cardcrawl.mod.stslib.cards.interfaces.SpawnModificationCard;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -7,6 +8,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.dungeons.Exordium;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.random.Random;
@@ -96,6 +98,48 @@ public class AbstractDungeonPatches {
             card = makeTempCard(type);
         }
         return card;
+    }
+
+    // Have to do these patches manually to avoid having the card pool get initialized twice on game start
+    @SpirePatch(
+            clz=AbstractDungeon.class,
+            method=SpirePatch.CONSTRUCTOR,
+            paramtypez={
+                    String.class,
+                    String.class,
+                    AbstractPlayer.class,
+                    ArrayList.class
+            }
+    )
+    public static class AbstractDungeonPatches_StartGame {
+
+        public static void Postfix(AbstractDungeon __instance,
+                                   String name, String levelId, AbstractPlayer p, ArrayList<String> newSpecialOneTimeEventList) {
+            if (levelId.equals(Exordium.ID) && AbstractDungeon.floorNum == 0) {
+                PGR.dungeon.initializeData();
+            }
+            PGR.dungeon.initializeCardPool();
+        }
+
+    }
+
+    @SpirePatch(
+            clz=AbstractDungeon.class,
+            method=SpirePatch.CONSTRUCTOR,
+            paramtypez={
+                    String.class,
+                    AbstractPlayer.class,
+                    SaveFile.class
+            }
+    )
+    public static class AbstractDungeonPatches_ContinueGame {
+
+        public static void Postfix(Object __obj_instance,
+                                   String name, AbstractPlayer p, SaveFile saveFile) {
+            PGR.dungeon.initializeData();
+            PGR.dungeon.initializeCardPool();
+        }
+
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getMonsterForRoomCreation")

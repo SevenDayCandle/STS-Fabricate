@@ -224,8 +224,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_HaveTakenDamage();
     }
 
-    public static PCond_HaveTakenDamage haveTakenDamage(int amount) {
-        return new PCond_HaveTakenDamage(amount);
+    public static PCond_HaveTakenDamage haveTakenDamage(PCLCardTarget target, int amount) {
+        return new PCond_HaveTakenDamage(target, amount);
     }
 
     public static PCond_HPPercent hpPercent(int amount) {
@@ -322,6 +322,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_OnReshuffle onReshuffle() {
         return new PCond_OnReshuffle();
+    }
+
+    public static PCond_OnRetain onRetain() {
+        return new PCond_OnRetain();
     }
 
     public static PCond_OnSummon onSummon() {

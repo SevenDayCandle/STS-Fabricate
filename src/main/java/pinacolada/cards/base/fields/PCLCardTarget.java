@@ -141,8 +141,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return null;
     }
 
-    public final AbstractCreature getTarget(PCLUseInfo info) {
-        List<? extends AbstractCreature> mons = getTargets(info);
+    public final AbstractCreature getTarget(PCLUseInfo info, int autoAmount) {
+        List<? extends AbstractCreature> mons = getTargets(info, autoAmount);
         return mons.size() > 0 ? mons.get(0) : null;
     }
 
@@ -191,8 +191,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return TargetFilter.None;
     }
 
-    public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info) {
-        return getTargets(info.source, info.target, info.tempTargets, 1);
+    public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info, int autoAmount) {
+        return getTargets(info.source, info.target, info.tempTargets, autoAmount);
     }
 
     public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {

@@ -117,6 +117,9 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
         String targetShortString = target.getShortString();
         if (targetShortString != null) {
+            if (scope > 1) {
+                targetShortString = targetShortString + "x" + scope;
+            }
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
         return EUIRM.strings.numNoun(amountString, attackString);
@@ -273,6 +276,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         if (pCard != null) {
             if (target.targetsMulti()) {
                 order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+            }
+            else if (target.targetsRandom() && scope > 1) {
+                for (AbstractCreature cr : getTargetList(info)) {
+                    order.dealCardDamage(pCard, info.source, cr, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                }
             }
             else {
                 order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));

@@ -71,7 +71,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     public String getAmountRawOrAllString() {
         return shouldActAsAll() ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any)
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : isForced() ? getAmountRawString() : getRangeToAmountRawString();
+                : getAmountRawString();
     }
 
     @Override
@@ -140,6 +140,11 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                         this.childEffect.use(info, order);
                     }
                 });
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return extra > 0 || isForced() ? String.valueOf(input) : zeroToRangeString(input);
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();

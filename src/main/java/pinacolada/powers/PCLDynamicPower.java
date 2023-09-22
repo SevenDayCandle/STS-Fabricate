@@ -63,7 +63,7 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
 
     public void setupMoves(PCLDynamicPowerData data) {
         for (PSkill<?> skill : data.moves) {
-            if (skill != null) {
+            if (skill != null && !skill.isBlank()) {
                 PSkill<?> effect = skill.makeCopy();
                 addUseMove(effect);
                 if (effect instanceof PTrigger) {

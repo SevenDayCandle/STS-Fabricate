@@ -81,6 +81,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected EUIDropdown<PCLCardTarget> targets;
     protected PCLCustomUpgradableEditor valueEditor;
     protected PCLCustomUpgradableEditor extraEditor;
+    protected PCLCustomUpgradableEditor scopeEditor;
     protected EUIImage backdrop;
     public EUIHitbox hb;
     public PCLCustomEffectPage editor;
@@ -156,6 +157,33 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         }
         skill.setExtra(val, upVal);
+    }
+
+    public void changeScopeForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getScopeSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+            }
+        }
+        skill.setScope(val, upVal);
     }
 
     public void close() {
@@ -340,6 +368,55 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return editor.getTitle();
     }
 
+    public int getScopeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getScopeSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.scope;
+    }
+
+    public int getScopeUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getScopeSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgradeScope();
+    }
+
+
     public String getSmartSearchableLabel(TooltipProvider item) {
         EUITooltip tip = item.getTooltip();
         return tip instanceof EUIKeywordTooltip && ((EUIKeywordTooltip) tip).icon != null ? tip.getTitleOrIconForced() + " " + tip.title : tip.title;
@@ -390,7 +467,16 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(node.getEffects());
         effects.sortByLabel();
         effects.setActive(effects.size() > 1);
-        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.2f : 0, OFFSET_AMOUNT)
+        scopeEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.2f : 0, OFFSET_AMOUNT)
+                , PGR.core.strings.cedit_scope, (val, upVal) -> {
+                    if (node.skill != null) {
+                        changeScopeForSkill(node.skill, val, upVal);
+                        editor.updateRootEffect();
+                    }
+                })
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_scope, PGR.core.strings.cetut_scope);
+        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.75f : MENU_WIDTH * 0.55f, OFFSET_AMOUNT)
                 , EUIRM.strings.ui_amount, (val, upVal) -> {
             if (node.skill != null) {
                 changeAmountForSkill(node.skill, val, upVal);
@@ -399,7 +485,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(EUIRM.strings.ui_amount, cetutString);
-        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.7f : MENU_WIDTH * 0.5f, OFFSET_AMOUNT)
+        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 1.3f : MENU_WIDTH * 1.1f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
                 changeExtraForSkill(node.skill, val, upVal);
@@ -499,11 +585,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLimits(eMin, eMax)
                 .setValue(getExtraForSkill(node.skill), getExtraUpgradeForSkill(node.skill), false)
                 .setActive(eMin != eMax);
+        scopeEditor
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setValue(getScopeForSkill(node.skill), getScopeUpgradeForSkill(node.skill), false);
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
             activeElements.clear();
             valueEditor.setHeaderText(node.skill.getHeaderTextForAmount());
             extraEditor.setHeaderText(node.skill.getHeaderTextForExtra());
+            scopeEditor.setHeaderText(node.skill.getHeaderTextForScope());
             targets
                     .setItems(PSkill.getEligibleTargets(node.skill))
                     .setActive(targets.getAllItems().size() > 1);
@@ -532,6 +622,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         else if (node.skill == null) {
             valueEditor.setHeaderText(PGR.core.strings.cedit_value);
             extraEditor.setHeaderText(PGR.core.strings.cedit_extraValue);
+            scopeEditor.setHeaderText(PGR.core.strings.cedit_scope);
         }
     }
 
@@ -802,6 +893,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.targets.tryRender(sb);
         this.valueEditor.tryRender(sb);
         this.extraEditor.tryRender(sb);
+        this.scopeEditor.tryRender(sb);
         for (EUIHoverable element : activeElements) {
             element.tryRender(sb);
         }
@@ -815,11 +907,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.targets.tryUpdate();
         this.valueEditor.tryUpdate();
         this.extraEditor.tryUpdate();
+        this.scopeEditor.tryUpdate();
         for (EUIHoverable element : activeElements) {
             element.tryUpdate();
         }
         if (EUIInputManager.leftClick.isJustPressed() && !wasBusy &&
-                !backdrop.hb.hovered && !effects.areAnyItemsHovered() && !targets.areAnyItemsHovered() && !valueEditor.hb.hovered && !extraEditor.hb.hovered && !EUIUtils.any(activeElements, e -> e.hb.hovered)) {
+                !backdrop.hb.hovered && !effects.areAnyItemsHovered() && !targets.areAnyItemsHovered() && !valueEditor.hb.hovered && !extraEditor.hb.hovered && !scopeEditor.hb.hovered && !EUIUtils.any(activeElements, e -> e.hb.hovered)) {
             close();
         }
     }

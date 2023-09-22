@@ -28,6 +28,10 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
         super(DATA, PCLCardTarget.Self, amount);
     }
 
+    public PCond_HaveTakenDamage(PCLCardTarget target, int amount) {
+        super(DATA, target, amount);
+    }
+
     public PCond_HaveTakenDamage(PSkillSaveData content) {
         super(DATA, content);
     }

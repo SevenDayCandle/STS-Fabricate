@@ -56,7 +56,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     public String getAmountRawOrAllString() {
         return shouldActAsAll() ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
+                : getAmountRawString();
     }
 
     @Override
@@ -103,6 +103,11 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         fields.setForced(true);
         useParent(true);
         return this;
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : zeroToRangeString(input);
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();

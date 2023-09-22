@@ -13,8 +13,10 @@ public class PSkillSaveData implements Serializable {
     public String special; // Used for multibase skills
     public int amount;
     public int extra;
+    public int scope;
     public int[] upgrade;
     public int[] upgradeExtra;
+    public int[] upgradeScope;
     public boolean useParent;
 
     public PSkillSaveData(PSkill<?> effect) {
@@ -22,8 +24,10 @@ public class PSkillSaveData implements Serializable {
         this.target = effect.target.name();
         this.amount = effect.amount;
         this.extra = effect.extra;
+        this.scope = effect.scope;
         this.upgrade = effect.upgrade;
         this.upgradeExtra = effect.upgradeExtra;
+        this.upgradeScope = effect.upgradeScope;
         this.useParent = effect.useParent;
         this.effectData = EUIUtils.serialize(effect.fields);
 

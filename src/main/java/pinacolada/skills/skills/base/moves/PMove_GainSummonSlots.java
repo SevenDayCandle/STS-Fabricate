@@ -10,31 +10,32 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_GainOrbSlots extends PMove_Gain {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_GainOrbSlots.class, PField_Empty.class)
+public class PMove_GainSummonSlots extends PMove_Gain {
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainSummonSlots.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .pclOnly()
             .noTarget();
 
-    public PMove_GainOrbSlots() {
+    public PMove_GainSummonSlots() {
         this(1);
     }
 
-    public PMove_GainOrbSlots(int amount) {
+    public PMove_GainSummonSlots(int amount) {
         super(DATA, amount);
     }
 
-    public PMove_GainOrbSlots(PSkillSaveData content) {
+    public PMove_GainSummonSlots(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
     public String gainText() {
-        return PGR.core.tooltips.orbSlot.title;
+        return PGR.core.tooltips.summonSlot.title;
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.orbSlot.title);
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.summonSlot.title);
     }
 
     @Override

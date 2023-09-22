@@ -507,6 +507,10 @@
 		"PRESENT": "Summons",
 		"PROGRESSIVE": "Summoning"
 	},
+	"Summon Slot":	{
+		"DESCRIPTION": "#ySummons are played by dragging them onto #ySummon #ySlots.",
+		"NAME": "Summon Slot"
+	},
 	"Supercharged":	{
 		"DESCRIPTION": "Gain additional [E] at the start of each turn.",
 		"NAME": "Supercharged"

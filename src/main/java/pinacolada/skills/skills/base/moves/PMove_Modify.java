@@ -64,15 +64,22 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     public String getBasicGiveString(String giveString) {
-        if (amount >= 0) {
-            return useParent ? TEXT.act_giveTarget(getInheritedThemString(), giveString) :
-                    fields.hasGroups() ?
-                            TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), giveString) :
-                            TEXT.act_giveTarget(TEXT.subjects_this, giveString);
-        }
+        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString()));
+        return useParent ? TEXT.act_giveTarget(getInheritedThemString(), giveString) :
+                fields.hasGroups() ?
+                        TEXT.act_giveFrom(destString, fields.getGroupString(), giveString) :
+                        TEXT.act_giveTarget(TEXT.subjects_thisCard(), giveString);
+    }
+
+    public String getBasicRemoveString() {
+        return getBasicGiveString();
+    }
+
+    public String getBasicRemoveString(String giveString) {
+        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString()));
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedThemString()) :
                 fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFromPlace(giveString, destString, fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard());
     }
 

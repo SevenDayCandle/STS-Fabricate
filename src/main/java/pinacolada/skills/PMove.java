@@ -291,6 +291,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return apply(PCLCardTarget.None, amount, powers);
     }
 
+    public static PMove_GainSummonSlots gainSummonSlots(int amount) {
+        return new PMove_GainSummonSlots(amount);
+    }
+
     public static PMove_GainTempHP gainTempHP(int amount) {
         return new PMove_GainTempHP(amount);
     }
