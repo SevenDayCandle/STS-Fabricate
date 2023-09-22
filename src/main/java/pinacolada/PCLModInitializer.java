@@ -11,7 +11,7 @@ import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
 @SpireInitializer //
-public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber,
+public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber, OnStartBattleSubscriber,
                                           PreStartGameSubscriber, OnPlayerTurnStartPostDrawSubscriber, OnPlayerTurnStartSubscriber,
                                           EditCardsSubscriber, EditCharactersSubscriber, EditKeywordsSubscriber, EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber, AddAudioSubscriber {
     private static final PCLModInitializer instance = new PCLModInitializer();
@@ -49,6 +49,11 @@ public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscri
     @Override
     public void receiveEditStrings() {
         PGR.receiveEditStrings();
+    }
+
+    @Override
+    public void receiveOnBattleStart(AbstractRoom abstractRoom) {
+        CombatManager.onBattleStartPostRefresh();
     }
 
     @Override

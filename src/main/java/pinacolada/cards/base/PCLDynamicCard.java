@@ -387,8 +387,12 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     @Override
     public PCLDynamicCard makeStatEquivalentCopy() {
-        PCLDynamicCard copy = makeCopy();
+        PCLDynamicCard copy = new PCLDynamicCard(builder);
         makeCopyProperties(copy);
+        if (forms != null && !forms.isEmpty()) {
+            copy.setForms(forms);
+            copy.onFormChange(copy.getForm(), copy.timesUpgraded);
+        }
         return copy;
     }
 

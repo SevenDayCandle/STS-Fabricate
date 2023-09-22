@@ -584,6 +584,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return getColoredXString();
             case EXTRA_CHAR:
                 return getColoredExtraString();
+            case SCOPE_CHAR:
+                return getColoredScopeString();
             default:
                 return new ColoredString("?", Settings.RED_TEXT_COLOR);
         }
@@ -599,6 +601,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
 
         return new ColoredString(displayAmount, (displayUpgrades && getUpgradeExtra() != 0) || extra > baseExtra ? Settings.GREEN_TEXT_COLOR : extra < baseExtra ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getColoredScopeString() {
+        return getColoredExtraString(baseScope, scope);
+    }
+
+    public ColoredString getColoredScopeString(Object displayBase, Object displayAmount) {
+        if (hasParentType(PMod.class)) {
+            return new ColoredString(displayBase, (displayUpgrades && getUpgradeScope() != 0) ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
+        }
+
+        return new ColoredString(displayAmount, (displayUpgrades && getUpgradeScope() != 0) || scope > baseScope ? Settings.GREEN_TEXT_COLOR : scope < baseScope ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public ColoredString getColoredValueString() {
@@ -915,7 +929,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 }
             }
 
-            return rootScope + sourceCard.timesUpgraded * getUpgradeExtra();
+            return rootScope + sourceCard.timesUpgraded * getUpgradeScope();
         }
         if (source != null && scopeSource == PCLCardValueSource.XValue) {
             return source.getXValue();
@@ -1552,6 +1566,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         this.baseAmount = getAmountBaseFromCard();
         this.extra = getExtraFromCard();
         this.baseExtra = getExtraBaseFromCard();
+        this.scope = getScopeFromCard();
+        this.baseScope = getScopeBaseFromCard();
         if (this.childEffect != null) {
             childEffect.setAmountFromCard();
         }

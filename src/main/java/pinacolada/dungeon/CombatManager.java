@@ -521,13 +521,19 @@ public class CombatManager extends EUIBase {
         refresh();
 
         subscriberDo(OnBattleStartSubscriber.class, OnBattleStartSubscriber::onBattleStart);
+    }
 
-        final ArrayList<AbstractCard> cards = new ArrayList<>(AbstractDungeon.player.drawPile.group);
-        cards.addAll(AbstractDungeon.player.hand.group);
-        cards.addAll(AbstractDungeon.player.discardPile.group);
-        cards.addAll(AbstractDungeon.player.exhaustPile.group);
-
-        for (AbstractCard c : cards) {
+    public static void onBattleStartPostRefresh() {
+        for (AbstractCard c : player.drawPile.group) {
+            onCardCreated(c, true);
+        }
+        for (AbstractCard c : player.hand.group) {
+            onCardCreated(c, true);
+        }
+        for (AbstractCard c : player.discardPile.group) {
+            onCardCreated(c, true);
+        }
+        for (AbstractCard c : player.exhaustPile.group) {
             onCardCreated(c, true);
         }
     }
