@@ -91,7 +91,6 @@ public class PGR {
     public static PCLAffinityPoolModule affinityFilters;
     public static PCLAugmentKeywordFilters augmentFilters;
     public static PCLAugmentLibraryScreen augmentLibrary;
-    public static PCLAugmentSortHeader augmentHeader;
     public static PCLAugmentCollectionScreen augmentScreen;
     public static PCLCardRewardScreen rewardScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
@@ -103,7 +102,6 @@ public class PGR {
     public static PCLColorlessGroupLibraryModule colorlessGroups;
     public static PCLLoadoutScreen loadoutEditor;
     public static PCLPowerKeywordFilters powerFilters;
-    public static PCLPowerSortHeader powerHeader;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
     public static PCLSingleRelicPopup relicPopup;
@@ -275,10 +273,8 @@ public class PGR {
         PGR.augmentScreen = new PCLAugmentCollectionScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.augmentFilters = new PCLAugmentKeywordFilters();
-        PGR.augmentHeader = new PCLAugmentSortHeader(null);
         PGR.augmentLibrary = new PCLAugmentLibraryScreen();
         PGR.powerFilters = new PCLPowerKeywordFilters();
-        PGR.powerHeader = new PCLPowerSortHeader(null);
         PGR.blackScreen = new EUIImage(ImageMaster.WHITE_SQUARE_IMG, new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
                 .setColor(0, 0, 0, 0.8f);

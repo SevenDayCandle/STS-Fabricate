@@ -87,9 +87,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float xPos = screenW(0.82f);
 
-        cardGrid = new EUICardGrid(0.41f, false)
-                .setOnCardClick(this::onCardClicked)
-                .setOnCardRightClick(this::onCardRightClicked)
+        cardGrid = (EUICardGrid) new EUICardGrid(0.3f, false)
+                .setOnClick(this::onCardClicked)
+                .setOnRightClick(this::onCardRightClicked)
                 .showScrollbar(false);
 
         startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
@@ -452,15 +452,15 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         EUI.actingColor = data.resources.cardColor;
 
         createCards(data);
-        cardGrid.addCards(getAllCards());
+        cardGrid.add(getAllCards());
         updateStartingDeckText();
 
         EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
 
         EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
-                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
+                new EUITourTooltip(cardGrid.group.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
+                new EUITourTooltip(cardGrid.group.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
                 new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
                         .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),

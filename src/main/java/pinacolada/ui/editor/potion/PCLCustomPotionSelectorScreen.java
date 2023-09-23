@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
@@ -31,7 +30,6 @@ import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
 import pinacolada.potions.PCLPotionData;
-import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 
 import java.awt.*;
@@ -145,7 +143,6 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomPotionSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -157,7 +154,6 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomPotionSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -184,10 +180,9 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomPotionEditPotionScreen(cardSlot)
                     .setOnSave(() -> {
                         PCLCustomPotionSlot.editSlot(cardSlot, oldID);
+                        EUI.potionFilters.removeFromOriginal(p -> p.potion == card, false);
                         putInList(cardSlot);
-                        grid.remove(card);
                         currentSlots.remove(card);
-                        refreshGrid();
                     });
         }
     }
@@ -223,7 +218,6 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
                             .setOnSave(() -> {
                                 PCLCustomPotionSlot.addSlot(slot);
                                 putInList(slot);
-                                refreshGrid();
                             });
                 }
             });
@@ -260,21 +254,16 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             currentSlots.put(potion, slot);
             grid.add(potion);
         }
-        refreshGrid();
+        EUI.potionFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, currentColor);
     }
 
     private void putInList(PCLCustomPotionSlot slot) {
         AbstractPotion newPotion = slot.make();
         currentSlots.put(newPotion, slot);
-        grid.group.group = EUI.potionHeader.originalGroup;
-        grid.add(newPotion);
-    }
-
-    public void refreshGrid() {
-        EUI.potionFilters.initializeForCustomHeader(grid.group, __ -> {
-            grid.moveToTop();
-            grid.forceUpdatePositions();
-        }, currentColor, false, true);
+        EUI.potionFilters.addToOriginal(new PotionInfo(newPotion), false);
     }
 
     public void remove(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
@@ -282,11 +271,9 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomPotionSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            grid.group.group = EUI.potionHeader.originalGroup;
-                            grid.remove(card);
+                            EUI.potionFilters.removeFromOriginal(p -> p.potion == card, false);
                             currentSlots.remove(card);
                             PCLCustomPotionSlot.deleteSlot(v);
-                            refreshGrid();
                         }
                     });
         }
@@ -308,6 +295,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
+            EUI.sortHeader.render(sb);
             if (!EUI.potionFilters.isActive) {
                 EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
@@ -333,6 +321,7 @@ public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
             if (shouldDoStandardUpdate) {
                 EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
+                EUI.sortHeader.update();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
                 grid.tryUpdate();

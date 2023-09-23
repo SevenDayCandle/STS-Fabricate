@@ -7,25 +7,19 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
-import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.CustomFilterModule;
-import extendedui.ui.cardFilter.FilterKeywordButton;
-import extendedui.ui.cardFilter.GenericFilters;
-import extendedui.ui.cardFilter.GenericFiltersObject;
+import extendedui.ui.cardFilter.*;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
-import extendedui.utilities.ItemGroup;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.augments.EUIExporterPCLAugmentRow;
-import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.augments.PCLAugmentCategorySub;
+import pinacolada.powers.EUIExporterPCLPowerRow;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
@@ -91,6 +85,21 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
 
     public static String getNameForSort(PCLPowerRenderable c) {
         return c.power.getName();
+    }
+
+    public static int rankByEndTurnBehavior(PCLPowerRenderable a, PCLPowerRenderable b) {
+        return (a == null ? -1 : b == null ? 1 :(a.power.endTurnBehavior.ordinal() - b.power.endTurnBehavior.ordinal()));
+    }
+    public static int rankByName(PCLPowerRenderable a, PCLPowerRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.power.getName(), b.power.getName()));
+    }
+
+    public static int rankByPriority(PCLPowerRenderable a, PCLPowerRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : (a.power.priority - b.power.priority));
+    }
+
+    public static int rankByType(PCLPowerRenderable a, PCLPowerRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : (a.power.type.ordinal() - b.power.type.ordinal()));
     }
 
     @Override
@@ -164,25 +173,24 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
         return globalFilters;
     }
 
-    public PCLPowerKeywordFilters initializeForCustomHeader(ItemGroup<PCLPowerRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
-        PGR.powerHeader.setGroup(group).snapToGroup(snapToGroup);
-        initialize(button -> {
-            PGR.augmentHeader.updateForFilters();
-            onClick.invoke(button);
-        }, PGR.powerHeader.originalGroup, color, isAccessedFromCardPool);
-        PGR.augmentHeader.updateForFilters();
-        EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
-        EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
-        return this;
+    @Override
+    public float getFirstY() {
+        return group.group.get(0).currentY;
+    }
+
+    @Override
+    public void defaultSort() {
+        this.group.sort(PCLPowerKeywordFilters::rankByName);
+        this.group.sort(PCLPowerKeywordFilters::rankByType);
     }
 
     @Override
     protected void initializeImpl(ActionT1<FilterKeywordButton> onClick, ArrayList<PCLPowerRenderable> cards, AbstractCard.CardColor color, boolean isAccessedFromCardPool) {
         HashSet<ModInfo> availableMods = new HashSet<>();
         HashSet<Integer> availablePriorities = new HashSet<>();
-        if (referenceItems != null) {
-            currentTotal = getReferenceCount();
-            for (PCLPowerRenderable augment : referenceItems) {
+        if (originalGroup != null) {
+            currentTotal = originalGroup.size();
+            for (PCLPowerRenderable augment : originalGroup) {
                 for (EUIKeywordTooltip tooltip : getAllTooltips(augment)) {
                     if (tooltip.canFilter) {
                         currentFilterCounts.merge(tooltip, 1, Integer::sum);
@@ -192,7 +200,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
                 availableMods.add(EUIGameUtils.getModInfo(augment));
                 availablePriorities.add(augment.power.priority);
             }
-            doForFilters(m -> m.initializeSelection(referenceItems));
+            doForFilters(m -> m.initializeSelection(originalGroup));
         }
 
         ArrayList<ModInfo> modInfos = new ArrayList<>(availableMods);
@@ -224,6 +232,20 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
         nameInput.tryRender(sb);
         descriptionInput.tryRender(sb);
         doForFilters(m -> m.render(sb));
+    }
+
+    @Override
+    protected void setupSortHeader(FilterSortHeader header, float startX) {
+        
+        startX = makeToggle(header, PCLPowerKeywordFilters::rankByType, CardLibSortHeader.TEXT[1], startX);
+        startX = makeToggle(header, PCLPowerKeywordFilters::rankByName, CardLibSortHeader.TEXT[2], startX);
+        startX = makeToggle(header, PCLPowerKeywordFilters::rankByEndTurnBehavior, PGR.core.strings.power_turnBehavior, startX);
+        startX = makeToggle(header, PCLPowerKeywordFilters::rankByPriority, PGR.core.strings.power_priority, startX);
+    }
+
+    @Override
+    public EUIExporter.Exportable<PCLPowerRenderable> getExportable() {
+        return EUIExporterPCLPowerRow.powerExportable;
     }
 
     @Override

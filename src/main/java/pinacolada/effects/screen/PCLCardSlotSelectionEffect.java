@@ -7,19 +7,17 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import extendedui.EUI;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.ui.characterSelection.PCLCardSlotEditor;
-
-import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlotSelectionEffect> {
@@ -45,18 +43,18 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             return;
         }
 
-        this.grid = new EUICardGrid()
+        this.grid = (EUICardGrid) new EUICardGrid()
                 .addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
                 .setEnlargeOnHover(false)
-                .setOnCardClick(this::onCardClicked)
-                .setOnCardRender(this::onCardRender);
+                .setOnClick(this::onCardClicked)
+                .setOnRender(this::onCardRender);
 
         for (String item : slot.getAvailableCards()) {
             AbstractCard card = CardLibrary.getCard(item);
             if (card != null) {
                 card.current_x = InputHelper.mX;
                 card.current_y = InputHelper.mY;
-                grid.addCard(card);
+                grid.add(card);
                 if (card instanceof PCLCard) {
                     ((PCLCard) card).affinities.updateSortedList();
                 }
@@ -64,8 +62,13 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
         }
 
         if (slot.slot != null) {
-            this.selectedCard = grid.cards.findCardById(slot.slot.selected);
+            this.selectedCard = EUIUtils.find(grid.group, s -> s.cardID.equals(slot.slot.selected));
         }
+
+        EUI.cardFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, EUI.actingColor);
     }
 
     public AbstractCard getSelectedCard() {
@@ -90,14 +93,23 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
     @Override
     public void render(SpriteBatch sb) {
         grid.tryRender(sb);
+        EUI.sortHeader.render(sb);
+        if (!EUI.cardFilters.isActive) {
+            EUI.openFiltersButton.tryRender(sb);
+        }
     }
 
     @Override
     protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            grid.tryUpdate();
+            EUI.sortHeader.update();
+            EUI.openFiltersButton.update();
 
-        if (InputHelper.justClickedLeft && !grid.isHovered()) {
-            complete();
+            if (InputHelper.justClickedLeft && !grid.isHovered() && !EUI.openFiltersButton.hb.hovered) {
+                complete();
+            }
         }
     }
 }

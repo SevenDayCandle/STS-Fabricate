@@ -1174,7 +1174,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(perspective, addPeriod) : PCLCoreStrings.period(addPeriod));
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     public final String getText() {

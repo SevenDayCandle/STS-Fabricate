@@ -147,6 +147,24 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (childEffect != null) {
+            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
+            });
+        }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if (shouldPay) {
+            use(info, order);
+        }
+        else if (childEffect != null) {
+            childEffect.use(info, order);
+        }
+    }
+
+    @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return order.add(new CooldownProgressAction(this, info.source, info.target, 1))
                 .addCallback(result -> {

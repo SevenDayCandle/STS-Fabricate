@@ -29,7 +29,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.CardFlashVfx;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import pinacolada.actions.affinity.TryChooseChoice;
+import pinacolada.actions.cards.TryChooseChoice;
 import pinacolada.actions.cards.*;
 import pinacolada.actions.creature.*;
 import pinacolada.actions.orbs.ChannelOrb;

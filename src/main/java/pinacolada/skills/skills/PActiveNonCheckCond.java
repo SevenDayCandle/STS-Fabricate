@@ -1,6 +1,7 @@
 package pinacolada.skills.skills;
 
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PCond;
@@ -49,5 +50,23 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COLON_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : "");
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (childEffect != null) {
+            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
+            });
+        }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if (shouldPay) {
+            use(info, order);
+        }
+        else if (childEffect != null) {
+            childEffect.use(info, order);
+        }
     }
 }

@@ -23,7 +23,6 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
@@ -146,7 +145,6 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomRelicSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -158,7 +156,6 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomRelicSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -179,16 +176,15 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         }
     }
 
-    public void edit(AbstractRelic card, PCLCustomRelicSlot cardSlot) {
+    public void edit(AbstractRelic relic, PCLCustomRelicSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
             String oldID = cardSlot.ID;
             currentDialog = new PCLCustomRelicEditRelicScreen(cardSlot)
                     .setOnSave(() -> {
                         PCLCustomRelicSlot.editSlot(cardSlot, oldID);
+                        EUI.relicFilters.removeFromOriginal(r -> r.relic == relic, false);
                         putInList(cardSlot);
-                        grid.remove(card);
-                        currentSlots.remove(card);
-                        refreshGrid();
+                        currentSlots.remove(relic);
                     });
         }
     }
@@ -226,7 +222,6 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                             .setOnSave(() -> {
                                 PCLCustomRelicSlot.addSlot(slot);
                                 putInList(slot);
-                                refreshGrid();
                             });
                 }
             });
@@ -265,34 +260,27 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             currentSlots.put(relic, slot);
             grid.add(relic);
         }
-        refreshGrid();
+        EUI.relicFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, currentColor);
     }
 
     private void putInList(PCLCustomRelicSlot slot) {
         AbstractRelic newRelic = slot.make();
         newRelic.isSeen = true;
         currentSlots.put(newRelic, slot);
-        grid.group.group = EUI.relicHeader.originalGroup;
-        grid.add(newRelic);
+        EUI.relicFilters.addToOriginal(new RelicInfo(newRelic), false);
     }
 
-    public void refreshGrid() {
-        EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
-            grid.moveToTop();
-            grid.forceUpdatePositions();
-        }, currentColor, false, true);
-    }
-
-    public void remove(AbstractRelic card, PCLCustomRelicSlot cardSlot) {
+    public void remove(AbstractRelic relic, PCLCustomRelicSlot cardSlot) {
         if (currentDialog == null && cardSlot != null) {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomRelicSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            grid.group.group = EUI.relicHeader.originalGroup;
-                            grid.remove(card);
-                            currentSlots.remove(card);
+                            EUI.relicFilters.removeFromOriginal(r -> r.relic == relic, false);
+                            currentSlots.remove(relic);
                             PCLCustomRelicSlot.deleteSlot(v);
-                            refreshGrid();
                         }
                     });
         }
@@ -314,6 +302,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
+            EUI.sortHeader.render(sb);
             if (!EUI.relicFilters.isActive) {
                 EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
@@ -339,6 +328,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             if (shouldDoStandardUpdate) {
                 EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
+                EUI.sortHeader.update();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
                 grid.tryUpdate();

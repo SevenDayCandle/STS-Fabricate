@@ -39,13 +39,13 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
         grid.clear();
         grid.add(EUIUtils.map(PCLAugmentData.getAvailable(), PCLAugmentRenderable::new));
 
-        PGR.augmentFilters.initializeForCustomHeader(grid.group, __ -> {
+        PGR.augmentFilters.initializeForSort(grid.group, __ -> {
             for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
-                module.open(PGR.augmentHeader.group.group, AbstractCard.CardColor.COLORLESS, null);
+                module.open(PGR.augmentFilters.group.group, AbstractCard.CardColor.COLORLESS, null);
             }
             grid.moveToTop();
             grid.forceUpdatePositions();
-        }, AbstractCard.CardColor.COLORLESS, false, true);
+        }, AbstractCard.CardColor.COLORLESS);
 
         for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
             module.open(grid.group.group, AbstractCard.CardColor.COLORLESS, null);
@@ -56,7 +56,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     public void renderImpl(SpriteBatch sb) {
         grid.tryRender(sb);
         cancelButton.render(sb);
-        PGR.augmentHeader.renderImpl(sb);
+        EUI.sortHeader.renderImpl(sb);
         if (!PGR.augmentFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
             EUIExporter.exportButton.tryRender(sb);
@@ -78,7 +78,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
                 this.cancelButton.hide();
                 close();
             }
-            PGR.augmentHeader.updateImpl();
+            EUI.sortHeader.updateImpl();
             EUI.openFiltersButton.tryUpdate();
             EUIExporter.exportButton.tryUpdate();
             for (CustomPoolModule<AbstractBlight> module : EUI.globalCustomBlightLibraryModules) {

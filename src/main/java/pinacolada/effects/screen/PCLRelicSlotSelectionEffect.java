@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIRelicGrid;
@@ -66,6 +67,11 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
                 grid.add(new RelicInfo(relic));
             }
         }
+
+        EUI.relicFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, EUI.actingColor);
     }
     @Override
     protected void firstUpdate(float deltaTime) {
@@ -114,14 +120,22 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
     @Override
     public void render(SpriteBatch sb) {
         grid.tryRender(sb);
+        if (!EUI.relicFilters.isActive) {
+            EUI.openFiltersButton.tryRender(sb);
+        }
     }
 
     @Override
     protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            grid.tryUpdate();
+            EUI.sortHeader.update();
+            EUI.openFiltersButton.update();
 
-        if (InputHelper.justClickedLeft && !grid.isHovered()) {
-            complete();
+            if (InputHelper.justClickedLeft && !grid.isHovered() && !EUI.openFiltersButton.hb.hovered) {
+                complete();
+            }
         }
     }
 }

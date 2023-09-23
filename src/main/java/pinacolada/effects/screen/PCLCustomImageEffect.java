@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
@@ -248,7 +247,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private void selectExistingCards() {
         CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
         group.sortAlphabetically(true);
-        curEffect = new PCLGenericSelectCardEffect(group)
+        curEffect = new PCLGenericSelectCardEffect(group.group)
                 .addCallback(card -> {
                             if (card != null) {
                                 // TODO handle EYBCardBase with PCLCard check

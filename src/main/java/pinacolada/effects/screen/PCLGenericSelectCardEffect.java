@@ -3,10 +3,10 @@ package pinacolada.effects.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.ui.controls.EUICardGrid;
 import pinacolada.effects.PCLEffectWithCallback;
@@ -16,19 +16,13 @@ import java.util.List;
 
 public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard> {
     private final Color screenColor;
-    private CardGroup cards;
     private EUICardGrid grid;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
     public PCLGenericSelectCardEffect(List<? extends AbstractCard> cards) {
-        this(GameUtilities.createCardGroup(cards));
-    }
-
-    public PCLGenericSelectCardEffect(CardGroup cards) {
         super(0.7f);
 
-        this.cards = cards;
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
@@ -38,7 +32,7 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         }
 
         if (cards.isEmpty()) {
-            this.grid = new EUICardGrid().canDragScreen(false);
+            this.grid = (EUICardGrid) new EUICardGrid().canDragScreen(false);
             complete();
             return;
         }
@@ -48,10 +42,15 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUICardGrid()
+        this.grid = (EUICardGrid) new EUICardGrid()
+                .setItems(cards)
                 .canDragScreen(false)
-                .addCards(cards.group)
-                .setOnCardClick(this::complete);
+                .setOnClick(this::complete);
+
+        EUI.cardFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, EUI.actingColor);
     }
 
     @Override
@@ -64,11 +63,10 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         }
     }
 
-    public void refresh(CardGroup cards) {
-        this.cards = cards;
-        this.grid = new EUICardGrid()
-                .canDragScreen(false)
-                .addCards(cards.group);
+    public void refresh(List<? extends AbstractCard> cards) {
+        this.grid = (EUICardGrid) new EUICardGrid()
+                .setItems(cards)
+                .canDragScreen(false);
     }
 
     @Override
@@ -76,27 +74,28 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
-    }
-
-    public PCLGenericSelectCardEffect setStartingPosition(float x, float y) {
-        for (AbstractCard c : cards.group) {
-            c.current_x = x - (c.hb.width * 0.5f);
-            c.current_y = y - (c.hb.height * 0.5f);
+        EUI.sortHeader.render(sb);
+        if (!EUI.cardFilters.isActive) {
+            EUI.openFiltersButton.tryRender(sb);
         }
-
-        return this;
     }
 
     @Override
     protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            grid.tryUpdate();
+            EUI.sortHeader.update();
+            EUI.openFiltersButton.update();
 
-        if (grid.isHovered() || grid.scrollBar.isDragging) {
-            return;
+            if (grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered || grid.scrollBar.isDragging) {
+                return;
+            }
+
+            if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+                complete();
+            }
         }
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
-            complete();
-        }
     }
 }

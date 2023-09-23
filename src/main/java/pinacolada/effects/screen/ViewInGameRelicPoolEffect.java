@@ -123,10 +123,10 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
         refreshCountText();
 
-        EUI.relicFilters.initializeForCustomHeader(grid.group, __ -> {
+        EUI.relicFilters.initializeForSort(grid.group, __ -> {
             grid.moveToTop();
             grid.forceUpdatePositions();
-        }, AbstractCard.CardColor.COLORLESS, false, false);
+        }, AbstractCard.CardColor.COLORLESS);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         deselectAllButton.tryRender(sb);
         selectRandomButton.tryRender(sb);
         selectedCount.tryRender(sb);
-        EUI.relicHeader.render(sb);
+        EUI.sortHeader.render(sb);
         if (!EUI.relicFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
         }
@@ -248,7 +248,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
-            EUI.relicHeader.update();
+            EUI.sortHeader.update();
             grid.tryUpdate();
             upgradeToggle.updateImpl();
             selectAllButton.tryUpdate();

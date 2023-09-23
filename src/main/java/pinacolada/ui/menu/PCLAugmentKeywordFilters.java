@@ -5,8 +5,7 @@ import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.EUI;
+import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -14,17 +13,14 @@ import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.CustomFilterModule;
 import extendedui.ui.cardFilter.FilterKeywordButton;
+import extendedui.ui.cardFilter.FilterSortHeader;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.cardFilter.GenericFiltersObject;
-import extendedui.ui.cardFilter.filters.CardKeywordFilters;
-import extendedui.ui.cardFilter.filters.RelicKeywordFilters;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
-import extendedui.utilities.ItemGroup;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.augments.EUIExporterPCLAugmentRow;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.augments.PCLAugmentRenderable;
@@ -92,6 +88,21 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         return c.augment.getName();
     }
 
+    public static int rankByCategory(PCLAugmentRenderable a, PCLAugmentRenderable b) {
+        return (a == null ? -1 : b == null ? 1 :
+                (
+                        a.augment.data.category == b.augment.data.category ? StringUtils.compare(a.augment.data.categorySub.suffix, b.augment.data.categorySub.suffix) :
+                        a.augment.data.category.ordinal() - b.augment.data.category.ordinal()
+                ));
+    }
+    public static int rankByName(PCLAugmentRenderable a, PCLAugmentRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.augment.getName(), b.augment.getName()));
+    }
+
+    public static int rankByTier(PCLAugmentRenderable a, PCLAugmentRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : (a.augment.data.tier - b.augment.data.tier));
+    }
+
     @Override
     public void clear(boolean shouldInvoke, boolean shouldClearColors) {
         super.clear(shouldInvoke, shouldClearColors);
@@ -101,6 +112,13 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         tierDropdown.setSelectionIndices((int[]) null, false);
         nameInput.setLabel("");
         descriptionInput.setLabel("");
+    }
+
+    @Override
+    public void defaultSort() {
+        this.group.sort(PCLAugmentKeywordFilters::rankByName);
+        this.group.sort(PCLAugmentKeywordFilters::rankByTier);
+        this.group.sort(PCLAugmentKeywordFilters::rankByCategory);
     }
 
     public boolean evaluate(PCLAugmentRenderable c) {
@@ -163,25 +181,18 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         return globalFilters;
     }
 
-    public PCLAugmentKeywordFilters initializeForCustomHeader(ItemGroup<PCLAugmentRenderable> group, ActionT1<FilterKeywordButton> onClick, AbstractCard.CardColor color, boolean isAccessedFromCardPool, boolean snapToGroup) {
-        PGR.augmentHeader.setGroup(group).snapToGroup(snapToGroup);
-        initialize(button -> {
-            PGR.augmentHeader.updateForFilters();
-            onClick.invoke(button);
-        }, PGR.augmentHeader.originalGroup, color, isAccessedFromCardPool);
-        PGR.augmentHeader.updateForFilters();
-        EUIExporter.exportButton.setOnClick(() -> EUIExporterPCLAugmentRow.augmentExportable.openAndPosition(PGR.augmentHeader.group.group));
-        EUI.openFiltersButton.setOnClick(() -> PGR.augmentFilters.toggleFilters());
-        return this;
+    @Override
+    public float getFirstY() {
+        return group.group.get(0).currentY;
     }
 
     @Override
     protected void initializeImpl(ActionT1<FilterKeywordButton> onClick, ArrayList<PCLAugmentRenderable> cards, AbstractCard.CardColor color, boolean isAccessedFromCardPool) {
         HashSet<ModInfo> availableMods = new HashSet<>();
         int maxTier = 1;
-        if (referenceItems != null) {
-            currentTotal = getReferenceCount();
-            for (PCLAugmentRenderable augment : referenceItems) {
+        if (originalGroup != null) {
+            currentTotal = originalGroup.size();
+            for (PCLAugmentRenderable augment : originalGroup) {
                 for (EUIKeywordTooltip tooltip : getAllTooltips(augment)) {
                     if (tooltip.canFilter) {
                         currentFilterCounts.merge(tooltip, 1, Integer::sum);
@@ -191,7 +202,7 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
                 availableMods.add(EUIGameUtils.getModInfo(augment));
                 maxTier = Math.max(augment.augment.data.tier, maxTier);
             }
-            doForFilters(m -> m.initializeSelection(referenceItems));
+            doForFilters(m -> m.initializeSelection(originalGroup));
         }
 
         ArrayList<ModInfo> modInfos = new ArrayList<>(availableMods);
@@ -221,6 +232,19 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         nameInput.tryRender(sb);
         descriptionInput.tryRender(sb);
         doForFilters(m -> m.render(sb));
+    }
+
+    @Override
+    protected void setupSortHeader(FilterSortHeader header, float startX) {
+        
+        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByCategory, PGR.core.strings.misc_category, startX);
+        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByName, CardLibSortHeader.TEXT[2], startX);
+        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByTier, PGR.core.strings.misc_tier, startX);
+    }
+
+    @Override
+    public EUIExporter.Exportable<PCLAugmentRenderable> getExportable() {
+        return null;
     }
 
     @Override

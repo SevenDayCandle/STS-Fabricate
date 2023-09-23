@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.utilities.RelicInfo;
@@ -48,6 +49,11 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
                 .canDragScreen(false)
                 .add(relics, RelicInfo::new)
                 .setOnClick(r -> complete(r.relic));
+
+        EUI.relicFilters.initializeForSort(grid.group, __ -> {
+            grid.moveToTop();
+            grid.forceUpdatePositions();
+        }, EUI.actingColor);
     }
 
     @Override
@@ -72,6 +78,10 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
+        EUI.sortHeader.render(sb);
+        if (!EUI.relicFilters.isActive) {
+            EUI.openFiltersButton.tryRender(sb);
+        }
     }
 
     public PCLGenericSelectRelicEffect setStartingPosition(float x, float y) {
@@ -85,14 +95,19 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
 
     @Override
     protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate();
+        if (shouldDoStandardUpdate) {
+            grid.tryUpdate();
+            EUI.sortHeader.update();
+            EUI.openFiltersButton.update();
 
-        if (grid.isHovered() || grid.scrollBar.isDragging) {
-            return;
-        }
+            if (grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered || grid.scrollBar.isDragging) {
+                return;
+            }
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
-            complete();
+            if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+                complete();
+            }
         }
     }
 }

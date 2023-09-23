@@ -1,6 +1,5 @@
 package pinacolada.ui.editor.power;
 
-import basemod.BaseMod;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,11 +7,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
@@ -23,21 +19,15 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
 import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLPower;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLPowerGrid;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
     private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
@@ -129,9 +119,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
                         PCLCustomPowerSlot.addSlot(slot);
                         PCLPowerRenderable newPower = slot.makeRenderable();
                         currentSlots.put(newPower, slot);
-                        grid.group.group = PGR.powerHeader.originalGroup;
-                        grid.add(newPower);
-                        refreshGrid();
+                        PGR.powerFilters.addToOriginal(newPower, false);
                     });
         }
     }
@@ -144,9 +132,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
                         PCLCustomPowerSlot.addSlot(slot);
                         PCLPowerRenderable newPower = slot.makeRenderable();
                         currentSlots.put(newPower, slot);
-                        grid.group.group = PGR.powerHeader.originalGroup;
-                        grid.add(newPower);
-                        refreshGrid();
+                        PGR.powerFilters.addToOriginal(card, false);
                     });
         }
     }
@@ -158,12 +144,10 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomPowerSlot.editSlot(cardSlot, prev);
                         PCLPowerRenderable newPower = cardSlot.makeRenderable();
-                        grid.group.group = PGR.powerHeader.originalGroup;
-                        grid.remove(card);
+                        PGR.powerFilters.removeFromOriginal(card, false);
                         currentSlots.remove(card);
                         currentSlots.put(newPower, cardSlot);
-                        grid.add(newPower);
-                        refreshGrid();
+                        PGR.powerFilters.addToOriginal(card, false);
                     });
         }
     }
@@ -192,14 +176,10 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             currentSlots.put(relic, slot);
             grid.add(relic);
         }
-        refreshGrid();
-    }
-
-    public void refreshGrid() {
-        PGR.powerFilters.initializeForCustomHeader(grid.group, __ -> {
+        PGR.powerFilters.initializeForSort(grid.group, __ -> {
             grid.moveToTop();
             grid.forceUpdatePositions();
-        }, AbstractCard.CardColor.COLORLESS, false, true);
+        }, AbstractCard.CardColor.COLORLESS);
     }
 
     public void remove(PCLPowerRenderable card, PCLCustomPowerSlot cardSlot) {
@@ -207,11 +187,9 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomPowerSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            grid.group.group = PGR.powerHeader.originalGroup;
-                            grid.remove(card);
+                            PGR.powerFilters.removeFromOriginal(card, false);
                             currentSlots.remove(card);
                             PCLCustomPowerSlot.deleteSlot(v);
-                            refreshGrid();
                         }
                     });
         }
@@ -231,6 +209,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             openButton.tryRender(sb);
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
+            EUI.sortHeader.render(sb);
             if (!EUI.relicFilters.isActive) {
                 EUI.openFiltersButton.tryRender(sb);
                 EUIExporter.exportButton.tryRender(sb);
@@ -256,6 +235,7 @@ public class PCLCustomPowerSelectorScreen extends AbstractMenuScreen {
             if (shouldDoStandardUpdate) {
                 EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
+                EUI.sortHeader.update();
                 info.tryUpdate();
                 grid.tryUpdate();
                 cancelButton.tryUpdate();

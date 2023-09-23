@@ -1819,12 +1819,6 @@ public class GameUtilities {
         return target != null && !isDeadOrEscaped(target);
     }
 
-    public static CardGroup makeCardGroup(Collection<AbstractCard> cards) {
-        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        group.group.addAll(cards);
-        return group;
-    }
-
     public static CardGroup makeCardGroupRandomized(Collection<AbstractCard> source, int limit, boolean makeCopy) {
         final RandomizedList<AbstractCard> choices = new RandomizedList<>(source);
         CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);

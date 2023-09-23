@@ -1,4 +1,4 @@
-package pinacolada.actions.affinity;
+package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;

@@ -41,8 +41,6 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
-    private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
-    private static final float DRAW_START_Y = (float) Settings.HEIGHT * 0.7f;
     private static final float PAD_Y = AbstractCard.IMG_HEIGHT * 0.75f + Settings.CARD_VIEW_PAD_Y;
     private static final float SCROLL_BAR_THRESHOLD = 500f * Settings.scale;
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
@@ -69,10 +67,10 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
 
-        this.grid = new EUICardGrid(1f)
+        this.grid = (EUICardGrid) new EUICardGrid(0.42f)
                 .setEnlargeOnHover(false)
-                .setOnCardClick(this::onCardClicked)
-                .setOnCardRightClick(this::onCardRightClicked);
+                .setOnClick(this::onCardClicked)
+                .setOnRightClick(this::onCardRightClicked);
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
                 .setBackground(EUIRM.images.greySquare.texture(), com.badlogic.gdx.graphics.Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
@@ -147,7 +145,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomCardSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -159,7 +156,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     .setOnSave(() -> {
                         PCLCustomCardSlot.addSlot(slot);
                         putInList(slot);
-                        refreshGrid();
                     });
         }
     }
@@ -186,10 +182,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
                     .setOnSave(() -> {
                         PCLCustomCardSlot.editSlot(cardSlot, oldID);
-                        EUI.customHeader.originalGroup.remove(card);
+                        EUI.cardFilters.removeFromOriginal(card, false);
                         currentSlots.remove(card);
                         putInList(cardSlot);
-                        refreshGrid();
                     });
         }
     }
@@ -234,7 +229,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                             .setOnSave(() -> {
                                 PCLCustomCardSlot.addSlot(slot);
                                 putInList(slot);
-                                refreshGrid();
                             });
                 }
             });
@@ -269,12 +263,12 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor)) {
             AbstractCard card = slot.make();
             currentSlots.put(card, slot);
-            grid.addCard(card);
+            grid.add(card);
         }
-        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
+        EUI.cardFilters.initializeForSort(grid.group, __ -> {
             grid.moveToTop();
-            grid.forceUpdateCardPositions();
-        }, currentColor, false, true);
+            grid.forceUpdatePositions();
+        }, currentColor);
 
         EUITourTooltip.queueFirstView(PGR.config.tourItemScreen,
                 addButton.makeTour(true),
@@ -286,15 +280,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     private void putInList(PCLCustomCardSlot slot) {
         AbstractCard newCard = slot.make();
         currentSlots.put(newCard, slot);
-        EUI.customHeader.originalGroup.add(newCard);
-    }
-
-    public void refreshGrid() {
-        grid.cards.group = EUI.customHeader.originalGroup;
-        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
-            grid.moveToTop();
-            grid.forceUpdateCardPositions();
-        }, currentColor, false, true);
+        EUI.cardFilters.addToOriginal(newCard, false);
     }
 
     public void remove(AbstractCard card, PCLCustomCardSlot cardSlot) {
@@ -302,10 +288,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomCardSlot>(cardSlot)
                     .addCallback((v) -> {
                         if (v != null) {
-                            EUI.customHeader.originalGroup.remove(card);
+                            EUI.cardFilters.removeFromOriginal(card, false);
                             currentSlots.remove(card);
                             PCLCustomCardSlot.deleteSlot(v);
-                            EUI.customHeader.updateForFilters();
                         }
                     });
         }
@@ -319,7 +304,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         }
         else {
             grid.tryRender(sb);
-            EUI.customHeader.render(sb);
+            EUI.sortHeader.render(sb);
             info.tryRender(sb);
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
@@ -355,7 +340,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 EUIExporter.exportButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
-                EUI.customHeader.update();
+                EUI.sortHeader.update();
                 grid.tryUpdate();
                 cancelButton.tryUpdate();
                 addButton.tryUpdate();

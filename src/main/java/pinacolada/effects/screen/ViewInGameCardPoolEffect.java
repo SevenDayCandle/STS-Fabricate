@@ -64,7 +64,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         }
 
         if (cards.isEmpty()) {
-            this.grid = new EUICardGrid().canDragScreen(false);
+            this.grid = (EUICardGrid) new EUICardGrid().canDragScreen(false);
             complete(this);
             return;
         }
@@ -74,10 +74,10 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUICardGrid()
-                .canRenderUpgrades(true)
+        this.grid = (EUICardGrid) new EUICardGrid()
+                .setCanRenderUpgrades(true)
                 .canDragScreen(false)
-                .setOnCardClick(this::toggleCard);
+                .setOnClick(this::toggleCard);
         this.grid.setCardGroup(cards);
         for (AbstractCard c : cards.group) {
             updateCardAlpha(c);
@@ -126,10 +126,10 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
         refreshCountText();
 
-        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
+        EUI.cardFilters.initializeForSort(grid.group, __ -> {
             grid.moveToTop();
-            grid.forceUpdateCardPositions();
-        }, EUI.actingColor, false, false);
+            grid.forceUpdatePositions();
+        }, EUI.actingColor);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         deselectAllButton.tryRender(sb);
         selectRandomButton.tryRender(sb);
         selectedCount.tryRender(sb);
-        EUI.customHeader.render(sb);
+        EUI.sortHeader.render(sb);
         if (!EUI.cardFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
         }
@@ -294,7 +294,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
-            EUI.customHeader.update();
+            EUI.sortHeader.update();
             grid.tryUpdate();
             upgradeToggle.updateImpl();
             selectAllButton.tryUpdate();
@@ -303,7 +303,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             instructions.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openFiltersButton.hb.hovered) {
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered) {
                 return;
             }
 
