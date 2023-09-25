@@ -40,7 +40,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (fields.orbs.isEmpty()) {
             return amount <= 0 ? GameUtilities.getOrbCount() == 0 : GameUtilities.getOrbCount() >= amount;
         }
-        return fields.random ? EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount) : EUIUtils.all(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount);
+        return fields.allOrAnyR(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount);
     }
 
     @Override

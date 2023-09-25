@@ -14,6 +14,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +41,15 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return ((fields.powers.isEmpty() ?
                 evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> po.type == targetType))) :
-                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> f.equals(po.ID)))))));
+                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> checkPower(f, po.ID)))))));
+    }
+
+    private boolean checkPower(String helper, String powerID) {
+        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(helper);
+        if (data != null) {
+            return data.ifAny(d -> d.equals(powerID));
+        }
+        return powerID.equals(helper);
     }
 
     @Override

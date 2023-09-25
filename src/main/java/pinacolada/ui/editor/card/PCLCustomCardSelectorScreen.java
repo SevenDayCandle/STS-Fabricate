@@ -15,9 +15,9 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
-import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.AbstractMenuScreen;
+import extendedui.ui.cardFilter.CardKeywordFilters;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
@@ -49,7 +49,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     protected final EUICardGrid grid;
     protected final EUIToggle toggle;
     private AbstractCard clickedCard;
-    protected ActionT0 onClose;
     protected EUIButton addButton;
     protected EUIButton cancelButton;
     protected EUIButton loadExistingButton;
@@ -60,6 +59,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     protected EUITextBox info;
     protected HashMap<AbstractCard, PCLCustomCardSlot> currentSlots = new HashMap<>();
     protected PCLEffectWithCallback<?> currentDialog;
+    public final CardKeywordFilters.CardFilters savedFilters = new CardKeywordFilters.CardFilters();
 
     public PCLCustomCardSelectorScreen() {
         final float buttonHeight = screenH(0.06f);
@@ -166,7 +166,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                     .addCallback((co) -> {
                         if (co != null) {
                             PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot, co);
-                            open(null, co, this.onClose);
+                            openImpl(currentClass, co);
                             currentDialog = new PCLCustomCardEditCardScreen(slot)
                                     .setOnSave(() -> {
                                         PCLCustomCardSlot.addSlot(slot);
@@ -237,7 +237,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     }
 
     private void makeColorButton(AbstractCard.CardColor co) {
-        colorButtons.addButton(button -> open(null, co, this.onClose), EUIGameUtils.getColorName(co))
+        colorButtons.addButton(button -> openImpl(currentClass, co), EUIGameUtils.getColorName(co))
                 .setColor(EUIGameUtils.getColorColor(co));
     }
 
@@ -253,13 +253,25 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         contextMenu.positionToOpen();
     }
 
-    public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor, ActionT0 onClose) {
+    public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor) {
         super.open();
 
+        savedFilters.clear(true);
+        openImpl(playerClass, cardColor);
+
+        EUITourTooltip.queueFirstView(PGR.config.tourItemScreen,
+                addButton.makeTour(true),
+                openButton.makeTour(true),
+                loadExistingButton.makeTour(true),
+                reloadButton.makeTour(true));
+    }
+
+    protected void openImpl(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor) {
         currentClass = playerClass;
         currentColor = EUI.actingColor = cardColor;
         currentSlots.clear();
         grid.clear();
+        savedFilters.clear(true);
         for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor)) {
             AbstractCard card = slot.make();
             currentSlots.put(card, slot);
@@ -269,12 +281,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, currentColor);
-
-        EUITourTooltip.queueFirstView(PGR.config.tourItemScreen,
-                addButton.makeTour(true),
-                openButton.makeTour(true),
-                loadExistingButton.makeTour(true),
-                reloadButton.makeTour(true));
     }
 
     private void putInList(PCLCustomCardSlot slot) {

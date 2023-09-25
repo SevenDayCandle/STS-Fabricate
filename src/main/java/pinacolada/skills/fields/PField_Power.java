@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -7,6 +8,7 @@ import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +17,14 @@ import java.util.Collection;
 public class PField_Power extends PField_Random {
     public ArrayList<String> powers = new ArrayList<>();
     public boolean debuff;
+
+    public static boolean checkPowers(String po, FuncT1<Boolean, String> valFunc) {
+        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(po);
+        if (data != null) {
+            return data.ifAny(valFunc);
+        }
+        return valFunc.invoke(po);
+    }
 
     public PField_Power addPower(PCLPowerData... powers) {
         for (PCLPowerData power : powers) {
@@ -26,6 +36,14 @@ public class PField_Power extends PField_Random {
     public PField_Power addPower(String... powers) {
         this.powers.addAll(Arrays.asList(powers));
         return this;
+    }
+
+    public boolean allOrAnyPower(AbstractCreature t) {
+        return allOrAnyPower(po -> doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po)));
+    }
+
+    public boolean allOrAnyPower(FuncT1<Boolean, String> valFunc) {
+        return allOrAnyR(powers, po -> checkPowers(po, valFunc));
     }
 
     @Override

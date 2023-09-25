@@ -45,14 +45,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         for (String powerID : fields.powers) {
             PCLPowerData power = PCLPowerData.getStaticData(powerID);
-            order.addPowerEffectBonus(powerID, amount, !power.isDebuff());
-            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-            if (power == PCLPowerData.Intangible) {
-                order.addPowerEffectBonus(IntangiblePower.POWER_ID, amount, !power.isDebuff());
-            }
-            else if (power == PCLPowerData.LockOn) {
-                order.addPowerEffectBonus(LockOnPower.POWER_ID, amount, !power.isDebuff());
-            }
+            power.doFor(p -> order.addPowerEffectBonus(p, amount, !power.isDebuff()));
         }
         super.use(info, order);
     }

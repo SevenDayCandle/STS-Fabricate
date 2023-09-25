@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
@@ -30,6 +31,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.cardText.ConditionToken;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -142,10 +144,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     /**
-     * Try to capitalize the first letter in the entire effect text
+     * Try to capitalize the first letter in the entire effect text. For condition tokens, we should change the character token instead
      */
+    public static String capital(String base) {
+        if (base != null && base.length() > 0 && base.charAt(0) == ConditionToken.TOKEN) {
+            return base.substring(0, 2).toUpperCase() + base.substring(2);
+        }
+        return StringUtils.capitalize(base);
+    }
+
     public static String capital(String base, boolean can) {
-        return can ? StringUtils.capitalize(base) : base;
+        return can ? capital(base) : base;
     }
 
     /**
@@ -1174,7 +1183,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + capital(childEffect.getText(perspective, addPeriod), true) : PCLCoreStrings.period(addPeriod));
     }
 
     public final String getText() {

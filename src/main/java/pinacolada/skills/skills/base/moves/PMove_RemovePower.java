@@ -49,18 +49,8 @@ public class PMove_RemovePower extends PMove<PField_Power> {
     protected void removePower(List<? extends AbstractCreature> targets, PCLPowerData power, PCLActions order) {
         if (power != null) {
             for (AbstractCreature t : targets) {
+                power.doFor(id -> order.removePower(t, t, id));
                 order.removePower(t, t, power.ID);
-            }
-            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-            if (power == PCLPowerData.Intangible) {
-                for (AbstractCreature t : targets) {
-                    order.removePower(t, t, IntangiblePower.POWER_ID);
-                }
-            }
-            else if (power == PCLPowerData.LockOn) {
-                for (AbstractCreature t : targets) {
-                    order.removePower(t, t, LockOnPower.POWER_ID);
-                }
             }
         }
     }

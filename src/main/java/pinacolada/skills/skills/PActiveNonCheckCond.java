@@ -4,6 +4,7 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -49,7 +50,14 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COLON_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : "");
+        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
+        if (childEffect != null) {
+            if (childEffect instanceof PCond && !isWhenClause()) {
+                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod);
+            }
+            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
+        }
+        return condString + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

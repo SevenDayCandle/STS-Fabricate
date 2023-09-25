@@ -55,18 +55,7 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
         // Spread amount 0 will spread the entire power
         if (power != null && (amount > 0 || baseAmount <= 0)) {
             for (AbstractCreature t : targets) {
-                order.spreadPower(p, t, power.ID, amount);
-            }
-            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-            if (power == PCLPowerData.Intangible) {
-                for (AbstractCreature t : targets) {
-                    order.spreadPower(p, t, IntangiblePower.POWER_ID, amount);
-                }
-            }
-            else if (power == PCLPowerData.LockOn) {
-                for (AbstractCreature t : targets) {
-                    order.spreadPower(p, t, LockOnPower.POWER_ID, amount);
-                }
+                power.doFor(id -> order.spreadPower(p, t, id, amount));
             }
         }
     }

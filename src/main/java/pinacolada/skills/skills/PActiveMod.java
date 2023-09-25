@@ -1,7 +1,9 @@
 package pinacolada.skills.skills;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMod;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
@@ -22,5 +24,10 @@ public abstract class PActiveMod<T extends PField> extends PMod<T> {
 
     public PActiveMod(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
+    }
+
+    public int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+        cachedValue = getModifiedAmount(be, info, isUsing);
+        return cachedValue;
     }
 }

@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -44,8 +45,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.powers.isEmpty() ?
-                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
-                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po)))) / Math.max(1, this.amount);
+                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? limitPer(po.amount) : 0) : 0) :
+                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> limitPer(GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
     }
 
     @Override
@@ -60,7 +61,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return TEXT.act_pay(TEXT.subjects_all, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, addPeriod);
+        String pay = extra > 0 ? zeroToRangeString(extra) : TEXT.subjects_all;
+        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, addPeriod);
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
@@ -79,12 +81,25 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
         updateChildAmount(info, true);
         AbstractCreature sourceCreature = getSourceCreature();
-        ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
-                EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
-        order.callback(new SequentialAction(actions), () -> {
-            info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
-            callback.invoke();
-        });
+        if (extra > 0) {
+            ArrayList<ApplyOrReducePowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
+                    EUIUtils.mapAsNonnull(fields.powers, id -> {
+                        PCLPowerData power = PCLPowerData.getStaticDataOrCustom(id);
+                        return power != null ? new ApplyOrReducePowerAction(sourceCreature, t, power, -extra) : null;
+                    })));
+            order.sequential(actions).addCallback(() -> {
+                info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));
+                callback.invoke();
+            });
+        }
+        else {
+            ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
+                    EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
+            order.callback(new SequentialAction(actions), () -> {
+                info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
+                callback.invoke();
+            });
+        }
     }
 
 }

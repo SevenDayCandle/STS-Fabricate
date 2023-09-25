@@ -1,10 +1,16 @@
 package pinacolada.skills.fields;
 
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public class PField_Random extends PField_Not {
     public boolean random;
+
+    public <T> boolean allOrAnyR(Iterable<T> items, FuncT1<Boolean, T> valFunc) {
+        return random ? EUIUtils.any(items, valFunc) : EUIUtils.all(items, valFunc);
+    }
 
     @Override
     public boolean equals(PField other) {

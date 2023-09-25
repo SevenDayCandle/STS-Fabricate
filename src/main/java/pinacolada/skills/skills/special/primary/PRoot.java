@@ -53,7 +53,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         if (source instanceof AbstractRelic || source instanceof AbstractPower) {
-            return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? COLON_SEPARATOR + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+            return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
         return childEffect != null ? childEffect.getText(perspective, addPeriod) : "";
     }

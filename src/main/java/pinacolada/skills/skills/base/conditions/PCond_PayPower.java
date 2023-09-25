@@ -48,11 +48,8 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)));
-    }
-
-    private boolean checkPowers(String po, AbstractCreature t) {
-        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po), Math.max(1, amount));
+        return evaluateTargets(info, t ->
+                fields.allOrAnyPower(t));
     }
 
     @Override
@@ -75,7 +72,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
         if (baseAmount <= 0) {
             ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
                     EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
-            return order.callback(new SequentialAction(actions), () -> {
+            return order.sequential(actions).addCallback(() -> {
                 info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
                 if (conditionMetCache) {
                     onComplete.invoke(info);
@@ -91,7 +88,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
                         PCLPowerData power = PCLPowerData.getStaticDataOrCustom(id);
                         return power != null ? new ApplyOrReducePowerAction(sourceCreature, t, power, -amount) : null;
                     })));
-            return order.callback(new SequentialAction(actions), () -> {
+            return order.sequential(actions).addCallback(() -> {
                 info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));
                 if (conditionMetCache) {
                     onComplete.invoke(info);

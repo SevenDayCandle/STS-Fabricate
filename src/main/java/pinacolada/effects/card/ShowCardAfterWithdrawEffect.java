@@ -17,7 +17,7 @@ public class ShowCardAfterWithdrawEffect extends PCLEffect {
         this.card = card;
         this.card.current_x = startX;
         this.card.current_y = startY;
-        this.card.target_x = (float) Settings.WIDTH / 2.0F;
+        this.card.target_x = (float) Settings.WIDTH * 0.65f;
         this.card.target_y = (float) Settings.HEIGHT / 2.0F;
         this.card.drawScale = 0.01F;
         this.card.targetDrawScale = 0.8F;
@@ -27,7 +27,6 @@ public class ShowCardAfterWithdrawEffect extends PCLEffect {
     @Override
     public void complete() {
         super.complete();
-        card.fadingOut = true;
         card.shrink();
         AbstractDungeon.getCurrRoom().souls.discard(card, true);
         card.stopGlowing();
@@ -49,5 +48,9 @@ public class ShowCardAfterWithdrawEffect extends PCLEffect {
     public void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
         this.card.update();
+        if (duration < startingDuration * 0.05f) {
+            card.fadingOut = true;
+            card.shrink();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package pinacolada.powers.replacement;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.powers.LockOnPower;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyLockOnSubscriber;
@@ -12,13 +13,16 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import static pinacolada.powers.PCLPowerData.ICON_LOCKON;
+
 // Deliberately not extending LockOnPower or inheriting its ID because this power behaves slightly differently and we also want to avoid this being used in hardcoded base game checks in AbstractOrb
-@VisiblePower
 public class PCLLockOnPower extends PCLSubscribingPower implements OnOrbApplyLockOnSubscriber {
     public static final PCLPowerData DATA = register(PCLLockOnPower.class)
             .setType(PowerType.DEBUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.TurnBased)
-            .setTooltip(PGR.core.tooltips.lockOn);
+            .setTooltip(PGR.core.tooltips.lockOn)
+            .setImageRegion(ICON_LOCKON)
+            .setEquivalents(LockOnPower.POWER_ID);
     public static final int BASE = 50;
 
     public PCLLockOnPower(AbstractCreature owner, AbstractCreature source, int amount) {

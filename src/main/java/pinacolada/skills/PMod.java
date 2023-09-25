@@ -430,6 +430,10 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         }
     }
 
+    protected int limitPer(int val) {
+        return extra > 0 ? Math.min(extra, val) : val;
+    }
+
     @Override
     public void onDrag(AbstractMonster m) {
         updateChildAmount(getInfo(m), false);
@@ -464,7 +468,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    public final int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+    public int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         cachedValue = getModifiedAmount(be, info, isUsing);
         if (extra > 0) {
             cachedValue = Math.min(extra, cachedValue);

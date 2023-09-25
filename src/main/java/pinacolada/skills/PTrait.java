@@ -151,12 +151,6 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return getSubDescText(perspective);
     }
 
-    // Child effects will always be separated by a period
-    @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + StringUtils.capitalize(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
-    }
-
     @Override
     public PTrait<T> makeCopy() {
         PTrait<T> copy = (PTrait<T>) super.makeCopy();

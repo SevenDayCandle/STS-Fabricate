@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.*;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -96,7 +97,6 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData CorpseExplosion = registerBaseDebuff(CorpseExplosionPower.class, CorpseExplosionPower.POWER_ID, PGR.core.tooltips.corpseExplosion).setImageRegion(ICON_CORPSE_EXPLOSION).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Entangled = registerBaseDebuff(EntanglePower.class, EntanglePower.POWER_ID, PGR.core.tooltips.entangled).setImageRegion(ICON_ENTANGLE).setEndTurnBehavior(Behavior.SingleTurn);
     public static final PCLPowerData Frail = registerBaseDebuffCommon(FrailPower.class, FrailPower.POWER_ID, PGR.core.tooltips.frail).setImageRegion(ICON_FRAIL).setEndTurnBehavior(Behavior.TurnBased);
-    public static final PCLPowerData LockOn = registerBaseDebuffCommon(com.megacrit.cardcrawl.powers.LockOnPower.class, LockOnPower.POWER_ID, PGR.core.tooltips.lockOn).setImageRegion(ICON_LOCKON).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData Mark = registerBaseDebuff(MarkPower.class, MarkPower.POWER_ID, PGR.core.tooltips.mark).setImageRegion(ICON_MARKED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData NoBlock = registerBaseDebuff(NoBlockPower.class, NoBlockPower.POWER_ID, PGR.core.tooltips.noBlock).setImageRegion(ICON_NO_BLOCK).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData NoDraw = registerBaseDebuff(NoDrawPower.class, NoDrawPower.POWER_ID, PGR.core.tooltips.noDraw).setImageRegion(ICON_NO_DRAW).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
@@ -119,7 +119,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData Focus = registerBaseBuffCommon(FocusPower.class, FocusPower.POWER_ID, PGR.core.tooltips.focus).setImageRegion(ICON_FOCUS).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Foresight = registerBaseBuff(ForesightPower.class, ForesightPower.POWER_ID, PGR.core.tooltips.foresight).setImageRegion(ICON_FORESIGHT).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData FreeAttack = registerBaseBuff(FreeAttackPower.class, FreeAttackPower.POWER_ID, PGR.core.tooltips.freeAttack).setImageRegion(ICON_FREEATTACK).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
-    public static final PCLPowerData Intangible = registerBaseBuff(IntangiblePlayerPower.class, IntangiblePlayerPower.POWER_ID, PGR.core.tooltips.intangible).setImageRegion(ICON_INTANGIBLE).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Intangible = registerBaseBuff(IntangiblePlayerPower.class, IntangiblePlayerPower.POWER_ID, PGR.core.tooltips.intangible).setImageRegion(ICON_INTANGIBLE).setEndTurnBehavior(Behavior.TurnBased)
+            .setEquivalents(IntangiblePower.POWER_ID);
     public static final PCLPowerData Invincible = registerBaseBuff(InvinciblePower.class, InvinciblePower.POWER_ID, PGR.core.tooltips.invincible).setImageRegion(ICON_INVINCIBLE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Juggernaut = registerBaseBuff(JuggernautPower.class, JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut).setImageRegion(ICON_JUGGERNAUT).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Malleable = registerBaseBuff(MalleablePower.class, MalleablePower.POWER_ID, PGR.core.tooltips.malleable).setImageRegion(ICON_MALLEABLE).setEndTurnBehavior(Behavior.Permanent);
@@ -159,6 +160,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData Vitality = VitalityPower.DATA;
     public static final PCLPowerData Warding = WardingPower.DATA;
 
+    protected String[] equivalents;
     public AbstractPower.PowerType type = NeutralPowertypePatch.NEUTRAL;
     public EUIKeywordTooltip tooltip;
     public PowerStrings strings;
@@ -279,6 +281,12 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return registerBaseDebuff(powerClass, id, tip).setIsCommon(true);
     }
 
+    // Should only be used by equivalents
+    private static <T extends PCLPowerData> T registerData(String id, T cardData) {
+        STATIC_DATA.put(id, cardData);
+        return cardData;
+    }
+
     protected static <T extends PCLPowerData> T registerData(T cardData) {
         STATIC_DATA.put(cardData.ID, cardData);
         return cardData;
@@ -343,6 +351,15 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return new TemporaryPower(owner, po);
     }
 
+    public void doFor(ActionT1<String> func) {
+        func.invoke(ID);
+        if (equivalents != null) {
+            for (String e : equivalents) {
+                func.invoke(e);
+            }
+        }
+    }
+
     public String getName() {
         return strings.NAME;
     }
@@ -365,6 +382,11 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         this.imagePath = PGR.getPowerImage(ID);
     }
 
+    public boolean ifAny(FuncT1<Boolean, String> ifFunc) {
+        boolean val = ifFunc.invoke(ID);
+        return val ? val : equivalents != null && EUIUtils.any(equivalents, ifFunc);
+    }
+
     public boolean isBuff() {
         return type == AbstractPower.PowerType.BUFF;
     }
@@ -384,9 +406,25 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         }
     }
 
+    public boolean matches(AbstractPower po) {
+        return matches(po.ID);
+    }
+
+    public boolean matches(String powerID) {
+        return ID.equals(powerID) || (equivalents != null && EUIUtils.any(equivalents, e -> e.equals(powerID)));
+    }
+
     public PCLPowerData setEndTurnBehavior(Behavior val) {
         this.endTurnBehavior = val;
 
+        return this;
+    }
+
+    public PCLPowerData setEquivalents(String... powers) {
+        equivalents = powers;
+        for (String po : powers) {
+            registerData(po, this);
+        }
         return this;
     }
 
@@ -444,6 +482,14 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         this.type = val;
 
         return this;
+    }
+
+    public int sum(FuncT1<Integer, String> ifFunc) {
+        int val = ifFunc.invoke(ID);
+        if (equivalents != null) {
+            val += EUIUtils.sumInt(equivalents, ifFunc);
+        }
+        return val;
     }
 
     public enum Behavior {

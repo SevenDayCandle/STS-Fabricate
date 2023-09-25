@@ -42,7 +42,7 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.random ? EUIUtils.any(fields.cardIDs, po -> checkPowers(po, t)) : EUIUtils.all(fields.cardIDs, po -> checkPowers(po, t)));
+        return evaluateTargets(info, t -> fields.allOrAnyR(fields.cardIDs, po -> checkPowers(po, t)));
     }
 
     private boolean checkPowers(String id, AbstractCreature t) {

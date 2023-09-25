@@ -1,9 +1,14 @@
 package pinacolada.actions.creature;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
@@ -36,6 +41,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     @Override
     protected void firstUpdate() {
         ArrayList<PCLCard> returned = new ArrayList<>();
+        ArrayList<PCLCardAlly> toRelease = new ArrayList<>();
 
         for (PCLCardAlly ally : allies) {
             if (ally != null) {
@@ -45,28 +51,42 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
                     for (int i = 0; i < triggerTimes; i++) {
                         ally.takeTurn(true);
                     }
-                    releaseCard(ally);
+                    toRelease.add(ally);
+                    PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard.makeStatEquivalentCopy(), ally.hb.cX, ally.hb.cY));
+                    if (showEffect) {
+                        PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
+                    }
                 }
 
                 returned.add(returnedCard);
             }
         }
 
-        complete(returned);
+        // Callback must be executed after the sequential to avoid incorrect calculations in triggers
+        if (toRelease.size() > 0) {
+            PCLActions.last.callback(() -> {
+               for (PCLCardAlly ally : toRelease) {
+                   releaseCard(ally);
+               }
+            }).addCallback(() -> {
+                for (ActionT1<ArrayList<PCLCard>> callback : callbacks) {
+                    callback.invoke(returned);
+                }
+            });
+            completeImpl();
+        }
+        else {
+            complete(returned);
+        }
     }
 
     protected void releaseCard(PCLCardAlly ally) {
         PCLCard returnedCard = ally.releaseCard(clearPowers);
         if (returnedCard != null) {
-            PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard.makeStatEquivalentCopy(), ally.hb.cX, ally.hb.cY));
             destination.addToTop(returnedCard);
             returnedCard.unhover();
             returnedCard.untip();
             returnedCard.unfadeOut();
-        }
-
-        if (showEffect) {
-            PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
         }
 
         CombatManager.onAllyWithdraw(returnedCard, ally);
