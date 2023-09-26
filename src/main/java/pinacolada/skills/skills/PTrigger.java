@@ -271,8 +271,12 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
                 usesThisTurn += 1;
                 if (usesThisTurn >= amount) {
                     usesThisTurn = 0;
+                    updateCounter();
                     flash();
                     return true;
+                }
+                else {
+                    updateCounter();
                 }
             }
             return false;
@@ -318,8 +322,12 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             usesThisTurn += 1;
             if (usesThisTurn >= amount) {
                 usesThisTurn = 0;
+                updateCounter();
                 this.childEffect.use(info, order, shouldPay);
                 flash();
+            }
+            else {
+                updateCounter();
             }
         }
         else if (usesThisTurn != 0) {

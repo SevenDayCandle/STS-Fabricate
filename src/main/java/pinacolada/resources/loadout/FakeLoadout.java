@@ -104,6 +104,11 @@ public class FakeLoadout extends PCLLoadout {
 
     @Override
     public void onVictory(int ascensionLevel, int trophyLevel, int score) {
-        //
+        // No-op
+    }
+
+    @Override
+    protected void setDefaultRelicsForData(PCLLoadoutData data) {
+        // No-op
     }
 }

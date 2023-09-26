@@ -360,7 +360,8 @@
 	},
 	"Orb Slot":	{
 		"DESCRIPTION": "#yOrb #ySlots allow you to channel additional Orbs.",
-		"NAME": "Orb Slot"
+		"NAME": "Orb Slot",
+		"PLURAL": "${0}@>1:Orb Slots@:Orb Slot$"
 	},
 	"Pay":	{
 		"DESCRIPTION": "Lose the specified entity to activate an effect.",
@@ -509,7 +510,8 @@
 	},
 	"Summon Slot":	{
 		"DESCRIPTION": "#ySummons are played by dragging them onto #ySummon #ySlots.",
-		"NAME": "Summon Slot"
+		"NAME": "Summon Slot",
+		"PLURAL": "${0}@>1:Summon Slots@:Summon Slot$"
 	},
 	"Supercharged":	{
 		"DESCRIPTION": "Gain additional [E] at the start of each turn.",

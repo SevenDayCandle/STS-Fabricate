@@ -9,7 +9,9 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -18,12 +20,15 @@ import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.AbstractMenuScreen;
+import extendedui.ui.cardFilter.GenericFilters;
+import extendedui.ui.cardFilter.PotionKeywordFilters;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.PotionInfo;
+import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
+import pinacolada.effects.screen.PCLCustomCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
 import pinacolada.effects.screen.PCLGenericSelectPotionEffect;
 import pinacolada.misc.PCLCustomLoadable;
@@ -31,6 +36,8 @@ import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
 import pinacolada.potions.PCLPotionData;
 import pinacolada.resources.PGR;
+import pinacolada.ui.editor.PCLCustomEditEntityScreen;
+import pinacolada.ui.editor.PCLCustomSelectorScreen;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -38,314 +45,70 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class PCLCustomPotionSelectorScreen extends AbstractMenuScreen {
-    private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
-    private static final float DRAW_START_Y = (float) Settings.HEIGHT * 0.7f;
-    private static final float PAD_Y = AbstractCard.IMG_HEIGHT * 0.75f + Settings.CARD_VIEW_PAD_Y;
-    private static final float SCROLL_BAR_THRESHOLD = 500f * Settings.scale;
-    protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
-    public static AbstractCard.CardColor currentColor = AbstractCard.CardColor.COLORLESS;
-    public static AbstractPlayer.PlayerClass currentClass;
-    protected final EUIPotionGrid grid;
-    protected final EUIToggle toggle;
-    private AbstractPotion clickedPotion;
-    protected ActionT0 onClose;
-    protected EUIButton addButton;
-    protected EUIButton cancelButton;
-    protected EUIButton loadExistingButton;
-    protected EUIButton openButton;
-    protected EUIButton reloadButton;
-    protected EUIButtonList colorButtons;
-    protected EUIContextMenu<ContextOption> contextMenu;
-    protected EUITextBox info;
-    protected HashMap<AbstractPotion, PCLCustomPotionSlot> currentSlots = new HashMap<>();
-    protected PCLEffectWithCallback<?> currentDialog;
-
-    public PCLCustomPotionSelectorScreen() {
-        final float buttonHeight = screenH(0.06f);
-        final float labelHeight = screenH(0.04f);
-        final float buttonWidth = screenW(0.18f);
-        final float labelWidth = screenW(0.20f);
-
-        this.grid = (EUIPotionGrid) new EUIPotionGrid(1f)
-                .setOnClick(this::onPotionClicked)
-                .setOnRightClick(this::onPotionRightClicked);
-        toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
-                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
-                .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f);
-        cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(buttonWidth * 0.53f, buttonHeight)
-                .setColor(Color.FIREBRICK)
-                .setText(GridCardSelectScreen.TEXT[1])
-                .setOnClick(this::close);
-
-        addButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
-                .setColor(Color.FOREST)
-                .setText(PGR.core.strings.cedit_newCard)
-                .setOnClick(this::add);
-
-        openButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
-                .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_openFolder)
-                .setOnClick(PCLCustomPotionSelectorScreen::openFolder);
-
-        loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
-                .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_loadFromCard)
-                .setTooltip(PGR.core.strings.cedit_loadFromCard, PGR.core.strings.cetut_loadFromCardScreen)
-                .setOnClick(this::loadFromExisting);
-
-        reloadButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
-                .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_reloadCards)
-                .setTooltip(PGR.core.strings.cedit_reloadCards, PGR.core.strings.cetut_selectorReload)
-                .setOnClick(PCLCustomPotionSlot::initialize);
-
-        contextMenu = (EUIContextMenu<ContextOption>) new EUIContextMenu<ContextOption>(new EUIHitbox(-500f, -500f, 0, 0), o -> o.name)
-                .setItems(ContextOption.values())
-                .setOnChange(options -> {
-                    for (ContextOption o : options) {
-                        o.onSelect.invoke(this, clickedPotion, currentSlots.get(clickedPotion));
-                    }
-                })
-                .setCanAutosizeButton(true);
-        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2f))
-                .setLabel(PGR.core.strings.cetut_selector2)
-                .setAlignment(0.75f, 0.05f, true)
-                .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
-
-        colorButtons = new EUIButtonList(14, screenW(0.09f), screenH(0.95f), EUIButtonList.BUTTON_W, EUIButtonList.BUTTON_H);
-
-        for (AbstractCard.CardColor color : getAllColors()) {
-            makeColorButton(color);
-        }
-    }
-
-    public static void openFolder() {
-        try {
-            Desktop.getDesktop().open(Gdx.files.local(PCLCustomLoadable.FOLDER).file());
-        }
-        catch (Exception e) {
-            EUIUtils.logError(null, "Failed to open card folder.");
-        }
-    }
-
-    public void add() {
-        if (currentDialog == null) {
-            PCLCustomPotionSlot slot = new PCLCustomPotionSlot(currentColor);
-            currentDialog = new PCLCustomPotionEditPotionScreen(slot)
-                    .setOnSave(() -> {
-                        PCLCustomPotionSlot.addSlot(slot);
-                        putInList(slot);
-                    });
-        }
-    }
-
-    public void duplicate(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
-        if (currentDialog == null && cardSlot != null) {
-            PCLCustomPotionSlot slot = new PCLCustomPotionSlot(cardSlot);
-            currentDialog = new PCLCustomPotionEditPotionScreen(slot)
-                    .setOnSave(() -> {
-                        PCLCustomPotionSlot.addSlot(slot);
-                        putInList(slot);
-                    });
-        }
-    }
-
-    public void duplicateToColor(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
-        if (currentDialog == null && cardSlot != null) {
-            currentDialog = new PCLCustomCardCopyConfirmationEffect(getAllColors())
-                    .addCallback((co) -> {
-                        if (co != null) {
-                            PCLCustomPotionSlot slot = new PCLCustomPotionSlot(cardSlot, co);
-                            open(null, co, this.onClose);
-                            currentDialog = new PCLCustomPotionEditPotionScreen(slot)
-                                    .setOnSave(() -> {
-                                        PCLCustomPotionSlot.addSlot(slot);
-                                    });
-                        }
-                    });
-        }
-    }
-
-    public void edit(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
-        if (currentDialog == null && cardSlot != null) {
-            String oldID = cardSlot.ID;
-            currentDialog = new PCLCustomPotionEditPotionScreen(cardSlot)
-                    .setOnSave(() -> {
-                        PCLCustomPotionSlot.editSlot(cardSlot, oldID);
-                        EUI.potionFilters.removeFromOriginal(p -> p.potion == card, false);
-                        putInList(cardSlot);
-                        currentSlots.remove(card);
-                    });
-        }
-    }
-
-    private ArrayList<AbstractCard.CardColor> getAllColors() {
-        ArrayList<AbstractCard.CardColor> list = new ArrayList<>();
-
-        // Base game colors are not tracked in getCardColors
-        list.add(AbstractCard.CardColor.COLORLESS);
-        list.add(AbstractCard.CardColor.RED);
-        list.add(AbstractCard.CardColor.GREEN);
-        list.add(AbstractCard.CardColor.BLUE);
-        list.add(AbstractCard.CardColor.PURPLE);
-
-        list.addAll(BaseMod.getCardColors().stream().sorted(Comparator.comparing(EUIGameUtils::getColorName)).collect(Collectors.toList()));
-        return list;
-    }
-
-    private ArrayList<AbstractPotion> getAvailablePotionsToCopy() {
-        return EUIUtils.mapAsNonnull(PCLPotionData.getTemplates(),
-                data -> {
-                    PCLPotion potion = data.create();
-                    return PCLCustomPotionSlot.canFullyCopy(potion) ? potion : null;
-                });
-    }
-
-    public void loadFromExisting() {
-        if (currentDialog == null) {
-            currentDialog = new PCLGenericSelectPotionEffect(this.getAvailablePotionsToCopy()).addCallback(card -> {
-                if (card instanceof PCLPotion) {
-                    PCLCustomPotionSlot slot = new PCLCustomPotionSlot((PCLPotion) card, currentColor);
-                    currentDialog = new PCLCustomPotionEditPotionScreen(slot)
-                            .setOnSave(() -> {
-                                PCLCustomPotionSlot.addSlot(slot);
-                                putInList(slot);
-                            });
-                }
-            });
-
-        }
-    }
-
-    private void makeColorButton(AbstractCard.CardColor co) {
-        colorButtons.addButton(button -> open(null, co, this.onClose), EUIGameUtils.getColorName(co))
-                .setColor(EUIGameUtils.getColorColor(co));
-    }
-
-    private void onPotionClicked(PotionInfo potion) {
-        PCLCustomPotionSlot slot = currentSlots.get(potion.potion);
-        if (slot != null) {
-            edit(potion.potion, slot);
-        }
-    }
-
-    private void onPotionRightClicked(PotionInfo potion) {
-        clickedPotion = potion.potion;
-        contextMenu.positionToOpen();
-    }
-
-    public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor, ActionT0 onClose) {
-        super.open();
-
-        currentClass = playerClass;
-        currentColor = EUI.actingColor = cardColor;
-        currentSlots.clear();
-        grid.clear();
-        for (PCLCustomPotionSlot slot : PCLCustomPotionSlot.getPotions(currentColor)) {
-            AbstractPotion potion = slot.make();
-            currentSlots.put(potion, slot);
-            grid.add(potion);
-        }
-        EUI.potionFilters.initializeForSort(grid.group, __ -> {
-            grid.moveToTop();
-            grid.forceUpdatePositions();
-        }, currentColor);
-    }
-
-    private void putInList(PCLCustomPotionSlot slot) {
-        AbstractPotion newPotion = slot.make();
-        currentSlots.put(newPotion, slot);
-        EUI.potionFilters.addToOriginal(new PotionInfo(newPotion), false);
-    }
-
-    public void remove(AbstractPotion card, PCLCustomPotionSlot cardSlot) {
-        if (currentDialog == null && cardSlot != null) {
-            currentDialog = new PCLCustomDeletionConfirmationEffect<PCLCustomPotionSlot>(cardSlot)
-                    .addCallback((v) -> {
-                        if (v != null) {
-                            EUI.potionFilters.removeFromOriginal(p -> p.potion == card, false);
-                            currentSlots.remove(card);
-                            PCLCustomPotionSlot.deleteSlot(v);
-                        }
-                    });
-        }
+public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<PotionInfo, PCLCustomPotionSlot, PotionKeywordFilters.PotionFilters> {
+    @Override
+    protected GenericFilters<PotionInfo, PotionKeywordFilters.PotionFilters, ?> getFilters() {
+        return EUI.potionFilters;
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb) {
-        PGR.blackScreen.renderImpl(sb);
-        if (currentDialog != null) {
-            currentDialog.render(sb);
-        }
-        else {
-            info.tryRender(sb);
-            grid.tryRender(sb);
-            cancelButton.tryRender(sb);
-            addButton.tryRender(sb);
-            openButton.tryRender(sb);
-            loadExistingButton.tryRender(sb);
-            reloadButton.tryRender(sb);
-            contextMenu.tryRender(sb);
-            colorButtons.tryRender(sb);
-            EUI.sortHeader.render(sb);
-            if (!EUI.potionFilters.isActive) {
-                EUI.openFiltersButton.tryRender(sb);
-                EUIExporter.exportButton.tryRender(sb);
-            }
-        }
+    protected EUIItemGrid<PotionInfo> getGrid() {
+        return new EUIPotionGrid(1f);
     }
 
     @Override
-    public void updateImpl() {
-        PGR.blackScreen.updateImpl();
-        if (currentDialog != null) {
-            currentDialog.update();
-
-            if (currentDialog.isDone) {
-                currentDialog = null;
-            }
-        }
-        else {
-            // Do not close the screen with esc if there is an effect going on
-            super.updateImpl();
-            contextMenu.tryUpdate();
-            boolean shouldDoStandardUpdate = !EUI.potionFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
-            if (shouldDoStandardUpdate) {
-                EUI.openFiltersButton.tryUpdate();
-                EUIExporter.exportButton.tryUpdate();
-                EUI.sortHeader.update();
-                info.tryUpdate();
-                colorButtons.tryUpdate();
-                grid.tryUpdate();
-                cancelButton.tryUpdate();
-                addButton.tryUpdate();
-                openButton.tryUpdate();
-                loadExistingButton.tryUpdate();
-                reloadButton.tryUpdate();
-            }
-            EUIExporter.exportDropdown.tryUpdate();
-        }
+    protected PotionKeywordFilters.PotionFilters getSavedFilters() {
+        return new PotionKeywordFilters.PotionFilters();
     }
 
-    public enum ContextOption {
-        Duplicate(PGR.core.strings.cedit_duplicate, PCLCustomPotionSelectorScreen::duplicate),
-        DuplicateToColor(PGR.core.strings.cedit_duplicateToColor, PCLCustomPotionSelectorScreen::duplicateToColor),
-        Delete(PGR.core.strings.cedit_delete, PCLCustomPotionSelectorScreen::remove);
+    @Override
+    protected PCLCustomEditEntityScreen<PCLCustomPotionSlot, ?> getScreen(PCLCustomPotionSlot slot) {
+        return new PCLCustomPotionEditPotionScreen(slot);
+    }
 
-        public final String name;
-        public final ActionT3<PCLCustomPotionSelectorScreen, AbstractPotion, PCLCustomPotionSlot> onSelect;
+    @Override
+    protected Iterable<PCLCustomPotionSlot> getSlots(AbstractCard.CardColor co) {
+        return PCLCustomPotionSlot.getPotions(co);
+    }
 
-        ContextOption(String name, ActionT3<PCLCustomPotionSelectorScreen, AbstractPotion, PCLCustomPotionSlot> onSelect) {
-            this.name = name;
-            this.onSelect = onSelect;
-        }
+    @Override
+    protected PotionInfo makeItem(PCLCustomPotionSlot slot) {
+        AbstractPotion potion = slot.make();
+        return new PotionInfo(potion);
+    }
+
+    @Override
+    protected PCLCustomPotionSlot makeSlot(AbstractCard.CardColor co) {
+        return new PCLCustomPotionSlot(co);
+    }
+
+    @Override
+    protected PCLCustomPotionSlot makeSlot(PCLCustomPotionSlot other) {
+        return new PCLCustomPotionSlot(other);
+    }
+
+    @Override
+    protected PCLCustomPotionSlot makeSlot(PCLCustomPotionSlot other, AbstractCard.CardColor co) {
+        return new PCLCustomPotionSlot(other, co);
+    }
+
+    @Override
+    protected void onAdd(PCLCustomPotionSlot slot) {
+        PCLCustomPotionSlot.addSlot(slot);
+    }
+
+    @Override
+    protected void onEdit(PCLCustomPotionSlot slot, String oldID) {
+        PCLCustomPotionSlot.editSlot(slot, oldID);
+    }
+
+    @Override
+    protected void onReload() {
+        PCLCustomPotionSlot.initialize();
+    }
+
+    @Override
+    protected void onRemove(PCLCustomPotionSlot slot) {
+        PCLCustomPotionSlot.deleteSlot(slot);
     }
 }

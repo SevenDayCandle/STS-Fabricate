@@ -467,16 +467,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(node.getEffects());
         effects.sortByLabel();
         effects.setActive(effects.size() > 1);
-        scopeEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.2f : 0, OFFSET_AMOUNT)
-                , PGR.core.strings.cedit_scope, (val, upVal) -> {
-                    if (node.skill != null) {
-                        changeScopeForSkill(node.skill, val, upVal);
-                        editor.updateRootEffect();
-                    }
-                })
-                .setLimits(1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_scope, PGR.core.strings.cetut_scope);
-        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 0.75f : MENU_WIDTH * 0.55f, OFFSET_AMOUNT)
+
+        float startX = effects.isActive ? effects.hb.width + MENU_WIDTH * 0.2f : 0;
+        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, startX, OFFSET_AMOUNT)
                 , EUIRM.strings.ui_amount, (val, upVal) -> {
             if (node.skill != null) {
                 changeAmountForSkill(node.skill, val, upVal);
@@ -485,7 +478,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(EUIRM.strings.ui_amount, cetutString);
-        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, effects.isActive ? effects.hb.width + MENU_WIDTH * 1.3f : MENU_WIDTH * 1.1f, OFFSET_AMOUNT)
+        startX += MENU_WIDTH * 0.55f;
+        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, startX, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
                 changeExtraForSkill(node.skill, val, upVal);
@@ -494,6 +488,16 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_extraValue, cetutString);
+        startX += MENU_WIDTH * 0.55f;
+        scopeEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, startX, OFFSET_AMOUNT)
+                , PGR.core.strings.cedit_scope, (val, upVal) -> {
+            if (node.skill != null) {
+                changeScopeForSkill(node.skill, val, upVal);
+                editor.updateRootEffect();
+            }
+        })
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_scope, PGR.core.strings.cetut_scope);
 
         targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardTarget::getTitle)
@@ -587,7 +591,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setActive(eMin != eMax);
         scopeEditor
                 .setLimits(1, PSkill.DEFAULT_MAX)
-                .setValue(getScopeForSkill(node.skill), getScopeUpgradeForSkill(node.skill), false);
+                .setValue(getScopeForSkill(node.skill), getScopeUpgradeForSkill(node.skill), false)
+                .setActive(node.skill != null && node.skill.target.targetsRandom());
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
             activeElements.clear();

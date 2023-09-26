@@ -115,6 +115,14 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     }
 
     @Override
+    public void cloneFrom(AugmentFilters filters) {
+        originsDropdown.setSelection(filters.currentOrigins, true);
+        categoryDropdown.setSelection(filters.currentCategories, true);
+        subCategoryDropdown.setSelection(filters.currentSubCategories, true);
+        tierDropdown.setSelection(filters.currentTiers, true);
+    }
+
+    @Override
     public void defaultSort() {
         this.group.sort(PCLAugmentKeywordFilters::rankByName);
         this.group.sort(PCLAugmentKeywordFilters::rankByTier);

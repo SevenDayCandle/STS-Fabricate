@@ -969,19 +969,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return target == PCLCardTarget.Self ? perspective : target;
     }
 
-    public String getTargetHasString(PCLCardTarget target, String desc) {
-        // For the case of self on the player, use ordinal 0 to get "have" in the description
-        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), getTargetOrdinal(target), desc);
-    }
-
-    public String getTargetHasStringPerspective(PCLCardTarget target, String desc) {
-        return getTargetHasString(getTargetForPerspective(target), desc);
-    }
-
-    public String getTargetHasYouString(String desc) {
-        return getTargetHasString(PCLCardTarget.None, desc);
-    }
-
     public final String getTargetIsString(PCLCardTarget target, String subject) {
         return TEXT.cond_ifX(TEXT.cond_xIsY(getTargetSubjectString(target), getTargetOrdinal(target), subject));
     }

@@ -9,11 +9,11 @@ import pinacolada.resources.PGR;
 
 import java.util.List;
 
-public class PCLCustomCardCopyConfirmationEffect extends PCLEffectWithCallback<AbstractCard.CardColor> {
+public class PCLCustomCopyConfirmationEffect extends PCLEffectWithCallback<AbstractCard.CardColor> {
 
     protected EUIDialogDropdown<AbstractCard.CardColor> dialog = new EUIDialogDropdown<AbstractCard.CardColor>(PGR.core.strings.cedit_duplicateToColor, PGR.core.strings.cedit_duplicateToColorDesc);
 
-    public PCLCustomCardCopyConfirmationEffect(List<AbstractCard.CardColor> colors) {
+    public PCLCustomCopyConfirmationEffect(List<AbstractCard.CardColor> colors) {
         this.dialog
                 .setItems(colors)
                 .setLabelFunctionForOption(e -> EUIUtils.capitalize(e.name().replace("_", " ")), false)

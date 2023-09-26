@@ -16,6 +16,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 import static pinacolada.powers.PCLPowerData.ICON_LOCKON;
 
 // Deliberately not extending LockOnPower or inheriting its ID because this power behaves slightly differently and we also want to avoid this being used in hardcoded base game checks in AbstractOrb
+@VisiblePower
 public class PCLLockOnPower extends PCLSubscribingPower implements OnOrbApplyLockOnSubscriber {
     public static final PCLPowerData DATA = register(PCLLockOnPower.class)
             .setType(PowerType.DEBUFF)

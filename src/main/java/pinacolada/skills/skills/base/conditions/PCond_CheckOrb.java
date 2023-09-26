@@ -57,7 +57,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_trigger(tt), perspective);
         }
-        return getTargetHasStringPerspective(perspective, amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(tt));
     }
 
     @Override

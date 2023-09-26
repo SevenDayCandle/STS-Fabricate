@@ -217,7 +217,9 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         if (sort) {
             stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
         }
-        return stream.collect(Collectors.toList());
+        return stream
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public static PCLPowerData getRandom() {

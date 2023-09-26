@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
@@ -43,10 +44,12 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
-    public static final int CARD_IMG_WIDTH = 500;
-    public static final int CARD_IMG_HEIGHT = 380;
-    public static final int POWER_IMG_SIZE = 84;
-    public static final int RELIC_IMG_SIZE = 128;
+    private static final float OFFSET_BASE_CARD_Y = Settings.scale * -6;
+    private static final float OUTLINE_SIZE = Settings.scale * 7;
+    private static final int CARD_IMG_WIDTH = 500;
+    private static final int CARD_IMG_HEIGHT = 380;
+    private static final int POWER_IMG_SIZE = 84;
+    private static final int RELIC_IMG_SIZE = 128;
     private final DraggableHitbox hb;
     private final EUILabel instructionsLabel;
     private final EUIButton cancelButton;
@@ -57,6 +60,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private final EUIVerticalScrollBar zoomBar;
     private final PCLCustomColorEditor tintEditor;
     private final EUIToggle tintToggle;
+    private final ShapeRenderer renderer;
     private final SpriteBatch sb;
     private final FrameBuffer imageBuffer;
     private final OrthographicCamera camera;
@@ -80,6 +84,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         hb = new DraggableHitbox(0, 0, Settings.WIDTH * 2, Settings.HEIGHT * 2, true);
         targetWidth = imageWidth;
         targetHeight = imageHeight;
+        renderer = new ShapeRenderer();
 
         instructionsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.1f, buttonWidth * 2f, buttonHeight))
@@ -239,7 +244,20 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
             }
             if (insideImageRenderable != null) {
-                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
+                sb.end();
+                float renderW = insideImageRenderable.getRegionWidth();
+                float renderY = insideImageRenderable.getRegionHeight();
+                float boxW = renderW * Settings.scale;
+                float boxY = renderY * Settings.scale;
+                float boxW2 = boxW + OUTLINE_SIZE;
+                float boxY2 = boxY + OUTLINE_SIZE;
+                renderer.setProjectionMatrix(sb.getProjectionMatrix());
+                renderer.begin(ShapeRenderer.ShapeType.Filled);
+                renderer.rect((Settings.WIDTH - boxW2) / 2, (Settings.HEIGHT - boxY2) / 2, boxW2, boxY2, Color.MAGENTA, Color.MAGENTA, Color.MAGENTA, Color.MAGENTA);
+                renderer.rect((Settings.WIDTH - boxW) / 2, (Settings.HEIGHT - boxY) / 2, boxW, boxY, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK);
+                renderer.end();
+                sb.begin();
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, renderW, renderY, 1, 0);
             }
         }
     }
@@ -250,11 +268,17 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         curEffect = new PCLGenericSelectCardEffect(group.group)
                 .addCallback(card -> {
                             if (card != null) {
-                                // TODO handle EYBCardBase with PCLCard check
-                                updateImage(
-                                        card instanceof PCLCard ? new Texture(Gdx.files.internal(card.assetUrl), true) :
-                                                card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
-                                                        : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true));
+                                if (card instanceof PCLCard) {
+                                    // TODO handle EYBCardBase with PCLCard check
+                                    updateImage(new Texture(Gdx.files.internal(card.assetUrl), true));
+                                }
+                                else {
+                                    // Zoom in slightly for non-PCLCards because base game card images have weird-ass transparent offsets
+                                    updateImage(
+                                            card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
+                                                    : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true)
+                                            , 0.53f, Settings.WIDTH, Settings.HEIGHT + OFFSET_BASE_CARD_Y);
+                                }
                             }
                         }
                 );
@@ -312,6 +336,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     // Update the images shown on the screen. Textures are explicitly not saved with EUI because we don't want to keep them after this effect is over
     private void updateImage(Texture texture) {
+        updateImage(texture, 0.5f, Settings.WIDTH, Settings.HEIGHT);
+    }
+
+    private void updateImage(Texture texture, float zoom, float centerX, float centerY) {
         if (texture != null) {
             // Flush the existing texture before dropping it
             if (baseTexture != null) {
@@ -319,12 +347,11 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             }
 
             baseTexture = texture;
-            hb.setCenter(Settings.WIDTH, Settings.HEIGHT);
-            //hb.SetBounds(texture.getWidth() * Settings.scale * 0.5f, texture.getWidth() * Settings.scale * 1.5f, texture.getWidth() * Settings.scale * -0.5f, texture.getHeight() * Settings.scale);
+            hb.setCenter(centerX, centerY);
 
             baseTexture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
             zoomBar.setActive(true);
-            updateZoom(1f);
+            updateZoom(zoom);
             instructionsLabel.setLabel(PGR.core.strings.cetut_imageCrop);
             saveButton.setInteractable(true);
         }
@@ -384,7 +411,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void updateZoom(float scrollPercentage) {
         zoomBar.scroll(scrollPercentage, false);
-        scale = EUIRenderHelpers.lerp(0f, 1f, scrollPercentage);
+        scale = EUIRenderHelpers.lerp(0f, 2f, scrollPercentage);
 
         updatePictures();
     }

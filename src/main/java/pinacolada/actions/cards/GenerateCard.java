@@ -5,24 +5,29 @@ import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.actions.unique.AddCardToDeckAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.cards.purple.MasterReality;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.watcher.MasterRealityPower;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDiscardEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDrawPileEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
+import com.megacrit.cardcrawl.vfx.cardManip.*;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
+import pinacolada.effects.PCLSFX;
+import pinacolada.effects.card.ShowCardEffect;
+import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLAction<AbstractCard> {
     protected final CardGroup cardGroup;
-    private transient AbstractGameEffect effect = null;
-    protected boolean upgrade;
     protected boolean makeCopy;
     protected boolean cancelIfFull;
     protected PCLCardSelection destination;
@@ -31,13 +36,16 @@ public class GenerateCard extends PCLAction<AbstractCard> {
     public GenerateCard(AbstractCard card, CardGroup group) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_MED);
 
-        this.card = card;
+        this.card = CardLibraryPatches.getReplacement(card);
+        if (this.card == null) {
+            this.card = card;
+        }
         this.cardGroup = group;
 
-        if (!UnlockTracker.isCardSeen(card.cardID) || !card.isSeen) {
-            UnlockTracker.markCardAsSeen(card.cardID);
-            card.isLocked = false;
-            card.isSeen = true;
+        if (!UnlockTracker.isCardSeen(this.card.cardID) || !this.card.isSeen) {
+            UnlockTracker.markCardAsSeen(this.card.cardID);
+            this.card.isLocked = false;
+            this.card.isSeen = true;
         }
 
         initialize(1);
@@ -51,29 +59,31 @@ public class GenerateCard extends PCLAction<AbstractCard> {
 
     @Override
     protected void firstUpdate() {
-        if (makeCopy) {
-            actualCard = card.makeStatEquivalentCopy();
-        }
-        else {
-            actualCard = card;
-        }
-
-        if (upgrade && actualCard.canUpgrade()) {
-            actualCard.upgrade();
-        }
-
         switch (cardGroup.type) {
+            // Master deck/unspecified should not trigger on create hooks
+            case MASTER_DECK: {
+                for (int i = 0; i < amount; i++) {
+                    if (makeCopy) {
+                        actualCard = card.makeStatEquivalentCopy();
+                    }
+                    else {
+                        actualCard = card;
+                    }
+                    PCLEffects.List.add(new ShowCardAndObtainEffect(actualCard, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F));
+                }
+                return;
+            }
+            case CARD_POOL:
+            case UNSPECIFIED:
+            default: {
+                EUIUtils.logWarning(this, "Can't make temp card in " + cardGroup.type.name());
+                completeImpl();
+                return;
+            }
             case DRAW_PILE: {
-                effect = PCLEffects.List.add(new ShowCardAndAddToDrawPileEffect(actualCard,
-                        (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
-                        (float) Settings.HEIGHT / 2f, true, true, false));
-
-                // For reasons unknown ShowCardAndAddToDrawPileEffect creates a copy of the card...
-                actualCard = ReflectionHacks.getPrivate(effect, ShowCardAndAddToDrawPileEffect.class, "card");
-
+                generateCard(c -> AbstractDungeon.getCurrRoom().souls.onToDeck(c, true, true));
                 break;
             }
-
             case HAND: {
                 if (player.hand.size() >= BaseMod.MAX_HAND_SIZE) {
                     if (cancelIfFull) {
@@ -82,48 +92,71 @@ public class GenerateCard extends PCLAction<AbstractCard> {
                     }
 
                     player.createHandIsFullDialog();
-                    effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
+                    generateCard(c -> AbstractDungeon.getCurrRoom().souls.discard(c, true));
                 }
                 else {
-                    // If you don't specify x and y it won't play the card obtain sfx
-                    effect = PCLEffects.List.add(new ShowCardAndAddToHandEffect(actualCard,
-                            (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
-                            (float) Settings.HEIGHT / 2f));
+                    generateCard(null, 0.01f);
+                    player.onCardDrawOrDiscard();
+                    actualCard.triggerWhenCopied();
+                    CombatManager.queueRefreshHandLayout();
                 }
 
                 break;
             }
 
             case DISCARD_PILE: {
-                effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
-
+                generateCard(c -> AbstractDungeon.getCurrRoom().souls.discard(c, true));
                 break;
             }
 
             case EXHAUST_PILE: {
-                effect = PCLEffects.List.add(new ExhaustCardEffect(actualCard));
-                player.exhaustPile.addToTop(actualCard);
-                break;
-            }
-
-            case MASTER_DECK: {
-                PCLActions.top.add(new AddCardToDeckAction(actualCard));
-
-                if (destination != null) {
-                    destination = null;
-                }
-
-                break;
-            }
-
-            case CARD_POOL:
-            case UNSPECIFIED:
-            default: {
-                EUIUtils.logWarning(this, "Can't make temp card in " + cardGroup.type.name());
-                completeImpl();
+                generateCard(c -> PCLEffects.List.add(new ExhaustCardEffect(c)));
                 break;
             }
         }
+    }
+
+    private void generateCard(ActionT1<AbstractCard> onComplete) {
+        generateCard(onComplete, 1.3f);
+    }
+
+    private void generateCard(ActionT1<AbstractCard> onComplete, float duration) {
+        if (shouldUpgradeCard() && actualCard.canUpgrade()) {
+            actualCard.upgrade();
+        }
+        for (int i = 0; i < amount; i++) {
+            if (makeCopy) {
+                actualCard = card.makeStatEquivalentCopy();
+            }
+            else {
+                actualCard = card;
+            }
+
+            if (destination != null && destination != PCLCardSelection.Manual) {
+                destination.add(cardGroup.group, actualCard, 0);
+            }
+            else {
+                cardGroup.addToTop(actualCard);
+            }
+
+            ShowCardEffect effect = PCLEffects.List.showCardBriefly(actualCard, duration)
+                    .showPoof(true);
+            if (onComplete != null) {
+                effect.addCallback(() -> {
+                    onComplete.invoke(actualCard);
+                });
+            }
+
+            CombatManager.onCardCreated(actualCard, false);
+
+            makeCopy = true;
+        }
+    }
+
+    // Hardcoded stuff
+    // TODO add hook for determining card upgrade on creation
+    private boolean shouldUpgradeCard() {
+        return card.type != AbstractCard.CardType.CURSE && card.type != AbstractCard.CardType.STATUS && AbstractDungeon.player.hasPower(MasterRealityPower.POWER_ID);
     }
 
     public GenerateCard repeat(int times) {
@@ -142,50 +175,5 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         this.destination = destination;
 
         return this;
-    }
-
-    public GenerateCard setMakeCopy(boolean makeCopy) {
-        this.makeCopy = makeCopy;
-
-        return this;
-    }
-
-    public GenerateCard setUpgrade(boolean upgrade) {
-        this.upgrade = upgrade;
-
-        return this;
-    }
-
-    public GenerateCard setUpgrade(boolean upgrade, boolean makeCopy) {
-        this.makeCopy = makeCopy;
-        this.upgrade = upgrade;
-
-        return this;
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (effect != null && !effect.isDone) {
-            effect.update();
-        }
-
-        if (tickDuration(deltaTime)) {
-            if (amount > 1) {
-                GenerateCard copy = new GenerateCard(actualCard, cardGroup);
-                copy.copySettings(this);
-                copy.destination = destination;
-                copy.makeCopy = makeCopy;
-                copy.upgrade = upgrade;
-                copy.cancelIfFull = cancelIfFull;
-                copy.amount = amount - 1;
-                PCLActions.top.add(copy);
-            }
-
-            complete(actualCard);
-
-            if (destination != null && destination != PCLCardSelection.Manual && cardGroup.group.remove(actualCard)) {
-                destination.add(cardGroup.group, actualCard, 0);
-            }
-        }
     }
 }

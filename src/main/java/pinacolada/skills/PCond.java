@@ -455,6 +455,15 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return EUIUtils.arrayList(checkCondition(info, true, null) ? 0 : 1);
     }
 
+    public String getTargetHasString(PCLCardTarget target, String desc) {
+        // For the case of self on the player, use ordinal 0 to get "have" in the description
+        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), getTargetOrdinal(target), desc);
+    }
+
+    public String getTargetHasStringPerspective(PCLCardTarget target, String desc) {
+        return getTargetHasString(getTargetForPerspective(target), desc);
+    }
+
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
         String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);

@@ -13,12 +13,12 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect;
 import com.megacrit.cardcrawl.vfx.combat.RoomTintEffect;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.utility.WaitRealtimeAction;
+import pinacolada.effects.card.ShowCardEffect;
 import pinacolada.effects.combat.TalkEffect;
 import pinacolada.effects.player.ObtainRelicEffect;
 import pinacolada.effects.player.RemoveRelicEffect;
@@ -167,15 +167,19 @@ public final class PCLEffects {
         return add(new ShowCardAndObtainEffect(card, x, y, converge));
     }
 
-    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card, float x, float y) {
-        return add(new ShowCardBrieflyEffect(card, x, y));
+    public ShowCardEffect showCardBriefly(AbstractCard card, float x, float y) {
+        return add(new ShowCardEffect(card, x, y));
     }
 
-    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card) {
-        return add(new ShowCardBrieflyEffect(card));
+    public ShowCardEffect showCardBriefly(AbstractCard card, float duration) {
+        return add(new ShowCardEffect(card, duration));
     }
 
-    public ShowCardBrieflyEffect showCopy(AbstractCard card) {
+    public ShowCardEffect showCardBriefly(AbstractCard card) {
+        return add(new ShowCardEffect(card));
+    }
+
+    public ShowCardEffect showCopy(AbstractCard card) {
         return showCardBriefly(card.makeStatEquivalentCopy());
     }
 

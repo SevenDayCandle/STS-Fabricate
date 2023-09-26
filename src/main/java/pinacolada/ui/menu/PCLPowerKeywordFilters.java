@@ -113,6 +113,14 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
         descriptionInput.setLabel("");
     }
 
+    @Override
+    public void cloneFrom(PowerFilters filters) {
+        originsDropdown.setSelection(filters.currentOrigins, true);
+        endTurnBehaviorDropdown.setSelection(filters.currentEndTurnBehaviors, true);
+        typeDropdown.setSelection(filters.currentTypes, true);
+        priorityDropdown.setSelection(filters.currentPriorities, true);
+    }
+
     public boolean evaluate(PCLPowerRenderable c) {
         //Name check
         if (filters.currentName != null && !filters.currentName.isEmpty()) {
