@@ -64,6 +64,11 @@ public class WordToken extends PCLTextToken {
         }
     }
 
+    public void modifyText(String text) {
+        rawText = text;
+        coloredString.text = rawText != null ? rawText : EUIUtils.EMPTY_STRING;
+    }
+
     public static int tryAdd(PCLTextParser parser) {
         if (isValidCharacter(parser.character, true)) {
             int additionalWidth = 0;

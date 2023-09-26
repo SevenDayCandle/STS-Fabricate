@@ -1086,6 +1086,35 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return getTargetString(getTargetForPerspective(target), scope);
     }
 
+    public final String getTargetStringPluralSuffix() {
+        return getTargetStringPluralSuffix(target);
+    }
+
+    public final String getTargetStringPluralSuffix(PCLCardTarget target) {
+        return getTargetStringPluralSuffix(target, amount);
+    }
+
+    public final String getTargetStringPluralSuffix(PCLCardTarget target, int amount) {
+        switch (target) {
+            case AllAlly:
+            case RandomAlly:
+            case SelfSingleAlly:
+            case SingleAlly:
+            case Team:
+                return PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, amount);
+            case AllEnemy:
+            case RandomEnemy:
+            case SelfSingle:
+            case Single:
+                return PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, amount);
+            case AllAllyEnemy:
+            case RandomAllyEnemy:
+                return PCLCoreStrings.joinWithOr(PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, amount), PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, amount));
+            default:
+                return PCLCoreStrings.pluralEvaluated(TEXT.subjects_characterN, amount);
+        }
+    }
+
     public final String getTargetStringSingular() {
         return getTargetStringSingular(target);
     }
@@ -1094,13 +1123,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         switch (target) {
             case AllAlly:
             case RandomAlly:
+            case SelfSingleAlly:
             case SingleAlly:
             case Team:
                 return TEXT.subjects_ally;
             case AllEnemy:
             case RandomEnemy:
+            case SelfSingle:
             case Single:
                 return TEXT.subjects_enemy;
+            case AllAllyEnemy:
+            case RandomAllyEnemy:
+                return PCLCoreStrings.joinWithOr(TEXT.subjects_ally, TEXT.subjects_enemy);
             default:
                 return TEXT.subjects_character;
         }

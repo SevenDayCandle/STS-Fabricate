@@ -1073,53 +1073,53 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_forTurns(Object subject) {
         return condFmt(12, subject);
     }
+    public final String cond_ifThere(Object number, Object target) {
+        return condFmt(13, number, target);
+    }
     public final String cond_ifHighest(Object subject) {
-        return condFmt(13, subject);
+        return condFmt(14, subject);
     }
     public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
-        return condFmt(14, target, ordinal, desc);
+        return condFmt(15, target, ordinal, desc);
     }
     public final String cond_ifTargetTook(Object target, Object desc) {
-        return condFmt(15, target, desc);
+        return condFmt(16, target, desc);
     }
-    public final String cond_ifTargetDidX(Object target, Object subject, Object desc9) {
-        return condFmt(16, target, subject, desc9);
+    public final String cond_ifTargetDidX(Object target, Object subject, Object desc10) {
+        return condFmt(17, target, subject, desc10);
     }
     public final String cond_ifXDid(Object subject, Object desc) {
-        return condFmt(17, subject, desc);
+        return condFmt(18, subject, desc);
     }
     public final String cond_ifX(Object subject) {
-        return condFmt(18, subject);
-    }
-    public final String cond_inXAtTurnEnd(Object subject) {
         return condFmt(19, subject);
     }
-    public final String cond_inXAtTurnStart(Object subject) {
+    public final String cond_inXAtTurnEnd(Object subject) {
         return condFmt(20, subject);
     }
-    public final String cond_inTurns(Object subject) {
+    public final String cond_inXAtTurnStart(Object subject) {
         return condFmt(21, subject);
     }
+    public final String cond_inTurns(Object subject) {
+        return condFmt(22, subject);
+    }
     public final String cond_levelItem(Object level, Object subject) {
-        return condFmt(22, level, subject);
+        return condFmt(23, level, subject);
     }
     public final String cond_nextTurn() {
-        return condFmt(23);
+        return condFmt(24);
     }
     public final String cond_no(Object subject) {
-        return condFmt(24, subject);
-    }
-    public final String cond_not(Object subject) {
         return condFmt(25, subject);
     }
-    public final String cond_onGeneric(Object subject) {
+    public final String cond_not(Object subject) {
         return condFmt(26, subject);
     }
-    public final String cond_otherwise(Object subject) {
+    public final String cond_onGeneric(Object subject) {
         return condFmt(27, subject);
     }
-    public final String cond_thereIs(Object number, Object target) {
-        return condFmt(28, number, target);
+    public final String cond_otherwise(Object subject) {
+        return condFmt(28, subject);
     }
     public final String cond_when(Object subject) {
         return condFmt(29, subject);

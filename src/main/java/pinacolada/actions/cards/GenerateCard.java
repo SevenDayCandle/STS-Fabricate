@@ -135,6 +135,10 @@ public class GenerateCard extends PCLAction<AbstractCard> {
             if (destination != null && destination != PCLCardSelection.Manual) {
                 destination.add(cardGroup.group, actualCard, 0);
             }
+            // Draw pile by default goes to a random spot
+            else if (cardGroup.type == CardGroup.CardGroupType.DRAW_PILE) {
+                cardGroup.addToRandomSpot(actualCard);
+            }
             else {
                 cardGroup.addToTop(actualCard);
             }

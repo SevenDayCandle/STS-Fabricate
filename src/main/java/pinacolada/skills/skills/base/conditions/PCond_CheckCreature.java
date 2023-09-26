@@ -1,15 +1,16 @@
 package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PCond_CheckCreature extends PPassiveCond<PField_Not> {
@@ -39,7 +40,6 @@ public class PCond_CheckCreature extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        String baseString = fields.getThresholdRawString(TEXT.subjects_character);
-        return TEXT.cond_thereIs(getAmountRawString(), baseString);
+        return TEXT.cond_ifThere(getAmountRawString(), fields.getThresholdRawString(getTargetStringPluralSuffix()));
     }
 }

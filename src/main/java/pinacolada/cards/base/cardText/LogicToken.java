@@ -120,7 +120,7 @@ public class LogicToken extends PCLTextToken {
                                     for (int j = 1; j < tokens.size(); j++) {
                                         temp.append(tokens.get(j).rawText);
                                     }
-                                    currentBlock.token.rawText = temp.toString();
+                                    currentBlock.token.modifyText(temp.toString());
                                 }
 
                                 currentBlock = null;

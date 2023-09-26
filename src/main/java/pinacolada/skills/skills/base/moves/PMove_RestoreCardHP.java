@@ -34,7 +34,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyCardHp(c, extra, false, true);
+        return (c) -> order.modifyCardHp(c, amount, false, true);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     public String getSubText(PCLCardTarget perspective) {
         return TEXT.act_healOn(getAmountRawString(),
                 useParent ? getInheritedThemString() :
-                        fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects_this);
+                        fields.hasGroups() ? fields.getFullCardString(getExtraRawString()) : TEXT.subjects_this);
     }
 
     @Override
     public boolean isDetrimental() {
-        return extra < 0;
+        return amount < 0;
     }
 
     @Override
