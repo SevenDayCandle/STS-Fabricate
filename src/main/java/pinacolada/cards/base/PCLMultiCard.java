@@ -309,8 +309,9 @@ public abstract class PCLMultiCard extends PCLCard {
     @Override
     public void triggerWhenCreated(boolean startOfBattle) {
         if (inheritedCards.size() < multiCardMove.baseAmount) {
+            PField_CardCategory filter = createMysteryFilterFields();
             while (inheritedCards.size() < multiCardMove.baseAmount) {
-                addInheritedCard(new MysteryCard(false, createMysteryFilterFields()));
+                addInheritedCard(new MysteryCard(false, filter));
             }
         }
         for (AbstractCard card : inheritedCards.getCards()) {

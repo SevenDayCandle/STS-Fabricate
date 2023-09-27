@@ -28,6 +28,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.TemplateCardData;
+import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -767,6 +768,27 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);
         return registerDropdown(dropdown, onChangeImpl, selectedItems);
+    }
+
+    public void registerFlag(List<String> cardIDs) {
+        registerDropdown(initializeSearchable(CardFlag.getAll(getColor()), CardFlag::getName, PGR.core.strings.cedit_flags),
+                cards -> {
+                    cardIDs.clear();
+                    cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.ID));
+                },
+                cardIDs,
+                card -> card.ID
+        )
+                .setTooltip(PGR.core.strings.cedit_flags, "");
+    }
+
+    public <V> void registerFlag(List<String> cardIDs, ActionT1<List<CardFlag>> onChangeImpl) {
+        registerDropdown(initializeSearchable(CardFlag.getAll(getColor()), CardFlag::getName, PGR.core.strings.cedit_flags),
+                onChangeImpl,
+                cardIDs,
+                card -> card.ID
+        )
+                .setTooltip(PGR.core.strings.cedit_flags, "");
     }
 
     public void registerIntent(List<PCLIntentType> items) {

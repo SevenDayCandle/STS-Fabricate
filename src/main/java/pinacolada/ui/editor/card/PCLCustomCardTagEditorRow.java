@@ -103,7 +103,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
     }
 
     protected boolean isComponentHovered() {
-        return decreaseButton2.hb.hovered || increaseButton2.hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered || displayValue2.hb.hovered || displayValue.hb.hovered;
+        return super.isComponentHovered() && !(decreaseButton2.hb.hovered || increaseButton2.hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered || displayValue2.hb.hovered || displayValue.hb.hovered);
     }
 
     public void renderRow(SpriteBatch sb) {
@@ -151,33 +151,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         }
 
         return this;
-    }
-
-    protected boolean tryHover(boolean isSelected) {
-        if (!isComponentHovered() && this.hb.hovered) {
-            this.label.setColor(Settings.GREEN_TEXT_COLOR);
-            if (InputHelper.justClickedLeft) {
-                this.hb.clickStarted = true;
-            }
-            if (dr.showTooltipOnHover) {
-                addTooltip();
-            }
-        }
-        else if (isSelected) {
-            this.label.setColor(Settings.GOLD_COLOR);
-            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_TICKED);
-        }
-        else {
-            this.label.setColor(Color.WHITE);
-            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_UNTICKED);
-        }
-
-        if (((this.hb.clicked) || (this.hb.hovered && CInputActionSet.select.isJustPressed()) && EUI.tryClick(this.hb))) {
-            this.hb.clicked = false;
-            this.checkbox.setTexture(isSelected ? ImageMaster.COLOR_TAB_BOX_UNTICKED : ImageMaster.COLOR_TAB_BOX_TICKED);
-            return true;
-        }
-        return false;
     }
 
     public boolean update(boolean isInRange, boolean isSelected) {

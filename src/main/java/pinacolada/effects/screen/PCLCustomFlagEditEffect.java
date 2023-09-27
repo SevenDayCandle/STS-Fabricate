@@ -1,19 +1,20 @@
 package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.loadout.PCLCustomLoadout;
+import pinacolada.ui.editor.PCLCustomFlagDialog;
 import pinacolada.ui.editor.PCLCustomLoadoutDialog;
 
-public class PCLCustomLoadoutEditEffect extends PCLEffectWithCallback<PCLCustomLoadoutDialog> {
+public class PCLCustomFlagEditEffect extends PCLEffectWithCallback<PCLCustomFlagDialog> {
 
-    protected PCLCustomLoadoutDialog dialog;
+    protected PCLCustomFlagDialog dialog;
 
-    public PCLCustomLoadoutEditEffect(String title, PCLCustomLoadout loadout, AbstractCard.CardColor color) {
-        dialog = new PCLCustomLoadoutDialog(title);
+    public PCLCustomFlagEditEffect(String title, PCLCustomFlagInfo info) {
+        dialog = new PCLCustomFlagDialog(title);
         this.dialog.setOnComplete(this::complete);
-        this.dialog.open(loadout, color);
+        this.dialog.open(info);
     }
 
     @Override

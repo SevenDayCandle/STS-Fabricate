@@ -15,6 +15,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.piles.SelectFromPile;
+import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -40,6 +41,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<CostFilter> costs = new ArrayList<>();
     public ArrayList<String> cardIDs = new ArrayList<>();
     public ArrayList<String> loadouts = new ArrayList<>();
+    public ArrayList<String> flags = new ArrayList<>();
     public boolean invert;
 
     public PField_CardCategory() {
@@ -56,7 +58,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         setCost(other.costs);
         setCardIDs(other.cardIDs);
         setLoadout(other.loadouts);
+        setFlag(other.flags);
         setInvert(other.invert);
+    }
+
+    public static boolean checkForFlag(String loadout, AbstractCard card) {
+        CardFlag l = CardFlag.get(loadout);
+        return l != null && l.has(card);
     }
 
     public static boolean checkForLoadout(String loadout, String card) {
@@ -69,6 +77,11 @@ public class PField_CardCategory extends PField_CardGeneric {
             return CardLibrary.getCard(id);
         }
         return null;
+    }
+
+    public static String getFlagName(String loadout) {
+        CardFlag l = CardFlag.get(loadout);
+        return l != null ? l.getName() : loadout;
     }
 
     public static String getLoadoutName(String loadout) {
@@ -104,6 +117,8 @@ public class PField_CardCategory extends PField_CardGeneric {
                 && types.equals(((PField_CardCategory) other).types)
                 && tags.equals(((PField_CardCategory) other).tags)
                 && costs.equals(((PField_CardCategory) other).costs)
+                && loadouts.equals(((PField_CardCategory) other).loadouts)
+                && flags.equals(((PField_CardCategory) other).flags)
                 && invert == ((PField_CardCategory) other).invert;
     }
 
@@ -138,6 +153,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
         if (!loadouts.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(loadouts, PField_CardCategory::getLoadoutName)));
+        }
+        if (!flags.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(flags, PField_CardCategory::getFlagName)));
         }
         if (!affinities.isEmpty()) {
             stringsToJoin.add(affinityFunc.invoke(affinities));
@@ -185,6 +203,7 @@ public class PField_CardCategory extends PField_CardGeneric {
                         && (colors.isEmpty() || colors.contains(c.color))
                         && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
                         && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c.cardID)))
+                        && (flags.isEmpty() || EUIUtils.any(flags, loadout -> checkForFlag(loadout, c)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
                         && (types.isEmpty() || types.contains(c.type))));
@@ -224,6 +243,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
         if (loadouts.size() > i) {
             stringsToJoin.add(getLoadoutName(loadouts.get(i)));
+        }
+        if (flags.size() > i) {
+            stringsToJoin.add(getFlagName(flags.get(i)));
         }
         if (affinities.size() > i) {
             stringsToJoin.add(affinities.get(i).getTooltip().toString());
@@ -296,7 +318,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public boolean isFilterEmpty() {
-        return cardIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && types.isEmpty() && affinities.isEmpty() && tags.isEmpty() && costs.isEmpty() && loadouts.isEmpty();
+        return cardIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && types.isEmpty() && affinities.isEmpty() && tags.isEmpty() && costs.isEmpty() && loadouts.isEmpty() && flags.isEmpty();
     }
 
     @Override
@@ -360,6 +382,20 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setCost(Arrays.asList(types));
     }
 
+    public PField_CardCategory setFlag(Collection<String> nt) {
+        this.flags.clear();
+        this.flags.addAll(nt);
+        return this;
+    }
+
+    public PField_CardCategory setFlag(String... nt) {
+        return setLoadout(Arrays.asList(nt));
+    }
+
+    public PField_CardCategory setFlag(CardFlag... nt) {
+        return setLoadout(EUIUtils.map(nt, l -> l.ID));
+    }
+
     public PField_CardCategory setInvert(boolean val) {
         this.invert = val;
         return this;
@@ -420,6 +456,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
         editor.registerLoadout(loadouts);
+        editor.registerFlag(flags);
         editor.registerCard(cardIDs);
         editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
     }

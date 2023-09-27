@@ -57,7 +57,7 @@ import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.CardTriggerConnection;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.tags.CardFlag;
+import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.CardTargetingManager;

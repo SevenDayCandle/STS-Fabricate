@@ -1,39 +1,44 @@
-package pinacolada.resources.loadout;
+package pinacolada.cards.base.fields;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
+import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLCustomLoadable;
+import pinacolada.resources.loadout.PCLCustomLoadout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
-public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
-    private static final HashMap<String, PCLCustomLoadoutInfo> CUSTOM_LOADOUTS = new HashMap<>();
+public class PCLCustomFlagInfo extends PCLCustomLoadable {
+    private static final HashMap<String, PCLCustomFlagInfo> CUSTOM_FLAGS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
-    private static final TypeToken<PCLCustomLoadoutInfo> TTOKEN = new TypeToken<PCLCustomLoadoutInfo>() {
+    private static final TypeToken<PCLCustomFlagInfo> TTOKEN = new TypeToken<PCLCustomFlagInfo>() {
     };
-    public static final String SUBFOLDER = "loadout";
+    private static final TypeToken<HashMap<Settings.GameLanguage, String>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, String>>() {
+    };
+    public static final String SUBFOLDER = "flag";
     protected transient String filePath;
     public String languageStrings;
     public String colorString;
-    public int unlockLevel;
     public transient AbstractCard.CardColor color = AbstractCard.CardColor.COLORLESS;
-    public transient PCLCustomLoadout loadout;
+    public transient CardFlag flag;
+    public transient HashMap<Settings.GameLanguage, String> languageMap;
 
-    public PCLCustomLoadoutInfo(String id, String languageStrings, AbstractCard.CardColor color) {
+    public PCLCustomFlagInfo(String id, HashMap<Settings.GameLanguage, String> languageMap, AbstractCard.CardColor color) {
         ID = id;
         filePath = makeFilePath();
-        this.languageStrings = languageStrings;
+        this.languageMap = languageMap;
         this.color = color;
-        linkLoadout();
+        linkFlag();
     }
 
     /**
@@ -43,19 +48,19 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
         PROVIDERS.add(provider);
     }
 
-    public static PCLCustomLoadoutInfo get(String id) {
-        return CUSTOM_LOADOUTS.get(id);
+    public static PCLCustomFlagInfo get(String id) {
+        return CUSTOM_FLAGS.get(id);
     }
 
-    public static ArrayList<PCLCustomLoadoutInfo> getLoadouts(AbstractCard.CardColor color) {
+    public static ArrayList<PCLCustomFlagInfo> getFlags(AbstractCard.CardColor color) {
         if (color == null) {
-            return new ArrayList<>(CUSTOM_LOADOUTS.values());
+            return new ArrayList<>(CUSTOM_FLAGS.values());
         }
-        return EUIUtils.filter(CUSTOM_LOADOUTS.values(), l -> l.color == color);
+        return EUIUtils.filter(CUSTOM_FLAGS.values(), l -> l.color == color);
     }
 
     public static void initialize() {
-        CUSTOM_LOADOUTS.clear();
+        CUSTOM_FLAGS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder());
@@ -63,22 +68,22 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     }
 
     public static boolean isIDDuplicate(String input) {
-        return isIDDuplicate(input, CUSTOM_LOADOUTS.values());
+        return isIDDuplicate(input, CUSTOM_FLAGS.values());
     }
 
     private static void loadFolder(FileHandle folder) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleLoadoutImpl(f);
+            loadSingleFlagImpl(f);
         }
     }
 
-    private static void loadSingleLoadoutImpl(FileHandle f) {
+    private static void loadSingleFlagImpl(FileHandle f) {
         String path = f.path();
         try {
             String jsonString = f.readString();
-            PCLCustomLoadoutInfo slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
+            PCLCustomFlagInfo slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setup(path);
-            CUSTOM_LOADOUTS.put(slot.ID, slot);
+            CUSTOM_FLAGS.put(slot.ID, slot);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -87,15 +92,18 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     }
 
     public static String makeNewID(AbstractCard.CardColor color) {
-        return makeNewID(StringUtils.lowerCase(String.valueOf(color)), CUSTOM_LOADOUTS.values());
+        return makeNewID(StringUtils.lowerCase(String.valueOf(color)), CUSTOM_FLAGS.values());
     }
 
-    public static void register(PCLCustomLoadoutInfo loadout) {
-        CUSTOM_LOADOUTS.put(loadout.ID, loadout);
+    public static void register(PCLCustomFlagInfo loadout) {
+        CUSTOM_FLAGS.put(loadout.ID, loadout);
     }
 
     public void commit() {
+        flag.setName(languageMap.getOrDefault(Settings.language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG, ID)));
         colorString = String.valueOf(color);
+        languageStrings = EUIUtils.serialize(languageMap);
 
         String newFilePath = makeFilePath();
         // If the file path has changed and the original file exists, we should move the file and its image
@@ -117,19 +125,25 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
         return SUBFOLDER;
     }
 
-    private void linkLoadout() {
-        loadout = new PCLCustomLoadout(this);
+    private void linkFlag() {
+        flag = new CardFlag(ID, color != null && color != AbstractCard.CardColor.COLORLESS ? EUIUtils.array(color) : EUIUtils.array());
+        flag.setName(languageMap.getOrDefault(Settings.language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG, ID)));
     }
 
     private void setup(String fp) {
         color = AbstractCard.CardColor.valueOf(colorString);
+        languageMap = EUIUtils.deserialize(languageStrings, TStrings.getType());
+        if (languageMap == null) {
+            languageMap = new HashMap<>();
+        }
         filePath = fp;
-        linkLoadout();
+        linkFlag();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Loadout: " + fp);
     }
 
     public void wipe() {
-        CUSTOM_LOADOUTS.remove(ID);
+        CUSTOM_FLAGS.remove(ID);
         FileHandle writer = Gdx.files.local(filePath);
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Loadout: " + filePath);

@@ -144,7 +144,10 @@
 												"Invert",
 												"Every X",
 												"Min/Max Stacks",
-												"Scope"
+												"Scope",
+												"New Flag",
+												"Rename Flag",
+												"Delete Flag"
 								]
 				},
 				"pcl:CardEditorTutorial": {

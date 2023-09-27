@@ -127,6 +127,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_every = cedit.TEXT[78];
     public final String cedit_minMaxStacks = cedit.TEXT[79];
     public final String cedit_scope = cedit.TEXT[80];
+    public final String cedit_newFlag = cedit.TEXT[81];
+    public final String cedit_renameFlag = cedit.TEXT[82];
+    public final String cedit_deleteFlag = cedit.TEXT[83];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];

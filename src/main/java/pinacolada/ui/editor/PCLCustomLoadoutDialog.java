@@ -1,4 +1,4 @@
-package pinacolada.ui.customRun;
+package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -137,7 +137,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
                         currentLanguageMap.size() > 0 ? currentLanguageMap.entrySet().iterator().next().getValue() : PCLCustomLoadout.getInitialStrings()));
     }
 
-    public void open(PCLCustomLoadout loadout) {
+    public void open(PCLCustomLoadout loadout, AbstractCard.CardColor color) {
         setActive(true);
         this.loadout = loadout;
         if (loadout != null) {
@@ -147,7 +147,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
             updateLanguage(activeLanguage);
         }
         else {
-            currentID = PCLCustomLoadoutInfo.makeNewID(AbstractCard.CardColor.COLORLESS);
+            currentID = PCLCustomLoadoutInfo.makeNewID(color);
             idInput.setText(currentID);
             currentLanguageMap = new HashMap<>();
         }

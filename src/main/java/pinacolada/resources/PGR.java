@@ -28,7 +28,8 @@ import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.tags.CardFlag;
+import pinacolada.cards.base.fields.CardFlag;
+import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.commands.*;
 import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.dungeon.CombatManager;
@@ -475,6 +476,7 @@ public class PGR {
 
     // Powers must be initialized before other customs because they are factored into checks
     public static void reloadCustoms() {
+        PCLCustomFlagInfo.initialize();
         PCLCustomLoadoutInfo.initialize();
         PCLCustomPowerSlot.initialize();
         PCLCustomCardSlot.initialize();
