@@ -593,8 +593,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
             activeElements.clear();
-            valueEditor.setHeaderText(node.skill.getHeaderTextForAmount());
-            extraEditor.setHeaderText(node.skill.getHeaderTextForExtra());
+            valueEditor.setHeaderText(node.skill.getHeaderTextForAmount()).setOnTab(() -> {
+                if (extraEditor.isActive) {
+                    extraEditor.start();
+                }
+                else {
+                    scopeEditor.start();
+                }
+            });
+            extraEditor.setHeaderText(node.skill.getHeaderTextForExtra()).setOnTab(() -> scopeEditor.start());
             scopeEditor.setHeaderText(node.skill.getHeaderTextForScope());
             targets
                     .setItems(PSkill.getEligibleTargets(node.skill))

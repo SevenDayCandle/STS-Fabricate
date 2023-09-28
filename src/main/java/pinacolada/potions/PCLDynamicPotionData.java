@@ -120,6 +120,11 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
     }
 
     @Override
+    public Texture getImage() {
+        return portraitImage;
+    }
+
+    @Override
     public ArrayList<PSkill<?>> getMoves() {
         return moves;
     }

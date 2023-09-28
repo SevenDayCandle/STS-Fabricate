@@ -215,7 +215,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(this, "Failed to load card image.");
+            EUIUtils.logError(this, "Failed to load card image: " + e.getLocalizedMessage());
         }
     }
 

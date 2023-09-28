@@ -58,9 +58,14 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
+
         this.inputCards.forceSetValue(0, false);
         this.inputColorless.forceSetValue(0, false);
         this.inputCurse.forceSetValue(0, false);
+
+        this.inputCards.setOnTab(() -> this.inputColorless.start());
+        this.inputColorless.setOnTab(() -> this.inputCurse.start());
+        this.inputCurse.setOnTab(() -> this.inputCards.start());
     }
 
     protected EUIButton getCancelButton() {

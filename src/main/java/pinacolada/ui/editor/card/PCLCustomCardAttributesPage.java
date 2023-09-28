@@ -148,6 +148,13 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         magicNumberEditor.tooltip.setChildren(upgradeLabel.tooltip);
         hpEditor.tooltip.setChildren(upgradeLabel.tooltip);
 
+        costEditor.setOnTab(() -> damageEditor.start());
+        damageEditor.setOnTab(() -> blockEditor.start());
+        blockEditor.setOnTab(() -> hitCountEditor.start());
+        hitCountEditor.setOnTab(() -> rightCountEditor.start());
+        rightCountEditor.setOnTab(() -> magicNumberEditor.start());
+        magicNumberEditor.setOnTab(() -> hpEditor.start());
+
         // Affinity editors
 
         curW = START_X;

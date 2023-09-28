@@ -114,6 +114,11 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     }
 
     @Override
+    public Texture getImage() {
+        return portraitImage;
+    }
+
+    @Override
     public ArrayList<PSkill<?>> getMoves() {
         return moves;
     }

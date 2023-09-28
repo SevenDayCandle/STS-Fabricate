@@ -220,42 +220,13 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
 
     protected void commitBuilder() {
         recordBuilder();
-        String newFilePath = makeFilePath();
-        String newImagePath = makeImagePath();
-
-        // If the file path has changed and the original file exists, we should move the file and its image
-        FileHandle writer = Gdx.files.local(filePath);
-        if (writer.exists() && !newFilePath.equals(filePath)) {
-            writer.moveTo(Gdx.files.local(newFilePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card: " + filePath + ", New: " + newFilePath);
-        }
-        writer = Gdx.files.local(newFilePath);
-
-        // The image should have the same file name as the file path
-        FileHandle imgWriter = Gdx.files.local(imagePath);
-        if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
-            imgWriter.moveTo(Gdx.files.local(newImagePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
-        }
-
-        filePath = newFilePath;
-        imagePath = newImagePath;
-
-        // If the image in the builder was updated, we need to overwrite the existing image
-        // All builders should have the same image
-        PCLDynamicCardData builder = getBuilder(0);
-        if (builder != null && builder.portraitImage != null) {
-            PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
-            // Forcibly reload the image
-            EUIRM.reloadTexture(newImagePath, true, PGR.config.lowVRAM.get());
-        }
+        writeFiles(TTOKEN.getType());
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
         for (PCLDynamicCardData b : builders) {
-            b.setImagePath(newImagePath).setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
+            b.setImagePath(imagePath).setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
         }
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
         if (PGR.debugCards != null) {
             PGR.debugCards.refresh();

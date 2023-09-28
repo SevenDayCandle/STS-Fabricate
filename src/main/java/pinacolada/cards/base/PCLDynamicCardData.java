@@ -1,5 +1,6 @@
 package pinacolada.cards.base;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -209,6 +210,11 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     @Override
     public AbstractCard.CardColor getCardColor() {
         return cardColor;
+    }
+
+    @Override
+    public Texture getImage() {
+        return portraitImage != null ? portraitImage.texture : null;
     }
 
     @Override

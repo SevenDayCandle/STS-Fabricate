@@ -123,6 +123,11 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         return PGR.core.cardColor;
     }
 
+    @Override
+    public Texture getImage() {
+        return portraitImage;
+    }
+
     public String getEffectTextForPreview(int level) {
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
+import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
@@ -67,6 +68,8 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(title);
+
+        this.displayValue.setOnTab(() -> this.displayValueSecondary.start());
 
         this.onUpdate = onUpdate;
     }
@@ -131,6 +134,11 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
         return this;
     }
 
+    public PCLCustomUpgradableEditor setOnTab(ActionT0 onComplete) {
+        this.displayValueSecondary.setOnTab(onComplete);
+        return this;
+    }
+
     public PCLCustomUpgradableEditor setSecondaryValue(int valueSecondary) {
         return setValue(displayValue.getCachedValue(), valueSecondary);
     }
@@ -163,6 +171,12 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
         }
 
         return this;
+    }
+
+    public void start() {
+        if (isActive) {
+            displayValue.start();
+        }
     }
 
     @Override

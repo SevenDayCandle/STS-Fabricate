@@ -1,8 +1,10 @@
 package pinacolada.interfaces.markers;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
+import extendedui.utilities.ColoredTexture;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
@@ -83,6 +85,8 @@ public interface EditorMaker {
     }
 
     AbstractCard.CardColor getCardColor();
+
+    Texture getImage();
 
     List<PSkill<?>> getMoves();
 

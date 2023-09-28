@@ -90,6 +90,9 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
+
+        this.idInput.setOnTab(() -> this.nameInput.start());
+        this.nameInput.setOnTab(() -> this.idInput.start());
     }
 
     public void create(AbstractCard.CardColor color) {
