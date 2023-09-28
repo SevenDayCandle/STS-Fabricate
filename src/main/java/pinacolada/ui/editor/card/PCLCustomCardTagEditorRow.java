@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUIButton;
@@ -40,7 +38,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
                 .setLimits(item.tag.minValue, item.tag.maxValue)
                 .setOnComplete(v -> {
                     // TODO use stack for active elements in EUI
-                    EUI.setActiveElement(dr);
+                    EUI.pushActiveElement(dr);
                     this.setPrimary(v, true);
                 })
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
@@ -53,7 +51,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
                 .showNegativeAsInfinity(true)
                 .setLimits(item.tag.minValue, item.tag.maxValue)
                 .setOnComplete(v -> {
-                    EUI.setActiveElement(dr);
+                    EUI.pushActiveElement(dr);
                     this.setSecondary(v, true);
                 })
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)

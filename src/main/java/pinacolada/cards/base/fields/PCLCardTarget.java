@@ -442,6 +442,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         switch (this) {
             case Self:
             case Any:
+            case All:
             case Team:
             case SelfAllEnemy:
             case SelfPlayer:

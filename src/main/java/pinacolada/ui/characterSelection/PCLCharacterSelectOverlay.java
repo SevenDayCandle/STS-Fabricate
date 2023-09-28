@@ -1,15 +1,11 @@
 package pinacolada.ui.characterSelection;
 
-import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -18,7 +14,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.*;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
@@ -35,7 +31,6 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
-import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
@@ -45,8 +40,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
@@ -399,32 +392,32 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         String hp = EUIClassUtils.getField(characterOption, "hp");
         String flavor = EUIClassUtils.getField(characterOption, "flavorText");
 
-        EUISmartText.write(sb, FontHelper.bannerNameFont, characterOption.name, infoX - 35.0F * Settings.scale, infoY + 350.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+        EUITextHelper.renderSmart(sb, FontHelper.bannerNameFont, characterOption.name, infoX - 35.0F * Settings.scale, infoY + 350.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.CardIcons.hp.texture(), infoX - 10.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
-        EUISmartText.write(sb,  EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
+        EUITextHelper.renderSmart(sb,  EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.Tooltips.gold.texture(), infoX + 260.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
-        EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + Integer.toString(gold), infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
+        EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + Integer.toString(gold), infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
 
         if (cachedBlights != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
                 r.render(sb, false, Color.WHITE);
             }
         }
         if (cachedRelics != null) {
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 10.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 10.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractRelic r : cachedRelics) {
                 r.renderWithoutAmount(sb, Color.WHITE);
             }
         }
 
         EUIFontHelper.cardTitleFontSmall.getData().setScale(0.8f);
-        EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, flavor, infoX - 26.0F * Settings.scale, infoY + 160.0F * Settings.scale, 10000.0F, 30.0F * Settings.scale, Settings.CREAM_COLOR);
+        EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, flavor, infoX - 26.0F * Settings.scale, infoY + 160.0F * Settings.scale, 10000.0F, 30.0F * Settings.scale, Settings.CREAM_COLOR);
         if (unlocksRemaining > 0) {
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 80.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlocksRemaining) + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 80.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
             int unlockProgress = UnlockTracker.getCurrentProgress(characterOption.c.chosenClass);
             int unlockCost = UnlockTracker.getCurrentScoreCost(characterOption.c.chosenClass);
-            EUISmartText.write(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, Integer.toString(unlockProgress) + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
         }
         EUIRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
     }

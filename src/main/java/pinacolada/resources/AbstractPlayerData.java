@@ -5,6 +5,7 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;

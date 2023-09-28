@@ -15,6 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardModifyAffinity;
 
+import java.util.Collections;
 import java.util.List;
 
 @VisibleSkill
@@ -48,7 +49,18 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
 
     @Override
     public void cardAction(List<AbstractCard> cards, PCLActions order) {
-        if (fields.or && fields.addAffinities.size() > 1) {
+        if (fields.addAffinities.size() == 0) {
+            if (fields.or) {
+                chooseEffect(cards, PCLAffinity.getAvailableAffinitiesAsList(), order);
+            }
+            else {
+                PCLAffinity random = PCLAffinity.getRandomAvailableAffinity();
+                for (AbstractCard c : cards) {
+                    order.modifyAffinityLevel(c, Collections.singletonList(random), amount, !fields.not, fields.forced);
+                }
+            }
+        }
+        else if (fields.or && fields.addAffinities.size() > 1) {
             chooseEffect(cards, fields.addAffinities, order);
         }
         else {

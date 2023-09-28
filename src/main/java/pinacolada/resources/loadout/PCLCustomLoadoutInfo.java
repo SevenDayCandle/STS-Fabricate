@@ -2,6 +2,7 @@ package pinacolada.resources.loadout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
@@ -75,7 +76,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     private static void loadSingleLoadoutImpl(FileHandle f) {
         String path = f.path();
         try {
-            String jsonString = f.readString();
+            String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomLoadoutInfo slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setup(path);
             CUSTOM_LOADOUTS.put(slot.ID, slot);
@@ -108,7 +109,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
 
         filePath = newFilePath;
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Loadout: " + filePath);
     }
 

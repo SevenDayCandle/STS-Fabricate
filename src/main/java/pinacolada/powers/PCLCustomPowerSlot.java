@@ -3,6 +3,7 @@ package pinacolada.powers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
@@ -137,7 +138,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     private static void loadSinglePowerImpl(FileHandle f) {
         String path = f.path();
         try {
-            String jsonString = f.readString();
+            String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomPowerSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             slot.registerTooltip();
@@ -196,7 +197,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             b.setImagePath(newImagePath).setImage(null);
         }
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomPowerSlot.class, "Saved Custom Potion: " + filePath);
         if (PGR.debugPotions != null) {
             PGR.debugPotions.refresh();

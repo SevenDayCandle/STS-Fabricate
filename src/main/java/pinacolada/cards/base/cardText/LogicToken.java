@@ -3,7 +3,7 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
@@ -55,7 +55,7 @@ public class LogicToken extends PCLTextToken {
             ArrayList<LogicTokenBlock> blockConds = new ArrayList<>();
             PointerToken pointer = null;
             LogicTokenBlock currentBlock = null;
-            EUISmartText.LogicCondition current = null;
+            EUITextHelper.LogicCondition current = null;
             int staticValue = 0;
 
             int i = 1;
@@ -81,7 +81,7 @@ public class LogicToken extends PCLTextToken {
                                 current.value = StringUtils.isNumeric(condOutput) ? Integer.parseInt(condOutput) : 0;
                                 currentBlock.conditions.add(current);
                             }
-                            current = new EUISmartText.LogicCondition(EUISmartText.LogicComparison.typeFor(next));
+                            current = new EUITextHelper.LogicCondition(EUITextHelper.LogicComparison.typeFor(next));
                             break;
                         // : signals end of condition definition. An empty condition means that this block always returns
                         case ':':
@@ -89,7 +89,7 @@ public class LogicToken extends PCLTextToken {
                                 currentBlock = new LogicTokenBlock();
                             }
                             if (current == null) {
-                                current = new EUISmartText.LogicCondition(EUISmartText.LogicComparison.True);
+                                current = new EUITextHelper.LogicCondition(EUITextHelper.LogicComparison.True);
                             }
                             String condOutput = EUIUtils.popBuilder(builder);
                             current.value = StringUtils.isNumeric(condOutput) ? Integer.parseInt(condOutput) : 0;
@@ -179,7 +179,7 @@ public class LogicToken extends PCLTextToken {
     }
 
     protected static class LogicTokenBlock {
-        final public ArrayList<EUISmartText.LogicCondition> conditions;
+        final public ArrayList<EUITextHelper.LogicCondition> conditions;
         public WordToken token;
 
         LogicTokenBlock() {

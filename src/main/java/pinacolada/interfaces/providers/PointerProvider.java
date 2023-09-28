@@ -8,7 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
@@ -263,7 +263,7 @@ public interface PointerProvider {
                             }
                         }
                     }
-                    sb.append(EUISmartText.parseLogicString(sub.toString()));
+                    sb.append(EUITextHelper.parseLogicString(sub.toString()));
                     break;
                 case SymbolToken.TOKEN2:
                 case '[':
@@ -355,7 +355,7 @@ public interface PointerProvider {
                             }
                         }
                     }
-                    sb.append(EUISmartText.parseLogicString(sub.toString()));
+                    sb.append(EUITextHelper.parseLogicString(sub.toString()));
                     break;
                 case SymbolToken.TOKEN2:
                 case '[':

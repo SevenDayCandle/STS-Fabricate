@@ -19,14 +19,14 @@ public class MerchantPatches {
         private static CardGroup uncommon;
         private static CardGroup rare;
 
-        private static CardGroup getReplacement(CardGroup group) {
+        private static CardGroup getReplacement(CardGroup group, int minAttackSkill, int minPower) {
             final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
             for (AbstractCard c : group.group) {
                 if (!PGR.dungeon.tryCancelCardReward(c) && PGR.dungeon.canObtainCopy(c)) {
                     replacement.group.add(c);
                 }
             }
-            // The pool must have at least two attack/skill/powers because LOOP DEE LOOP DEE LOOP
+            // The pool must have at least two attack/skill and one power because LOOP DEE LOOP DEE LOOP
             int attackCount = 0;
             int skillCount = 0;
             int powerCount = 0;
@@ -41,17 +41,21 @@ public class MerchantPatches {
                     powerCount += 1;
                 }
             }
-            while (attackCount < 2) {
+            while (attackCount < minAttackSkill) {
                 replacement.group.add(makeTempCard(AbstractCard.CardType.ATTACK));
                 attackCount += 1;
             }
-            while (skillCount < 2) {
+            while (skillCount < minAttackSkill) {
                 replacement.group.add(makeTempCard(AbstractCard.CardType.SKILL));
                 skillCount += 1;
             }
-            while (powerCount < 2) {
+            while (powerCount < minPower) {
                 replacement.group.add(makeTempCard(AbstractCard.CardType.POWER));
                 powerCount += 1;
+            }
+
+            if (replacement.group.isEmpty()) {
+                replacement.group.add(makeTempCard(AbstractCard.CardType.SKILL));
             }
 
             return replacement;
@@ -75,16 +79,16 @@ public class MerchantPatches {
         @SpirePrefixPatch
         public static void prefix(Merchant __instance, float x, float y, int newShopScreen) {
             colorless = AbstractDungeon.colorlessCardPool;
-            AbstractDungeon.colorlessCardPool = getReplacement(colorless);
+            AbstractDungeon.colorlessCardPool = getReplacement(colorless, 0, 0);
 
             common = AbstractDungeon.commonCardPool;
-            AbstractDungeon.commonCardPool = getReplacement(common);
+            AbstractDungeon.commonCardPool = getReplacement(common, 2, 0);
 
             uncommon = AbstractDungeon.uncommonCardPool;
-            AbstractDungeon.uncommonCardPool = getReplacement(uncommon);
+            AbstractDungeon.uncommonCardPool = getReplacement(uncommon, 2, 1);
 
             rare = AbstractDungeon.rareCardPool;
-            AbstractDungeon.rareCardPool = getReplacement(rare);
+            AbstractDungeon.rareCardPool = getReplacement(rare, 2, 1);
         }
     }
 }

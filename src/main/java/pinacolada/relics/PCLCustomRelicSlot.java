@@ -3,6 +3,7 @@ package pinacolada.relics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -169,7 +170,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     private static void loadSingleRelicImpl(FileHandle f) {
         String path = f.path();
         try {
-            String jsonString = f.readString();
+            String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomRelicSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             getRelics(slot.slotColor).add(slot);
@@ -222,7 +223,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             b.setImagePath(newImagePath).setImage(null);
         }
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomRelicSlot.class, "Saved Custom Relic: " + filePath);
         if (PGR.debugRelics != null) {
             PGR.debugRelics.refresh();

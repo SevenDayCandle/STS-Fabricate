@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
@@ -20,7 +19,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
@@ -32,10 +31,8 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.cardText.ConditionToken;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -698,7 +695,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                         break;
                     }
                 }
-                sb.append(EUISmartText.parseLogicString(sub.toString()));
+                sb.append(EUITextHelper.parseLogicString(sub.toString()));
             }
             else if (!(c == '{' || c == '}' || c == '[' || c == ']')) {
                 sb.append(c);
@@ -1212,11 +1209,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getThemString() {
-        return EUISmartText.parseLogicString(TEXT.subjects_them(amount));
+        return EUITextHelper.parseLogicString(TEXT.subjects_them(amount));
     }
 
     public String getTheyString() {
-        return EUISmartText.parseLogicString(TEXT.subjects_they(amount));
+        return EUITextHelper.parseLogicString(TEXT.subjects_they(amount));
     }
 
     @Override

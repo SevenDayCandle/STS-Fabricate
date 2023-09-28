@@ -2,6 +2,7 @@ package pinacolada.cards.base.fields;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -80,7 +81,7 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
     private static void loadSingleFlagImpl(FileHandle f) {
         String path = f.path();
         try {
-            String jsonString = f.readString();
+            String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomFlagInfo slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setup(path);
             CUSTOM_FLAGS.put(slot.ID, slot);
@@ -116,7 +117,7 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
 
         filePath = newFilePath;
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Loadout: " + filePath);
     }
 

@@ -72,6 +72,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckCreature(target, amount);
     }
 
+    public static PCond_CheckDamage checkDamage(PCLCardTarget target, int amount) {
+        return new PCond_CheckDamage(target, amount);
+    }
+
     public static PCond_CheckDistinctPower checkDistinctPower(PCLCardTarget target, int amount, PCLPowerData... powers) {
         return new PCond_CheckDistinctPower(target, amount, powers);
     }

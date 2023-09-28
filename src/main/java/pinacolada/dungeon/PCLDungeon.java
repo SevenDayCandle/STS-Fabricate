@@ -578,10 +578,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             }
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
-                // Do not add basic/special/curse rarity items into the colorless pool
-                if (rarity == AbstractCard.CardRarity.COMMON || rarity == AbstractCard.CardRarity.UNCOMMON || rarity == AbstractCard.CardRarity.RARE) {
-                    AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
-                    AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
+                switch (rarity) {
+                    case COMMON:
+                    case UNCOMMON:
+                    case RARE:
+                        AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
+                        AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
+                        break;
+                    case CURSE:
+                        AbstractDungeon.srcCurseCardPool.addToBottom(c.getBuilder(0).create());
+                        AbstractDungeon.curseCardPool.addToBottom(c.getBuilder(0).create());
                 }
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
             }

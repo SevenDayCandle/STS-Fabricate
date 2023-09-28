@@ -115,13 +115,6 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         return ascensionLevel;
     }
 
-    // TODO investigate what is causing the screen to take focus away from everything else
-    public void close() {
-        super.close();
-        EUI.setActiveElement(null);
-        CardCrawlGame.isPopupOpen = false;
-    }
-
     public void confirm() {
         CardCrawlGame.chosenCharacter = currentOption != null ? currentOption.c.chosenClass : null;
         if (CardCrawlGame.chosenCharacter == null) {

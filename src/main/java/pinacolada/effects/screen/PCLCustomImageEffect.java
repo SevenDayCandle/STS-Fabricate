@@ -2,7 +2,6 @@ package pinacolada.effects.screen;
 
 import basemod.abstracts.CustomCard;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.*;
@@ -14,8 +13,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
+import extendedui.EUIInputManager;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -387,8 +388,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 }
             }
 
-            // TODO see if there is a way to check for the "paste" function for different operating systems
-            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            if (InputHelper.isPasteJustPressed()) {
                 getImageFromClipboard();
             }
         }

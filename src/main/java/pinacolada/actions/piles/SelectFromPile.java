@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -312,7 +312,7 @@ public class SelectFromPile extends CardFilterAction {
 
     @Override
     public String updateMessage() {
-        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
+        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUITextHelper.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
 

@@ -3,7 +3,7 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 
 // Copied and modified from STS-AnimatorMod
@@ -77,7 +77,7 @@ public abstract class HighlightToken extends PCLTextToken {
                     case ':':
                         if (color == null) {
                             final String cString = builder.toString();
-                            color = EUISmartText.getColor(cString);
+                            color = EUITextHelper.getColor(cString);
                             builder.setLength(0);
                             break;
                         }

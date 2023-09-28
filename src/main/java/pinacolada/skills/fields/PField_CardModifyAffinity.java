@@ -1,6 +1,8 @@
 package pinacolada.skills.fields;
 
+import extendedui.EUIRM;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class PField_CardModifyAffinity extends PField_CardModify {
     }
 
     public String getAddAffinityChoiceString() {
+        if (addAffinities.isEmpty()) {
+            return or ? PGR.core.strings.subjects_anyX(getGeneralAffinityString()) : EUIRM.strings.numNoun(1, PGR.core.strings.subjects_randomX(getGeneralAffinityString()));
+        }
         return getAffinityAndOrString(addAffinities, or);
     }
 

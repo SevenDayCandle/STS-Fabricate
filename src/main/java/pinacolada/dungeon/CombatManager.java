@@ -838,7 +838,12 @@ public class CombatManager extends EUIBase {
     public static void onShuffle(boolean triggerRelics) {
         if (triggerRelics) {
             // Activates before the cards actually get moved to the draw pile
-            for (AbstractCard c : AbstractDungeon.player.discardPile.group) {
+            for (AbstractCard c : player.discardPile.group) {
+                if (c instanceof PCLCard) {
+                    ((PCLCard) c).triggerOnShuffle();
+                }
+            }
+            for (AbstractCard c : player.drawPile.group) {
                 if (c instanceof PCLCard) {
                     ((PCLCard) c).triggerOnShuffle();
                 }

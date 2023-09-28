@@ -3,6 +3,7 @@ package pinacolada.potions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -169,7 +170,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     private static void loadSinglePotionImpl(FileHandle f) {
         String path = f.path();
         try {
-            String jsonString = f.readString();
+            String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomPotionSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             getPotions(slot.slotColor).add(slot);
@@ -222,7 +223,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
             b.setImagePath(newImagePath).setImage(null);
         }
 
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomPotionSlot.class, "Saved Custom Potion: " + filePath);
         if (PGR.debugPotions != null) {
             PGR.debugPotions.refresh();

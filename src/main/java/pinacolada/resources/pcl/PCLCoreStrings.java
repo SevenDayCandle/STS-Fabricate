@@ -10,7 +10,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.resources.AbstractStrings;
 import pinacolada.resources.PCLResources;
@@ -681,11 +681,11 @@ public class PCLCoreStrings extends AbstractStrings {
     }
 
     public static String pluralEvaluated(String tip, Object evaluated) {
-        return EUISmartText.parseLogicString(EUIUtils.format(tip, evaluated));
+        return EUITextHelper.parseLogicString(EUIUtils.format(tip, evaluated));
     }
 
     public static String pluralForce(String tip) {
-        return EUISmartText.parseLogicString(EUIUtils.format(tip, 2));
+        return EUITextHelper.parseLogicString(EUIUtils.format(tip, 2));
     }
 
     public static String present(Object obj) {
@@ -697,7 +697,7 @@ public class PCLCoreStrings extends AbstractStrings {
     }
 
     public static String singularForce(String tip) {
-        return EUISmartText.parseLogicString(EUIUtils.format(tip, 1));
+        return EUITextHelper.parseLogicString(EUIUtils.format(tip, 1));
     }
 
     private String actFmt(int index, Object... objects) {

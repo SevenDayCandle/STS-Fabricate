@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
@@ -13,7 +12,7 @@ import extendedui.*;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
@@ -27,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.TemplateCardData;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -37,9 +35,7 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLDynamicPower;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -641,7 +637,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerBoolean(String title, String desc, ActionT1<Boolean> onChange, boolean initial) {
-        float predictLength = EUISmartText.getSmartWidth(EUIFontHelper.cardDescriptionFontNormal, title, Settings.WIDTH, 0f);
+        float predictLength = EUITextHelper.getSmartWidth(EUIFontHelper.cardDescriptionFontNormal, title, Settings.WIDTH, 0f);
         registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f + predictLength, MENU_HEIGHT, MENU_WIDTH, 0))
                         .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                         .setText(title)

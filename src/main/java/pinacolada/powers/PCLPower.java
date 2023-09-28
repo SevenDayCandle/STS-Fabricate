@@ -22,7 +22,7 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.text.EUISmartText;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
@@ -111,7 +111,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             char c = description.charAt(i);
             switch (c) {
                 case '|':
-                    sb.append(EUISmartText.NEWLINE);
+                    sb.append(EUITextHelper.NEWLINE);
                     break;
                 case '[':
                 case '†':
