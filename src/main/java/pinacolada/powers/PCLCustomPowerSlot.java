@@ -9,12 +9,15 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.resources.PCLMainConfig;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
@@ -91,7 +94,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     public static void editSlot(PCLCustomPowerSlot slot, String oldID) {
-        if (!oldID.equals(slot.ID)) {
+        if (!Objects.equals(oldID, slot.ID)) {
             CUSTOM_POWERS.remove(oldID);
             CUSTOM_POWERS.put(slot.ID, slot);
             EUIKeywordTooltip.removeTemp(oldID);
@@ -230,7 +233,6 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         PCLDynamicPowerData first = getBuilder(0);
         if (first != null) {
             first.updateTooltip();
-            EUIKeywordTooltip.registerIDTemp(ID, first.tooltip);
         }
     }
 

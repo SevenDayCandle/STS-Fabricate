@@ -15,7 +15,6 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
@@ -260,6 +259,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public void setCharacter(CharacterOption c) {
         this.currentOption = c;
         canvas.setCharacter(c);
+        fakeLoadout.onSelect(currentOption); // Refresh character option
     }
 
     public void setSeed(String s) {

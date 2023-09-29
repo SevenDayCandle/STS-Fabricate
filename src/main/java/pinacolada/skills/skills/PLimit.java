@@ -43,9 +43,9 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
         limitCache = canActivate(info);
-        super.refresh(info, limitCache & conditionMet);
+        super.refresh(info, limitCache & conditionMet, isUsing);
     }
 
     public PLimit setChild(PSkill<?> effect) {

@@ -575,7 +575,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
         int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
         int eMax = data != null ? data.maxExtra : PSkill.DEFAULT_MAX;
-        shouldOverrideTarget = false;
 
         effects.setSelection(node.skill, false);
         valueEditor
@@ -592,6 +591,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setActive(node.skill != null && node.skill.target.targetsRandom());
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
+            shouldOverrideTarget = node.skill.shouldOverrideTarget();
             activeElements.clear();
             valueEditor.setHeaderText(node.skill.getHeaderTextForAmount()).setOnTab(() -> {
                 if (extraEditor.isActive) {
@@ -632,6 +632,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             valueEditor.setHeaderText(PGR.core.strings.cedit_value);
             extraEditor.setHeaderText(PGR.core.strings.cedit_extraValue);
             scopeEditor.setHeaderText(PGR.core.strings.cedit_scope);
+        }
+        else {
+            shouldOverrideTarget = node.skill.shouldOverrideTarget();
         }
     }
 

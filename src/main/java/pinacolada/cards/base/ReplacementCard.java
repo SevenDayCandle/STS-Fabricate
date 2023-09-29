@@ -122,7 +122,7 @@ public class ReplacementCard extends PCLDynamicCard {
         }
 
         @Override
-        public void refresh(PCLUseInfo info, boolean conditionMet) {
+        public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
             card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
         }
 

@@ -113,6 +113,11 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     @Override
+    public void onUndo() {
+        initializeEffects();
+    }
+
+    @Override
     public void refresh() {
         if (currentEditingSkill != null) {
             currentEditingSkill.refresh();

@@ -35,12 +35,10 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
 
     public PCLDynamicPowerData(PCLResources<?, ?, ?, ?> resources, String cardID) {
         super(PCLDynamicPower.class, resources, cardID);
-        this.tooltip = new EUIKeywordTooltip(strings.NAME);
     }
 
     public PCLDynamicPowerData(PCLResources<?, ?, ?, ?> resources, String cardID, PowerStrings strings) {
         super(PCLDynamicPower.class, resources, cardID, strings);
-        this.tooltip = new EUIKeywordTooltip(strings.NAME);
     }
 
     public PCLDynamicPowerData(PCLPowerData original) {
@@ -238,6 +236,10 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public PCLDynamicPowerData updateTooltip() {
+        tooltip = EUIKeywordTooltip.findByIDTemp(ID);
+        if (tooltip == null) {
+            tooltip = new EUIKeywordTooltip(strings.NAME);
+        }
         tooltip.title = strings.NAME;
         if (this.strings.DESCRIPTIONS.length > 0) {
             tooltip.setDescription(this.strings.DESCRIPTIONS[0]);
@@ -245,6 +247,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         else {
             tooltip.setDescription(getEffectTextForTip());
         }
+        EUIKeywordTooltip.registerIDTemp(ID, tooltip);
         return this;
     }
 }

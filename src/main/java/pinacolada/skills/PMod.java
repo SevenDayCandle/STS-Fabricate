@@ -440,8 +440,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        updateChildAmount(info, false);
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
+        updateChildAmount(info, isUsing);
     }
 
     @Override
@@ -476,7 +476,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return cachedValue;
     }
 
-    protected void updateChildAmount(PCLUseInfo info, boolean isUsing) {
+    public void updateChildAmount(PCLUseInfo info, boolean isUsing) {
         if (this.childEffect != null) {
             if (this.childEffect instanceof PMultiBase) {
                 for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects()) {

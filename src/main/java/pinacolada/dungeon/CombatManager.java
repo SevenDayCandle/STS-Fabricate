@@ -906,9 +906,9 @@ public class CombatManager extends EUIBase {
             subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, finalTarget));
             pclCard.unfadeOut();
             pclCard.lighten(true);
-            pclCard.calculateCardDamage(EUIUtils.safeCast(finalTarget, AbstractMonster.class));
             final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, finalTarget);
             lastCardPlayed = card; // Set last card played after the info generates
+            pclCard.calculateCardDamage(finalTarget, true);
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
                 summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
             }

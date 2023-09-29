@@ -21,6 +21,10 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
 
     }
 
+    public void onUndo() {
+        refresh();
+    }
+
     abstract public TextureCache getTextureCache();
 
     abstract public String getTitle();

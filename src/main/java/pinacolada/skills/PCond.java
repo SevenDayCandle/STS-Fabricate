@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -645,9 +644,9 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
         conditionMetCache = checkCondition(info, false, null);
-        super.refresh(info, conditionMetCache & conditionMet);
+        super.refresh(info, conditionMetCache & conditionMet, isUsing);
     }
 
     @Override

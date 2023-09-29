@@ -36,15 +36,15 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     protected float pitchMax = 1.05f;
 
     public DealDamageToAll(AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect) {
-        this(null, source, targets, amount, damageType, attackEffect, false);
+        this(null, source, targets, amount, damageType, attackEffect, 1);
     }
 
     public DealDamageToAll(AbstractCard card, AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect) {
-        this(card, source, targets, amount, damageType, attackEffect, false);
+        this(card, source, targets, amount, damageType, attackEffect, 1);
     }
 
-    public DealDamageToAll(AbstractCard card, AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect, boolean isFast) {
-        super(ActionType.DAMAGE, isFast ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
+    public DealDamageToAll(AbstractCard card, AbstractCreature source, ArrayList<AbstractCreature> targets, int[] amount, DamageInfo.DamageType damageType, AttackEffect attackEffect, int times) {
+        super(ActionType.DAMAGE, Settings.ACTION_DUR_XFAST);
 
         this.attackEffect = attackEffect;
         this.card = card;
@@ -52,7 +52,7 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
         this.damage = amount;
         this.targets = targets;
 
-        initialize(source, null, amount[0]);
+        initialize(source, null, times);
     }
 
     public DealDamageToAll applyPowers(boolean applyPowers) {
@@ -62,31 +62,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
 
     @Override
     protected void firstUpdate() {
-        boolean mute = pitchMin == 0;
-        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
-        for (AbstractCreature enemy : targets) {
-            if (!GameUtilities.isDeadOrEscaped(enemy)) {
-                if (attackVFX != null) {
-                    if (mute) {
-                        attackVFX.attackWithoutSound(source, enemy, vfxColor, 0.15f);
-                    }
-                    else {
-                        attackVFX.attack(source, enemy, pitchMin, pitchMax, vfxColor, 0.15f);
-                    }
-                }
-
-                if (onDamageEffect != null) {
-                    onDamageEffect.accept(enemy, !mute);
-                }
-
-                mute = true;
-            }
-        }
-
-        if (attackVFX != null) {
-            addDuration(attackVFX.damageDelay);
-        }
-
         if (targets.size() < damage.length) {
             EUIUtils.logWarning(this, "Target size " + targets.size() + " is smaller than damage length " + damage.length);
         }
@@ -145,37 +120,65 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
         return this;
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (tickDuration(deltaTime)) {
-            for (AbstractPower p : player.powers) {
+    private boolean updateAttack() {
+        boolean mute = pitchMin == 0;
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
+
+        if (source != null) {
+            for (AbstractPower p : source.powers) {
                 p.onDamageAllEnemies(this.damage);
             }
+        }
 
-            for (int i = 0; i < targets.size(); i++) {
-                AbstractCreature enemy = targets.get(i);
-                if (!GameUtilities.isDeadOrEscaped(enemy) && i < this.damage.length) {
-                    final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
+        for (int i = 0; i < targets.size(); i++) {
+            AbstractCreature enemy = targets.get(i);
+            if (!GameUtilities.isDeadOrEscaped(enemy) && i < this.damage.length) {
+                if (attackVFX != null) {
+                    if (mute) {
+                        attackVFX.attackWithoutSound(source, enemy, vfxColor, 0.25f);
+                    }
+                    else {
+                        attackVFX.attack(source, enemy, pitchMin, pitchMax, vfxColor, 0.25f);
+                    }
+                }
+
+                if (onDamageEffect != null) {
+                    onDamageEffect.accept(enemy, !mute);
+                }
+
+                mute = true;
+
+                final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
+                if (applyPowers) {
+                    info.applyPowers(source, enemy);
                     if (orb != null) {
                         info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
                     }
-                    if (applyPowers) {
-                        info.applyPowers(source, enemy);
-                    }
-                    DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
-                    DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
                 }
+                DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
+                DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
             }
+        }
 
-            if (GameUtilities.areMonstersBasicallyDead()) {
-                GameUtilities.clearPostCombatActions();
+        if (GameUtilities.areMonstersBasicallyDead()) {
+            GameUtilities.clearPostCombatActions();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            if (amount > 0 && updateAttack()) {
+                amount -= 1;
+                duration = startDuration;
+                isDone = false;
             }
-
-            if (!isFast && !Settings.FAST_MODE) {
-                PCLActions.top.wait(0.1f);
+            else {
+                complete(targets);
             }
-
-            complete(targets);
         }
     }
 }

@@ -37,8 +37,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
                 .showNegativeAsInfinity(true)
                 .setLimits(item.tag.minValue, item.tag.maxValue)
                 .setOnComplete(v -> {
-                    // TODO use stack for active elements in EUI
-                    EUI.pushActiveElement(dr);
                     this.setPrimary(v, true);
                 })
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
@@ -51,7 +49,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
                 .showNegativeAsInfinity(true)
                 .setLimits(item.tag.minValue, item.tag.maxValue)
                 .setOnComplete(v -> {
-                    EUI.pushActiveElement(dr);
                     this.setSecondary(v, true);
                 })
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)

@@ -261,41 +261,32 @@ public final class PCLActions {
         return add(new CycleCards(sourceName, amount));
     }
 
-    public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, PCLAttackVFX effect) {
+    public DealDamage dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, PCLAttackVFX effect) {
         return dealCardDamage(card, source, target, effect.key);
     }
 
-    public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect) {
-        return dealCardDamage(card, card.hitCount, source, target, effect);
+    public DealDamage dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect) {
+        return dealCardDamage(card, card.hitCount, source, target, effect, card.pclTarget.targetsRandom());
     }
 
-    public ArrayList<DealDamage> dealCardDamage(PCLCard card, int times, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect) {
-        ArrayList<DealDamage> actions = new ArrayList<>();
-        for (int i = 0; i < times; i++) {
-            actions.add(add(new DealDamage(card, source, target, effect))
-                    .canRedirect(!card.pclTarget.targetsSingle())
-                    .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
-        }
-
-        return actions;
+    public DealDamage dealCardDamage(PCLCard card, int times, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect, boolean randomize) {
+        return add(new DealDamage(card, source, target, effect, times))
+                .canRedirect(randomize)
+                .shouldRandomize(randomize)
+                .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock);
     }
 
-    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, PCLAttackVFX effect) {
+    public DealDamageToAll dealCardDamageToAll(PCLCard card, AbstractCreature source, PCLAttackVFX effect) {
         return dealCardDamageToAll(card, source, effect.key);
     }
 
-    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
+    public DealDamageToAll dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
         return dealCardDamageToAll(card, card.hitCount, source, effect);
     }
 
-    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, int times, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
-        ArrayList<DealDamageToAll> actions = new ArrayList<>();
-        for (int i = 0; i < times; i++) {
-            actions.add(add(new DealDamageToAll(card, source, card.multiDamageCreatures, card.multiDamage, card.damageTypeForTurn, effect, false))
-                    .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
-        }
-
-        return actions;
+    public DealDamageToAll dealCardDamageToAll(PCLCard card, int times, AbstractCreature source, AbstractGameAction.AttackEffect effect) {
+        return add(new DealDamageToAll(card, source, card.multiDamageCreatures, card.multiDamage, card.damageTypeForTurn, effect, times))
+                .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock);
     }
 
     public DealDamage dealDamage(AbstractCreature source, AbstractCreature target, int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
@@ -323,11 +314,11 @@ public final class PCLActions {
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect) {
-        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true);
+        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true).shouldRandomize(true);
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect) {
-        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true);
+        return dealDamage(player, null, baseDamage, damageType, effect).canRedirect(true).shouldRandomize(true);
     }
 
     public MoveCard discard(AbstractCard card, CardGroup group) {

@@ -65,7 +65,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
     }
 
     @Override

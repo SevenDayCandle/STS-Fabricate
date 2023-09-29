@@ -18,7 +18,6 @@ import pinacolada.utilities.GameUtilities;
 // Copied and modified from STS-AnimatorMod
 public class DealDamage extends PCLAction<AbstractCreature> {
     protected final DamageInfo info;
-
     protected FuncT2<Float, AbstractCreature, AbstractCreature> onDamageEffect;
     protected AbstractOrb orb;
     protected boolean applyPowers;
@@ -26,28 +25,14 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     protected boolean bypassThorns;
     protected boolean canKill = true;
     protected boolean canRedirect;
-    protected boolean hasPlayedEffect;
-    protected boolean skipWait;
-
+    protected boolean shouldRandomize;
     protected Color vfxColor = null;
     protected Color enemyTint = null;
     protected float pitchMin = 0.95f;
     protected float pitchMax = 1.05f;
 
     public DealDamage(AbstractCreature target, DamageInfo info, AttackEffect effect) {
-        this(null, target, info, effect);
-    }
-
-    public DealDamage(AbstractCard card, AbstractCreature target, DamageInfo info, AttackEffect effect) {
-        super(ActionType.DAMAGE, Settings.ACTION_DUR_XFAST);
-
-        this.card = card;
-        this.skipWait = false;
-        this.info = info;
-        this.attackEffect = effect;
-
-        initialize(info.owner, target, info.output);
-        this.applyPowers = card != null;
+        this(null, target, info, effect, 1);
     }
 
     public DealDamage(AbstractCreature target, DamageInfo info) {
@@ -55,7 +40,26 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     }
 
     public DealDamage(AbstractCard card, AbstractCreature source, AbstractCreature target, AttackEffect effect) {
-        this(card, target, new DamageInfo(source, card.damage, card.damageTypeForTurn), effect);
+        this(card, target, new DamageInfo(source, card.damage, card.damageTypeForTurn), effect, 1);
+    }
+
+    public DealDamage(AbstractCard card, AbstractCreature source, AbstractCreature target, AttackEffect effect, int times) {
+        this(card, target, new DamageInfo(source, card.damage, card.damageTypeForTurn), effect, times);
+    }
+
+    public DealDamage(AbstractCard card, AbstractCreature target, DamageInfo info, AttackEffect effect) {
+        this(card, target, info, effect, 1);
+    }
+
+    public DealDamage(AbstractCard card, AbstractCreature target, DamageInfo info, AttackEffect effect, int times) {
+        super(ActionType.DAMAGE, Settings.ACTION_DUR_XFAST);
+
+        this.card = card;
+        this.info = info;
+        this.attackEffect = effect;
+
+        initialize(info.owner, target, times);
+        this.applyPowers = card != null;
     }
 
     public DealDamage applyPowers(boolean applyPowers) {
@@ -75,21 +79,15 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
+    public DealDamage shouldRandomize(boolean value) {
+        this.shouldRandomize = value;
+
+        return this;
+    }
+
     @Override
     protected void firstUpdate() {
-        if (target == null || GameUtilities.isDeadOrEscaped(target)) {
-            if (canRedirect && GameUtilities.getEnemies(true).size() > 0) {
-                target = GameUtilities.getRandomEnemy(true);
-                applyPowers = applyPowers || card != null;
-                amount = info.base;
-            }
-            else {
-                complete(null);
-                return;
-            }
-        }
-
-        if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction()) {
+        if (this.info.type != DamageInfo.DamageType.THORNS && this.source != null && this.source.isDying) {
             complete(null);
             return;
         }
@@ -110,8 +108,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public DealDamage setOptions(boolean superFast, boolean canKill, boolean canRedirect) {
-        this.skipWait = superFast;
+    public DealDamage setOptions(boolean canKill, boolean canRedirect) {
         this.canKill = canKill;
         this.canRedirect = canRedirect;
         return this;
@@ -136,16 +133,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public DealDamage setVFX(boolean superFast, boolean muteSfx) {
-        this.skipWait = superFast;
-
-        if (muteSfx) {
-            this.pitchMin = this.pitchMax = 0;
-        }
-
-        return this;
-    }
-
     public DealDamage setVFXColor(Color color) {
         this.vfxColor = color.cpy();
 
@@ -159,46 +146,70 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    @Override
-    protected void updateInternal(float deltaTime) {
-        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
-
-        if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f) {
-            addDuration(attackVFX.damageDelay);
-            attackVFX.attack(source, target, pitchMin, pitchMax, vfxColor);
-            hasPlayedEffect = true;
+    private boolean updateAttack() {
+        if (shouldRandomize) {
+            if (GameUtilities.getEnemies(true).size() > 0) {
+                target = GameUtilities.getRandomEnemy(true);
+                applyPowers = applyPowers || card != null;
+            }
+            else {
+                return false;
+            }
+        }
+        else if (target == null || GameUtilities.isDeadOrEscaped(target)) {
+            if (canRedirect && GameUtilities.getEnemies(true).size() > 0) {
+                target = GameUtilities.getRandomEnemy(true);
+                applyPowers = applyPowers || card != null;
+            }
+            else {
+                return false;
+            }
         }
 
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
+        if (attackVFX != null) {
+            attackVFX.attack(source, target, pitchMin, pitchMax, vfxColor);
+        }
+
+        if (applyPowers) {
+            if (card != null) {
+                card.calculateCardDamage(GameUtilities.asMonster(target));
+                this.info.output = card.damage;
+            }
+            else {
+                this.info.applyPowers(this.info.owner, target);
+                if (orb != null) {
+                    this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
+                }
+            }
+            applyPowers = false;
+        }
+
+        if (!canKill) {
+            info.output = Math.max(0, Math.min(GameUtilities.getHP(target, true, true) - 1, info.output));
+        }
+        DamageHelper.applyTint(target, enemyTint, attackVFX);
+        DamageHelper.dealDamage(target, info, bypassBlock, bypassThorns);
+
+        if (GameUtilities.areMonstersBasicallyDead()) {
+            GameUtilities.clearPostCombatActions();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
         if (tickDuration(deltaTime)) {
-            if (applyPowers) {
-                if (card != null) {
-                    card.calculateCardDamage(GameUtilities.asMonster(target));
-                    this.info.output = card.damage;
-                }
-                else {
-                    this.info.applyPowers(this.info.owner, target);
-                }
+            if (amount > 0 && updateAttack()) {
+                amount -= 1;
+                duration = startDuration;
+                isDone = false;
             }
-
-            if (orb != null) {
-                this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
+            else {
+                complete(target);
             }
-
-            if (!canKill) {
-                info.output = Math.max(0, Math.min(GameUtilities.getHP(target, true, true) - 1, info.output));
-            }
-            DamageHelper.applyTint(target, enemyTint, attackVFX);
-            DamageHelper.dealDamage(target, info, bypassBlock, bypassThorns);
-
-            if (GameUtilities.areMonstersBasicallyDead()) {
-                GameUtilities.clearPostCombatActions();
-            }
-
-            if (!this.skipWait && !Settings.FAST_MODE) {
-                PCLActions.top.wait(0.1f);
-            }
-
-            complete(target);
         }
     }
 }

@@ -1536,9 +1536,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
         if (this.childEffect != null) {
-            this.childEffect.refresh(info, conditionMet);
+            this.childEffect.refresh(info, conditionMet, isUsing);
         }
     }
 
@@ -1698,6 +1698,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public boolean shouldActAsAll() {
         return baseAmount <= 0 && getUpgrade() <= 0;
     }
+
+    public boolean shouldOverrideTarget() {return false;}
 
     public boolean shouldUseWhenText() {
         return true;

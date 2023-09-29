@@ -58,7 +58,7 @@ public class PMod_RepeatForTarget extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {

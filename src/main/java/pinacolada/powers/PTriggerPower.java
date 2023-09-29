@@ -337,7 +337,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
 
     public void refreshTriggers(PCLUseInfo info) {
         for (PTrigger effect : ptriggers) {
-            effect.refresh(info, true);
+            effect.refresh(info, true, false);
         }
     }
 

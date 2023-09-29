@@ -364,11 +364,11 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public void refresh(PCLUseInfo info, boolean conditionMet) {
-            super.refresh(info, conditionMet);
+        public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
+            super.refresh(info, conditionMet, isUsing);
             for (AbstractCard card : multicard.getCards()) {
                 if (card instanceof PCLCard) {
-                    ((PCLCard) card).refreshImpl(info);
+                    ((PCLCard) card).refreshImpl(info, isUsing);
                 }
                 else {
                     card.calculateCardDamage(GameUtilities.asMonster(info.source));

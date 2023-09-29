@@ -16,7 +16,6 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.PSkillPowerContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
@@ -297,7 +296,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     // TODO single endpoint for calling refresh
     public void refresh(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
-            effect.refresh(info, true);
+            effect.refresh(info, true, false);
         }
     }
 

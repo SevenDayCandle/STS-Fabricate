@@ -140,7 +140,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public void onPhaseChanged(GameActionManager.Phase phase) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, getOwner(), null);
-        trigger.refresh(info, true);
+        trigger.refresh(info, true, false);
     }
 
     public void targetToUse(int amount) {

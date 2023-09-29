@@ -384,9 +384,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
         for (PSkill<?> effect : effects) {
-            effect.refresh(info, conditionMet);
+            effect.refresh(info, conditionMet, false);
         }
     }
 

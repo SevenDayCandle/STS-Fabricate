@@ -44,7 +44,7 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX LIGHTNING = new PCLAttackVFX(AttackEffect.LIGHTNING, null, Color.YELLOW, (sx, sy, cx, cy) -> new LightningEffect(cx, cy), PCLSFX.ATTACK_DAGGER_6);
     public static final PCLAttackVFX POISON = new PCLAttackVFX(AttackEffect.POISON, ImageMaster.ATK_POISON, Color.CHARTREUSE, PCLSFX.ATTACK_POISON, PCLSFX.ATTACK_POISON2);
     public static final PCLAttackVFX PSYCHOKINESIS = new PCLAttackVFX(PCLEnum.AttackEffect.PSYCHOKINESIS, null, Color.MAGENTA, (sx, sy, cx, cy) -> new PsychokinesisEffect(cx, cy), PCLSFX.PCL_PSI);
-    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, 0.6f, (sx, sy, cx, cy) -> new StrongPunchEffect(cx, cy, 2), PCLSFX.RAGE);
+    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, (sx, sy, cx, cy) -> new StrongPunchEffect(cx, cy, 2), PCLSFX.RAGE);
     public static final PCLAttackVFX SHIELD = new PCLAttackVFX(AttackEffect.SHIELD, ImageMaster.ATK_SHIELD, (sx, sy, cx, cy) -> new ShieldParticleEffect(cx, cy));
     public static final PCLAttackVFX SLASH_DIAGONAL = new PCLAttackVFX(AttackEffect.SLASH_DIAGONAL, ImageMaster.ATK_SLASH_D, PCLSFX.ATTACK_FAST);
     public static final PCLAttackVFX SLASH_HEAVY = new PCLAttackVFX(AttackEffect.SLASH_HEAVY, ImageMaster.ATK_SLASH_HEAVY, PCLSFX.ATTACK_HEAVY);
@@ -63,7 +63,6 @@ public class PCLAttackVFX {
     protected final FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX;
     public final AttackEffect key;
     public final TextureRegion texture;
-    public final float damageDelay;
     public final Color damageTint;
 
     public PCLAttackVFX(AttackEffect key) {
@@ -71,33 +70,24 @@ public class PCLAttackVFX {
     }
 
     public PCLAttackVFX(AttackEffect key, TextureRegion texture, String... sfx) {
-        this(key, texture, null, 0, null, sfx);
+        this(key, texture, null, null, sfx);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, float damageDelay, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
         ALL.put(key, this);
         this.key = key;
         this.texture = texture;
         this.damageTint = damageTint;
-        this.damageDelay = damageDelay;
         this.createVFX = createVFX;
         this.sounds = sfx;
     }
 
     public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, String... sfx) {
-        this(key, texture, damageTint, 0, null, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, float damageDelay, String... sfx) {
-        this(key, texture, null, damageDelay, null, sfx);
+        this(key, texture, damageTint, null, sfx);
     }
 
     public PCLAttackVFX(AttackEffect key, TextureRegion texture, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
-        this(key, texture, null, 0, createVFX, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
-        this(key, texture, damageTint, 0, createVFX, sfx);
+        this(key, texture, null, createVFX, sfx);
     }
 
     public static boolean flipHorizontally() {

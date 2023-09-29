@@ -253,7 +253,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
         if (sc != null) {
-            editor.shouldOverrideTarget = true;
             editor.registerDropdown(Arrays.asList(PCLAttackType.values())
                     , EUIUtils.arrayList(sc.getBuilder().attackType)
                     , item -> {
@@ -271,19 +270,24 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
+    public boolean shouldOverrideTarget() {
+        return true;
+    }
+
+    @Override
     public void useImpl(PCLUseInfo info, PCLActions order) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (pCard != null) {
             if (target.targetsMulti()) {
-                order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                setDamageOptions(order.dealCardDamageToAll(pCard, info.source, fields.attackEffect), info);
             }
             else if (target.targetsRandom() && scope > 1) {
                 for (AbstractCreature cr : getTargetList(info)) {
-                    order.dealCardDamage(pCard, info.source, cr, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    setDamageOptions(order.dealCardDamage(pCard, info.source, cr, fields.attackEffect), info);
                 }
             }
             else {
-                order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                setDamageOptions(order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect), info);
             }
         }
     }

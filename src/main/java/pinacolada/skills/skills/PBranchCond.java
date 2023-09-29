@@ -227,14 +227,14 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
         conditionMetCache = checkCondition(info, false, null);
         boolean refreshVal = conditionMetCache & conditionMet;
         for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
+            effect.refresh(info, refreshVal, false);
         }
         if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
+            this.childEffect.refresh(info, refreshVal, false);
         }
     }
 

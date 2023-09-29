@@ -28,7 +28,7 @@ public class AbstractCardPatches {
         @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
         public static void insertPre(AbstractCard __instance, @ByRef float[] tmp) {
             // Updating cost here because this gets called by all vanilla card calculation update methods
-            TemporaryCostModifier.tryRefresh(__instance, AbstractDungeon.player, __instance.cost);
+            TemporaryCostModifier.tryRefresh(__instance, AbstractDungeon.player, __instance.costForTurn, 0);
 
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (r instanceof PCLRelic) {

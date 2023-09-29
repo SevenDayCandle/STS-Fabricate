@@ -5,6 +5,7 @@ import basemod.abstracts.CustomSavable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
@@ -14,13 +15,14 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.vfx.FlashPotionEffect;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUIColors;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -30,7 +32,6 @@ import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.PSkillPowerContainer;
 
 import java.lang.reflect.Type;
@@ -43,6 +44,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public PSkillPowerContainer skills;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
+    private float flashTime;
 
     // We deliberately avoid using initializeData because we need to load the PotionStrings after the super call
     public PCLPotion(PCLPotionData data) {
@@ -91,6 +93,11 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     public void fillPreviews(RotatingList<EUIPreview> list) {
         PointerProvider.fillPreviewsForKeywordProvider(this, list);
+    }
+
+    @Override
+    public void flash() {
+        flashTime = 1;
     }
 
     @Override
@@ -191,6 +198,28 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         renderImpl(sb, false);
     }
 
+    protected void renderFlash(SpriteBatch sb, float x, float y, float scale, Texture containerImg, Texture liquidImg, Texture hybridImg, Texture spotsImg, Texture outlineImg) {
+        Color renderColor = EUIColors.white(liquidColor.a);
+        sb.setColor(renderColor);
+        sb.draw(containerImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        sb.setColor(this.liquidColor);
+        sb.draw(liquidImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        sb.setBlendFunction(770, 1);
+        sb.setColor(renderColor);
+        sb.draw(containerImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        sb.setColor(this.liquidColor);
+        sb.draw(liquidImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        if (hybridImg != null) {
+            sb.setColor(this.hybridColor);
+            sb.draw(hybridImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        }
+        if (spotsImg != null) {
+            sb.setColor(this.spotsColor);
+            sb.draw(spotsImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+        }
+        sb.setBlendFunction(770, 771);
+    }
+
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
         float angle = ReflectionHacks.getPrivate(this, AbstractPotion.class, "angle");
         Texture containerImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "containerImg");
@@ -198,9 +227,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         Texture hybridImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "hybridImg");
         Texture spotsImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "spotsImg");
         Texture outlineImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "outlineImg");
-        ArrayList<FlashPotionEffect> effect = ReflectionHacks.getPrivate(this, AbstractPotion.class, "effect");
 
-        updateFlash();
         updateEffect();
         if (this.hb.hovered) {
             EUITooltip.queueTooltips(this);
@@ -226,8 +253,9 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         sb.setColor(Color.WHITE);
         sb.draw(containerImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
 
-        for (FlashPotionEffect e : effect) {
-            e.render(sb, this.posX, this.posY);
+        if (flashTime > 0) {
+            flashTime -= EUI.delta();
+            renderFlash(sb, posX, posY, Interpolation.exp10In.apply(Settings.scale, Settings.scale * 12f, flashTime), containerImg, liquidImg, hybridImg, spotsImg, outlineImg);
         }
 
         if (this.hb != null) {
@@ -288,7 +316,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     @SpireOverride
     protected void updateFlash() {
-        SpireSuper.call();
+        // No-op to avoid creating flash effects that can crash the game
     }
 
     public PCLPotion upgrade() {

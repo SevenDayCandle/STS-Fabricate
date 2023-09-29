@@ -111,6 +111,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         setLoadout(original.loadout);
         setFlags(original.flags);
         setText(name, text, text);
+        setLoadoutValueFromRarity();
     }
 
     public PCLDynamicCardData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
@@ -158,6 +159,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
         setMultiformData(data.forms.length);
+        setLoadoutValueFromRarity();
     }
 
     protected static CardStrings getInitialStrings() {

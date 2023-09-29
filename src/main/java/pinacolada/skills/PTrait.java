@@ -2,7 +2,6 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.configuration.EUIConfiguration;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
@@ -176,8 +175,8 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        super.refresh(info, conditionMet);
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
+        super.refresh(info, conditionMet, isUsing);
         if (info != null && conditionMet != conditionMetCache) {
             conditionMetCache = conditionMet;
             applyToCard(info.card, conditionMet);

@@ -559,10 +559,6 @@ public abstract class PCLLoadout {
         return data != null && data.loadout == this;
     }
 
-    public void onOpen(CharacterOption option) {
-
-    }
-
     public void onVictory(int ascensionLevel, int trophyLevel, int score) {
         PCLTrophies trophies = getTrophies();
         AbstractPlayerData<?, ?> data = getPlayerData();

@@ -75,6 +75,22 @@ public class PCLMainConfig extends AbstractConfig {
         return prefix + "-" + name;
     }
 
+    // Whenever this setting is updated, we need to force all cards and powers everywhere to refresh their descriptions
+    public static void updateAllDescriptions() {
+        PCLCustomPowerSlot.refreshTooltips();
+
+        EUIPreview.invalidate();
+        for (AbstractCard c : CardLibrary.getAllCards()) {
+            c.initializeDescription();
+        }
+
+        if (GameUtilities.inGame()) {
+            for (AbstractCard c : GameUtilities.getCardsInGame()) {
+                c.initializeDescription();
+            }
+        }
+    }
+
     public boolean hideTipDescription(String id) {
         if (tips == null) {
             tips = new HashSet<>();
@@ -143,10 +159,10 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, PGR.core.strings.optionDesc_showUpgradeToggle);
         makeModToggle(fabricatePopup, PGR.core.strings.options_fabricatePopup, PGR.core.strings.optionDesc_fabricatePopup);
 
-        EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateDescriptions());
-        displayCardTagDescription.addListener(val -> this.updateDescriptions());
-        abbreviateEffects.addListener(val -> this.updateDescriptions());
-        removeLineBreaks.addListener(val -> this.updateDescriptions());
+        EUIConfiguration.enableDescriptionIcons.addListener(val -> updateAllDescriptions());
+        displayCardTagDescription.addListener(val -> updateAllDescriptions());
+        abbreviateEffects.addListener(val -> updateAllDescriptions());
+        removeLineBreaks.addListener(val -> updateAllDescriptions());
     }
 
     public void load(int slot) {
@@ -198,21 +214,5 @@ public class PCLMainConfig extends AbstractConfig {
         tourLoadout.addConfig(config);
         tourRelicPrimary.addConfig(config);
         tourSeriesSelect.addConfig(config);
-    }
-
-    // Whenever this setting is updated, we need to force all cards and powers everywhere to refresh their descriptions
-    private void updateDescriptions() {
-        EUIPreview.invalidate();
-        for (AbstractCard c : CardLibrary.getAllCards()) {
-            c.initializeDescription();
-        }
-
-        if (GameUtilities.inGame()) {
-            for (AbstractCard c : GameUtilities.getCardsInGame()) {
-                c.initializeDescription();
-            }
-        }
-
-        PCLCustomPowerSlot.refreshTooltips();
     }
 }

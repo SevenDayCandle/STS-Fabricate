@@ -4,6 +4,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.skills.PMod;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -40,18 +41,11 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         return this;
     }
 
-    // We want to execute active mods first because they affect card output, but we want the PCardPrimary to be the parent in order to ensure type safety in the skills object
+    // We want to execute children first because they affect card output, but we want the PCardPrimary to be the parent in order to ensure type safety in the skills object
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (this.childEffect instanceof PActiveMod) {
-            // The child effect should be affecting a card's primary attribute, so we don't need to grab the value from it
-            this.childEffect.use(info, order);
-            this.useImpl(info, order);
-        }
-        else {
-            useImpl(info, order);
-            super.use(info, order);
-        }
+        super.use(info, order);
+        useImpl(info, order);
     }
 
     // Obtains the target and numerical values from the given card

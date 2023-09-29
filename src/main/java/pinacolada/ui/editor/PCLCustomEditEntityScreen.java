@@ -88,6 +88,14 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     protected void clearPages() {
+        createCurrentEffects();
+        pages.clear();
+        effectPages.clear();
+        powerPages.clear();
+        pageButtons.clear();
+    }
+
+    protected void createCurrentEffects() {
         currentEffects.clear();
         currentEffects.addAll(getBuilder().getMoves());
         while (currentEffects.size() < EFFECT_COUNT) {
@@ -98,11 +106,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         while (currentPowers.size() < getPowerLimit()) {
             currentPowers.add(null);
         }
-
-        pages.clear();
-        effectPages.clear();
-        powerPages.clear();
-        pageButtons.clear();
     }
 
     protected void end() {
@@ -266,13 +269,16 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     protected void undo() {
         if (prevBuilders != null) {
-            ArrayList<U> backups = EUIUtils.map(prevBuilders, EditorMaker::makeCopy);
-            currentBuilder = MathUtils.clamp(currentBuilder, 0, backups.size() - 1);
+            ArrayList<U> backups = prevBuilders;
+            prevBuilders = tempBuilders;
+            tempBuilders = backups;
+            currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 1);
+            createCurrentEffects();
             updateVariant();
-            modifyBuilder(__ -> {
-                tempBuilders = backups;
-            });
-            refreshPages();
+            for (PCLCustomGenericPage b : pages) {
+                b.onUndo();
+            }
+            rebuildItem();
         }
     }
 

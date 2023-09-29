@@ -112,7 +112,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
     public static AbstractPlayer player = null;
     public static Random rng = null;
-    protected final transient float[] fakeGlowList = new float[4];
+    private final transient float[] fakeGlowList = new float[4];
     public final PSkillPowerContainer skills = new PSkillPowerContainer();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final ArrayList<PCLAugment> augments = new ArrayList<>();
@@ -121,7 +121,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public final PCLCardText cardText;
     private ColoredTexture portraitImgBackup;
     protected transient ArrayList<PCLCardAffinity> previousAffinities;
-    protected transient int glowIndex = 0;
+    private transient int glowIndex = 0;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
     public ColoredString bottomText;
@@ -497,6 +497,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // TODO only update when necessary (i.e. when phase or target changes)
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
+        calculateCardDamage(mo, false);
+    }
+
+    public void calculateCardDamage(AbstractCreature mo, boolean isUsing) {
         if (isMultiDamage) {
             multiDamageCreatures = pclTarget.getTargets(getSourceCreature(), mo);
             multiDamage = new int[multiDamageCreatures.size()];
@@ -517,7 +521,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
         }
         else {
-            refresh(mo);
+            refresh(mo, isUsing);
         }
     }
 
@@ -1530,20 +1534,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void refresh(AbstractCreature enemy) {
+        refresh(enemy, false);
+    }
+
+    public void refresh(AbstractCreature enemy, boolean isUsing) {
         AbstractCreature owner = getSourceCreature();
         PCLUseInfo info = CombatManager.playerSystem.getInfo(this, owner, enemy);
-        refreshImpl(info);
+        refreshImpl(info, isUsing);
     }
 
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
-    public void refreshImpl(PCLUseInfo info) {
+    public void refreshImpl(PCLUseInfo info, boolean isUsing) {
         AbstractCreature owner = info.source;
         AbstractCreature enemy = info.target;
         // We use magicNumber for the counter mechanic; effects have their amounts determined separately
         // Thus, we instead funnel onModifyBaseMagic into a separate addition to apply to our effects
         float effectBonus = CardModifierManager.onModifyBaseMagic(CombatManager.onModifySkillBonus(0, this), this);
-        doEffects(be -> be.refresh(info, true));
+        doEffects(be -> be.refresh(info, true, isUsing));
         AbstractMonster asEnemy = GameUtilities.asMonster(enemy);
 
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
@@ -1763,8 +1771,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         addDefendResult(baseBlock, tempBlock);
 
         // Invoke cost updates
-        int baseCostChange = modifyCost(info, cost);
-        TemporaryCostModifier.tryRefresh(this, owner, baseCostChange);
+        int baseCostChange = cost - modifyCost(info, cost);
+        TemporaryCostModifier.tryRefresh(this, owner, costForTurn, baseCostChange);
 
         // Release damage display for rendering
         formulaDisplay = null;

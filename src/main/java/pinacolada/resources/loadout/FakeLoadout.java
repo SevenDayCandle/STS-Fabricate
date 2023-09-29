@@ -93,8 +93,7 @@ public class FakeLoadout extends PCLLoadout {
         return null;
     }
 
-    @Override
-    public void onOpen(CharacterOption option) {
+    public void onSelect(CharacterOption option) {
         AbstractCard.CardColor newColor = option.c.getCardColor();
         if (newColor != color) {
             color = newColor;

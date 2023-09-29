@@ -11,7 +11,6 @@ import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkill;
@@ -19,8 +18,6 @@ import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
 
 public class PCLPointerPower extends PCLClickablePower implements PointerProvider, TriggerConnection {
     public PSkillContainer skills;
@@ -278,7 +275,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
 
     public void refreshTriggers(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
-            effect.refresh(info, true);
+            effect.refresh(info, true, false);
         }
     }
 

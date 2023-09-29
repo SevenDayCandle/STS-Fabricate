@@ -5,6 +5,7 @@ import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.dungeon.CombatManager;
@@ -53,33 +54,43 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
         return null;
     }
 
-    public static void tryRefresh(AbstractCard c, AbstractCreature owner, int base) {
-        if (owner instanceof AbstractPlayer) {
-            for (AbstractRelic relic : ((AbstractPlayer) owner).relics) {
-                if (relic instanceof PCLRelic) {
-                    base = ((PCLRelic) relic).atCostModify(base, c);
-                }
-            }
-        }
-        if (owner != null) {
-            for (AbstractPower po : owner.powers) {
-                if (po instanceof PCLPower) {
-                    base = ((PCLPower) po).modifyCost(base, c);
-                }
-            }
-        }
-        base = CombatManager.onModifyCost(base, c);
-        if (base != c.cost) {
-            int baseDiff = base - c.cost;
+    /* Update the cost modifier to the calculated cost from powers. Called in applyPowersToBlock in regular cards and refresh in PCLCard.
+    * Base is the baseline card cost to compare with, and var is any additional precalculations that should be added on to the result */
+    public static void tryRefresh(AbstractCard c, AbstractCreature owner, int base, int var) {
+        if (c.cost > -1) {
             TemporaryCostModifier mod = get(c);
-            if (mod == null) {
-                mod = new TemporaryCostModifier(0, false, false);
-                mod.baseDiff = baseDiff;
-                CardModifierManager.addModifier(c, mod);
+            int baseDiff = 0;
+            if (mod != null) {
+                baseDiff = mod.baseDiff;
+                base -= mod.baseDiff;
             }
-            else if (mod.baseDiff != baseDiff) {
-                mod.baseDiff = baseDiff;
-                mod.apply(c);
+            int res = base + var;
+            if (owner instanceof AbstractPlayer) {
+                for (AbstractRelic relic : ((AbstractPlayer) owner).relics) {
+                    if (relic instanceof PCLRelic) {
+                        res = ((PCLRelic) relic).atCostModify(res, c);
+                    }
+                }
+            }
+            if (owner != null) {
+                for (AbstractPower po : owner.powers) {
+                    if (po instanceof PCLPower) {
+                        res = ((PCLPower) po).modifyCost(res, c);
+                    }
+                }
+            }
+            res = CombatManager.onModifyCost(res, c);
+            int diff = res - base;
+            if (diff != baseDiff) {
+                if (mod == null) {
+                    mod = new TemporaryCostModifier(0, false, false);
+                    mod.baseDiff = diff;
+                    CardModifierManager.addModifier(c, mod);
+                }
+                else {
+                    mod.baseDiff = diff;
+                    mod.apply(c);
+                }
             }
         }
     }

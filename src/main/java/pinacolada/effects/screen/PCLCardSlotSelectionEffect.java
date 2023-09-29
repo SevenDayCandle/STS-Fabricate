@@ -69,6 +69,11 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, EUI.actingColor);
+        grid.group.sort((a, b) -> getCardValue(a) - getCardValue(b));
+    }
+
+    private int getCardValue(AbstractCard card) {
+        return card instanceof PCLCard ? ((PCLCard) card).cardData.loadoutValue : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
     }
 
     public AbstractCard getSelectedCard() {
@@ -82,7 +87,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
     }
 
     private void onCardRender(SpriteBatch sb, AbstractCard card) {
-        int estimateValue = card instanceof PCLCard ? ((PCLCard) card).cardData.loadoutValue : PCLCardData.getValueForRarity(card.rarity);
+        int estimateValue = getCardValue(card);
         cardValue_text
                 .setLabel(estimateValue)
                 .setFontColor(estimateValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
@@ -107,7 +112,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             EUI.sortHeader.update();
             EUI.openFiltersButton.update();
 
-            if (InputHelper.justClickedLeft && !grid.isHovered() && !EUI.openFiltersButton.hb.hovered) {
+            if (InputHelper.justClickedLeft && !grid.isHovered() && !EUI.openFiltersButton.hb.hovered && !EUI.sortHeader.isHovered()) {
                 complete();
             }
         }
