@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
+import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -344,7 +345,15 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
     @Override
     public void updateImpl() {
-        super.updateImpl();
+        if (EUIInputManager.tryEscape()) {
+            if (selectionEffect != null) {
+                selectionEffect = null;
+            }
+            else {
+                close();
+                return;
+            }
+        }
 
         CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
         startingDeck.updateImpl();

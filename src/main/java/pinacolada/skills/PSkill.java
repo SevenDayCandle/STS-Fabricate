@@ -202,7 +202,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(PSkill.class, "Failed to deserialize: " + serializedString);
+            EUIUtils.logError(PSkill.class, "Failed to deserialize: " + serializedString + ". Error was: " + e.getLocalizedMessage());
         }
 
         return null;

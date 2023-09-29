@@ -16,7 +16,6 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
-import extendedui.EUIInputManager;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -210,7 +209,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void getImageFromFileDialog() {
         try {
-            File openedFile = EUIUtils.chooseFile(EXTENSIONS, PGR.config.lastImagePath);
+            File openedFile = EUIUtils.loadFile(EXTENSIONS, PGR.config.lastImagePath);
             updateImage(new Texture(new FileHandle(openedFile), true));
         }
         catch (Exception e) {
