@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -29,11 +30,21 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         super(data, amount, count);
     }
 
+    public PMod_PerCardHas(PSkillData<PField_CardCategory> data, int amount, int count, PCLCardGroupHelper group) {
+        super(data, amount, count);
+        fields.setCardGroup(group);
+    }
+
     @Override
     public String getConditionText(PCLCardTarget perspective, String childText) {
+        if (fields.groupTypes.isEmpty() && sourceCard != null) {
+            return fields.forced ? TEXT.cond_perThisCombat(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()))
+                    : TEXT.cond_perThisTurn(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()));
+        }
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
-                    fields.forced ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())));
+                    fields.forced ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip()))
+                            : TEXT.cond_perThisTurn(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())));
         }
         String subjString = this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());
         return fields.forced ? TEXT.cond_perThisCombat(childText, subjString, PCLCoreStrings.past(getActionTooltip())) : TEXT.cond_perThisTurn(childText, subjString, PCLCoreStrings.past(getActionTooltip()));
@@ -41,7 +52,9 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
+        return fields.groupTypes.isEmpty() && sourceCard != null
+                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == sourceCard.uuid)
+                : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
     }
 
     @Override

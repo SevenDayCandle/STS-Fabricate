@@ -40,14 +40,20 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
+        if (fields.groupTypes.isEmpty() && sourceCard != null) {
+            String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
+                    TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
+            return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;
+        }
         return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString())));
     }
 
     @Override
     public boolean meetsCondition(PCLUseInfo info, boolean isUsing) {
-        int count = EUIUtils.count(getCardPile(info, isUsing),
-                c -> fields.getFullCardFilter().invoke(c));
+        int count = fields.groupTypes.isEmpty() && sourceCard != null
+                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == sourceCard.uuid)
+                : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
         return extra == 0 ? count == 0 : fields.not ^ count >= extra;
     }
 

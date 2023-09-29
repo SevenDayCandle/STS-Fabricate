@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -21,22 +22,23 @@ public class PMod_PerCardPlayed extends PMod_PerCardHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class)
             .setOrigins(PCLCardSelection.Manual)
             .setDestinations(PCLCardSelection.Manual)
+            .setGroups(PCLCardGroupHelper.Hand)
             .noTarget();
 
     public PMod_PerCardPlayed() {
         this(1, 0);
     }
 
+    public PMod_PerCardPlayed(int amount) {
+        this(amount, 0);
+    }
+
     public PMod_PerCardPlayed(int amount, int extra) {
-        super(DATA, amount, extra);
+        super(DATA, amount, extra, PCLCardGroupHelper.Hand);
     }
 
     public PMod_PerCardPlayed(PSkillSaveData content) {
         super(DATA, content);
-    }
-
-    public PMod_PerCardPlayed(int amount) {
-        super(DATA, amount, 0);
     }
 
     @Override

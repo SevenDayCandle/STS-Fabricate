@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -19,22 +20,23 @@ public class PMod_PerCardDiscarded extends PMod_PerCardHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDiscarded.class, PField_CardCategory.class)
             .setOrigins(PCLCardSelection.Manual)
             .setDestinations(PCLCardSelection.Manual)
+            .setGroups(PCLCardGroupHelper.DiscardPile)
             .noTarget();
 
     public PMod_PerCardDiscarded() {
         this(1, 0);
     }
 
+    public PMod_PerCardDiscarded(int amount) {
+        this(amount, 0);
+    }
+
     public PMod_PerCardDiscarded(int amount, int extra) {
-        super(DATA, amount, extra);
+        super(DATA, amount, extra, PCLCardGroupHelper.DiscardPile);
     }
 
     public PMod_PerCardDiscarded(PSkillSaveData content) {
         super(DATA, content);
-    }
-
-    public PMod_PerCardDiscarded(int amount) {
-        super(DATA, amount, 0);
     }
 
     @Override
