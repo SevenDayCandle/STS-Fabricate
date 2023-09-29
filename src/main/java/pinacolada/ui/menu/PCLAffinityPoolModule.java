@@ -22,10 +22,7 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.ui.AffinityKeywordButton;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
 import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;
@@ -96,9 +93,15 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
         seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
         seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
 
-        currentAffinities = EUIUtils.map(PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
-        currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
+        currentAffinities = EUIUtils.map(PGR.config.showIrrelevantProperties.get() ? PCLAffinity.basic() : PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
+        if (currentAffinities.size() > 0) {
+            currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
+            currentAffinities.add(new PCLCardAffinity(PCLAffinity.General));
+            affinitiesSectionLabel.setActive(true);
+        }
+        else {
+            affinitiesSectionLabel.setActive(false);
+        }
         initializeAffinities();
     }
 

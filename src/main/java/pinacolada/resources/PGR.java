@@ -294,12 +294,10 @@ public class PGR {
         EUI.addBattleSubscriber(CombatManager.renderInstance);
         EUI.addSubscriber(PGR.cardPopup);
         EUI.addSubscriber(PGR.relicPopup);
-        EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
-        EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
+        EUI.addGlobalCustomCardFilter(PGR.affinityFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.colorlessGroups);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.colorlessGroups);
         for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
-            EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
             EUI.setCustomCardLibraryModule(r.cardColor, PGR.colorlessGroups);
         }
 
