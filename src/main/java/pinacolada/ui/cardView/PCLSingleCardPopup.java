@@ -17,6 +17,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.ui.EUIBase;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
@@ -51,8 +52,8 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     protected final EUITextBox changeVariantNumber;
     protected final EUILabel changeVariantLabel;
     protected final EUILabel changeVariantDescription;
+    protected final EUILabel maxUpgradesLabel;
     protected final EUILabel maxCopiesLabel;
-    protected final EUILabel maxCopiesDescription;
     private PCLCard upgradedCard;
     private CardGroup group;
     private ApplyAugmentToCardEffect effect;
@@ -120,14 +121,15 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
 
-        this.maxCopiesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), screenH(0.07f), offX, changeVariant.hb.height * 3.7f))
+        this.maxUpgradesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
+                new RelativeHitbox(changeVariant.hb, screenW(0.21f), EUIBase.scale(48), offX, changeVariant.hb.height * 3.7f))
                 .setAlignment(0.9f, 0.1f, true);
+        this.maxUpgradesLabel.setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades);
 
-        this.maxCopiesDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), screenH(0.07f), offX, changeVariant.hb.height * 3.1f))
-                .setAlignment(0.9f, 0.1f, true)
-                .setLabel(PGR.core.strings.cetut_maxCopies);
+        this.maxCopiesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
+                new RelativeHitbox(changeVariant.hb, screenW(0.21f), EUIBase.scale(48), offX, changeVariant.hb.height * 3.25f))
+                .setAlignment(0.9f, 0.1f, true);
+        this.maxCopiesLabel.setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies);
     }
 
     private void applyAugment(PCLAugment augment) {
@@ -198,8 +200,32 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         else if (currentCopies >= 0) {
             return String.valueOf(currentCopies);
         }
-        else {
+        else if (maxCopies > 0) {
             return String.valueOf(maxCopies);
+        }
+        else {
+            return PGR.core.strings.subjects_infinite;
+        }
+    }
+
+    private String getCardUpgradesText() {
+        if (displayCard == null) {
+            return "";
+        }
+        int current = displayCard.timesUpgraded;
+        int max = displayCard.cardData != null ? displayCard.cardData.maxUpgradeLevel : 1;
+
+        if (current >= 0 && max > 0) {
+            return current + "/" + max;
+        }
+        else if (current >= 0) {
+            return String.valueOf(current);
+        }
+        else if (max >= 0) {
+            return String.valueOf(max);
+        }
+        else {
+            return PGR.core.strings.subjects_infinite;
         }
     }
 
@@ -403,8 +429,8 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         }
 
         if (AbstractDungeon.player != null || card.cardData != null) {
+            maxUpgradesLabel.renderImpl(sb);
             maxCopiesLabel.renderImpl(sb);
-            maxCopiesDescription.renderImpl(sb);
         }
 
         this.toggleAugment.tryRender(sb);
@@ -458,9 +484,10 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.changeVariant.tryUpdate();
         this.changeVariantLabel.tryUpdate();
         this.changeVariantDescription.tryUpdate();
-        this.maxCopiesLabel.setLabel((AbstractDungeon.player != null ? PGR.core.strings.scp_currentCopies : PGR.core.strings.scp_maxCopies) + COLON_SEPARATOR + PCLCoreStrings.colorString("b", getCardCopiesText()));
+        this.maxUpgradesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentUpgrades : PGR.core.strings.scp_maxUpgrades), getCardUpgradesText()));
+        this.maxUpgradesLabel.tryUpdate();
+        this.maxCopiesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentCopies : PGR.core.strings.scp_maxCopies), getCardCopiesText()));
         this.maxCopiesLabel.tryUpdate();
-        this.maxCopiesDescription.tryUpdate();
         this.toggleAugment.tryUpdate();
 
         this.viewVariants = viewChangeVariants || currentItem != null && currentItem.cardData != null && currentItem.getMaxForms() > 1;

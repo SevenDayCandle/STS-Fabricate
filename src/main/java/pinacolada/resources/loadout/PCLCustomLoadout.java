@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import pinacolada.misc.LoadoutStrings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLCustomLoadout extends PCLLoadout {
@@ -64,6 +65,11 @@ public class PCLCustomLoadout extends PCLLoadout {
 
     public String getName() {
         return strings != null && strings.NAME != null ? strings.NAME : ID;
+    }
+
+    @Override
+    public ArrayList<String> getBaseStartingRelics() {
+        return EUIUtils.arrayList();
     }
 
     public void refreshStrings() {

@@ -149,7 +149,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     protected final ArrayList<String> getCardXPrefixes(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (!costs.isEmpty()) {
-            stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(EUIUtils.map(costs, c -> c.name))));
+            stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(CostFilter.getCostRangeStrings(costs))));
         }
         if (!loadouts.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(loadouts, PField_CardCategory::getLoadoutName)));

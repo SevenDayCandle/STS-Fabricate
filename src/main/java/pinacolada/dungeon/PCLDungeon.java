@@ -562,6 +562,31 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     // Add custom cards if applicable
     public void loadCustomCards(AbstractPlayer player) {
+        if (data != null) {
+            String[] additional = data.getAdditionalCardIDs();
+            if (additional != null) {
+                for (String s : additional) {
+                    AbstractCard c = CardLibrary.getCard(s);
+                    if (c != null) {
+                        if (GameUtilities.isColorlessCardColor(c.color)) {
+                            AbstractDungeon.srcColorlessCardPool.addToBottom(c);
+                            AbstractDungeon.colorlessCardPool.addToBottom(c);
+                        }
+                        else {
+                            CardGroup pool = GameUtilities.getCardPool(c.rarity);
+                            if (pool != null) {
+                                pool.addToBottom(c);
+                            }
+                            CardGroup spool = GameUtilities.getCardPoolSource(c.rarity);
+                            if (spool != null) {
+                                spool.addToBottom(c);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (allowCustomCards) {
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;

@@ -166,6 +166,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         }
     }
 
+    public String[] getAdditionalCardIDs() {
+        return null;
+    }
+
     public String[] getAdditionalRelicIDs() {
         return null;
     }
@@ -330,6 +334,4 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     public abstract U getConfig();
 
     public abstract PCLLoadout getCoreLoadout();
-
-    public abstract List<String> getStartingRelics();
 }

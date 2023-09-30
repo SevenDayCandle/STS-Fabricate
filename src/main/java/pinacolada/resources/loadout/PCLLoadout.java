@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
-import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanelStats;
@@ -176,13 +175,6 @@ public abstract class PCLLoadout {
     public static <T extends PCLLoadout> T register(T loadout) {
         LOADOUTS.put(loadout.ID, loadout);
         return loadout;
-    }
-
-    public void addStarterRelic(ArrayList<String> res, String id) {
-        if (!UnlockTracker.isRelicSeen(id)) {
-            UnlockTracker.markRelicAsSeen(id);
-        }
-        res.add(id);
     }
 
     public boolean allowCustoms() {
@@ -476,13 +468,10 @@ public abstract class PCLLoadout {
     }
 
     public final ArrayList<String> getStartingRelics() {
-        final ArrayList<String> res = new ArrayList<>();
-
-        AbstractPlayerData<?, ?> data = getPlayerData();
-        if (data != null) {
-            List<String> starterRelics = data.getStartingRelics();
-            for (String starterRelic : starterRelics) {
-                addStarterRelic(res, starterRelic);
+        ArrayList<String> res = getBaseStartingRelics();
+        for (String s : res) {
+            if (!UnlockTracker.isRelicSeen(s)) {
+                UnlockTracker.markRelicAsSeen(s);
             }
         }
 
@@ -541,7 +530,7 @@ public abstract class PCLLoadout {
     public boolean isEnabled() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources == null || (resources.getUnlockLevel() >= unlockLevel &&
-                (resources.data == null || resources.data.getCoreLoadout() == this || resources.data.config.selectedLoadouts.get().contains(this.ID)));
+                (resources.data == null || resources.data.getCoreLoadout() == this || this.ID.equals(resources.data.config.lastLoadout.get()) || resources.data.config.selectedLoadouts.get().contains(this.ID)));
     }
 
     public boolean isLocked() {
@@ -620,4 +609,6 @@ public abstract class PCLLoadout {
             }, 0, cardDatas.size());
         }
     }
+
+    public abstract ArrayList<String> getBaseStartingRelics();
 }

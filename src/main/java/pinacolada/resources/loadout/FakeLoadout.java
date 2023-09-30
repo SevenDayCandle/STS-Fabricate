@@ -3,6 +3,7 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
+import extendedui.EUIUtils;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -109,5 +110,10 @@ public class FakeLoadout extends PCLLoadout {
     @Override
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
         // No-op
+    }
+
+    @Override
+    public ArrayList<String> getBaseStartingRelics() {
+        return EUIUtils.arrayList();
     }
 }

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -220,6 +221,22 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 shownColorlessCards.add(c);
             }
         }
+
+        // Add additional cards
+        String[] additional = data.getAdditionalCardIDs();
+        if (additional != null) {
+            for (String s : additional) {
+                AbstractCard c = CardLibrary.getCard(s);
+                if (c != null) {
+                    if (GameUtilities.isColorlessCardColor(c.color)) {
+                        shownColorlessCards.add(c);
+                    }
+                    else {
+                        shownCards.add(c);
+                    }
+                }
+            }
+        }
     }
 
     public void cancel() {
@@ -366,14 +383,16 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
         }
 
-        List<String> startingRelics = data.getStartingRelics();
         relics.removeIf(r -> {
-            if (UnlockTracker.isRelicLocked(r.relicId) || startingRelics.contains(r.relicId)) {
+            if (UnlockTracker.isRelicLocked(r.relicId)) {
                 return true;
             }
             for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
                 PCLLoadout loadout = entry.getValue();
                 if (loadout.isRelicFromLoadout(r.relicId) && (loadout.isLocked() || (!selectedLoadouts.contains(loadout.ID) && currentSeriesCard != entry.getKey()))) {
+                    return true;
+                }
+                else if (loadout.getStartingRelics().contains(r.relicId)) {
                     return true;
                 }
             }
