@@ -136,10 +136,6 @@ public class PGR {
         return getPng(id, "blights");
     }
 
-    public static String getBlightOutlineImage(String id) {
-        return getPng(id, "blights/outline");
-    }
-
     public static BlightStrings getBlightStrings(String blightID) {
         return getLanguagePack().getBlightString(blightID);
     }
@@ -237,6 +233,10 @@ public class PGR {
 
     public static String getRewardImage(String id) {
         return getPng(id, REWARDS_SUBFOLDER);
+    }
+
+    public static String getRunModImage(String id) {
+        return getPng(id, "runmods");
     }
 
     public static RunModStrings getRunModStrings(String stringID) {

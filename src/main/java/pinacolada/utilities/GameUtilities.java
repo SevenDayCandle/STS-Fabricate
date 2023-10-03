@@ -57,7 +57,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.blights.common.UpgradedHand;
+import pinacolada.blights.pcl.UpgradedHand;
 import pinacolada.cardmods.AffinityDisplayModifier;
 import pinacolada.cardmods.TagDisplayModifier;
 import pinacolada.cardmods.TemporaryBlockModifier;

@@ -57,7 +57,6 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourSeriesSelect"), false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph0"), 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph1"), 0);
-    public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph2"), 0);
     public STSStringConfigItem lastCSVPath = new STSStringConfigItem(PCLMainConfig.createFullID("LastCSVPath"), "");
     public STSStringConfigItem lastImagePath = new STSStringConfigItem(PCLMainConfig.createFullID("LastImagePath"), "");
     public STSStringConfigItem lastSeed = new STSStringConfigItem(LAST_SEED_KEY, "");
@@ -183,7 +182,6 @@ public class PCLMainConfig extends AbstractConfig {
         abbreviateEffects.addConfig(config);
         ascensionGlyph0.addConfig(config);
         ascensionGlyph1.addConfig(config);
-        ascensionGlyph2.addConfig(config);
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
         displayCardTagDescription.addConfig(config);

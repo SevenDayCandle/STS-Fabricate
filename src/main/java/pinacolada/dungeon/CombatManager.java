@@ -521,6 +521,8 @@ public class CombatManager extends EUIBase {
         refresh();
 
         subscriberDo(OnBattleStartSubscriber.class, OnBattleStartSubscriber::onBattleStart);
+
+        PGR.dungeon.atBattleStart();
     }
 
     public static void onBattleStartPostRefresh() {

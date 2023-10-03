@@ -26,12 +26,13 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.blights.common.AbstractGlyphBlight;
+import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
 import pinacolada.interfaces.providers.RunAttributesProvider;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -136,8 +137,8 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setOnClick(this::openSeriesSelect);
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
-        for (AbstractGlyphBlight glyph : AbstractPlayerData.GLYPHS) {
-            glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, glyph.hb.width, glyph.hb.height)));
+        for (AbstractGlyph glyph : AbstractPlayerData.GLYPHS) {
+            glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, ROW_OFFSET, ROW_OFFSET)));
             xOffset += ROW_OFFSET * 1.7f;
         }
     }

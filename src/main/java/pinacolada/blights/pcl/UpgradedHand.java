@@ -1,4 +1,4 @@
-package pinacolada.blights.common;
+package pinacolada.blights.pcl;
 
 import basemod.BaseMod;
 import pinacolada.annotations.VisibleBlight;

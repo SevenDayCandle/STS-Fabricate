@@ -80,6 +80,6 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
             conditions.add(PCLCoreStrings.joinWithOr(c -> c.name, fields.costs));
         }
 
-        return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
+        return TEXT.cond_ifTargetHas(useParent ? getTheyString() : TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
     }
 }

@@ -5,7 +5,6 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.net.HttpParametersUtils;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
@@ -15,10 +14,9 @@ import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.blights.common.AbstractGlyphBlight;
-import pinacolada.blights.common.GlyphBlight;
-import pinacolada.blights.common.GlyphBlight1;
-import pinacolada.blights.common.GlyphBlight2;
+import pinacolada.dungeon.modifiers.AbstractGlyph;
+import pinacolada.dungeon.modifiers.Glyph1;
+import pinacolada.dungeon.modifiers.Glyph0;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffect;
 import pinacolada.monsters.PCLCreatureData;
@@ -45,7 +43,7 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     public static final int DEFAULT_DRAW = 5;
     public static final int DEFAULT_ENERGY = 3;
     public static final int DEFAULT_ORBS = 0;
-    public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
+    public static final ArrayList<AbstractGlyph> GLYPHS = new ArrayList<>();
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
     public final T resources;
@@ -81,9 +79,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     }
 
     public static void postInitialize() {
-        GLYPHS.add(new GlyphBlight());
-        GLYPHS.add(new GlyphBlight1());
-        GLYPHS.add(new GlyphBlight2());
+        GLYPHS.add(new Glyph0());
+        GLYPHS.add(new Glyph1());
     }
 
     public void addTutorial(PCLCreatureData data) {

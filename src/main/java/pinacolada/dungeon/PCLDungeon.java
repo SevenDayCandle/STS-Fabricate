@@ -3,9 +3,6 @@ package pinacolada.dungeon;
 import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
 import basemod.interfaces.PostDungeonInitializeSubscriber;
-import basemod.interfaces.PreStartGameSubscriber;
-import basemod.interfaces.StartActSubscriber;
-import basemod.interfaces.StartGameSubscriber;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -26,7 +23,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.blights.common.AbstractGlyphBlight;
+import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -139,6 +136,15 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
                 pool.add(rng.random(pool.size() - 1), relicID);
                 bannedRelics.remove(relicID);
+            }
+        }
+    }
+
+    public void atBattleStart() {
+        for (int i = 0; i < Math.min(AbstractPlayerData.GLYPHS.size(), ascensionGlyphCounters.size()); i++) {
+            int count = ascensionGlyphCounters.get(i);
+            if (count > 0) {
+                AbstractPlayerData.GLYPHS.get(i).atBattleStart(count);
             }
         }
     }
@@ -441,9 +447,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             highestScore = 0;
             rNGCounter = 0;
             totalAugmentCount = 0;
-            for (AbstractGlyphBlight glyph : AbstractPlayerData.GLYPHS) {
-                ascensionGlyphCounters.add(glyph.counter);
-            }
+
+            // TODO add ascension glyph information to ascension panel tooltip
             rng = null;
         }
     }
@@ -494,25 +499,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                     loadouts.add(l);
                 }
             }
+
+            // Glyph settings
+            for (AbstractGlyph glyph : AbstractPlayerData.GLYPHS) {
+                ascensionGlyphCounters.add(glyph.configOption.get());
+            }
         }
 
         // Custom loadout
         if (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout != null) {
             loadout = ((PCLCustomTrial) CardCrawlGame.trial).fakeLoadout;
-        }
-    }
-
-    private void initializeGlyph(int i) {
-        for (AbstractBlight blight : player.blights) {
-            if (AbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass())) {
-                return;
-            }
-        }
-        int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
-        if (counter > 0) {
-            AbstractBlight blight = AbstractPlayerData.GLYPHS.get(i).makeCopy();
-            blight.setCounter(counter);
-            GameUtilities.obtainBlightWithoutEffect(blight);
         }
     }
 
@@ -549,11 +545,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             // Add character blights if applicable
             for (String id : loadout.getStartingBlights()) {
                 initializeCharacterBlight(id);
-            }
-
-            // Add glyphs
-            for (int i = 0; i < AbstractPlayerData.GLYPHS.size(); i++) {
-                initializeGlyph(i);
             }
 
             initializePotions();

@@ -1,10 +1,10 @@
 {
-  "No Relics": {
-    "NAME": "No Relics",
-    "DESCRIPTION": "Non-Event, non-Boss relics are replaced with Circlets."
+  "pcl:Glyph0": {
+    "NAME": "Demonization",
+    "DESCRIPTION": "Enemies gain Strength each turn."
   },
-  "Series Deck": {
-    "NAME": "Series Deck",
-    "DESCRIPTION": "Starts with 1 copy of each card in your starting series."
+  "pcl:Glyph1": {
+    "NAME": "Persistence",
+    "DESCRIPTION": "Enemies have more HP."
   }
 }

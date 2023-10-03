@@ -278,7 +278,8 @@
 												"Character Reference",
 												"View an archive of this character's mechanics",
 												"Modifiers:",
-												"Abilities"
+												"Abilities",
+												"{#r:Unlocks at Ascension {0}}"
 								]
 				},
 				"pcl:Combat": {
