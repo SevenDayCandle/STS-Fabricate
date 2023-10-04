@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
@@ -24,6 +23,7 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
+import extendedui.ui.cardFilter.CardKeywordFilters;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
@@ -215,7 +215,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
         }
 
-        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+        for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
             if (isRarityAllowed(c.rarity, c.type) &&
                     data.resources.containsColorless(c) && !bannedColorless.contains(c.cardID)) {
                 shownColorlessCards.add(c);
@@ -402,43 +402,44 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         return relics;
     }
 
-    public CardGroup getCardPool(PCLLoadout loadout) {
-        final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+    public ArrayList<AbstractCard> getCardPool(PCLLoadout loadout) {
+        final ArrayList<AbstractCard> cards = new ArrayList<>();
         if (loadout != null) {
             for (PCLCardData data : loadout.cardDatas) {
-                cards.group.add(allCards.get(data.ID));
+                cards.add(allCards.get(data.ID));
             }
         }
         else {
-            cards.group.addAll(shownCards);
+            cards.addAll(shownCards);
         }
-        cards.sortAlphabetically(true);
-        cards.sortByRarity(true);
+
+        cards.sort(CardKeywordFilters::rankByName);
+        cards.sort(CardKeywordFilters::rankByRarity);
         return cards;
     }
 
-    public CardGroup getColorlessPool() {
-        final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+    public ArrayList<AbstractCard> getColorlessPool() {
+        final ArrayList<AbstractCard> cards = new ArrayList<>();
         if (data != null) {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+            for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
                 if (isRarityAllowed(c.rarity, c.type) &&
                         data.resources.containsColorless(c)) {
-                    cards.addToBottom(c.makeCopy());
+                    cards.add(c.makeCopy());
                 }
             }
         }
         else {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group) {
+            for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
                 for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
                     if (isRarityAllowed(c.rarity, c.type) && !resources.filterColorless(c)) {
-                        cards.addToBottom(c.makeCopy());
+                        cards.add(c.makeCopy());
                     }
                 }
             }
         }
 
-        cards.sortAlphabetically(true);
-        cards.sortByRarity(true);
+        cards.sort(CardKeywordFilters::rankByName);
+        cards.sort(CardKeywordFilters::rankByRarity);
         return cards;
     }
 
@@ -504,13 +505,12 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 source.unhover();
                 loadout = find(EUIUtils.safeCast(source, PCLCard.class));
             }
-            final CardGroup cards = getCardPool(loadout);
-            previewCards(cards, loadout);
+            previewCards(getCardPool(loadout), loadout);
         }
     }
 
     // Core loadout cards cannot be toggled off
-    public void previewCards(CardGroup cards, PCLLoadout loadout) {
+    public void previewCards(ArrayList<AbstractCard> cards, PCLLoadout loadout) {
         currentEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);

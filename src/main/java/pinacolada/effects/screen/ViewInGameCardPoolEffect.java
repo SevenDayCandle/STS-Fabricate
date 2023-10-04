@@ -22,6 +22,7 @@ import pinacolada.ui.customRun.PCLRandomCardAmountDialog;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
@@ -32,7 +33,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     private final ActionT0 onRefresh;
     private final Color screenColor;
     private final EUICardGrid grid;
-    public final CardGroup cards;
+    public final ArrayList<AbstractCard> cards;
     public final HashSet<String> bannedCards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
@@ -45,11 +46,11 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
-    public ViewInGameCardPoolEffect(CardGroup cards, HashSet<String> bannedCards) {
+    public ViewInGameCardPoolEffect(ArrayList<AbstractCard> cards, HashSet<String> bannedCards) {
         this(cards, bannedCards, null);
     }
 
-    public ViewInGameCardPoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh) {
+    public ViewInGameCardPoolEffect(ArrayList<AbstractCard> cards, HashSet<String> bannedCards, ActionT0 onRefresh) {
         super(0.7f);
 
         this.bannedCards = bannedCards;
@@ -78,8 +79,8 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setCanRenderUpgrades(true)
                 .canDragScreen(false)
                 .setOnClick(this::toggleCard);
-        this.grid.setCardGroup(cards);
-        for (AbstractCard c : cards.group) {
+        this.grid.setItems(cards);
+        for (AbstractCard c : cards) {
             updateCardAlpha(c);
         }
 
@@ -144,10 +145,10 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
 
     public void refreshCountText() {
         if (canToggle) {
-            selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+            selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards, card -> !bannedCards.contains(card.cardID)), cards.size()));
         }
         else {
-            selectedCount.setLabel(EUIRM.strings.ui_total + COLON_SEPARATOR + cards.group.size());
+            selectedCount.setLabel(EUIRM.strings.ui_total + COLON_SEPARATOR + cards.size());
         }
         if (onRefresh != null) {
             onRefresh.invoke();
@@ -183,7 +184,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             RandomizedList<AbstractCard> possibleCards = new RandomizedList<>();
             RandomizedList<AbstractCard> possibleColorless = new RandomizedList<>();
             RandomizedList<AbstractCard> possibleCurses = new RandomizedList<>();
-            for (AbstractCard c : cards.group) {
+            for (AbstractCard c : cards) {
                 if (c.color == AbstractCard.CardColor.COLORLESS) {
                     possibleColorless.add(c);
                 }
@@ -237,7 +238,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     }
 
     public ViewInGameCardPoolEffect setStartingPosition(float x, float y) {
-        for (AbstractCard c : cards.group) {
+        for (AbstractCard c : cards) {
             c.current_x = x - (c.hb.width * 0.5f);
             c.current_y = y - (c.hb.height * 0.5f);
         }
@@ -246,7 +247,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     }
 
     private void startSelectRandom() {
-        randomSelection.open(cards.group);
+        randomSelection.open(cards);
     }
 
     private void toggleCard(AbstractCard c) {
@@ -267,7 +268,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     }
 
     private void toggleCards(boolean value) {
-        for (AbstractCard c : cards.group) {
+        for (AbstractCard c : cards) {
             toggleCardImpl(c, value);
         }
         refreshCountText();

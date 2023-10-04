@@ -2,7 +2,6 @@ package pinacolada.ui.customRun;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -57,26 +56,26 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         canvas = new PCLCustomRunCanvas(this);
     }
 
-    private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+    private void addCardsForGroup(ArrayList<AbstractCard> group, AbstractCard.CardColor color) {
         addCardsFromGroup(group, color, c -> isCardEligible(c.rarity));
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
                 if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.make());
+                    group.add(slot.make());
                 }
             }
         }
     }
 
-    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc) {
-        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
+    private void addCardsFromGroup(ArrayList<AbstractCard> group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc) {
+        for (AbstractCard c : CustomCardLibraryScreen.getCards(color)) {
             if (evalFunc.invoke(c)) {
-                group.group.add(c.makeSameInstanceOf());
+                group.add(c.makeSameInstanceOf());
             }
         }
     }
 
-    private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+    private void addColorlessCardsForGroup(ArrayList<AbstractCard> group, AbstractCard.CardColor color) {
         PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
         addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && isCardEligible(c.rarity));
         addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && isCardEligible(c.rarity));
@@ -84,7 +83,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
                 if (isCardEligible(AbstractCard.CardRarity.valueOf(slot.rarity))) {
-                    group.group.add(slot.make());
+                    group.add(slot.make());
                 }
             }
         }
@@ -155,8 +154,8 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         canvas.confirmButton.isDisabled = value;
     }
 
-    public CardGroup getAllPossibleCards() {
-        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+    public ArrayList<AbstractCard> getAllPossibleCards() {
+        ArrayList<AbstractCard> group = new ArrayList<>();
         AbstractCard.CardColor color = currentOption.c.getCardColor();
         HashMap<String, AbstractPlayer> moddedChars = new HashMap<>();
 
@@ -168,10 +167,10 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         for (CustomMod mod : activeMods) {
             // Diverse means that we put all possible cards into the pool
             if (Diverse.ID.equals(mod.ID)) {
-                group.group.clear();
-                for (CardGroup cGroup : CustomCardLibraryScreen.CardLists.values()) {
-                    for (AbstractCard c : cGroup.group) {
-                        group.group.add(c.makeCopy());
+                group.clear();
+                for (ArrayList<AbstractCard> cGroup : CustomCardLibraryScreen.getAllCards()) {
+                    for (AbstractCard c : cGroup) {
+                        group.add(c.makeCopy());
                     }
                 }
                 break;

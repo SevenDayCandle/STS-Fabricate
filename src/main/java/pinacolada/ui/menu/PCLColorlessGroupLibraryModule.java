@@ -6,9 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import extendedui.EUI;
 import extendedui.EUIRM;
-import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.CustomCardPoolModule;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
@@ -23,8 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCardPoolModule {
-    private static final HashMap<ColorlessGroup, CardGroup> ColorlessGroupMapping = new HashMap<>();
-    private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
+    private static final HashMap<ColorlessGroup, ArrayList<AbstractCard>> ColorlessGroupMapping = new HashMap<>();
+    private static final HashMap<ColorlessGroup, ArrayList<AbstractCard>> CurseGroupMapping = new HashMap<>();
     public static ColorlessGroup group = ColorlessGroup.Default;
     protected CustomCardLibraryScreen screen;
     public EUIButton groupButton;
@@ -46,17 +44,17 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
                 .setItems(ColorlessGroup.values());
     }
 
-    protected CardGroup getGroup(ColorlessGroup val) {
-        HashMap<ColorlessGroup, CardGroup> mapping = getMapping(CustomCardLibraryScreen.currentColor);
+    protected ArrayList<AbstractCard> getGroup(ColorlessGroup val) {
+        HashMap<ColorlessGroup, ArrayList<AbstractCard>> mapping = getMapping(CustomCardLibraryScreen.currentColor);
         if (mapping == null) {
             return null;
         }
-        CardGroup g = mapping.get(val);
+        ArrayList<AbstractCard> g = mapping.get(val);
         if (g == null) {
-            g = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(CustomCardLibraryScreen.currentColor).group) {
+            g = new ArrayList<>();
+            for (AbstractCard c : CustomCardLibraryScreen.getCards(CustomCardLibraryScreen.currentColor)) {
                 if (val.isMatch(c)) {
-                    g.addToBottom(c);
+                    g.add(c);
                 }
             }
             mapping.put(val, g);
@@ -64,7 +62,7 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
         return g;
     }
 
-    protected HashMap<ColorlessGroup, CardGroup> getMapping(AbstractCard.CardColor color) {
+    protected HashMap<ColorlessGroup, ArrayList<AbstractCard>> getMapping(AbstractCard.CardColor color) {
         switch (color) {
             case COLORLESS:
                 return ColorlessGroupMapping;
@@ -94,7 +92,7 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
 
     protected void togglePool(ColorlessGroup val) {
         group = val;
-        CardGroup cards = getGroup(val);
+        ArrayList<AbstractCard> cards = getGroup(val);
         if (cards != null) {
             screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards, CustomCardLibraryScreen.currentColor);
         }

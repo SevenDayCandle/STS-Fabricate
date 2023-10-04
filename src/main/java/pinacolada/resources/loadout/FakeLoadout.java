@@ -11,7 +11,6 @@ import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelicData;
-import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -27,7 +26,7 @@ public class FakeLoadout extends PCLLoadout {
     public ArrayList<String> getAvailableCardIDs() {
         ArrayList<String> base = new ArrayList<>();
         if (!GameUtilities.isColorlessCardColor(color)) {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
+            for (AbstractCard c : CustomCardLibraryScreen.getCards(color)) {
                 switch (c.rarity) {
                     case BASIC:
                     case COMMON:
