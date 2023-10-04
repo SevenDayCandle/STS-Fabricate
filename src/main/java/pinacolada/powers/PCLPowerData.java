@@ -173,6 +173,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public int maxAmount = DEFAULT_POWER_MAX;
     public int minAmount = 0;
     public int priority = 5;
+    public int turns = 1;
 
     public PCLPowerData(Class<? extends AbstractPower> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -480,6 +481,12 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return this;
     }
 
+    public PCLPowerData setTurns(int turns) {
+        this.turns = turns;
+
+        return this;
+    }
+
     public PCLPowerData setType(AbstractPower.PowerType val) {
         this.type = val;
 
@@ -497,6 +504,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public enum Behavior {
         Permanent,
         TurnBased,
+        TurnBasedNext,
         SingleTurn,
         SingleTurnNext,
         Special;
@@ -507,6 +515,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_permanent;
                 case TurnBased:
                     return PGR.core.strings.power_turnBased;
+                case TurnBasedNext:
+                    return PGR.core.strings.power_turnBasedNext;
                 case SingleTurn:
                     return PGR.core.strings.power_singleTurn;
                 case SingleTurnNext:

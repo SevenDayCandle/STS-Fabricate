@@ -24,6 +24,7 @@ import pinacolada.skills.fields.PField_CardTransform;
 @VisibleSkill
 public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     public static final PSkillData<PField_CardTransform> DATA = register(PMove_Transform.class, PField_CardTransform.class)
+            .setExtra2(0, DEFAULT_MAX)
             .noTarget();
 
     public PMove_Transform() {
@@ -73,7 +74,11 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     private void transformImpl(AbstractCard c) {
         AbstractCard c2 = PField_CardCategory.getCard(fields.result);
         if (c2 != null) {
-            PCLActions.last.replaceCard(c.uuid, c2.makeCopy());
+            AbstractCard cardCopy = c2.makeCopy();
+            for (int i = 0; i < extra2; i++) {
+                cardCopy.upgrade();
+            }
+            PCLActions.last.replaceCard(c.uuid, cardCopy);
             PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
         }
     }

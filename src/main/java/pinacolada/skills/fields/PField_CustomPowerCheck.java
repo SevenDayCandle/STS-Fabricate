@@ -18,11 +18,11 @@ public class PField_CustomPowerCheck extends PField_Random {
     }
 
     public String getCardIDAndString() {
-        return getCardIDAndString(cardIDs);
+        return getCardIDAndString(cardIDs, 0, 0); // Upgrade/form doesn't matter
     }
 
     public String getCardIDOrString() {
-        return getCardIDOrString(cardIDs);
+        return getCardIDOrString(cardIDs, 0, 0);
     }
 
     @Override

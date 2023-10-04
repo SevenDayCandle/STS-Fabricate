@@ -122,6 +122,19 @@ public class PField_CardCategory extends PField_CardGeneric {
                 && invert == ((PField_CardCategory) other).invert;
     }
 
+    /* Filter cards without upgrade filtering; use if you need to use the upgrade filter for something else (e.g. generating cards with upgrades) */
+    public FuncT1<Boolean, AbstractCard> getBaseCardFilter() {
+        return !cardIDs.isEmpty() ? c -> invert ^ EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
+                (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+                        && (colors.isEmpty() || colors.contains(c.color))
+                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
+                        && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c.cardID)))
+                        && (flags.isEmpty() || EUIUtils.any(flags, loadout -> checkForFlag(loadout, c)))
+                        && (rarities.isEmpty() || rarities.contains(c.rarity))
+                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
+                        && (types.isEmpty() || types.contains(c.type))));
+    }
+
     public String getCardAndString() {
         return getCardAndString(skill.getAmountRawString());
     }
@@ -131,11 +144,11 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getCardIDAndString() {
-        return getCardIDAndString(cardIDs);
+        return getCardIDAndString(cardIDs, skill.extra2, 0);
     }
 
     public String getCardIDOrString() {
-        return getCardIDOrString(cardIDs);
+        return getCardIDOrString(cardIDs, skill.extra2, 0);
     }
 
     public String getCardOrString() {
@@ -148,6 +161,9 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     protected final ArrayList<String> getCardXPrefixes(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
+        if (skill.extra2 > 0) {
+            stringsToJoin.add(PGR.core.tooltips.upgrade.past());
+        }
         if (!costs.isEmpty()) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(CostFilter.getCostRangeStrings(costs))));
         }
@@ -197,16 +213,16 @@ public class PField_CardCategory extends PField_CardGeneric {
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
+    /* Filter cards based on the base field filters and their upgrades. Use this unless you require the upgrades field for a different purpose (e.g. generating cards), in which case you use getBaseCardFilter */
     public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
-        return !cardIDs.isEmpty() ? c -> invert ^ EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
-                        && (colors.isEmpty() || colors.contains(c.color))
-                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
-                        && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c.cardID)))
-                        && (flags.isEmpty() || EUIUtils.any(flags, loadout -> checkForFlag(loadout, c)))
-                        && (rarities.isEmpty() || rarities.contains(c.rarity))
-                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                        && (types.isEmpty() || types.contains(c.type))));
+        return getFullCardFilter(skill.extra2);
+    }
+
+    public FuncT1<Boolean, AbstractCard> getFullCardFilter(int upgrades) {
+        if (upgrades > 0) {
+            return c -> getBaseCardFilter().invoke(c) && (invert ^ c.timesUpgraded >= upgrades);
+        }
+        return getBaseCardFilter();
     }
 
     public String getFullCardOrString(Object value) {
@@ -329,7 +345,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public String makeFullString(EUITooltip tooltip) {
         String tooltipTitle = tooltip.title;
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
-                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
+                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs, skill.extra2, 0) : getFullCardString(), getGroupString())
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard());
     }
 

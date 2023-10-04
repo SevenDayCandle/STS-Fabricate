@@ -46,16 +46,16 @@ public abstract class PField implements Serializable {
         return EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, affinities);
     }
 
-    public static String getCardIDAndString(ArrayList<String> cardIDs) {
-        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getCardNameForID(g) + "}", cardIDs);
+    public static String getCardIDAndString(ArrayList<String> cardIDs, int upgrade, int form) {
+        return PCLCoreStrings.joinWithAnd(c -> getCardIDString(c, upgrade, form), cardIDs);
     }
 
-    public static String getCardIDOrString(ArrayList<String> cardIDs) {
-        return PCLCoreStrings.joinWithOr(PField::getCardIDString, cardIDs);
+    public static String getCardIDOrString(ArrayList<String> cardIDs, int upgrade, int form) {
+        return PCLCoreStrings.joinWithOr(c -> getCardIDString(c, upgrade, form), cardIDs);
     }
 
-    public static String getCardIDString(String cardID) {
-        return "{" + GameUtilities.getCardNameForID(cardID) + "}";
+    public static String getCardIDString(String cardID, int upgrade, int form) {
+        return "{" + GameUtilities.getCardNameForID(cardID, upgrade, form) + "}";
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities) {

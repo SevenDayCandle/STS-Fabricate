@@ -23,6 +23,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -48,6 +49,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUILabel idWarning;
     protected PCLCustomUpgradableEditor minMaxAmount;
     protected PCLValueEditor priority;
+    protected PCLValueEditor turns;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
     public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditPowerScreen effect) {
@@ -112,7 +114,9 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLPowerData.Behavior::getText)
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(types.get(0)));
+                        PCLPowerData.Behavior type = types.get(0);
+                        effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(type));
+                        turns.setActive(type == PCLPowerData.Behavior.SingleTurn || type == PCLPowerData.Behavior.SingleTurnNext);
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
@@ -128,6 +132,10 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)
                 .setHasInfinite(true, true);
+        turns = new PCLValueEditor(new EUIHitbox(screenW(0.46f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_turns, (val) -> effect.modifyAllBuilders((e, i) -> e.setTurns(val)))
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_turns, PGR.core.strings.cetut_turns);
 
         refresh();
     }
@@ -158,14 +166,17 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomPowerSlot.BASE_POWER_ID));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        typeDropdown.setSelection(effect.getBuilder().type, false);
-        endTurnBehaviorDropdown.setSelection(effect.getBuilder().endTurnBehavior, false);
-        minMaxAmount.setValue(effect.getBuilder().minAmount, effect.getBuilder().maxAmount, false);
-        priority.setValue(effect.getBuilder().priority, false);
+        PCLDynamicPowerData builder = effect.getBuilder();
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxAmount > 0);
+        idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomPowerSlot.BASE_POWER_ID));
+        nameInput.setLabel(builder.strings.NAME);
+        typeDropdown.setSelection(builder.type, false);
+        endTurnBehaviorDropdown.setSelection(builder.endTurnBehavior, false);
+        minMaxAmount.setValue(builder.minAmount, builder.maxAmount, false);
+        priority.setValue(builder.priority, false);
+        turns.setValue(builder.turns, false).setActive(builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurn || builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext);
+
+        effect.upgradeToggle.setActive(builder.maxAmount > 0);
     }
 
     @Override
@@ -179,6 +190,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryRender(sb);
         minMaxAmount.tryRender(sb);
         priority.tryRender(sb);
+        turns.tryRender(sb);
     }
 
     @Override
@@ -192,6 +204,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryUpdate();
         minMaxAmount.tryUpdate();
         priority.tryUpdate();
+        turns.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
@@ -18,7 +17,6 @@ public class TemporaryPower extends PCLPower {
 
     private final AbstractPower originalPower;
     private int sourceMaxAmount = Integer.MAX_VALUE;
-    public int stabilizeTurns;
 
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower) {
         super(DATA, owner, owner, sourcePower.amount);
@@ -52,12 +50,7 @@ public class TemporaryPower extends PCLPower {
 
     @Override
     public void atEndOfRound() {
-        if (stabilizeTurns > 0) {
-            stabilizeTurns -= 1;
-        }
-        else {
-            removePower();
-        }
+        addTurns(-1);
     }
 
     @Override
@@ -83,10 +76,6 @@ public class TemporaryPower extends PCLPower {
         PCLRenderHelpers.drawSepia(sb, (s) ->
                 super.renderIconsImpl(s, x, y, borderColor, imageColor)
         );
-    }
-
-    public void stabilize(int turns) {
-        stabilizeTurns += turns;
     }
 
     @Override

@@ -48,6 +48,16 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
         return builder;
     }
 
+    @Override
+    protected ColoredString getSecondaryAmount(Color c) {
+        switch (data.endTurnBehavior) {
+            case SingleTurn:
+            case SingleTurnNext:
+                return new ColoredString(turns, Color.RED, c.a);
+        }
+        return null;
+    }
+
     public PCLDynamicPower setForm(int form) {
         PCLDynamicPowerData lastBuilder = null;
         this.form = form;

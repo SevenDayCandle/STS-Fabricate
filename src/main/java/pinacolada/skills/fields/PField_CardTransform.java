@@ -24,7 +24,7 @@ public class PField_CardTransform extends PField_CardCategory {
     }
 
     public String getCardIDString() {
-        return result != null ? getCardIDString(result) : "";
+        return result != null ? getCardIDString(result, skill.extra2, 0) : "";
     }
 
     @Override

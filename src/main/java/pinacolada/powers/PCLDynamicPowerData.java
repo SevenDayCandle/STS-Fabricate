@@ -18,6 +18,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.*;
 
@@ -43,7 +44,6 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
 
     public PCLDynamicPowerData(PCLPowerData original) {
         this(original.resources, original.ID);
-
         setImagePath(original.imagePath);
         setEndTurnBehavior(original.endTurnBehavior);
         setIsCommon(original.isCommon);
@@ -51,6 +51,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         setIsPostActionPower(original.isPostActionPower);
         setLimits(original.minAmount, original.maxAmount);
         setPriority(original.priority);
+        setTurns(original.turns);
         setType(original.type);
     }
 
@@ -63,6 +64,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         setIsPostActionPower(original.isPostActionPower);
         setLimits(original.minAmount, original.maxAmount);
         setPriority(original.priority);
+        setTurns(original.turns);
         setType(original.type);
         setImage(original.portraitImage);
         setLanguageMap(original.languageMap);
@@ -78,6 +80,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         safeLoadValue(() -> setIsPostActionPower(data.isPostActionPower));
         safeLoadValue(() -> setLimits(data.minValue, data.maxValue));
         safeLoadValue(() -> setPriority(data.priority));
+        safeLoadValue(() -> setTurns(data.turns));
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(effects, PSkill::get), true, true));
     }
@@ -246,6 +249,9 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         }
         else {
             tooltip.setDescription(getEffectTextForTip());
+        }
+        if (portraitImage != null) {
+            tooltip.setIcon(PCLRenderHelpers.generateIcon(portraitImage));
         }
         EUIKeywordTooltip.registerIDTemp(ID, tooltip);
         return this;

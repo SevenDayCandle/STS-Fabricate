@@ -25,6 +25,7 @@ import pinacolada.utilities.GameUtilities;
 public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
+            .setExtra2(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.MasterDeck)
             .noTarget();
 

@@ -117,8 +117,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         }
         // Otherwise, we prioritize making card ID copies first if they exist, then color-specific cards if colors exist, then any cards
         else {
+            ArrayList<AbstractCard> created;
             if (generateSpecificCards()) {
-                ArrayList<AbstractCard> created = new ArrayList<>();
+                created = new ArrayList<>();
                 // When creating specific cards in an X of Y effect, only create up to Y cards.
                 if (isOutOf()) {
                     for (String cd : fields.cardIDs) {
@@ -139,7 +140,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 // Otherwise, create X copies of each card
                 else {
                     for (String cd : fields.cardIDs) {
-                        // getCard already makes a copy
                         AbstractCard c = PField_CardCategory.getCard(cd);
                         if (c != null) {
                             for (int i = 0; i < limit; i++) {
@@ -148,11 +148,20 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                         }
                     }
                 }
-
-                return created;
             }
-            return EUIUtils.map(getSourceCards(limit),
-                    AbstractCard::makeCopy);
+            else {
+                created = EUIUtils.map(getSourceCards(limit),
+                        AbstractCard::makeCopy);
+            }
+
+            // For created cards, upgrade them as necessary
+            for (int i = 0; i < extra2; i++) {
+                for (AbstractCard c : created) {
+                    c.upgrade();
+                }
+            }
+
+            return created;
         }
 
         return new ArrayList<>();
@@ -162,7 +171,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
-                : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() || fields.origin != PCLCardSelection.Manual || !generateSpecificCards() ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
     }
 
     @Override
@@ -185,7 +194,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     protected FuncT1<Boolean, AbstractCard> getSourceFilter() {
-        return isMetascaling() ? fields.getFullCardFilter() : c -> fields.not ^ fields.getFullCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
+        return isMetascaling() ? fields.getBaseCardFilter() : c -> fields.not ^ fields.getBaseCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
     }
 
     @Override

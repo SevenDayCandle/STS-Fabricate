@@ -428,6 +428,16 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info, triggerSource);
     }
 
+    protected boolean checkChildCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (childEffect instanceof PCond) {
+            if (((PCond<?>) childEffect).checkCondition(info, isUsing, triggerSource)) {
+                return ((PCond<?>) childEffect).checkChildCondition(info, isUsing, triggerSource);
+            }
+            return false;
+        }
+        return true;
+    }
+
     public boolean checkConditionOutsideOfBattle() {
         return checkCondition(generateInfo(null), false, null);
     }
@@ -696,7 +706,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     protected void useFromTrigger(PCLUseInfo info, PCLActions order) {
         // Use the super pass parent to bypass the cond check for the triggering cond
-        if (super.tryPassParent(this, info)) {
+        // We also need to check if the child condition passes, so that the parent use doesn't get tacked down if the child did not pass
+        if (checkChildCondition(info, true, this) && super.tryPassParent(this, info)) {
             if (childEffect != null) {
                 childEffect.use(info, order);
             }

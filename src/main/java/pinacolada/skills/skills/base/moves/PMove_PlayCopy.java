@@ -17,6 +17,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMove_PlayCopy extends PMove_GenerateCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_PlayCopy.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
+            .setExtra2(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
     public PMove_PlayCopy() {

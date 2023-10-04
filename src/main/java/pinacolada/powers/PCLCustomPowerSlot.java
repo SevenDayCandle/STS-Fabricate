@@ -35,6 +35,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     public int maxValue;
     public int minValue;
     public int priority;
+    public int turns;
     public String type;
     public String endTurnBehavior;
     public String languageStrings;
@@ -218,6 +219,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             minValue = first.minAmount;
             maxValue = first.maxAmount;
             priority = first.priority;
+            turns = first.turns;
             type = first.type.toString();
             endTurnBehavior = first.endTurnBehavior.toString();
         }

@@ -50,7 +50,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public static final int DUMMY_MULT = 100;
     public static AbstractPlayer player = null;
     public static Random rng = null;
-    protected final ArrayList<AbstractGameEffect> effects;
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final PCLPowerData data;
     protected PowerStrings powerStrings;
@@ -59,14 +58,13 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public EUIKeywordTooltip mainTip;
     public boolean enabled = true;
     public boolean justApplied = false;
-    public boolean hideAmount = false;
     public int baseAmount = 0;
+    public int turns = 1;
 
     // Should not call this constructor without setting strings up through one of the setupStrings methods
     protected PCLPower(PCLPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {
         this.data = data;
         this.ID = data.ID;
-        this.effects = ReflectionHacks.getPrivate(this, AbstractPower.class, "effect");
         this.owner = owner;
         this.source = source;
         hb = new EUIHitbox(HITBOX_SIZE, HITBOX_SIZE);
@@ -154,6 +152,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return sb.toString();
     }
 
+    public void addTurns(int amount) {
+        setTurns(this.turns + amount);
+    }
+
     // Note that info.card and c may be DIFFERENT in the case of PCLMultiCard
     public float atDamageFinalGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
         return atDamageFinalGive(block, type, c);
@@ -166,7 +168,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public void atEndOfRound() {
         switch (data.endTurnBehavior) {
             case SingleTurn:
-                removePower();
+                addTurns(-1);
                 break;
             case TurnBased:
                 if (justApplied) {
@@ -180,20 +182,25 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     public void atStartOfTurnPostDraw() {
-        if (data.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext) {
-            removePower();
+        switch (data.endTurnBehavior) {
+            case SingleTurnNext:
+                addTurns(-1);
+                break;
+            case TurnBasedNext:
+                reducePower(1);
+                break;
         }
     }
 
     @Override
     public void flash() {
-        this.effects.add(new PCLGainPowerEffect(this, true));
+        PCLEffects.Queue.add(new PCLGainPowerEffect(this, true));
         PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
     }
 
     @Override
     public void flashWithoutSound() {
-        this.effects.add(new PCLGainPowerEffect(this, false));
+        PCLEffects.Queue.add(new PCLGainPowerEffect(this, false));
         PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
     }
 
@@ -375,10 +382,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     @Override
     public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
-        if (hideAmount) {
-            return;
-        }
-
         ColoredString amount = getPrimaryAmount(c);
         if (amount != null) {
             FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount.text, x, y, fontScale, amount.color);
@@ -405,10 +408,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         Color imageColor = getImageColor(c);
 
         this.renderIconsImpl(sb, x, y, borderColor, imageColor);
-
-        for (AbstractGameEffect e : effects) {
-            e.render(sb, x, y);
-        }
     }
 
     protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
@@ -436,6 +435,13 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public PCLPower setHitbox(EUIHitbox hb) {
         this.hb = hb;
         return this;
+    }
+
+    public void setTurns(int turns) {
+        this.turns = turns;
+        if (this.turns <= 0) {
+            removePower();
+        }
     }
 
     public void setup() {
@@ -472,8 +478,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     public void setupProperties(int amount) {
         this.baseAmount = this.amount = Math.min(data.maxAmount, amount);
+        this.priority = data.priority;
+        this.turns = data.turns;
         this.type = data.type;
-        this.isTurnBased = data.endTurnBehavior == PCLPowerData.Behavior.TurnBased;
+        this.isTurnBased = data.endTurnBehavior != PCLPowerData.Behavior.Permanent && data.endTurnBehavior != PCLPowerData.Behavior.Special;
         this.isPostActionPower = data.isPostActionPower;
         this.justApplied = !GameUtilities.isPlayerTurn(false);
         this.canGoNegative = data.minAmount < 0;

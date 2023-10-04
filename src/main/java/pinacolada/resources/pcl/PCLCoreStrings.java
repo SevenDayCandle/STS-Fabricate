@@ -130,6 +130,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_newFlag = cedit.TEXT[81];
     public final String cedit_renameFlag = cedit.TEXT[82];
     public final String cedit_deleteFlag = cedit.TEXT[83];
+    public final String cedit_turns = cedit.TEXT[84];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -206,6 +207,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_effectTarget = cetut.TEXT[72];
     public final String cetut_amountPower = cetut.TEXT[73];
     public final String cetut_scope = cetut.TEXT[74];
+    public final String cetut_turns = cetut.TEXT[75];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -395,9 +397,10 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String power_neutral = power.TEXT[3];
     public final String power_permanent = power.TEXT[4];
     public final String power_turnBased = power.TEXT[5];
-    public final String power_singleTurn = power.TEXT[6];
-    public final String power_singleTurnNext = power.TEXT[7];
-    public final String power_custom = power.TEXT[8];
+    public final String power_turnBasedNext = power.TEXT[6];
+    public final String power_singleTurn = power.TEXT[7];
+    public final String power_singleTurnNext = power.TEXT[8];
+    public final String power_custom = power.TEXT[9];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];

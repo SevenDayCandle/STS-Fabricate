@@ -17,7 +17,9 @@ import pinacolada.skills.skills.PPassiveMod;
 @VisibleSkill
 public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class).noTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .noTarget();
 
     public PMod_IncreaseOnUse(PSkillSaveData content) {
         super(DATA, content);

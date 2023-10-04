@@ -31,7 +31,8 @@ public class PSkillData<T extends PField> {
     public int maxAmount;
     public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
     public int maxExtra = PSkill.DEFAULT_EXTRA_MIN;
-    public boolean excludeColors;
+    public int minExtra2 = PSkill.DEFAULT_EXTRA_MIN;
+    public int maxExtra2 = PSkill.DEFAULT_EXTRA_MIN;
 
     public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType) {
         this(id, effectClass, effectType, 0, DEFAULT_MAX);
@@ -61,7 +62,7 @@ public class PSkillData<T extends PField> {
     }
 
     public final boolean isColorCompatible(AbstractCard.CardColor co) {
-        return colors.isEmpty() || (excludeColors ^ colors.contains(co));
+        return colors.isEmpty() || (colors.contains(co));
     }
 
     public PSkillData<T> noTarget() {
@@ -95,14 +96,15 @@ public class PSkillData<T extends PField> {
         return this;
     }
 
-    public PSkillData<T> setExcludeColors(boolean val) {
-        excludeColors = val;
-        return this;
-    }
-
     public PSkillData<T> setExtra(int min, int max) {
         this.minExtra = min;
         this.maxExtra = Math.max(min, max);
+        return this;
+    }
+
+    public PSkillData<T> setExtra2(int min, int max) {
+        this.minExtra2 = min;
+        this.maxExtra2 = Math.max(min, max);
         return this;
     }
 

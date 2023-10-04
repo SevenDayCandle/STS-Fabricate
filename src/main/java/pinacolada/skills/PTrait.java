@@ -2,12 +2,14 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.configuration.EUIConfiguration;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
@@ -126,7 +128,11 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         if (perspective != PCLCardTarget.Self || !EUIConfiguration.enableDescriptionIcons.get()) {
             return TEXT.subjects_damage;
         }
-        return getAttackTooltip().getTitleOrIcon();
+        EUIKeywordTooltip tooltip = getAttackTooltip();
+        if (tooltip == PGR.core.tooltips.normalDamage && !PGR.config.abbreviateEffects.get()) {
+            return TEXT.subjects_damage;
+        }
+        return tooltip.getTitleOrIcon();
     }
 
     public String getSampleAmount() {

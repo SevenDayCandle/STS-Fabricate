@@ -494,17 +494,21 @@ public class GameUtilities {
     }
 
     public static String getCardNameForID(String cardID) {
+        return getCardNameForID(cardID, 0, 0);
+    }
+
+    public static String getCardNameForID(String cardID, int upgrade, int form) {
         if (cardID != null) {
+            // Try to load PCL data first to apply form/upgrade to
+            PCLCardData data = PCLCardData.getStaticData(cardID);
+            if (data != null) {
+                return GameUtilities.getMultiformName(data.strings.NAME, form, upgrade, data.maxForms, data.maxUpgradeLevel, data.branchFactor);
+            }
+
             // NOT using CardLibrary.getCard as the replacement patching on that method may cause text glitches or infinite loops in this method
             AbstractCard c = CardLibraryPatches.getDirectCard(cardID);
             if (c != null) {
-                return c.name;
-            }
-
-            // Try to load data on cards not in the library
-            PCLCardData data = PCLCardData.getStaticData(cardID);
-            if (data != null) {
-                return data.strings.NAME;
+                return upgrade > 0 ? c.name + "+" : c.name;
             }
 
             // Try to load data from slots. Do not actually create cards here to avoid infinite loops
@@ -513,7 +517,7 @@ public class GameUtilities {
                 HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicCardData.parseLanguageStrings(slot.languageStrings);
                 CardStrings language = languageMap != null ? PCLDynamicCardData.getStringsForLanguage(languageMap) : null;
                 if (language != null) {
-                    return language.NAME;
+                    return GameUtilities.getMultiformName(language.NAME, form, upgrade, slot.forms != null ? slot.forms.length : 1, slot.maxUpgradeLevel, slot.branchUpgradeFactor);
                 }
             }
 
