@@ -41,7 +41,6 @@ public class ResistancePower extends PCLPower {
 
     @Override
     public String getUpdatedDescription() {
-        this.type = amount < 0 ? PowerType.DEBUFF : PowerType.BUFF;
         return formatDescription(amount < 0 ? 1 : 0, PCLRenderHelpers.decimalFormat(Math.abs(amount * getMultiplier())));
     }
 
@@ -51,6 +50,9 @@ public class ResistancePower extends PCLPower {
 
         if (amount == 0) {
             removePower();
+        }
+        else {
+            this.type = amount < 0 ? PowerType.DEBUFF : PowerType.BUFF;
         }
     }
 }

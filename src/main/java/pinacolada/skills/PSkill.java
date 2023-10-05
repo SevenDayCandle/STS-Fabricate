@@ -101,7 +101,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public int extra = -1;
     public int baseExtra = extra;
     public int rootExtra = baseExtra;
-    public int extra2 = -1;
+    public int extra2 = 0;
     public int baseExtra2 = extra2;
     public int rootExtra2 = baseExtra2;
     public int scope = 1;

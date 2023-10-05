@@ -31,8 +31,8 @@ public class PSkillData<T extends PField> {
     public int maxAmount;
     public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
     public int maxExtra = PSkill.DEFAULT_EXTRA_MIN;
-    public int minExtra2 = PSkill.DEFAULT_EXTRA_MIN;
-    public int maxExtra2 = PSkill.DEFAULT_EXTRA_MIN;
+    public int minExtra2;
+    public int maxExtra2;
 
     public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType) {
         this(id, effectClass, effectType, 0, DEFAULT_MAX);

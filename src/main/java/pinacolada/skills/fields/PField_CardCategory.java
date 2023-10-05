@@ -353,7 +353,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);
             if (c != null && !EUIUtils.any(previews, p -> p.matches(c.cardID))) {
-                previews.add(new EUICardPreview(c.makeCopy()));
+                AbstractCard copy = c.makeCopy();
+                for (int i = 0; i < skill.extra2; i++) {
+                    copy.upgrade();
+                }
+                previews.add(new EUICardPreview(copy));
             }
         }
     }

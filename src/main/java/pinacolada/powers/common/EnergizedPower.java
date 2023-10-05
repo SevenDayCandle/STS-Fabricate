@@ -6,6 +6,7 @@ import pinacolada.annotations.VisiblePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import static pinacolada.powers.PCLPowerData.DEFAULT_POWER_MAX;
 
@@ -19,6 +20,12 @@ public class EnergizedPower extends PCLPower {
 
     public EnergizedPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(DATA, owner, source, amount);
+    }
+
+    @Override
+    protected void onAmountChanged(int previousAmount, int difference) {
+        this.type = amount < 0 ? PowerType.DEBUFF : PowerType.BUFF;
+        super.onAmountChanged(previousAmount, difference);
     }
 
     @Override
