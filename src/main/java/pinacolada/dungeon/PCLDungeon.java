@@ -66,6 +66,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
     public Boolean allowAugments = false;
+    public Boolean allowCustomBlights = false;
     public Boolean allowCustomCards = false;
     public Boolean allowCustomPotions = false;
     public Boolean allowCustomRelics = false;
@@ -419,6 +420,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         valueDivisor = 1;
         if (dungeon != null) {
             eventLog = new HashMap<>(dungeon.eventLog);
+            allowCustomBlights = dungeon.allowCustomBlights;
             allowCustomCards = dungeon.allowCustomCards;
             allowCustomPotions = dungeon.allowCustomPotions;
             allowCustomRelics = dungeon.allowCustomRelics;
@@ -444,6 +446,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         else {
             eventLog = new HashMap<>();
             allowAugments = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).allowAugments : data != null && data.useAugments;
+            allowCustomBlights = PGR.config.enableCustomBlights.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomBlights);
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
             allowCustomPotions = PGR.config.enableCustomPotions.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomPotions);
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
@@ -837,6 +840,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
         if (allowAugments == null) {
             allowAugments = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).allowAugments : data != null && data.useAugments;
+        }
+
+        if (allowCustomBlights == null) {
+            allowCustomBlights = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomBlights;
         }
 
         if (allowCustomCards == null) {

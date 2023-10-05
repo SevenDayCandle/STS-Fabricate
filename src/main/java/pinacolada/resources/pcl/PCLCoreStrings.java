@@ -370,7 +370,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String options_enableCustomCards = options.TEXT[9];
     public final String options_enableCustomRelics = options.TEXT[10];
     public final String options_enableCustomPotions = options.TEXT[11];
-    public final String options_enableCustomEvents = options.TEXT[12];
+    public final String options_enableCustomBlights = options.TEXT[12];
     public final String options_lowVRAM = options.TEXT[13];
     public final String options_madnessReplacements = options.TEXT[14];
     public final String options_fabricatePopup = options.TEXT[15];

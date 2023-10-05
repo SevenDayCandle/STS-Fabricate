@@ -3,7 +3,9 @@ package pinacolada.blights;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.localization.BlightStrings;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.utilities.BlightTier;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.misc.PCLGenericData;
@@ -22,6 +24,7 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
     private static final Map<String, PCLBlightData> STATIC_DATA = new HashMap<>();
 
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
+    public BlightTier tier = BlightTier.SPECIAL;
     public BlightStrings strings;
     public String imagePath;
     public Integer[] counter = array(0);
@@ -144,6 +147,12 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
     public PCLBlightData setMaxUpgrades(int maxUpgradeLevel, boolean levelOnStack) {
         setMaxUpgrades(maxUpgradeLevel);
         return setUnique(levelOnStack);
+    }
+
+    public PCLBlightData setTier(BlightTier tier) {
+        this.tier = tier;
+
+        return this;
     }
 
     public PCLBlightData setUnique(boolean unique) {

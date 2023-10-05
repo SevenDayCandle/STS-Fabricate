@@ -1,25 +1,33 @@
 package pinacolada.patches.library;
 
 import basemod.ReflectionHacks;
+import basemod.devcommands.blight.Blight;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import com.megacrit.cardcrawl.random.Random;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.utilities.BlightTier;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.RandomizedList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
 
 public class BlightHelperPatches {
     private static boolean TEMP_DISABLE_PATCH;
@@ -62,6 +70,81 @@ public class BlightHelperPatches {
         return null;
     }
 
+    public static AbstractBlight getRandomBlightForTier(BlightTier tier) {
+        return getRandomBlightForTier(tier, AbstractDungeon.relicRng, AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS, Collections.emptyList(), PGR.dungeon.allowCustomBlights);
+    }
+
+    public static AbstractBlight getRandomBlightForTier(BlightTier tier, Random rng, AbstractCard.CardColor actingColor, Collection<String> exclusions, boolean allowCustom) {
+        RandomizedList<String> blights = new RandomizedList<>();
+        FuncT1<Boolean, AbstractCard.CardColor> colorFunc = GameUtilities.isColorlessCardColor(actingColor) ? c -> c == AbstractCard.CardColor.COLORLESS : c -> c == AbstractCard.CardColor.COLORLESS || c == actingColor;
+        if (tier == null) {
+            blights.addAll(BlightHelper.blights);
+            for (String a : additionalBlights.keySet()) {
+                if (PCLBlightData.getStaticData(a) == null) {
+                    blights.add(a);
+                }
+            }
+            for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> b.tier != BlightTier.SPECIAL && colorFunc.invoke(b.cardColor))) {
+                blights.add(data.ID);
+            }
+            if (allowCustom) {
+                for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(actingColor)) {
+                    BlightTier t = BlightTier.valueOf(slot.tier);
+                    if (t != BlightTier.SPECIAL) {
+                        blights.add(slot.ID);
+                    }
+                }
+                if (actingColor != AbstractCard.CardColor.COLORLESS) {
+                    for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS)) {
+                        BlightTier t = BlightTier.valueOf(slot.tier);
+                        if (t != BlightTier.SPECIAL) {
+                            blights.add(slot.ID);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            switch (tier) {
+                case BOSS:
+                    blights.addAll(BlightHelper.chestBlights);
+                    break;
+                case BASIC:
+                    blights.addAll(BlightHelper.blights);
+                    blights.removeIf(b -> BlightHelper.chestBlights.contains(b));
+                    for (String a : additionalBlights.keySet()) {
+                        if (PCLBlightData.getStaticData(a) == null) {
+                            blights.add(a);
+                        }
+                    }
+            }
+            for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> b.tier == tier && colorFunc.invoke(b.cardColor))) {
+                blights.add(data.ID);
+            }
+            if (allowCustom) {
+                for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(actingColor)) {
+                    BlightTier t = BlightTier.valueOf(slot.tier);
+                    if (t == tier) {
+                        blights.add(slot.ID);
+                    }
+                }
+                if (actingColor != AbstractCard.CardColor.COLORLESS) {
+                    for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS)) {
+                        BlightTier t = BlightTier.valueOf(slot.tier);
+                        if (t == tier) {
+                            blights.add(slot.ID);
+                        }
+                    }
+                }
+            }
+        }
+
+        blights.removeAll(exclusions);
+
+        String res = blights.retrieve(rng, false);
+        return res != null ? BlightHelper.getBlight(res) : null;
+    }
+
     public static void loadCustomBlights() {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleBlight.class)) {
             try {
@@ -92,6 +175,31 @@ public class BlightHelperPatches {
                 }
             }
             return SpireReturn.Continue();
+        }
+    }
+
+    // Despite the name, this only pulls chest blights :)
+    @SpirePatch(clz = BlightHelper.class, method = "getRandomBlight", paramtypez = {})
+    public static class BlightHelperPatches_GetRandomBlight {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractBlight> method() {
+            return SpireReturn.Return(getRandomBlightForTier(BlightTier.BOSS));
+        }
+    }
+
+    @SpirePatch(clz = BlightHelper.class, method = "getRandomBlight", paramtypez = {Random.class})
+    public static class BlightHelperPatches_GetRandomBlight2 {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractBlight> method(Random rng) {
+            return SpireReturn.Return(getRandomBlightForTier(null, rng, AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS, Collections.emptyList(), PGR.dungeon.allowCustomBlights));
+        }
+    }
+
+    @SpirePatch(clz = BlightHelper.class, method = "getRandomChestBlight")
+    public static class BlightHelperPatches_GetRandomChestBlight {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractBlight> method(ArrayList<String> exclusions) {
+            return SpireReturn.Return(getRandomBlightForTier(BlightTier.BOSS, AbstractDungeon.relicRng, AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS, exclusions, PGR.dungeon.allowCustomBlights));
         }
     }
 }

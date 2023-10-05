@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import extendedui.EUIUtils;
+import extendedui.utilities.BlightTier;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.blights.PCLCustomBlightSlot;
@@ -46,6 +47,8 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker {
         this(original.ID, original.resources);
 
         setImagePath(original.imagePath);
+        setColor(original.cardColor);
+        setTier(original.tier);
         setUnique(original.unique);
         setMaxUpgrades(original.maxUpgradeLevel);
         setBranchFactor(original.branchFactor);
@@ -55,6 +58,8 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker {
         this(original.ID, original.resources);
         setImagePath(original.imagePath);
         setImage(original.portraitImage);
+        setColor(original.cardColor);
+        setTier(original.tier);
         setUnique(original.unique);
         setMaxUpgrades(original.maxUpgradeLevel);
         setBranchFactor(original.branchFactor);
@@ -67,6 +72,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker {
     public PCLDynamicBlightData(PCLCustomBlightSlot data, PCLCustomEditorLoadable.EffectItemForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
+        safeLoadValue(() -> setTier(BlightTier.valueOf(data.tier)));
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> counter = data.counter.clone());

@@ -4,16 +4,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUITextBoxInput;
-import extendedui.ui.controls.EUIToggle;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
+import extendedui.utilities.BlightTier;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
@@ -32,6 +33,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUITextBoxInput nameInput;
     protected EUITextBoxInput flavorInput; // TODO implement this once you have multi-line input available
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
+    protected EUIDropdown<BlightTier> tierDropdown;
     protected EUILabel idWarning;
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor branchUpgrades;
@@ -88,6 +90,15 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
+        tierDropdown = new EUIDropdown<BlightTier>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), BlightTier::name)
+                .setOnChange(rarities -> {
+                    if (!rarities.isEmpty()) {
+                        effect.modifyAllBuilders((e, i) -> e.setTier(rarities.get(0)));
+                    }
+                })
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
+                .setItems(BlightTier.values())
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
@@ -136,6 +147,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
     public void refresh() {
         idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomBlightSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
+        tierDropdown.setSelection(effect.getBuilder().tier, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
@@ -147,6 +159,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
+        tierDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
@@ -159,6 +172,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
     public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
+        tierDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();

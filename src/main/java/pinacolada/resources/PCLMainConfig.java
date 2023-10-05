@@ -31,8 +31,8 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("AbbreviateEffects"), false);
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("UseCroppedPortrait"), false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("DisplayCardTagDescription"), false);
+    public STSConfigItem<Boolean> enableCustomBlights = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomBlights"), false);
     public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomCards"), false);
-    public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomEvents"), false);
     public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomPotions"), false);
     public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomRelics"), false);
     public STSConfigItem<Boolean> fabricatePopup = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("FabricatePopup"), false);
@@ -148,6 +148,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(0, enableCustomBlights, PGR.core.strings.options_enableCustomBlights, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
@@ -188,8 +189,8 @@ public class PCLMainConfig extends AbstractConfig {
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
         displayCardTagDescription.addConfig(config);
+        enableCustomBlights.addConfig(config);
         enableCustomCards.addConfig(config);
-        enableCustomEvents.addConfig(config);
         enableCustomPotions.addConfig(config);
         enableCustomRelics.addConfig(config);
         fabricatePopup.addConfig(config);

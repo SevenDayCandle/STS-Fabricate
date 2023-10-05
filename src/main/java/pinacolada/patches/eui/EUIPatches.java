@@ -17,6 +17,10 @@ import extendedui.patches.screens.MenuPanelScreenPatches;
 import extendedui.ui.TextureCache;
 import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
 import extendedui.ui.controls.EUIMainMenuPanelButton;
+import extendedui.utilities.BlightTier;
+import pinacolada.blights.PCLBlight;
+import pinacolada.blights.PCLBlightData;
+import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PCLEnum;
@@ -28,6 +32,36 @@ import java.util.ArrayList;
 
 public class EUIPatches {
     protected static final CardTypePanelFilterItem SUMMON = new CardTypePanelFilterItem(PCLEnum.CardType.SUMMON);
+
+    @SpirePatch(clz = BlightTier.class, method = "getTier", paramtypez = {AbstractBlight.class})
+    public static class BlightTier_GetTier {
+        @SpirePrefixPatch
+        public static SpireReturn<BlightTier> prefix(AbstractBlight blight) {
+            if (blight instanceof PCLBlight) {
+                return SpireReturn.Return(((PCLBlight) blight).blightData.tier);
+            }
+            return SpireReturn.Continue();
+        }
+    }
+
+    // Non-PCL blights should not have the special tier
+    @SpirePatch(clz = BlightTier.class, method = "getTier", paramtypez = {String.class})
+    public static class BlightTier_GetTier2 {
+        @SpirePostfixPatch
+        public static BlightTier postfix(BlightTier ret, String id) {
+            if (ret == BlightTier.SPECIAL) {
+                PCLBlightData data = PCLBlightData.getStaticData(id);
+                if (data != null) {
+                    return data.tier;
+                }
+                PCLCustomBlightSlot slot = PCLCustomBlightSlot.get(id);
+                if (slot != null) {
+                    return BlightTier.valueOf(slot.tier);
+                }
+            }
+            return ret;
+        }
+    }
 
     @SpirePatch(clz = CardTypePanelFilterItem.class, method = "get")
     public static class CardTypePanelFilterItem_Get {
