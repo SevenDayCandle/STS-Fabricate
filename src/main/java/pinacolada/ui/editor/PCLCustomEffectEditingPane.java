@@ -47,10 +47,10 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
-import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.editor.card.PCLCustomCardPrimaryInfoPage;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
-import pinacolada.ui.editor.power.PCLCustomPowerEditPowerScreen;
+import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void changeAmountForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
@@ -131,7 +131,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void changeExtra2ForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
@@ -158,7 +158,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
@@ -185,7 +185,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void changeScopeForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
@@ -219,7 +219,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
@@ -243,7 +243,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
@@ -339,7 +339,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtra2Source()) {
                 case Damage:
@@ -363,7 +363,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtra2Source()) {
                 case Damage:
@@ -387,7 +387,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
@@ -411,7 +411,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
@@ -435,7 +435,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
@@ -459,7 +459,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (skill == null) {
             return 0;
         }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
@@ -524,7 +524,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected void initializeSelectors() {
         final AbstractCard.CardColor cardColor = getColor();
-        String cetutString = editor.screen instanceof PCLCustomPowerEditPowerScreen ? PGR.core.strings.cetut_amountPower : PGR.core.strings.cetut_amount;
+        String cetutString = editor.screen instanceof PCLCustomPowerEditScreen ? PGR.core.strings.cetut_amountPower : PGR.core.strings.cetut_amount;
         effects = (EUISearchableDropdown<PSkill<?>>) new EUISearchableDropdown<PSkill<?>>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect, node.parent != null ? node.parent.skill : null)))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty()) {
@@ -621,8 +621,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (node.skill != null && !targets.isEmpty()) {
             node.skill.setTarget(targets.get(0));
             if (shouldOverrideTarget) {
-                if (editor.screen instanceof PCLCustomCardEditCardScreen) {
-                    ((PCLCustomCardEditCardScreen)editor.screen).modifyBuilder(e -> e.setTarget(targets.get(0)));
+                if (editor.screen instanceof PCLCustomCardEditScreen) {
+                    ((PCLCustomCardEditScreen)editor.screen).modifyBuilder(e -> e.setTarget(targets.get(0)));
                     for (PCLCustomGenericPage page : editor.screen.pages) {
                         if (page != editor) {
                             page.refresh();

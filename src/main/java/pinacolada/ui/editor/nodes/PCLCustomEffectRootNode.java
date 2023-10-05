@@ -13,7 +13,7 @@ import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.card.PCLCustomAttackEffectPage;
 import pinacolada.ui.editor.card.PCLCustomBlockEffectPage;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
             NodeType targetType =
                     editor instanceof PCLCustomAttackEffectPage ? NodeType.Attack :
                             editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
-                                    editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
+                                    editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditScreen ? NodeType.Trigger : NodeType.Limit;
             for (PSkill<?> sk : targetType.getSkills(editor.screen.getBuilder().getCardColor())) {
                 if (sk.data.sourceTypes == null || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
                     if (skill != null && sk.effectID.equals(skill.effectID)) {

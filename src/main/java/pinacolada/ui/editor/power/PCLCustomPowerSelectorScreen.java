@@ -38,7 +38,7 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
 
     @Override
     protected PCLCustomEditEntityScreen<PCLCustomPowerSlot, ?> getScreen(PCLCustomPowerSlot slot) {
-        return new PCLCustomPowerEditPowerScreen(slot);
+        return new PCLCustomPowerEditScreen(slot);
     }
 
     @Override

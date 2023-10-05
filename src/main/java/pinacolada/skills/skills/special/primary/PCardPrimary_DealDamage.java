@@ -37,7 +37,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.Arrays;
@@ -251,7 +251,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
+        PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
             editor.registerDropdown(Arrays.asList(PCLAttackType.values())
                     , EUIUtils.arrayList(sc.getBuilder().attackType)

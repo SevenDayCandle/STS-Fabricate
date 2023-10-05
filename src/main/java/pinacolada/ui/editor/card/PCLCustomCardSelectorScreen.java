@@ -28,7 +28,7 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
 
     @Override
     protected PCLCustomEditEntityScreen<PCLCustomCardSlot, ?> getScreen(PCLCustomCardSlot slot) {
-        return new PCLCustomCardEditCardScreen(slot);
+        return new PCLCustomCardEditScreen(slot);
     }
 
     @Override

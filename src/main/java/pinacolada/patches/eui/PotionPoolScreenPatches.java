@@ -14,7 +14,7 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
 import pinacolada.resources.PGR;
-import pinacolada.ui.editor.potion.PCLCustomPotionEditPotionScreen;
+import pinacolada.ui.editor.potion.PCLCustomPotionEditScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class PotionPoolScreenPatches {
                 AbstractDungeon.overlayMenu.cancelButton.hide();
             }
             GameUtilities.setTopPanelVisible(false);
-            currentEffect = new PCLCustomPotionEditPotionScreen(potionSlot, true)
+            currentEffect = new PCLCustomPotionEditScreen(potionSlot, true)
                     .setOnSave(() -> {
                         PCLCustomPotionSlot.editSlot(potionSlot, potionSlot.ID); // Card slot ID should never change
                         for (AbstractPotion r : AbstractDungeon.player.potions) {

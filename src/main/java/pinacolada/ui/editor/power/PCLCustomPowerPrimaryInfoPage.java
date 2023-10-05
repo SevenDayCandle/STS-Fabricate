@@ -32,7 +32,7 @@ import pinacolada.ui.editor.PCLCustomUpgradableEditor;
 import pinacolada.utilities.GameUtilities;
 
 public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomPowerEditPowerScreen effect;
+    protected PCLCustomPowerEditScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
@@ -46,7 +46,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLValueEditor turns;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditPowerScreen effect) {
+    public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,

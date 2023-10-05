@@ -57,6 +57,7 @@ import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.*;
+import pinacolada.ui.editor.blight.PCLCustomBlightSelectorScreen;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerSelectorScreen;
@@ -95,6 +96,7 @@ public class PGR {
     public static PCLAugmentCollectionScreen augmentScreen;
     public static PCLCardRewardScreen rewardScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
+    public static PCLCustomBlightSelectorScreen customBlights;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomPotionSelectorScreen customPotions;
     public static PCLCustomPowerSelectorScreen customPowers;
@@ -264,6 +266,7 @@ public class PGR {
         PGR.relicPopup = new PCLSingleRelicPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
         PGR.loadoutEditor = new PCLLoadoutScreen();
+        PGR.customBlights = new PCLCustomBlightSelectorScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
         PGR.customPotions = new PCLCustomPotionSelectorScreen();
         PGR.customPowers = new PCLCustomPowerSelectorScreen();

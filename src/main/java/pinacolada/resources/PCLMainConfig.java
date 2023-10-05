@@ -45,6 +45,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowIrrelevantProperties"), false);
     public STSConfigItem<Boolean> showUpgradeOnCardRewards = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowUpgradeOnCardRewards"), false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("VanillaLibraryScreen"), false);
+    public STSConfigItem<Boolean> tourBlightPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourBlightPrimary"), false);
     public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCardAttribute"), false);
     public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCardPrimary"), false);
     public STSConfigItem<Boolean> tourCharSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourCharSelect"), false);
@@ -53,6 +54,8 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> tourEditorPower = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourEditorPower"), false);
     public STSConfigItem<Boolean> tourItemScreen = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourItemScreen"), false);
     public STSConfigItem<Boolean> tourLoadout = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourLoadout"), false);
+    public STSConfigItem<Boolean> tourPotionPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourPotionPrimary"), false);
+    public STSConfigItem<Boolean> tourPowerPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourPowerPrimary"), false);
     public STSConfigItem<Boolean> tourRelicPrimary = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourRelicPrimary"), false);
     public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourSeriesSelect"), false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph0"), 0);
@@ -202,6 +205,7 @@ public class PCLMainConfig extends AbstractConfig {
         lastSeed.addConfig(config);
         madnessReplacements.addConfig(config);
         replaceCardsPCL.addConfig(config);
+        tourBlightPrimary.addConfig(config);
         tourCardAttribute.addConfig(config);
         tourCardPrimary.addConfig(config);
         tourCharSelect.addConfig(config);
@@ -210,6 +214,8 @@ public class PCLMainConfig extends AbstractConfig {
         tourEditorPower.addConfig(config);
         tourItemScreen.addConfig(config);
         tourLoadout.addConfig(config);
+        tourPotionPrimary.addConfig(config);
+        tourPowerPrimary.addConfig(config);
         tourRelicPrimary.addConfig(config);
         tourSeriesSelect.addConfig(config);
     }

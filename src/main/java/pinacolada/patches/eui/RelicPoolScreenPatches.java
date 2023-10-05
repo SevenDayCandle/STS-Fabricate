@@ -14,7 +14,7 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PGR;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class RelicPoolScreenPatches {
                 AbstractDungeon.overlayMenu.cancelButton.hide();
             }
             GameUtilities.setTopPanelVisible(false);
-            currentEffect = new PCLCustomRelicEditRelicScreen(relicSlot, true)
+            currentEffect = new PCLCustomRelicEditScreen(relicSlot, true)
                     .setOnSave(() -> {
                         PCLCustomRelicSlot.editSlot(relicSlot, relicSlot.ID); // Card slot ID should never change
                         for (AbstractRelic r : AbstractDungeon.player.relics) {

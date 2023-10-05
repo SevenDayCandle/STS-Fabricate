@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomPotionEditPotionScreen effect;
+    protected PCLCustomPotionEditScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
@@ -51,7 +51,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLValueEditor branchUpgrades;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomPotionPrimaryInfoPage(PCLCustomPotionEditPotionScreen effect) {
+    public PCLCustomPotionPrimaryInfoPage(PCLCustomPotionEditScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,

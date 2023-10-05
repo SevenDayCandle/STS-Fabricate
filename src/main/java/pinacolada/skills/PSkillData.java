@@ -8,10 +8,10 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.fields.PField;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
-import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
-import pinacolada.ui.editor.power.PCLCustomPowerEditPowerScreen;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
+import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 
 import java.util.*;
 
@@ -146,11 +146,11 @@ public class PSkillData<T extends PField> {
         public boolean isSourceAllowed(PCLCustomEffectNode node) {
             switch (this) {
                 case Card:
-                    return node.editor.screen instanceof PCLCustomCardEditCardScreen;
+                    return node.editor.screen instanceof PCLCustomCardEditScreen;
                 case Collectible:
-                    return !(node.editor.screen instanceof PCLCustomCardEditCardScreen);
+                    return !(node.editor.screen instanceof PCLCustomCardEditScreen);
                 case Power:
-                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditRelicScreen || node.editor.screen instanceof PCLCustomPowerEditPowerScreen;
+                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditScreen || node.editor.screen instanceof PCLCustomPowerEditScreen;
             }
             return true;
         }

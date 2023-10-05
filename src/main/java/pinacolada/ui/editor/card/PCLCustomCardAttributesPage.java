@@ -42,7 +42,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     public static final float MENU_HEIGHT = scale(40);
     public static final float SPACING_WIDTH = screenW(0.06f);
     protected ArrayList<PCLAffinity> availableAffinities;
-    protected PCLCustomCardEditCardScreen screen;
+    protected PCLCustomCardEditScreen screen;
     protected EUILabel header;
     protected EUIDropdown<PCLCardTagInfo> tagsDropdown;
     protected EUIDropdown<PCLCardTarget> targetDropdown;
@@ -58,7 +58,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     protected EUILabel upgradeLabel;
     protected EUILabel upgradeLabel2;
 
-    public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen) {
+    public PCLCustomCardAttributesPage(PCLCustomCardEditScreen screen) {
         this.screen = screen;
         availableAffinities = getEligibleAffinities(screen.currentSlot.slotColor);
 

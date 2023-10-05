@@ -33,7 +33,7 @@ public class BaseModPatches {
         }
     }
 
-    @SpirePatch(clz = BaseMod.class, method = "calculateCardDamage")
+    @SpirePatch(clz = BaseMod.class, method = "calculateCardDamage", paramtypez = {AbstractPlayer.class, AbstractMonster.class, AbstractCard.class, float.class})
     public static class BaseModPatches_CalculateCardDamage {
 
         // Called only by the vanilla AbstractCard card calculations, in both the single and multi-damage scenarios

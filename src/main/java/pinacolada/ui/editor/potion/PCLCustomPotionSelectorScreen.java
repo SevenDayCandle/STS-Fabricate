@@ -30,7 +30,7 @@ public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<Potio
 
     @Override
     protected PCLCustomEditEntityScreen<PCLCustomPotionSlot, ?> getScreen(PCLCustomPotionSlot slot) {
-        return new PCLCustomPotionEditPotionScreen(slot);
+        return new PCLCustomPotionEditScreen(slot);
     }
 
     @Override

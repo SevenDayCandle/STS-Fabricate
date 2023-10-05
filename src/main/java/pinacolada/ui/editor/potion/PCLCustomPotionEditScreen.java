@@ -1,4 +1,4 @@
-package pinacolada.ui.editor.relic;
+package pinacolada.ui.editor.potion;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,36 +15,38 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomImageEffect;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLDynamicRelic;
-import pinacolada.relics.PCLDynamicRelicData;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLDynamicPotion;
+import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
+import pinacolada.ui.editor.relic.PCLCustomRelicPrimaryInfoPage;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData> {
+public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData> {
     protected EUIToggle upgradeToggle;
-    protected PCLDynamicRelic previewRelic;
+    protected PCLDynamicPotion preview;
+    protected PCLCustomImageEffect imageEditor;
     protected PCLCustomFormEditor formEditor;
     protected EUIButton imageButton;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
-    public PCLCustomRelicEditRelicScreen(PCLCustomRelicSlot slot) {
+    public PCLCustomPotionEditScreen(PCLCustomPotionSlot slot) {
         this(slot, false);
     }
 
-    public PCLCustomRelicEditRelicScreen(PCLCustomRelicSlot slot, boolean fromInGame) {
+    public PCLCustomPotionEditScreen(PCLCustomPotionSlot slot, boolean fromInGame) {
         super(slot);
     }
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomRelicPrimaryInfoPage(this));
+            pages.add(new PCLCustomPotionPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }
@@ -62,7 +64,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        currentDialog = PCLCustomImageEffect.forRelic(image)
+        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));
@@ -75,7 +77,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomRelicPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
 
-    public void preInitialize(PCLCustomRelicSlot slot) {
+    public void preInitialize(PCLCustomPotionSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
@@ -114,21 +116,31 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
     }
 
     protected void rebuildItem() {
-        previewRelic = getBuilder().create();
-        previewRelic.setTimesUpgraded(upgraded ? 1 : 0);
-        previewRelic.scale = 1f;
-        previewRelic.currentX = previewRelic.targetX = CARD_X;
-        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
-        previewRelic.hb.move(previewRelic.currentX, previewRelic.currentY);
-        previewDescription.setLabel(previewRelic.getDescriptionImpl());
+        preview = getBuilder().create();
+        preview.setTimesUpgraded(upgraded ? 1 : 0);
+        preview.scale = 1f;
+        preview.posX = CARD_X;
+        preview.posY = RELIC_Y;
+        preview.hb.move(preview.posX, preview.posY);
+        previewDescription.setLabel(preview.getUpdatedDescription());
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (imageEditor != null) {
+            imageEditor.render(sb);
+        }
+        else {
+            super.render(sb);
+        }
     }
 
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
-        imageButton.tryRender(sb);
+        //imageButton.tryRender(sb);
         formEditor.tryRender(sb);
         upgradeToggle.tryRender(sb);
-        previewRelic.render(sb);
+        preview.labRender(sb);
         previewDescription.tryRender(sb);
     }
 
@@ -141,19 +153,32 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     protected void toggleViewUpgrades(boolean value) {
         super.toggleViewUpgrades(value);
-        previewRelic.setTimesUpgraded(upgraded ? 1 : 0);
-        previewDescription.setLabel(previewRelic.getDescriptionImpl());
+        preview.setTimesUpgraded(upgraded ? 1 : 0);
+        previewDescription.setLabel(preview.getUpdatedDescription());
     }
 
     public void updateInnerElements() {
         super.updateInnerElements();
-        imageButton.tryUpdate();
+        //imageButton.tryUpdate();
         formEditor.tryUpdate();
         upgradeToggle.tryUpdate();
-        previewRelic.hb.update();
+        preview.hb.update();
         previewDescription.tryUpdate();
-        if (previewRelic.hb.hovered) {
-            EUITooltip.queueTooltips(previewRelic);
+        if (preview.hb.hovered) {
+            EUITooltip.queueTooltips(preview);
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (imageEditor != null) {
+            imageEditor.update();
+            if (imageEditor.isDone) {
+                imageEditor = null;
+            }
+        }
+        else {
+            super.updateInternal(deltaTime);
         }
     }
 

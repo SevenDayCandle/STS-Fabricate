@@ -17,7 +17,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.resources.PGR;
-import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class CardPoolScreenPatches {
                 AbstractDungeon.overlayMenu.cancelButton.hide();
                 GameUtilities.setTopPanelVisible(false);
                 c.unhover();
-                currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
+                currentEffect = new PCLCustomCardEditScreen(cardSlot, true)
                         .setOnSave(() -> {
                             PCLCustomCardSlot.editSlot(cardSlot, cardSlot.ID); // Card slot ID should never change
                             if (c instanceof EditorCard) {
@@ -61,7 +61,7 @@ public class CardPoolScreenPatches {
                 EUI.cardsScreen.openScreen(AbstractDungeon.player, CardPoolPanelItem.getAllCards());
                 AbstractDungeon.overlayMenu.cancelButton.hide();
                 GameUtilities.setTopPanelVisible(false);
-                currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
+                currentEffect = new PCLCustomCardEditScreen(cardSlot, true)
                         .setOnSave(() -> {
                             PCLCustomCardSlot.editSlot(cardSlot, cardSlot.ID); // Card slot ID should never change
                             for (AbstractCard ca : GameUtilities.getAllCopies(cardSlot.ID)) {

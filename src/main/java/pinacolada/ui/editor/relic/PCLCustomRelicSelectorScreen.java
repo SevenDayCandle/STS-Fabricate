@@ -48,7 +48,7 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
 
     @Override
     protected PCLCustomEditEntityScreen<PCLCustomRelicSlot, ?> getScreen(PCLCustomRelicSlot slot) {
-        return new PCLCustomRelicEditRelicScreen(slot);
+        return new PCLCustomRelicEditScreen(slot);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
             currentDialog = new PCLGenericSelectRelicEffect(this.getAvailableRelicsToCopy()).addCallback(card -> {
                 if (card instanceof PCLPointerRelic) {
                     PCLCustomRelicSlot slot = new PCLCustomRelicSlot((PCLPointerRelic) card, currentColor);
-                    currentDialog = new PCLCustomRelicEditRelicScreen(slot)
+                    currentDialog = new PCLCustomRelicEditScreen(slot)
                             .setOnSave(() -> {
                                 PCLCustomRelicSlot.addSlot(slot);
                                 putInList(slot);

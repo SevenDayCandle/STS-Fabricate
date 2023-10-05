@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomCardEditCardScreen effect;
+    protected PCLCustomCardEditScreen effect;
     protected EUIButton addLoadoutButton;
     protected EUIButton editLoadoutButton;
     protected EUIButton deleteLoadoutButton;
@@ -63,7 +63,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUIToggle soulboundToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect) {
+    public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,

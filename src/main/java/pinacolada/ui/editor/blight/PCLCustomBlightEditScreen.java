@@ -1,4 +1,4 @@
-package pinacolada.ui.editor.potion;
+package pinacolada.ui.editor.blight;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,38 +15,36 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomImageEffect;
-import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.potions.PCLDynamicPotion;
-import pinacolada.potions.PCLDynamicPotionData;
+import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.blights.PCLDynamicBlight;
+import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-import pinacolada.ui.editor.relic.PCLCustomRelicPrimaryInfoPage;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData> {
+public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData> {
     protected EUIToggle upgradeToggle;
-    protected PCLDynamicPotion preview;
-    protected PCLCustomImageEffect imageEditor;
+    protected PCLDynamicBlight previewBlight;
     protected PCLCustomFormEditor formEditor;
     protected EUIButton imageButton;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
-    public PCLCustomPotionEditPotionScreen(PCLCustomPotionSlot slot) {
+    public PCLCustomBlightEditScreen(PCLCustomBlightSlot slot) {
         this(slot, false);
     }
 
-    public PCLCustomPotionEditPotionScreen(PCLCustomPotionSlot slot, boolean fromInGame) {
+    public PCLCustomBlightEditScreen(PCLCustomBlightSlot slot, boolean fromInGame) {
         super(slot);
     }
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomPotionPrimaryInfoPage(this));
+            pages.add(new PCLCustomBlightPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }
@@ -64,7 +62,8 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
+        // Blights use the same image size as relics
+        currentDialog = PCLCustomImageEffect.forRelic(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));
@@ -74,10 +73,10 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
     }
 
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
-        return new EUITooltip(page.getTitle(), page instanceof PCLCustomRelicPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
+        return new EUITooltip(page.getTitle(), page instanceof PCLCustomBlightPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
 
-    public void preInitialize(PCLCustomPotionSlot slot) {
+    public void preInitialize(PCLCustomBlightSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
@@ -116,31 +115,21 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
     }
 
     protected void rebuildItem() {
-        preview = getBuilder().create();
-        preview.setTimesUpgraded(upgraded ? 1 : 0);
-        preview.scale = 1f;
-        preview.posX = CARD_X;
-        preview.posY = RELIC_Y;
-        preview.hb.move(preview.posX, preview.posY);
-        previewDescription.setLabel(preview.getUpdatedDescription());
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (imageEditor != null) {
-            imageEditor.render(sb);
-        }
-        else {
-            super.render(sb);
-        }
+        previewBlight = getBuilder().create();
+        previewBlight.setTimesUpgraded(upgraded ? 1 : 0);
+        previewBlight.scale = 1f;
+        previewBlight.currentX = previewBlight.targetX = CARD_X;
+        previewBlight.currentY = previewBlight.targetY = RELIC_Y;
+        previewBlight.hb.move(previewBlight.currentX, previewBlight.currentY);
+        previewDescription.setLabel(previewBlight.getUpdatedDescription());
     }
 
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
-        //imageButton.tryRender(sb);
+        imageButton.tryRender(sb);
         formEditor.tryRender(sb);
         upgradeToggle.tryRender(sb);
-        preview.labRender(sb);
+        previewBlight.render(sb);
         previewDescription.tryRender(sb);
     }
 
@@ -153,32 +142,19 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
 
     protected void toggleViewUpgrades(boolean value) {
         super.toggleViewUpgrades(value);
-        preview.setTimesUpgraded(upgraded ? 1 : 0);
-        previewDescription.setLabel(preview.getUpdatedDescription());
+        previewBlight.setTimesUpgraded(upgraded ? 1 : 0);
+        previewDescription.setLabel(previewBlight.getUpdatedDescription());
     }
 
     public void updateInnerElements() {
         super.updateInnerElements();
-        //imageButton.tryUpdate();
+        imageButton.tryUpdate();
         formEditor.tryUpdate();
         upgradeToggle.tryUpdate();
-        preview.hb.update();
+        previewBlight.hb.update();
         previewDescription.tryUpdate();
-        if (preview.hb.hovered) {
-            EUITooltip.queueTooltips(preview);
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (imageEditor != null) {
-            imageEditor.update();
-            if (imageEditor.isDone) {
-                imageEditor = null;
-            }
-        }
-        else {
-            super.updateInternal(deltaTime);
+        if (previewBlight.hb.hovered) {
+            EUITooltip.queueTooltips(previewBlight);
         }
     }
 

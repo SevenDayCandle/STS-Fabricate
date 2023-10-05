@@ -14,7 +14,7 @@ public class PCLCustomBlockEffectPage extends PCLCustomEffectPage {
     }
 
     public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen instanceof PCLCustomCardEditCardScreen ? ((PCLCustomCardEditCardScreen) screen).currentBlock : null;
+        PSkill<?> base = screen instanceof PCLCustomCardEditScreen ? ((PCLCustomCardEditScreen) screen).currentBlock : null;
         return base != null ? base.makeCopy() : null;
     }
 
