@@ -1,18 +1,11 @@
 package pinacolada.cards.base;
 
 import basemod.BaseMod;
-import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.evacipated.cardcrawl.mod.stslib.blockmods.AbstractBlockModifier;
-import com.evacipated.cardcrawl.mod.stslib.blockmods.BlockModifierManager;
-import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier;
-import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import pinacolada.augments.PCLAugment;
-import pinacolada.cards.base.fields.PCLCardSaveData;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;

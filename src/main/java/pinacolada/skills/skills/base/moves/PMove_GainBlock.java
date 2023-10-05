@@ -6,7 +6,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -34,14 +33,15 @@ public class PMove_GainBlock extends PMove_Gain {
     }
 
     @Override
+    public String gainText() {
+        return PGR.core.tooltips.block.toString();
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
-    @Override
-    public String gainText() {
-        return PGR.core.tooltips.block.toString();
-    }
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (amount < 0) {

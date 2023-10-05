@@ -1,12 +1,5 @@
 package pinacolada.resources.loadout;
 
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.utilities.RotatingList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.function.Predicate;
-
 public abstract class LoadoutSlot {
     protected final PCLLoadoutData container;
     public String selected;

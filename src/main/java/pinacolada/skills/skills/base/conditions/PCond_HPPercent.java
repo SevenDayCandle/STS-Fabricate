@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;

@@ -30,7 +30,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderable, PCLAugmentKeywordFilters.AugmentFilters, CustomFilterModule<PCLAugmentRenderable>> {
+public class PCLAugmentKeywordFilters
+        extends GenericFilters<PCLAugmentRenderable, PCLAugmentKeywordFilters.AugmentFilters, CustomFilterModule<PCLAugmentRenderable>> {
     public static final ArrayList<CustomFilterModule<PCLAugmentRenderable>> globalFilters = new ArrayList<>();
     public final EUIDropdown<ModInfo> originsDropdown;
     public final EUIDropdown<PCLAugmentCategory> categoryDropdown;
@@ -92,9 +93,10 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
         return (a == null ? -1 : b == null ? 1 :
                 (
                         a.augment.data.category == b.augment.data.category ? StringUtils.compare(a.augment.data.categorySub.suffix, b.augment.data.categorySub.suffix) :
-                        a.augment.data.category.ordinal() - b.augment.data.category.ordinal()
+                                a.augment.data.category.ordinal() - b.augment.data.category.ordinal()
                 ));
     }
+
     public static int rankByName(PCLAugmentRenderable a, PCLAugmentRenderable b) {
         return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.augment.getName(), b.augment.getName()));
     }
@@ -185,13 +187,23 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
     }
 
     @Override
-    public ArrayList<CustomFilterModule<PCLAugmentRenderable>> getGlobalFilters() {
-        return globalFilters;
+    public EUIExporter.Exportable<PCLAugmentRenderable> getExportable() {
+        return null;
+    }
+
+    @Override
+    protected AugmentFilters getFilterObject() {
+        return new AugmentFilters();
     }
 
     @Override
     public float getFirstY() {
         return group.group.get(0).currentY;
+    }
+
+    @Override
+    public ArrayList<CustomFilterModule<PCLAugmentRenderable>> getGlobalFilters() {
+        return globalFilters;
     }
 
     @Override
@@ -244,20 +256,10 @@ public class PCLAugmentKeywordFilters extends GenericFilters<PCLAugmentRenderabl
 
     @Override
     protected void setupSortHeader(FilterSortHeader header, float startX) {
-        
+
         startX = makeToggle(header, PCLAugmentKeywordFilters::rankByCategory, PGR.core.strings.misc_category, startX);
         startX = makeToggle(header, PCLAugmentKeywordFilters::rankByName, CardLibSortHeader.TEXT[2], startX);
         startX = makeToggle(header, PCLAugmentKeywordFilters::rankByTier, PGR.core.strings.misc_tier, startX);
-    }
-
-    @Override
-    public EUIExporter.Exportable<PCLAugmentRenderable> getExportable() {
-        return null;
-    }
-
-    @Override
-    protected AugmentFilters getFilterObject() {
-        return new AugmentFilters();
     }
 
     @Override

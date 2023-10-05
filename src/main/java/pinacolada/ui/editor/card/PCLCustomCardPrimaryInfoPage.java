@@ -32,10 +32,10 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
-import pinacolada.ui.editor.PCLCustomFlagDialog;
-import pinacolada.ui.editor.PCLCustomLoadoutDialog;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
+import pinacolada.ui.editor.PCLCustomFlagDialog;
 import pinacolada.ui.editor.PCLCustomGenericPage;
+import pinacolada.ui.editor.PCLCustomLoadoutDialog;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;

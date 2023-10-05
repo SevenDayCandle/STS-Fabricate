@@ -3,13 +3,10 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.annotations.VisiblePower;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
-import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLSubscribingPower;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.GameUtilities;
 
 @VisiblePower

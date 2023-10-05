@@ -10,9 +10,7 @@ import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
-import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLCustomLoadable;
-import pinacolada.resources.loadout.PCLCustomLoadout;
 
 import java.util.ArrayList;
 import java.util.HashMap;

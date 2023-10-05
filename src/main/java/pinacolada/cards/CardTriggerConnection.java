@@ -24,8 +24,8 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
                                               OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
     public final AbstractCard card;
-    protected EUIKeywordTooltip triggerTip;
     private PCLClickableUse triggerCondition;
+    protected EUIKeywordTooltip triggerTip;
 
     public CardTriggerConnection(PTrigger trigger, AbstractCard card) {
         this.trigger = trigger;

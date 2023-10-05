@@ -1,7 +1,6 @@
 package pinacolada.dungeon.modifiers;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import pinacolada.annotations.VisibleBlight;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

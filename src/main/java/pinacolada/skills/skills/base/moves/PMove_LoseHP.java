@@ -15,7 +15,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
-import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
 public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMove {

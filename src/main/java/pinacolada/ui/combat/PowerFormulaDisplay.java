@@ -13,7 +13,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 

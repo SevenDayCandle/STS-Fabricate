@@ -32,15 +32,15 @@ public class PMove_PlayCopy extends PMove_GenerateCard {
         super(DATA, content);
     }
 
-    @Override
-    public EUIKeywordTooltip getActionTooltip() {
-        return PGR.core.tooltips.play;
-    }
-
     // Prevent ephemeral cards from being copied to avoid infinite loops
     @Override
     protected boolean canMakeCopy(AbstractCard card) {
         return !card.purgeOnUse;
+    }
+
+    @Override
+    public EUIKeywordTooltip getActionTooltip() {
+        return PGR.core.tooltips.play;
     }
 
     @Override

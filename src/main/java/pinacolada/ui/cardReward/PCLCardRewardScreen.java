@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
-import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -18,15 +16,11 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLSFX;
-import pinacolada.effects.card.HideCardEffect;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,10 +28,10 @@ import java.util.HashSet;
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardScreen extends EUIBase {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;
+    public static final HashSet<String> seenCards = new HashSet<>();
     protected final ArrayList<PCLCardRewardActionButton> buttons = new ArrayList<>();
     protected final ArrayList<PCLCardRewardBundle> bundles = new ArrayList<>();
     protected final HashMap<AbstractCard, AbstractCard> upgrades = new HashMap<>();
-    public static final HashSet<String> seenCards = new HashSet<>();
     private boolean shouldClose; // Needed to prevent comodification errors
     protected CardRewardActionProvider actionProvider;
     protected CardRewardBonusProvider lastProvider;
@@ -67,6 +61,17 @@ public class PCLCardRewardScreen extends EUIBase {
         canReroll = actionProvider.canAct();
     }
 
+    public void close(boolean clearBundles) {
+        EUI.countingPanel.close();
+        upgradeToggle.toggle(false);
+        buttons.clear();
+        if (clearBundles) {
+            bundles.clear();
+            PCLCardRewardScreen.seenCards.clear();
+        }
+        upgrades.clear();
+    }
+
     public AbstractCard getActualCardToRender(AbstractCard c) {
         if (SingleCardViewPopup.isViewingUpgrade && c.canUpgrade()) {
             AbstractCard upgrade = upgrades.get(c);
@@ -92,15 +97,12 @@ public class PCLCardRewardScreen extends EUIBase {
         return c;
     }
 
-    public void close(boolean clearBundles) {
-        EUI.countingPanel.close();
-        upgradeToggle.toggle(false);
-        buttons.clear();
-        if (clearBundles) {
-            bundles.clear();
-            PCLCardRewardScreen.seenCards.clear();
-        }
-        upgrades.clear();
+    protected PCLCardRewardActionButton getButton(int index) {
+        return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
+                EUIRM.images.hexagonalButton.texture(), actionProvider.getTitle(), actionProvider.getDescription(), REWARD_INDEX, index, false)
+                .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
+                .setColor(Color.TAN)
+                .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);
     }
 
     public void onCardObtained(AbstractCard hoveredCard) {
@@ -109,14 +111,6 @@ public class PCLCardRewardScreen extends EUIBase {
                 cardRewardBundle.acquired();
             }
         }
-    }
-
-    protected PCLCardRewardActionButton getButton(int index) {
-        return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
-                EUIRM.images.hexagonalButton.texture(), actionProvider.getTitle(), actionProvider.getDescription(), REWARD_INDEX, index, false)
-                .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
-                .setColor(Color.TAN)
-                .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);
     }
 
     public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {

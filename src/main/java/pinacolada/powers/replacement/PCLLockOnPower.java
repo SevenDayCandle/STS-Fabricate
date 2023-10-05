@@ -5,12 +5,9 @@ import com.megacrit.cardcrawl.powers.LockOnPower;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyLockOnSubscriber;
-import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLSubscribingPower;
-import pinacolada.powers.common.VitalityPower;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import static pinacolada.powers.PCLPowerData.ICON_LOCKON;

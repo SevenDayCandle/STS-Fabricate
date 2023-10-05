@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import extendedui.configuration.EUIConfiguration;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.PCLRenderHelpers;
 

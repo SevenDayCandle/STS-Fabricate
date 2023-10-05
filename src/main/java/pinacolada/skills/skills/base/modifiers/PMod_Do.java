@@ -63,15 +63,15 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return getActionTooltip().title;
     }
 
-    public PCLCardGroupHelper getDestinationGroup() {
-        return null;
-    }
-
     @Override
     public String getAmountRawOrAllString() {
         return shouldActAsAll() ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any)
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
                 : getAmountRawString();
+    }
+
+    public PCLCardGroupHelper getDestinationGroup() {
+        return null;
     }
 
     @Override

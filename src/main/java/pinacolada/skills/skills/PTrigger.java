@@ -11,7 +11,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

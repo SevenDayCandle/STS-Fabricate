@@ -5,7 +5,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCustomCardSlot;
 
 import java.io.Serializable;
 

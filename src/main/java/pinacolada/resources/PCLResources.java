@@ -13,14 +13,12 @@ import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
-import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.ActionT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
-import pinacolada.monsters.PCLCreatureData;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
 

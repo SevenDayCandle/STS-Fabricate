@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.moves;
 
 import extendedui.EUIRM;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

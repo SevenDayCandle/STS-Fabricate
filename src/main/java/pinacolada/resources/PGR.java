@@ -80,12 +80,14 @@ public class PGR {
     private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?, ?, ?, ?>> playerResourceMap = new HashMap<>();
     private static final String IMAGES_FOLDER = "images/";
     private static final String REWARDS_SUBFOLDER = "ui/rewards";
-    public static final String BASE_PREFIX = "pcl";
-    public static final PCLDungeon dungeon = PCLDungeon.register();
     private final static HashMap<String, AugmentStrings> AUGMENT_STRINGS = new HashMap<>();
     private final static HashMap<String, LoadoutStrings> LOADOUT_STRINGS = new HashMap<>();
-    private static final Type AUGMENT_TYPE = new TypeToken<Map<String, AugmentStrings>>() {}.getType();
-    private static final Type LOADOUT_TYPE = new TypeToken<Map<String, LoadoutStrings>>() {}.getType();
+    private static final Type AUGMENT_TYPE = new TypeToken<Map<String, AugmentStrings>>() {
+    }.getType();
+    private static final Type LOADOUT_TYPE = new TypeToken<Map<String, LoadoutStrings>>() {
+    }.getType();
+    public static final String BASE_PREFIX = "pcl";
+    public static final PCLDungeon dungeon = PCLDungeon.register();
     public static PCLCoreResources core;
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;

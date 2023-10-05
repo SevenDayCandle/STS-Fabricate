@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadable<?,?>, V extends GenericFiltersObject> extends AbstractMenuScreen {
+public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadable<?, ?>, V extends GenericFiltersObject> extends AbstractMenuScreen {
     private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
     private static final float DRAW_START_Y = (float) Settings.HEIGHT * 0.7f;
     private static final float PAD_Y = AbstractCard.IMG_HEIGHT * 0.75f + Settings.CARD_VIEW_PAD_Y;
@@ -67,7 +67,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         final float labelWidth = screenW(0.20f);
 
         this.savedFilters = getSavedFilters();
-        this.grid = (EUIItemGrid<T>) getGrid()
+        this.grid = getGrid()
                 .setOnClick(this::onClicked)
                 .setOnRightClick(this::onRightClicked);
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
@@ -354,13 +354,13 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         }
     }
 
-    protected abstract GenericFilters<T,V,?> getFilters();
+    protected abstract GenericFilters<T, V, ?> getFilters();
 
     protected abstract EUIItemGrid<T> getGrid();
 
     protected abstract V getSavedFilters();
 
-    protected abstract PCLCustomEditEntityScreen<U,?> getScreen(U slot);
+    protected abstract PCLCustomEditEntityScreen<U, ?> getScreen(U slot);
 
     protected abstract Iterable<U> getSlots(AbstractCard.CardColor co);
 
@@ -386,9 +386,9 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         Delete(PGR.core.strings.cedit_delete, PCLCustomSelectorScreen::remove);
 
         public final String name;
-        public final ActionT1<PCLCustomSelectorScreen<?,?,?>> onSelect;
+        public final ActionT1<PCLCustomSelectorScreen<?, ?, ?>> onSelect;
 
-        ContextOption(String name, ActionT1<PCLCustomSelectorScreen<?,?,?>> onSelect) {
+        ContextOption(String name, ActionT1<PCLCustomSelectorScreen<?, ?, ?>> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }

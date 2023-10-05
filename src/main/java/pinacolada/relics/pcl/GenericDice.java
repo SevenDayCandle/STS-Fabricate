@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.rooms.RestRoom;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
@@ -14,9 +13,6 @@ import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardReward.PCLCardRewardScreen;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 @VisibleRelic
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
@@ -30,6 +26,10 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         setCounter(1);
     }
 
+    public static int getChance() {
+        return GameUtilities.getTotalCardsInRewardPool();
+    }
+
     public boolean canAct() {
         return counter > 0;
     }
@@ -39,11 +39,6 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         rerollCard(card, getReward(card, rewardItem), rewardItem, cardIndex);
         return false;
     }
-
-    public static int getChance() {
-        return GameUtilities.getTotalCardsInRewardPool();
-    }
-
 
     @Override
     public String getDescriptionImpl() {

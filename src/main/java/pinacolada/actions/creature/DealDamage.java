@@ -8,8 +8,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLAction;
-import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
@@ -79,12 +77,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public DealDamage shouldRandomize(boolean value) {
-        this.shouldRandomize = value;
-
-        return this;
-    }
-
     @Override
     protected void firstUpdate() {
         if (this.info.type != DamageInfo.DamageType.THORNS && this.source != null && this.source.isDying) {
@@ -142,6 +134,12 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     public DealDamage setVFXColor(Color color, Color enemyTint) {
         this.vfxColor = color.cpy();
         this.enemyTint = enemyTint.cpy();
+
+        return this;
+    }
+
+    public DealDamage shouldRandomize(boolean value) {
+        this.shouldRandomize = value;
 
         return this;
     }

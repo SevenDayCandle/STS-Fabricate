@@ -29,9 +29,9 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
     private final boolean draggingScreen = false;
+    public final PCLCardSlotEditor slot;
     private AbstractCard selectedCard;
     private EUICardGrid grid;
-    public final PCLCardSlotEditor slot;
 
     public PCLCardSlotSelectionEffect(PCLCardSlotEditor slot) {
         super(0.7f, true);

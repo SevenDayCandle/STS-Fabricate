@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -55,11 +54,11 @@ public class PMove_KillAlly extends PMove<PField_Empty> {
         order.withdrawAlly(targets)
                 .setDestination(CombatManager.PURGED_CARDS)
                 .setTriggerTimes(0).showEffect(true).addCallback(cards ->
-        {
-            if (this.childEffect != null) {
-                info.setData(cards);
-                this.childEffect.use(info, order);
-            }
-        });
+                {
+                    if (this.childEffect != null) {
+                        info.setData(cards);
+                        this.childEffect.use(info, order);
+                    }
+                });
     }
 }

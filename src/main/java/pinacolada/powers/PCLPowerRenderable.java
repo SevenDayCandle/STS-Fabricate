@@ -13,8 +13,6 @@ import extendedui.EUIRM;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
@@ -22,10 +20,9 @@ import java.util.List;
 
 public class PCLPowerRenderable implements KeywordProvider {
     public static final float BASE_SCALE = Settings.scale * 0.6f;
-
+    public final PCLPowerData power;
     protected Texture texture;
     protected TextureRegion region;
-    public final PCLPowerData power;
     public Hitbox hb;
     public ArrayList<EUIKeywordTooltip> tips;
     public EUIKeywordTooltip mainTooltip;

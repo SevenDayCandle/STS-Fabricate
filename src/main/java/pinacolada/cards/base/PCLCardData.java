@@ -13,7 +13,6 @@ import extendedui.interfaces.markers.CardObject;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLEnum;

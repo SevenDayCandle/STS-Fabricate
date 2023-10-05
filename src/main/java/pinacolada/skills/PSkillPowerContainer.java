@@ -1,7 +1,6 @@
 package pinacolada.skills;
 
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;
 

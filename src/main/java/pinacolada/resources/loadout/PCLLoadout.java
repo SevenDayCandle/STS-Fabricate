@@ -595,6 +595,8 @@ public abstract class PCLLoadout {
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
+    public abstract ArrayList<String> getBaseStartingRelics();
+
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
@@ -609,6 +611,4 @@ public abstract class PCLLoadout {
             }, 0, cardDatas.size());
         }
     }
-
-    public abstract ArrayList<String> getBaseStartingRelics();
 }

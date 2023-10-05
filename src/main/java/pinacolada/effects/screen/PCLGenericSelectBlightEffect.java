@@ -8,8 +8,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIInputManager;
 import extendedui.ui.controls.EUIBlightGrid;
-import extendedui.ui.controls.EUIRelicGrid;
-import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 

@@ -2,7 +2,6 @@ package pinacolada.ui.editor.potion;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -21,10 +20,8 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLCustomColorPickerEffect;
 import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;

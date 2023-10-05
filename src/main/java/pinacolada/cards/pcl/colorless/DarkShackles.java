@@ -6,7 +6,6 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.ShacklesPower;
 import pinacolada.skills.PMove;
 

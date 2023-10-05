@@ -297,13 +297,13 @@ public abstract class PCLCharacter extends CustomPlayer {
         }
     }
 
-    protected void renderPlayerSkeleton() {
-        sr.draw(CardCrawlGame.psb, this.skeleton);
-    }
-
     protected void renderPlayerSingle(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
         sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+    }
+
+    protected void renderPlayerSkeleton() {
+        sr.draw(CardCrawlGame.psb, this.skeleton);
     }
 
     protected void renderPlayerSprite(SpriteBatch sb) {

@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.megacrit.cardcrawl.rewards.RewardItem.TEXT;
-import static pinacolada.utilities.GameUtilities.CHAR_OFFSET;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
     private static EUITooltip hiddenTooltip;
@@ -441,7 +440,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         else {
             EUIRenderHelpers.drawSilhouette(sb, Color.LIGHT_GRAY, s -> {
                 renderRelicImage(s,
-                         this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
+                        this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
                         -64f,
                         -64f,
                         scaleMult);

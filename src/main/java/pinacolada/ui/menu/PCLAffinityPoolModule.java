@@ -22,7 +22,10 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.ui.AffinityKeywordButton;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
 import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
 import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;

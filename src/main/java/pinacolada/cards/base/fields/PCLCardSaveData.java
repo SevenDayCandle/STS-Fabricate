@@ -1,9 +1,6 @@
 package pinacolada.cards.base.fields;
 
-import pinacolada.cards.base.tags.PCLCardTag;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class PCLCardSaveData {
     public int form;

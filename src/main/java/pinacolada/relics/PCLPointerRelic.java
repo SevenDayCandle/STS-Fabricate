@@ -307,9 +307,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         initializePCLTips();
     }
 
-    public void setup() {
-    }
-
     public void setTimesUpgraded(int times) {
         auxiliaryData.timesUpgraded = times;
         for (PSkill<?> ef : getEffects()) {
@@ -319,6 +316,9 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
             ef.setAmountFromCard().onUpgrade();
         }
         updateDescription(null);
+    }
+
+    public void setup() {
     }
 
     protected void subscribe() {

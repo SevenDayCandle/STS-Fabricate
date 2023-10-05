@@ -7,7 +7,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnBattleEndSubscriber;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

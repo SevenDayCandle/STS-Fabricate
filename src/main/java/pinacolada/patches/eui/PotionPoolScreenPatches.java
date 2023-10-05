@@ -13,10 +13,8 @@ import extendedui.ui.screens.PotionPoolScreen;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
-import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.potion.PCLCustomPotionEditPotionScreen;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

@@ -11,7 +11,6 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkillData;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;

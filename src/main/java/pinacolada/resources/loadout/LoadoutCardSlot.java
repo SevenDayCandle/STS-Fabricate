@@ -1,18 +1,11 @@
 package pinacolada.resources.loadout;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.AbstractPlayerData;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class LoadoutCardSlot extends LoadoutSlot {
@@ -28,6 +21,20 @@ public class LoadoutCardSlot extends LoadoutSlot {
         super(other);
         this.amount = other.amount;
         this.currentMax = other.currentMax;
+    }
+
+    public static int getLoadoutValue(String item) {
+        PCLCardData data = PCLCardData.getStaticData(item);
+        if (data != null) {
+            return data.loadoutValue;
+        }
+        AbstractCard r = CardLibrary.getCard(item);
+        return r != null ? PCLCardData.getValueForRarity(r.rarity) : 0;
+    }
+
+    public static int getMaxCardCopies(String item) {
+        PCLCardData data = PCLCardData.getStaticData(item);
+        return data != null ? data.maxCopies : -1;
     }
 
     public void add() {
@@ -120,19 +127,5 @@ public class LoadoutCardSlot extends LoadoutSlot {
             }
             this.amount = Math.min(amount, currentMax);
         }
-    }
-
-    public static int getMaxCardCopies(String item) {
-        PCLCardData data = PCLCardData.getStaticData(item);
-        return data != null ? data.maxCopies : -1;
-    }
-
-    public static int getLoadoutValue(String item) {
-        PCLCardData data = PCLCardData.getStaticData(item);
-        if (data != null) {
-            return data.loadoutValue;
-        }
-        AbstractCard r = CardLibrary.getCard(item);
-        return r != null ? PCLCardData.getValueForRarity(r.rarity) : 0;
     }
 }

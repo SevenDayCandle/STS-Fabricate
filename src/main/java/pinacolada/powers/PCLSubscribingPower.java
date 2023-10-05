@@ -1,10 +1,7 @@
 package pinacolada.powers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
-import pinacolada.relics.PCLRelic;
-import pinacolada.skills.PSkill;
 
 public class PCLSubscribingPower extends PCLPower implements PCLCombatSubscriber {
 
@@ -12,14 +9,14 @@ public class PCLSubscribingPower extends PCLPower implements PCLCombatSubscriber
         super(data, owner, source, amount);
     }
 
-    public void onInitialApplication() {
-        super.onInitialApplication();
-        powerSubscribeTo();
-    }
-
     public void onDeath() {
         super.onDeath();
         unsubscribeFromAll();
+    }
+
+    public void onInitialApplication() {
+        super.onInitialApplication();
+        powerSubscribeTo();
     }
 
     public void onRemove() {

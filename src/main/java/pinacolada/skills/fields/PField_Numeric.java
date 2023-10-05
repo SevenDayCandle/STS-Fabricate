@@ -1,13 +1,10 @@
 package pinacolada.skills.fields;
 
-import extendedui.EUIUtils;
-import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class PField_Numeric extends PField {
     public ArrayList<Integer> indexes = new ArrayList<>();
@@ -22,11 +19,6 @@ public class PField_Numeric extends PField {
         return new PField_Numeric().setIndexes(indexes);
     }
 
-    // Logic is defined in the skills that use this field
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-    }
-
     public PField_Numeric setIndexes(Collection<Integer> orbs) {
         this.indexes.clear();
         this.indexes.addAll(orbs);
@@ -35,5 +27,10 @@ public class PField_Numeric extends PField {
 
     public PField_Numeric setIndexes(Integer... indexes) {
         return setIndexes(Arrays.asList(indexes));
+    }
+
+    // Logic is defined in the skills that use this field
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 }

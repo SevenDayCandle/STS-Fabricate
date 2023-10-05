@@ -21,16 +21,17 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @JsonAdapter(PCLAffinity.PCLAffinityAdapter.class)
 public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, CountingPanelItem {
     private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
     private static final HashMap<String, PCLAffinity> BY_SYMBOL = new HashMap<>();
-    private static final PCLAffinity[] NONE = new PCLAffinity[] {};
-    private static PCLAffinity[] AFFINITIES = new PCLAffinity[] {};
-
+    private static final PCLAffinity[] NONE = new PCLAffinity[]{};
     public static final int ID_UNKNOWN = -3;
     public static final int ID_GENERAL = -2;
     public static final int ID_STAR = -1;
@@ -41,7 +42,6 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     public static final int ID_YELLOW = 4;
     public static final int ID_PURPLE = 5;
     public static final int ID_SILVER = 6;
-
     public static final String SYM_RED = "R";
     public static final String SYM_BLUE = "B";
     public static final String SYM_GREEN = "G";
@@ -52,12 +52,11 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     public static final String SYM_STAR = "A";
     public static final String SYM_GENERAL = "W";
     public static final String SYM_UNKNOWN = "U";
-
     // Affinities with special purposes, these are deliberately not registered
     public static final PCLAffinity Unknown = new PCLAffinity(ID_UNKNOWN, SYM_UNKNOWN);
     public static final PCLAffinity General = new PCLAffinity(ID_GENERAL, SYM_GENERAL);
     public static final PCLAffinity Star = new PCLAffinity(ID_STAR, SYM_STAR);
-
+    private static PCLAffinity[] AFFINITIES = new PCLAffinity[]{};
     public static final PCLAffinity Red = registerAffinityAt(ID_RED, SYM_RED).setColor(new Color(0.8f, 0.5f, 0.5f, 1f));
     public static final PCLAffinity Blue = registerAffinityAt(ID_BLUE, SYM_BLUE).setColor(new Color(0.45f, 0.55f, 0.7f, 1f));
     public static final PCLAffinity Green = registerAffinityAt(ID_GREEN, SYM_GREEN).setColor(new Color(0.45f, 0.7f, 0.55f, 1f));

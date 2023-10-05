@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.primary;
 
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -15,7 +14,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PTrigger;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 @VisibleSkill
@@ -43,7 +41,7 @@ public class PTrigger_When extends PTrigger {
 
         // Every x times
         if (fields.forced && childEffect != null) {
-            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(), childEffect.getText(perspective, false) ) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(), childEffect.getText(perspective, false) ))
+            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(), childEffect.getText(perspective, false)) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(), childEffect.getText(perspective, false)))
                     + PCLCoreStrings.period(addPeriod);
         }
         else {

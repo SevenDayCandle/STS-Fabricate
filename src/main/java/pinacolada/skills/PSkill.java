@@ -606,18 +606,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public ColoredString getColoredExtraString() {
-        return getColoredExtraString(wrapExtra(baseExtra), wrapExtra(extra));
-    }
-
-    public ColoredString getColoredExtraString(Object displayBase, Object displayAmount) {
-        if (hasParentType(PMod.class)) {
-            return new ColoredString(displayBase, (displayUpgrades && getUpgradeExtra() != 0) ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
-        }
-
-        return new ColoredString(displayAmount, (displayUpgrades && getUpgradeExtra() != 0) || extra > baseExtra ? Settings.GREEN_TEXT_COLOR : extra < baseExtra ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
     public ColoredString getColoredExtra2String() {
         return getColoredExtra2String(wrapExtra(baseExtra2), wrapExtra(extra2));
     }
@@ -628,6 +616,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
 
         return new ColoredString(displayAmount, (displayUpgrades && getUpgradeExtra2() != 0) || extra2 > baseExtra2 ? Settings.GREEN_TEXT_COLOR : extra2 < baseExtra2 ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getColoredExtraString() {
+        return getColoredExtraString(wrapExtra(baseExtra), wrapExtra(extra));
+    }
+
+    public ColoredString getColoredExtraString(Object displayBase, Object displayAmount) {
+        if (hasParentType(PMod.class)) {
+            return new ColoredString(displayBase, (displayUpgrades && getUpgradeExtra() != 0) ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
+        }
+
+        return new ColoredString(displayAmount, (displayUpgrades && getUpgradeExtra() != 0) || extra > baseExtra ? Settings.GREEN_TEXT_COLOR : extra < baseExtra ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public ColoredString getColoredScopeString() {
@@ -726,63 +726,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return sb.toString();
     }
 
-    public final int getExtraBaseFromCard() {
-        PCLCardValueSource extraSource = getExtraSource();
-        if (this.sourceCard != null && extraSource != null) {
-            switch (extraSource) {
-                case Block:
-                    return sourceCard.baseBlock;
-                case Damage:
-                    return sourceCard.baseDamage;
-                case HitCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
-                case MagicNumber:
-                    return sourceCard.baseMagicNumber;
-                case SecondaryNumber:
-                    return sourceCard.baseHeal;
-                case RightCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
-                case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
-            }
-        }
-        return extra;
-    }
-
-    public final int getExtraFromCard() {
-        PCLCardValueSource extraSource = getExtraSource();
-        if (this.sourceCard != null) {
-            if (extraSource != null) {
-                switch (extraSource) {
-                    case Block:
-                        return sourceCard.block;
-                    case Damage:
-                        return sourceCard.damage;
-                    case HitCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
-                    case MagicNumber:
-                        return sourceCard.magicNumber;
-                    case SecondaryNumber:
-                        return sourceCard.heal;
-                    case RightCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
-                    case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
-                }
-            }
-
-            return rootExtra + sourceCard.timesUpgraded * getUpgradeExtra();
-        }
-        if (source != null && extraSource == PCLCardValueSource.XValue) {
-            return source.getXValue();
-        }
-        return rootExtra;
-    }
-
-    public final String getExtraRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra);
-    }
-
     public final int getExtra2BaseFromCard() {
         PCLCardValueSource extraSource = getExtra2Source();
         if (this.sourceCard != null && extraSource != null) {
@@ -840,11 +783,68 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return source != null ? EUIUtils.format(BOUND_FORMAT, EXTRA2_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra2);
     }
 
-    public PCLCardValueSource getExtraSource() {
+    public PCLCardValueSource getExtra2Source() {
         return PCLCardValueSource.None;
     }
 
-    public PCLCardValueSource getExtra2Source() {
+    public final int getExtraBaseFromCard() {
+        PCLCardValueSource extraSource = getExtraSource();
+        if (this.sourceCard != null && extraSource != null) {
+            switch (extraSource) {
+                case Block:
+                    return sourceCard.baseBlock;
+                case Damage:
+                    return sourceCard.baseDamage;
+                case HitCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                case MagicNumber:
+                    return sourceCard.baseMagicNumber;
+                case SecondaryNumber:
+                    return sourceCard.baseHeal;
+                case RightCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                case XValue:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+            }
+        }
+        return extra;
+    }
+
+    public final int getExtraFromCard() {
+        PCLCardValueSource extraSource = getExtraSource();
+        if (this.sourceCard != null) {
+            if (extraSource != null) {
+                switch (extraSource) {
+                    case Block:
+                        return sourceCard.block;
+                    case Damage:
+                        return sourceCard.damage;
+                    case HitCount:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                    case MagicNumber:
+                        return sourceCard.magicNumber;
+                    case SecondaryNumber:
+                        return sourceCard.heal;
+                    case RightCount:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                    case XValue:
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                }
+            }
+
+            return rootExtra + sourceCard.timesUpgraded * getUpgradeExtra();
+        }
+        if (source != null && extraSource == PCLCardValueSource.XValue) {
+            return source.getXValue();
+        }
+        return rootExtra;
+    }
+
+    public final String getExtraRawString() {
+        return source != null ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra);
+    }
+
+    public PCLCardValueSource getExtraSource() {
         return PCLCardValueSource.None;
     }
 
@@ -1754,6 +1754,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    public PSkill<T> setScope(int amount, int upgrade) {
+        this.upgradeScope = new int[]{upgrade};
+        setScope(amount);
+        return this;
+    }
+
+    public PSkill<T> setScope(int amount) {
+        this.rootScope = this.baseScope = this.scope = MathUtils.clamp(amount, 1, DEFAULT_MAX);
+        return this;
+    }
+
     public PSkill<T> setSource(PointerProvider card) {
         this.source = card;
         this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
@@ -1768,17 +1779,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         if (this.childEffect != null) {
             this.childEffect.setSource(card);
         }
-        return this;
-    }
-
-    public PSkill<T> setScope(int amount, int upgrade) {
-        this.upgradeScope = new int[]{upgrade};
-        setScope(amount);
-        return this;
-    }
-
-    public PSkill<T> setScope(int amount) {
-        this.rootScope = this.baseScope = this.scope = MathUtils.clamp(amount, 1, DEFAULT_MAX);
         return this;
     }
 
@@ -1820,7 +1820,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return baseAmount <= 0 && getUpgrade() <= 0;
     }
 
-    public boolean shouldOverrideTarget() {return false;}
+    public boolean shouldOverrideTarget() {
+        return false;
+    }
 
     public boolean shouldUseWhenText() {
         return true;

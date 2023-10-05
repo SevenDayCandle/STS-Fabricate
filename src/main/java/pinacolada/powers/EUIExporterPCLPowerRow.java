@@ -1,6 +1,5 @@
 package pinacolada.powers;
 
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;

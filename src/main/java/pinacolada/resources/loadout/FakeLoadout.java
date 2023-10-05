@@ -22,6 +22,10 @@ public class FakeLoadout extends PCLLoadout {
         super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0, -1, 1, 9999);
     }
 
+    public boolean allowCustoms() {
+        return true;
+    }
+
     @Override
     public ArrayList<String> getAvailableCardIDs() {
         ArrayList<String> base = new ArrayList<>();
@@ -79,8 +83,9 @@ public class FakeLoadout extends PCLLoadout {
         return base;
     }
 
-    public boolean allowCustoms() {
-        return true;
+    @Override
+    public ArrayList<String> getBaseStartingRelics() {
+        return EUIUtils.arrayList();
     }
 
     @Override
@@ -109,10 +114,5 @@ public class FakeLoadout extends PCLLoadout {
     @Override
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
         // No-op
-    }
-
-    @Override
-    public ArrayList<String> getBaseStartingRelics() {
-        return EUIUtils.arrayList();
     }
 }

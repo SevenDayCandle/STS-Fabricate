@@ -7,15 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.FlyingSpikeEffect;
 import com.megacrit.cardcrawl.vfx.combat.PowerExpireTextEffect;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.VisualEffect;
-import pinacolada.powers.PCLPower;
 
 import static pinacolada.effects.powers.PCLFlashPowerEffect.REGION_HALF;
 import static pinacolada.effects.powers.PCLFlashPowerEffect.REGION_SIZE;
@@ -72,11 +69,11 @@ public class PCLExpirePowerEffect extends VisualEffect {
             this.spikeEffectTriggered = true;
 
             int i;
-            for(i = 0; i < 10; ++i) {
+            for (i = 0; i < 10; ++i) {
                 PCLEffects.Queue.add(new FlyingSpikeEffect(this.x - MathUtils.random(20.0F) * Settings.scale + 70.0F * Settings.scale, this.y + MathUtils.random(STARTING_OFFSET_Y, TARGET_OFFSET_Y) * Settings.scale, 0.0F, MathUtils.random(50.0F, 400.0F) * Settings.scale, 0.0F, Settings.BLUE_TEXT_COLOR));
             }
 
-            for(i = 0; i < 10; ++i) {
+            for (i = 0; i < 10; ++i) {
                 PCLEffects.Queue.add(new FlyingSpikeEffect(this.x + MathUtils.random(20.0F) * Settings.scale, this.y + MathUtils.random(STARTING_OFFSET_Y, TARGET_OFFSET_Y) * Settings.scale, 0.0F, MathUtils.random(-400.0F, -50.0F) * Settings.scale, 0.0F, Settings.BLUE_TEXT_COLOR));
             }
         }

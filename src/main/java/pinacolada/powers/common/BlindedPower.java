@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.powers.TemporaryPower;
 import pinacolada.resources.PGR;
 
 @VisiblePower

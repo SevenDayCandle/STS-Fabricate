@@ -224,7 +224,8 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     public void openLoadoutEditor() {
         allowLoadoutToggle.toggle(true);
-        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {});
+        PGR.loadoutEditor.open(screen.fakeLoadout, null, screen.currentOption, () -> {
+        });
     }
 
     public void openRelicPool() {

@@ -34,12 +34,6 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
         return new PCLDynamicPotion(builder);
     }
 
-    public void setupBuilder(PCLDynamicPotionData builder) {
-        this.builder = builder;
-        setupMoves(builder);
-        initializeTips();
-    }
-
     public PCLDynamicPotion setForm(int form) {
         PCLDynamicPotionData lastBuilder = null;
         this.auxiliaryData.form = form;
@@ -52,6 +46,12 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
         }
         initializeTips();
         return this;
+    }
+
+    public void setupBuilder(PCLDynamicPotionData builder) {
+        this.builder = builder;
+        setupMoves(builder);
+        initializeTips();
     }
 
     public void setupMoves(PCLDynamicPotionData builder) {

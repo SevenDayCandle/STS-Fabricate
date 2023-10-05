@@ -2,17 +2,13 @@ package pinacolada.powers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.resources.PCLMainConfig;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -113,8 +109,8 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     /*
-    * Clear out custom powers and registered tooltips from those powers, then reload custom items from the custom folders
-    * */
+     * Clear out custom powers and registered tooltips from those powers, then reload custom items from the custom folders
+     * */
     public static void initialize() {
         for (String id : CUSTOM_POWERS.keySet()) {
             EUIKeywordTooltip.removeTemp(id);

@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.traits;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -12,7 +11,6 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PTrait_Cost extends PTrait<PField_Not> {

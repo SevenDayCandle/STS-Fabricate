@@ -8,7 +8,6 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreTooltips;
 
 @VisiblePower
 public class ShacklesPower extends PCLPower {

@@ -14,10 +14,10 @@ import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.dungeon.modifiers.AbstractGlyph;
-import pinacolada.dungeon.modifiers.Glyph1;
-import pinacolada.dungeon.modifiers.Glyph0;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.dungeon.modifiers.AbstractGlyph;
+import pinacolada.dungeon.modifiers.Glyph0;
+import pinacolada.dungeon.modifiers.Glyph1;
 import pinacolada.effects.PCLEffect;
 import pinacolada.monsters.PCLCreatureData;
 import pinacolada.monsters.PCLTutorialMonster;
@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
-import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {

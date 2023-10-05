@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIDropdown;

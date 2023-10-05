@@ -26,13 +26,13 @@ public class PCLCharacterConfig extends AbstractConfig {
 
     public PCLCharacterConfig(String id) {
         super(id);
-        bannedCards = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id,SUFFIX_BANNED_CARDS), new HashSet<>());
-        bannedRelics = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id,SUFFIX_BANNED_RELICS), new HashSet<>());
-        lastLoadout = new STSStringConfigItem(PGR.createID(id,SUFFIX_LAST_LOADOUT), "");
-        meterPosition = new STSSerializedConfigItem<Vector2>(PGR.createID(id,SUFFIX_METER_POSITION), new Vector2(0.35f, 0.8f));
-        seenTutorial = new STSConfigItem<Boolean>(PGR.createID(id,SUFFIX_SEEN_TUTORIAL), false);
-        selectedLoadouts = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id,SUFFIX_CARDS_COUNT), new HashSet<>());
-        trophies = new STSStringConfigItem(PGR.createID(id,SUFFIX_TROPHIES), "");
+        bannedCards = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_BANNED_CARDS), new HashSet<>());
+        bannedRelics = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_BANNED_RELICS), new HashSet<>());
+        lastLoadout = new STSStringConfigItem(PGR.createID(id, SUFFIX_LAST_LOADOUT), "");
+        meterPosition = new STSSerializedConfigItem<Vector2>(PGR.createID(id, SUFFIX_METER_POSITION), new Vector2(0.35f, 0.8f));
+        seenTutorial = new STSConfigItem<Boolean>(PGR.createID(id, SUFFIX_SEEN_TUTORIAL), false);
+        selectedLoadouts = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_CARDS_COUNT), new HashSet<>());
+        trophies = new STSStringConfigItem(PGR.createID(id, SUFFIX_TROPHIES), "");
     }
 
     @Override

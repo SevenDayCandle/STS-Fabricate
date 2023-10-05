@@ -40,28 +40,28 @@ public abstract class AbstractGlyph {
     public void atBattleStart(int counter) {
     }
 
-    public String getLockedTooltipDescription() {
-        return EUIUtils.format(PGR.core.strings.csel_unlocksAt, ascensionRequirement);
-    }
-
-    public int getPotency(int counter) {
-        return baseAmount + counter * (AbstractDungeon.actNum - 1) * baseAmountStep;
-    }
-
     public String getDescription(int level) {
         return EUIUtils.format(getDescriptionBase(), baseAmountStep);
-    }
-
-    public String getDescriptionInGame(int counter) {
-        return EUIUtils.format(getDescriptionBase(), GameUtilities.inGame() ? getPotency(counter) : baseAmount, baseAmountStep);
     }
 
     protected String getDescriptionBase() {
         return strings != null ? strings.DESCRIPTION : EUIUtils.EMPTY_STRING;
     }
 
+    public String getDescriptionInGame(int counter) {
+        return EUIUtils.format(getDescriptionBase(), GameUtilities.inGame() ? getPotency(counter) : baseAmount, baseAmountStep);
+    }
+
     public Texture getImage() {
         return EUIRM.getTexture(PGR.getRunModImage(ID));
+    }
+
+    public String getLockedTooltipDescription() {
+        return EUIUtils.format(PGR.core.strings.csel_unlocksAt, ascensionRequirement);
+    }
+
+    public int getPotency(int counter) {
+        return baseAmount + counter * (AbstractDungeon.actNum - 1) * baseAmountStep;
     }
 
     public String getTitle() {

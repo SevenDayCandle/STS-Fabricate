@@ -1,6 +1,5 @@
 package pinacolada.powers;
 
-import basemod.devcommands.power.Power;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
@@ -16,16 +15,10 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.annotations.VisiblePower;
-import pinacolada.annotations.VisibleRelic;
 import pinacolada.misc.PCLGenericData;
-import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.common.*;
 import pinacolada.powers.common.EnergizedPower;
-import pinacolada.powers.replacement.PCLConstrictedPower;
+import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLCurlUpPower;
-import pinacolada.powers.replacement.PCLLockOnPower;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -36,8 +29,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static extendedui.EUIUtils.array;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
 public class PCLPowerData extends PCLGenericData<AbstractPower> implements KeywordProvider {
@@ -205,7 +196,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public static Collection<PCLPowerData> getAllData() {
-        return getAllData(true, (FuncT1<Boolean, PCLPowerData>) null);
+        return getAllData(true, null);
     }
 
     public static List<PCLPowerData> getAllData(boolean sort, FuncT1<Boolean, PCLPowerData> filterFunc) {
@@ -252,6 +243,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         PCLPowerData data = getStaticDataOrCustom(key);
         return data != null && data.isBuff();
     }
+
     public static boolean isDebuff(String key) {
         PCLPowerData data = getStaticDataOrCustom(key);
         return data != null && data.isDebuff();
@@ -372,22 +364,22 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     @Override
-    public EUIKeywordTooltip getTooltip() {
-        return tooltip;
-    }
-
-    @Override
     public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 
-    public void initializeImage() {
-        this.imagePath = PGR.getPowerImage(ID);
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     public boolean ifAny(FuncT1<Boolean, String> ifFunc) {
         boolean val = ifFunc.invoke(ID);
         return val ? val : equivalents != null && EUIUtils.any(equivalents, ifFunc);
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getPowerImage(ID);
     }
 
     public boolean isBuff() {

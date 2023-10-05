@@ -2,21 +2,14 @@ package pinacolada.effects.card;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.actions.common.EmptyDeckShuffleAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-
-import java.util.Iterator;
 
 public class ShowCardEffect extends PCLEffectWithCallback<AbstractCard> {
     private static final float PADDING = (15.0F * Settings.scale) + AbstractCard.IMG_WIDTH;
@@ -56,7 +49,7 @@ public class ShowCardEffect extends PCLEffectWithCallback<AbstractCard> {
                 e -> e instanceof ShowCardEffect);
 
         this.card.target_y = y;
-        switch(effectCount) {
+        switch (effectCount) {
             case 0:
                 this.card.target_x = x;
                 break;
@@ -73,22 +66,22 @@ public class ShowCardEffect extends PCLEffectWithCallback<AbstractCard> {
                 this.card.target_x = x + (PADDING * 2.0F);
                 break;
             default:
-                this.card.target_x = MathUtils.random((float)Settings.WIDTH * 0.1F, (float)Settings.WIDTH * 0.9F);
-                this.card.target_y = MathUtils.random((float)Settings.HEIGHT * 0.2F, (float)Settings.HEIGHT * 0.8F);
+                this.card.target_x = MathUtils.random((float) Settings.WIDTH * 0.1F, (float) Settings.WIDTH * 0.9F);
+                this.card.target_y = MathUtils.random((float) Settings.HEIGHT * 0.2F, (float) Settings.HEIGHT * 0.8F);
         }
 
         this.card.current_x = this.card.target_x;
         this.card.current_y = this.card.target_y - 200.0F * Settings.scale;
     }
 
-    public ShowCardEffect showPoof(boolean val) {
-        this.showPoof = val;
-        return this;
-    }
-
     @Override
     public void render(SpriteBatch sb) {
         this.card.render(sb);
+    }
+
+    public ShowCardEffect showPoof(boolean val) {
+        this.showPoof = val;
+        return this;
     }
 
     @Override

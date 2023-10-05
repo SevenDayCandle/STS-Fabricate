@@ -124,11 +124,6 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         return PGR.core.cardColor;
     }
 
-    @Override
-    public Texture getImage() {
-        return portraitImage;
-    }
-
     public String getEffectTextForPreview(int level) {
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
@@ -146,6 +141,11 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
 
     public String getEffectTextForTip() {
         return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null && !move.isBlank() ? move.getPowerTextForTooltip() : null, moves));
+    }
+
+    @Override
+    public Texture getImage() {
+        return portraitImage;
     }
 
     @Override

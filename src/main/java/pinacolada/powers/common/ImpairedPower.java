@@ -1,7 +1,6 @@
 package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.dungeon.CombatManager;
@@ -22,12 +21,12 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
 
     public ImpairedPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(DATA, owner, source, amount);
-    };
+    }
 
     public ImpairedPower(AbstractCreature owner, AbstractCreature source, int amount, boolean isSourceMonster) {
         super(DATA, owner, source, amount);
         justApplied = isSourceMonster;
-    };
+    }
 
     public static float getOrbMultiplier() {
         return (MULTIPLIER + CombatManager.getPlayerEffectBonus(DATA.ID));

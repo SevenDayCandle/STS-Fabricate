@@ -1,7 +1,6 @@
 package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.fields.PCLCardAffinity;
 
 import java.util.HashMap;
 import java.util.List;

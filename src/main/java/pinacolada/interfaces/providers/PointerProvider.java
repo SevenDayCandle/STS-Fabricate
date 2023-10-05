@@ -24,8 +24,8 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.PSkillContainer;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
@@ -57,7 +57,7 @@ public interface PointerProvider {
             if (preview != null) {
                 TemplateCardData template = TemplateCardData.getTemplate(preview.defaultPreview.cardID);
                 if (!EUIUtils.any(list, p -> p.matches(preview.defaultPreview.cardID))
-                        && (template == null || !EUIUtils.any(list, p -> p.matches(template.ID)) )) {
+                        && (template == null || !EUIUtils.any(list, p -> p.matches(template.ID)))) {
                     list.add(preview);
                 }
             }

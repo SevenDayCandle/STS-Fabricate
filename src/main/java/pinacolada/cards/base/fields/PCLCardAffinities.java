@@ -5,11 +5,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -20,10 +18,10 @@ import static pinacolada.cards.base.fields.PCLAffinity.General;
 
 
 public class PCLCardAffinities {
+    public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     protected PCLCardAffinity[] list = new PCLCardAffinity[PCLAffinity.getCount()];
     public PCLCardAffinity star = null;
     public boolean collapseDuplicates = false;
-    public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     public transient AbstractCard card;
 
     public PCLCardAffinities(AbstractCard card) {

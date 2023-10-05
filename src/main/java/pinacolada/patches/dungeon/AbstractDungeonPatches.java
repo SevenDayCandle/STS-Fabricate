@@ -1,7 +1,5 @@
 package pinacolada.patches.dungeon;
 
-import basemod.BaseMod;
-import com.evacipated.cardcrawl.mod.stslib.cards.interfaces.SpawnModificationCard;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -102,9 +100,9 @@ public class AbstractDungeonPatches {
 
     // Have to do these patches manually to avoid having the card pool get initialized twice on game start
     @SpirePatch(
-            clz=AbstractDungeon.class,
-            method=SpirePatch.CONSTRUCTOR,
-            paramtypez={
+            clz = AbstractDungeon.class,
+            method = SpirePatch.CONSTRUCTOR,
+            paramtypez = {
                     String.class,
                     String.class,
                     AbstractPlayer.class,
@@ -124,9 +122,9 @@ public class AbstractDungeonPatches {
     }
 
     @SpirePatch(
-            clz=AbstractDungeon.class,
-            method=SpirePatch.CONSTRUCTOR,
-            paramtypez={
+            clz = AbstractDungeon.class,
+            method = SpirePatch.CONSTRUCTOR,
+            paramtypez = {
                     String.class,
                     AbstractPlayer.class,
                     SaveFile.class

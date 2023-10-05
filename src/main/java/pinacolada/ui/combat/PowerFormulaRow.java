@@ -15,7 +15,6 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;

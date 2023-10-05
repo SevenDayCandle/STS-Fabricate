@@ -2,7 +2,6 @@ package pinacolada.ui.editor.relic;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -21,7 +20,6 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;

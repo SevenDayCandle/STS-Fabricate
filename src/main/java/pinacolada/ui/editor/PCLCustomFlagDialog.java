@@ -18,11 +18,8 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
-import pinacolada.misc.LoadoutStrings;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLCustomLoadout;
 
 import java.util.HashMap;
 

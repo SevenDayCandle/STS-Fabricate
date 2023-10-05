@@ -11,14 +11,10 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
-import pinacolada.resources.loadout.PCLLoadout;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @JsonAdapter(CardFlag.CardFlagAdapter.class)
 public class CardFlag implements TooltipProvider {
@@ -98,22 +94,22 @@ public class CardFlag implements TooltipProvider {
         return EUIUtils.mapAsNonnull(card.tags, CardFlag::get);
     }
 
-    public static CardFlag register(AbstractCard.CardTags gameFlag, AbstractCard.CardColor... colors) {
-        return registerFlag(new CardFlag(gameFlag, colors));
+    public static void postInitialize() {
+        Defend.name = CardCrawlGame.languagePack.getCardStrings(Defend_Red.ID).NAME;
+        Strike.name = CardCrawlGame.languagePack.getCardStrings(Strike_Red.ID).NAME;
     }
 
     public static CardFlag register(String id, AbstractCard.CardColor... colors) {
         return registerFlag(new CardFlag(id, null, colors));
     }
 
+    public static CardFlag register(AbstractCard.CardTags gameFlag, AbstractCard.CardColor... colors) {
+        return registerFlag(new CardFlag(gameFlag, colors));
+    }
+
     protected static CardFlag registerFlag(CardFlag flag) {
         ALL.putIfAbsent(flag.ID, flag);
         return flag;
-    }
-
-    public static void postInitialize() {
-        Defend.name = CardCrawlGame.languagePack.getCardStrings(Defend_Red.ID).NAME;
-        Strike.name = CardCrawlGame.languagePack.getCardStrings(Strike_Red.ID).NAME;
     }
 
     public String getName() {

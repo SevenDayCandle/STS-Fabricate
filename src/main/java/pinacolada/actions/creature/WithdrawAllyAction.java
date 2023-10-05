@@ -1,11 +1,8 @@
 package pinacolada.actions.creature;
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -65,9 +62,9 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
         // Callback must be executed after the sequential to avoid incorrect calculations in triggers
         if (toRelease.size() > 0) {
             PCLActions.last.callback(() -> {
-               for (PCLCardAlly ally : toRelease) {
-                   releaseCard(ally);
-               }
+                for (PCLCardAlly ally : toRelease) {
+                    releaseCard(ally);
+                }
             }).addCallback(() -> {
                 for (ActionT1<ArrayList<PCLCard>> callback : callbacks) {
                     callback.invoke(returned);

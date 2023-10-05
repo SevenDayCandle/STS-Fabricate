@@ -11,9 +11,9 @@ import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
 
 // Copied and modified from STS-AnimatorMod
 public class WordToken extends PCLTextToken {
+    private final int extraLength;
     protected EUIKeywordTooltip tooltip = null;
     protected ColoredString coloredString;
-    private final int extraLength;
 
     protected WordToken(String text, int extraLength) {
         super(PCLTextTokenType.Text, text);
@@ -62,11 +62,6 @@ public class WordToken extends PCLTextToken {
             default:
                 return Character.isLetterOrDigit(character);
         }
-    }
-
-    public void modifyText(String text) {
-        rawText = text;
-        coloredString.text = rawText != null ? rawText : EUIUtils.EMPTY_STRING;
     }
 
     public static int tryAdd(PCLTextParser parser) {
@@ -131,6 +126,11 @@ public class WordToken extends PCLTextToken {
         else {
             return super.getWidth(font, text);
         }
+    }
+
+    public void modifyText(String text) {
+        rawText = text;
+        coloredString.text = rawText != null ? rawText : EUIUtils.EMPTY_STRING;
     }
 
     @Override

@@ -1,33 +1,18 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.actions.utility.UseCardAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.FabricateItem;
-import pinacolada.interfaces.markers.TriggerConnection;
-import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
 
-    public PCLDynamicPowerData builder;
     protected ArrayList<PCLDynamicPowerData> forms;
+    public PCLDynamicPowerData builder;
     public int form;
 
     public PCLDynamicPower(PCLDynamicPowerData data, AbstractCreature owner, AbstractCreature source, int amount) {

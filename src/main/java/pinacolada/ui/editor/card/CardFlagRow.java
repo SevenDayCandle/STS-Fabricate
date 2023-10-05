@@ -1,27 +1,16 @@
 package pinacolada.ui.editor.card;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import extendedui.EUI;
-import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUIDropdownRow;
-import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.CardFlag;
-import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 import static pinacolada.ui.editor.card.PCLCustomCardAttributesPage.MENU_HEIGHT;
@@ -35,11 +24,11 @@ public class CardFlagRow extends EUIDropdownRow<CardFlag> {
     public CardFlagRow(EUIDropdown<CardFlag> dr, EUIHitbox hb, CardFlag item, int index, ActionT1<PCLCustomFlagInfo> onEdit, ActionT1<PCLCustomFlagInfo> onDelete) {
         super(dr, hb, item, index);
 
-        editButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new RelativeHitbox(hb,MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 6.3f, MENU_HEIGHT * 0.35f)
+        editButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new RelativeHitbox(hb, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 6.3f, MENU_HEIGHT * 0.35f)
                 .setIsPopupCompatible(true).setParentElement(dr))
                 .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_renameFlag, "");
-        deleteButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new RelativeHitbox(hb,MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 7.1f, MENU_HEIGHT * 0.35f)
+        deleteButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new RelativeHitbox(hb, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 7.1f, MENU_HEIGHT * 0.35f)
                 .setIsPopupCompatible(true).setParentElement(dr))
                 .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_deleteFlag, "");

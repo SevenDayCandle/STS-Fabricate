@@ -1,6 +1,5 @@
 package pinacolada.powers;
 
-import basemod.ReflectionHacks;
 import basemod.interfaces.CloneablePowerInterface;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,7 +17,6 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.random.Random;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
@@ -216,16 +214,16 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return (enabled) ? c : disabledColor;
     }
 
-    protected Color getImageColor(Color c) {
-        return (enabled) ? c : disabledColor;
-    }
-
     public String getDisplayDescription() {
         return mainTip.description;
     }
 
     public String getID() {
         return ID;
+    }
+
+    protected Color getImageColor(Color c) {
+        return (enabled) ? c : disabledColor;
     }
 
     protected ColoredString getPrimaryAmount(Color c) {

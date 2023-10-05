@@ -20,7 +20,6 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.utility.WaitRealtimeAction;
 import pinacolada.effects.card.ShowCardEffect;
 import pinacolada.effects.combat.TalkEffect;
-import pinacolada.effects.player.ObtainRelicEffect;
 import pinacolada.effects.player.RemoveRelicEffect;
 import pinacolada.effects.player.SpawnRelicEffect;
 import pinacolada.effects.utility.ActionCallbackEffect;

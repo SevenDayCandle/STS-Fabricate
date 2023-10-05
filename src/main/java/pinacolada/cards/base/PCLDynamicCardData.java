@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;

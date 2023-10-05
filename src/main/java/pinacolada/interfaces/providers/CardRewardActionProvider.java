@@ -33,5 +33,6 @@ public interface CardRewardActionProvider {
     }
 
     boolean canAct();
+
     boolean doAction(AbstractCard card, RewardItem rewardItem, int cardIndex);
 }

@@ -11,7 +11,6 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.powers.TemporaryPower;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

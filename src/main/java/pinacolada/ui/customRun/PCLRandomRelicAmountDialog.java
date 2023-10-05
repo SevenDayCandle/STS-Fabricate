@@ -3,14 +3,11 @@ package pinacolada.ui.customRun;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIDialog;
 import extendedui.ui.controls.EUITextBoxNumericalInput;
@@ -63,10 +60,6 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
         return null;
     }
 
-    public int getCount() {
-        return inputRelics.getCachedValue();
-    }
-
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
@@ -81,6 +74,10 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
     @Override
     public PCLRandomRelicAmountDialog getConfirmValue() {
         return this;
+    }
+
+    public int getCount() {
+        return inputRelics.getCachedValue();
     }
 
     public void open(ArrayList<AbstractRelic> relics) {

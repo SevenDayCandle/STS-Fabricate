@@ -6,13 +6,11 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardReward.PCLCardRewardScreen;
 
 import java.util.ArrayList;
 

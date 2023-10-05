@@ -23,10 +23,10 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
@@ -40,7 +40,10 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 

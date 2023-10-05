@@ -2,19 +2,14 @@ package pinacolada.misc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.utilities.ColoredTexture;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
-import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.resources.PGR;
 
 import java.io.Serializable;

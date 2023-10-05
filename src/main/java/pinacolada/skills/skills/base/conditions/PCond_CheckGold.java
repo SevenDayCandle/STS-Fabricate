@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;

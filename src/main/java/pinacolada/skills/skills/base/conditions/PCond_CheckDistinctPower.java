@@ -14,10 +14,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.Collection;
-import java.util.List;
 
 @VisibleSkill
 public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> implements OnApplyPowerSubscriber {

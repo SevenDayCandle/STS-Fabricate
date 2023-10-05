@@ -1,29 +1,22 @@
 package pinacolada.actions.cards;
 
 import basemod.BaseMod;
-import basemod.ReflectionHacks;
-import com.megacrit.cardcrawl.actions.unique.AddCardToDeckAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.purple.MasterReality;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.watcher.MasterRealityPower;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.cardManip.*;
+import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
+import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLAction;
-import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.ShowCardEffect;
 import pinacolada.patches.library.CardLibraryPatches;
-import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLAction<AbstractCard> {
@@ -69,7 +62,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
                     else {
                         actualCard = card;
                     }
-                    PCLEffects.List.add(new ShowCardAndObtainEffect(actualCard, (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F));
+                    PCLEffects.List.add(new ShowCardAndObtainEffect(actualCard, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F));
                 }
                 return;
             }
@@ -157,12 +150,6 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         }
     }
 
-    // Hardcoded stuff
-    // TODO add hook for determining card upgrade on creation
-    private boolean shouldUpgradeCard() {
-        return card.type != AbstractCard.CardType.CURSE && card.type != AbstractCard.CardType.STATUS && AbstractDungeon.player.hasPower(MasterRealityPower.POWER_ID);
-    }
-
     public GenerateCard repeat(int times) {
         // Always makeCopy because repeating action with the same card will cause visual glitches
         this.makeCopy = true;
@@ -179,5 +166,11 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         this.destination = destination;
 
         return this;
+    }
+
+    // Hardcoded stuff
+    // TODO add hook for determining card upgrade on creation
+    private boolean shouldUpgradeCard() {
+        return card.type != AbstractCard.CardType.CURSE && card.type != AbstractCard.CardType.STATUS && AbstractDungeon.player.hasPower(MasterRealityPower.POWER_ID);
     }
 }

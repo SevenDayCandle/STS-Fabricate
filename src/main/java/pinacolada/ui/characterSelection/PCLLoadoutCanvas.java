@@ -3,8 +3,6 @@ package pinacolada.ui.characterSelection;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUICanvas;
@@ -12,12 +10,11 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.*;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.resources.loadout.LoadoutBlightSlot;
+import pinacolada.resources.loadout.LoadoutCardSlot;
+import pinacolada.resources.loadout.LoadoutRelicSlot;
+import pinacolada.resources.loadout.PCLLoadoutData;
 
 import java.util.ArrayList;
 

@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
-import extendedui.ui.EUIBase;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
@@ -17,11 +15,8 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
@@ -41,8 +36,8 @@ public class PCLRelicSlotEditor extends EUIHoverable {
     protected EUIButton clearButton;
     protected EUIImage relicImage;
     protected AbstractRelic relic;
-    public LoadoutRelicSlot slot;
     protected PCLLoadoutCanvas canvas;
+    public LoadoutRelicSlot slot;
 
     public PCLRelicSlotEditor(PCLLoadoutCanvas canvas) {
         super(new EUIHitbox(AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT));
@@ -54,7 +49,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(),new OriginRelativeHitbox(hb,AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT, hb.width + SPACING, 0))
+        nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new OriginRelativeHitbox(hb, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT, hb.width + SPACING, 0))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
@@ -114,7 +109,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
         this.nameText.setLabel(relic != null ? relic.name : "");
         this.clearButton.setInteractable(slot.canRemove());
         if (relic != null) {
-            this.relicImage = new EUIImage(relic.img, new OriginRelativeHitbox(relicValueText.hb,relic.hb.width, relic.hb.height, relicValueText.hb.width,0));
+            this.relicImage = new EUIImage(relic.img, new OriginRelativeHitbox(relicValueText.hb, relic.hb.width, relic.hb.height, relicValueText.hb.width, 0));
             if (relic instanceof PCLRelic) {
                 this.relicImage.setScale(0.7f, 0.7f);
             }
@@ -153,16 +148,6 @@ public class PCLRelicSlotEditor extends EUIHoverable {
         clearButton.tryRender(sb);
     }
 
-    protected void trySelect() {
-        canvas.screen.trySelectRelic(this).addCallback((ef) ->
-        {
-            if (ef != null && ef.getSelectedRelic() != null) {
-                slot.select(ef.getSelectedRelic().relicId);
-                onSelect();
-            }
-        });
-    }
-
     public PCLRelicSlotEditor setSlot(LoadoutRelicSlot slot) {
         if (slot == null) {
             canvas.queueDeleteRelicSlot(this);
@@ -171,6 +156,16 @@ public class PCLRelicSlotEditor extends EUIHoverable {
         this.slot = slot;
         onSelect();
         return this;
+    }
+
+    protected void trySelect() {
+        canvas.screen.trySelectRelic(this).addCallback((ef) ->
+        {
+            if (ef != null && ef.getSelectedRelic() != null) {
+                slot.select(ef.getSelectedRelic().relicId);
+                onSelect();
+            }
+        });
     }
 
     @Override

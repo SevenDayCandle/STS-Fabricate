@@ -61,7 +61,9 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckBlock(target, amount);
     }
 
-    public static PCond_BlockBreak blockBreak(PCLCardTarget target) {return new PCond_BlockBreak(target);}
+    public static PCond_BlockBreak blockBreak(PCLCardTarget target) {
+        return new PCond_BlockBreak(target);
+    }
 
     public static PCond_CheckCreatureSummon checkAlly(PCLCardTarget target) {
         return new PCond_CheckCreatureSummon(target);

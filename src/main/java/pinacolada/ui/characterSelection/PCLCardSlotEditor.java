@@ -6,28 +6,20 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import extendedui.EUI;
 import extendedui.EUIRM;
-import extendedui.ui.EUIBase;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutCanvas.BUTTON_SIZE;
 
@@ -46,8 +38,8 @@ public class PCLCardSlotEditor extends EUIHoverable {
     protected EUIButton clearButton;
     protected AbstractCard card;
     protected Color nameColor;
-    public LoadoutCardSlot slot;
     protected PCLLoadoutCanvas canvas;
+    public LoadoutCardSlot slot;
 
     public PCLCardSlotEditor(PCLLoadoutCanvas canvas) {
         super(new EUIHitbox(AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT));
@@ -59,7 +51,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        cardamountText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new OriginRelativeHitbox(hb,AbstractCard.IMG_HEIGHT * 0.15f, ITEM_HEIGHT, hb.width, 0))
+        cardamountText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new OriginRelativeHitbox(hb, AbstractCard.IMG_HEIGHT * 0.15f, ITEM_HEIGHT, hb.width, 0))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
@@ -90,6 +82,44 @@ public class PCLCardSlotEditor extends EUIHoverable {
                 .setOnClick(this::trySelect)
                 .setTooltip(PGR.core.strings.loadout_change, "");
         nameColor = Settings.GOLD_COLOR;
+    }
+
+    public ArrayList<String> getAvailableCards() {
+        final ArrayList<String> cards = new ArrayList<>();
+
+        for (String cardID : canvas.screen.loadout.getAvailableCardIDs()) {
+            boolean add = isCardAllowed(cardID);
+            if (add) {
+                for (PCLCardSlotEditor editor : canvas.cardEditors) {
+                    if (editor.slot != this.slot && cardID.equals(editor.slot.selected) && editor.slot.getAmount() > 0) {
+                        add = false;
+                        break;
+                    }
+                }
+            }
+
+            if (add && CardLibrary.getCard(cardID) != null) {
+                cards.add(cardID);
+            }
+        }
+
+        cards.sort((a, b) -> {
+            int aEst = LoadoutCardSlot.getLoadoutValue(a);
+            if (aEst < 0) {
+                aEst = -aEst * 1000;
+            }
+            int bEst = LoadoutCardSlot.getLoadoutValue(b);
+            if (bEst < 0) {
+                bEst = -bEst * 1000;
+            }
+            return aEst - bEst;
+        });
+
+        return cards;
+    }
+
+    protected boolean isCardAllowed(String id) {
+        return !canvas.screen.loadout.isCardBanned(id) && !GameUtilities.isCardLocked(id);
     }
 
     private void onSelect() {
@@ -129,44 +159,6 @@ public class PCLCardSlotEditor extends EUIHoverable {
             card.renderInLibrary(sb);
             card.renderCardTip(sb);
         }
-    }
-
-    public ArrayList<String> getAvailableCards() {
-        final ArrayList<String> cards = new ArrayList<>();
-
-        for (String cardID : canvas.screen.loadout.getAvailableCardIDs()) {
-            boolean add = isCardAllowed(cardID);
-            if (add) {
-                for (PCLCardSlotEditor editor : canvas.cardEditors) {
-                    if (editor.slot != this.slot && cardID.equals(editor.slot.selected) && editor.slot.getAmount() > 0) {
-                        add = false;
-                        break;
-                    }
-                }
-            }
-
-            if (add && CardLibrary.getCard(cardID) != null) {
-                cards.add(cardID);
-            }
-        }
-
-        cards.sort((a, b) -> {
-            int aEst = LoadoutCardSlot.getLoadoutValue(a);
-            if (aEst < 0) {
-                aEst = -aEst * 1000;
-            }
-            int bEst = LoadoutCardSlot.getLoadoutValue(b);
-            if (bEst < 0) {
-                bEst = -bEst * 1000;
-            }
-            return aEst - bEst;
-        });
-
-        return cards;
-    }
-
-    protected boolean isCardAllowed(String id) {
-        return !canvas.screen.loadout.isCardBanned(id) && !GameUtilities.isCardLocked(id);
     }
 
     public PCLCardSlotEditor setSlot(LoadoutCardSlot slot) {

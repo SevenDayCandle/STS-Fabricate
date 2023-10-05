@@ -58,7 +58,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static pinacolada.ui.editor.PCLCustomEffectPage.*;
+import static pinacolada.ui.editor.PCLCustomEffectPage.OFFSET_AMOUNT;
 
 public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.4f;
@@ -68,9 +68,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     private static ArrayList<AbstractPotion> availablePotions;
     private static ArrayList<PCLPowerData> availablePowers;
     private static ArrayList<AbstractRelic> availableRelics;
+    private final ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     private PSkill<?> lastEffect;
     private float additionalHeight;
-    private final ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill<?>> effects;
     protected EUIDropdown<PCLCardGroupHelper> piles;
     protected EUIDropdown<PCLCardSelection> destinations;
@@ -130,33 +130,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         skill.setAmount(val, upVal);
     }
 
-    public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-                case Block:
-                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-                case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-                case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-                case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-                case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
-                    return;
-            }
-        }
-        skill.setExtra(val, upVal);
-    }
-
     public void changeExtra2ForSkill(PSkill<?> skill, int val, int upVal) {
         PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
         if (sc != null) {
@@ -182,6 +155,33 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         }
         skill.setExtra2(val, upVal);
+    }
+
+    public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    return;
+            }
+        }
+        skill.setExtra(val, upVal);
     }
 
     public void changeScopeForSkill(PSkill<?> skill, int val, int upVal) {
@@ -335,54 +335,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
     }
 
-    public int getExtraForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamage(0);
-                case Block:
-                    return sc.getBuilder().getBlock(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCount(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCount(0);
-            }
-        }
-        return skill.extra;
-    }
-
-    public int getExtraUpgradeForSkill(PSkill<?> skill) {
-        if (skill == null) {
-            return 0;
-        }
-        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
-        if (sc != null) {
-            switch (skill.getExtraSource()) {
-                case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
-                case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
-                case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
-                case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
-                case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
-                case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
-            }
-        }
-        return skill.getUpgradeExtra();
-    }
-
     public int getExtra2ForSkill(PSkill<?> skill) {
         if (skill == null) {
             return 0;
@@ -431,14 +383,52 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return skill.getUpgradeExtra2();
     }
 
-    @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorEffect;
+    public int getExtraForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.extra;
     }
 
-    @Override
-    public String getTitle() {
-        return editor.getTitle();
+    public int getExtraUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgradeExtra();
     }
 
     public int getScopeForSkill(PSkill<?> skill) {
@@ -489,10 +479,19 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return skill.getUpgradeScope();
     }
 
-
     public String getSmartSearchableLabel(TooltipProvider item) {
         EUITooltip tip = item.getTooltip();
         return tip instanceof EUIKeywordTooltip && ((EUIKeywordTooltip) tip).icon != null ? tip.getTitleOrIconForced() + " " + tip.title : tip.title;
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorEffect;
+    }
+
+    @Override
+    public String getTitle() {
+        return editor.getTitle();
     }
 
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
@@ -598,23 +597,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.cedit_pile, PGR.core.strings.cetut_pile);
     }
 
-    protected void modifyTargets(List<PCLCardTarget> targets) {
-        if (node.skill != null && !targets.isEmpty()) {
-            node.skill.setTarget(targets.get(0));
-            if (shouldOverrideTarget) {
-                if (editor.screen instanceof PCLCustomCardEditCardScreen) {
-                    ((PCLCustomCardEditCardScreen) editor.screen).modifyBuilder(e -> e.setTarget(targets.get(0)));
-                    for (PCLCustomGenericPage page: editor.screen.pages) {
-                        if (page != editor) {
-                            page.refresh();
-                        }
-                    }
-                }
-            }
-            editor.updateRootEffect();
-        }
-    }
-
     public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(T[] items, String title) {
         return initializeSmartSearchable(Arrays.asList(items), title);
     }
@@ -633,6 +615,23 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(items);
         dropdown.setLabelFunctionForButton((list, __) -> dropdown.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
         return dropdown;
+    }
+
+    protected void modifyTargets(List<PCLCardTarget> targets) {
+        if (node.skill != null && !targets.isEmpty()) {
+            node.skill.setTarget(targets.get(0));
+            if (shouldOverrideTarget) {
+                if (editor.screen instanceof PCLCustomCardEditCardScreen) {
+                    ((PCLCustomCardEditCardScreen)editor.screen).modifyBuilder(e -> e.setTarget(targets.get(0)));
+                    for (PCLCustomGenericPage page : editor.screen.pages) {
+                        if (page != editor) {
+                            page.refresh();
+                        }
+                    }
+                }
+            }
+            editor.updateRootEffect();
+        }
     }
 
     protected <U> float position(EUIHoverable element, float x) {

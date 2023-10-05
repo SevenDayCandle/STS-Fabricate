@@ -3,16 +3,16 @@ package pinacolada.blights;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.localization.BlightStrings;
-import com.megacrit.cardcrawl.localization.RelicStrings;
 import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLLoadout;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

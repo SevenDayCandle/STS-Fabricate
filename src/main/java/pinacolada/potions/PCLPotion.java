@@ -41,10 +41,10 @@ import java.util.List;
 public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider, CustomSavable<PCLCollectibleSaveData> {
     public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public final PCLPotionData potionData;
+    private float flashTime;
     public PSkillPowerContainer skills;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
-    private float flashTime;
 
     // We deliberately avoid using initializeData because we need to load the PotionStrings after the super call
     public PCLPotion(PCLPotionData data) {

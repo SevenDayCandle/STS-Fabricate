@@ -18,9 +18,8 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.powers.PCLPower;
-import pinacolada.powers.PTriggerPower;
 import pinacolada.powers.PSpecialCardPower;
-import pinacolada.powers.replacement.PCLLockOnPower;
+import pinacolada.powers.PTriggerPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.delay.DelayTiming;
@@ -78,7 +77,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
             if (c != null) {
                 if (this.hb.x < Settings.WIDTH * 0.35f) {
                     c.current_x = c.target_x = this.hb.x;
-                    c.current_y = c.target_y = this.hb.y - AbstractCard.IMG_HEIGHT  * card.drawScale;
+                    c.current_y = c.target_y = this.hb.y - AbstractCard.IMG_HEIGHT * card.drawScale;
                 }
                 else {
                     c.current_x = c.target_x = this.hb.x - (AbstractCard.IMG_WIDTH * 0.9F + 16.0F) * card.drawScale;

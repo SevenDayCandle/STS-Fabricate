@@ -13,7 +13,10 @@ import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.CustomFilterModule;
-import extendedui.ui.cardFilter.*;
+import extendedui.ui.cardFilter.FilterKeywordButton;
+import extendedui.ui.cardFilter.FilterSortHeader;
+import extendedui.ui.cardFilter.GenericFilters;
+import extendedui.ui.cardFilter.GenericFiltersObject;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -88,8 +91,9 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
     }
 
     public static int rankByEndTurnBehavior(PCLPowerRenderable a, PCLPowerRenderable b) {
-        return (a == null ? -1 : b == null ? 1 :(a.power.endTurnBehavior.ordinal() - b.power.endTurnBehavior.ordinal()));
+        return (a == null ? -1 : b == null ? 1 : (a.power.endTurnBehavior.ordinal() - b.power.endTurnBehavior.ordinal()));
     }
+
     public static int rankByName(PCLPowerRenderable a, PCLPowerRenderable b) {
         return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.power.getName(), b.power.getName()));
     }
@@ -119,6 +123,12 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
         endTurnBehaviorDropdown.setSelection(filters.currentEndTurnBehaviors, true);
         typeDropdown.setSelection(filters.currentTypes, true);
         priorityDropdown.setSelection(filters.currentPriorities, true);
+    }
+
+    @Override
+    public void defaultSort() {
+        this.group.sort(PCLPowerKeywordFilters::rankByName);
+        this.group.sort(PCLPowerKeywordFilters::rankByType);
     }
 
     public boolean evaluate(PCLPowerRenderable c) {
@@ -177,8 +187,13 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
     }
 
     @Override
-    public ArrayList<CustomFilterModule<PCLPowerRenderable>> getGlobalFilters() {
-        return globalFilters;
+    public EUIExporter.Exportable<PCLPowerRenderable> getExportable() {
+        return EUIExporterPCLPowerRow.powerExportable;
+    }
+
+    @Override
+    protected PowerFilters getFilterObject() {
+        return new PowerFilters();
     }
 
     @Override
@@ -187,9 +202,8 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
     }
 
     @Override
-    public void defaultSort() {
-        this.group.sort(PCLPowerKeywordFilters::rankByName);
-        this.group.sort(PCLPowerKeywordFilters::rankByType);
+    public ArrayList<CustomFilterModule<PCLPowerRenderable>> getGlobalFilters() {
+        return globalFilters;
     }
 
     @Override
@@ -244,21 +258,11 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
 
     @Override
     protected void setupSortHeader(FilterSortHeader header, float startX) {
-        
+
         startX = makeToggle(header, PCLPowerKeywordFilters::rankByType, CardLibSortHeader.TEXT[1], startX);
         startX = makeToggle(header, PCLPowerKeywordFilters::rankByName, CardLibSortHeader.TEXT[2], startX);
         startX = makeToggle(header, PCLPowerKeywordFilters::rankByEndTurnBehavior, PGR.core.strings.power_turnBehavior, startX);
         startX = makeToggle(header, PCLPowerKeywordFilters::rankByPriority, PGR.core.strings.power_priority, startX);
-    }
-
-    @Override
-    public EUIExporter.Exportable<PCLPowerRenderable> getExportable() {
-        return EUIExporterPCLPowerRow.powerExportable;
-    }
-
-    @Override
-    protected PowerFilters getFilterObject() {
-        return new PowerFilters();
     }
 
     @Override

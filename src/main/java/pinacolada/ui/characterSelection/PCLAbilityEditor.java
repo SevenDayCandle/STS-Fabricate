@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
-import extendedui.ui.EUIBase;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
@@ -17,7 +16,6 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLBlight;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutBlightSlot;
@@ -71,6 +69,26 @@ public class PCLAbilityEditor extends EUIHoverable {
         return abilities;
     }
 
+    protected void onSelect() {
+        this.item = BlightHelper.getBlight(slot.selected);
+        this.nameText.setLabel(item != null ? item.name : "").setActive(true);
+        this.changeButton.setOnClick(this::selectPrev).setActive(true);
+        this.changeButton2.setOnClick(this::selectNext).setActive(true);
+        if (item != null) {
+            this.image = new EUIImage(item.img, new OriginRelativeHitbox(nameText.hb, item.hb.width, item.hb.height, -item.hb.width, 0));
+            if (item instanceof PCLBlight) {
+                this.image.setScale(0.7f, 0.7f);
+            }
+            else {
+                this.image.setScale(1.4f, 1.4f);
+            }
+        }
+        else {
+            this.image = null;
+        }
+        refreshValues();
+    }
+
     public void refreshValues() {
         int value = slot == null ? 0 : slot.getEstimatedValue();
         canvas.screen.updateValidation();
@@ -92,26 +110,6 @@ public class PCLAbilityEditor extends EUIHoverable {
         changeButton2.tryRender(sb);
     }
 
-    protected void onSelect() {
-        this.item = BlightHelper.getBlight(slot.selected);
-        this.nameText.setLabel(item != null ? item.name : "").setActive(true);
-        this.changeButton.setOnClick(this::selectPrev).setActive(true);
-        this.changeButton2.setOnClick(this::selectNext).setActive(true);
-        if (item != null) {
-            this.image = new EUIImage(item.img, new OriginRelativeHitbox(nameText.hb, item.hb.width, item.hb.height, -item.hb.width, 0));
-            if (item instanceof PCLBlight) {
-                this.image.setScale(0.7f, 0.7f);
-            }
-            else {
-                this.image.setScale(1.4f, 1.4f);
-            }
-        }
-        else {
-            this.image = null;
-        }
-        refreshValues();
-    }
-
     protected void selectNext() {
         ArrayList<String> abilities = canvas.screen.loadout.getAvailableBlightIDs();
         int base = abilities.indexOf(slot.selected);
@@ -120,7 +118,8 @@ public class PCLAbilityEditor extends EUIHoverable {
         do {
             index = (abilities.indexOf(slot.selected) + 1) % abilities.size();
             abAt = abilities.get(index);
-        } while (index != base && slot.selected.equals(abAt));
+        }
+        while (index != base && slot.selected.equals(abAt));
         this.slot.select(abAt);
         onSelect();
         canvas.screen.updateValidation();
@@ -137,7 +136,8 @@ public class PCLAbilityEditor extends EUIHoverable {
                 index = abilities.size() - 1;
             }
             abAt = abilities.get(index);
-        } while (index != base && slot.selected.equals(abAt));
+        }
+        while (index != base && slot.selected.equals(abAt));
         this.slot.select(abAt);
         onSelect();
         canvas.screen.updateValidation();

@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;

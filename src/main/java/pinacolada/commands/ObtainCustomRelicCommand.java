@@ -4,7 +4,6 @@ import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.ConvertHelper;
 import extendedui.EUIUtils;
-import pinacolada.effects.PCLEffects;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.utilities.GameUtilities;

@@ -121,13 +121,13 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
     }
 
     @Override
-    public AbstractCreature getOwner() {
-        return owner;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public String getName() {
-        return name;
+    public AbstractCreature getOwner() {
+        return owner;
     }
 
     @Override

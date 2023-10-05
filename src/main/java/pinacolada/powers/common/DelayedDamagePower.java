@@ -10,22 +10,22 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.GameUtilities;
 
 @VisiblePower
 public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower {
+    private static final Color healthBarColor = Color.PURPLE.cpy();
     public static final PCLPowerData DATA = register(DelayedDamagePower.class)
             .setType(PowerType.DEBUFF)
             .setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn)
             .setPriority(97)
             .setTooltip(PGR.core.tooltips.delayedDamage);
-    private static final Color healthBarColor = Color.PURPLE.cpy();
     private final AbstractGameAction.AttackEffect attackEffect;
 
     public DelayedDamagePower(AbstractCreature owner, AbstractCreature source, int amount) {
         this(owner, source, amount, AbstractGameAction.AttackEffect.NONE);
     }
+
     public DelayedDamagePower(AbstractCreature owner, AbstractCreature source, int amount, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, owner, source, amount);
         this.attackEffect = attackEffect;

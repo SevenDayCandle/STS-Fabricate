@@ -58,6 +58,10 @@ public class PCLCustomLoadout extends PCLLoadout {
         return strings != null && strings.AUTHOR != null ? strings.AUTHOR : "";
     }
 
+    @Override
+    public ArrayList<String> getBaseStartingRelics() {
+        return EUIUtils.arrayList();
+    }
 
     protected AbstractCard.CardRarity getLoadoutCardRarity() {
         return AbstractCard.CardRarity.UNCOMMON;
@@ -65,11 +69,6 @@ public class PCLCustomLoadout extends PCLLoadout {
 
     public String getName() {
         return strings != null && strings.NAME != null ? strings.NAME : ID;
-    }
-
-    @Override
-    public ArrayList<String> getBaseStartingRelics() {
-        return EUIUtils.arrayList();
     }
 
     public void refreshStrings() {

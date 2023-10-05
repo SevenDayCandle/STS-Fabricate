@@ -230,7 +230,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     protected void modifyTargets(List<PCLCardTarget> targets) {
         if (!targets.isEmpty()) {
             screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
-            for (PCLCustomGenericPage page: screen.pages) {
+            for (PCLCustomGenericPage page : screen.pages) {
                 if (page != this) {
                     page.refresh();
                 }

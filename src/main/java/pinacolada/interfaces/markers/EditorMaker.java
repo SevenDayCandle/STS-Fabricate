@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.utilities.ColoredTexture;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

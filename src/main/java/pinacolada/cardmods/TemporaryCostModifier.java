@@ -5,7 +5,6 @@ import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.dungeon.CombatManager;
@@ -55,7 +54,7 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
     }
 
     /* Update the cost modifier to the calculated cost from powers. Called in applyPowersToBlock in regular cards and refresh in PCLCard.
-    * Base is the baseline card cost to compare with, and var is any additional precalculations that should be added on to the result */
+     * Base is the baseline card cost to compare with, and var is any additional precalculations that should be added on to the result */
     public static void tryRefresh(AbstractCard c, AbstractCreature owner, int base, int var) {
         if (c.cost > -1) {
             TemporaryCostModifier mod = get(c);

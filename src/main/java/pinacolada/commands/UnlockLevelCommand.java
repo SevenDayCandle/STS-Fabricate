@@ -4,12 +4,8 @@ import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.ConvertHelper;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.Prefs;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 

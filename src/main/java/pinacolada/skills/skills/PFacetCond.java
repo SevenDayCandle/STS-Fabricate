@@ -3,7 +3,6 @@ package pinacolada.skills.skills;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -40,6 +39,6 @@ public abstract class PFacetCond<T extends PField> extends PCond<T> {
     // TODO in the use condition, have the effect pass for "each" of the items that pass
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-       super.use(info, order);
+        super.use(info, order);
     }
 }

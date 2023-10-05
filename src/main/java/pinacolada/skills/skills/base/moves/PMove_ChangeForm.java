@@ -63,17 +63,17 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
         }
     }
 
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return TEXT.act_changeXToY(TEXT.subjects_this, TEXT.cedit_form);
+    }
+
     protected String getSourceName(int index) {
         if (source != null) {
             // Intentially omit upgrade level
             return GameUtilities.getMultiformName(source.getName(), index, 1, 2, 1, source.branchFactor());
         }
         return EUIUtils.EMPTY_STRING;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_changeXToY(TEXT.subjects_this, TEXT.cedit_form);
     }
 
     @Override

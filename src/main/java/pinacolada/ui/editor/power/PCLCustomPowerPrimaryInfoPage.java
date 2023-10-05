@@ -2,15 +2,12 @@ package pinacolada.ui.editor.power;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
@@ -33,9 +30,6 @@ import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLCustomPowerEditPowerScreen effect;

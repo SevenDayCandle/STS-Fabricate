@@ -17,12 +17,8 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLLockOnPower;
-import pinacolada.powers.common.ProvokedPower;
-import pinacolada.powers.common.SelfImmolationPower;
-import pinacolada.powers.common.SilencedPower;
 import pinacolada.resources.AbstractTooltips;
 import pinacolada.resources.PCLEnum;
-import pinacolada.resources.PGR;
 
 public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip energy = EUIKeywordTooltip.findByID(EUI.ENERGY_ID);

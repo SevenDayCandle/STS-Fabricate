@@ -217,14 +217,14 @@ public class PField_CardGeneric extends PField_Not {
         return this;
     }
 
-    public boolean shouldHideGroupNames() {
-        return groupTypes.size() == 1
-                && (groupTypes.get(0) == PCLCardGroupHelper.Hand || skill.getEligibleOrigins().size() <= 1);
-    }
-
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
+    }
+
+    public boolean shouldHideGroupNames() {
+        return groupTypes.size() == 1
+                && (groupTypes.get(0) == PCLCardGroupHelper.Hand || skill.getEligibleOrigins().size() <= 1);
     }
 }

@@ -10,7 +10,6 @@ import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
-import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -21,7 +20,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PActiveCond;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 

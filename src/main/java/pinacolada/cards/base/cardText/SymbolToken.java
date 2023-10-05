@@ -3,13 +3,11 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLAffinity;
 
 import java.util.HashMap;
 import java.util.Map;
