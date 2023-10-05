@@ -521,6 +521,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     public PCLRelic setForm(int form) {
         this.auxiliaryData.form = form;
+        updateName();
         initializePCLTips();
         return this;
     }

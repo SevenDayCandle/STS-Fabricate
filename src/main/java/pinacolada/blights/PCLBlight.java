@@ -2,14 +2,18 @@ package pinacolada.blights;
 
 
 import basemod.ReflectionHacks;
+import basemod.abstracts.CustomSavable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -17,23 +21,29 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLBlight extends AbstractBlight implements KeywordProvider {
+public abstract class PCLBlight extends AbstractBlight implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
     public final PCLBlightData blightData;
     public ArrayList<EUIKeywordTooltip> tips;
     public EUIKeywordTooltip mainTooltip;
+    public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
     public PCLBlight(PCLBlightData data) {
         super(data.ID, data.strings.NAME, EUIUtils.EMPTY_STRING, "durian.png", true);
         this.blightData = data;
+        preSetup(data);
         setupImages();
         updateDescription();
     }
@@ -52,6 +62,70 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
 
     protected static <T extends PCLBlightData> T registerBlightData(T cardData) {
         return PCLBlightData.registerData(cardData);
+    }
+
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        return atBlockLastModify(block, info.card);
+    }
+
+    public float atBlockLastModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atBlockModify(PCLUseInfo info, float block) {
+        return atBlockModify(block, info.card);
+    }
+
+    public float atBlockModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public int atCostModify(PCLUseInfo info, int block) {
+        return atCostModify(block, info.card);
+    }
+
+    public int atCostModify(int cost, AbstractCard c) {
+        return cost;
+    }
+
+    public float atDamageLastModify(PCLUseInfo info, float block) {
+        return atDamageLastModify(block, info.card);
+    }
+
+    public float atDamageLastModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atDamageModify(PCLUseInfo info, float block) {
+        return atDamageModify(block, info.card);
+    }
+
+    public float atDamageModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atHealModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atHitCountModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public void atPreBattle() {
+
+    }
+
+    public float atRightCountModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atSkillBonusModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public boolean canUpgrade() {
+        return auxiliaryData.timesUpgraded < blightData.maxUpgradeLevel || blightData.maxUpgradeLevel < 0;
     }
 
     protected String formatDescription(int index, Object... args) {
@@ -78,6 +152,14 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     @Override
     public List<EUIKeywordTooltip> getTipsForFilters() {
         return tips.subList(1, tips.size());
+    }
+
+    public String getNameFromData() {
+        String name = blightData.strings.NAME;
+        if (auxiliaryData.timesUpgraded > 0) {
+            return GameUtilities.getMultiformName(name, auxiliaryData.form, auxiliaryData.timesUpgraded, blightData.maxForms, blightData.maxUpgradeLevel, blightData.branchFactor);
+        }
+        return name;
     }
 
     public String getUpdatedDescription() {
@@ -122,7 +204,20 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         updateDescription();
     }
 
-    protected void preSetup(PCLRelicData data) {
+    @Override
+    public void onLoad(PCLCollectibleSaveData data) {
+        if (data != null) {
+            this.auxiliaryData = new PCLCollectibleSaveData(data);
+        }
+        updateDescription();
+    }
+
+    @Override
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    protected void preSetup(PCLBlightData data) {
 
     }
 
@@ -184,7 +279,6 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         }
     }
 
-    // TODO add outlines
     @Override
     public void renderOutline(Color c, SpriteBatch sb, boolean inTopPanel) {
     }
@@ -198,6 +292,20 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         EUITooltip.queueTooltips(this);
     }
 
+    public PCLBlight setForm(int form) {
+        this.auxiliaryData.form = form;
+        updateName();
+        initializeTips();
+        return this;
+    }
+
+    public void setTimesUpgraded(int times) {
+        auxiliaryData.timesUpgraded = times;
+        updateName();
+        updateDescription();
+    }
+
+
     public void setupImages() {
         loadImage(blightData.imagePath);
     }
@@ -208,8 +316,26 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         if (tips == null) {
             initializeTips();
         }
-        if (tips.size() > 0) {
-            tips.get(0).setDescription(description);
+        if (this.mainTooltip != null) {
+            this.mainTooltip.setTitle(name).setDescription(description);
         }
+    }
+
+    @Override
+    public void updateDescription(AbstractPlayer.PlayerClass pc) {
+        updateDescription();
+    }
+
+    public void updateName() {
+        name = getNameFromData();
+    }
+
+    public PCLBlight upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            updateName();
+            updateDescription();
+        }
+        return this;
     }
 }

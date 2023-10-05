@@ -3,6 +3,7 @@ package pinacolada.patches.card;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.GameActionManager;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -12,6 +13,7 @@ import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
+import pinacolada.blights.PCLBlight;
 import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -33,6 +35,22 @@ public class AbstractCardPatches {
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (r instanceof PCLRelic) {
                     tmp[0] = ((PCLRelic) r).atBlockModify(tmp[0], __instance);
+                }
+            }
+            for (AbstractRelic r : AbstractDungeon.player.relics) {
+                if (r instanceof PCLRelic) {
+                    tmp[0] = ((PCLRelic) r).atBlockLastModify(tmp[0], __instance);
+                }
+            }
+
+            for (AbstractBlight r : AbstractDungeon.player.blights) {
+                if (r instanceof PCLBlight) {
+                    tmp[0] = ((PCLBlight) r).atBlockModify(tmp[0], __instance);
+                }
+            }
+            for (AbstractBlight r : AbstractDungeon.player.blights) {
+                if (r instanceof PCLBlight) {
+                    tmp[0] = ((PCLBlight) r).atBlockLastModify(tmp[0], __instance);
                 }
             }
         }

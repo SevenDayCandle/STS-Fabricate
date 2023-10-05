@@ -71,7 +71,7 @@ public class EUIPatches {
     public static class ExtendedUIPatches_GetAllBlights {
         @SpirePostfixPatch
         public static ArrayList<AbstractBlight> postfix(ArrayList<AbstractBlight> retVal) {
-            retVal.addAll(BlightHelperPatches.getCustomBlights());
+            retVal.addAll(BlightHelperPatches.getAdditionalBlights());
             return retVal;
         }
     }

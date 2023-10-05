@@ -21,6 +21,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.green.Tactician;
@@ -53,6 +54,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.blights.PCLBlight;
 import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.CardTriggerConnection;
 import pinacolada.cards.base.cardText.PCLCardText;
@@ -1589,6 +1591,18 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                         tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount);
                     }
                 }
+
+                // Vanilla blights don't affect calculations
+                for (AbstractBlight r : ((AbstractPlayer) owner).blights) {
+                    if (r instanceof PCLBlight) {
+                        oldBlock = tempBlock;
+                        oldDamage = tempDamage;
+                        tempDamage = ((PCLBlight) r).atDamageModify(info, tempDamage);
+                        tempBlock = ((PCLBlight) r).atBlockModify(info, tempBlock);
+                        addAttackDisplay(r.img, oldDamage, tempDamage);
+                        addDefendDisplay(r.img, oldBlock, tempBlock);
+                    }
+                }
             }
 
             tempBlock = CardModifierManager.onModifyBlock(tempBlock, this);
@@ -1653,8 +1667,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             if (owner instanceof AbstractPlayer) {
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
                     if (r instanceof PCLRelic) {
+                        oldBlock = tempBlock;
+                        oldDamage = tempDamage;
                         tempDamage = ((PCLRelic) r).atDamageLastModify(info, tempDamage);
                         tempBlock = ((PCLRelic) r).atBlockLastModify(info, tempBlock);
+                        addAttackDisplay(r.img, oldDamage, tempDamage);
+                        addDefendDisplay(r.img, oldBlock, tempBlock);
+                    }
+                }
+
+                // Vanilla blights don't affect calculations
+                for (AbstractBlight r : ((AbstractPlayer) owner).blights) {
+                    if (r instanceof PCLBlight) {
+                        oldBlock = tempBlock;
+                        oldDamage = tempDamage;
+                        tempDamage = ((PCLBlight) r).atDamageLastModify(info, tempDamage);
+                        tempBlock = ((PCLBlight) r).atBlockLastModify(info, tempBlock);
+                        addAttackDisplay(r.img, oldDamage, tempDamage);
+                        addDefendDisplay(r.img, oldBlock, tempBlock);
                     }
                 }
             }

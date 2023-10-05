@@ -26,6 +26,7 @@ import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.CardFlag;
@@ -55,10 +56,7 @@ import pinacolada.ui.characterSelection.PCLCharacterSelectOverlay;
 import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
-import pinacolada.ui.debug.PCLDebugAugmentPanel;
-import pinacolada.ui.debug.PCLDebugCardPanel;
-import pinacolada.ui.debug.PCLDebugPotionPanel;
-import pinacolada.ui.debug.PCLDebugRelicPanel;
+import pinacolada.ui.debug.*;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerSelectorScreen;
@@ -109,6 +107,7 @@ public class PGR {
     public static PCLSingleCardPopup cardPopup;
     public static PCLSingleRelicPopup relicPopup;
     public static PCLDebugAugmentPanel debugAugments;
+    public static PCLDebugBlightPanel debugBlights;
     public static PCLDebugCardPanel debugCards;
     public static PCLDebugPotionPanel debugPotions;
     public static PCLDebugRelicPanel debugRelics;
@@ -284,6 +283,7 @@ public class PGR {
         PGR.rewardScreen = new PCLCardRewardScreen();
         try {
             PGR.debugAugments = new PCLDebugAugmentPanel();
+            PGR.debugBlights = new PCLDebugBlightPanel();
             PGR.debugCards = new PCLDebugCardPanel();
             PGR.debugPotions = new PCLDebugPotionPanel();
             PGR.debugRelics = new PCLDebugRelicPanel();
@@ -482,5 +482,6 @@ public class PGR {
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
         PCLCustomPotionSlot.initialize();
+        PCLCustomBlightSlot.initialize();
     }
 }

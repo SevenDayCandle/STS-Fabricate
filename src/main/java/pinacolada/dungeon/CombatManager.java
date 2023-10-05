@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.actions.common.GainGoldAction;
 import com.megacrit.cardcrawl.actions.common.HealAction;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -42,6 +43,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
+import pinacolada.blights.PCLBlight;
 import pinacolada.cardmods.SkillModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -866,6 +868,11 @@ public class CombatManager extends EUIBase {
     public static void onStartup() {
         refresh();
         clearStats();
+        for (AbstractBlight blight : player.blights) {
+            if (blight instanceof PCLBlight) {
+                ((PCLBlight) blight).atPreBattle();
+            }
+        }
     }
 
     public static void onTagChanged(AbstractCard card, PCLCardTag tag, int value) {

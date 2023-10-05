@@ -21,6 +21,7 @@ import static extendedui.EUIUtils.array;
 public class PCLBlightData extends PCLGenericData<PCLBlight> {
     private static final Map<String, PCLBlightData> STATIC_DATA = new HashMap<>();
 
+    public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public BlightStrings strings;
     public String imagePath;
     public Integer[] counter = array(0);
@@ -91,6 +92,12 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
 
     public PCLBlightData setBranchFactor(int factor) {
         this.branchFactor = factor;
+
+        return this;
+    }
+
+    public PCLBlightData setColor(AbstractCard.CardColor color) {
+        this.cardColor = color;
 
         return this;
     }

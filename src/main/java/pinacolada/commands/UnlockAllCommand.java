@@ -32,7 +32,7 @@ public class UnlockAllCommand extends ConsoleCommand {
             }
         }
 
-        for (AbstractRelic r : RelicViewScreenPatches.getAllReics()) {
+        for (AbstractRelic r : RelicViewScreenPatches.getAllRelics()) {
             String key = r.relicId;
             UnlockTracker.relicSeenPref.putInteger(key, 1);
             UnlockTracker.lockedRelics.remove(key);

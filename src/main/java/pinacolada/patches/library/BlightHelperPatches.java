@@ -20,14 +20,14 @@ import java.util.HashMap;
 
 @SpirePatch(clz = BlightHelper.class, method = "getBlight", paramtypez = {String.class})
 public class BlightHelperPatches {
-    private static final HashMap<String, Class<? extends AbstractBlight>> customBlights = new HashMap<>();
+    private static final HashMap<String, Class<? extends AbstractBlight>> additionalBlights = new HashMap<>();
 
-    public static Collection<String> getCustomBlightIDs() {
-        return customBlights.keySet();
+    public static Collection<String> getAdditionalBlightIDs() {
+        return additionalBlights.keySet();
     }
 
-    public static ArrayList<AbstractBlight> getCustomBlights() {
-        return EUIUtils.map(getCustomBlightIDs(), EUIGameUtils::getSeenBlight);
+    public static ArrayList<AbstractBlight> getAdditionalBlights() {
+        return EUIUtils.map(getAdditionalBlightIDs(), EUIGameUtils::getSeenBlight);
     }
 
     public static void loadCustomBlights() {
@@ -36,7 +36,7 @@ public class BlightHelperPatches {
                 VisibleBlight a = ct.getAnnotation(VisibleBlight.class);
                 Object data = ReflectionHacks.getPrivateStatic(ct, a.data());
                 String id = data instanceof PCLBlightData ? ((PCLBlightData) data).ID : String.valueOf(data);
-                customBlights.put(id, (Class<? extends AbstractBlight>) ct);
+                additionalBlights.put(id, (Class<? extends AbstractBlight>) ct);
                 EUIUtils.logInfoIfDebug(BlightHelper.class, "Adding blight " + id);
             }
             catch (Exception e) {
@@ -47,7 +47,7 @@ public class BlightHelperPatches {
 
     @SpirePrefixPatch
     public static SpireReturn<AbstractBlight> method(String id) {
-        final Class<? extends AbstractBlight> blight = customBlights.get(id);
+        final Class<? extends AbstractBlight> blight = additionalBlights.get(id);
         if (blight != null) {
             try {
                 return SpireReturn.Return(blight.getConstructor().newInstance());
