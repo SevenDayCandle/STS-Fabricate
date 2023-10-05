@@ -94,7 +94,7 @@ public class FakeLoadout extends PCLLoadout {
     }
 
     @Override
-    public PCLTrophies getTrophies() {
+    public PCLLoadoutStats getLoadoutStats() {
         return null;
     }
 
@@ -107,7 +107,7 @@ public class FakeLoadout extends PCLLoadout {
     }
 
     @Override
-    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
+    public void onVictory(int ascensionLevel, int score, boolean act) {
         // No-op
     }
 

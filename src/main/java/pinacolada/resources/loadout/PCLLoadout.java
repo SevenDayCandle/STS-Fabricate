@@ -381,6 +381,21 @@ public abstract class PCLLoadout {
         return new CharSelectInfo(name + "-" + ID, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
     }
 
+    public PCLLoadoutStats getLoadoutStats() {
+        AbstractPlayerData<?, ?> data = getPlayerData();
+        if (data == null) {
+            return null;
+        }
+
+        PCLLoadoutStats trophies = data.getStats(ID);
+        if (trophies == null) {
+            trophies = new PCLLoadoutStats();
+            data.stats.put(ID, trophies);
+        }
+
+        return trophies;
+    }
+
     public String getName() {
         LoadoutStrings strings = PGR.getLoadoutStrings(ID);
         return strings != null ? strings.NAME : "";
@@ -488,21 +503,6 @@ public abstract class PCLLoadout {
         return QuestionMark.DATA;
     }
 
-    public PCLTrophies getTrophies() {
-        AbstractPlayerData<?, ?> data = getPlayerData();
-        if (data == null) {
-            return null;
-        }
-
-        PCLTrophies trophies = data.getTrophies(ID);
-        if (trophies == null) {
-            trophies = new PCLTrophies(ID);
-            data.trophies.put(ID, trophies);
-        }
-
-        return trophies;
-    }
-
     public boolean isCardBanned(String cardID) {
         AbstractPlayerData<?, ?> playerData = getPlayerData();
         return playerData != null && playerData.config.bannedCards.get().contains(cardID);
@@ -548,18 +548,14 @@ public abstract class PCLLoadout {
         return data != null && data.loadout == this;
     }
 
-    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
-        PCLTrophies trophies = getTrophies();
+    public void onVictory(int ascensionLevel, int score, boolean postAct3) {
+        PCLLoadoutStats trophies = getLoadoutStats();
         AbstractPlayerData<?, ?> data = getPlayerData();
         if (data != null && data.selectedLoadout.ID.equals(ID)) {
-            if (trophyLevel >= 2) {
-                trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);
+            if (postAct3) {
+                trophies.act4completion = Math.max(trophies.act4completion, ascensionLevel);
             }
-            trophies.trophy1 = Math.max(trophies.trophy1, ascensionLevel);
-
-            trophies.glyph0 = Math.max(trophies.glyph0, PGR.dungeon.ascensionGlyphCounters.get(0));
-            trophies.glyph1 = Math.max(trophies.glyph1, PGR.dungeon.ascensionGlyphCounters.get(1));
-            trophies.glyph2 = Math.max(trophies.glyph2, PGR.dungeon.ascensionGlyphCounters.get(2));
+            trophies.act3completion = Math.max(trophies.act3completion, ascensionLevel);
             trophies.highScore = Math.max(trophies.highScore, score);
         }
     }

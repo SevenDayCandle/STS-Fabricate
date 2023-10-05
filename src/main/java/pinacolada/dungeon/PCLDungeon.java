@@ -542,7 +542,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         else if (data != null) {
             data.updateRelicsForDungeon();
             if (Settings.isStandardRun()) {
-                data.saveTrophies();
+                data.saveStats();
             }
 
             // Add character blights if applicable

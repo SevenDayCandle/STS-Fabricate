@@ -19,7 +19,6 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-// Act 5 and Act 3 victory logic
 public class VictoryPatches {
     private static int glyphBonus = 0;
 
@@ -51,11 +50,11 @@ public class VictoryPatches {
                 stats.add(Math.max(0, stats.size() - 2), getAscensionGlyphStats());
             }
 
-            // TODO Account for alternate acts by checking act number
             if (Settings.isStandardRun() && GameUtilities.isPCLPlayerClass()) {
-                PGR.getPlayerData(AbstractDungeon.player.chosenClass).recordTrueVictory(GameUtilities.getAscensionLevel(),
-                        (CardCrawlGame.dungeon instanceof TheEnding ? 2 : 1),
-                        ReflectionHacks.getPrivate(__instance, GameOverScreen.class, "score"));
+                PGR.getPlayerData(AbstractDungeon.player.chosenClass)
+                        .recordTrueVictory(GameUtilities.getAscensionLevel(),
+                        ReflectionHacks.getPrivate(__instance, GameOverScreen.class, "score"),
+                        AbstractDungeon.actNum > 3);
             }
         }
     }

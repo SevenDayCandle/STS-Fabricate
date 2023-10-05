@@ -5,6 +5,7 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
@@ -23,18 +24,19 @@ import pinacolada.monsters.PCLCreatureData;
 import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
-import pinacolada.resources.loadout.PCLTrophies;
+import pinacolada.resources.loadout.PCLLoadoutStats;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringJoiner;
 
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {
+    private static final TypeToken<HashMap<String, PCLLoadoutStats>> TStats = new TypeToken<HashMap<String, PCLLoadoutStats>>() {
+    };
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
@@ -45,7 +47,7 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     public static final int DEFAULT_ORBS = 0;
     public static final ArrayList<AbstractGlyph> GLYPHS = new ArrayList<>();
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
-    public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
+    public final HashMap<String, PCLLoadoutStats> stats = new HashMap<>();
     public final T resources;
     public final U config;
     public final int baseHP;
@@ -139,27 +141,18 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         }
     }
 
-    private void deserializeSelectedLoadout() {
+    protected void deserializeSelectedLoadout() {
         selectedLoadout = getLoadout(config.lastLoadout.get());
         if (selectedLoadout == null) {
             selectedLoadout = prepareLoadout();
         }
     }
 
-    @Deprecated
-    private void deserializeTrophies(String data) {
-        trophies.clear();
-
-        if (data != null && data.length() > 0) {
-            //final String decoded = Base64Coder.decodeString(data);
-            final String[] items = EUIUtils.splitString(EUIUtils.SPLIT_LINE, data);
-
-            if (items.length > 0) {
-                for (int i = 1; i < items.length; i++) {
-                    final PCLTrophies trophies = new PCLTrophies(items[i]);
-                    this.trophies.put(items[0], trophies);
-                }
-            }
+    protected void deserializeStats() {
+        stats.clear();
+        HashMap<String, PCLLoadoutStats> stats = EUIUtils.deserialize(config.trophies.get(), TStats.getType());
+        if (stats != null) {
+            stats.putAll(EUIUtils.deserialize(config.trophies.get(), TStats.getType()));
         }
     }
 
@@ -195,9 +188,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         return null;
     }
 
-    @Deprecated
-    public PCLTrophies getTrophies(String id) {
-        return trophies.get(id);
+    public PCLLoadoutStats getStats(String id) {
+        return stats.get(id);
     }
 
     public void initialize() {
@@ -236,36 +228,26 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         return selectedLoadout;
     }
 
-    public void recordTrueVictory(int ascensionLevel, int trophyLevel, int score) {
-        if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
-        {
-            return;
-        }
-
+    public void recordTrueVictory(int ascensionLevel, int score, boolean postAct3) {
         if (selectedLoadout != null) {
-            selectedLoadout.onVictory(ascensionLevel, trophyLevel, score);
+            selectedLoadout.onVictory(ascensionLevel, score, true);
         }
 
-        saveTrophies();
+        saveStats();
     }
 
     public void recordVictory(int ascensionLevel) {
-        if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
-        {
-            return;
-        }
-
         if (selectedLoadout != null) {
-            selectedLoadout.onVictory(ascensionLevel, 1, 0); // Do not record score unless you are actually at the gameover screen
+            selectedLoadout.onVictory(ascensionLevel, 1, false); // Do not record score unless you are actually at the gameover screen
         }
 
-        saveTrophies();
+        saveStats();
     }
 
     public void reload() {
         if (config != null) {
             config.load(CardCrawlGame.saveSlot);
-            deserializeTrophies(config.trophies.get());
+            deserializeStats();
             deserializeCustomLoadouts();
             deserializeSelectedLoadout();
         }
@@ -295,24 +277,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         config.lastLoadout.set(selectedLoadout.ID);
     }
 
-    @Deprecated
-    public void saveTrophies() {
-        EUIUtils.logInfoIfDebug(this, "Saving Trophies");
-
-        config.trophies.set(serializeTrophies());
-    }
-
-    // Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
-    // TODO rework
-    @Deprecated
-    private String serializeTrophies() {
-        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
-
-        for (PCLTrophies t : trophies.values()) {
-            sj.add(t.serialize());
-        }
-
-        return sj.toString();
+    public void saveStats() {
+        config.trophies.set(EUIUtils.serialize(stats));
     }
 
     public void updateRelicsForDungeon() {
