@@ -181,12 +181,18 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
+        EUITourTooltip.queueFirstView(PGR.config.tourPotionPrimary,
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
                 rarityDropdown.makeTour(true),
-                sizeDropdown.makeTour(true));
+                sizeDropdown.makeTour(true),
+                effectDropdown.makeTour(true),
+                liquidColorEditor.makeTour(true),
+                hybridColorEditor.makeTour(true),
+                spotsColorEditor.makeTour(true),
+                maxUpgrades.makeTour(true),
+                branchUpgrades.makeTour(true));
     }
 
     protected void openColorEditor(PCLCustomColorEditor editor) {

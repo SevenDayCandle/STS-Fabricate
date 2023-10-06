@@ -26,6 +26,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
@@ -57,6 +58,9 @@ import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.blights.PCLBlightData;
+import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.blights.pcl.UpgradedHand;
 import pinacolada.cardmods.AffinityDisplayModifier;
 import pinacolada.cardmods.TagDisplayModifier;
@@ -84,6 +88,7 @@ import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.patches.basemod.PotionPoolPatches;
+import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
@@ -483,6 +488,39 @@ public class GameUtilities {
 
     public static ArrayList<AbstractCard> getAvailableCardsForAllColors(FuncT1<Boolean, AbstractCard> filter) {
         return EUIUtils.filter(CardLibrary.cards.values(), c -> EUIGameUtils.canSeeCard(c) && filter.invoke(c));
+    }
+
+    public static AbstractCard.CardColor getBlightColor(String relicID) {
+        PCLBlightData data = PCLBlightData.getStaticData(relicID);
+        if (data != null) {
+            return data.cardColor;
+        }
+        PCLCustomBlightSlot slot = PCLCustomBlightSlot.get(relicID);
+        if (slot != null) {
+            return slot.slotColor;
+        }
+        return AbstractCard.CardColor.COLORLESS;
+    }
+
+    public static String getBlightNameForID(String relicID) {
+        if (relicID != null) {
+            // NOT using BlightHelper.getBlight as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractBlight c = BlightHelperPatches.getDirectBlight(relicID);
+            if (c != null) {
+                return c.name;
+            }
+
+            // Try to load data from slots. Do not actually create relics here to avoid infinite loops
+            PCLCustomBlightSlot slot = PCLCustomBlightSlot.get(relicID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, BlightStrings> languageMap = PCLDynamicBlightData.parseLanguageStrings(slot.languageStrings);
+                BlightStrings language = languageMap != null ? PCLDynamicBlightData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
+            }
+        }
+        return "";
     }
 
     public static int getBlockedHits(AbstractCreature creature) {
@@ -925,10 +963,12 @@ public class GameUtilities {
 
     public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor) {
         StringBuilder sb = new StringBuilder(base);
-        sb.append("+");
 
-        if (maxUpgrades < 0 || maxUpgrades > 1) {
-            sb.append(timesUpgraded);
+        if (timesUpgraded != 0) {
+            sb.append("+");
+            if (maxUpgrades < 0 || maxUpgrades > 1) {
+                sb.append(timesUpgraded);
+            }
         }
 
         // Do not show appended characters for non-multiform or linear upgrade path cards

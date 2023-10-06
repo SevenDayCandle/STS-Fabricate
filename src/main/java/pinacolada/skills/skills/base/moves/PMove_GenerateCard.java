@@ -7,12 +7,17 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.CostFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.CardFlag;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -105,8 +110,8 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 return created;
             }
         }
-        // For these actions, also treat the "forced" parameter as a self-target to allow users to create effects that create copies of the calling card in a specific pile
-        else if (fields.forced && sourceCard != null) {
+        // For these actions, also treat the "not" parameter as a self-target to allow users to create effects that create copies of the calling card in a specific pile
+        else if (fields.not && sourceCard != null) {
             ArrayList<AbstractCard> created = new ArrayList<>();
             if (canMakeCopy(sourceCard)) {
                 for (int i = 0; i < limit; i++) {
@@ -134,6 +139,15 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                         while (created.size() < limit) {
                             created.add(created.get(0).makeCopy());
                             ind++;
+                        }
+                    }
+                }
+                // If "or" mode, randomly choose copies up to X
+                else if (fields.random) {
+                    for (int i = 0; i < limit; i++) {
+                        AbstractCard c = PField_CardCategory.getCard(GameUtilities.getRandomElement(fields.cardIDs));
+                        if (c != null) {
+                            created.add(c.makeCopy());
                         }
                     }
                 }
@@ -169,9 +183,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
-                : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
+                : (fields.not && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
-                : isOutOf() || fields.origin != PCLCardSelection.Manual || !generateSpecificCards() ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() || fields.origin != PCLCardSelection.Manual || fields.random ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
     }
 
     @Override
@@ -180,13 +194,57 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {
-        if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
-                || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
-                || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
-            return GameUtilities.getCardsFromAllColorCombatPool(getSourceFilter(), limit);
+        if (fields.random || fields.isFilterSolo()) {
+            if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
+                    || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
+                    || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
+                return GameUtilities.getCardsFromAllColorCombatPool(getSourceFilter(), limit);
+            }
+            else if (!fields.rarities.isEmpty() || !fields.types.isEmpty()) {
+                return GameUtilities.getCardsFromFullCombatPool(getSourceFilter(), limit);
+            }
+            else {
+                return GameUtilities.getCardsFromStandardCombatPool(getSourceFilter(), limit);
+            }
         }
-        else if (!fields.rarities.isEmpty() || !fields.types.isEmpty()) {
-            return GameUtilities.getCardsFromFullCombatPool(getSourceFilter(), limit);
+        else if (!fields.isFilterEmpty()) {
+            ArrayList<AbstractCard> cards = new ArrayList<>();
+            for (AbstractCard.CardColor co : fields.colors) {
+                cards.addAll(GameUtilities.getCardsFromAllColorCombatPool(c -> c.color == co, limit));
+            }
+            for (AbstractCard.CardRarity co : fields.rarities) {
+                cards.addAll(GameUtilities.getCardsFromFullCombatPool(c -> c.rarity == co, limit));
+            }
+            for (AbstractCard.CardType co : fields.types) {
+                if (co == AbstractCard.CardType.STATUS) {
+                    cards.addAll(GameUtilities.getCardsFromAllColorCombatPool(c -> c.type == co, limit));
+                }
+                else {
+                    cards.addAll(GameUtilities.getCardsFromFullCombatPool(c -> c.type == co, limit));
+                }
+            }
+            for (PCLAffinity af : fields.affinities) {
+                cards.addAll(GameUtilities.getCardsFromStandardCombatPool(c -> GameUtilities.hasAffinity(c, af), limit));
+            }
+            for (PCLCardTag af : fields.tags) {
+                cards.addAll(GameUtilities.getCardsFromStandardCombatPool(af::has, limit));
+            }
+            for (CostFilter af : fields.costs) {
+                cards.addAll(GameUtilities.getCardsFromStandardCombatPool(af::check, limit));
+            }
+            for (String af : fields.flags) {
+                CardFlag cf = CardFlag.get(af);
+                if (cf != null) {
+                    cards.addAll(GameUtilities.getCardsFromStandardCombatPool(cf::has, limit));
+                }
+            }
+            for (String af : fields.loadouts) {
+                PCLLoadout cf = PCLLoadout.get(af);
+                if (cf != null) {
+                    cards.addAll(GameUtilities.getCardsFromStandardCombatPool(cf::isCardFromLoadout, limit));
+                }
+            }
+            return cards;
         }
         else {
             return GameUtilities.getCardsFromStandardCombatPool(getSourceFilter(), limit);
@@ -194,13 +252,13 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     protected FuncT1<Boolean, AbstractCard> getSourceFilter() {
-        return isMetascaling() ? fields.getBaseCardFilter() : c -> fields.not ^ fields.getBaseCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
+        return isMetascaling() ? fields.getBaseCardFilter() : c -> fields.getBaseCardFilter().invoke(c) && GameUtilities.isObtainableInCombat(c);
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
         String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
+        return (fields.origin != PCLCardSelection.Manual || fields.random) && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 
     protected boolean isOutOf() {
@@ -211,7 +269,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
-        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard()), null);
+        fields.registerRequired(editor);
+        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard()), null);
+        fields.registerRBoolean(editor, StringUtils.capitalize(TEXT.cedit_or), null);
     }
 
     @Override
@@ -222,7 +282,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         int itemsToGet = isOutOf() ? amount : choice.group.size();
 
         order.selectFromPile(getName(), itemsToGet, choice)
-                .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin), !fields.not)
+                .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin), !fields.forced)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {
                         performAction(info, order, c);

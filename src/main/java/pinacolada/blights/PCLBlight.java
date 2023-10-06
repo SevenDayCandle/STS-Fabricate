@@ -17,6 +17,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -248,11 +249,23 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
 
     @Override
     public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
-        renderBlightImage(sb,
-                this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
-                -64f,
-                -64f,
-                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f);
+        float scaleMult = AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float) (System.currentTimeMillis() / 5L % 360L)) : 0.5f;
+        if (this.isSeen) {
+            renderBlightImage(sb,
+                    Color.WHITE,
+                    -64f,
+                    -64f,
+                    scaleMult);
+        }
+        else {
+            EUIRenderHelpers.drawSilhouette(sb, Color.LIGHT_GRAY, s -> {
+                renderBlightImage(s,
+                        this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
+                        -64f,
+                        -64f,
+                        scaleMult);
+            });
+        }
         if (this.hb.hovered) {
             if (!this.isSeen) {
                 PCLRelic.renderUnseenTip();

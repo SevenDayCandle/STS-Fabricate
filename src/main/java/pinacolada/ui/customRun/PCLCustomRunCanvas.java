@@ -60,6 +60,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUIToggle customCardToggle;
     public final EUIToggle customRelicToggle;
     public final EUIToggle customPotionToggle;
+    public final EUIToggle customBlightToggle;
     public final EUIToggle allowLoadoutToggle;
     public final EUIButton editCardPoolButton;
     public final EUIButton editRelicPoolButton;
@@ -131,6 +132,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setOnToggle(v -> {
                     screen.allowCustomCards = v;
                 })
+                .setToggle(screen.allowCustomCards)
                 .setTooltip(PGR.core.strings.misc_customCards, PGR.core.strings.misc_customCardsDesc);
 
         customRelicToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
@@ -139,6 +141,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setOnToggle(v -> {
                     screen.allowCustomRelics = v;
                 })
+                .setToggle(screen.allowCustomRelics)
                 .setTooltip(PGR.core.strings.misc_customRelics, PGR.core.strings.misc_customRelicsDesc);
 
         customPotionToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
@@ -147,7 +150,17 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setOnToggle(v -> {
                     screen.allowCustomPotions = v;
                 })
+                .setToggle(screen.allowCustomPotions)
                 .setTooltip(PGR.core.strings.misc_customPotions, PGR.core.strings.misc_customPotionsDesc);
+
+        customBlightToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setText(PGR.core.strings.misc_customBlights)
+                .setOnToggle(v -> {
+                    screen.allowCustomPotions = v;
+                })
+                .setToggle(screen.allowCustomBlights)
+                .setTooltip(PGR.core.strings.misc_customBlights, PGR.core.strings.misc_customBlightsDesc);
 
         allowLoadoutToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
@@ -261,6 +274,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customCardToggle.tryRender(sb);
             customRelicToggle.tryRender(sb);
             customPotionToggle.tryRender(sb);
+            customBlightToggle.tryRender(sb);
             allowLoadoutToggle.tryRender(sb);
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
@@ -326,6 +340,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customCardToggle.tryUpdate();
             customRelicToggle.tryUpdate();
             customPotionToggle.tryUpdate();
+            customBlightToggle.tryUpdate();
             allowLoadoutToggle.tryUpdate();
             seedInput.tryUpdate();
             ascensionEditor.tryUpdate();
@@ -378,6 +393,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(customCardToggle, yPos, scale(35));
         yPos = positionElement(customRelicToggle, yPos, scale(35));
         yPos = positionElement(customPotionToggle, yPos, scale(35));
+        yPos = positionElement(customBlightToggle, yPos, scale(35));
         yPos = positionElement(allowLoadoutToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));

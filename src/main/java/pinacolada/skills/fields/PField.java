@@ -45,6 +45,14 @@ public abstract class PField implements Serializable {
         return EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, affinities);
     }
 
+    public static String getBlightIDAndString(ArrayList<String> relicIDs) {
+        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getBlightNameForID(g) + "}", relicIDs);
+    }
+
+    public static String getBlightIDOrString(ArrayList<String> relicIDs) {
+        return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getBlightNameForID(g) + "}", relicIDs);
+    }
+
     public static String getCardIDAndString(ArrayList<String> cardIDs, int upgrade, int form) {
         return PCLCoreStrings.joinWithAnd(c -> getCardIDString(c, upgrade, form), cardIDs);
     }

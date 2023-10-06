@@ -16,6 +16,7 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
 
     public PCLDynamicRelic(PCLDynamicRelicData data) {
         super(data);
+        isSeen = true; // Always seen
     }
 
     protected void findForms() {

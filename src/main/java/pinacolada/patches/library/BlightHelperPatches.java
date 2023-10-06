@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.blights.Durian;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
@@ -24,10 +25,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 public class BlightHelperPatches {
     private static boolean TEMP_DISABLE_PATCH;
@@ -39,6 +37,40 @@ public class BlightHelperPatches {
 
     public static ArrayList<AbstractBlight> getAdditionalBlights() {
         return EUIUtils.map(getAdditionalBlightIDs(), EUIGameUtils::getSeenBlight);
+    }
+
+    public static RandomizedList<String> getBlightIDs(Collection<BlightTier> tiers, Collection<AbstractCard.CardColor> colors, boolean allowCustom) {
+        RandomizedList<String> blights = new RandomizedList<>();
+        for (BlightTier tier : tiers) {
+            switch (tier) {
+                case BOSS:
+                    blights.addAll(BlightHelper.chestBlights);
+                    break;
+                case BASIC:
+                    blights.addAll(BlightHelper.blights);
+                    blights.removeIf(b -> BlightHelper.chestBlights.contains(b));
+                    for (String a : additionalBlights.keySet()) {
+                        if (PCLBlightData.getStaticData(a) == null) {
+                            blights.add(a);
+                        }
+                    }
+            }
+        }
+        for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> tiers.contains(b.tier) && colors.contains(b.cardColor))) {
+            blights.add(data.ID);
+        }
+        if (allowCustom) {
+            for (AbstractCard.CardColor color : colors) {
+                for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(color)) {
+                    BlightTier t = BlightTier.valueOf(slot.tier);
+                    if (tiers.contains(t)) {
+                        blights.add(slot.ID);
+                    }
+                }
+            }
+        }
+
+        return blights;
     }
 
     public static AbstractBlight getDirectBlight(String id) {
@@ -75,72 +107,10 @@ public class BlightHelperPatches {
     }
 
     public static AbstractBlight getRandomBlightForTier(BlightTier tier, Random rng, AbstractCard.CardColor actingColor, Collection<String> exclusions, boolean allowCustom) {
-        RandomizedList<String> blights = new RandomizedList<>();
-        FuncT1<Boolean, AbstractCard.CardColor> colorFunc = GameUtilities.isColorlessCardColor(actingColor) ? c -> c == AbstractCard.CardColor.COLORLESS : c -> c == AbstractCard.CardColor.COLORLESS || c == actingColor;
-        if (tier == null) {
-            blights.addAll(BlightHelper.blights);
-            for (String a : additionalBlights.keySet()) {
-                if (PCLBlightData.getStaticData(a) == null) {
-                    blights.add(a);
-                }
-            }
-            for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> b.tier != BlightTier.SPECIAL && colorFunc.invoke(b.cardColor))) {
-                blights.add(data.ID);
-            }
-            if (allowCustom) {
-                for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(actingColor)) {
-                    BlightTier t = BlightTier.valueOf(slot.tier);
-                    if (t != BlightTier.SPECIAL) {
-                        blights.add(slot.ID);
-                    }
-                }
-                if (actingColor != AbstractCard.CardColor.COLORLESS) {
-                    for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS)) {
-                        BlightTier t = BlightTier.valueOf(slot.tier);
-                        if (t != BlightTier.SPECIAL) {
-                            blights.add(slot.ID);
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            switch (tier) {
-                case BOSS:
-                    blights.addAll(BlightHelper.chestBlights);
-                    break;
-                case BASIC:
-                    blights.addAll(BlightHelper.blights);
-                    blights.removeIf(b -> BlightHelper.chestBlights.contains(b));
-                    for (String a : additionalBlights.keySet()) {
-                        if (PCLBlightData.getStaticData(a) == null) {
-                            blights.add(a);
-                        }
-                    }
-            }
-            for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> b.tier == tier && colorFunc.invoke(b.cardColor))) {
-                blights.add(data.ID);
-            }
-            if (allowCustom) {
-                for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(actingColor)) {
-                    BlightTier t = BlightTier.valueOf(slot.tier);
-                    if (t == tier) {
-                        blights.add(slot.ID);
-                    }
-                }
-                if (actingColor != AbstractCard.CardColor.COLORLESS) {
-                    for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS)) {
-                        BlightTier t = BlightTier.valueOf(slot.tier);
-                        if (t == tier) {
-                            blights.add(slot.ID);
-                        }
-                    }
-                }
-            }
-        }
-
+        RandomizedList<String> blights = getBlightIDs(tier == null ? EUIUtils.set(BlightTier.BASIC, BlightTier.BOSS) : Collections.singleton(tier),
+                GameUtilities.isColorlessCardColor(actingColor) ? Collections.singleton(AbstractCard.CardColor.COLORLESS) : EUIUtils.set(actingColor, AbstractCard.CardColor.COLORLESS),
+                allowCustom);
         blights.removeAll(exclusions);
-
         String res = blights.retrieve(rng, false);
         return res != null ? BlightHelper.getBlight(res) : null;
     }
@@ -183,7 +153,13 @@ public class BlightHelperPatches {
     public static class BlightHelperPatches_GetRandomBlight {
         @SpirePrefixPatch
         public static SpireReturn<AbstractBlight> method() {
-            return SpireReturn.Return(getRandomBlightForTier(BlightTier.BOSS));
+            AbstractBlight res = null;
+            if (AbstractDungeon.player == null) {
+                return SpireReturn.Return(getRandomBlightForTier(BlightTier.BOSS));
+            }
+            // Hardcoded durian check
+            return SpireReturn.Return(getRandomBlightForTier(BlightTier.BOSS, AbstractDungeon.relicRng, AbstractDungeon.player.getCardColor(),
+                    AbstractDungeon.player.maxHealth <= 20 ? Collections.singleton(Durian.ID) : Collections.emptyList(), PGR.dungeon.allowCustomBlights));
         }
     }
 

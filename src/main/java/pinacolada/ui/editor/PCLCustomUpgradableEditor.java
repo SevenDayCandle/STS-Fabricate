@@ -16,6 +16,7 @@ import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 
 public class PCLCustomUpgradableEditor extends EUIHoverable {
@@ -92,6 +93,16 @@ public class PCLCustomUpgradableEditor extends EUIHoverable {
 
     public void increaseSecondary() {
         setValue(displayValue.getCachedValue(), displayValueSecondary.getCachedValue() + 1);
+    }
+
+    public EUITourTooltip makeTour(boolean canDismiss) {
+        if (tooltip != null && isActive) {
+            EUITourTooltip tip = new EUITourTooltip(hb, tooltip.title, tooltip.description);
+            tip.setFlash(displayValue.image);
+            tip.setCanDismiss(canDismiss);
+            return tip;
+        }
+        return null;
     }
 
     @Override

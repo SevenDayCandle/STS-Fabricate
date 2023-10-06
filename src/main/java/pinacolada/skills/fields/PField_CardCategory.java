@@ -337,6 +337,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         return cardIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && types.isEmpty() && affinities.isEmpty() && tags.isEmpty() && costs.isEmpty() && loadouts.isEmpty() && flags.isEmpty();
     }
 
+    public boolean isFilterSolo() {
+        return !isFilterEmpty() && cardIDs.size() <= 1 && colors.size() <= 1 && rarities.size() <= 1 && types.size() <= 1 && affinities.size() <= 1 && tags.size() <= 1 && costs.size() <= 1 && loadouts.size() <= 1 && flags.size() <= 1;
+    }
+
     @Override
     public PField_CardCategory makeCopy() {
         return new PField_CardCategory(this);
@@ -357,7 +361,7 @@ public class PField_CardCategory extends PField_CardGeneric {
                 for (int i = 0; i < skill.extra2; i++) {
                     copy.upgrade();
                 }
-                previews.add(new EUICardPreview(copy));
+                previews.add(new EUICardPreview(copy, false));
             }
         }
     }

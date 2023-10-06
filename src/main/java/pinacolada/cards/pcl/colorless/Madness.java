@@ -5,6 +5,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
@@ -26,6 +27,6 @@ public class Madness extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.modifyCostExact(0, 1, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom));
+        addUseMove(PMove.modifyCostExact(0, 1, PCLCardGroupHelper.Hand).edit(f -> f.setOrigin(PCLCardSelection.Random)));
     }
 }

@@ -2,6 +2,7 @@ package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
@@ -20,9 +21,11 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.BlightTier;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -64,6 +67,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.4f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 3.16f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
+    private static ArrayList<AbstractBlight> availableBlights;
     private static ArrayList<AbstractCard> availableCards;
     private static ArrayList<AbstractPotion> availablePotions;
     private static ArrayList<PCLPowerData> availablePowers;
@@ -97,6 +101,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public static void invalidateItems() {
+        availableBlights = null;
         availableCards = null;
         availablePotions = null;
         availablePowers = null;
@@ -284,6 +289,25 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availableCards;
+    }
+
+    protected ArrayList<AbstractBlight> getAvailableBlights() {
+        if (availableBlights == null) {
+            if (PGR.config.showIrrelevantProperties.get()) {
+                availableBlights = EUIGameUtils.getAllBlights();
+                availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
+            }
+            else {
+                AbstractCard.CardColor cardColor = getColor();
+                availableBlights = EUIGameUtils.getAllBlights();
+                availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
+                }
+            }
+            availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return availableBlights;
     }
 
     protected ArrayList<AbstractPotion> getAvailablePotions() {
@@ -734,6 +758,30 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), PGR.core.tooltips.affinityGeneral.title), items);
     }
 
+    public void registerBlight(List<String> blightIDs) {
+        registerDropdown(initializeSearchable(getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
+                blights -> {
+                    blightIDs.clear();
+                    blightIDs.addAll(EUIUtils.mapAsNonnull(blights, t -> t.blightID));
+                },
+                blightIDs,
+                blight -> blight.blightID
+        );
+    }
+
+    public <V> void registerBlight(List<String> blightIDs, ActionT1<List<AbstractBlight>> onChangeImpl) {
+        registerDropdown(initializeSearchable(getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
+                onChangeImpl,
+                blightIDs,
+                blight -> blight.blightID
+        );
+    }
+
+    public void registerBlightRarity(List<BlightTier> items) {
+        registerDropdown(initializeSearchable(BlightTier.values(), BlightTier::getName, CardLibSortHeader.TEXT[0]), items)
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_blightRarity);
+    }
+
     public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial) {
         registerBoolean(title, null, onChange, initial);
     }
@@ -957,7 +1005,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPower(List<String> powerIDs) {
-        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, pd -> pd instanceof PCLDynamicPowerData ? pd.getName() : getSmartSearchableLabel(pd)),
+        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, this::getSmartSearchableLabel),
                 powers -> {
                     powerIDs.clear();
                     powerIDs.addAll(EUIUtils.mapAsNonnull(powers, t -> t.ID));

@@ -7,6 +7,15 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 public class PField_Not extends PField {
     public boolean not;
 
+    public PField_Not() {
+        super();
+    }
+
+    public PField_Not(PField_Not other) {
+        super();
+        setNot(other.not);
+    }
+
     public boolean doesValueMatchThreshold(int input) {
         return doesValueMatchThreshold(input, skill.amount);
     }

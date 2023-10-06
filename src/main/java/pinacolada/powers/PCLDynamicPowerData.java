@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
@@ -250,8 +251,12 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         else {
             tooltip.setDescription(getEffectTextForTip());
         }
-        if (portraitImage != null) {
-            tooltip.setIcon(PCLRenderHelpers.generateIcon(portraitImage));
+        Texture tex = EUIRM.getTexture(imagePath);
+        if (tex != null) {
+            tooltip.setIcon(PCLRenderHelpers.generateIcon(tex));
+        }
+        else {
+            tooltip.setIcon(PCLCoreImages.CardAffinity.unknown.texture());
         }
         EUIKeywordTooltip.registerIDTemp(ID, tooltip);
         return this;

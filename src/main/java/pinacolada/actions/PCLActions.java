@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.actions.utility.LoseBlockAction;
 import com.megacrit.cardcrawl.actions.utility.ShakeScreenAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -527,6 +528,10 @@ public final class PCLActions {
 
     public MoveCards moveCards(CardGroup source, CardGroup destination, int amount) {
         return add(new MoveCards(destination, source, amount));
+    }
+
+    public ObtainBlightAction obtainBlight(AbstractBlight blight) {
+        return add(new ObtainBlightAction(blight));
     }
 
     public PCLObtainPotionAction obtainPotion(AbstractPotion potion) {

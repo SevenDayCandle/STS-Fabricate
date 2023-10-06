@@ -150,12 +150,15 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
+        EUITourTooltip.queueFirstView(PGR.config.tourPowerPrimary,
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
                 typeDropdown.makeTour(true),
-                endTurnBehaviorDropdown.makeTour(true));
+                endTurnBehaviorDropdown.makeTour(true),
+                minMaxAmount.makeTour(true),
+                priority.makeTour(true),
+                turns.makeTour(true));
     }
 
     @Override

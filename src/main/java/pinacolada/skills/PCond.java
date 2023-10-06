@@ -10,6 +10,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
@@ -126,7 +127,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_CycleTo cycleRandom(int amount) {
-        return (PCond_CycleTo) new PCond_CycleTo(amount).edit(PField_CardGeneric::setRandom);
+        return (PCond_CycleTo) new PCond_CycleTo(amount).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PCond_CheckDamage damage(PCLCardTarget target, int amount) {
@@ -146,7 +147,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h) {
-        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(PField_CardGeneric::setRandom);
+        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PCond_EvokeTo evokeTo(int amount, PCLOrbHelper... h) {
@@ -166,7 +167,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_ExhaustTo exhaustRandom(int amount, PCLCardGroupHelper... h) {
-        return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(PField_CardGeneric::setRandom);
+        return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PCond_Fatal fatal() {
@@ -382,7 +383,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_PurgeTo purgeRandom(int amount, PCLCardGroupHelper... h) {
-        return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(PField_CardGeneric::setRandom);
+        return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PCond_ReshuffleTo reshuffle(int amount) {
@@ -398,7 +399,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h) {
-        return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(PField_CardGeneric::setRandom);
+        return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PCond_Shuffle shuffle() {

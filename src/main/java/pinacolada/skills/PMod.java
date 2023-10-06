@@ -7,6 +7,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -127,7 +128,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_CyclePerCard cycleRandomPer(int amount) {
-        return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(PField_CardGeneric::setRandom);
+        return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMod_DiscardPerCard discardPer(int amount) {
@@ -139,7 +140,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_DiscardPerCard discardRandomPer(int amount, PCLCardGroupHelper... groups) {
-        return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMod_DrawPerCard drawPer(int amount) {
@@ -159,7 +160,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_ExhaustPerCard exhaustRandomPer(int amount, PCLCardGroupHelper... groups) {
-        return (PMod_ExhaustPerCard) new PMod_ExhaustPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMod_ExhaustPerCard) new PMod_ExhaustPerCard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMod_FetchPerCard fetchPer(int amount, PCLCardGroupHelper... groups) {
@@ -167,7 +168,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_FetchPerCard fetchRandomPer(int amount, PCLCardGroupHelper... groups) {
-        return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMod_IncreaseOnUse increaseOnUse(int amount) {
@@ -327,7 +328,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_PurgePerCard purgeRandomPer(int amount, PCLCardGroupHelper... groups) {
-        return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors) {
@@ -353,7 +354,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_ReshufflePerCard reshuffleRandomPer(int amount, PCLCardGroupHelper... groups) {
-        return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMod_ScoutPerCard scoutPer(int amount) {

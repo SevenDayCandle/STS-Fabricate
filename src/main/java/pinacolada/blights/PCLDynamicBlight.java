@@ -17,6 +17,7 @@ public class PCLDynamicBlight extends PCLPointerBlight implements FabricateItem 
 
     public PCLDynamicBlight(PCLDynamicBlightData data) {
         super(data);
+        isSeen = true; // Always seen
     }
 
     protected void findForms() {

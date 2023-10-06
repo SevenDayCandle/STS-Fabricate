@@ -155,7 +155,9 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
                 tierDropdown.makeTour(true),
-                sfxDropdown.makeTour(true));
+                sfxDropdown.makeTour(true),
+                maxUpgrades.makeTour(true),
+                branchUpgrades.makeTour(true));
     }
 
     @Override

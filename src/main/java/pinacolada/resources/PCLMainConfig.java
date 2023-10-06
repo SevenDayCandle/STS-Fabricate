@@ -137,18 +137,19 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
-        yPos = addToggle(0, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
         yPos = addToggle(0, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
         yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         yPos = addToggle(0, showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, yPos, PGR.core.strings.optionDesc_showUpgradeToggle);
-        yPos = addToggle(0, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, fabricatePopup, PGR.core.strings.options_fabricatePopup, yPos, PGR.core.strings.optionDesc_fabricatePopup);
-        yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
-        yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
-        yPos = addToggle(0, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
-        yPos = addToggle(0, enableCustomBlights, PGR.core.strings.options_enableCustomBlights, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+
+        yPos = addToggle(1, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(1, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(1, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(1, enableCustomBlights, PGR.core.strings.options_enableCustomBlights, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(1, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
+        yPos = addToggle(1, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
@@ -160,6 +161,7 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         makeModToggle(showUpgradeOnCardRewards, PGR.core.strings.options_showUpgradeToggle, PGR.core.strings.optionDesc_showUpgradeToggle);
+        makeModToggle(lowVRAM, PGR.core.strings.options_lowVRAM, PGR.core.strings.optionDesc_lowVRAM);
         makeModToggle(fabricatePopup, PGR.core.strings.options_fabricatePopup, PGR.core.strings.optionDesc_fabricatePopup);
 
         EUIConfiguration.enableDescriptionIcons.addListener(val -> updateAllDescriptions());

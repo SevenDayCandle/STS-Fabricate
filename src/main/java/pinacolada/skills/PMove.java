@@ -10,6 +10,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
@@ -147,7 +148,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_Cycle cycleRandom(int amount) {
-        return (PMove_Cycle) new PMove_Cycle(amount, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom);
+        return (PMove_Cycle) new PMove_Cycle(amount, PCLCardGroupHelper.Hand).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMove_DealDamage dealDamage(int amount) {
@@ -191,11 +192,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_Discard discardRandom(int amount) {
-        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom);
+        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMove_Discard discardRandom(int amount, PCLCardGroupHelper... groups) {
-        return (PMove_Discard) new PMove_Discard(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMove_Discard) new PMove_Discard(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMove_Draw draw(int amount) {
@@ -237,7 +238,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_Exhaust exhaustRandom(int amount, PCLCardGroupHelper... groups) {
-        return (PMove_Exhaust) new PMove_Exhaust(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMove_Exhaust) new PMove_Exhaust(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMove_Fetch fetch(int amount, PCLCardGroupHelper... groups) {
@@ -249,7 +250,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_Fetch fetchRandom(int amount, PCLCardGroupHelper... groups) {
-        return (PMove_Fetch) new PMove_Fetch(amount, groups).edit(PField_CardGeneric::setRandom);
+        return (PMove_Fetch) new PMove_Fetch(amount, groups).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
     public static PMove_StackPower gain(int amount, PCLPowerData... powers) {

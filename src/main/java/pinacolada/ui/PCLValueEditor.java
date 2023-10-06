@@ -67,7 +67,7 @@ public class PCLValueEditor extends EUIHoverable {
     }
 
     public EUITourTooltip makeTour(boolean canDismiss) {
-        if (this.tooltip != null) {
+        if (this.tooltip != null && isActive) {
             EUITourTooltip tip = new EUITourTooltip(this.hb, this.tooltip.title, this.tooltip.description);
             tip.setFlash(this.displayValue.image);
             tip.setCanDismiss(canDismiss);

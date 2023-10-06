@@ -42,9 +42,10 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
     public boolean allowAugments;
-    public boolean allowCustomCards;
-    public boolean allowCustomPotions;
-    public boolean allowCustomRelics;
+    public boolean allowCustomBlights = true;
+    public boolean allowCustomCards = true;
+    public boolean allowCustomPotions = true;
+    public boolean allowCustomRelics = true;
     public boolean allowLoadout;
     public boolean isAscensionMode;
     public boolean isEndless;
@@ -139,6 +140,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         }
 
         trial.addMods(activeMods);
+        trial.allowCustomBlights = allowCustomBlights;
         trial.allowCustomCards = allowCustomCards;
         trial.allowCustomPotions = allowCustomPotions;
         trial.allowCustomRelics = allowCustomRelics;

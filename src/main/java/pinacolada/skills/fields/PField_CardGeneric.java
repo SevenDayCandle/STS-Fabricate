@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PField_CardGeneric extends PField_Not {
+public class PField_CardGeneric extends PField_Random {
     public ArrayList<PCLCardGroupHelper> groupTypes = new ArrayList<>();
     public ArrayList<PCLCardGroupHelper> baseGroupTypes = groupTypes;
     public PCLCardSelection origin = PCLCardSelection.Manual;
@@ -32,7 +32,7 @@ public class PField_CardGeneric extends PField_Not {
     }
 
     public PField_CardGeneric(PField_CardGeneric other) {
-        super();
+        super(other);
         setCardGroup(other.groupTypes);
         setOrigin(other.origin);
         setDestination(other.destination);
@@ -204,11 +204,6 @@ public class PField_CardGeneric extends PField_Not {
 
     public PField_CardGeneric setOrigin(PCLCardSelection origin) {
         this.origin = origin;
-        return this;
-    }
-
-    public PField_CardGeneric setRandom() {
-        this.origin = PCLCardSelection.Random;
         return this;
     }
 

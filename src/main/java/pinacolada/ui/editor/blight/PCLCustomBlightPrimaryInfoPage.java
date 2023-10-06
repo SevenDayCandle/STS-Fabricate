@@ -90,7 +90,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
-        tierDropdown = new EUIDropdown<BlightTier>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), BlightTier::name)
+        tierDropdown = new EUIDropdown<BlightTier>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), BlightTier::getName)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
                         effect.modifyAllBuilders((e, i) -> e.setTier(rarities.get(0)));
@@ -139,7 +139,11 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourBlightPrimary,
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
-                languageDropdown.makeTour(true)
+                languageDropdown.makeTour(true),
+                tierDropdown.makeTour(true),
+                maxUpgrades.makeTour(true),
+                branchUpgrades.makeTour(true),
+                uniqueToggle.makeTour(true)
         );
     }
 

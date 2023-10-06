@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -95,6 +96,9 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         }
         if (source instanceof AbstractRelic) {
             ((AbstractRelic) source).flash();
+        }
+        else if (source instanceof AbstractBlight) {
+            ((AbstractBlight) source).flash();
         }
     }
 
