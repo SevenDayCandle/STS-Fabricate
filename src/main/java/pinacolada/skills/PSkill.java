@@ -933,18 +933,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return parent;
     }
 
-    public String getPowerText() {
+    public String getPowerText(Object requestor) {
         if (source != null) {
-            return source.makePowerString(getText());
+            return source.makePowerString(getTextForPreview(requestor));
         }
-        return getText();
+        return getTextForPreview(requestor);
     }
 
-    public String getPowerTextForTooltip() {
+    public String getPowerTextForTooltip(Object requestor) {
         if (source != null) {
-            return source.makePowerString(getText(), true);
+            return source.makePowerString(getTextForPreview(requestor), true);
         }
-        return getText();
+        return getTextForPreview(requestor);
     }
 
     public int getQualifierRange() {
@@ -1134,24 +1134,24 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return TEXT.subjects_your(target.getTitle().toLowerCase());
             case SelfAllEnemy:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_allEnemies());
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_allEnemies());
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
             case SelfSingle:
                 String base = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)) : TEXT.subjects_target;
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), base);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, base);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, base);
             case SelfSingleAlly:
                 String allyBase = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)) : TEXT.subjects_ally;
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), allyBase);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, allyBase);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, allyBase);
             case SelfPlayer:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_you);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_you);
                 }
                 return TEXT.subjects_you;
             case UseParent:
@@ -1249,22 +1249,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return PGR.core.strings.subjects_anyone;
             case SelfAllEnemy:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_allEnemies());
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_allEnemies());
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
             case SelfSingle:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_target);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_target);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_target);
             case SelfSingleAlly:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_ally);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_ally);
                 }
                 return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_ally);
             case SelfPlayer:
                 if (isFromCreature()) {
-                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard(), TEXT.subjects_you);
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_this, TEXT.subjects_you);
                 }
                 return TEXT.subjects_you;
             case UseParent:
@@ -1292,6 +1292,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getText() {
         return getText(PCLCardTarget.Self, true);
+    }
+
+    public String getTextForPreview(Object source) {
+        return getText();
     }
 
     public String getThemString() {

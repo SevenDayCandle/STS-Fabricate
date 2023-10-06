@@ -518,7 +518,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public final String getWheneverYouString(Object impl) {
-        String subjectString = isFromCreature() ? TEXT.subjects_thisCard() : TEXT.subjects_you;
+        String subjectString = isFromCreature() ? TEXT.subjects_this : TEXT.subjects_you;
         return EUIRM.strings.nounVerb(subjectString, impl);
     }
 

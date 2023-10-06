@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PCLAugmentRenderable implements KeywordProvider {
-    public static final float BASE_SCALE = Settings.scale * 0.6f;
+    public static final float BASE_SCALE = Settings.scale * 0.45f;
 
     public final PCLAugment augment;
     public Hitbox hb;

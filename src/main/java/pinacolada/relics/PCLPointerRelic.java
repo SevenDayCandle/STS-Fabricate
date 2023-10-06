@@ -221,6 +221,18 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         return new PSpecialSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
     }
 
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
+        return getSpecialMove(relicData.strings.DESCRIPTIONS[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
+        return getSpecialMove(relicData.strings.DESCRIPTIONS[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+        return getSpecialMove(relicData.strings.DESCRIPTIONS[descIndex], onUse, amount, extra);
+    }
+
     protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return getSpecialMove(strFunc, onUse, amount, 0);
     }
@@ -231,6 +243,18 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
         return new PSpecialPowerSkill(this.relicId + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+        return getSpecialPower(relicData.strings.DESCRIPTIONS[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(relicData.strings.DESCRIPTIONS[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return getSpecialPower(relicData.strings.DESCRIPTIONS[descIndex], onUse, amount, extra);
     }
 
     protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
