@@ -185,12 +185,23 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public void onLoad(PCLCollectibleSaveData data) {
         if (data != null) {
             this.auxiliaryData = new PCLCollectibleSaveData(data);
+            onUpgrade();
         }
     }
 
     @Override
     public PCLCollectibleSaveData onSave() {
         return auxiliaryData;
+    }
+
+    protected void onUpgrade() {
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        initializeTips();
     }
 
     @Override
@@ -264,9 +275,8 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
+    public final Type savedType() {
+        return PCLCollectibleSaveData.TOKEN.getType();
     }
 
     public PCLPotion setForm(int form) {
@@ -322,13 +332,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public PCLPotion upgrade() {
         if (this.canUpgrade()) {
             auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            initializeTips();
+            onUpgrade();
         }
         return this;
     }

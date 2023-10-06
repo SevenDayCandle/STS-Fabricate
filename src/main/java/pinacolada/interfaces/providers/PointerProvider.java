@@ -153,7 +153,7 @@ public interface PointerProvider {
 
     default String getEffectPowerTextStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getPowerText()) : null,
+                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getPowerText(null)) : null,
                 getFullEffects());
     }
 

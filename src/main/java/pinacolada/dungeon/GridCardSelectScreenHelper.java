@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.ui.buttons.PeekButton;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.controls.EUITextBox;
@@ -53,14 +54,8 @@ public class GridCardSelectScreenHelper {
         if (targetCardGroup.size() % 5 != 0) {
             ++scrollTmp;
         }
-        float finalScrollTmp = scrollTmp + 1.3f * (cardGroups.size() - 1);
-        if (finalScrollTmp > 0) {
-            EUIClassUtils.setField(instance, "scrollUpperBound", Settings.DEFAULT_SCROLL_LIMIT + scrollTmp * padY);
-        }
-        else {
-            EUIClassUtils.setField(instance, "scrollUpperBound", Settings.DEFAULT_SCROLL_LIMIT);
-        }
-
+        float finalScrollTmp = scrollTmp + 1.3f * (cardGroups.size());
+        EUIClassUtils.setField(instance, "scrollUpperBound", finalScrollTmp > 0 ? Settings.DEFAULT_SCROLL_LIMIT + finalScrollTmp * padY : Settings.DEFAULT_SCROLL_LIMIT);
         EUIClassUtils.setField(instance, "prevDeckSize", targetCardGroup.size());
 
         return true;
@@ -104,7 +99,7 @@ public class GridCardSelectScreenHelper {
     }
 
     public static void renderDynamicString(SpriteBatch sb) {
-        if (dynamicString != null) {
+        if (dynamicString != null && !PeekButton.isPeeking) {
             //dynamicLabel.SetText(dynamicString.Invoke(AbstractDungeon.gridSelectScreen.selectedCards));
             dynamicLabel.renderImpl(sb);
         }

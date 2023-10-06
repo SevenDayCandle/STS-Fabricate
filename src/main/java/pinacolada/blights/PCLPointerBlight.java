@@ -1,5 +1,6 @@
 package pinacolada.blights;
 
+import basemod.abstracts.CustomSavable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIInputManager;
@@ -14,6 +15,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.blights.PCLBlight;
@@ -24,7 +26,7 @@ import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider {
+public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
     public PSkillPowerContainer skills;
     public PCLClickableUse triggerCondition;
 
@@ -252,6 +254,16 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
     }
 
     @Override
+    protected void onUpgrade() {
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+    }
+
+    @Override
     public void onVictory() {
         super.onVictory();
         unsubscribe();
@@ -325,20 +337,5 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
             triggerCondition.targetToUse(1);
             flash();
         }
-    }
-
-    @Override
-    public PCLPointerBlight upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            updateDescription(null);
-        }
-        return this;
     }
 }

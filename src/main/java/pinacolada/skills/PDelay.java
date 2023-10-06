@@ -95,7 +95,7 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            getDelayUse(info, (i) -> useChildEffect(i, order), this.childEffect.getName(), this.childEffect.getPowerText()).start();
+            getDelayUse(info, (i) -> useChildEffect(i, order), this.childEffect.getName(), this.childEffect.getPowerText(null)).start();
         }
     }
 

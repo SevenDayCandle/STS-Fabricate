@@ -244,7 +244,7 @@ public class PCLCustomEffectNode extends EUIButton {
         if (text != null) {
             setTextAndAlign(StringUtils.capitalize(text), 0.4f, 0.4f);
         }
-        this.tooltip = new EUITooltip(type.getTitle(), skill.getPowerText());
+        this.tooltip = new EUITooltip(type.getTitle(), skill.getPowerText(null));
 
         warningImage.tooltip = getWarningTooltip();
         warningImage.setActive(warningImage.tooltip != null);

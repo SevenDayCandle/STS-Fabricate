@@ -17,7 +17,6 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
@@ -205,7 +204,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
 
     @Override
     public String getUpdatedDescription() {
-        this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, PSkill::getPowerText).toArray(new String[]{});
+        this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, pTrigger -> pTrigger.getPowerText(null)).toArray(new String[]{});
         return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
     }
 

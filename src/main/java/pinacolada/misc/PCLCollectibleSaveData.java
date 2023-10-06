@@ -1,8 +1,11 @@
 package pinacolada.misc;
 
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 
 public class PCLCollectibleSaveData {
+    public static final TypeToken<PCLCollectibleSaveData> TOKEN = new TypeToken<PCLCollectibleSaveData>(){};
     public int form;
     public int timesUpgraded;
     public ArrayList<String> additionalData;

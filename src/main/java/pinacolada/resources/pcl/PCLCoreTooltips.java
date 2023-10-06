@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
@@ -21,15 +22,19 @@ import pinacolada.resources.AbstractTooltips;
 import pinacolada.resources.PCLEnum;
 
 public class PCLCoreTooltips extends AbstractTooltips {
+    // Initialized conditionally
+    public EUIKeywordTooltip burn;
+    public EUIKeywordTooltip dazed;
+    public EUIKeywordTooltip woundCard;
+    public EUIKeywordTooltip voidCard;
+
     public EUIKeywordTooltip energy = EUIKeywordTooltip.findByID(EUI.ENERGY_ID);
 
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip buff = EUIKeywordTooltip.findByID("Buff").setCanAdd(false).canHighlight(false);
-    public EUIKeywordTooltip burn = EUIKeywordTooltip.findByID("Burn").setPreviewFunc(() -> makePreview(Burn.ID)).setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip create = EUIKeywordTooltip.findByID("Create").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip curse = EUIKeywordTooltip.findByID("Curse").setCanAdd(false);
-    public EUIKeywordTooltip dazed = EUIKeywordTooltip.findByID("Dazed").setPreviewFunc(() -> makePreview(Dazed.ID)).setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip debuff = EUIKeywordTooltip.findByID("Debuff").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip discard = EUIKeywordTooltip.findByID("Discard").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip draw = EUIKeywordTooltip.findByID("Draw").setCanAdd(false).canHighlight(false);
@@ -49,8 +54,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip skill = EUIKeywordTooltip.findByID("Skill").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip status = EUIKeywordTooltip.findByID("Status").setCanAdd(false);
     public EUIKeywordTooltip upgrade = EUIKeywordTooltip.findByID("Upgrade").setCanAdd(false).canHighlight(false);
-    public EUIKeywordTooltip woundCard = EUIKeywordTooltip.findByID("Wound").setPreviewFunc(() -> makePreview(Wound.ID)).setCanAdd(false).canHighlight(false);
-    public EUIKeywordTooltip voidCard = EUIKeywordTooltip.findByID("Void").setPreviewFunc(() -> makePreview(VoidCard.ID)).setCanAdd(false).canHighlight(false);
 
     public EUIKeywordTooltip affinityGeneral = EUIKeywordTooltip.findByID("A-W");
     public EUIKeywordTooltip affinityUnknown = EUIKeywordTooltip.findByID("A-U");
@@ -191,6 +194,17 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public PCLCoreTooltips() {
         EUIKeywordTooltip.registerID("THP", tempHP);
         EUIKeywordTooltip.registerID("Gold", gold);
+
+        // In some rare cases, these tooltips or card IDs can be null
+        try {
+            burn = EUIKeywordTooltip.findByID("Burn").setPreviewFunc(() -> makePreview(Burn.ID)).setCanAdd(false).canHighlight(false);
+            dazed = EUIKeywordTooltip.findByID("Dazed").setPreviewFunc(() -> makePreview(Dazed.ID)).setCanAdd(false).canHighlight(false);
+            woundCard = EUIKeywordTooltip.findByID("Wound").setPreviewFunc(() -> makePreview(Wound.ID)).setCanAdd(false).canHighlight(false);
+            voidCard = EUIKeywordTooltip.findByID("Void").setPreviewFunc(() -> makePreview(VoidCard.ID)).setCanAdd(false).canHighlight(false);
+        }
+        catch (Exception e) {
+            EUIUtils.logError(this, "Failed to initialize card-based tooltips");
+        }
     }
 
     public static EUICardPreview makePreview(String cardID) {

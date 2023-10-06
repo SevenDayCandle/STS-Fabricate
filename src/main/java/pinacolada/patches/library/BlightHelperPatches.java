@@ -62,9 +62,11 @@ public class BlightHelperPatches {
         if (allowCustom) {
             for (AbstractCard.CardColor color : colors) {
                 for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(color)) {
-                    BlightTier t = BlightTier.valueOf(slot.tier);
-                    if (tiers.contains(t)) {
-                        blights.add(slot.ID);
+                    if (slot.tier != null) {
+                        BlightTier t = BlightTier.valueOf(slot.tier);
+                        if (tiers.contains(t)) {
+                            blights.add(slot.ID);
+                        }
                     }
                 }
             }

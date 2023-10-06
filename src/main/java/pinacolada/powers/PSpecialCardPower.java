@@ -30,7 +30,7 @@ public abstract class PSpecialCardPower extends PCLClickablePower implements PCL
 
     @Override
     public String getUpdatedDescription() {
-        return move != null ? move.getPowerText() : "";
+        return move != null ? move.getPowerText(null) : "";
     }
 
     public void onInitialApplication() {

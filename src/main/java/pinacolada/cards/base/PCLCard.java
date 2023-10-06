@@ -69,6 +69,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.powers.PCLPower;
@@ -2228,9 +2229,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
-    public Type savedType() {
-        return new TypeToken<PCLCardSaveData>() {
-        }.getType();
+    public final Type savedType() {
+        return PCLCollectibleSaveData.TOKEN.getType();
     }
 
     public void setAttackType(PCLAttackType attackType) {

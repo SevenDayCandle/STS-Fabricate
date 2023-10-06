@@ -1,16 +1,18 @@
 package pinacolada.relics;
 
+import basemod.abstracts.CustomSavable;
 import com.badlogic.gdx.graphics.Texture;
 import extendedui.EUIRM;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 
-public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
+public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem, CustomSavable<PCLCollectibleSaveData> {
     protected PCLDynamicRelicData builder;
     protected ArrayList<PCLDynamicRelicData> forms;
 

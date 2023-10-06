@@ -560,7 +560,7 @@
 		"NAME": "Turn Start Timing"
 	},
 	"Unique":	{
-		"DESCRIPTION": "You can only have one copy of this card in your deck. Additional copies will #yUpgrade this card instead.",
+		"DESCRIPTION": "You can only have one copy of this item. Additional copies will #yUpgrade this instead.",
 		"NAME": "Unique"
 	},
 	"Vigor":	{

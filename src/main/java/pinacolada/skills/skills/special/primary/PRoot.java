@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.special.primary;
 
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
@@ -7,6 +8,7 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PPrimary;
@@ -37,7 +39,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (source instanceof AbstractRelic) {
+        if (source instanceof AbstractRelic || source instanceof AbstractBlight) {
             return TEXT.cond_atStartOfCombat();
         }
         if (source instanceof AbstractPower) {
@@ -51,10 +53,20 @@ public class PRoot extends PPrimary<PField_Empty> {
     // For powers, this activates when the power is first applied
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        if (source instanceof AbstractRelic || source instanceof AbstractPower) {
-            return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+        String sub = getCapitalSubText(perspective, addPeriod);
+        if (!sub.isEmpty()) {
+            return sub + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
         return childEffect != null ? childEffect.getText(perspective, addPeriod) : "";
+    }
+
+    @Override
+    public String getTextForPreview(Object requestor) {
+        if (requestor instanceof PCLDynamicPowerData) {
+            return capital(TEXT.cond_when(PGR.core.tooltips.create.past()), true)
+                    + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(PCLCardTarget.Self, true)) : PCLCoreStrings.period(true));
+        }
+        return super.getTextForPreview(requestor);
     }
 
     @Override
@@ -64,7 +76,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(source instanceof AbstractRelic) || !(skill instanceof PDelegateCond);
+        return !(source instanceof AbstractRelic || source instanceof AbstractBlight || source instanceof AbstractPower) || !(skill instanceof PDelegateCond);
     }
 
     @Override

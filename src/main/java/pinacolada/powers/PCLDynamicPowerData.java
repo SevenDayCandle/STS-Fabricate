@@ -130,7 +130,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
         for (PSkill<?> move : moves) {
             if (move != null) {
                 move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
-                String pText = move.getPowerText();
+                String pText = move.getPowerText(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(pText);
                 }
@@ -141,7 +141,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
     }
 
     public String getEffectTextForTip() {
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null && !move.isBlank() ? move.getPowerTextForTooltip() : null, moves));
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> move != null && !move.isBlank() ? move.getPowerTextForTooltip(this) : null, moves));
     }
 
     @Override

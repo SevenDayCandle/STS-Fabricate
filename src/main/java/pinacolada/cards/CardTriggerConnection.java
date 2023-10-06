@@ -77,7 +77,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
         PCLClickableUse use = trigger.getClickable(this);
         if (use != null) {
             triggerCondition = use;
-            triggerTip = new EUIKeywordTooltip(card.name, trigger.getPowerText());
+            triggerTip = new EUIKeywordTooltip(card.name, trigger.getPowerText(null));
         }
     }
 

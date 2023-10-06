@@ -16,6 +16,7 @@ import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.GridCardSelectScreenHelper;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,17 @@ public class AbstractPlayerPatches {
                 final Matcher matcher = new Matcher.MethodCallMatcher(AbstractOrb.class, "playChannelSFX");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
+        }
+    }
+
+    @SpirePatch(clz = AbstractPlayer.class, method = "renderHand")
+    public static class AbstractPlayer_RenderHand {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> method(AbstractPlayer __instance, SpriteBatch sb) {
+            if (GridCardSelectScreenHelper.isActive()) {
+                return SpireReturn.Return(null);
+            }
+            return SpireReturn.Continue();
         }
     }
 

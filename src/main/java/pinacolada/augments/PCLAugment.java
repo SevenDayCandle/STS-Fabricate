@@ -110,7 +110,7 @@ public abstract class PCLAugment implements KeywordProvider {
     }
 
     public String getPowerText() {
-        return skill.getPowerText();
+        return skill.getPowerText(null);
     }
 
     public String getReqsString() {

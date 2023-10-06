@@ -1,5 +1,6 @@
 package pinacolada.relics;
 
+import basemod.abstracts.CustomSavable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
@@ -13,6 +14,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.skills.PSkill;
@@ -21,7 +23,7 @@ import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider {
+public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
     public PSkillPowerContainer skills;
     public PCLClickableUse triggerCondition;
 
@@ -306,6 +308,16 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public void onUpgrade() {
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+    }
+
+    @Override
     public void onVictory() {
         super.onVictory();
         unsubscribe();
@@ -382,21 +394,6 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
                 flash();
             }
         }
-    }
-
-    @Override
-    public PCLPointerRelic upgrade() {
-        if (this.canUpgrade()) {
-            auxiliaryData.timesUpgraded += 1;
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            for (PSkill<?> ef : getPowerEffects()) {
-                ef.setAmountFromCard().onUpgrade();
-            }
-            updateDescription(null);
-        }
-        return this;
     }
 
     @Override

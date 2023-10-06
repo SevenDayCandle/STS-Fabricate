@@ -2057,13 +2057,34 @@ public class GameUtilities {
     }
 
     public static void obtainBlight(float cX, float cY, AbstractBlight blight) {
+        if (blight.unique) {
+            for (AbstractBlight b : player.blights) {
+                if (b.blightID.equals(blight.blightID)) {
+                    b.incrementUp();
+                    b.flash();
+                    return;
+                }
+            }
+        }
         AbstractRoom room = getCurrentRoom();
         if (room != null) {
             room.spawnBlightAndObtain(cX, cY, blight);
         }
+        else {
+            blight.instantObtain(player, player.blights.size(), false);
+        }
     }
 
+    // In spite of defining the unique field for the appropriate blights, the game never actually makes use of this field in spawning or obtaining logic...
     public static void obtainBlightWithoutEffect(AbstractBlight blight) {
+        if (blight.unique) {
+            for (AbstractBlight b : player.blights) {
+                if (b.blightID.equals(blight.blightID)) {
+                    b.incrementUp();
+                    return;
+                }
+            }
+        }
         blight.instantObtain(player, player.blights.size(), false);
     }
 

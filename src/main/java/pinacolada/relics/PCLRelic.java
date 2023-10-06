@@ -369,8 +369,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public void onLoad(PCLCollectibleSaveData data) {
         if (data != null) {
             this.auxiliaryData = new PCLCollectibleSaveData(data);
+            onUpgrade();
+            updateName();
+            updateDescription(null);
         }
-        updateDescription(null);
     }
 
     @Override
@@ -389,6 +391,9 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         if (GameUtilities.inBattle(true)) {
             deactivateBattleEffect();
         }
+    }
+
+    protected void onUpgrade() {
     }
 
     @Override
@@ -498,9 +503,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     @Override
-    public Type savedType() {
-        return new TypeToken<PCLCollectibleSaveData>() {
-        }.getType();
+    public final Type savedType() {
+        return PCLCollectibleSaveData.TOKEN.getType();
     }
 
     // Imitating lizard tail so that used up status can be saved
@@ -601,6 +605,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public PCLRelic upgrade() {
         if (this.canUpgrade()) {
             auxiliaryData.timesUpgraded += 1;
+            onUpgrade();
             updateName();
             updateDescription(null);
         }

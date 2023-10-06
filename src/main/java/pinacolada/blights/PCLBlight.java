@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -32,6 +33,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,6 +170,11 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     }
 
     @Override
+    public void incrementUp() {
+        upgrade();
+    }
+
+    @Override
     public void initializeTips() {
         if (tips == null) {
             tips = new ArrayList<>();
@@ -209,8 +216,10 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     public void onLoad(PCLCollectibleSaveData data) {
         if (data != null) {
             this.auxiliaryData = new PCLCollectibleSaveData(data);
+            onUpgrade();
+            updateName();
+            updateDescription();
         }
-        updateDescription();
     }
 
     @Override
@@ -218,8 +227,12 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         return auxiliaryData;
     }
 
-    protected void preSetup(PCLBlightData data) {
+    protected void onUpgrade() {
 
+    }
+
+    protected void preSetup(PCLBlightData data) {
+        this.unique = this.blightData.unique;
     }
 
     @Override
@@ -305,6 +318,11 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
         EUITooltip.queueTooltips(this);
     }
 
+    @Override
+    public final Type savedType() {
+        return PCLCollectibleSaveData.TOKEN.getType();
+    }
+
     public PCLBlight setForm(int form) {
         this.auxiliaryData.form = form;
         updateName();
@@ -346,6 +364,7 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
     public PCLBlight upgrade() {
         if (this.canUpgrade()) {
             auxiliaryData.timesUpgraded += 1;
+            onUpgrade();
             updateName();
             updateDescription();
         }

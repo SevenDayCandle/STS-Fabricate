@@ -231,6 +231,7 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
             languageStrings = EUIUtils.serialize(first.languageMap);
             color = first.cardColor.name();
             unique = first.unique;
+            tier = first.tier.toString();
             counter = first.counter.clone();
             counterUpgrade = first.counterUpgrade.clone();
             maxUpgradeLevel = first.maxUpgradeLevel;
