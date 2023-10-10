@@ -28,7 +28,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PCardPrimary_GainBlock.class, PField_Empty.class)
-            .setExtra(1, DEFAULT_MAX);
+            .setExtra(0, DEFAULT_MAX);
 
     public PCardPrimary_GainBlock() {
         super(DATA, PCLCardTarget.Self, 0);
@@ -71,7 +71,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
-        String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+        String amountString = count != 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         // Use expanded text like PMove_GainBlock if verbose mode is used
         if (isVerbose()) {
@@ -93,8 +93,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond ||
-                skill instanceof PPassiveMod ||
+        return super.isSkillAllowed(skill) ||
                 skill instanceof PBlockTrait;
     }
 

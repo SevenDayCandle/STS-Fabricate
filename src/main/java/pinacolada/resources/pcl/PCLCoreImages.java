@@ -105,6 +105,8 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache cardBannerAttribute2 = new TextureCache("images/pcl/cardui/512/banner_attribute2.png");
         public static final TextureCache cardBannerAttribute2L = new TextureCache("images/pcl/cardui/1024/banner_attribute2.png");
         public static final TextureCache cardBannerAttributeL = new TextureCache("images/pcl/cardui/1024/banner_attribute.png");
+        public static final TextureCache cardBannerAttributeVanilla = new TextureCache("images/pcl/cardui/512/banner_attribute_vanilla.png");
+        public static final TextureCache cardBannerAttributeVanillaL = new TextureCache("images/pcl/cardui/1024/banner_attribute_vanilla.png");
         public static final TextureCache cardBannerL = new TextureCache("images/pcl/cardui/1024/banner.png");
         public static final TextureCache cardFrameAttack = new TextureCache("images/pcl/cardui/512/frame_attack.png");
         public static final TextureCache cardFrameAttackL = new TextureCache("images/pcl/cardui/1024/frame_attack.png");
@@ -114,13 +116,6 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache cardFrameSkillL = new TextureCache("images/pcl/cardui/1024/frame_skill.png");
         public static final TextureCache cardFrameSummon = new TextureCache("images/pcl/cardui/512/frame_summon.png");
         public static final TextureCache cardFrameSummonL = new TextureCache("images/pcl/cardui/1024/frame_summon.png");
-        public static final TextureCache orbBaseBorder = new TextureCache("images/pcl/ui/energy/BaseBorder.png");
-        public static final TextureCache orbBaseLayer = new TextureCache("images/pcl/ui/energy/BaseLayer.png");
-        public static final TextureCache orbFlash = new TextureCache("images/pcl/ui/energy/OrbFlash.png");
-        public static final TextureCache orbTopLayer1 = new TextureCache("images/pcl/ui/energy/TopLayer1.png");
-        public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
-        public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
-        public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
         public static final TextureCache augmentSlot = new TextureCache("images/pcl/cardui/augments/AugmentSlot.png", true);
         public static final TextureCache augmentBase = new TextureCache("images/pcl/cardui/augments/AugmentBase.png", true);
         public static final TextureCache augmentPlayed = new TextureCache("images/pcl/cardui/augments/AugmentPlayed.png", true);

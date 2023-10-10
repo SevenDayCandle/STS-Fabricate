@@ -4,9 +4,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.skills.PPrimary;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField;
 
 public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
@@ -29,6 +27,12 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     public PCardPrimary(PSkillData<T> data, EditorCard card) {
         super(data);
         setProvider(card);
+    }
+
+    @Override
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return (skill instanceof PCond && !(skill instanceof PActiveNonCheckCond))
+                || (skill instanceof PMod);
     }
 
     // Only set the amount for this effect and not its children. Used in refresh to avoid refreshing chained children twice

@@ -326,7 +326,8 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     @Override
     protected void onSamePowerApplied(AbstractPower power) {
         PTriggerPower po = EUIUtils.safeCast(power, PTriggerPower.class);
-        if (po != null && this.ID.equals(po.ID)) {
+        // Only stack if not turn based
+        if (po != null && this.ID.equals(po.ID) && !isTurnBased) {
             // The effects of identical cards will always be in the same order
             for (int i = 0; i < Math.min(ptriggers.size(), po.ptriggers.size()); i++) {
                 ptriggers.get(i).stack(po.ptriggers.get(i));

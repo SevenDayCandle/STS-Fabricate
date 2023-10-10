@@ -21,7 +21,7 @@ import pinacolada.relics.PCLRelicData;
 import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.relics.pcl.Macroscope;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
@@ -98,7 +98,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {
-        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseDraw;
         }
@@ -108,19 +108,19 @@ public abstract class PCLLoadout {
                 return info.cardDraw;
             }
         }
-        return AbstractPlayerData.DEFAULT_DRAW;
+        return PCLPlayerData.DEFAULT_DRAW;
     }
 
     public static int getBaseEnergy(AbstractCard.CardColor color) {
-        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseEnergy;
         }
-        return AbstractPlayerData.DEFAULT_ENERGY;
+        return PCLPlayerData.DEFAULT_ENERGY;
     }
 
     public static int getBaseGold(AbstractCard.CardColor color) {
-        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseGold;
         }
@@ -130,11 +130,11 @@ public abstract class PCLLoadout {
                 return info.gold;
             }
         }
-        return AbstractPlayerData.DEFAULT_GOLD;
+        return PCLPlayerData.DEFAULT_GOLD;
     }
 
     public static int getBaseHP(AbstractCard.CardColor color) {
-        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseHP;
         }
@@ -144,11 +144,11 @@ public abstract class PCLLoadout {
                 return info.maxHp;
             }
         }
-        return AbstractPlayerData.DEFAULT_HP;
+        return PCLPlayerData.DEFAULT_HP;
     }
 
     public static int getBaseOrbs(AbstractCard.CardColor color) {
-        AbstractPlayerData<?, ?> data = PGR.getPlayerData(color);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseOrbs;
         }
@@ -382,7 +382,7 @@ public abstract class PCLLoadout {
     }
 
     public PCLLoadoutStats getLoadoutStats() {
-        AbstractPlayerData<?, ?> data = getPlayerData();
+        PCLPlayerData<?, ?, ?> data = getPlayerData();
         if (data == null) {
             return null;
         }
@@ -410,7 +410,7 @@ public abstract class PCLLoadout {
         return PCLBaseStatEditor.StatType.OrbSlot.getAmount(this, getPreset());
     }
 
-    public AbstractPlayerData<?, ?> getPlayerData() {
+    public PCLPlayerData<?, ?, ?> getPlayerData() {
         return PGR.getPlayerData(color);
     }
 
@@ -438,7 +438,7 @@ public abstract class PCLLoadout {
     public final ArrayList<String> getStartingBlights() {
         final ArrayList<String> res = new ArrayList<>();
 
-        AbstractPlayerData<?, ?> data = getPlayerData();
+        PCLPlayerData<?, ?, ?> data = getPlayerData();
         if (data != null) {
             List<String> starterRelics = data.getStartingBlights();
             if (starterRelics != null) {
@@ -465,7 +465,7 @@ public abstract class PCLLoadout {
 
         if (cards.isEmpty()) {
             EUIUtils.logWarning(this, "Starting loadout was empty");
-            AbstractPlayerData<?, ?> data = getPlayerData();
+            PCLPlayerData<?, ?, ?> data = getPlayerData();
             if (data != null) {
                 for (int i = 0; i < 2; i++) {
                     for (PCLCardData card : data.getCoreLoadout().strikes) {
@@ -504,7 +504,7 @@ public abstract class PCLLoadout {
     }
 
     public boolean isCardBanned(String cardID) {
-        AbstractPlayerData<?, ?> playerData = getPlayerData();
+        PCLPlayerData<?, ?, ?> playerData = getPlayerData();
         return playerData != null && playerData.config.bannedCards.get().contains(cardID);
     }
 
@@ -539,7 +539,7 @@ public abstract class PCLLoadout {
     }
 
     public boolean isRelicBanned(String id) {
-        AbstractPlayerData<?, ?> playerData = getPlayerData();
+        PCLPlayerData<?, ?, ?> playerData = getPlayerData();
         return playerData != null && playerData.config.bannedRelics.get().contains(id);
     }
 
@@ -550,7 +550,7 @@ public abstract class PCLLoadout {
 
     public void onVictory(int ascensionLevel, int score, boolean postAct3) {
         PCLLoadoutStats trophies = getLoadoutStats();
-        AbstractPlayerData<?, ?> data = getPlayerData();
+        PCLPlayerData<?, ?, ?> data = getPlayerData();
         if (data != null && data.selectedLoadout.ID.equals(ID)) {
             if (postAct3) {
                 trophies.act4completion = Math.max(trophies.act4completion, ascensionLevel);

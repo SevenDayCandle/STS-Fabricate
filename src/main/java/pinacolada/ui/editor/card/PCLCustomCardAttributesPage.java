@@ -128,12 +128,12 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
-                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_hitCount, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setRightCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
-                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)

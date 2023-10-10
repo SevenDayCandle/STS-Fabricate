@@ -1,5 +1,6 @@
 package pinacolada.patches.screens;
 
+import basemod.CustomCharacterSelectScreen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
@@ -57,6 +58,37 @@ public class CharacterSelectScreenPatches {
                 Matcher finalMatcher = new Matcher.FieldAccessMatcher(CharacterSelectScreen.class, "cancelButton");
                 return LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
             }
+        }
+    }
+
+    @SpirePatch(clz = CustomCharacterSelectScreen.class, method = "render")
+    public static class CustomCharacterSelectScreen_Render {
+        @SpireInsertPatch(locator = IndexLocator.class)
+        public static SpireReturn<Void> insertPre(CharacterSelectScreen __instance, SpriteBatch sb) {
+            if (PGR.charSelectProvider.hasDialog()) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
+        }
+
+
+    }
+
+    @SpirePatch(clz = CustomCharacterSelectScreen.class, method = "update")
+    public static class CustomCharacterSelectScreen_Update {
+        @SpireInsertPatch(locator = IndexLocator.class)
+        public static SpireReturn<Void> insertPre(CharacterSelectScreen __instance) {
+            if (PGR.charSelectProvider.hasDialog()) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
+        }
+    }
+
+    private static class IndexLocator extends SpireInsertLocator {
+        public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+            Matcher finalMatcher = new Matcher.FieldAccessMatcher(CustomCharacterSelectScreen.class, "maxSelectIndex");
+            return LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
         }
     }
 }

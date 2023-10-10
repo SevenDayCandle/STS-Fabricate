@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import javassist.CtBehavior;
-import pinacolada.characters.CreatureAnimationInfo;
+import pinacolada.characters.PCLCharacterAnimation;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
 
@@ -17,7 +17,7 @@ public class AbstractMonsterPatches {
         @SpirePostfixPatch
         public static void postfix(AbstractMonster __instance, String name, String id, int maxHealth, float hb_x, float hb_y, float hb_w, float hb_h, String imgUrl, float offsetX, float offsetY, boolean ignoreBlights) {
             if (imgUrl != null) {
-                CreatureAnimationInfo.registerCreatureImage(__instance, imgUrl);
+                PCLCharacterAnimation.registerCreatureImage(__instance, imgUrl);
             }
         }
     }

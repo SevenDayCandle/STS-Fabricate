@@ -7,12 +7,12 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.dungeon.PCLDungeon;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
+public class PCLCoreResources extends PCLResources<PCLPlayerData<?, ?, ?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
     public static final String ID = PGR.BASE_PREFIX;
 
     public PCLCoreResources() {
@@ -30,7 +30,7 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
     }
 
     @Override
-    public AbstractPlayerData<?, ?> getData() {
+    public PCLPlayerData<?, ?, ?> getData() {
         return null;
     }
 
@@ -54,6 +54,12 @@ public class PCLCoreResources extends PCLResources<AbstractPlayerData<?, ?>, PCL
     @Override
     protected void postInitialize() {
         tooltips.initializeIcons();
+        // No data
+    }
+
+    @Override
+    public void receiveEditCharacters() {
+        // No-op
     }
 
     @Override

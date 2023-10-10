@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
@@ -78,7 +78,7 @@ public class LoadoutCardSlot extends LoadoutSlot {
 
     @Override
     public boolean isBanned() {
-        AbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        PCLPlayerData<?, ?, ?> playerData = container.loadout.getPlayerData();
         return playerData != null && playerData.config.bannedCards.get().contains(selected);
     }
 

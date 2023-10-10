@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import pinacolada.relics.PCLRelicData;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
 
 public class LoadoutRelicSlot extends LoadoutSlot {
@@ -36,7 +36,7 @@ public class LoadoutRelicSlot extends LoadoutSlot {
 
     @Override
     public boolean isBanned() {
-        AbstractPlayerData<?, ?> playerData = container.loadout.getPlayerData();
+        PCLPlayerData<?, ?, ?> playerData = container.loadout.getPlayerData();
         return playerData != null && playerData.config.bannedRelics.get().contains(selected);
     }
 

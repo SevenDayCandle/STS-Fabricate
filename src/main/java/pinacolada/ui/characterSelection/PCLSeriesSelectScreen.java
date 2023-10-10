@@ -35,7 +35,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -71,7 +71,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final HashSet<String> bannedCards = new HashSet<>();
     public final HashSet<String> bannedColorless = new HashSet<>();
     public final HashSet<String> selectedLoadouts = new HashSet<>();
-    protected AbstractPlayerData<?, ?> data;
+    protected PCLPlayerData<?, ?, ?> data;
     protected ActionT0 onClose;
     protected CharacterOption characterOption;
     protected PCLCard selectedCard;
@@ -88,7 +88,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float xPos = screenW(0.82f);
 
-        cardGrid = (EUICardGrid) new EUICardGrid(0.3f, false)
+        cardGrid = (EUICardGrid) new EUICardGrid(0.25f, false)
                 .setOnClick(this::onCardClicked)
                 .setOnRightClick(this::onCardRightClicked)
                 .showScrollbar(false);
@@ -251,7 +251,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
     }
 
-    public void commitChanges(AbstractPlayerData<?, ?> data) {
+    public void commitChanges(PCLPlayerData<?, ?, ?> data) {
         data.selectedLoadout = find(currentSeriesCard);
         HashSet<String> banned = new HashSet<>(bannedCards);
         banned.addAll(bannedColorless);
@@ -265,7 +265,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());
     }
 
-    public void createCards(AbstractPlayerData<?, ?> data) {
+    public void createCards(PCLPlayerData<?, ?, ?> data) {
         allCards.clear();
         allColorlessCards.clear();
         shownCards.clear();
@@ -463,7 +463,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
     }
 
-    public void open(CharacterOption characterOption, AbstractPlayerData<?, ?> data, ActionT0 onClose) {
+    public void open(CharacterOption characterOption, PCLPlayerData<?, ?, ?> data, ActionT0 onClose) {
         super.open();
 
         this.onClose = onClose;
@@ -512,7 +512,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     // Core loadout cards cannot be toggled off
     public void previewCards(ArrayList<AbstractCard> cards, PCLLoadout loadout) {
         currentEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
-                .setCanToggle(loadout != null && !loadout.isCore())
+                .setCanToggle((loadout != null && !loadout.isCore()) || data.canEditCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
     }
 

@@ -298,6 +298,36 @@ public class AbstractDungeonPatches {
         }
     }
 
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomCardFromAvailable", paramtypez = {AbstractCard.class, Random.class})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomColorlessCardFromAvailable", paramtypez = {AbstractCard.class, Random.class})
+    public static class AbstractDungeon_ReturnTrulyRandomCardFromAvailable {
+
+        // Ensure that at least one card is in the random choices list, or these calls will crash
+        @SpireInsertPatch(locator = RandomLocator.class, localvars = {"list"})
+        public static void patch(AbstractCard prohibited, ArrayList<AbstractCard> list) {
+            if (list.isEmpty()) {
+                list.add(prohibited.makeCopy());
+            }
+        }
+    }
+
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnRandomCard", paramtypez = {})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomCard", paramtypez = {})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomCardInCombat", paramtypez = {})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomCardInCombat", paramtypez = {AbstractCard.CardType.class})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomColorlessCardInCombat", paramtypez = {Random.class})
+    @SpirePatch(clz = AbstractDungeon.class, method = "returnTrulyRandomColorlessCardFromAvailable", paramtypez = {String.class, Random.class})
+    public static class AbstractDungeon_ReturnTrulyRandomCardFromAvailable2 {
+
+        // Ensure that at least one card is in the random choices list, or these calls will crash
+        @SpireInsertPatch(locator = RandomLocator.class, localvars = {"list"})
+        public static void patch(ArrayList<AbstractCard> list) {
+            if (list.isEmpty()) {
+                list.add(makeTempCard());
+            }
+        }
+    }
+
     @SpirePatch(
             clz = AbstractDungeon.class,
             method = "nextRoomTransition"
@@ -318,6 +348,13 @@ public class AbstractDungeonPatches {
                 Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer.class, "preBattlePrep");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
+        }
+    }
+
+    private static class RandomLocator extends SpireInsertLocator {
+        public int[] Locate(CtBehavior ctBehavior) throws Exception {
+            Matcher matcher = new Matcher.MethodCallMatcher(Random.class, "random");
+            return LineFinder.findAllInOrder(ctBehavior, matcher);
         }
     }
 }

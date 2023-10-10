@@ -16,6 +16,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.ui.characterSelection.PCLCardSlotEditor;
 
@@ -69,11 +70,23 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, EUI.actingColor);
-        grid.group.sort((a, b) -> getCardValue(a) - getCardValue(b));
+        grid.group.sort(this::defaultSort);
+    }
+
+    private int defaultSort(AbstractCard a, AbstractCard b) {
+        int aVal = getCardValue(a);
+        int bVal = getCardValue(b);
+        if (aVal < 0) {
+            aVal = aVal * -1000;
+        }
+        if (bVal < 0) {
+            bVal = bVal * -1000;
+        }
+        return aVal - bVal;
     }
 
     private int getCardValue(AbstractCard card) {
-        return card instanceof PCLCard ? ((PCLCard) card).cardData.loadoutValue : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
+        return (card instanceof PCLCard && !(card instanceof PCLDynamicCard)) ? ((PCLCard) card).cardData.loadoutValue : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
     }
 
     public AbstractCard getSelectedCard() {

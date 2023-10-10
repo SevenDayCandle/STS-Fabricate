@@ -144,12 +144,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public boolean upgradedHitCount = false;
     public boolean upgradedRightCount = false;
     public float hoverDuration;
-    public int baseHitCount = 1;
-    public int baseRightCount = 1;
+    public int baseHitCount;
+    public int baseRightCount;
     public int currentHealth = 1; // Used for storing the card's current HP in battle
-    public int hitCount = 1;
+    public int hitCount;
     public int maxUpgradeLevel;
-    public int rightCount = 1;
+    public int rightCount;
     public transient AbstractCreature owner;
     public transient ArrayList<AbstractCreature> multiDamageCreatures;
     public transient CardTriggerConnection controller;
@@ -724,10 +724,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public ColoredTexture getCardAttributeBanner() {
-        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
-            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
+        if (shouldUsePCLFrame()) {
+            if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
+                return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
+            }
+            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
         }
-        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
+        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeVanillaL : PCLCoreImages.CardUI.cardBannerAttributeVanilla).texture(), getRarityColor());
     }
 
     protected Texture getCardBackground() {
@@ -829,7 +832,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     protected Texture getEnergyOrb() {
         // For non-custom cards, use the original resource card color so that colorless/curses have their resource's energy orb
-        PCLResources<?, ?, ?, ?> resources = PGR.getResources(cardData.resources.cardColor);
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(this instanceof PCLDynamicCard ? color : cardData.resources.cardColor);
         if (resources == null || resources.images == null) {
             resources = PGR.core;
         }
@@ -1771,8 +1774,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
         block = Math.max(0, MathUtils.floor(tempBlock));
         damage = Math.max(0, MathUtils.floor(tempDamage));
-        hitCount = Math.max(1, MathUtils.floor(modifyHitCount(info, tempHitCount)));
-        rightCount = Math.max(1, MathUtils.floor(modifyRightCount(info, tempRightCount)));
+        hitCount = Math.max(0, MathUtils.floor(modifyHitCount(info, tempHitCount)));
+        rightCount = Math.max(0, MathUtils.floor(modifyRightCount(info, tempRightCount)));
 
         this.isBlockModified = (baseBlock != block);
         this.isDamageModified = (baseDamage != damage);
@@ -2230,7 +2233,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public final Type savedType() {
-        return PCLCollectibleSaveData.TOKEN.getType();
+        return new TypeToken<PCLCardSaveData>() {
+        }.getType();
     }
 
     public void setAttackType(PCLAttackType attackType) {
@@ -2307,8 +2311,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.baseBlock = this.block = block;
         this.baseMagicNumber = this.magicNumber = magicNumber;
         this.currentHealth = this.baseHeal = this.heal = secondaryValue;
-        this.baseHitCount = this.hitCount = Math.max(1, hitCount);
-        this.baseRightCount = this.rightCount = Math.max(1, rightCount);
+        this.baseHitCount = this.hitCount = Math.max(0, hitCount);
+        this.baseRightCount = this.rightCount = Math.max(0, rightCount);
     }
 
     protected void setNumbers(int damage, int block) {
@@ -2690,7 +2694,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void updateHitCount(int amount) {
-        this.baseHitCount = Math.max(1, amount);
+        this.baseHitCount = Math.max(0, amount);
         this.hitCount = this.baseHitCount;
         this.upgradedHitCount = true;
         if (onAttackEffect != null) {
@@ -2713,7 +2717,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void updateRightCount(int amount) {
-        this.baseRightCount = Math.max(1, amount);
+        this.baseRightCount = Math.max(0, amount);
         this.rightCount = this.baseRightCount;
         this.upgradedRightCount = true;
         if (onBlockEffect != null) {

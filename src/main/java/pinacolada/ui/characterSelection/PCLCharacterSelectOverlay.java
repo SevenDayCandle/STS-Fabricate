@@ -3,8 +3,12 @@ package pinacolada.ui.characterSelection;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.random.Random;
@@ -12,30 +16,34 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
+import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import extendedui.EUI;
-import extendedui.EUIRM;
-import extendedui.EUIRenderHelpers;
-import extendedui.EUIUtils;
+import extendedui.*;
 import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
+import pinacolada.effects.screen.ViewInGameCardPoolEffect;
+import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.interfaces.providers.RunAttributesProvider;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
@@ -43,27 +51,31 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
-    protected static final float POS_X = 1100f * Settings.scale;
-    protected static final float POS_Y = Settings.HEIGHT * 0.47f;
-    protected static final float ROW_OFFSET = 60 * Settings.scale;
+    private static final float GAP_Y = scale(55);
+    private static final float POS_X = 1100f * Settings.scale;
+    private static final float POS_Y = Settings.HEIGHT * 0.47f;
+    private static final float ROW_OFFSET = 60 * Settings.scale;
 
-    protected static final Random RNG = new Random();
-    protected final ArrayList<PCLLoadout> availableLoadouts;
-    protected final ArrayList<PCLLoadout> loadouts;
-    public final ArrayList<PCLGlyphEditor> glyphEditors;
-    protected ArrayList<AbstractBlight> cachedBlights;
-    protected ArrayList<AbstractRelic> cachedRelics;
-    protected CharacterSelectScreen charScreen;
-    protected CharacterOption characterOption;
-    protected AbstractPlayerData<?, ?> data;
-    protected PCLLoadout loadout;
-    protected PCLEffect currentDialog;
-    protected float textScale;
+    private final ArrayList<PCLLoadout> loadouts;
+    private final ArrayList<PCLGlyphEditor> glyphEditors;
+    private final ArrayList<EUIButton> activeButtons;
+    private ArrayList<AbstractBlight> cachedBlights;
+    private ArrayList<AbstractRelic> cachedRelics;
+    private CharacterSelectScreen charScreen;
+    private CharacterOption characterOption;
+    private PCLPlayerData<?, ?, ?> data;
+    private PCLLoadout loadout;
+    private PCLEffect currentDialog;
     public PCLEffect playEffect;
     public EUIButton seriesButton;
+    public EUIButton editCardsButton;
+    public EUIButton editRelicsButton;
     public EUIButton loadoutEditorButton;
     public EUIButton infoButton;
     public EUIButton resetButton;
@@ -75,16 +87,9 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     public PCLCharacterSelectOverlay() {
         final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f) + scale(10);
 
-        textScale = Settings.scale;
-
-        //Need to prevent text from disappearing from scaling too big on 4K resolutions
-        if (textScale > 1) {
-            textScale = 1;
-        }
-
         loadouts = new ArrayList<>();
-        availableLoadouts = new ArrayList<>();
         glyphEditors = new ArrayList<>();
+        activeButtons = new ArrayList<>();
 
         startingCardsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(POS_X, POS_Y, leftTextWidth, 50f * Settings.scale))
@@ -105,26 +110,22 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setLabel(PGR.core.strings.csel_ascensionGlyph);
 
         final float buttonWidth = Settings.WIDTH * (0.11f);
-        final float gapY = scale(76);
         final float buttonheight = scale(46);
         final float textScale = 0.8f;
 
         resetButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, startingCardsListLabel.hb.y + scale(110))
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_resetTutorial)
                 .setTooltip(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialInfo)
                 .setColor(new Color(0.8f, 0.3f, 0.5f, 1))
                 .setOnClick(this::openResetDialog);
 
         infoButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, resetButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_charTutorial)
                 .setTooltip(PGR.core.strings.csel_charTutorial, PGR.core.strings.csel_charTutorialInfo)
                 .setColor(new Color(0.5f, 0.3f, 0.8f, 1))
                 .setOnClick(this::openInfo);
 
         loadoutEditorButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, infoButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_deckEditor)
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
@@ -132,14 +133,25 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setOnClick(this::openLoadoutEditor);
 
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setPosition(startingCardsListLabel.hb.cX, loadoutEditorButton.hb.y + gapY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::openSeriesSelect);
 
+        editCardsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
+                .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
+                .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
+                .setOnClick(this::previewCards);
+
+        editRelicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.sui_relicPool)
+                .setTooltip(PGR.core.strings.sui_relicPool, PGR.core.strings.sui_relicPoolInfo)
+                .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
+                .setOnClick(this::previewRelics);
+
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
-        for (AbstractGlyph glyph : AbstractPlayerData.GLYPHS) {
+        for (AbstractGlyph glyph : PCLPlayerData.GLYPHS) {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, ROW_OFFSET, ROW_OFFSET)));
             xOffset += ROW_OFFSET * 1.7f;
         }
@@ -179,12 +191,71 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    protected ArrayList<AbstractCard> getAvailableCards() {
+        ArrayList<AbstractCard> group = new ArrayList<>();
+
+        // Add loadout cards
+        for (PCLLoadout series : data.getEveryLoadout()) {
+            if (!series.isLocked() && (!series.isCore() || data.canEditCore())) {
+                for (PCLCardData cardData : series.cardDatas) {
+                    group.add(cardData.makeCardFromLibrary(0));
+                }
+            }
+        }
+
+        // Add available colorless
+        for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
+            if (PCLSeriesSelectScreen.isRarityAllowed(c.rarity, c.type) && data.resources.containsColorless(c)) {
+                group.add(c);
+            }
+        }
+
+        // Get additional cards that this character can use
+        String[] additional = data.getAdditionalCardIDs();
+        if (additional != null) {
+            for (String id : additional) {
+                group.add(CardLibrary.getCard(id));
+            }
+        }
+
+        return group;
+    }
+
+    protected ArrayList<AbstractRelic> getAvailableRelics() {
+        ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
+
+        // Get additional relics that this character can use
+        String[] additional = data.getAdditionalRelicIDs();
+        if (additional != null) {
+            for (String id : additional) {
+                relics.add(RelicLibrary.getRelic(id));
+            }
+        }
+
+        // Get other non base-game relics
+        for (AbstractRelic r : GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values()) {
+            if (EUIGameUtils.getModInfo(r) != null && GameUtilities.isRelicTierSpawnable(r.tier)) {
+                relics.add(r);
+            }
+        }
+
+        relics.removeIf(r -> {
+            return UnlockTracker.isRelicLocked(r.relicId);
+        });
+
+        return relics;
+    }
+
     protected float getInfoX() {
         return EUIClassUtils.getField(characterOption, "infoX");
     }
 
     protected float getInfoY() {
         return EUIClassUtils.getField(characterOption, "infoY");
+    }
+
+    public boolean hasDialog() {
+        return currentDialog != null;
     }
 
     public void initialize(CharacterSelectScreen selectScreen) {
@@ -220,14 +291,23 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
-    public void randomizeLoadout() {
-        if (availableLoadouts.size() > 1) {
-            while (loadout == data.selectedLoadout) {
-                data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
-            }
+    private void positionButton(EUIButton button) {
+        button.setPosition(startingCardsListLabel.hb.cX, startingCardsListLabel.hb.y + (GAP_Y * (activeButtons.size() + 2)));
+        activeButtons.add(button);
+    }
 
-            refresh(characterOption);
-        }
+    private void previewCards() {
+        currentDialog = new ViewInGameCardPoolEffect(getAvailableCards(), new HashSet<>(data.config.bannedCards.get()))
+                .addCallback((effect) -> {
+                    data.config.bannedCards.set(effect.bannedCards);
+                });
+    }
+
+    private void previewRelics() {
+        currentDialog = new ViewInGameRelicPoolEffect(getAvailableRelics(), new HashSet<>(data.config.bannedRelics.get()))
+                .addCallback((effect) -> {
+                    data.config.bannedRelics.set(effect.bannedRelics);
+                });
     }
 
     public void refresh(CharacterOption characterOption) {
@@ -236,6 +316,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     public void refresh(CharacterOption characterOption, boolean canOpen) {
         this.characterOption = characterOption;
+        activeButtons.clear();
 
         if (characterOption != null && canOpen) {
             EUI.actingColor = characterOption.c.getCardColor();
@@ -247,10 +328,24 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             playEffect = data.getCharSelectScreenAnimation();
             startingCardsLabel.setActive(true);
             startingCardsListLabel.setActive(true);
-            seriesButton.setActive(true);
-            loadoutEditorButton.setActive(true);
-            infoButton.setActive(true);
-            resetButton.setActive(true);
+
+            if (data.hasTutorials()) {
+                positionButton(resetButton);
+            }
+            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
+            if (meter != null && meter.getInfoPages() != null && meter.getInfoPages().length > 0) {
+                positionButton(infoButton);
+            }
+            positionButton(loadoutEditorButton);
+            if (data.canEditPool()) {
+                if (data.loadouts.size() > 1) {
+                    positionButton(seriesButton);
+                }
+                else {
+                    positionButton(editCardsButton);
+                    positionButton(editRelicsButton);
+                }
+            }
 
             // Only show the glyphs if any glyphs are unlocked
             for (PCLGlyphEditor geditor : glyphEditors) {
@@ -263,18 +358,14 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 geditor.setActive(showGlyphs);
             }
 
-            EUITourTooltip.queueFirstView(PGR.config.tourCharSelect,
-                    seriesButton.makeTour(true),
-                    loadoutEditorButton.makeTour(true),
-                    infoButton.makeTour(true),
-                    resetButton.makeTour(true));
+            if (activeButtons.size() > 0) {
+                EUITourTooltip.queueFirstView(PGR.config.tourCharSelect,
+                        EUIUtils.map(activeButtons, b -> b.makeTour(true)));
+            }
+
         }
         else {
             playEffect = null;
-            seriesButton.setActive(false);
-            loadoutEditorButton.setActive(false);
-            infoButton.setActive(false);
-            resetButton.setActive(false);
             startingCardsLabel.setActive(false);
             startingCardsListLabel.setActive(false);
             ascensionGlyphsLabel.setActive(false);
@@ -326,16 +417,10 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     protected void refreshPlayerData() {
         this.data = PGR.getPlayerData(characterOption.c.chosenClass);
         this.loadouts.clear();
-        this.availableLoadouts.clear();
 
         if (data != null) {
             final int unlockLevel = data.resources.getUnlockLevel();
-            for (PCLLoadout loadout : data.loadouts.values()) {
-                this.loadouts.add(loadout);
-                if (unlockLevel >= loadout.unlockLevel) {
-                    this.availableLoadouts.add(loadout);
-                }
-            }
+            this.loadouts.addAll(data.loadouts.values());
 
             this.loadouts.sort((a, b) ->
             {
@@ -368,13 +453,12 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     }
 
     public void renderImpl(SpriteBatch sb) {
-        seriesButton.tryRender(sb);
-        loadoutEditorButton.tryRender(sb);
-        infoButton.tryRender(sb);
-        resetButton.tryRender(sb);
         startingCardsLabel.tryRender(sb);
         startingCardsListLabel.tryRender(sb);
         ascensionGlyphsLabel.tryRender(sb);
+        for (EUIButton button : activeButtons) {
+            button.renderImpl(sb);
+        }
         for (PCLGlyphEditor geditor : glyphEditors) {
             geditor.tryRender(sb);
         }
@@ -401,7 +485,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.Tooltips.gold.texture(), infoX + 260.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
         EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + gold, infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
 
-        if (cachedBlights != null) {
+        if (cachedBlights != null && cachedBlights.size() > 0) {
             EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
                 r.render(sb, false, Color.WHITE);
@@ -448,13 +532,12 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             }
         }
         else {
-            seriesButton.tryUpdate();
-            loadoutEditorButton.tryUpdate();
-            infoButton.tryUpdate();
-            resetButton.tryUpdate();
             startingCardsLabel.tryUpdate();
             startingCardsListLabel.tryUpdate();
             ascensionGlyphsLabel.tryUpdate();
+            for (EUIButton button : activeButtons) {
+                button.updateImpl();
+            }
             for (PCLGlyphEditor geditor : glyphEditors) {
                 geditor.tryUpdate();
             }

@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends AbstractImages, V extends AbstractTooltips, W extends AbstractStrings> {
+public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends AbstractImages, V extends AbstractTooltips, W extends AbstractStrings> {
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
     }.getType();
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {
@@ -45,7 +45,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     public final boolean usePCLFrame;
     public final T data;
     public final U images;
-    protected CharacterStrings characterStrings;
     protected boolean isLoaded;
     public V tooltips;
     public W strings;
@@ -107,13 +106,6 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     // Intercepts the creation of Ascender's Bane upon starting a run
     public PCLCardData getAscendersBane() {
         return null;
-    }
-
-    public CharacterStrings getCharacterStrings() {
-        if (characterStrings == null) {
-            characterStrings = PGR.getCharacterStrings(StringUtils.capitalize(id));
-        }
-        return characterStrings;
     }
 
     // Intercepts cards generated from events
@@ -181,13 +173,16 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
     }
 
     protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc) {
-        String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
-        loadFunc.invoke(json);
-
-        FileHandle file = getFile(Settings.language, path);
-        if (file.exists()) {
-            String json2 = file.readString(StandardCharsets.UTF_8.name());
+        FileHandle fallback = getFallbackFile(path);
+        if (fallback != null) {
+            String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
             loadFunc.invoke(json);
+
+            FileHandle file = getFile(Settings.language, path);
+            if (file.exists()) {
+                String json2 = file.readString(StandardCharsets.UTF_8.name());
+                loadFunc.invoke(json);
+            }
         }
     }
 
@@ -216,10 +211,15 @@ public abstract class PCLResources<T extends AbstractPlayerData<?, ?>, U extends
 
     protected void postInitialize() {
         tooltips.initializeIcons();
-        data.initialize();
+        if (data != null) {
+            data.initialize();
+        }
     }
 
     public void receiveEditCharacters() {
+        if (data != null) {
+            data.registerCharacter();
+        }
     }
 
     public void receiveEditKeywords() {

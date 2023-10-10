@@ -1,6 +1,7 @@
 package pinacolada.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
@@ -11,31 +12,13 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLEnergyOrb implements EnergyOrbInterface {
-    protected static final TextureCache DEFAULT_BORDER = PCLCoreImages.Core.controllableCardPileBorder;
-    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardUI.orbFlash;
     protected static final float BASE_MULT = 3f;
     protected static final float ORB_IMG_SCALE = 1.15F * Settings.scale;
-    public static final TextureCache[] DEFAULT_TEXTURES =
-            {
-                    PCLCoreImages.CardUI.orbBaseLayer,
-                    PCLCoreImages.CardUI.orbTopLayer1,
-                    PCLCoreImages.CardUI.orbTopLayer2,
-                    PCLCoreImages.CardUI.orbTopLayer3,
-                    PCLCoreImages.CardUI.orbTopLayer4,
-                    };
     protected TextureCache border;
     protected TextureCache flash;
     protected TextureCache[] images;
     protected float[] angleMults;
     protected float angle;
-
-    public PCLEnergyOrb() {
-        this(DEFAULT_TEXTURES, DEFAULT_FLASH, DEFAULT_BORDER, null);
-    }
-
-    public PCLEnergyOrb(TextureCache[] images, TextureCache flash) {
-        this(images, flash, DEFAULT_BORDER, null);
-    }
 
     public PCLEnergyOrb(TextureCache[] images, TextureCache flash, TextureCache border) {
         this(images, flash, border, null);
@@ -66,7 +49,6 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
 
     @Override
     public void renderOrb(SpriteBatch sb, boolean enabled, float current_x, float current_y) {
-        sb.draw(border.texture(), current_x - 64.0F, current_y - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, ORB_IMG_SCALE, ORB_IMG_SCALE, this.angle, 0, 0, border.texture().getWidth(), border.texture().getHeight(), false, false);
         if (enabled) {
             this.renderOrbLayer(sb, current_x, current_y);
         }
@@ -74,6 +56,8 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
             PCLRenderHelpers.drawGrayscale(sb, (s) ->
                     this.renderOrbLayer(s, current_x, current_y));
         }
+        sb.setColor(Color.WHITE);
+        sb.draw(border.texture(), current_x - 64.0F, current_y - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, ORB_IMG_SCALE, ORB_IMG_SCALE, this.angle, 0, 0, border.texture().getWidth(), border.texture().getHeight(), false, false);
     }
 
     protected void renderOrbLayer(SpriteBatch sb, float current_x, float current_y) {

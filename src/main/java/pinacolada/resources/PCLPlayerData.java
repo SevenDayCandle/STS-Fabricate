@@ -9,13 +9,16 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
+import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.dungeon.modifiers.Glyph0;
 import pinacolada.dungeon.modifiers.Glyph1;
@@ -34,7 +37,7 @@ import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {
+public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig, V extends PCLCharacter> {
     private static final TypeToken<HashMap<String, PCLLoadoutStats>> TStats = new TypeToken<HashMap<String, PCLLoadoutStats>>() {
     };
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
@@ -57,13 +60,15 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
     public final int baseOrbs;
     public final boolean useSummons;
     public final boolean useAugments;
+    protected boolean hasTutorials;
+    public final String characterID;
     public PCLLoadout selectedLoadout;
 
-    public AbstractPlayerData(T resources) {
+    public PCLPlayerData(T resources) {
         this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public AbstractPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
+    public PCLPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
@@ -74,6 +79,7 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         this.baseOrbs = orbs;
         this.useSummons = useSummons;
         this.useAugments = useAugments;
+        this.characterID = resources.createID(getCharacterClass().getSimpleName());
     }
 
     public static Random getRNG() {
@@ -87,10 +93,25 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
 
     public void addTutorial(PCLCreatureData data) {
         PCLTutorialMonster.register(data, config.seenTutorial, p -> p.chosenClass == this.resources.playerClass);
+        hasTutorials = true;
     }
 
     public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
         PCLTutorialMonster.register(data, config.seenTutorial, canShow);
+        hasTutorials = true;
+    }
+
+    public void addTutorial(PCLCreatureData data, STSConfigItem<Boolean> configItem, FuncT1<Boolean, AbstractPlayer> canShow) {
+        PCLTutorialMonster.register(data, configItem, canShow);
+        hasTutorials = true;
+    }
+
+    public boolean canEditCore() {
+        return false;
+    }
+
+    public boolean canEditPool() {
+        return true;
     }
 
     protected void addUnlockBundle(PCLLoadout loadout) {
@@ -118,6 +139,16 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
             }
 
             BaseMod.addUnlockBundle(bundle, resources.playerClass, loadout.unlockLevel - 1);
+        }
+    }
+
+    public V createCharacter() {
+        try {
+            return getCharacterClass().newInstance();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -168,6 +199,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);
     }
 
+    public CharacterStrings getCharacterStrings() {
+        return PGR.getCharacterStrings(characterID);
+    }
+
     public PCLEffect getCharSelectScreenAnimation() {
         return null;
     }
@@ -190,6 +225,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
 
     public PCLLoadoutStats getStats(String id) {
         return stats.get(id);
+    }
+
+    public boolean hasTutorials() {
+        return hasTutorials;
     }
 
     public void initialize() {
@@ -244,6 +283,10 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
         saveStats();
     }
 
+    public void registerCharacter() {
+        BaseMod.addCharacter(createCharacter(), resources.images.getCharButtonPath(), resources.images.getCharBackgroundPath(), resources.playerClass);
+    }
+
     public void reload() {
         if (config != null) {
             config.load(CardCrawlGame.saveSlot);
@@ -293,6 +336,8 @@ public abstract class AbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U e
             }
         }
     }
+
+    public abstract Class<V> getCharacterClass();
 
     public abstract U getConfig();
 

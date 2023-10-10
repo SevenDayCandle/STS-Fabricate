@@ -27,7 +27,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
 import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
 import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
-import pinacolada.resources.AbstractPlayerData;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
@@ -47,7 +47,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected int preset;
     protected CharacterOption characterOption;
-    protected AbstractPlayerData<?, ?> data;
+    protected PCLPlayerData<?, ?, ?> data;
     protected PCLEffect selectionEffect;
     protected EUILabel startingDeck;
     protected EUILabel attributesText;
@@ -186,7 +186,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         return presets[preset];
     }
 
-    public void open(PCLLoadout loadout, AbstractPlayerData<?, ?> data, CharacterOption option, ActionT0 onClose) {
+    public void open(PCLLoadout loadout, PCLPlayerData<?, ?, ?> data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
         this.loadout = loadout;
@@ -216,7 +216,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         changePreset(loadout.preset);
         canvas.initialize(getCurrentPreset());
 
-        seriesButton.setActive(data != null);
+        seriesButton.setActive(data != null && data.loadouts.size() > 1);
         startingDeck.setActive(data != null);
         for (EUIButton button : presetButtons) {
             button.setActive(data != null);

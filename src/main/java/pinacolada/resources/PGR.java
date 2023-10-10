@@ -155,16 +155,6 @@ public class PGR {
         return getLanguagePack().getCharacterString(characterID);
     }
 
-    public static CharacterStrings getCharacterStrings(AbstractCard.CardColor cardColor) {
-        PCLResources<?, ?, ?, ?> resources = colorResourceMap.getOrDefault(cardColor, null);
-        return resources != null ? resources.getCharacterStrings() : null;
-    }
-
-    public static CharacterStrings getCharacterStrings(AbstractPlayer.PlayerClass player) {
-        PCLResources<?, ?, ?, ?> resources = playerResourceMap.getOrDefault(player, null);
-        return resources != null ? resources.getCharacterStrings() : null;
-    }
-
     public static EventStrings getEventStrings(String eventID) {
         return getLanguagePack().getEventString(eventID);
     }
@@ -189,11 +179,11 @@ public class PGR {
         return getLanguagePack().getOrbString(orbID);
     }
 
-    public static AbstractPlayerData<?, ?> getPlayerData(AbstractCard.CardColor playerClass) {
+    public static PCLPlayerData<?, ?, ?> getPlayerData(AbstractCard.CardColor playerClass) {
         return getResources(playerClass).data;
     }
 
-    public static AbstractPlayerData<?, ?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
+    public static PCLPlayerData<?, ?, ?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
         return getResources(playerClass).data;
     }
 
@@ -401,7 +391,7 @@ public class PGR {
 
     public static void postInitialize() {
         registerCommands();
-        AbstractPlayerData.postInitialize();
+        PCLPlayerData.postInitialize();
         PotionPoolPatches.initialize();
         config.load(CardCrawlGame.saveSlot);
         config.initializeOptions();

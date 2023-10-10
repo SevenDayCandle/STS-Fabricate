@@ -45,7 +45,7 @@ import java.util.Arrays;
 @VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class)
-            .setExtra(1, DEFAULT_MAX);
+            .setExtra(0, DEFAULT_MAX);
 
     // Damage effects are only customizable in code and cannot be saved in fields
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
@@ -98,7 +98,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public String getSubText(PCLCardTarget perspective) {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
-        String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+        String amountString = (count != 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         // When displayed as text, we can just write normal damage down as "damage"
         EUITooltip attackTooltip = getAttackTooltip();
@@ -127,8 +127,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond ||
-                skill instanceof PPassiveMod ||
+        return super.isSkillAllowed(skill) ||
                 skill instanceof PDamageTrait;
     }
 

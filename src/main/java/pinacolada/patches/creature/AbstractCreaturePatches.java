@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.characters.CreatureAnimationInfo;
+import pinacolada.characters.PCLCharacterAnimation;
 import pinacolada.dungeon.CombatManager;
 
 public class AbstractCreaturePatches {
@@ -13,7 +13,7 @@ public class AbstractCreaturePatches {
     public static class AbstractMonster_LoadAnimation {
         @SpirePrefixPatch
         public static void prefix(AbstractCreature __instance, String atlasUrl, String skeletonUrl, float scale) {
-            CreatureAnimationInfo.registerCreatureAnimation(__instance, atlasUrl, skeletonUrl, scale);
+            PCLCharacterAnimation.registerCreatureAnimation(__instance, atlasUrl, skeletonUrl, scale);
         }
     }
 

@@ -12,32 +12,31 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CreatureAnimationInfo {
-    private static final HashMap<String, CreatureAnimationInfo> creatureAnimations = new HashMap<>();
+public class PCLCharacterAnimation extends AbstractAnimation {
+    private static final HashMap<String, AbstractAnimation> creatureAnimations = new HashMap<>();
     private static final HashMap<String, String> creatureImages = new HashMap<>();
-    private static final HashMap<String, AbstractAnimation> creatureSpriters = new HashMap<>();
     private static final ArrayList<String> playerIDs = new ArrayList<>();
 
-    public final String atlas;
-    public final String skeleton;
+    public final String atlasUrl;
+    public final String skeletonUrl;
     public final float scale;
 
-    public CreatureAnimationInfo(String atlas, String skeleton, float scale) {
-        this.atlas = atlas;
-        this.skeleton = skeleton;
+    public PCLCharacterAnimation(String atlasUrl, String skeletonUrl, float scale) {
+        this.atlasUrl = atlasUrl;
+        this.skeletonUrl = skeletonUrl;
         this.scale = scale;
     }
 
-    public static CreatureAnimationInfo getAnimation(AbstractCreature c) {
+    public static AbstractAnimation getAnimation(AbstractCreature c) {
         return getAnimationForID(getIdentifierString(c));
     }
 
-    public static CreatureAnimationInfo getAnimationForID(String id) {
+    public static AbstractAnimation getAnimationForID(String id) {
         return creatureAnimations.get(id);
     }
 
-    public static CreatureAnimationInfo getAnimationForIDWithLoading(String id) {
-        CreatureAnimationInfo info = getAnimationForID(id);
+    public static AbstractAnimation getAnimationForIDWithLoading(String id) {
+        AbstractAnimation info = getAnimationForID(id);
         if (info == null) {
             AbstractCreature creature = tryCreate(id);
             if (creature != null) {
@@ -67,12 +66,18 @@ public class CreatureAnimationInfo {
         return GameUtilities.getRandomElement(playerIDs);
     }
 
-    public static AbstractAnimation getSpriterForID(String id) {
-        return creatureSpriters.get(id);
-    }
-
     public static boolean isPlayer(String id) {
         return playerIDs.contains(id);
+    }
+
+    public static void registerCreatureAnimation(AbstractCreature creature, AbstractAnimation animation) {
+        String id = getIdentifierString(creature);
+        if (id != null && !creatureAnimations.containsKey(id)) {
+            if (creature instanceof AbstractPlayer) {
+                playerIDs.add(id);
+            }
+            creatureAnimations.put(id, animation);
+        }
     }
 
     public static void registerCreatureAnimation(AbstractCreature creature, String atlasUrl, String skeletonUrl, float scale) {
@@ -81,7 +86,7 @@ public class CreatureAnimationInfo {
             if (creature instanceof AbstractPlayer) {
                 playerIDs.add(id);
             }
-            creatureAnimations.put(id, new CreatureAnimationInfo(atlasUrl, skeletonUrl, scale));
+            creatureAnimations.put(id, new PCLCharacterAnimation(atlasUrl, skeletonUrl, scale));
         }
     }
 
@@ -92,7 +97,7 @@ public class CreatureAnimationInfo {
     public static void registerCreatureSpriter(CustomMonster creature) {
         AbstractAnimation animation = ReflectionHacks.getPrivate(creature, CustomMonster.class, "animation");
         if (animation != null) {
-            creatureSpriters.putIfAbsent(getIdentifierString(creature), animation);
+            creatureAnimations.putIfAbsent(getIdentifierString(creature), animation);
         }
     }
 
@@ -109,7 +114,7 @@ public class CreatureAnimationInfo {
     }
 
     public static void tryLoadAnimations(String id) {
-        CreatureAnimationInfo info = getAnimationForID(id);
+        AbstractAnimation info = getAnimationForID(id);
         if (info == null) {
             AbstractCreature creature = tryCreate(id);
             if (creature != null) {
@@ -122,5 +127,10 @@ public class CreatureAnimationInfo {
                 }
             }
         }
+    }
+
+    @Override
+    public Type type() {
+        return Type.NONE;
     }
 }
