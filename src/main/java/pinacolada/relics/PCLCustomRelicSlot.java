@@ -135,13 +135,23 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static ArrayList<PCLCustomRelicSlot> getRelics(AbstractCard.CardColor color) {
-        if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
-        }
         if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
             CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
         return CUSTOM_COLOR_LISTS.get(color);
+    }
+
+    public static ArrayList<PCLCustomRelicSlot> getRelics(AbstractCard.CardColor... colors) {
+        ArrayList<PCLCustomRelicSlot> res = new ArrayList<>();
+        for (AbstractCard.CardColor color : colors) {
+            if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+                CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
+            }
+            else {
+                res.addAll(CUSTOM_COLOR_LISTS.get(color));
+            }
+        }
+        return res;
     }
 
     public static void initialize() {

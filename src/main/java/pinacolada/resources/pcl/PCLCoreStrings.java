@@ -121,16 +121,14 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_tintDesc = cedit.TEXT[72];
     public final String cedit_repeat = cedit.TEXT[73];
     public final String cedit_newLoadout = cedit.TEXT[74];
-    public final String cedit_renameLoadout = cedit.TEXT[75];
-    public final String cedit_deleteLoadout = cedit.TEXT[76];
+    public final String cedit_renameItem = cedit.TEXT[75];
+    public final String cedit_deleteItem = cedit.TEXT[76];
     public final String cedit_invert = cedit.TEXT[77];
     public final String cedit_every = cedit.TEXT[78];
     public final String cedit_minMaxStacks = cedit.TEXT[79];
     public final String cedit_scope = cedit.TEXT[80];
     public final String cedit_newFlag = cedit.TEXT[81];
-    public final String cedit_renameFlag = cedit.TEXT[82];
-    public final String cedit_deleteFlag = cedit.TEXT[83];
-    public final String cedit_turns = cedit.TEXT[84];
+    public final String cedit_turns = cedit.TEXT[82];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];

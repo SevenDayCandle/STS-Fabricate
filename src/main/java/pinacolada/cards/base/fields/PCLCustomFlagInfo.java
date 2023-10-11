@@ -25,7 +25,6 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
     private static final TypeToken<HashMap<Settings.GameLanguage, String>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, String>>() {
     };
     public static final String SUBFOLDER = "flag";
-    protected transient String filePath;
     public String languageStrings;
     public String colorString;
     public transient AbstractCard.CardColor color = AbstractCard.CardColor.COLORLESS;

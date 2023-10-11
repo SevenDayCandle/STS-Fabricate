@@ -46,6 +46,7 @@ import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
+import pinacolada.resources.loadout.PCLLoadoutDataInfo;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
@@ -407,6 +408,7 @@ public class PGR {
         for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receivePostInitialize();
         }
+        PCLLoadoutDataInfo.reloadLoadouts();
 
         for (AbstractCard c : CardLibrary.getAllCards()) {
             if (c instanceof PCLCard) {

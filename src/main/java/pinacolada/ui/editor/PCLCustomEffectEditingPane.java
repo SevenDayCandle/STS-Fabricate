@@ -39,7 +39,6 @@ import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;

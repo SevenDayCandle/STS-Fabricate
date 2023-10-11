@@ -5,6 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.megacrit.cardcrawl.screens.mainMenu.SaveSlotScreen;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadoutDataInfo;
 
 public class SaveSlotScreenPatches {
     @SpirePatch(clz = SaveSlotScreen.class, method = "confirm", paramtypez = {int.class})
@@ -17,6 +18,7 @@ public class SaveSlotScreenPatches {
                     resources.data.reload();
                 }
             }
+            PCLLoadoutDataInfo.reloadLoadouts();
         }
     }
 }

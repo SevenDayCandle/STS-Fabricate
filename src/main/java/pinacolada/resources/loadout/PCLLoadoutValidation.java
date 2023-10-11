@@ -46,7 +46,7 @@ public class PCLLoadoutValidation {
     }
 
     public PCLLoadoutValidation refresh(PCLLoadoutData data) {
-        if (data == null || data.preset < 0 || data.preset >= PCLLoadout.MAX_PRESETS) {
+        if (data == null || data.ID == null) {
             isValid = false;
             return this;
         }

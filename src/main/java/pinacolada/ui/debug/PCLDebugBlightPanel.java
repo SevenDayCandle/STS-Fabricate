@@ -76,7 +76,7 @@ public class PCLDebugBlightPanel {
 
     protected void regenerate() {
         originalSorted.addAll(EUIGameUtils.getAllBlights()); // Will contain patched blights
-        originalSorted.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(null), PCLCustomBlightSlot::make));
+        originalSorted.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
         originalSorted.sort((a, b) -> StringUtils.compare(a.blightID, b.blightID));
         sortedModIDs.add(PCLDebugCardPanel.ALL);
         sortedModIDs.addAll(originalSorted.stream()

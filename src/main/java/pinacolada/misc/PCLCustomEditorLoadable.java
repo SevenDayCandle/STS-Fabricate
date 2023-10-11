@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public abstract class PCLCustomEditorLoadable<T extends EditorMaker, U extends FabricateItem> extends PCLCustomLoadable {
     protected static final TypeToken<EffectItemForm> TTOKENFORM = new TypeToken<EffectItemForm>() {
     };
-    protected transient String filePath;
     protected transient String imagePath;
     public transient ArrayList<T> builders = new ArrayList<>();
 

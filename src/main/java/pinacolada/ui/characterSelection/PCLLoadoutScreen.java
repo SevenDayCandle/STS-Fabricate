@@ -15,7 +15,6 @@ import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -24,15 +23,15 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
-import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
-import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
+import pinacolada.effects.screen.*;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
+import pinacolada.resources.loadout.PCLLoadoutDataInfo;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.ui.editor.card.EditDeleteDropdownRow;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -41,18 +40,15 @@ import java.util.ArrayList;
 public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected static final PCLLoadoutValidation val = new PCLLoadoutValidation();
     protected final ArrayList<PCLBaseStatEditor> baseStatEditors = new ArrayList<>();
-    protected final PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
-    public final EUIContextMenu<ContextOption> contextMenu;
+    protected EUIDropdown<PCLLoadoutData> presetDropdown;
     protected PCLLoadout loadout;
     protected ActionT0 onClose;
-    protected int preset;
     protected CharacterOption characterOption;
     protected PCLPlayerData<?, ?, ?> data;
     protected PCLEffect selectionEffect;
-    protected EUILabel startingDeck;
     protected EUILabel attributesText;
+    protected EUIButton addPresetButton;
     protected EUIButton seriesButton;
-    protected EUIButton[] presetButtons;
     protected EUIButton cancelButton;
     protected EUIButton clearButton;
     protected EUIButton saveButton;
@@ -61,7 +57,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected EUITextBox cardsvalueText;
     protected EUITextBox hindrancevalueText;
     protected PCLLoadoutCanvas canvas;
-    protected int rightClickedSlot;
+    private PCLLoadoutData current;
     public PCLBaseStatEditor activeEditor;
 
     public PCLLoadoutScreen() {
@@ -70,12 +66,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
         final float button_cY = buttonHeight * 1.5f;
-
-        startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
-                .setCenter(screenW(0.08f), screenH(0.97f)))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
-                .setSmartText(true, false)
-                .setColor(Settings.CREAM_COLOR);
 
         canvas = new PCLLoadoutCanvas(this);
 
@@ -86,21 +76,24 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setAlignment(0.5f, 0.5f);
 
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(),
-                new EUIHitbox(startingDeck.hb.x + scale(30), startingDeck.hb.y - scale(65), scale(150), scale(52)))
+                new EUIHitbox(screenW(0.01f), screenH(0.93f), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_seriesEditor)
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::openSeriesSelect);
 
-        presetButtons = new EUIButton[PCLLoadout.MAX_PRESETS];
-        for (int i = 0; i < presetButtons.length; i++) {
-            //noinspection SuspiciousNameCombination
-            presetButtons[i] = new EUIButton(EUIRM.images.squaredButton.texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
-                    .setPosition(screenW(0.6f) + ((i - 1f) * buttonHeight), screenH(1f) - (buttonHeight * 0.85f))
-                    .setText(String.valueOf(i + 1))
-                    .setOnClick(i, this::changePreset)
-                    .setOnRightClick(i, this::rightClickPreset);
-        }
+        presetDropdown = new EUIDropdown<PCLLoadoutData>(new EUIHitbox(screenW(0.8f), screenH(0.92f), scale(200), scale(40)), l -> l.name)
+                .setOnChange(l -> {
+                    if (l.size() > 0) {
+                        this.changePreset(l.get(0));
+                    }
+                })
+                .setRowFunction((a, b, c, d) -> new EditDeleteDropdownRow<PCLLoadoutData, PCLLoadoutData>(a, b, c, c, d, f -> this.openPresetEditName(PGR.core.strings.cedit_renameItem, f), this::openPresetDelete))
+                .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + scale(250))
+                .setHeader(EUIFontHelper.cardTooltipTitleFontNormal, 0.8f, Settings.CREAM_COLOR, EUIUtils.EMPTY_STRING);
+        addPresetButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(screenW(0.7f), screenH(0.87f), scale(30), scale(30)))
+                .setOnClick(() -> this.openPresetCreate(PGR.core.strings.cedit_newLoadout))
+                .setTooltip(PGR.core.strings.cedit_newLoadout, "");
 
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.85f, button_cY)
@@ -131,43 +124,55 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, screenH(0.7f))
-                .setFont(FontHelper.tipHeaderFont, 1);
+                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1);
 
         cardscountText = new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardsvalueText.hb.y + labelHeight * 1.4f)
-                .setFont(FontHelper.tipHeaderFont, 1);
+                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1);
 
         hindrancevalueText = (EUITextBox) new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardscountText.hb.y + labelHeight * 1.4f)
-                .setFont(FontHelper.tipHeaderFont, 1)
+                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1)
                 .setTooltip(new EUIHeaderlessTooltip(EUIUtils.format(PGR.core.strings.loadout_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
         final PCLBaseStatEditor.StatType[] statTypes = PCLBaseStatEditor.StatType.values();
         for (int i = 0; i < statTypes.length; i++) {
             baseStatEditors.add(new PCLBaseStatEditor(statTypes[i], screenW(0.6f), screenH(0.82f - i * 0.1f), this));
         }
-
-        contextMenu = new EUIContextMenu<ContextOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
-                .setOnChange(options -> {
-                    for (ContextOption o : options) {
-                        o.onSelect.invoke(this, rightClickedSlot);
-                    }
-                })
-                .setCanAutosizeButton(true);
     }
 
-    public void changePreset(int preset) {
-        this.preset = preset;
+    protected PCLLoadoutData addPreset() {
+        PCLLoadoutData newLoadout = loadout.getDefaultData();
+        presetDropdown.addItems(newLoadout);
+        refreshPresetSelector();
+        changePreset(newLoadout);
+        return newLoadout;
+    }
+
+    public void changePreset(String key) {
+        for (PCLLoadoutData data : presetDropdown.getAllItems()) {
+            if (data.ID.equals(key)) {
+                changePreset(data);
+                return;
+            }
+        }
+        if (presetDropdown.size() > 0) {
+            changePreset(presetDropdown.getItemAt(0));
+        }
+    }
+
+    public void changePreset(PCLLoadoutData preset) {
+        current = preset;
+        presetDropdown.setSelection(current, false);
         refresh();
     }
 
     public void clear() {
-        PCLLoadoutData defaultData = loadout.getDefaultData(preset);
-        presets[preset] = defaultData;
+        loadout.resetPreset(current);
         refresh();
     }
 
@@ -183,7 +188,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     }
 
     public PCLLoadoutData getCurrentPreset() {
-        return presets[preset];
+        return current;
     }
 
     public void open(PCLLoadout loadout, PCLPlayerData<?, ?, ?> data, CharacterOption option, ActionT0 onClose) {
@@ -195,32 +200,37 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         this.data = data;
         EUI.actingColor = data != null ? data.resources.cardColor : option.c.getCardColor();
 
-        for (int i = 0; i < loadout.presets.length; i++) {
-            presets[i] = loadout.getPreset(i).makeCopy();
-        }
-
+        ArrayList<PCLLoadoutData> dataCopies = EUIUtils.map(loadout.presets.values(), PCLLoadoutData::makeCopy);
         for (PCLBaseStatEditor beditor : baseStatEditors) {
             final boolean available = GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
             beditor.setActive(available);
             beditor.setInteractable(available);
             if (!available) {
-                for (int i = 0; i < loadout.presets.length; i++) {
-                    presets[i].values.put(beditor.type, 0);
+                for (PCLLoadoutData ld : dataCopies) {
+                    ld.values.put(beditor.type, 0);
                 }
             }
         }
 
-        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", loadout.getName()));
+        if (dataCopies.isEmpty()) {
+            PCLLoadoutData dData = loadout.getDefaultData();
+            presetDropdown.setItems(dData);
+            changePreset(dData);
+        }
+        else {
+            presetDropdown.setItems(dataCopies);
+            changePreset(loadout.preset);
+        }
+        refreshPresetSelector();
+
+        presetDropdown.setHeaderText(loadout.getName());
 
         toggleViewUpgrades(false);
-        changePreset(loadout.preset);
         canvas.initialize(getCurrentPreset());
 
         seriesButton.setActive(data != null && data.loadouts.size() > 1);
-        startingDeck.setActive(data != null);
-        for (EUIButton button : presetButtons) {
-            button.setActive(data != null);
-        }
+        presetDropdown.setActive(data != null);
+        addPresetButton.setActive(data != null);
 
         if (canvas.cardEditors.size() > 0 && canvas.relicsEditors.size() > 0) {
             EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
@@ -242,6 +252,45 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
     }
 
+    protected void openPresetCreate(String title) {
+        selectionEffect = new PCLCustomPresetNameDialogEffect(title, EUIRM.strings.generic2(loadout.getName(), presetDropdown.size() + 1))
+                .addCallback(res -> {
+                    if (res != null) {
+                        addPreset().name = res;
+                        presetDropdown.refreshText();
+                        refreshPresetSelector();
+                    }
+                });
+    }
+
+    protected void openPresetDelete(PCLLoadoutData flag) {
+        if (presetDropdown.size() > 1) {
+            selectionEffect = new PCLCustomDeletionConfirmationEffect<>(flag)
+                    .addCallback((v) -> {
+                        if (v != null) {
+                            ArrayList<PCLLoadoutData> items = presetDropdown.getAllItems();
+                            items.remove(v);
+                            presetDropdown.setItems(items);
+                            if (current == v) {
+                                changePreset(presetDropdown.getItemAt(0));
+                            }
+                            refreshPresetSelector();
+                        }
+                    });
+        }
+    }
+
+    protected void openPresetEditName(String title, PCLLoadoutData flag) {
+        selectionEffect = new PCLCustomPresetNameDialogEffect(title, flag.name)
+                .addCallback(res -> {
+                    if (res != null) {
+                        flag.name = res;
+                        presetDropdown.refreshText();
+                        refreshPresetSelector();
+                    }
+                });
+    }
+
     private void openSeriesSelect() {
         if (characterOption != null && data != null) {
             PGR.seriesSelection.open(characterOption, data, this.onClose);
@@ -256,6 +305,11 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         updateValidation();
     }
 
+    protected void refreshPresetSelector() {
+        presetDropdown.sortByLabel();
+        addPresetButton.setPosition(presetDropdown.getClearButtonHitbox().cX + presetDropdown.getClearButtonHitbox().width, presetDropdown.getClearButtonHitbox().y + addPresetButton.hb.height * 0.25f);
+    }
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
@@ -265,13 +319,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
         else {
             seriesButton.tryRender(sb);
-
-            for (EUIButton button : presetButtons) {
-                button.tryRender(sb);
-            }
-
-            startingDeck.renderImpl(sb);
-
+            presetDropdown.tryRender(sb);
+            addPresetButton.tryRender(sb);
             attributesText.renderImpl(sb);
 
             // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
@@ -288,31 +337,23 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             cardsvalueText.tryRender(sb);
             canvas.tryRender(sb);
         }
-
-        contextMenu.tryRender(sb);
-    }
-
-    public void rightClickPreset(int preset) {
-        rightClickedSlot = preset;
-        if (rightClickedSlot != this.preset) {
-            ArrayList<ContextOption> list = new ArrayList<>();
-            list.add(ContextOption.CopyFrom);
-            list.add(ContextOption.CopyTo);
-
-            contextMenu.setItems(list);
-            contextMenu.positionToOpen();
-        }
-
     }
 
     public void save() {
-        for (int i = 0, presetsLength = presets.length; i < presetsLength; i++) {
-            loadout.presets[i] = presets[i];
+        loadout.presets.clear();
+        for (PCLLoadoutData ld : presetDropdown.getAllItems()) {
+            loadout.presets.put(ld.ID, ld);
         }
-
-        loadout.preset = preset;
+        loadout.preset = current.ID;
+        for (PCLLoadoutData data : loadout.presets.values()) {
+            if (data == null) {
+                continue;
+            }
+            PCLLoadoutDataInfo info = new PCLLoadoutDataInfo(loadout.ID, data);
+            info.commit();
+        }
         if (data != null) {
-            data.saveLoadouts();
+            data.saveSelectedLoadout();
         }
         close();
     }
@@ -355,7 +396,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
 
         CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
-        startingDeck.updateImpl();
         attributesText.updateImpl();
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).updateImpl();
 
@@ -368,15 +408,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
         else {
             seriesButton.tryUpdate();
-
-            if (!EUI.doesActiveElementExist()) {
-                for (int i = 0; i < presetButtons.length; i++) {
-                    final EUIButton button = presetButtons[i];
-                    button
-                            .setColor((i == preset) ? Color.SKY : button.interactable ? Color.LIGHT_GRAY : Color.DARK_GRAY)
-                            .tryUpdate();
-                }
-            }
+            presetDropdown.tryUpdate();
+            addPresetButton.tryUpdate();
 
             for (PCLBaseStatEditor beditor : baseStatEditors) {
                 if (activeEditor == null || activeEditor == beditor) {
@@ -393,7 +426,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             cardsvalueText.tryUpdate();
             saveButton.tryUpdate();
         }
-        contextMenu.tryUpdate();
     }
 
     public void updateValidation() {
@@ -413,25 +445,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
         else {
             saveButton.setTooltip(new EUITooltip(PGR.core.strings.loadout_invalidLoadout, val.getFailingString()));
-        }
-    }
-
-    public enum ContextOption {
-        CopyTo(PGR.core.strings.loadout_copyTo, (screen, index) -> {
-            screen.presets[index] = screen.presets[screen.preset];
-            screen.changePreset(index);
-        }),
-        CopyFrom(PGR.core.strings.loadout_copyFrom, (screen, index) -> {
-            screen.presets[screen.preset] = screen.presets[index];
-            screen.refresh();
-        });
-
-        public final String name;
-        public final ActionT2<PCLLoadoutScreen, Integer> onSelect;
-
-        ContextOption(String name, ActionT2<PCLLoadoutScreen, Integer> onSelect) {
-            this.name = name;
-            this.onSelect = onSelect;
         }
     }
 }

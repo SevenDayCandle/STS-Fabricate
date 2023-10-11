@@ -166,13 +166,23 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
      * Obtain a list of all of the custom cards created for a specific color. If color is NULL, returns ALL custom cards
      */
     public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor color) {
-        if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
-        }
         if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
             CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
         return CUSTOM_COLOR_LISTS.get(color);
+    }
+
+    public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor... colors) {
+        ArrayList<PCLCustomCardSlot> res = new ArrayList<>();
+        for (AbstractCard.CardColor color : colors) {
+            if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+                CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
+            }
+            else {
+                res.addAll(CUSTOM_COLOR_LISTS.get(color));
+            }
+        }
+        return res;
     }
 
     public static void initialize() {

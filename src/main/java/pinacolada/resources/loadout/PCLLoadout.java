@@ -3,7 +3,6 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
@@ -32,18 +31,14 @@ import java.util.*;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
-    public static final int MAX_LIMIT = 6;
-    public static final int DEFAULT_CARD_SLOTS = 6;
-    public static final int DEFAULT_RELIC_SLOTS = 2;
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
-    public static final int MAX_PRESETS = 5;
+    public static final int MAX_LIMIT = 6;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
     public static final int CARD_SLOTS = 4;
     public final String ID;
-    protected String shortDescription = EUIUtils.EMPTY_STRING;
     public AbstractCard.CardColor color;
-    public int preset;
+    public String preset;
     public int unlockLevel = 0;
     public int maxValue;
     public int maxCardsPerSlot;
@@ -53,7 +48,7 @@ public abstract class PCLLoadout {
     public ArrayList<PCLCardData> defends = new ArrayList<>();
     public ArrayList<PCLCardData> strikes = new ArrayList<>();
     public ArrayList<PCLRelicData> relics = new ArrayList<>();
-    public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
+    public HashMap<String, PCLLoadoutData> presets = new HashMap<>();
 
     public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel) {
         this(color, id, unlockLevel, MAX_VALUE, MIN_CARDS, MAX_LIMIT);
@@ -85,6 +80,10 @@ public abstract class PCLLoadout {
             }
         }
         return loadout;
+    }
+
+    public static ArrayList<PCLLoadout> getAll() {
+        return new ArrayList<>(LOADOUTS.values());
     }
 
     public static ArrayList<PCLLoadout> getAll(AbstractCard.CardColor cardColor) {
@@ -253,12 +252,8 @@ public abstract class PCLLoadout {
         return card;
     }
 
-    public boolean canChangePreset(int preset) {
-        return preset >= 0 && preset < MAX_PRESETS;
-    }
-
     public void clearPresets() {
-        presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
+        presets.clear();
     }
 
     public PCLLoadoutValidation createValidation() {
@@ -331,32 +326,14 @@ public abstract class PCLLoadout {
         return getBaseOrbs(color);
     }
 
-    public String getDeckPreviewString(boolean forceRefresh) {
-        if (shortDescription == null || forceRefresh) {
-            final StringJoiner sj = new StringJoiner(", ");
-            for (String s : getStartingDeck()) {
-                AbstractCard card = CardLibrary.getCard(s);
-                if (card.rarity != AbstractCard.CardRarity.BASIC) {
-                    sj.add(card.originalName);
-                }
-            }
-
-            shortDescription = EUIUtils.format("{0} #{1}", getName(), preset + 1);
-        }
-
-        return shortDescription;
+    public String getDeckPreviewString() {
+        PCLLoadoutData data = getPreset();
+        return data != null ? data.name : getName();
     }
 
-    public PCLLoadoutData getDefaultData(int preset) {
+    public PCLLoadoutData getDefaultData() {
         final PCLLoadoutData data = new PCLLoadoutData(this);
-        data.preset = preset;
-        for (PCLBaseStatEditor.StatType type : PCLBaseStatEditor.StatType.values()) {
-            data.values.put(type, 0);
-        }
-
-        setDefaultBlightsForData(data);
-        setDefaultCardsForData(data);
-        setDefaultRelicsForData(data);
+        resetPreset(data);
         return data;
     }
 
@@ -419,16 +396,19 @@ public abstract class PCLLoadout {
     }
 
     public PCLLoadoutData getPreset() {
-        return getPreset(preset);
-    }
-
-    public PCLLoadoutData getPreset(int preset) {
-        final PCLLoadoutData data = presets[preset];
+        PCLLoadoutData data = presets.get(preset);
         if (data != null) {
             return data;
         }
 
-        return presets[preset] = getDefaultData(preset);
+        if (!presets.isEmpty()) {
+            data = EUIUtils.random(presets.values());
+            if (data != null) {
+                preset = data.ID;
+            }
+            return data;
+        }
+        return getDefaultData();
     }
 
     public final PCLResources<?, ?, ?, ?> getResources() {
@@ -530,7 +510,7 @@ public abstract class PCLLoadout {
     public boolean isEnabled() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources == null || (resources.getUnlockLevel() >= unlockLevel &&
-                (resources.data == null || resources.data.getCoreLoadout() == this || this.ID.equals(resources.data.config.lastLoadout.get()) || resources.data.config.selectedLoadouts.get().contains(this.ID)));
+                (resources.data == null || resources.data.getCoreLoadout() == this || this.ID.equals(resources.data.config.lastPreset.get()) || resources.data.config.selectedLoadouts.get().contains(this.ID)));
     }
 
     public boolean isLocked() {
@@ -558,6 +538,16 @@ public abstract class PCLLoadout {
             trophies.act3completion = Math.max(trophies.act3completion, ascensionLevel);
             trophies.highScore = Math.max(trophies.highScore, score);
         }
+    }
+
+    public void resetPreset(PCLLoadoutData data) {
+        data.clear();
+        for (PCLBaseStatEditor.StatType type : PCLBaseStatEditor.StatType.values()) {
+            data.values.put(type, 0);
+        }
+        setDefaultBlightsForData(data);
+        setDefaultCardsForData(data);
+        setDefaultRelicsForData(data);
     }
 
     protected void setDefaultBlightsForData(PCLLoadoutData data) {

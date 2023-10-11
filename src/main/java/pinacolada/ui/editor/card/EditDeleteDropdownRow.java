@@ -15,25 +15,22 @@ import pinacolada.resources.pcl.PCLCoreImages;
 
 import static pinacolada.ui.editor.card.PCLCustomCardAttributesPage.MENU_HEIGHT;
 
-public class CardFlagRow extends EUIDropdownRow<CardFlag> {
+public class EditDeleteDropdownRow<T,U> extends EUIDropdownRow<T> {
     public static final float ICON_SIZE = 24f * Settings.scale;
 
     protected EUIButton editButton;
     protected EUIButton deleteButton;
 
-    public CardFlagRow(EUIDropdown<CardFlag> dr, EUIHitbox hb, CardFlag item, int index, ActionT1<PCLCustomFlagInfo> onEdit, ActionT1<PCLCustomFlagInfo> onDelete) {
+    public EditDeleteDropdownRow(EUIDropdown<T> dr, EUIHitbox hb, T item, U info, int index, ActionT1<U> onEdit, ActionT1<U> onDelete) {
         super(dr, hb, item, index);
 
         editButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new RelativeHitbox(hb, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 6.3f, MENU_HEIGHT * 0.35f)
                 .setIsPopupCompatible(true).setParentElement(dr))
-                .setClickDelay(0.02f)
-                .setTooltip(PGR.core.strings.cedit_renameFlag, "");
+                .setTooltip(PGR.core.strings.cedit_renameItem, "");
         deleteButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new RelativeHitbox(hb, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 0.65f, MENU_HEIGHT * 7.1f, MENU_HEIGHT * 0.35f)
                 .setIsPopupCompatible(true).setParentElement(dr))
-                .setClickDelay(0.02f)
-                .setTooltip(PGR.core.strings.cedit_deleteFlag, "");
+                .setTooltip(PGR.core.strings.cedit_deleteItem, "");
 
-        PCLCustomFlagInfo info = PCLCustomFlagInfo.get(item.ID);
         if (info != null) {
             editButton.setOnClick(() -> {
                 dr.forceClose();

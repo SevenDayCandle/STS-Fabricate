@@ -8,9 +8,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -134,14 +136,28 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         return getBaseIDPrefix(BASE_POTION_ID, color);
     }
 
+    public static ArrayList<PCLCustomPotionSlot> getPotions() {
+        return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
+    }
+
     public static ArrayList<PCLCustomPotionSlot> getPotions(AbstractCard.CardColor color) {
-        if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
-        }
         if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
             CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
         return CUSTOM_COLOR_LISTS.get(color);
+    }
+
+    public static ArrayList<PCLCustomPotionSlot> getPotions(AbstractCard.CardColor... colors) {
+        ArrayList<PCLCustomPotionSlot> res = new ArrayList<>();
+        for (AbstractCard.CardColor color : colors) {
+            if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+                CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
+            }
+            else {
+                res.addAll(CUSTOM_COLOR_LISTS.get(color));
+            }
+        }
+        return res;
     }
 
     public static void initialize() {

@@ -20,7 +20,7 @@ public class ObtainCustomPotionCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomPotionSlot.getPotions(null), slot -> slot.ID);
+        return EUIUtils.map(PCLCustomPotionSlot.getPotions(), slot -> slot.ID);
     }
 
     protected void doAction(PCLPotion copy) {

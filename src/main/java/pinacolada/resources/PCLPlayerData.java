@@ -3,8 +3,6 @@ package pinacolada.resources;
 import basemod.BaseMod;
 import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -17,7 +15,6 @@ import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.dungeon.modifiers.Glyph0;
@@ -25,16 +22,11 @@ import pinacolada.dungeon.modifiers.Glyph1;
 import pinacolada.effects.PCLEffect;
 import pinacolada.monsters.PCLCreatureData;
 import pinacolada.monsters.PCLTutorialMonster;
-import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.loadout.PCLLoadoutData;
-import pinacolada.resources.loadout.PCLLoadoutStats;
+import pinacolada.resources.loadout.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
-import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig, V extends PCLCharacter> {
@@ -152,31 +144,12 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         }
     }
 
-    private void deserializeCustomLoadouts() {
-        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER)) {
-            String path = f.path();
-            try {
-                String jsonString = f.readString();
-                PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
-                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
-                final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
-
-                if (loadoutData.validate().isValid) {
-                    loadout.presets[loadoutInfo.preset] = loadoutData;
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load loadout : " + path);
-            }
-        }
-    }
-
     protected void deserializeSelectedLoadout() {
         selectedLoadout = getLoadout(config.lastLoadout.get());
         if (selectedLoadout == null) {
             selectedLoadout = prepareLoadout();
         }
+        selectedLoadout.preset = config.lastPreset.get();
     }
 
     protected void deserializeStats() {
@@ -291,26 +264,8 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         if (config != null) {
             config.load(CardCrawlGame.saveSlot);
             deserializeStats();
-            deserializeCustomLoadouts();
             deserializeSelectedLoadout();
         }
-    }
-
-    public void saveLoadouts() {
-        final int level = resources.getUnlockLevel();
-        for (PCLLoadout loadout : loadouts.values()) {
-            if (loadout.unlockLevel <= level) {
-                for (PCLLoadoutData data : loadout.presets) {
-                    if (data == null) {
-                        continue;
-                    }
-
-                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.ID, data.preset));
-                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.ID, data), TInfo.getType()), false);
-                }
-            }
-        }
-        saveSelectedLoadout();
     }
 
     public void saveSelectedLoadout() {
@@ -318,6 +273,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
             selectedLoadout = prepareLoadout();
         }
         config.lastLoadout.set(selectedLoadout.ID);
+        config.lastPreset.set(selectedLoadout.preset);
     }
 
     public void saveStats() {

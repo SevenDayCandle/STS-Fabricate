@@ -12,6 +12,7 @@ public abstract class PCLCustomLoadable implements Serializable {
     static final long serialVersionUID = 1L;
     public static final int ID_SIZE = 4;
     public static final String FOLDER = "custom";
+    protected transient String filePath;
 
     public String ID;
 

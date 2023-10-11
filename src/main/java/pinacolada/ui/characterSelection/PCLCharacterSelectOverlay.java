@@ -129,7 +129,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_deckEditor)
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
-                .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
@@ -174,14 +173,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     private void changeLoadout(PCLLoadout loadout) {
         data.selectedLoadout = loadout;
         refresh(characterOption);
-    }
-
-    private void changePreset() {
-        final int preset = loadout.canChangePreset(loadout.preset + 1) ? (loadout.preset + 1) : 0;
-        if (preset != loadout.preset) {
-            loadout.preset = preset;
-            refreshInternal();
-        }
     }
 
     @Override
@@ -393,7 +384,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
 
         int currentLevel = data.resources.getUnlockLevel();
-        startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true));
+        startingCardsListLabel.setLabel(loadout.getDeckPreviewString());
         PCLLoadoutValidation validation = loadout.createValidation();
         if (currentLevel < loadout.unlockLevel) {
             EUITooltip invalidTooltip = new EUITooltip(PGR.core.strings.loadout_invalidLoadout, PGR.core.strings.loadout_invalidLoadoutDescLocked);

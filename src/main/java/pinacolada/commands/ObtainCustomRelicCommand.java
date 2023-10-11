@@ -20,7 +20,7 @@ public class ObtainCustomRelicCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomRelicSlot.getRelics(null), slot -> slot.ID);
+        return EUIUtils.map(PCLCustomRelicSlot.getRelics(), slot -> slot.ID);
     }
 
     protected void doAction(PCLRelic copy) {

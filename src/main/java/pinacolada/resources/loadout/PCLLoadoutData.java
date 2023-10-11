@@ -1,11 +1,11 @@
 package pinacolada.resources.loadout;
 
 import com.google.gson.reflect.TypeToken;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,25 +15,27 @@ public class PCLLoadoutData {
     };
     public static final TypeToken<TupleT2<String, Integer>> TTuple = new TypeToken<TupleT2<String, Integer>>() {
     };
-    public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>() {
-    };
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
     public final ArrayList<LoadoutBlightSlot> blightSlots = new ArrayList<>();
     public final ArrayList<LoadoutCardSlot> cardSlots = new ArrayList<>();
     public final ArrayList<LoadoutRelicSlot> relicSlots = new ArrayList<>();
     public final PCLLoadout loadout;
-    public int preset;
+    public final String ID;
+    public String name;
 
     public PCLLoadoutData(PCLLoadout loadout) {
         this.loadout = loadout;
+        this.ID = PCLLoadoutDataInfo.makeNewID(loadout);
+        this.name = EUIRM.strings.generic2(loadout.getName(), loadout.presets.size() + 1);
         for (PCLBaseStatEditor.StatType type : PCLBaseStatEditor.StatType.values()) {
             values.put(type, 0);
         }
     }
 
-    public PCLLoadoutData(PCLLoadout loadout, LoadoutInfo info) {
+    public PCLLoadoutData(PCLLoadout loadout, PCLLoadoutDataInfo info) {
         this.loadout = loadout;
-        preset = info.preset;
+        ID = info.ID;
+        name = info.name;
         values.putAll(EUIUtils.deserialize(info.values, TValue.getType()));
         for (String blight : info.blights) {
             if (blight != null) {
@@ -45,7 +47,7 @@ public class PCLLoadoutData {
                 addRelicSlot(blight);
             }
         }
-        for (LoadoutInfo.LoadoutCardInfo blight : info.cards) {
+        for (PCLLoadoutDataInfo.LoadoutCardInfo blight : info.cards) {
             if (blight != null && blight.id != null) {
                 addCardSlot(blight.id, blight.count);
             }
@@ -54,7 +56,8 @@ public class PCLLoadoutData {
 
     public PCLLoadoutData(PCLLoadoutData other) {
         loadout = other.loadout;
-        preset = other.preset;
+        ID = other.ID;
+        name = other.name;
         values.putAll(other.values);
         for (LoadoutBlightSlot slot : other.blightSlots) {
             blightSlots.add(new LoadoutBlightSlot(slot));
@@ -115,10 +118,6 @@ public class PCLLoadoutData {
     }
 
     public PCLLoadoutData makeCopy() {
-        return makeCopy(preset);
-    }
-
-    public PCLLoadoutData makeCopy(int preset) {
         return new PCLLoadoutData(this);
     }
 
@@ -126,36 +125,4 @@ public class PCLLoadoutData {
         return PCLLoadoutValidation.createFrom(this);
     }
 
-    public static class LoadoutInfo implements Serializable {
-        static final long serialVersionUID = 1L;
-        public String loadout;
-        public int preset;
-        public String values;
-        public String[] blights;
-        public String[] relics;
-        public LoadoutCardInfo[] cards;
-
-        public LoadoutInfo() {
-        }
-
-        public LoadoutInfo(String id, PCLLoadoutData data) {
-            loadout = id;
-            preset = data.preset;
-            values = EUIUtils.serialize(data.values);
-            blights = EUIUtils.arrayMapAsNonnull(data.blightSlots, String.class, d -> d.selected);
-            cards = EUIUtils.arrayMapAsNonnull(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected, d.amount) : null);
-            relics = EUIUtils.arrayMapAsNonnull(data.relicSlots, String.class, d -> d.selected);
-        }
-
-        public static class LoadoutCardInfo implements Serializable {
-            static final long serialVersionUID = 1L;
-            public String id;
-            public Integer count;
-
-            public LoadoutCardInfo(String id, Integer count) {
-                this.id = id;
-                this.count = count;
-            }
-        }
-    }
 }

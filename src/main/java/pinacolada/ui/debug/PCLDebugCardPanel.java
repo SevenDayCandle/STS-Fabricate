@@ -99,7 +99,7 @@ public class PCLDebugCardPanel {
 
     protected void regenerate() {
         originalSorted.addAll(CardLibrary.getAllCards());
-        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(0, 0, false)));
+        originalSorted.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), slot -> slot.getBuilder(0).createImplWithForms(0, 0, false)));
         originalSorted.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
         sortedModIDs.add(ALL);
         sortedModIDs.addAll(originalSorted.stream()

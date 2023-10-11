@@ -629,7 +629,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public void loadCustomPotions(ArrayList<String> result, AbstractPlayer.PlayerClass p, boolean getAll) {
         if (allowCustomPotions || getAll) {
             if (getAll) {
-                for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions(null)) {
+                for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions()) {
                     result.add(c.ID);
                 }
             }

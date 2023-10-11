@@ -82,7 +82,6 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         this.changeVariant = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(200f * Settings.scale, 150f * Settings.scale))
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.WHITE)
-                .setClickDelay(0.3f)
                 .setDimensions(screenW(0.18f), screenH(0.07f))
                 .setText(PGR.core.strings.scp_changeVariant)
                 .setOnClick(this::changeCardForm)

@@ -145,11 +145,10 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setIsMultiSelect(true)
                 .setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags)
-                .setRowFunction((a, b, c, d) -> new CardFlagRow(a, b, c, d, f -> this.openFlagCreator(PGR.core.strings.cedit_renameFlag, f), this::openFlagDelete))
+                .setRowFunction((a, b, c, d) -> new EditDeleteDropdownRow<CardFlag, PCLCustomFlagInfo>(a, b, c, PCLCustomFlagInfo.get(c.ID), d, f -> this.openFlagCreator(PGR.core.strings.cedit_renameItem, f), this::openFlagDelete))
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 5);
         addFlagButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width, screenH(0.62f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openFlagCreator(PGR.core.strings.cedit_newFlag, null))
-                .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_newFlag, "");
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
@@ -162,16 +161,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.sui_seriesUI, "");
         addLoadoutButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_newLoadout, null))
-                .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_newLoadout, "");
         editLoadoutButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
-                .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_renameLoadout, EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
-                .setClickDelay(0.02f)
-                .setTooltip(PGR.core.strings.cedit_renameLoadout, "");
+                .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_renameItem, EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
+                .setTooltip(PGR.core.strings.cedit_renameItem, "");
         deleteLoadoutButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openLoadoutDelete(EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
-                .setClickDelay(0.02f)
-                .setTooltip(PGR.core.strings.cedit_deleteLoadout, "");
+                .setTooltip(PGR.core.strings.cedit_deleteItem, "");
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)

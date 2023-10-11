@@ -55,11 +55,9 @@ public class PCLCustomFormEditor extends EUIBase {
 
         add = new EUIButton(EUIRM.images.plus.texture(), new RelativeHitbox(hb, scale(48), scale(48), scale(162), scale(24)))
                 .setOnClick(screen::addBuilder)
-                .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_addForm, "");
         remove = new EUIButton(EUIRM.images.minus.texture(), new RelativeHitbox(hb, scale(48), scale(48), scale(212), scale(24)))
                 .setOnClick(screen::removeBuilder)
-                .setClickDelay(0.02f)
                 .setTooltip(PGR.core.strings.cedit_removeForm, "");
         refresh();
     }

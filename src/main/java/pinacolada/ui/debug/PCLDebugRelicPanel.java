@@ -71,7 +71,7 @@ public class PCLDebugRelicPanel {
 
     protected void regenerate() {
         originalSorted.addAll(RelicViewScreenPatches.getAllRelics());
-        originalSorted.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(null), PCLCustomRelicSlot::make));
+        originalSorted.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
         originalSorted.sort((a, b) -> StringUtils.compare(a.relicId, b.relicId));
         sortedModIDs.add(PCLDebugCardPanel.ALL);
         sortedModIDs.addAll(originalSorted.stream()

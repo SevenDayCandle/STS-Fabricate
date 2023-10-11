@@ -20,7 +20,7 @@ public class ObtainCustomCardCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.ID);
+        return EUIUtils.map(PCLCustomCardSlot.getCards(), slot -> slot.ID);
     }
 
     protected void doAction(PCLCard copy) {

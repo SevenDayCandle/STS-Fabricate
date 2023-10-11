@@ -73,7 +73,7 @@ public class PCLDebugPotionPanel {
 
     protected void regenerate() {
         originalSorted.addAll(GameUtilities.getPotions(null));
-        originalSorted.addAll(EUIUtils.map(PCLCustomPotionSlot.getPotions(null), PCLCustomPotionSlot::make));
+        originalSorted.addAll(EUIUtils.map(PCLCustomPotionSlot.getPotions(), PCLCustomPotionSlot::make));
         originalSorted.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         sortedModIDs.add(PCLDebugCardPanel.ALL);
         sortedModIDs.addAll(originalSorted.stream()

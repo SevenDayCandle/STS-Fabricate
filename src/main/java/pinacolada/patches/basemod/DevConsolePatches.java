@@ -14,7 +14,7 @@ public class DevConsolePatches {
 
         @SpirePostfixPatch
         public static ArrayList<String> postfix(ArrayList<String> ret) {
-            ret.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(null), slot -> slot.ID));
+            ret.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), slot -> slot.ID));
             return ret;
         }
     }

@@ -21,8 +21,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     private static final TypeToken<PCLCustomLoadoutInfo> TTOKEN = new TypeToken<PCLCustomLoadoutInfo>() {
     };
-    public static final String SUBFOLDER = "loadout";
-    protected transient String filePath;
+    protected static final String SUBFOLDER = "loadout";
     public String languageStrings;
     public String colorString;
     public int unlockLevel;

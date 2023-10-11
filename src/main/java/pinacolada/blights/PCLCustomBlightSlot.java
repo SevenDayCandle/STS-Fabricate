@@ -11,6 +11,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -135,13 +136,23 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
     }
 
     public static ArrayList<PCLCustomBlightSlot> getBlights(AbstractCard.CardColor color) {
-        if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
-        }
         if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
             CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
         }
         return CUSTOM_COLOR_LISTS.get(color);
+    }
+
+    public static ArrayList<PCLCustomBlightSlot> getBlights(AbstractCard.CardColor... colors) {
+        ArrayList<PCLCustomBlightSlot> res = new ArrayList<>();
+        for (AbstractCard.CardColor color : colors) {
+            if (!CUSTOM_COLOR_LISTS.containsKey(color)) {
+                CUSTOM_COLOR_LISTS.put(color, new ArrayList<>());
+            }
+            else {
+                res.addAll(CUSTOM_COLOR_LISTS.get(color));
+            }
+        }
+        return res;
     }
 
     public static void initialize() {

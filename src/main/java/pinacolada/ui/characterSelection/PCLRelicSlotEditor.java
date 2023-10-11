@@ -58,12 +58,10 @@ public class PCLRelicSlotEditor extends EUIHoverable {
                 .setOnClick(() -> {
                     canvas.queueDeleteRelicSlot(this);
                 })
-                .setTooltip(PGR.core.strings.loadout_remove, "")
-                .setClickDelay(0.02f);
+                .setTooltip(PGR.core.strings.loadout_remove, "");
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new OriginRelativeHitbox(clearButton.hb, BUTTON_SIZE, BUTTON_SIZE, clearButton.hb.width, 0))
                 .setOnClick(this::trySelect)
-                .setTooltip(PGR.core.strings.loadout_change, "")
-                .setClickDelay(0.02f);
+                .setTooltip(PGR.core.strings.loadout_change, "");
     }
 
     public ArrayList<String> getAvailableRelics() {

@@ -48,11 +48,9 @@ public class PCLAbilityEditor extends EUIHoverable {
 
         final float offY = BUTTON_SIZE / 4;
         changeButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new OriginRelativeHitbox(nameText.hb, BUTTON_SIZE, BUTTON_SIZE, nameText.hb.width, BUTTON_SIZE / 4))
-                .setTooltip(PGR.core.strings.loadout_change, "")
-                .setClickDelay(0.02f);
+                .setTooltip(PGR.core.strings.loadout_change, "");
         changeButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new OriginRelativeHitbox(changeButton.hb, BUTTON_SIZE, BUTTON_SIZE, changeButton.hb.width, 0))
-                .setTooltip(PGR.core.strings.loadout_change, "")
-                .setClickDelay(0.02f);
+                .setTooltip(PGR.core.strings.loadout_change, "");
     }
 
     public ArrayList<String> getAvailableAbilitiesForSelection() {

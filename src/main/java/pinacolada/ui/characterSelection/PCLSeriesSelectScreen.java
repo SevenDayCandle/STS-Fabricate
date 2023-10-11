@@ -46,12 +46,13 @@ import pinacolada.utilities.GameUtilities;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static pinacolada.skills.PSkill.COLON_SEPARATOR;
+
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public static final int MINIMUM_CARDS = 75; // 75
     public static final int MINIMUM_COLORLESS = 40;
     public final EUICardGrid cardGrid;
-    public final EUILabel startingDeck;
     public final EUIButton resetPoolButton;
     public final EUIButton resetBanButton;
     public final EUIButton previewCards;
@@ -61,6 +62,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUIButton loadoutEditor;
     public final EUIButton relicsButton;
     public final EUITextBox typesAmount;
+    public final EUITextBox startingDeck;
     public final EUITextBox previewCardsInfo;
     public final EUIContextMenu<ContextOption> contextMenu;
     public final ArrayList<AbstractCard> shownCards = new ArrayList<>();
@@ -85,22 +87,16 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final Texture panelTexture = EUIRM.images.panelRounded.texture();
         final FuncT1<Float, Float> getY = (delta) -> screenH(0.95f) - screenH(0.07f * delta);
         final float buttonHeight = screenH(0.05f);
-        final float buttonWidth = screenW(0.18f);
+        final float buttonWidth = screenW(0.17f);
         final float xPos = screenW(0.82f);
 
-        cardGrid = (EUICardGrid) new EUICardGrid(0.25f, false)
+        cardGrid = (EUICardGrid) new EUICardGrid(0.31f, false)
                 .setOnClick(this::onCardClicked)
                 .setOnRightClick(this::onCardRightClicked)
                 .showScrollbar(false);
 
-        startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
-                .setCenter(screenW(0.08f), screenH(0.97f)))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
-                .setSmartText(true)
-                .setColor(Settings.CREAM_COLOR);
-
         loadoutEditor = new EUIButton(EUIRM.images.rectangularButton.texture(),
-                new EUIHitbox(startingDeck.hb.x + scale(30), startingDeck.hb.y - scale(65), scale(150), scale(52)))
+                new EUIHitbox(screenW(0.01f), screenH(0.93f), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_deckEditor)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
@@ -124,23 +120,27 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setAlignment(0.85f, 0.1f, true)
                 .setColors(panelColor, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(4f), buttonWidth, screenH(0.12f)))
+        startingDeck = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(4.5f), buttonWidth, screenH(0.10f)))
+                .setColors(panelColor, Settings.CREAM_COLOR)
+                .setAlignment(0.82f, 0.1f, true)
+                .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(6f), buttonWidth, screenH(0.12f)))
                 .setColors(panelColor, Settings.GOLD_COLOR)
                 .setAlignment(0.82f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
 
-        previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(6.3f), buttonWidth, buttonHeight)
+        previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(8.3f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
-        resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.1f), buttonWidth, buttonHeight)
+        resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9.1f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetPool)
                 .setTooltip(PGR.core.strings.sui_resetPool, PGR.core.strings.sui_resetPoolDesc)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.ROYAL);
 
-        resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
+        resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9.9f), buttonWidth, buttonHeight)
                 .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetBan)
                 .setTooltip(PGR.core.strings.sui_resetBan, PGR.core.strings.sui_resetBanDesc)
                 .setOnClick(this::unbanAll)
@@ -539,7 +539,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void renderImpl(SpriteBatch sb) {
         cardGrid.tryRender(sb);
 
-        startingDeck.tryRender(sb);
         loadoutEditor.tryRender(sb);
         colorlessButton.renderImpl(sb);
         relicsButton.renderImpl(sb);
@@ -550,6 +549,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         confirm.renderImpl(sb);
 
         previewCardsInfo.renderImpl(sb);
+        startingDeck.renderImpl(sb);
         typesAmount.renderImpl(sb);
 
         if (currentEffect != null) {
@@ -689,7 +689,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             totalCardsChanged(totalCardsCache, totalColorlessCache);
         }
 
-        startingDeck.tryUpdate();
         loadoutEditor.tryUpdate();
         colorlessButton.tryUpdate();
         relicsButton.tryUpdate();
@@ -702,6 +701,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             confirm.updateImpl();
             cardGrid.tryUpdate();
             previewCardsInfo.tryUpdate();
+            startingDeck.tryUpdate();
             typesAmount.tryUpdate();
         }
 
@@ -709,7 +709,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     protected void updateStartingDeckText() {
-        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", (currentSeriesCard != null) ? currentSeriesCard.name : ""));
+        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("g", (currentSeriesCard != null) ? currentSeriesCard.name : ""));
     }
 
     public enum ContextOption {

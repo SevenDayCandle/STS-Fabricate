@@ -12,6 +12,7 @@ public class PCLCharacterConfig extends AbstractConfig {
     protected static final String SUFFIX_BANNED_RELICS = "BannedRelics";
     protected static final String SUFFIX_CARDS_COUNT = "CardsCount";
     protected static final String SUFFIX_LAST_LOADOUT = "LastLoadout";
+    protected static final String SUFFIX_LAST_PRESET = "LastPreset";
     protected static final String SUFFIX_METER_POSITION = "MeterPosition";
     protected static final String SUFFIX_SEEN_TUTORIAL = "SeenTutorial";
     protected static final String SUFFIX_SEEN_SUMMON_TUTORIAL = "SeenSummonTutorial";
@@ -22,6 +23,7 @@ public class PCLCharacterConfig extends AbstractConfig {
     public STSSerializedConfigItem<HashSet<String>> selectedLoadouts;
     public STSSerializedConfigItem<Vector2> meterPosition;
     public STSStringConfigItem lastLoadout;
+    public STSStringConfigItem lastPreset;
     public STSStringConfigItem trophies;
 
     public PCLCharacterConfig(String id) {
@@ -29,6 +31,7 @@ public class PCLCharacterConfig extends AbstractConfig {
         bannedCards = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_BANNED_CARDS), new HashSet<>());
         bannedRelics = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_BANNED_RELICS), new HashSet<>());
         lastLoadout = new STSStringConfigItem(PGR.createID(id, SUFFIX_LAST_LOADOUT), "");
+        lastPreset = new STSStringConfigItem(PGR.createID(id, SUFFIX_LAST_PRESET), "");
         meterPosition = new STSSerializedConfigItem<Vector2>(PGR.createID(id, SUFFIX_METER_POSITION), new Vector2(0.35f, 0.8f));
         seenTutorial = new STSConfigItem<Boolean>(PGR.createID(id, SUFFIX_SEEN_TUTORIAL), false);
         selectedLoadouts = new STSSerializedConfigItem<HashSet<String>>(PGR.createID(id, SUFFIX_CARDS_COUNT), new HashSet<>());
@@ -40,6 +43,7 @@ public class PCLCharacterConfig extends AbstractConfig {
         bannedCards.addConfig(config);
         bannedRelics.addConfig(config);
         lastLoadout.addConfig(config);
+        lastPreset.addConfig(config);
         meterPosition.addConfig(config);
         seenTutorial.addConfig(config);
         selectedLoadouts.addConfig(config);
