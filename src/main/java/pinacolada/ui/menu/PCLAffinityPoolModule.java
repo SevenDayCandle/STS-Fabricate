@@ -84,6 +84,11 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
             affinitiesSectionLabel.setActive(false);
         }
         initializeAffinities();
+        for (AbstractCard card : cards) {
+            if (card instanceof PCLCard) {
+                ((PCLCard) card).affinities.updateSortedList();
+            }
+        }
     }
 
     @Override

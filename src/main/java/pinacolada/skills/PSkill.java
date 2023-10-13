@@ -330,6 +330,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public static boolean isSkillBlank(PSkill<?> skill) {
+        return skill == null || skill.isBlank();
+    }
+
     public static boolean isVerbose() {
         return !PGR.config.abbreviateEffects.get();
     }

@@ -480,14 +480,14 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         onBlockEffect = null;
         final PCLCard source = builder.source != null ? builder.source : this;
         for (PSkill<?> effect : builder.moves) {
-            if (effect == null || effect.isBlank()) {
+            if (PSkill.isSkillBlank(effect)) {
                 continue;
             }
             addUseMove(effect.makeCopy());
         }
 
         for (PTrigger pe : builder.powers) {
-            if (pe == null || pe.isBlank()) {
+            if (PSkill.isSkillBlank(pe)) {
                 continue;
             }
             addPowerMove(pe.makeCopy());

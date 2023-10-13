@@ -127,7 +127,6 @@ public abstract class PCLCharacter extends CustomPlayer {
     @Override
     public void doCharSelectScreenSelectEffect() {
         CardCrawlGame.sound.playA(getCustomModeCharacterButtonSoundKey(), MathUtils.random(-0.1f, 0.2f));
-        CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
     }
 
     protected Animation getAnimation(String key) {

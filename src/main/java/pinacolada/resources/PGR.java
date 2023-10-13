@@ -17,6 +17,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIImage;
@@ -41,6 +42,7 @@ import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -328,8 +330,25 @@ public class PGR {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisiblePotion.class)) {
             try {
                 AbstractPotion potion = (AbstractPotion) ct.getConstructor().newInstance();
-                // TODO get color from potion and add it to the proper pool
-                BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID);
+                if (potion instanceof PCLPotion) {
+                    // We should only add the potion to a player pool if it corresponds with an actual player (i.e. it has playerdata), simply having a playerclass isn't enough
+                    PCLPlayerData<?,?,?> data = ((PCLPotion) potion).potionData.resources.data;
+                    if (data != null) {
+                        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID, data.resources.playerClass);
+                    }
+                    else {
+                        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID);
+                    }
+                }
+                else {
+                    AbstractPlayer.PlayerClass pc = EUIGameUtils.getPlayerClassForCardColor(ct.getAnnotation(VisiblePotion.class).color());
+                    if (pc != null) {
+                        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID, pc);
+                    }
+                    else {
+                        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID);
+                    }
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -362,7 +381,6 @@ public class PGR {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleRelic.class)) {
             try {
                 AbstractRelic relic = (AbstractRelic) ct.getConstructor().newInstance();
-                // TODO figure out whether we should only use annotation
                 AbstractCard.CardColor color = relic instanceof PCLRelic ? ((PCLRelic) relic).relicData.cardColor : ct.getAnnotation(VisibleRelic.class).color();
                 switch (color) {
                     case COLORLESS:
