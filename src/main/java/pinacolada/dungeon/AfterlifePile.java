@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
+@Deprecated
 public class AfterlifePile {
     protected static AbstractCard currentCard;
 

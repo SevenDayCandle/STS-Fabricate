@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Pain extends PCLCard {
     public static final String ATLAS_URL = "curse/pain";
     public static final PCLCardData DATA = registerTemplate(Curse_Pain.class, Pain.ID)

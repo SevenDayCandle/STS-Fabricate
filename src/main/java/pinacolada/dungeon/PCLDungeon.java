@@ -177,21 +177,26 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         }
 
         if (data != null) {
+            HashSet<String> replaced = new HashSet<>();
+            ArrayList<AbstractCard> toAdd = new ArrayList<>();
             for (CardGroup group : groups) {
+                replaced.clear();
+                toAdd.clear();
+                for (AbstractCard c : group.group) {
+                    String replacement = data.resources.getReplacement(c.cardID);
+                    if (replacement != null) {
+                        replaced.add(c.cardID);
+                        toAdd.add(CardLibrary.getCard(replacement));
+                    }
+                }
+                group.group.addAll(toAdd);
                 group.group.removeIf(card ->
                 {
-                    if (!bannedCards.contains(card.cardID)) {
+                    if (!bannedCards.contains(card.cardID) && !replaced.contains(card.cardID)) {
                         if (GameUtilities.isColorlessCardColor(card.color)) {
-                            if (data.resources.containsColorless(card)) {
-                                for (PCLLoadout loadout : data.loadouts.values()) {
-                                    if (loadout.isCardFromLoadout(card.cardID) && loadout.isLocked()) {
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            }
-                            return true;
+                            return !data.resources.containsColorless(card);
                         }
+                        // Prevent removal of cards added by "multiclass" relics from Replay the Spire
                         else if (card.color != data.resources.cardColor || loadouts.isEmpty()) {
                             return false;
                         }

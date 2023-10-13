@@ -11,7 +11,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Normality extends PCLCard {
     public static final String ATLAS_URL = "curse/normality";
     public static final PCLCardData DATA = registerTemplate(Curse_Normality.class, Normality.ID)

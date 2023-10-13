@@ -11,7 +11,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_DealDamage;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Decay extends PCLCard {
     public static final String ATLAS_URL = "curse/decay";
     public static final PCLCardData DATA = registerTemplate(Curse_Decay.class, Decay.ID)

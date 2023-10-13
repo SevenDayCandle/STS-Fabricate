@@ -9,7 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Apotheosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/apotheosis";
     public static final PCLCardData DATA = registerTemplate(Apotheosis.class, com.megacrit.cardcrawl.cards.colorless.Apotheosis.ID)

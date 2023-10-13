@@ -138,7 +138,7 @@
 												"Enable Tint",
 												"If enabled, alters the color of the saved image",
 												"Repeat",
-												"New Loadout",
+												"New Set",
 												"Rename",
 												"Delete",
 												"Invert",
@@ -401,7 +401,7 @@
 						"Loadout value is over limit",
 						"Loadout contains cards not in the pool",
 						"Loadout does not have enough cards",
-						"Current loadout has not been unlocked. Please select an unlocked loadout.",
+						"Current set has not been unlocked. Please select an unlocked set.",
 						"You have unsaved changes to your loadout. Are you sure you want to exit without saving?",
 						"Reset",
 						"Copy Current To Slot",
@@ -411,7 +411,10 @@
 						"This leftmost number is the value this item. #yCommon cards are worth more, while #yCurse cards are worth less.",
 						"You can select additional relics to start your run with, which also have their own values.",
 						"You can adjust various other starting parameters, such as Max. HP and Gold. Click on the center button to see all available options, along with the excepted value of each option.",
-						"The total value amongst all items cannot exceed {0}. In addition, your deck must have at least {1} cards."
+						"The total value amongst all items cannot exceed {0}. In addition, your deck must have at least {1} cards.",
+						"New Preset",
+						"Change Preset",
+						"Switch between or manage presets for your starting loadout."
 					]
 				},
 				"pcl:Menu": {
@@ -531,7 +534,7 @@
 				},
 				"pcl:SeriesUI": {
 								"TEXT": [
-												"Loadout",
+												"Set",
 												"Core Set",
 												"Allowed: {0}/{1}",
 												"Unlocked: {0}/{1}",
@@ -539,14 +542,14 @@
 												"Add to Pool",
 												"Reset Bans",
 												"View Cards",
-												"Loadouts: #b{0} | Cards: {#{1}:{2}/{3}} | Colorless: {#{4}:{5}/{6}}",
-												"#oLeft-Click a loadout to use its cards for this run.",
-												"#oRight-Click a loadout for additional options.",
+												"Sets: #b{0} | Cards: {#{1}:{2}/{3}} | Colorless: {#{4}:{5}/{6}}",
+												"#oLeft-Click a set to use its cards for this run.",
+												"#oRight-Click a set for additional options.",
 												"#oLeft-Click a card to ban or unban it. Banned cards are faded out.",
 												"Character Cards",
 												"Reset Pool",
-												"Remove all additional loadouts added to the pool.",
-												"Unban all loadout cards and colorless cards.",
+												"Remove all additional sets added to the pool.",
+												"Unban all set cards and colorless cards.",
 												"Allow All",
 												"Disallow All",
 												"Allow Random",
@@ -554,7 +557,7 @@
 												"Manage Colorless",
 												"Choose which colorless cards will appear in your runs.",
 												"Manage Relics",
-												"Choose which relics will appear in your runs. What relics are available depends on the selected loadouts.",
+												"Choose which relics will appear in your runs. What relics are available depends on the selected sets.",
 												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes."
 								]
 				},

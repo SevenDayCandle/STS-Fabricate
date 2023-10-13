@@ -314,6 +314,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String loadout_tutorialRelic = loadout.TEXT[31];
     public final String loadout_tutorialAttributes = loadout.TEXT[32];
     public final String loadout_tutorialRequired = loadout.TEXT[33];
+    public final String loadout_newPreset = loadout.TEXT[34];
+    public final String loadout_changePreset = loadout.TEXT[35];
+    public final String loadout_tutorialPreset = loadout.TEXT[36];
     // Menu
     public final String menu_editor = menu.TEXT[0];
     public final String menu_card = menu.TEXT[1];

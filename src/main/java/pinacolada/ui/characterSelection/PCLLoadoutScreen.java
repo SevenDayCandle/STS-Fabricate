@@ -90,10 +90,11 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 })
                 .setRowFunction((a, b, c, d) -> new EditDeleteDropdownRow<PCLLoadoutData, PCLLoadoutData>(a, b, c, c, d, f -> this.openPresetEditName(PGR.core.strings.cedit_renameItem, f), this::openPresetDelete))
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + scale(250))
-                .setHeader(EUIFontHelper.cardTooltipTitleFontNormal, 0.8f, Settings.CREAM_COLOR, EUIUtils.EMPTY_STRING);
+                .setHeader(EUIFontHelper.cardTooltipTitleFontNormal, 0.8f, Settings.CREAM_COLOR, EUIUtils.EMPTY_STRING)
+                .setTooltip(PGR.core.strings.loadout_changePreset, PGR.core.strings.loadout_tutorialPreset);
         addPresetButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(screenW(0.7f), screenH(0.87f), scale(30), scale(30)))
-                .setOnClick(() -> this.openPresetCreate(PGR.core.strings.cedit_newLoadout))
-                .setTooltip(PGR.core.strings.cedit_newLoadout, "");
+                .setOnClick(() -> this.openPresetCreate(PGR.core.strings.loadout_newPreset))
+                .setTooltip(PGR.core.strings.loadout_newPreset, PGR.core.strings.loadout_tutorialPreset);
 
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.85f, button_cY)
@@ -247,7 +248,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                     new EUITourTooltip(attributesText.hb, attributesText.text, PGR.core.strings.loadout_tutorialAttributes),
                     new EUITourTooltip(cardsvalueText.hb, PGR.core.strings.csel_deckEditor, PGR.core.strings.loadout_tutorialRequired)
                             .setFlash(cardsvalueText.image)
-                            .setPosition(cardsvalueText.hb.x - cardsvalueText.hb.width * 2, cardsvalueText.hb.y)
+                            .setPosition(cardsvalueText.hb.x - cardsvalueText.hb.width * 2, cardsvalueText.hb.y),
+                    presetDropdown.makeTour(true)
             );
         }
     }

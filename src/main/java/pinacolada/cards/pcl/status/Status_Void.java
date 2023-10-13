@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_GainEnergy;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Status_Void extends PCLCard {
     public static final String ATLAS_URL = "status/void";
     public static final PCLCardData DATA = registerTemplate(Status_Void.class, VoidCard.ID)

@@ -11,7 +11,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Mayhem extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/mayhem";
     public static final PCLCardData DATA = registerTemplate(Mayhem.class, com.megacrit.cardcrawl.cards.colorless.Mayhem.ID)

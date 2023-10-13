@@ -297,7 +297,9 @@ public abstract class PCLLoadout {
 
         // Dynamically add non-special curses
         for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL)) {
-            values.add(data.ID);
+            PCLResources<?,?,?,?> resources = getResources();
+            String replacement = resources.getReplacement(data.ID);
+            values.add(replacement != null ? replacement : data.ID);
         }
         return values;
     }
@@ -375,7 +377,7 @@ public abstract class PCLLoadout {
 
     public String getName() {
         LoadoutStrings strings = PGR.getLoadoutStrings(ID);
-        return strings != null ? strings.NAME : "";
+        return strings != null ? strings.NAME : EUIUtils.EMPTY_STRING;
     }
 
     public String getNameForFilter() {
@@ -411,6 +413,7 @@ public abstract class PCLLoadout {
         return getDefaultData();
     }
 
+    // This will never be null because the fallback will be core
     public final PCLResources<?, ?, ?, ?> getResources() {
         return PGR.getResources(color);
     }
@@ -509,7 +512,7 @@ public abstract class PCLLoadout {
 
     public boolean isEnabled() {
         PCLResources<?, ?, ?, ?> resources = getResources();
-        return resources == null || (resources.getUnlockLevel() >= unlockLevel &&
+        return (resources.getUnlockLevel() >= unlockLevel &&
                 (resources.data == null || resources.data.getCoreLoadout() == this || this.ID.equals(resources.data.config.lastPreset.get()) || resources.data.config.selectedLoadouts.get().contains(this.ID)));
     }
 

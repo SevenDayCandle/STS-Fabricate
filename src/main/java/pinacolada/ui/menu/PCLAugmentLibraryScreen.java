@@ -41,14 +41,14 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
 
         PGR.augmentFilters.initializeForSort(grid.group, __ -> {
             for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
-                module.open(PGR.augmentFilters.group.group, AbstractCard.CardColor.COLORLESS, null);
+                module.open(PGR.augmentFilters.group.group, AbstractCard.CardColor.COLORLESS, true, null);
             }
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, AbstractCard.CardColor.COLORLESS);
 
         for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
-            module.open(grid.group.group, AbstractCard.CardColor.COLORLESS, null);
+            module.open(grid.group.group, AbstractCard.CardColor.COLORLESS, true, null);
         }
     }
 

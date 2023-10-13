@@ -11,7 +11,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 import pinacolada.skills.fields.PField_CardGeneric;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Madness extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/madness";
     public static final PCLCardData DATA = registerTemplate(Madness.class, com.megacrit.cardcrawl.cards.colorless.Madness.ID)

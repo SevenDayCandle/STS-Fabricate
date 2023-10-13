@@ -9,7 +9,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Forethought extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/forethought";
     public static final PCLCardData DATA = registerTemplate(Forethought.class, com.megacrit.cardcrawl.cards.colorless.Forethought.ID)

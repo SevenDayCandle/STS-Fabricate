@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Status_Wound extends PCLCard {
     public static final String ATLAS_URL = "status/wound";
     public static final PCLCardData DATA = registerTemplate(Status_Wound.class, Wound.ID)

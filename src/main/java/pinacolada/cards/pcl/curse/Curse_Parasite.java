@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PShift;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Parasite extends PCLCard {
     public static final String ATLAS_URL = "curse/parasite";
     public static final PCLCardData DATA = registerTemplate(Curse_Parasite.class, Parasite.ID)

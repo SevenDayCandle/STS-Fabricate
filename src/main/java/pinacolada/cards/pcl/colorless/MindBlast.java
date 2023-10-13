@@ -11,7 +11,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.skills.PMod;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class MindBlast extends PCLCard {
     public static final String ATLAS_URL = "colorless/attack/mind_blast";
     public static final PCLCardData DATA = registerTemplate(MindBlast.class, com.megacrit.cardcrawl.cards.colorless.MindBlast.ID)

@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Status_Dazed extends PCLCard {
     public static final String ATLAS_URL = "status/dazed";
     public static final PCLCardData DATA = registerTemplate(Status_Dazed.class, Dazed.ID)

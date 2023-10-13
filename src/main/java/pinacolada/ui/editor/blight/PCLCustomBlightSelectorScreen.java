@@ -20,7 +20,7 @@ public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<Abstr
 
     @Override
     protected EUIItemGrid<AbstractBlight> getGrid() {
-        return new EUIBlightGrid(1f);
+        return new EUIBlightGrid();
     }
 
     @Override

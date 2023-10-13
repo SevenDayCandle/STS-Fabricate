@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CustomCardPoolModule;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
@@ -14,14 +15,15 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCardPoolModule {
-    private static final HashMap<ColorlessGroup, ArrayList<AbstractCard>> ColorlessGroupMapping = new HashMap<>();
-    private static final HashMap<ColorlessGroup, ArrayList<AbstractCard>> CurseGroupMapping = new HashMap<>();
     public static ColorlessGroup group = ColorlessGroup.Default;
     protected CustomCardLibraryScreen screen;
     public EUIButton groupButton;
@@ -32,54 +34,33 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
         groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.905f, scale(210), scale(80)))
                 .setColor(Color.DARK_GRAY)
                 .setLabel(EUIFontHelper.cardDescriptionFontNormal, 1f, group.getTitle())
-                .setOnClick(() -> togglePool(group.next()))
                 .setOnRightClick(() -> groupMenu.positionToOpen());
         groupMenu = (EUIContextMenu<ColorlessGroup>) new EUIContextMenu<>(new EUIHitbox(0, 0, scale(240), scale(48)).setIsPopupCompatible(true), ColorlessGroup::getTitle)
                 .setPosition(screen.quickSearch.hb.cX + screen.quickSearch.hb.width * 0.5f, screen.quickSearch.hb.cY)
-                .setOnChange(costs -> {
-                    togglePool(costs.size() > 0 ? costs.get(0) : ColorlessGroup.Default);
-                })
                 .setCanAutosizeButton(true)
                 .setItems(ColorlessGroup.values());
     }
 
-    protected ArrayList<AbstractCard> getGroup(ColorlessGroup val) {
-        HashMap<ColorlessGroup, ArrayList<AbstractCard>> mapping = getMapping(CustomCardLibraryScreen.currentColor);
-        if (mapping == null) {
-            return null;
+    protected ArrayList<? extends AbstractCard> getGroup(ArrayList<? extends AbstractCard> arrayList, ColorlessGroup val) {
+        if (val == ColorlessGroup.Default) {
+            return arrayList;
         }
-        ArrayList<AbstractCard> g = mapping.get(val);
-        if (g == null) {
-            g = new ArrayList<>();
-            for (AbstractCard c : CustomCardLibraryScreen.getCards(CustomCardLibraryScreen.currentColor)) {
-                if (val.isMatch(c)) {
-                    g.add(c);
-                }
-            }
-            mapping.put(val, g);
-        }
-        return g;
-    }
-
-    protected HashMap<ColorlessGroup, ArrayList<AbstractCard>> getMapping(AbstractCard.CardColor color) {
-        switch (color) {
-            case COLORLESS:
-                return ColorlessGroupMapping;
-            case CURSE:
-                return CurseGroupMapping;
-            default:
-                return null;
-        }
+        return EUIUtils.map(arrayList, val::processCard);
     }
 
     @Override
-    public void open(ArrayList<? extends AbstractCard> arrayList, AbstractCard.CardColor color, Object payload) {
+    public void open(ArrayList<? extends AbstractCard> arrayList, AbstractCard.CardColor color, boolean isAll, Object payload) {
         // Only trigger the custom module if:
         // 1. Just switching into the colorless/curse pool (to initialize the module)
         // 2. When clicking on the button
         if (payload == null) {
-            groupButton.setActive(getMapping(CustomCardLibraryScreen.currentColor) != null);
-            togglePool(group);
+            groupButton
+                    .setOnClick(() -> togglePool(arrayList, group.next(), isAll))
+                    .setActive(GameUtilities.isColorlessCardColor(color));
+            groupMenu.setOnChange(costs -> {
+                togglePool(arrayList, costs.size() > 0 ? costs.get(0) : ColorlessGroup.Default, isAll);
+            });
+            togglePool(arrayList, group, isAll);
         }
     }
 
@@ -89,12 +70,10 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
         groupMenu.tryRender(sb);
     }
 
-    protected void togglePool(ColorlessGroup val) {
+    protected void togglePool(ArrayList<? extends AbstractCard> arrayList, ColorlessGroup val, boolean isAll) {
         group = val;
-        ArrayList<AbstractCard> cards = getGroup(val);
-        if (cards != null) {
-            screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards, CustomCardLibraryScreen.currentColor);
-        }
+        ArrayList<? extends AbstractCard> cards = getGroup(arrayList, val);
+        screen.setActiveColor(CustomCardLibraryScreen.getCurrentColor(), cards, isAll, CustomCardLibraryScreen.getCurrentColor());
         groupButton.setText(group.getTitle());
     }
 
@@ -105,14 +84,8 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
     }
 
     public enum ColorlessGroup {
-        Default(null),
-        PCL(PCLCard.class);
-
-        public final Class<? extends AbstractCard> cardClass;
-
-        ColorlessGroup(Class<? extends AbstractCard> cardClass) {
-            this.cardClass = cardClass;
-        }
+        Default,
+        PCL;
 
         public String getTitle() {
             if (this == ColorlessGroup.PCL) {
@@ -121,16 +94,19 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
             return EUIRM.strings.ui_basegame;
         }
 
-        public boolean isMatch(AbstractCard c) {
-            if (cardClass == null) {
-                return !(c instanceof PCLCard);
-            }
-            return cardClass.isInstance(c);
-        }
-
         public ColorlessGroup next() {
             ColorlessGroup[] values = ColorlessGroup.values();
             return values[(this.ordinal() + 1) % values.length];
+        }
+
+        public AbstractCard processCard(AbstractCard c) {
+            if (this == PCL) {
+                TemplateCardData template = TemplateCardData.getTemplate(c.cardID);
+                if (template != null) {
+                    return template.create(c.timesUpgraded);
+                }
+            }
+            return c;
         }
     }
 }

@@ -46,8 +46,6 @@ import pinacolada.utilities.GameUtilities;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pinacolada.skills.PSkill.COLON_SEPARATOR;
-
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public static final int MINIMUM_CARDS = 75; // 75
@@ -422,6 +420,10 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final ArrayList<AbstractCard> cards = new ArrayList<>();
         if (data != null) {
             for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
+                String replacement = data.resources.getReplacement(c.cardID);
+                if (replacement != null) {
+                    c = CardLibrary.getCard(replacement);
+                }
                 if (isRarityAllowed(c.rarity, c.type) &&
                         data.resources.containsColorless(c)) {
                     cards.add(c.makeCopy());
@@ -475,7 +477,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         cardGrid.add(getAllCards());
         updateStartingDeckText();
 
-        EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
+        EUI.countingPanel.open(shownCards, data.resources.cardColor, false, false);
 
         EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
                 new EUITourTooltip(cardGrid.group.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
@@ -602,7 +604,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     protected void totalCardsChanged(int totalCards, int totalColorless) {
         if (EUI.countingPanel.isActive) {
-            EUI.countingPanel.open(shownCards, data.resources.cardColor, false);
+            EUI.countingPanel.open(shownCards, data.resources.cardColor, false, false);
         }
 
         PCLLoadout cur = loadoutMap.get(currentSeriesCard);

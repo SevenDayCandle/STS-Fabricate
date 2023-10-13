@@ -196,6 +196,10 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
         // Add available colorless
         for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
+            String replacement = data.resources.getReplacement(c.cardID);
+            if (replacement != null) {
+                c = CardLibrary.getCard(replacement);
+            }
             if (PCLSeriesSelectScreen.isRarityAllowed(c.rarity, c.type) && data.resources.containsColorless(c)) {
                 group.add(c);
             }

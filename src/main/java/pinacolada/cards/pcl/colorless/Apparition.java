@@ -9,7 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Apparition extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/apparition";
     public static final PCLCardData DATA = registerTemplate(Apparition.class, com.megacrit.cardcrawl.cards.colorless.Apparition.ID)

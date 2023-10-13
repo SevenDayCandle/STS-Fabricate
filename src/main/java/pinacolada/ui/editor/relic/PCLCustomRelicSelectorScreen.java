@@ -38,7 +38,7 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
 
     @Override
     protected EUIItemGrid<RelicInfo> getGrid() {
-        return new EUIRelicGrid(1f);
+        return new EUIRelicGrid();
     }
 
     @Override

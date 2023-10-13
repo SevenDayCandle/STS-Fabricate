@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_AscendersBane extends PCLCard {
     public static final String ATLAS_URL = "curse/ascenders_bane";
     public static final PCLCardData DATA = registerTemplate(Curse_AscendersBane.class, AscendersBane.ID)

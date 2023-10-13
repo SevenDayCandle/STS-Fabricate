@@ -8,7 +8,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Status_Slimed extends PCLCard {
     public static final String ATLAS_URL = "status/slimed";
     public static final PCLCardData DATA = registerTemplate(Status_Slimed.class, Slimed.ID)

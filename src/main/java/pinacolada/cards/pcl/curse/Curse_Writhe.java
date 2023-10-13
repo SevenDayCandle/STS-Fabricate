@@ -8,7 +8,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Writhe extends PCLCard {
     public static final String ATLAS_URL = "curse/writhe";
     public static final PCLCardData DATA = registerTemplate(Curse_Writhe.class, Writhe.ID)

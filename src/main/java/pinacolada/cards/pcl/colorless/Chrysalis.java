@@ -9,7 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Chrysalis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/chrysalis";
     public static final PCLCardData DATA = registerTemplate(Chrysalis.class, com.megacrit.cardcrawl.cards.colorless.Chrysalis.ID)

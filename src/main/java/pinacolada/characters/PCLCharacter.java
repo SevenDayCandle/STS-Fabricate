@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -82,7 +83,7 @@ public abstract class PCLCharacter extends CustomPlayer {
         this.playerData = playerData;
         this.originalAnimation = animation;
 
-        // SpriteAnimation is already register via patch in super constructor
+        // SpriteAnimation is already registered via patch in super constructor
         if (!(this.animation instanceof SpriterAnimation)) {
             PCLCharacterAnimation.registerCreatureAnimation(this, this.animation);
             reloadDefaultAnimation();

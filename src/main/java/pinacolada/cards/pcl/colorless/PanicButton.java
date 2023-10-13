@@ -9,7 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class PanicButton extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/panic_button";
     public static final PCLCardData DATA = registerTemplate(PanicButton.class, com.megacrit.cardcrawl.cards.colorless.PanicButton.ID)

@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Transmutation extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/transmutation";
     public static final PCLCardData DATA = registerTemplate(Transmutation.class, com.megacrit.cardcrawl.cards.colorless.Transmutation.ID)

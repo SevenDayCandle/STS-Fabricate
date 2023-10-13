@@ -36,21 +36,10 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     public static ArrayList<PCLCardAffinity> currentAffinities = EUIUtils.map(PCLAffinity.basic(), PCLCardAffinity::new);
     public final ArrayList<AffinityKeywordButton> affinityButtons = new ArrayList<>();
     public final EUILabel affinitiesSectionLabel;
-    public final EUISearchableDropdown<PCLLoadout> seriesDropdown;
     public final CardKeywordFilters filters;
 
     public PCLAffinityPoolModule(CardKeywordFilters filters) {
         this.filters = filters;
-        seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getNameForFilter)
-                .setOnOpenOrClose(isOpen -> CardCrawlGame.isPopupOpen = this.isActive)
-                .setOnChange(selectedSeries -> {
-                    currentSeries.clear();
-                    currentSeries.addAll(selectedSeries);
-                    filters.invoke(null);
-                })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
-                .setIsMultiSelect(true)
-                .setCanAutosizeButton(true);
 
         affinitiesSectionLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(0, 0, scale(48), scale(48)))
@@ -85,17 +74,6 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
 
     @Override
     public void initializeSelection(Collection<? extends AbstractCard> cards) {
-        HashSet<PCLLoadout> availableSeries = new HashSet<>();
-        for (AbstractCard card : cards) {
-            availableSeries.add(GameUtilities.getPCLSeries(card));
-            if (card instanceof PCLCard) {
-                ((PCLCard) card).affinities.updateSortedList();
-            }
-        }
-        ArrayList<PCLLoadout> seriesItems = EUIUtils.filter(availableSeries, Objects::nonNull);
-        seriesItems.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
-        seriesDropdown.setItems(seriesItems).setActive(seriesItems.size() > 0);
-
         currentAffinities = EUIUtils.map(PGR.config.showIrrelevantProperties.get() ? PCLAffinity.basic() : PCLAffinity.getAvailableAffinities(), PCLCardAffinity::new);
         if (currentAffinities.size() > 0) {
             currentAffinities.add(new PCLCardAffinity(PCLAffinity.Star));
@@ -115,12 +93,12 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
 
     @Override
     public boolean isHovered() {
-        return seriesDropdown.hb.hovered || EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
+        return EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
     }
 
     @Override
     public boolean isItemValid(AbstractCard c) {
-        if (!currentSeries.isEmpty() && !currentSeries.contains(GameUtilities.getPCLSeries(c))) {
+        if (!currentSeries.isEmpty() && !currentSeries.contains(GameUtilities.getLoadoutForCard(c))) {
             return false;
         }
         for (PCLCardAffinity cAffinity : currentAffinities) {
@@ -133,7 +111,6 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
 
     @Override
     public void renderImpl(SpriteBatch sb) {
-        this.seriesDropdown.tryRender(sb);
         this.affinitiesSectionLabel.tryRender(sb);
         for (AffinityKeywordButton c : affinityButtons) {
             c.tryRender(sb);
@@ -143,7 +120,6 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     @Override
     public void reset() {
         currentSeries.clear();
-        seriesDropdown.setSelectionIndices((int[]) null, false);
         for (PCLCardAffinity c : currentAffinities) {
             c.level = 0;
         }
@@ -154,7 +130,6 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
 
     @Override
     public void updateImpl() {
-        this.seriesDropdown.setPosition(filters.seenDropdown.hb.x + filters.seenDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
         this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 5f, DRAW_START_Y + filters.getScrollDelta() - SPACING * 1.9f).tryUpdate();
         for (AffinityKeywordButton c : affinityButtons) {
             c.tryUpdate();

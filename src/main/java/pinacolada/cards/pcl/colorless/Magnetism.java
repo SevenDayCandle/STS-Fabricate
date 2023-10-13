@@ -9,7 +9,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Magnetism extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/magnetism";
     public static final PCLCardData DATA = registerTemplate(Magnetism.class, com.megacrit.cardcrawl.cards.colorless.Magnetism.ID)

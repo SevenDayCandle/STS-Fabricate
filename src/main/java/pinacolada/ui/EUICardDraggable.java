@@ -51,7 +51,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
         if (meterSavedPosition == null && config != null) {
             meterSavedPosition = config.get().cpy();
             hb.setCenter(screenW(meterSavedPosition.x), screenH(meterSavedPosition.y));
-            EUIUtils.logInfoIfDebug(this, "Loaded position: " + meterSavedPosition);
         }
     }
 
@@ -72,7 +71,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             meterSavedPosition.x = hb.targetCx / (float) Settings.WIDTH;
             meterSavedPosition.y = hb.targetCy / (float) Settings.HEIGHT;
             if (meterSavedPosition.dst2(config.get().cpy()) > EPSILON) {
-                EUIUtils.logInfoIfDebug(this, "Saved position: " + meterSavedPosition);
                 config.set(meterSavedPosition.cpy());
             }
         }

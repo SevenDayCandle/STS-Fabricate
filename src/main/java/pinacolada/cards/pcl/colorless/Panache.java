@@ -8,7 +8,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Panache extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/panache";
     public static final PCLCardData DATA = registerTemplate(Panache.class, com.megacrit.cardcrawl.cards.colorless.Panache.ID)

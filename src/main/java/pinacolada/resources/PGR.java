@@ -291,11 +291,9 @@ public class PGR {
         EUI.addSubscriber(PGR.cardPopup);
         EUI.addSubscriber(PGR.relicPopup);
         EUI.addGlobalCustomCardFilter(PGR.affinityFilters);
+        EUI.addCardSetFilter(AbstractCard.CardColor.COLORLESS, GameUtilities::getLoadoutNameForCard);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.colorlessGroups);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.colorlessGroups);
-        for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
-            EUI.setCustomCardLibraryModule(r.cardColor, PGR.colorlessGroups);
-        }
 
         BaseMod.addCustomScreen(PGR.augmentScreen);
     }
@@ -308,12 +306,16 @@ public class PGR {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleCard.class)) {
             try {
                 AbstractCard card = (AbstractCard) ct.getConstructor().newInstance();
+                // Game may treat extra cards as locked, this should not be the case
                 if (UnlockTracker.isCardLocked(card.cardID)) {
                     UnlockTracker.unlockCard(card.cardID);
                     card.isLocked = false;
                 }
 
-                BaseMod.addCard(card);
+                VisibleCard a = ct.getAnnotation(VisibleCard.class);
+                if (a.add()) {
+                    BaseMod.addCard(card);
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();

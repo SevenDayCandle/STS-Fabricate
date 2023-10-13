@@ -11,7 +11,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Pride extends PCLCard {
     public static final String ATLAS_URL = "curse/pride";
     public static final PCLCardData DATA = registerTemplate(Curse_Pride.class, Pride.ID)

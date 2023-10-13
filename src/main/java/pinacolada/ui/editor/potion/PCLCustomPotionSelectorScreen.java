@@ -20,7 +20,7 @@ public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<Potio
 
     @Override
     protected EUIItemGrid<PotionInfo> getGrid() {
-        return new EUIPotionGrid(1f);
+        return new EUIPotionGrid();
     }
 
     @Override

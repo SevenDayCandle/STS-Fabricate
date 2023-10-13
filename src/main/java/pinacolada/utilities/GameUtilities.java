@@ -1105,11 +1105,19 @@ public class GameUtilities {
         return a != null ? a.getLevel(affinity, useStarLevel) : 0;
     }
 
-    public static PCLLoadout getPCLSeries(AbstractCard c) {
+    public static PCLLoadout getLoadoutForCard(AbstractCard c) {
         if (c instanceof PCLCard) {
             return ((PCLCard) c).cardData.loadout;
         }
         return null;
+    }
+
+    public static String getLoadoutNameForCard(AbstractCard c) {
+        PCLLoadout loadout = getLoadoutForCard(c);
+        if (loadout != null) {
+            return loadout.getName();
+        }
+        return EUIUtils.EMPTY_STRING;
     }
 
     public static AbstractPlayer.PlayerClass getPlayerClass() {

@@ -12,7 +12,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.modifiers.PMod_PerCard;
 import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Regret extends PCLCard {
     public static final String ATLAS_URL = "curse/regret";
     public static final PCLCardData DATA = registerTemplate(Curse_Regret.class, Regret.ID)

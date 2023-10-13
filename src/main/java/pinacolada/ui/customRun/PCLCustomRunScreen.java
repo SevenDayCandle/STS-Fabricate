@@ -170,7 +170,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             // Diverse means that we put all possible cards into the pool
             if (Diverse.ID.equals(mod.ID)) {
                 group.clear();
-                for (ArrayList<AbstractCard> cGroup : CustomCardLibraryScreen.getAllCards()) {
+                for (ArrayList<AbstractCard> cGroup : CustomCardLibraryScreen.getAllCardLists()) {
                     for (AbstractCard c : cGroup) {
                         group.add(c.makeCopy());
                     }

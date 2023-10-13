@@ -17,6 +17,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -89,9 +90,9 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     public boolean containsColorless(AbstractCard card) {
         if (card instanceof PCLCard) {
             PCLLoadout loadout = ((PCLCard) card).cardData.loadout;
-            return loadout == null || !loadout.isLocked();
+            return loadout == null || loadout.isCore() || !loadout.isLocked();
         }
-        return false;
+        return true;
     }
 
     public String createID(String suffix) {
@@ -100,7 +101,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
 
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card should be removed when playing as a non-PCL character
     public boolean filterColorless(AbstractCard card) {
-        return card instanceof PCLCard;
+        return card instanceof PCLCard && ((PCLCard) card).cardData.resources == this;
     }
 
     // Intercepts the creation of Ascender's Bane upon starting a run
@@ -132,9 +133,10 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
         return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
     }
 
-    // Intercepts CardLibrary's getCopy to return a different card
+    // Intercepts CardLibrary's getCopy to return a different card. By default, this prevents example templates from showing up for regular characters
     public String getReplacement(String cardID) {
-        return null;
+        PCLCardData data = PCLCardData.getStaticData(cardID);
+        return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
     }
 
     public UIStrings getUIStrings(String stringID) {

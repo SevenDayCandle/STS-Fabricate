@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CacheableCard;
@@ -119,7 +120,7 @@ public class PCLCardRewardScreen extends EUIBase {
             return;
         }
 
-        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group, AbstractDungeon.player.getCardColor(), false);
+        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group, AbstractDungeon.player.getCardColor(), EUIGameUtils.canReceiveAnyColorCard(), false);
         openForBundle(rItem, cards);
         openForReroll(rItem);
         upgradeToggle.toggle(false);

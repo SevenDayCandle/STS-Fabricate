@@ -8,7 +8,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class JAX extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/jax";
     public static final PCLCardData DATA = registerTemplate(JAX.class, com.megacrit.cardcrawl.cards.colorless.JAX.ID)

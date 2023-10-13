@@ -9,7 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.common.ShacklesPower;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class DarkShackles extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/dark_shackles";
     public static final PCLCardData DATA = registerTemplate(DarkShackles.class, com.megacrit.cardcrawl.cards.colorless.DarkShackles.ID)

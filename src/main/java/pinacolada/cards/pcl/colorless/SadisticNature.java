@@ -10,7 +10,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class SadisticNature extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/sadistic_nature";
     public static final PCLCardData DATA = registerTemplate(SadisticNature.class, com.megacrit.cardcrawl.cards.colorless.SadisticNature.ID)

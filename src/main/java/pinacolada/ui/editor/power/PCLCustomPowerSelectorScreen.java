@@ -28,7 +28,7 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
 
     @Override
     protected EUIItemGrid<PCLPowerRenderable> getGrid() {
-        return new PCLPowerGrid(1f);
+        return new PCLPowerGrid();
     }
 
     @Override

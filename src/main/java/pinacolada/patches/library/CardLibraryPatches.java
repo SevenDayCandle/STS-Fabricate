@@ -39,6 +39,12 @@ public class CardLibraryPatches {
             if (slot != null) {
                 return SpireReturn.Return(slot.make());
             }
+
+            // Fall back on PCLCardData if card was still not found
+            PCLCardData data = PCLCardData.getStaticData(key);
+            if (data != null) {
+                return SpireReturn.Return(data.create());
+            }
         }
 
         return SpireReturn.Continue();

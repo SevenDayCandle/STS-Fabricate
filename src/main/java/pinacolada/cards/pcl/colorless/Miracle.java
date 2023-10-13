@@ -8,7 +8,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Miracle extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/miracle";
     public static final PCLCardData DATA = registerTemplate(Miracle.class, com.megacrit.cardcrawl.cards.tempCards.Miracle.ID)

@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Status_Burn extends PCLCard {
     public static final String ATLAS_URL = "status/burn";
     public static final PCLCardData DATA = registerTemplate(Status_Burn.class, Burn.ID)

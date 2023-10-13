@@ -10,7 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
-@VisibleCard
+@VisibleCard(add = false)
 public class Curse_Necronomicurse extends PCLCard {
     public static final String ATLAS_URL = "curse/necronomicurse";
     public static final PCLCardData DATA = registerTemplate(Curse_Necronomicurse.class, Necronomicurse.ID)
