@@ -8,12 +8,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PBlockTrait;
 
 @VisibleSkill
-public class PTrait_BlockMultiplier extends PBlockTrait<PField_Empty> {
+public class PTrait_BlockMultiplier extends PBlockTrait<PField_Not> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_BlockMultiplier.class, PField_Empty.class)
+    public static final PSkillData<PField_Not> DATA = register(PTrait_BlockMultiplier.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_BlockMultiplier() {
@@ -49,6 +50,6 @@ public class PTrait_BlockMultiplier extends PBlockTrait<PField_Empty> {
 
     @Override
     public float modifyBlockFirst(PCLUseInfo info, float amount) {
-        return amount * (1f + (this.amount / 100f));
+        return amount * ((fields.not ? 0f : 1f) + (this.amount / 100f));
     }
 }

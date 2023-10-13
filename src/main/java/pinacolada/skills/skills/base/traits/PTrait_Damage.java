@@ -7,11 +7,12 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PDamageTrait;
 
 @VisibleSkill
-public class PTrait_Damage extends PDamageTrait<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_Damage.class, PField_Empty.class)
+public class PTrait_Damage extends PDamageTrait<PField_Not> {
+    public static final PSkillData<PField_Not> DATA = register(PTrait_Damage.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_Damage() {
@@ -43,6 +44,6 @@ public class PTrait_Damage extends PDamageTrait<PField_Empty> {
 
     @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
-        return amount + this.amount;
+        return fields.not ? this.amount : amount + this.amount;
     }
 }

@@ -8,12 +8,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PBlockTrait;
 
 @VisibleSkill
-public class PTrait_BlockCount extends PBlockTrait<PField_Empty> {
+public class PTrait_BlockCount extends PBlockTrait<PField_Not> {
 
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_BlockCount.class, PField_Empty.class)
+    public static final PSkillData<PField_Not> DATA = register(PTrait_BlockCount.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_BlockCount() {
@@ -45,6 +46,6 @@ public class PTrait_BlockCount extends PBlockTrait<PField_Empty> {
 
     @Override
     public float modifyRightCount(PCLUseInfo info, float amount) {
-        return amount + this.amount;
+        return fields.not ? this.amount : amount + this.amount;
     }
 }

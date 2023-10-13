@@ -11,6 +11,7 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PTrait_Cost extends PTrait<PField_Not> {
@@ -60,11 +61,17 @@ public class PTrait_Cost extends PTrait<PField_Not> {
 
     @Override
     public int modifyCost(PCLUseInfo info, int amount) {
-        return amount + this.amount;
+        return fields.not ? this.amount : amount + this.amount;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
     }
 
     @Override
     public String wrapAmount(int input) {
-        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+        return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

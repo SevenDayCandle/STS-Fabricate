@@ -215,7 +215,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
 
     @Override
     public String wrapAmount(int input) {
-        return input > 0 ? "+" + input : String.valueOf(input);
+        return input >= 0 ? "+" + input : String.valueOf(input);
     }
 
     abstract public String getSubDescText(PCLCardTarget perspective);
