@@ -99,17 +99,17 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setItems(BlightTier.values())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
-        maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
-        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {

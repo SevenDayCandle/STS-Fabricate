@@ -18,6 +18,7 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
@@ -47,6 +48,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUIButton editLoadoutButton;
     protected EUIButton deleteLoadoutButton;
     protected EUIButton addFlagButton;
+    protected EUIButton resetLoadoutValue;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
@@ -59,6 +61,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor maxCopies;
     protected PCLValueEditor branchUpgrades;
+    protected PCLValueEditor loadoutValue;
     protected EUIToggle uniqueToggle;
     protected EUIToggle soulboundToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
@@ -169,29 +172,40 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnClick(() -> this.openLoadoutDelete(EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
                 .setTooltip(PGR.core.strings.cedit_deleteItem, "");
 
-        maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxCopies, (val) -> effect.modifyAllBuilders((e, i) -> e.setMaxCopies(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies)
                 .setHasInfinite(true, true);
-        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
-        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        loadoutValue = new PCLValueEditor(new EUIHitbox(screenW(0.562f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_loadoutValue, (val) -> effect.modifyAllBuilders((e, i) -> e.setLoadoutValue(val)))
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_loadoutValue, PGR.core.strings.cetut_loadoutValue)
+                .setHasInfinite(true, true);
+        resetLoadoutValue = new EUIButton(PCLCoreImages.Core.backArrow.texture(), new EUIHitbox(screenW(0.602f), screenH(0.403f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+                .setOnClick(() -> {
+                    int val = PCLCardData.getValueForRarity(effect.getBuilder().cardRarity);
+                    loadoutValue.setValue(val, true);
+                })
+                .setTooltip(PGR.core.strings.loadout_reset, "");
+        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.24f), screenH(0.35f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
-        soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.34f), screenH(0.35f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setText(PGR.core.tooltips.soulbound.title)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
@@ -298,6 +312,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         flagsDropdown.setSelection(effect.getBuilder().flags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        loadoutValue.setValue(effect.getBuilder().getLoadoutValue(), false);
         maxCopies.setValue(effect.getBuilder().maxCopies, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
         soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
@@ -379,6 +394,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
         branchUpgrades.tryRender(sb);
+        loadoutValue.tryRender(sb);
+        resetLoadoutValue.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
     }
@@ -407,6 +424,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput.tryUpdate();
         idInput.tryUpdate();
         branchUpgrades.tryUpdate();
+        loadoutValue.tryUpdate();
+        resetLoadoutValue.tryUpdate();
         uniqueToggle.tryUpdate();
         soulboundToggle.tryUpdate();
     }

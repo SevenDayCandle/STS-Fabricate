@@ -121,12 +121,12 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);
-        priority = new PCLValueEditor(new EUIHitbox(screenW(0.36f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        priority = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.power_priority, (val) -> effect.modifyAllBuilders((e, i) -> e.setPriority(val)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)
                 .setHasInfinite(true, true);
-        turns = new PCLValueEditor(new EUIHitbox(screenW(0.46f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        turns = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_turns, (val) -> effect.modifyAllBuilders((e, i) -> e.setTurns(val)))
                 .setLimits(1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_turns, PGR.core.strings.cetut_turns);

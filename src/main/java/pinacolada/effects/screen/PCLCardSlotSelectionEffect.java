@@ -86,7 +86,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
     }
 
     private int getCardValue(AbstractCard card) {
-        return (card instanceof PCLCard && !(card instanceof PCLDynamicCard)) ? ((PCLCard) card).cardData.loadoutValue : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
+        return (card instanceof PCLCard) ? ((PCLCard) card).cardData.getLoadoutValue() : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
     }
 
     public AbstractCard getSelectedCard() {

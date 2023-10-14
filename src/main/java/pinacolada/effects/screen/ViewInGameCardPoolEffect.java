@@ -1,6 +1,9 @@
 package pinacolada.effects.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -11,6 +14,7 @@ import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -21,7 +25,10 @@ import pinacolada.ui.customRun.PCLRandomCardAmountDialog;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
@@ -29,6 +36,7 @@ import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
 public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCardPoolEffect> {
+    protected static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("*.csv", "csv");
     private final ActionT0 onRefresh;
     private final Color screenColor;
     private final EUICardGrid grid;
@@ -37,6 +45,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
     private EUIButton selectRandomButton;
+    private EUIButton importButton;
     private EUILabel selectedCount;
     private EUITextBox instructions;
     private EUIToggle upgradeToggle;
@@ -52,9 +61,9 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
     public ViewInGameCardPoolEffect(ArrayList<AbstractCard> cards, HashSet<String> bannedCards, ActionT0 onRefresh) {
         super(0.7f);
 
-        this.bannedCards = bannedCards;
         this.onRefresh = onRefresh;
         this.cards = cards;
+        this.bannedCards = new HashSet<>();
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
@@ -67,6 +76,13 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             this.grid = (EUICardGrid) new EUICardGrid().canDragScreen(false);
             complete(this);
             return;
+        }
+
+        // Only allow cards in the actual grid to be amongst the bannedCards
+        for (AbstractCard c : cards) {
+            if (bannedCards.contains(c.cardID)) {
+                this.bannedCards.add(c.cardID);
+            }
         }
 
         if (GameUtilities.isTopPanelVisible()) {
@@ -91,13 +107,13 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setColor(Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f, true);
 
-        instructions = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.6f, buttonWidth, Settings.HEIGHT * 0.18f))
+        instructions = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(xPos, Settings.HEIGHT * 0.65f, buttonWidth, Settings.HEIGHT * 0.18f))
                 .setLabel(PGR.core.strings.sui_viewPoolInstructions)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
-        deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.48f, buttonWidth, buttonHeight)
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.54f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
@@ -112,7 +128,12 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setOnClick(this::startSelectRandom)
                 .setColor(Color.ROYAL);
 
-        upgradeToggle = new EUIToggle(new EUIHitbox(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height * 3, buttonWidth, buttonHeight))
+        importButton = EUIButton.createHexagonalButton(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height, buttonWidth, buttonHeight)
+                .setText(PGR.core.strings.sui_importFromFile)
+                .setOnClick(this::importFromFile)
+                .setColor(Color.ROYAL);
+
+        upgradeToggle = new EUIToggle(new EUIHitbox(xPos, importButton.hb.y - importButton.hb.height * 2.5f, buttonWidth, buttonHeight))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
@@ -142,6 +163,41 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         }
     }
 
+    private void importFromFile() {
+        try {
+            File openedFile = EUIUtils.loadFile(EXTENSIONS, PGR.config.lastCSVPath);
+            FileHandle fh = Gdx.files.absolute(openedFile.getAbsolutePath());
+            String[] lines = EUIUtils.splitString(EUIExporter.NEWLINE, fh.readString());
+            bannedCards.clear();
+
+            HashMap<String, AbstractCard> cardMap = new HashMap<>();
+            for (AbstractCard c : grid.group) {
+                cardMap.put(c.cardID, c);
+                bannedCards.add(c.cardID);
+            }
+
+            // ID is the first delimited object per line. Assume comma delineation
+            // Skip the header row
+            for (int start = EUIExporter.EXT_CSV.equals(fh.extension()) ? 1 : 0; start < lines.length; start++) {
+                String id = EUIUtils.splitString(",",lines[start])[0];
+                AbstractCard found = cardMap.get(id);
+                if (found != null) {
+                    bannedCards.remove(id);
+                }
+            }
+
+            for (AbstractCard c : grid.group) {
+                updateCardAlpha(c);
+            }
+
+            refreshCountText();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(this, "Failed to load CSV file: " + e.getLocalizedMessage());
+        }
+    }
+
     public void refreshCountText() {
         if (canToggle) {
             selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards, card -> !bannedCards.contains(card.cardID)), cards.size()));
@@ -164,10 +220,12 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         selectAllButton.tryRender(sb);
         deselectAllButton.tryRender(sb);
         selectRandomButton.tryRender(sb);
+        importButton.tryRender(sb);
         selectedCount.tryRender(sb);
         EUI.sortHeader.render(sb);
         if (!EUI.cardFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
+            EUIExporter.exportButton.tryRender(sb);
         }
         if (randomSelection.isActive) {
             sb.setColor(this.screenColor);
@@ -225,6 +283,11 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
             }
             refreshCountText();
         }
+    }
+
+    public ViewInGameCardPoolEffect setCanImport(boolean canImport) {
+        importButton.setActive(canImport);
+        return this;
     }
 
     public ViewInGameCardPoolEffect setCanToggle(boolean canToggle) {
@@ -291,19 +354,22 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
+            EUIExporter.exportButton.tryUpdate();
             EUI.sortHeader.update();
             grid.tryUpdate();
             upgradeToggle.updateImpl();
             selectAllButton.tryUpdate();
             deselectAllButton.tryUpdate();
             selectRandomButton.tryUpdate();
+            importButton.tryUpdate();
             instructions.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered) {
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered
+                    || selectRandomButton.hb.hovered || importButton.hb.hovered || grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered || EUIExporter.exportButton.hb.hovered) {
                 return;
             }
 
@@ -311,5 +377,6 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 complete(this);
             }
         }
+        EUIExporter.exportDropdown.tryUpdate();
     }
 }

@@ -26,7 +26,7 @@ public class LoadoutCardSlot extends LoadoutSlot {
     public static int getLoadoutValue(String item) {
         PCLCardData data = PCLCardData.getStaticData(item);
         if (data != null) {
-            return data.loadoutValue;
+            return data.getLoadoutValue();
         }
         AbstractCard r = CardLibrary.getCard(item);
         return r != null ? PCLCardData.getValueForRarity(r.rarity) : 0;

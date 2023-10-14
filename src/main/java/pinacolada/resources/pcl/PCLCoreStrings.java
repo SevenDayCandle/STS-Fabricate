@@ -129,6 +129,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_scope = cedit.TEXT[80];
     public final String cedit_newFlag = cedit.TEXT[81];
     public final String cedit_turns = cedit.TEXT[82];
+    public final String cedit_loadoutValue = cedit.TEXT[83];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -207,6 +208,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_scope = cetut.TEXT[74];
     public final String cetut_turns = cetut.TEXT[75];
     public final String cetut_blightRarity = cetut.TEXT[76];
+    public final String cetut_loadoutValue = cetut.TEXT[77];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -306,17 +308,15 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String loadout_invalidLoadoutDescLocked = loadout.TEXT[23];
     public final String loadout_unsavedChanges = loadout.TEXT[24];
     public final String loadout_reset = loadout.TEXT[25];
-    public final String loadout_copyTo = loadout.TEXT[26];
-    public final String loadout_copyFrom = loadout.TEXT[27];
-    public final String loadout_export = loadout.TEXT[28];
-    public final String loadout_tutorialCard = loadout.TEXT[29];
-    public final String loadout_tutorialValue = loadout.TEXT[30];
-    public final String loadout_tutorialRelic = loadout.TEXT[31];
-    public final String loadout_tutorialAttributes = loadout.TEXT[32];
-    public final String loadout_tutorialRequired = loadout.TEXT[33];
-    public final String loadout_newPreset = loadout.TEXT[34];
-    public final String loadout_changePreset = loadout.TEXT[35];
-    public final String loadout_tutorialPreset = loadout.TEXT[36];
+    public final String loadout_tutorialCard = loadout.TEXT[26];
+    public final String loadout_tutorialValue = loadout.TEXT[27];
+    public final String loadout_tutorialRelic = loadout.TEXT[28];
+    public final String loadout_tutorialAttributes = loadout.TEXT[29];
+    public final String loadout_tutorialRequired = loadout.TEXT[30];
+    public final String loadout_newPreset = loadout.TEXT[31];
+    public final String loadout_changePreset = loadout.TEXT[32];
+    public final String loadout_tutorialPreset = loadout.TEXT[33];
+    public final String loadout_duplicatePreset = loadout.TEXT[34];
     // Menu
     public final String menu_editor = menu.TEXT[0];
     public final String menu_card = menu.TEXT[1];
@@ -440,6 +440,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String sui_relicPool = seriesui.TEXT[22];
     public final String sui_relicPoolInfo = seriesui.TEXT[23];
     public final String sui_totalInstructions = seriesui.TEXT[24];
+    public final String sui_importFromFile = seriesui.TEXT[25];
+    public final String sui_importFromFileInstructions = seriesui.TEXT[26];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];

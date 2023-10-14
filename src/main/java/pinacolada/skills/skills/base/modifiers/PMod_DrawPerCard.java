@@ -37,7 +37,7 @@ public class PMod_DrawPerCard extends PMod_Do {
     }
 
     public PMod_DrawPerCard(int amount) {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, PCLCardTarget.None, amount, PCLCardGroupHelper.DrawPile);
     }
 
     @Override
@@ -62,5 +62,10 @@ public class PMod_DrawPerCard extends PMod_Do {
     @Override
     public String getAmountRawOrAllString() {
         return getAmountRawString();
+    }
+
+    @Override
+    public String getMoveString(boolean addPeriod) {
+        return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
     }
 }

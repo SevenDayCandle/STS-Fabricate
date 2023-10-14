@@ -86,7 +86,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setText(PGR.core.strings.scp_changeVariant)
                 .setOnClick(this::changeCardForm)
                 .setColor(Color.FIREBRICK);
-        this.changeVariant.hb.move(Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 170 * Settings.scale);
+        this.changeVariant.hb.move(Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 180 * Settings.scale);
 
         this.changeVariantNext = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 3.5f, changeVariant.hb.height * 0.8f))
                 .setOnClick(() -> changePreviewForm(currentForm + 1));
@@ -108,14 +108,14 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         this.changeVariantLabel = new EUILabel(EUIFontHelper.cardDescriptionFontLarge,
-                new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 - ICON_SIZE * 2, changeVariant.hb.height * 1.3f))
+                new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 - ICON_SIZE * 2, changeVariant.hb.height * 0.85f))
                 .setAlignment(0.5f, 0.5f) // 0.1f
                 .setLabel(PGR.core.strings.scp_variant + ":");
 
         final float offX = changeVariant.hb.width / 2 - ICON_SIZE * 0.75f;
 
         this.changeVariantDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), screenH(0.07f), changeVariant.hb.width / 2, -changeVariant.hb.height * 0.8f))
+                new RelativeHitbox(changeVariant.hb, screenW(0.21f), screenH(0.07f), changeVariant.hb.width / 2, -changeVariant.hb.height * 0.6f))
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
 

@@ -42,7 +42,8 @@ public interface EditorMaker {
             loadFunc.invoke();
         }
         catch (Exception e) {
-            EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
+            // Using info since this can be really long
+            EUIUtils.logInfoIfDebug(this, "Failed to load field: " + e.getLocalizedMessage());
         }
     }
 

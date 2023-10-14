@@ -183,7 +183,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");
-        ascensionEditor.header.setAlignment(0.4f, 0f);
+        ascensionEditor.header.setAlignment(0.4f, 0.25f);
 
         modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)), mod -> mod.name)
                 .setRowFunction(PCLCustomModDropdownRow::new)

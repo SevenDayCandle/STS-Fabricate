@@ -652,8 +652,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
         AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
         ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
-        // Mark this relic as seen so it shows up properly in menus, etc.
-        UnlockTracker.markRelicAsSeen(c.ID);
         if (relicPool != null && !relicPool.contains(c.ID)) {
             relicPool.add(c.ID);
             EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);

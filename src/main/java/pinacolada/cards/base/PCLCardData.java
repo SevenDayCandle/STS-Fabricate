@@ -27,8 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static extendedui.EUIUtils.array;
-import static extendedui.EUIUtils.safeIndex;
+import static extendedui.EUIUtils.*;
 
 // TODO create a non-dynamic-only subclass
 public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
@@ -68,7 +67,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public boolean obtainableInCombat = true;
     public boolean removableFromDeck = true;
     public boolean unique = false;
-    public int loadoutValue;
+    public Integer loadoutValue;
     public int maxCopies = -1;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
@@ -251,6 +250,13 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public String getLoadoutName() {
         String loadoutName = loadout != null ? loadout.getName() : null;
         return loadoutName != null ? loadoutName : strings.DESCRIPTION;
+    }
+
+    public int getLoadoutValue() {
+        if (loadoutValue != null) {
+            return loadoutValue;
+        }
+        return getValueForRarity(cardRarity);
     }
 
     public int getMagicNumber(int form) {
@@ -656,17 +662,14 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
             }
         }
 
-        // Non-loadout cards, curses, statuses, and special cards cannot get slots
-        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL) {
-            // Commons and Attacks/Skills get an extra slot
-            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
-        }
+        setSlotsFromLoadout();
 
         return this;
     }
 
-    protected void setLoadoutValueFromRarity() {
-        this.loadoutValue = getValueForRarity(this.cardRarity);
+    public PCLCardData setLoadoutValue(int value) {
+        this.loadoutValue = value;
+        return this;
     }
 
     public PCLCardData setMagicNumber(int heal) {
@@ -791,7 +794,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         cardRarity = rarity;
         cardType = type;
         setMaxCopiesFromLoadoutType();
-        setLoadoutValueFromRarity();
 
         return this;
     }
@@ -831,6 +833,15 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public PCLCardData setSlots(int slots) {
         this.slots = slots;
+        return this;
+    }
+
+    public PCLCardData setSlotsFromLoadout() {
+        // Curses, statuses, basic, and special cards cannot get slots
+        if (slots <= 0 && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL && cardRarity != AbstractCard.CardRarity.BASIC && cardRarity != AbstractCard.CardRarity.CURSE) {
+            // Commons and non-Powers get an extra slot
+            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
+        }
         return this;
     }
 

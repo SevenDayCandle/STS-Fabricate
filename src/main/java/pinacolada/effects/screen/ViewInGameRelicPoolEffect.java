@@ -1,5 +1,7 @@
 package pinacolada.effects.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -13,6 +15,7 @@ import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
@@ -27,7 +30,9 @@ import pinacolada.ui.customRun.PCLRandomRelicAmountDialog;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import static pinacolada.skills.PSkill.COLON_SEPARATOR;
@@ -44,6 +49,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     private EUIButton selectAllButton;
     private EUIButton selectCustomButton;
     private EUIButton selectRandomButton;
+    private EUIButton importButton;
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
     private PCLRandomRelicAmountDialog randomSelection;
@@ -58,7 +64,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     public ViewInGameRelicPoolEffect(ArrayList<AbstractRelic> relics, HashSet<String> bannedRelics, ActionT0 onRefresh) {
         super(0.7f);
 
-        this.bannedRelics = bannedRelics;
+        this.bannedRelics = new HashSet<>();
         this.onRefresh = onRefresh;
         this.relics = relics;
         this.isRealtime = true;
@@ -73,6 +79,13 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
             this.grid = (EUIRelicGrid) new EUIRelicGrid().canDragScreen(false);
             complete(this);
             return;
+        }
+
+        // Only allow cards in the actual grid to be amongst the bannedCards
+        for (AbstractRelic c : relics) {
+            if (bannedRelics.contains(c.relicId)) {
+                this.bannedRelics.add(c.relicId);
+            }
         }
 
         if (GameUtilities.isTopPanelVisible()) {
@@ -112,7 +125,12 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
                 .setOnClick(this::startSelectRandom)
                 .setColor(Color.ROYAL);
 
-        upgradeToggle = new EUIToggle(new EUIHitbox(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height * 3, buttonWidth, buttonHeight))
+        importButton = EUIButton.createHexagonalButton(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height, buttonWidth, buttonHeight)
+                .setText(PGR.core.strings.sui_importFromFile)
+                .setOnClick(this::importFromFile)
+                .setColor(Color.ROYAL);
+
+        upgradeToggle = new EUIToggle(new EUIHitbox(xPos, importButton.hb.y - importButton.hb.height * 2.5f, buttonWidth, buttonHeight))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
@@ -142,6 +160,41 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         }
     }
 
+    private void importFromFile() {
+        try {
+            File openedFile = EUIUtils.loadFile(ViewInGameCardPoolEffect.EXTENSIONS, PGR.config.lastCSVPath);
+            FileHandle fh = Gdx.files.absolute(openedFile.getAbsolutePath());
+            String[] lines = EUIUtils.splitString(EUIExporter.NEWLINE, fh.readString());
+            bannedRelics.clear();
+
+            HashMap<String, RelicInfo> cardMap = new HashMap<>();
+            for (RelicInfo c : grid.group) {
+                cardMap.put(c.relic.relicId, c);
+                bannedRelics.add(c.relic.relicId);
+            }
+
+            // ID is the first delimited object per line. Assume comma delineation
+            // Skip the header row
+            for (int start = EUIExporter.EXT_CSV.equals(fh.extension()) ? 1 : 0; start < lines.length; start++) {
+                String id = EUIUtils.splitString(",",lines[start])[0];
+                RelicInfo found = cardMap.get(id);
+                if (found != null) {
+                    bannedRelics.remove(id);
+                }
+            }
+
+            for (RelicInfo c : grid.group) {
+                updateRelicAlpha(c);
+            }
+
+            refreshCountText();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(this, "Failed to load CSV file: " + e.getLocalizedMessage());
+        }
+    }
+
     public void refreshCountText() {
         if (canToggle) {
             selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(relics, relic -> !bannedRelics.contains(relic.relicId)), relics.size()));
@@ -167,6 +220,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         EUI.sortHeader.render(sb);
         if (!EUI.relicFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
+            EUIExporter.exportButton.tryRender(sb);
         }
         if (randomSelection.isActive) {
             sb.setColor(this.screenColor);
@@ -248,9 +302,10 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
+            EUIExporter.exportButton.tryUpdate();
             EUI.sortHeader.update();
             grid.tryUpdate();
             upgradeToggle.updateImpl();
@@ -267,6 +322,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
                 complete(this);
             }
         }
+        EUIExporter.exportDropdown.tryUpdate();
     }
 
     private void updateRelicAlpha(RelicInfo c) {

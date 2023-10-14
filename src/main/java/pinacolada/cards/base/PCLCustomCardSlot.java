@@ -31,6 +31,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     public static final String SUBFOLDER = "cards";
 
     public String loadout;
+    public Integer loadoutValue;
+    public Integer augmentSlots;
     public Integer maxUpgradeLevel = 1;
     public Integer maxCopies = -1;
     public Integer branchUpgradeFactor = 0;
@@ -297,6 +299,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             unique = first.unique;
             removableFromDeck = first.removableFromDeck;
             branchUpgradeFactor = first.branchFactor;
+            augmentSlots = first.slots;
+            loadoutValue = first.getLoadoutValue();
             affinities = EUIUtils.serialize(first.affinities);
             tags = EUIUtils.mapAsNonnull(first.tags.values(), EUIUtils::serialize).toArray(new String[]{});
             flags = EUIUtils.mapAsNonnull(first.flags, f -> f.ID).toArray(new String[]{});

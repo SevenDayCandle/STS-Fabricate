@@ -515,18 +515,55 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void previewCards(ArrayList<AbstractCard> cards, PCLLoadout loadout) {
         currentEffect = new ViewInGameCardPoolEffect(cards, bannedCards, this::forceUpdateText)
                 .setCanToggle((loadout != null && !loadout.isCore()) || data.canEditCore())
-                .setStartingPosition(InputHelper.mX, InputHelper.mY);
+                .setStartingPosition(InputHelper.mX, InputHelper.mY)
+                .addCallback(effect -> {
+                    // Only allow effect to affect the subset of cards shown in the effect
+                    for (AbstractCard c : cards) {
+                        if (effect.bannedCards.contains(c.cardID)) {
+                            bannedCards.add(c.cardID);
+                        }
+                        else {
+                            bannedCards.remove(c.cardID);
+                        }
+                    }
+                    forceUpdateText();
+                });
     }
 
     public void previewColorless() {
-        currentEffect = new ViewInGameCardPoolEffect(getColorlessPool(), bannedColorless, this::forceUpdateText)
-                .setStartingPosition(InputHelper.mX, InputHelper.mY);
+        ArrayList<AbstractCard> cPool = getColorlessPool();
+        currentEffect = new ViewInGameCardPoolEffect(cPool, bannedColorless, this::forceUpdateText)
+                .setStartingPosition(InputHelper.mX, InputHelper.mY)
+                .addCallback(effect -> {
+                    // Only allow effect to affect the subset of cards shown in the effect
+                    for (AbstractCard c : cPool) {
+                        if (effect.bannedCards.contains(c.cardID)) {
+                            bannedColorless.add(c.cardID);
+                        }
+                        else {
+                            bannedColorless.remove(c.cardID);
+                        }
+                    }
+                    forceUpdateText();
+                });
     }
 
     protected void previewRelics() {
+        HashSet<String> res = new HashSet<>(data.config.bannedRelics.get());
+        ArrayList<AbstractRelic> rPool = getAvailableRelics();
         currentEffect = new ViewInGameRelicPoolEffect(getAvailableRelics(), new HashSet<>(data.config.bannedRelics.get()))
                 .addCallback((effect) -> {
-                    data.config.bannedRelics.set(effect.bannedRelics);
+                    // Only allow effect to affect the subset of cards shown in the effect
+                    for (AbstractRelic c : rPool) {
+                        if (effect.bannedRelics.contains(c.relicId)) {
+                            res.add(c.relicId);
+                        }
+                        else {
+                            res.remove(c.relicId);
+                        }
+                    }
+                    data.config.bannedRelics.set(res);
+                    forceUpdateText();
                 });
     }
 

@@ -76,7 +76,7 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
     @Override
     protected RelicInfo makeItem(PCLCustomRelicSlot slot) {
         AbstractRelic relic = slot.make();
-        UnlockTracker.markRelicAsSeen(relic.relicId);
+        relic.isSeen = true;
         return new RelicInfo(relic);
     }
 

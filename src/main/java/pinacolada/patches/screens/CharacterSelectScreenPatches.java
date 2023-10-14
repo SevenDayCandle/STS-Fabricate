@@ -40,7 +40,14 @@ public class CharacterSelectScreenPatches {
 
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CharacterSelectScreen __instance) {
-            return (EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU)) ? SpireReturn.Return() : SpireReturn.Continue();
+            if (EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU)) {
+                return SpireReturn.Return();
+            }
+            else if (PGR.charSelectProvider.hasDialog()) {
+                PGR.charSelectProvider.update();
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 

@@ -108,9 +108,10 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         setRarity(original.cardRarity);
         setType(original.cardType);
         setLoadout(original.loadout);
+        setLoadoutValue(original.getLoadoutValue());
+        setSlots(original.slots);
         setFlags(original.flags);
         setText(name, text, text);
-        setLoadoutValueFromRarity();
     }
 
     public PCLDynamicCardData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
@@ -158,7 +159,11 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
         setMultiformData(data.forms.length);
-        setLoadoutValueFromRarity();
+        safeLoadValue(() -> setLoadoutValue(data.loadoutValue));
+        // TODO convert to safeLoadValue
+        if (data.augmentSlots != null) {
+            setSlots(data.augmentSlots);
+        }
     }
 
     protected static CardStrings getInitialStrings() {
@@ -330,6 +335,13 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
 
     public PCLDynamicCardData setLanguageMapEntry(Settings.GameLanguage language) {
         this.languageMap.put(language, this.strings);
+        return this;
+    }
+
+    // Do not actually add this card to the available loadout cards
+    @Override
+    public PCLDynamicCardData setLoadout(PCLLoadout loadout, boolean colorless) {
+        this.loadout = loadout;
         return this;
     }
 

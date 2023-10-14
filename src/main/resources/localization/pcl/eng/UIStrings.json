@@ -146,7 +146,9 @@
 												"Min/Max Stacks",
 												"Scope",
 												"New Flag",
-												"Turns"
+												"Turns",
+												"Loadout Value",
+												"Augment Slots"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -227,7 +229,8 @@
 												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per stack of this power (negative power stacks will decrease from the total value).",
 												"Determines the number of targets that will be chosen by random targeting.",
 												"Determines how many turns this power will last.",
-												"#yRarity determines where this blight can appear. #yBasic blights can appear from any chest and from looping in #yEndless #yMode. #yBoss blights only appear in boss chests. #ySpecial blights cannot be randomly encountered in-game."
+												"#yRarity determines where this blight can appear. #yBasic blights can appear from any chest and from looping in #yEndless #yMode. #yBoss blights only appear in boss chests. #ySpecial blights cannot be randomly encountered in-game.",
+												"The total combined #yLoadout #Value of items in custom loadouts cannot exceed the maximum value for that character (this does not apply in #yCustom #yRuns)."
 								]
 				},
 				"pcl:CardPile": {
@@ -404,9 +407,6 @@
 						"Current set has not been unlocked. Please select an unlocked set.",
 						"You have unsaved changes to your loadout. Are you sure you want to exit without saving?",
 						"Reset",
-						"Copy Current To Slot",
-						"Import From Slot",
-						"Export",
 						"Each row shows the number of copies of each card that your starting deck will contain. The first two row are reserved for basic cards, while the other rows can contain #yCommon cards or #yCurses.",
 						"This leftmost number is the value this item. #yCommon cards are worth more, while #yCurse cards are worth less.",
 						"You can select additional relics to start your run with, which also have their own values.",
@@ -414,7 +414,8 @@
 						"The total value amongst all items cannot exceed {0}. In addition, your deck must have at least {1} cards.",
 						"New Preset",
 						"Change Preset",
-						"Switch between or manage presets for your starting loadout."
+						"Switch between or manage presets for your starting loadout.",
+						"Duplicate Preset"
 					]
 				},
 				"pcl:Menu": {
@@ -558,7 +559,9 @@
 												"Choose which colorless cards will appear in your runs.",
 												"Manage Relics",
 												"Choose which relics will appear in your runs. What relics are available depends on the selected sets.",
-												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes."
+												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes.",
+												"Import from File",
+												"Set the card pool from a CSV table exported by EUI"
 								]
 				},
 				"pcl:SingleCardPopupButtons": {
