@@ -16,7 +16,7 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
@@ -164,91 +164,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    public void banCardsFromPool() {
-        final ArrayList<CardGroup> groups = new ArrayList<>();
-        groups.addAll(EUIGameUtils.getGameCardPools());
-        groups.addAll(EUIGameUtils.getSourceCardPools());
-
-        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
-            bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
-        }
-        else if (data != null) {
-            bannedCards.addAll(data.config.bannedCards.get());
-        }
-
-        if (data != null) {
-            HashSet<String> replaced = new HashSet<>();
-            ArrayList<AbstractCard> toAdd = new ArrayList<>();
-            for (CardGroup group : groups) {
-                replaced.clear();
-                toAdd.clear();
-                for (AbstractCard c : group.group) {
-                    String replacement = data.resources.getReplacement(c.cardID);
-                    if (replacement != null) {
-                        replaced.add(c.cardID);
-                        toAdd.add(CardLibrary.getCard(replacement));
-                    }
-                }
-                group.group.addAll(toAdd);
-                group.group.removeIf(card ->
-                {
-                    if (!bannedCards.contains(card.cardID) && !replaced.contains(card.cardID)) {
-                        if (GameUtilities.isColorlessCardColor(card.color)) {
-                            return !data.resources.containsColorless(card);
-                        }
-                        // Prevent removal of cards added by "multiclass" relics from Replay the Spire
-                        else if (card.color != data.resources.cardColor || loadouts.isEmpty()) {
-                            return false;
-                        }
-                        for (PCLLoadout loadout : loadouts) {
-                            if (loadout.isCardFromLoadout(card.cardID)) {
-                                return false;
-                            }
-                        }
-                    }
-                    return true;
-                });
-            }
-        }
-        else {
-            for (CardGroup group : groups) {
-                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
-            }
-        }
-    }
-
     public void banRelic(String relicID) {
         removeRelic(relicID);
         bannedRelics.add(relicID);
         log("Banned " + relicID + ", Total: " + bannedRelics.size());
-    }
-
-    // Ban relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
-    public void banRelicsFromPools() {
-        if (data != null) {
-            bannedRelics.addAll(data.config.bannedRelics.get());
-            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-                relicPool.removeIf(relic -> {
-                    if (bannedRelics.contains(relic)) {
-                        return true;
-                    }
-                    for (PCLLoadout loadout : data.loadouts.values()) {
-                        if (loadout.isRelicFromLoadout(relic) && (!loadout.isEnabled())) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-            }
-        }
-        else {
-            if (CardCrawlGame.trial instanceof PCLCustomTrial) {
-                bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
-            }
-            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
-                relicPool.removeIf(relic -> bannedRelics.contains(relic));
-            }
-        }
     }
 
     public boolean canJumpAnywhere() {
@@ -469,8 +388,116 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     public void initializeCardPool() {
         final AbstractPlayer player = CombatManager.refreshPlayer();
-        banCardsFromPool();
-        loadCustomCards(player);
+        final ArrayList<CardGroup> groups = new ArrayList<>();
+        groups.addAll(EUIGameUtils.getGameCardPools());
+        groups.addAll(EUIGameUtils.getSourceCardPools());
+
+        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
+            bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
+        }
+        else if (data != null) {
+            bannedCards.addAll(data.config.bannedCards.get());
+        }
+
+        if (data != null) {
+            HashSet<String> replaced = new HashSet<>();
+            ArrayList<AbstractCard> toAdd = new ArrayList<>();
+            for (CardGroup group : groups) {
+                replaced.clear();
+                toAdd.clear();
+                for (AbstractCard c : group.group) {
+                    String replacement = data.resources.getReplacement(c.cardID);
+                    if (replacement != null) {
+                        replaced.add(c.cardID);
+                        toAdd.add(CardLibrary.getCard(replacement));
+                    }
+                }
+                group.group.addAll(toAdd);
+                group.group.removeIf(card ->
+                {
+                    if (!bannedCards.contains(card.cardID) && !replaced.contains(card.cardID)) {
+                        if (GameUtilities.isColorlessCardColor(card.color)) {
+                            return !data.resources.containsColorless(card);
+                        }
+                        // Prevent removal of cards added by "multiclass" relics from Replay the Spire
+                        else if (card.color != data.resources.cardColor || loadouts.isEmpty()) {
+                            return false;
+                        }
+                        for (PCLLoadout loadout1 : loadouts) {
+                            if (loadout1.isCardFromLoadout(card.cardID)) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+            }
+
+            String[] additional = data.getAdditionalCardIDs(allowCustomCards);
+            if (additional != null) {
+                for (String s : additional) {
+                    if (!bannedCards.contains(s)) {
+                        AbstractCard c = CardLibrary.getCard(s);
+                        if (c != null) {
+                            if (GameUtilities.isColorlessCardColor(c.color)) {
+                                AbstractDungeon.srcColorlessCardPool.addToBottom(c);
+                                AbstractDungeon.colorlessCardPool.addToBottom(c);
+                            }
+                            else {
+                                CardGroup pool = GameUtilities.getCardPool(c.rarity);
+                                if (pool != null) {
+                                    pool.addToBottom(c);
+                                }
+                                CardGroup spool = GameUtilities.getCardPoolSource(c.rarity);
+                                if (spool != null) {
+                                    spool.addToBottom(c);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for (CardGroup group : groups) {
+                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
+            }
+        }
+
+        if (allowCustomCards) {
+            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
+                if (!bannedCards.contains(c.ID)) {
+                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
+                    CardGroup pool = GameUtilities.getCardPool(rarity);
+                    if (pool != null) {
+                        pool.addToBottom(c.make());
+                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
+                    }
+                    CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+                    if (spool != null) {
+                        spool.addToBottom(c.make());
+                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
+                    }
+                }
+            }
+            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                if (!bannedCards.contains(c.ID)) {
+                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
+                    switch (rarity) {
+                        case COMMON:
+                        case UNCOMMON:
+                        case RARE:
+                            AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
+                            AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
+                            break;
+                        case CURSE:
+                            AbstractDungeon.srcCurseCardPool.addToBottom(c.getBuilder(0).create());
+                            AbstractDungeon.curseCardPool.addToBottom(c.getBuilder(0).create());
+                    }
+                    EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
+                }
+            }
+        }
     }
 
     private void initializeCharacterBlight(String id) {
@@ -540,6 +567,61 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         }
     }
 
+    // Add custom relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
+    public void initializeRelicPool(AbstractPlayer player) {
+        if (CardCrawlGame.trial instanceof PCLCustomTrial) {
+            bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+        }
+        else if (data != null) {
+            bannedRelics.addAll(data.config.bannedRelics.get());
+        }
+
+        if (data != null) {
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> {
+                    if (bannedRelics.contains(relic)) {
+                        return true;
+                    }
+                    for (PCLLoadout loadout : data.loadouts.values()) {
+                        if (loadout.isRelicFromLoadout(relic) && (!loadout.isEnabled())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
+
+            String[] additional = data.getAdditionalRelicIDs(allowCustomRelics);
+            if (additional != null) {
+                for (String id : additional) {
+                    if (!bannedRelics.contains(id)) {
+                        AbstractRelic r = RelicLibrary.getRelic(id);
+                        // Circlet means that the relic didn't exist
+                        if (!(r instanceof Circlet)) {
+                            PGR.dungeon.addRelic(id, r.tier);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
+                relicPool.removeIf(relic -> bannedRelics.contains(relic));
+            }
+        }
+
+        if (allowCustomRelics) {
+            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(player.getCardColor())) {
+                loadCustomRelicImpl(c);
+            }
+            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
+                loadCustomRelicImpl(c);
+            }
+        }
+    }
+
+    // Add custom cards if applicable
+
     private void initializeRun() {
         if (loadout instanceof FakeLoadout) {
             for (LoadoutRelicSlot rSlot : loadout.getPreset().relicSlots) {
@@ -551,7 +633,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             initializePotions();
         }
         else if (data != null) {
-            data.updateRelicsForDungeon();
             if (Settings.isStandardRun()) {
                 data.saveStats();
             }
@@ -562,71 +643,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             }
 
             initializePotions();
-        }
-    }
-
-    // Add custom cards if applicable
-    public void loadCustomCards(AbstractPlayer player) {
-        if (data != null) {
-            String[] additional = data.getAdditionalCardIDs();
-            if (additional != null) {
-                for (String s : additional) {
-                    if (!bannedCards.contains(s)) {
-                        AbstractCard c = CardLibrary.getCard(s);
-                        if (c != null) {
-                            if (GameUtilities.isColorlessCardColor(c.color)) {
-                                AbstractDungeon.srcColorlessCardPool.addToBottom(c);
-                                AbstractDungeon.colorlessCardPool.addToBottom(c);
-                            }
-                            else {
-                                CardGroup pool = GameUtilities.getCardPool(c.rarity);
-                                if (pool != null) {
-                                    pool.addToBottom(c);
-                                }
-                                CardGroup spool = GameUtilities.getCardPoolSource(c.rarity);
-                                if (spool != null) {
-                                    spool.addToBottom(c);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (allowCustomCards) {
-            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
-                if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
-                    CardGroup pool = GameUtilities.getCardPool(rarity);
-                    if (pool != null) {
-                        pool.addToBottom(c.make());
-                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
-                    }
-                    CardGroup spool = GameUtilities.getCardPoolSource(rarity);
-                    if (spool != null) {
-                        spool.addToBottom(c.make());
-                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
-                    }
-                }
-            }
-            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
-                if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
-                    switch (rarity) {
-                        case COMMON:
-                        case UNCOMMON:
-                        case RARE:
-                            AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
-                            AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
-                            break;
-                        case CURSE:
-                            AbstractDungeon.srcCurseCardPool.addToBottom(c.getBuilder(0).create());
-                            AbstractDungeon.curseCardPool.addToBottom(c.getBuilder(0).create());
-                    }
-                    EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
-                }
-            }
         }
     }
 
@@ -652,21 +668,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
         AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
         ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
-        if (relicPool != null && !relicPool.contains(c.ID)) {
+        if (relicPool != null && !relicPool.contains(c.ID) && !bannedRelics.contains(c.ID)) {
             relicPool.add(c.ID);
             EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
-        }
-    }
-
-    // Add custom relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
-    public void loadCustomRelics(AbstractPlayer player) {
-        if (allowCustomRelics) {
-            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(player.getCardColor())) {
-                loadCustomRelicImpl(c);
-            }
-            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
-                loadCustomRelicImpl(c);
-            }
         }
     }
 

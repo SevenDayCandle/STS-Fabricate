@@ -28,7 +28,7 @@ public class PField_Attack extends PField {
     }
 
     public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {
-        this.attackEffect = effect;
+        this.attackEffect = effect != null ? effect : AbstractGameAction.AttackEffect.NONE;
         return this;
     }
 

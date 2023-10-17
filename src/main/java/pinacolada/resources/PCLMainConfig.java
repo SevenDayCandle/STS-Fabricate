@@ -132,7 +132,6 @@ public class PCLMainConfig extends AbstractConfig {
         panel.addUIElement(settingsBlock);
 
         int yPos = BASE_OPTION_OFFSET_Y;
-
         yPos = addToggle(0, abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
@@ -144,6 +143,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, fabricatePopup, PGR.core.strings.options_fabricatePopup, yPos, PGR.core.strings.optionDesc_fabricatePopup);
 
+        yPos = BASE_OPTION_OFFSET_Y;
         yPos = addToggle(1, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);

@@ -4,24 +4,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
-import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
-import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.*;
 import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIBase;
-import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
@@ -33,7 +28,6 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLPlayerMeter;
@@ -51,9 +45,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
@@ -206,7 +198,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
 
         // Get additional cards that this character can use
-        String[] additional = data.getAdditionalCardIDs();
+        String[] additional = data.getAdditionalCardIDs(false);
         if (additional != null) {
             for (String id : additional) {
                 group.add(CardLibrary.getCard(id));
@@ -220,7 +212,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
 
         // Get additional relics that this character can use
-        String[] additional = data.getAdditionalRelicIDs();
+        String[] additional = data.getAdditionalRelicIDs(false);
         if (additional != null) {
             for (String id : additional) {
                 relics.add(RelicLibrary.getRelic(id));

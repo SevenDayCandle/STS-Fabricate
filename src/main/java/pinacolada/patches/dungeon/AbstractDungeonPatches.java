@@ -154,8 +154,7 @@ public class AbstractDungeonPatches {
     public static class AbstractDungeonPatches_InitializeRelicList {
         @SpirePostfixPatch
         public static void postfix(AbstractDungeon __instance) {
-            PGR.dungeon.loadCustomRelics(AbstractDungeon.player);
-            PGR.dungeon.banRelicsFromPools();
+            PGR.dungeon.initializeRelicPool(AbstractDungeon.player);
         }
     }
 

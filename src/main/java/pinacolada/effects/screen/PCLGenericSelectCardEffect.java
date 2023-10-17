@@ -12,6 +12,7 @@ import extendedui.ui.controls.EUICardGrid;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard> {
@@ -20,7 +21,7 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
-    public PCLGenericSelectCardEffect(List<? extends AbstractCard> cards) {
+    public PCLGenericSelectCardEffect(Collection<? extends AbstractCard> cards) {
         super(0.7f);
 
         this.isRealtime = true;

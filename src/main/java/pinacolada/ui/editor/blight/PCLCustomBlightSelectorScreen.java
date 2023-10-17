@@ -3,13 +3,27 @@ package pinacolada.ui.editor.blight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import extendedui.EUI;
+import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.cardFilter.BlightKeywordFilters;
 import extendedui.ui.controls.EUIItemGrid;
 import extendedui.ui.controls.EUIBlightGrid;
+import extendedui.utilities.BlightTier;
+import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.blights.PCLDynamicBlightData;
+import pinacolada.blights.PCLPointerBlight;
+import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PMove;
+import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
+
+import java.util.Collections;
 
 public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<AbstractBlight, PCLCustomBlightSlot, BlightKeywordFilters.BlightFilters> {
 
@@ -36,6 +50,27 @@ public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<Abstr
     @Override
     protected Iterable<PCLCustomBlightSlot> getSlots(AbstractCard.CardColor co) {
         return PCLCustomBlightSlot.getBlights(co);
+    }
+
+    @Override
+    public void loadFromExisting() {
+        if (currentDialog == null) {
+            PCLDynamicBlightData sample = new PCLDynamicBlightData(EUIUtils.EMPTY_STRING);
+            sample.setText(PGR.core.strings.menu_blight)
+                    .setTier(BlightTier.BOSS);
+            sample.addPSkill(PTrigger.when(3, PCond.onDiscard(), PMove.modifyCost(1).useParentForce()));
+
+            currentDialog = new PCLGenericSelectBlightEffect(Collections.singleton(sample.create())).addCallback(card -> {
+                if (card instanceof PCLPointerBlight) {
+                    PCLCustomBlightSlot slot = new PCLCustomBlightSlot((PCLPointerBlight) card, currentColor);
+                    currentDialog = new PCLCustomBlightEditScreen(slot)
+                            .setOnSave(() -> {
+                                PCLCustomBlightSlot.addSlot(slot);
+                                putInList(slot);
+                            });
+                }
+            });
+        }
     }
 
     @Override

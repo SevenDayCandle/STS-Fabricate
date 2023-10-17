@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -33,9 +34,13 @@ public class PField_CardModifyTag extends PField_CardModify {
         return new PField_CardModifyTag(this);
     }
 
-    public PField_CardModifyTag setAddTag(Collection<PCLCardTag> affinities) {
+    public PField_CardModifyTag setAddTag(Collection<PCLCardTag> nt) {
         this.addTags.clear();
-        this.addTags.addAll(affinities);
+        for (PCLCardTag t : nt) {
+            if (t != null) {
+                this.addTags.add(t);
+            }
+        }
         return this;
     }
 

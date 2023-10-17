@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.cards.base.fields.PCLAttackType;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -21,9 +22,13 @@ public class PField_AttackType extends PField_Random {
         return (PField_AttackType) new PField_AttackType().setAttackType(attackTypes).setRandom(random).setNot(not);
     }
 
-    public PField_AttackType setAttackType(Collection<PCLAttackType> orbs) {
+    public PField_AttackType setAttackType(Collection<PCLAttackType> nt) {
         this.attackTypes.clear();
-        this.attackTypes.addAll(orbs);
+        for (PCLAttackType t : nt) {
+            if (t != null) {
+                this.attackTypes.add(t);
+            }
+        }
         return this;
     }
 

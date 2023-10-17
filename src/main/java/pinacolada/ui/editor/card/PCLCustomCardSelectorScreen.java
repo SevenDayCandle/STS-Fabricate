@@ -1,16 +1,47 @@
 package pinacolada.ui.editor.card;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
+import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CardKeywordFilters;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUIItemGrid;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.TemplateCardData;
+import pinacolada.effects.screen.PCLGenericSelectCardEffect;
+import pinacolada.effects.screen.PCLGenericSelectRelicEffect;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLPointerRelic;
+import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
+import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
 
 public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<AbstractCard, PCLCustomCardSlot, CardKeywordFilters.CardFilters> {
+    private ArrayList<AbstractCard> getAvailableCardsToCopy() {
+        ArrayList<AbstractCard> cards = EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
+                data -> {
+                    PCLCard card = data.create();
+                    UnlockTracker.markCardAsSeen(data.ID);
+                    card.isSeen = true;
+                    card.isLocked = false;
+                    // Hide the affinities for colorless cards
+                    if (!PGR.config.showIrrelevantProperties.get() && GameUtilities.isColorlessCardColor(currentColor)) {
+                        card.affinities.sorted.clear();
+                    }
+                    return PCLCustomCardSlot.canFullyCopy(card) ? card : null;
+                });
+        cards.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        return cards;
+    }
+
     @Override
     protected GenericFilters<AbstractCard, CardKeywordFilters.CardFilters, ?> getFilters() {
         return EUI.cardFilters;
@@ -34,6 +65,22 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
     @Override
     protected Iterable<PCLCustomCardSlot> getSlots(AbstractCard.CardColor co) {
         return PCLCustomCardSlot.getCards(co);
+    }
+
+    @Override
+    public void loadFromExisting() {
+        if (currentDialog == null) {
+            currentDialog = new PCLGenericSelectCardEffect(this.getAvailableCardsToCopy()).addCallback(card -> {
+                if (card instanceof PCLCard) {
+                    PCLCustomCardSlot slot = new PCLCustomCardSlot((PCLCard) card, currentColor);
+                    currentDialog = new PCLCustomCardEditScreen(slot)
+                            .setOnSave(() -> {
+                                PCLCustomCardSlot.addSlot(slot);
+                                putInList(slot);
+                            });
+                }
+            });
+        }
     }
 
     @Override

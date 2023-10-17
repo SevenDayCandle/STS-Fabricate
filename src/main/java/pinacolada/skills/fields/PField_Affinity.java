@@ -2,6 +2,7 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -88,9 +89,13 @@ public class PField_Affinity extends PField_Random {
         return (PField_Affinity) new PField_Affinity().setAffinity(affinities).setRandom(random).setNot(not);
     }
 
-    public PField_Affinity setAffinity(Collection<PCLAffinity> affinities) {
+    public PField_Affinity setAffinity(Collection<PCLAffinity> nt) {
         this.affinities.clear();
-        this.affinities.addAll(affinities);
+        for (PCLAffinity t : nt) {
+            if (t != null) {
+                this.affinities.add(t);
+            }
+        }
         return this;
     }
 

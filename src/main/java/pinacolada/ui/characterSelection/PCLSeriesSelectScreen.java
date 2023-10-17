@@ -221,7 +221,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
 
         // Add additional cards
-        String[] additional = data.getAdditionalCardIDs();
+        String[] additional = data.getAdditionalCardIDs(false);
         if (additional != null) {
             for (String s : additional) {
                 AbstractCard c = CardLibrary.getCard(s);
@@ -367,7 +367,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         ArrayList<AbstractRelic> relics = new ArrayList<>(GameUtilities.getRelics(data.resources.cardColor).values());
 
         // Get additional relics that this character can use
-        String[] additional = data.getAdditionalRelicIDs();
+        String[] additional = data.getAdditionalRelicIDs(false);
         if (additional != null) {
             for (String id : additional) {
                 relics.add(RelicLibrary.getRelic(id));

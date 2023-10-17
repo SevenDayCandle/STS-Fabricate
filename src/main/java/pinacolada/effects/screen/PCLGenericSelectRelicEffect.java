@@ -13,19 +13,18 @@ import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractRelic> {
     private final Color screenColor;
-    private List<? extends AbstractRelic> relics;
     private EUIRelicGrid grid;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
-    public PCLGenericSelectRelicEffect(List<? extends AbstractRelic> relics) {
+    public PCLGenericSelectRelicEffect(Collection<? extends AbstractRelic> relics) {
         super(0.7f);
 
-        this.relics = relics;
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
@@ -67,7 +66,6 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
     }
 
     public void refresh(List<? extends AbstractRelic> cards) {
-        this.relics = cards;
         this.grid = (EUIRelicGrid) new EUIRelicGrid()
                 .canDragScreen(false)
                 .add(cards, RelicInfo::new);
@@ -82,15 +80,6 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
         if (!EUI.relicFilters.isActive) {
             EUI.openFiltersButton.tryRender(sb);
         }
-    }
-
-    public PCLGenericSelectRelicEffect setStartingPosition(float x, float y) {
-        for (AbstractRelic c : relics) {
-            c.currentX = x - (c.hb.width * 0.5f);
-            c.currentY = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 
     @Override

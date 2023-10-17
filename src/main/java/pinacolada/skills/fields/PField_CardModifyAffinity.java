@@ -38,9 +38,13 @@ public class PField_CardModifyAffinity extends PField_CardModify {
         return new PField_CardModifyAffinity(this);
     }
 
-    public PField_CardModifyAffinity setAddAffinity(Collection<PCLAffinity> affinities) {
+    public PField_CardModifyAffinity setAddAffinity(Collection<PCLAffinity> nt) {
         this.addAffinities.clear();
-        this.addAffinities.addAll(affinities);
+        for (PCLAffinity t : nt) {
+            if (t != null) {
+                this.addAffinities.add(t);
+            }
+        }
         return this;
     }
 

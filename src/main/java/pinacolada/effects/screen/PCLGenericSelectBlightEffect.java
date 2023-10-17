@@ -11,19 +11,18 @@ import extendedui.ui.controls.EUIBlightGrid;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PCLGenericSelectBlightEffect extends PCLEffectWithCallback<AbstractBlight> {
     private final Color screenColor;
-    private List<? extends AbstractBlight> blights;
     private EUIBlightGrid grid;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
-    public PCLGenericSelectBlightEffect(List<? extends AbstractBlight> blights) {
+    public PCLGenericSelectBlightEffect(Collection<? extends AbstractBlight> blights) {
         super(0.7f);
 
-        this.blights = blights;
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
@@ -60,7 +59,6 @@ public class PCLGenericSelectBlightEffect extends PCLEffectWithCallback<Abstract
     }
 
     public void refresh(List<? extends AbstractBlight> cards) {
-        this.blights = cards;
         this.grid = (EUIBlightGrid) new EUIBlightGrid()
                 .canDragScreen(false)
                 .add(cards);
@@ -71,15 +69,6 @@ public class PCLGenericSelectBlightEffect extends PCLEffectWithCallback<Abstract
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
-    }
-
-    public PCLGenericSelectBlightEffect setStartingPosition(float x, float y) {
-        for (AbstractBlight c : blights) {
-            c.currentX = x - (c.hb.width * 0.5f);
-            c.currentY = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 
     @Override

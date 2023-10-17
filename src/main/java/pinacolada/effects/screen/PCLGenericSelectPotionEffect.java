@@ -12,19 +12,18 @@ import extendedui.utilities.PotionInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<AbstractPotion> {
     private final Color screenColor;
-    private List<? extends AbstractPotion> potions;
     private EUIPotionGrid grid;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
 
-    public PCLGenericSelectPotionEffect(List<? extends AbstractPotion> potions) {
+    public PCLGenericSelectPotionEffect(Collection<? extends AbstractPotion> potions) {
         super(0.7f);
 
-        this.potions = potions;
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
@@ -61,7 +60,6 @@ public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<Abstract
     }
 
     public void refresh(List<? extends AbstractPotion> cards) {
-        this.potions = cards;
         this.grid = (EUIPotionGrid) new EUIPotionGrid()
                 .canDragScreen(false)
                 .add(cards, PotionInfo::new);
@@ -72,15 +70,6 @@ public class PCLGenericSelectPotionEffect extends PCLEffectWithCallback<Abstract
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
-    }
-
-    public PCLGenericSelectPotionEffect setStartingPosition(float x, float y) {
-        for (AbstractPotion c : potions) {
-            c.posX = x - (c.hb.width * 0.5f);
-            c.posY = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
     }
 
     @Override

@@ -160,11 +160,11 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         }
     }
 
-    public String[] getAdditionalCardIDs() {
+    public String[] getAdditionalCardIDs(boolean customEnabled) {
         return null;
     }
 
-    public String[] getAdditionalRelicIDs() {
+    public String[] getAdditionalRelicIDs(boolean customEnabled) {
         return null;
     }
 
@@ -278,19 +278,6 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
 
     public void saveStats() {
         config.trophies.set(EUIUtils.serialize(stats));
-    }
-
-    public void updateRelicsForDungeon() {
-        String[] additional = getAdditionalRelicIDs();
-        if (additional != null) {
-            for (String id : additional) {
-                AbstractRelic r = RelicLibrary.getRelic(id);
-                // Circlet means that the relic didn't exist
-                if (!(r instanceof Circlet)) {
-                    PGR.dungeon.addRelic(id, r.tier);
-                }
-            }
-        }
     }
 
     public abstract Class<V> getCharacterClass();

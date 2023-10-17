@@ -3,6 +3,7 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.resources.PGR;
@@ -45,9 +46,13 @@ public class PField_Intent extends PField_Not {
         return (PField_Intent) new PField_Intent().setIntent(intents).setNot(not);
     }
 
-    public PField_Intent setIntent(Collection<PCLIntentType> orbs) {
+    public PField_Intent setIntent(Collection<PCLIntentType> nt) {
         this.intents.clear();
-        this.intents.addAll(orbs);
+        for (PCLIntentType t : nt) {
+            if (t != null) {
+                this.intents.add(t);
+            }
+        }
         return this;
     }
 

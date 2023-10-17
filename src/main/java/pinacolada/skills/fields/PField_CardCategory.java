@@ -27,10 +27,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();
@@ -366,9 +363,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
     }
 
-    public PField_CardCategory setAffinity(Collection<PCLAffinity> affinities) {
+    public PField_CardCategory setAffinity(Collection<PCLAffinity> nt) {
         this.affinities.clear();
-        this.affinities.addAll(affinities);
+        for (PCLAffinity t : nt) {
+            if (t != null) {
+                this.affinities.add(t);
+            }
+        }
         return this;
     }
 
@@ -386,9 +387,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setCardIDs(Arrays.asList(cards));
     }
 
-    public PField_CardCategory setColor(Collection<AbstractCard.CardColor> types) {
+    public PField_CardCategory setColor(Collection<AbstractCard.CardColor> nt) {
         this.colors.clear();
-        this.colors.addAll(types);
+        for (AbstractCard.CardColor t : nt) {
+            if (t != null) {
+                this.colors.add(t);
+            }
+        }
         return this;
     }
 
@@ -396,9 +401,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setColor(Arrays.asList(types));
     }
 
-    public PField_CardCategory setCost(Collection<CostFilter> types) {
+    public PField_CardCategory setCost(Collection<CostFilter> nt) {
         this.costs.clear();
-        this.costs.addAll(types);
+        for (CostFilter t : nt) {
+            if (t != null) {
+                this.costs.add(t);
+            }
+        }
         return this;
     }
 
@@ -439,9 +448,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setLoadout(EUIUtils.map(nt, l -> l.ID));
     }
 
-    public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> types) {
+    public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> nt) {
         this.rarities.clear();
-        this.rarities.addAll(types);
+        for (AbstractCard.CardRarity t : nt) {
+            if (t != null) {
+                this.rarities.add(t);
+            }
+        }
         return this;
     }
 
@@ -451,7 +464,11 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public PField_CardCategory setTag(Collection<PCLCardTag> nt) {
         this.tags.clear();
-        this.tags.addAll(nt);
+        for (PCLCardTag t : nt) {
+            if (t != null) {
+                this.tags.add(t);
+            }
+        }
         return this;
     }
 
@@ -459,9 +476,13 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setTag(Arrays.asList(nt));
     }
 
-    public PField_CardCategory setType(Collection<AbstractCard.CardType> types) {
+    public PField_CardCategory setType(Collection<AbstractCard.CardType> nt) {
         this.types.clear();
-        this.types.addAll(types);
+        for (AbstractCard.CardType t : nt) {
+            if (t != null) {
+                this.types.add(t);
+            }
+        }
         return this;
     }
 
