@@ -19,7 +19,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
+public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<PCLDynamicPotion> {
     private static final TypeToken<HashMap<Settings.GameLanguage, PotionStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PotionStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, PotionStrings> languageMap = new HashMap<>();
@@ -106,6 +106,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker {
         return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
+    @Override
     public PCLDynamicPotion create() {
         setTextForLanguage();
         if (imagePath == null) {

@@ -2,6 +2,7 @@ package pinacolada.ui.editor;
 
 import basemod.BaseMod;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -90,7 +91,8 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                 .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_openFolder)
-                .setOnClick(PCLCustomSelectorScreen::openFolder);
+                .setTooltip(PGR.core.strings.cedit_openFolder, PGR.core.strings.cetut_openFolder)
+                .setOnClick(this::viewDesktopFolderBase);
 
         loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
@@ -114,7 +116,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                     }
                 })
                 .setCanAutosizeButton(true);
-        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2f))
+        info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.022f), screenW(0.5f), buttonHeight * 2f))
                 .setLabel(PGR.core.strings.cetut_selector2)
                 .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
@@ -127,9 +129,13 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         }
     }
 
-    public static void openFolder() {
+    public static void viewDesktopFolder() {
+        viewDesktopFolder(Gdx.files.local(PCLCustomLoadable.FOLDER));
+    }
+
+    public static void viewDesktopFolder(FileHandle handle) {
         try {
-            Desktop.getDesktop().open(Gdx.files.local(PCLCustomLoadable.FOLDER).file());
+            Desktop.getDesktop().open(handle.file());
         }
         catch (Exception e) {
             EUIUtils.logError(null, "Failed to open card folder.");
@@ -209,7 +215,10 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
     }
 
     protected ContextOption[] getContextOptions() {
-        return ContextOption.values();
+        U slot = currentSlots.get(clicked);
+        return slot != null && slot.getIsInternal()
+                ? EUIUtils.array(ContextOption.Duplicate, ContextOption.DuplicateToColor, ContextOption.OpenFolder)
+                : ContextOption.values();
     }
 
     public void loadFromExisting() {
@@ -305,7 +314,6 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
             currentDialog.render(sb);
         }
         else {
-            info.tryRender(sb);
             grid.tryRender(sb);
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
@@ -314,6 +322,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
+            info.tryRender(sb);
             EUI.sortHeader.render(sb);
             if (!getFilters().isActive) {
                 EUI.openFiltersButton.tryRender(sb);
@@ -354,13 +363,30 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         }
     }
 
+    private void viewDesktopFolderBase() {
+        viewDesktopFolder(Gdx.files.local(getFolder()));
+    }
+
+    private void viewDesktopFolderForSelected() {
+        U sourceSlot = currentSlots.get(clicked);
+        if (sourceSlot != null) {
+            FileHandle file = sourceSlot.getFileHandle();
+            // File should never be a directory
+            if (file != null) {
+                viewDesktopFolder(file.parent());
+            }
+        }
+    }
+
     protected abstract GenericFilters<T, V, ?> getFilters();
+
+    protected abstract String getFolder();
 
     protected abstract EUIItemGrid<T> getGrid();
 
     protected abstract V getSavedFilters();
 
-    protected abstract PCLCustomEditEntityScreen<U, ?> getScreen(U slot);
+    protected abstract PCLCustomEditEntityScreen<U, ?, ?> getScreen(U slot);
 
     protected abstract Iterable<U> getSlots(AbstractCard.CardColor co);
 
@@ -383,7 +409,8 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
     public enum ContextOption {
         Duplicate(PGR.core.strings.cedit_duplicate, PCLCustomSelectorScreen::duplicate),
         DuplicateToColor(PGR.core.strings.cedit_duplicateToColor, PCLCustomSelectorScreen::duplicateToColor),
-        Delete(PGR.core.strings.cedit_delete, PCLCustomSelectorScreen::remove);
+        Delete(PGR.core.strings.cedit_delete, PCLCustomSelectorScreen::remove),
+        OpenFolder(PGR.core.strings.cedit_openFolder, PCLCustomSelectorScreen::viewDesktopFolderForSelected);
 
         public final String name;
         public final ActionT1<PCLCustomSelectorScreen<?, ?, ?>> onSelect;

@@ -29,7 +29,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public static final float OFFSET_AMOUNT = scale(10);
     public static final float START_Y = Settings.HEIGHT * (0.8f);
 
-    public final PCLCustomEditEntityScreen<?, ?> screen;
+    public final PCLCustomEditEntityScreen<?, ?, ?> screen;
     protected int editorIndex;
     protected ActionT1<PSkill<?>> onUpdate;
     protected EUIHitbox hb;
@@ -40,7 +40,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public PPrimary<?> rootEffect;
     public PCLCustomEffectNode root;
 
-    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         this.screen = screen;
         this.editorIndex = index;
         this.onUpdate = onUpdate;

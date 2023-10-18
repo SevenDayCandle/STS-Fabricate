@@ -11,16 +11,15 @@ import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUITextBoxInput;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -34,6 +33,7 @@ import java.util.List;
 
 public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLCustomRelicEditScreen effect;
+    protected EUIButton resetLoadoutValue;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
@@ -44,6 +44,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUILabel idWarning;
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor branchUpgrades;
+    protected PCLValueEditor loadoutValue;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
     public PCLCustomRelicPrimaryInfoPage(PCLCustomRelicEditScreen effect) {
@@ -126,6 +127,17 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
+        loadoutValue = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_loadoutValue, (val) -> effect.modifyAllBuilders((e, i) -> e.setLoadoutValue(val)))
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_loadoutValue, PGR.core.strings.cetut_loadoutValue)
+                .setHasInfinite(true, true);
+        resetLoadoutValue = new EUIButton(PCLCoreImages.Core.backArrow.texture(), new EUIHitbox(screenW(0.502f), screenH(0.403f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+                .setOnClick(() -> {
+                    int val = PCLRelicData.getValueForRarity(effect.getBuilder().tier);
+                    loadoutValue.setValue(val, true);
+                })
+                .setTooltip(PGR.core.strings.loadout_reset, "");
 
         refresh();
     }
@@ -168,6 +180,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         sfxDropdown.setSelection(effect.getBuilder().sfx, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        loadoutValue.setValue(effect.getBuilder().getLoadoutValue(), false);
 
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
@@ -183,6 +196,8 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryRender(sb);
         maxUpgrades.tryRender(sb);
         branchUpgrades.tryRender(sb);
+        loadoutValue.tryRender(sb);
+        resetLoadoutValue.tryRender(sb);
     }
 
     @Override
@@ -196,6 +211,8 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryUpdate();
         maxUpgrades.tryUpdate();
         branchUpgrades.tryUpdate();
+        loadoutValue.tryUpdate();
+        resetLoadoutValue.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

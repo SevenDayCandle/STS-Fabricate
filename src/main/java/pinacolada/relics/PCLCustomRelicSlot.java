@@ -1,16 +1,23 @@
 package pinacolada.relics;
 
+import basemod.BaseMod;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
+import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -28,6 +35,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public static final String BASE_RELIC_ID = "PCLR";
     public static final String SUBFOLDER = "relics";
 
+    public Integer loadoutValue;
     public Integer maxUpgradeLevel = 0;
     public Integer branchUpgradeFactor = 0;
     public Integer[] counter = array(0);
@@ -130,6 +138,10 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return getBaseIDPrefix(BASE_RELIC_ID, color);
     }
 
+    public static String getFolder() {
+        return FOLDER + "/" + SUBFOLDER;
+    }
+
     public static ArrayList<PCLCustomRelicSlot> getRelics() {
         return EUIUtils.flattenList(CUSTOM_COLOR_LISTS.values());
     }
@@ -156,9 +168,12 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
     public static void initialize() {
         CUSTOM_COLOR_LISTS.clear();
-        loadFolder(getCustomFolder(SUBFOLDER));
+        loadFolder(getCustomFolder(SUBFOLDER), null, false);
+        for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
+            loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
+        }
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder());
+            loadFolder(provider.getFolder(), null, true);
         }
         if (PGR.debugRelics != null) {
             PGR.debugRelics.refresh();
@@ -169,20 +184,33 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return isIDDuplicate(input, getRelics(color));
     }
 
-    private static void loadFolder(FileHandle folder) {
+    private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleRelicImpl(f);
+            loadSingleRelicImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleRelicImpl(FileHandle f) {
+    private static void loadSingleRelicImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomRelicSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path);
+            slot.setupBuilder(path, workshopPath, isInternal);
             getRelics(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
+
+            if (isInternal) {
+                // Use direct library to avoid grabbing custom items
+                AbstractRelic actualRelic = RelicLibraryPatches.getDirectRelic(slot.ID);
+                if (actualRelic != null) {
+                    if (actualRelic instanceof PCLDynamicRelic) {
+                        ((PCLDynamicRelic) actualRelic).reset();
+                    }
+                }
+                else {
+                    PGR.addRelicToLibrary(slot.make(), slot.slotColor);
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -207,18 +235,6 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         if (PGR.debugRelics != null) {
             PGR.debugRelics.refresh();
         }
-    }
-
-    public PCLDynamicRelicData getBuilder(int i) {
-        return (builders.size() > i) ? builders.get(i) : null;
-    }
-
-    public FileHandle getImageHandle() {
-        return Gdx.files.local(imagePath);
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 
     @Override
@@ -246,6 +262,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             counterUpgrade = first.counterUpgrade.clone();
             maxUpgradeLevel = first.maxUpgradeLevel;
             branchUpgradeFactor = first.branchFactor;
+            loadoutValue = first.getLoadoutValue();
         }
 
         for (PCLDynamicRelicData builder : builders) {
@@ -259,9 +276,11 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         forms = tempForms.toArray(new String[]{});
     }
 
-    protected void setupBuilder(String fp) {
+    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
+        this.workshopFolder = workshopPath;
+        this.isInternal = isInternal;
 
         for (String fo : forms) {
             EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
@@ -274,16 +293,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             builder.setImagePath(imagePath);
         }
 
-        filePath = fp;
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Relic: " + filePath);
-    }
-
-    protected void wipeBuilder() {
-        FileHandle writer = getImageHandle();
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic Image: " + imagePath);
-        writer = Gdx.files.local(filePath);
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic: " + filePath);
+        this.filePath = filePath;
+        EUIUtils.logInfo(PCLCustomRelicSlot.class, "Loaded Custom Relic: " + filePath);
     }
 }

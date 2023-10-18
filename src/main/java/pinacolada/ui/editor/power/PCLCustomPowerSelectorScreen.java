@@ -1,8 +1,11 @@
 package pinacolada.ui.editor.power;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUIItemGrid;
+import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
@@ -27,6 +30,11 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
     }
 
     @Override
+    protected String getFolder() {
+        return PCLCustomPowerSlot.getFolder();
+    }
+
+    @Override
     protected EUIItemGrid<PCLPowerRenderable> getGrid() {
         return new PCLPowerGrid();
     }
@@ -37,13 +45,13 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
     }
 
     @Override
-    protected PCLCustomEditEntityScreen<PCLCustomPowerSlot, ?> getScreen(PCLCustomPowerSlot slot) {
+    protected PCLCustomPowerEditScreen getScreen(PCLCustomPowerSlot slot) {
         return new PCLCustomPowerEditScreen(slot);
     }
 
     @Override
     protected Iterable<PCLCustomPowerSlot> getSlots(AbstractCard.CardColor co) {
-        return PCLCustomPowerSlot.getAll().values();
+        return EUIUtils.filter(PCLCustomPowerSlot.getAll().values(), c -> !c.getIsInternal());
     }
 
     @Override

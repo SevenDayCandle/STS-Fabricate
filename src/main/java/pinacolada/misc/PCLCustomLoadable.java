@@ -3,10 +3,15 @@ package pinacolada.misc;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.modthespire.Loader;
+import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import extendedui.utilities.TupleT2;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class PCLCustomLoadable implements Serializable {
     static final long serialVersionUID = 1L;
@@ -14,6 +19,8 @@ public abstract class PCLCustomLoadable implements Serializable {
     public static final String FOLDER = "custom";
     protected transient String filePath;
 
+    protected boolean isInternal;
+    protected String workshopFolder;
     public String ID;
 
     protected static String getBaseIDPrefix(String baseIDPrefix, AbstractCard.CardColor color) {
@@ -27,6 +34,17 @@ public abstract class PCLCustomLoadable implements Serializable {
             EUIUtils.logInfo(PCLCustomLoadable.class, "Created Custom Folder: " + folder.path());
         }
         return folder;
+    }
+
+    protected static ArrayList<TupleT2<SteamSearch.WorkshopInfo, FileHandle>> getWorkshopFolders(String subfolder) {
+        ArrayList<TupleT2<SteamSearch.WorkshopInfo, FileHandle>> folders = new ArrayList<>();
+        for (SteamSearch.WorkshopInfo s : Loader.getWorkshopInfos()) {
+            FileHandle folder = Gdx.files.absolute(s.getInstallPath() + "/" + FOLDER + "/" + subfolder);
+            if (folder.exists()) {
+                folders.add(new TupleT2<>(s, folder));
+            }
+        }
+        return folders;
     }
 
     protected static boolean isIDDuplicate(String input, Iterable<? extends PCLCustomLoadable> items) {
@@ -74,12 +92,18 @@ public abstract class PCLCustomLoadable implements Serializable {
         return getCustomFolder(getSubfolderPath());
     }
 
-    protected String makeFilePath() {
-        return getBaseFolderPath() + "/" + ID + ".json";
+    public boolean getIsInternal() {
+        return isInternal;
     }
 
-    protected String makeImagePath() {
-        return getBaseFolderPath() + "/" + ID + ".png";
+    protected final String makeFilePath() {
+        String base = getBaseFolderPath() + "/" + ID + ".json";
+        return workshopFolder != null ? workshopFolder + "/" + base : base;
+    }
+
+    protected final String makeImagePath() {
+        String base = getBaseFolderPath() + "/" + ID + ".png";
+        return workshopFolder != null ? workshopFolder + "/" + base : base;
     }
 
     abstract protected String getSubfolderPath();

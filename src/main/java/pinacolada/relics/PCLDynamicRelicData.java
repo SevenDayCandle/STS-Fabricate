@@ -18,7 +18,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
+public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCLDynamicRelic> {
     private static final TypeToken<HashMap<Settings.GameLanguage, RelicStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, RelicStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, RelicStrings> languageMap = new HashMap<>();
@@ -40,13 +40,14 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
 
     public PCLDynamicRelicData(PCLRelicData original) {
         this(original.ID, original.resources);
-
         setImagePath(original.imagePath);
         setColor(original.cardColor);
         setSfx(original.sfx);
         setTier(original.tier);
         setMaxUpgrades(original.maxUpgradeLevel);
         setBranchFactor(original.branchFactor);
+        setCounter(original.counter.clone(), original.counterUpgrade.clone());
+        setLoadoutValue(original.getLoadoutValue());
     }
 
     public PCLDynamicRelicData(PCLDynamicRelicData original) {
@@ -58,8 +59,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         setTier(original.tier);
         setMaxUpgrades(original.maxUpgradeLevel);
         setBranchFactor(original.branchFactor);
-        setLanguageMap(original.languageMap);
         setCounter(original.counter.clone(), original.counterUpgrade.clone());
+        setLoadoutValue(original.getLoadoutValue());
+        setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
     }
@@ -76,6 +78,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         safeLoadValue(() -> setBranchFactor(data.branchUpgradeFactor));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
+        safeLoadValue(() -> setLoadoutValue(data.loadoutValue));
     }
 
     protected static RelicStrings getInitialStrings() {

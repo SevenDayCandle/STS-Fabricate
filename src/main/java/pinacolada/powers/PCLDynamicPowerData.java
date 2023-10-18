@@ -24,7 +24,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 import java.util.*;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
-public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker {
+public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower> {
     private static final TypeToken<HashMap<Settings.GameLanguage, PowerStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PowerStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, PowerStrings> languageMap = new HashMap<>();

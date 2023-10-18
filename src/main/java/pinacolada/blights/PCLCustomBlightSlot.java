@@ -3,15 +3,18 @@ package pinacolada.blights;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import extendedui.EUIUtils;
+import extendedui.ui.screens.BlightLibraryScreen;
+import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -155,11 +158,18 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
         return res;
     }
 
+    public static String getFolder() {
+        return FOLDER + "/" + SUBFOLDER;
+    }
+
     public static void initialize() {
         CUSTOM_COLOR_LISTS.clear();
-        loadFolder(getCustomFolder(SUBFOLDER));
+        loadFolder(getCustomFolder(SUBFOLDER), null, false);
+        for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
+            loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
+        }
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder());
+            loadFolder(provider.getFolder(), null, true);
         }
         if (PGR.debugBlights != null) {
             PGR.debugBlights.refresh();
@@ -170,18 +180,18 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
         return isIDDuplicate(input, getBlights(color));
     }
 
-    private static void loadFolder(FileHandle folder) {
+    private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleBlightImpl(f);
+            loadSingleBlightImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleBlightImpl(FileHandle f) {
+    private static void loadSingleBlightImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomBlightSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path);
+            slot.setupBuilder(path, workshopPath, isInternal);
             getBlights(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
         }
@@ -208,18 +218,6 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
         if (PGR.debugBlights != null) {
             PGR.debugBlights.refresh();
         }
-    }
-
-    public PCLDynamicBlightData getBuilder(int i) {
-        return (builders.size() > i) ? builders.get(i) : null;
-    }
-
-    public FileHandle getImageHandle() {
-        return Gdx.files.local(imagePath);
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 
     @Override
@@ -260,9 +258,11 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
         forms = tempForms.toArray(new String[]{});
     }
 
-    protected void setupBuilder(String fp) {
+    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
+        this.workshopFolder = workshopPath;
+        this.isInternal = isInternal;
 
         for (String fo : forms) {
             EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
@@ -275,16 +275,7 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
             builder.setImagePath(imagePath);
         }
 
-        filePath = fp;
+        this.filePath = filePath;
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Blight: " + filePath);
-    }
-
-    protected void wipeBuilder() {
-        FileHandle writer = getImageHandle();
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Blight Image: " + imagePath);
-        writer = Gdx.files.local(filePath);
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Blight: " + filePath);
     }
 }

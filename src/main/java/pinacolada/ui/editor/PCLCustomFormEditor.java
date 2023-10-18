@@ -16,7 +16,7 @@ import pinacolada.resources.PGR;
 
 public class PCLCustomFormEditor extends EUIBase {
     protected static final float ICON_SIZE = scale(36f);
-    protected PCLCustomEditEntityScreen<?, ?> screen;
+    protected PCLCustomEditEntityScreen<?, ?, ?> screen;
     protected EUIDropdown<Integer> formValues;
     public EUIHitbox hb;
     public EUILabel header;
@@ -25,7 +25,7 @@ public class PCLCustomFormEditor extends EUIBase {
     public EUIButton add;
     public EUIButton remove;
 
-    public PCLCustomFormEditor(EUIHitbox hb, PCLCustomEditEntityScreen<?, ?> screen) {
+    public PCLCustomFormEditor(EUIHitbox hb, PCLCustomEditEntityScreen<?, ?, ?> screen) {
         this.hb = hb;
         this.screen = screen;
 

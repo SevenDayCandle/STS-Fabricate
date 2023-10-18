@@ -26,7 +26,7 @@ import pinacolada.ui.editor.PCLCustomGenericPage;
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData> {
+public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight> {
     protected EUIToggle upgradeToggle;
     protected PCLDynamicBlight previewBlight;
     protected PCLCustomFormEditor formEditor;

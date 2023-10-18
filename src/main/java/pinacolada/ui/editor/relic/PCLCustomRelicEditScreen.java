@@ -26,7 +26,7 @@ import pinacolada.ui.editor.PCLCustomGenericPage;
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData> {
+public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData, PCLDynamicRelic> {
     protected EUIToggle upgradeToggle;
     protected PCLDynamicRelic previewRelic;
     protected PCLCustomFormEditor formEditor;

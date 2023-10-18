@@ -10,12 +10,12 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.Arrays;
 import java.util.List;
 
-public interface EditorMaker {
-    default EditorMaker addPPower(PTrigger effect) {
+public interface EditorMaker<T> {
+    default EditorMaker<T> addPPower(PTrigger effect) {
         return addPPower(effect, false);
     }
 
-    default EditorMaker addPPower(PTrigger effect, boolean makeCopy) {
+    default EditorMaker<T> addPPower(PTrigger effect, boolean makeCopy) {
         if (makeCopy && effect != null) {
             effect = effect.makeCopy();
         }
@@ -24,11 +24,11 @@ public interface EditorMaker {
         return this;
     }
 
-    default EditorMaker addPSkill(PSkill<?> effect) {
+    default EditorMaker<T> addPSkill(PSkill<?> effect) {
         return addPSkill(effect, false);
     }
 
-    default EditorMaker addPSkill(PSkill<?> effect, boolean makeCopy) {
+    default EditorMaker<T> addPSkill(PSkill<?> effect, boolean makeCopy) {
         if (makeCopy && effect != null) {
             effect = effect.makeCopy();
         }
@@ -47,15 +47,15 @@ public interface EditorMaker {
         }
     }
 
-    default EditorMaker setPPower(PTrigger... effect) {
+    default EditorMaker<T> setPPower(PTrigger... effect) {
         return setPPower(Arrays.asList(effect));
     }
 
-    default EditorMaker setPPower(Iterable<PTrigger> currentEffects) {
+    default EditorMaker<T> setPPower(Iterable<PTrigger> currentEffects) {
         return setPPower(currentEffects, false, true);
     }
 
-    default EditorMaker setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear) {
+    default EditorMaker<T> setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear) {
         if (clear) {
             getPowers().clear();
         }
@@ -65,15 +65,15 @@ public interface EditorMaker {
         return this;
     }
 
-    default EditorMaker setPSkill(PSkill<?>... effect) {
+    default EditorMaker<T> setPSkill(PSkill<?>... effect) {
         return setPSkill(Arrays.asList(effect));
     }
 
-    default EditorMaker setPSkill(Iterable<PSkill<?>> currentEffects) {
+    default EditorMaker<T> setPSkill(Iterable<PSkill<?>> currentEffects) {
         return setPSkill(currentEffects, false, true);
     }
 
-    default EditorMaker setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
+    default EditorMaker<T> setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
         if (clear) {
             getMoves().clear();
         }
@@ -83,6 +83,8 @@ public interface EditorMaker {
         return this;
     }
 
+    T create();
+
     AbstractCard.CardColor getCardColor();
 
     Texture getImage();
@@ -91,5 +93,5 @@ public interface EditorMaker {
 
     List<PTrigger> getPowers();
 
-    <T extends EditorMaker> T makeCopy();
+    <U extends EditorMaker<T>> U makeCopy();
 }

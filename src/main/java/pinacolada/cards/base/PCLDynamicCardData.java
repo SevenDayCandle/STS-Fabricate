@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
+public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDynamicCard> {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();

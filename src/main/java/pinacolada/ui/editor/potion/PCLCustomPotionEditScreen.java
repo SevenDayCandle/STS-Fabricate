@@ -27,7 +27,7 @@ import pinacolada.ui.editor.relic.PCLCustomRelicPrimaryInfoPage;
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData> {
+public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion> {
     protected EUIToggle upgradeToggle;
     protected PCLDynamicPotion preview;
     protected PCLCustomImageEffect imageEditor;

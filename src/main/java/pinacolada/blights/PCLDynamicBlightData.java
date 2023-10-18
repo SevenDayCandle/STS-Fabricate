@@ -23,7 +23,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker {
+public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<PCLDynamicBlight> {
     private static final TypeToken<HashMap<Settings.GameLanguage, BlightStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, BlightStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, BlightStrings> languageMap = new HashMap<>();

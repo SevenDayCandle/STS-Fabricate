@@ -8,6 +8,8 @@ import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.blights.PCLDynamicBlight;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.PGR;
@@ -16,35 +18,73 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public abstract class PCLCustomEditorLoadable<T extends EditorMaker, U extends FabricateItem> extends PCLCustomLoadable {
+public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U>, U extends FabricateItem> extends PCLCustomLoadable {
     protected static final TypeToken<EffectItemForm> TTOKENFORM = new TypeToken<EffectItemForm>() {
     };
     protected transient String imagePath;
     public transient ArrayList<T> builders = new ArrayList<>();
 
-    public T getBuilder(int i) {
+    public final T getBuilder(int i) {
         return (builders.size() > i) ? builders.get(i) : null;
     }
 
+    public final FileHandle getFileHandle() {
+        return workshopFolder != null ? Gdx.files.absolute(filePath) : Gdx.files.local(filePath);
+    }
+
+    protected final FileHandle getGenericHandle(String path) {
+        return workshopFolder != null ? Gdx.files.absolute(path) : Gdx.files.local(path);
+    }
+
+    public final FileHandle getImageHandle() {
+        return workshopFolder != null ? Gdx.files.absolute(imagePath) : Gdx.files.local(imagePath);
+    }
+
+    public final String getImagePath() {
+        return imagePath;
+    }
+
+    public U make() {
+        T builder = getBuilder(0);
+        return builder != null ? builder.create() : null;
+    }
+
+    protected void wipeBuilder() {
+        if (isInternal) {
+            EUIUtils.logInfo(this.getClass(), "Cannot delete internal item: " + filePath);
+            return;
+        }
+        FileHandle writer = getImageHandle();
+        writer.delete();
+        EUIUtils.logInfo(this.getClass(), "Deleted Custom Image: " + imagePath);
+        writer = getFileHandle();
+        writer.delete();
+        EUIUtils.logInfo(this.getClass(), "Deleted Custom File: " + filePath);
+    }
+
     protected void writeFiles(Type type) {
+        if (isInternal) {
+            EUIUtils.logInfo(this.getClass(), "Cannot overwrite internal item: " + filePath);
+            return;
+        }
         String newFilePath = makeFilePath();
         String newImagePath = makeImagePath();
 
         // If the file path has changed and the original file exists, we should move the file and its image
-        FileHandle writer = Gdx.files.local(filePath);
+        FileHandle writer = getGenericHandle(filePath);
         if (writer.exists() && !newFilePath.equals(filePath)) {
-            writer.moveTo(Gdx.files.local(newFilePath));
+            writer.moveTo(getGenericHandle(newFilePath));
             EUIUtils.logInfo(this.getClass(), "Moved Custom Item: " + filePath + ", New: " + newFilePath);
         }
-        writer = Gdx.files.local(newFilePath);
+        writer = getGenericHandle(newFilePath);
 
         // The image should have the same file name as the file path
-        FileHandle imgWriter = Gdx.files.local(imagePath);
+        FileHandle imgWriter = getGenericHandle(imagePath);
         if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
-            imgWriter.moveTo(Gdx.files.local(newImagePath));
+            imgWriter.moveTo(getGenericHandle(newImagePath));
             EUIUtils.logInfo(this.getClass(), "Moved Custom Image: " + imagePath + ", New: " + newImagePath);
         }
-        imgWriter = Gdx.files.local(newImagePath);
+        imgWriter = getGenericHandle(newImagePath);
 
         filePath = newFilePath;
         imagePath = newImagePath;
@@ -64,7 +104,9 @@ public abstract class PCLCustomEditorLoadable<T extends EditorMaker, U extends F
         writer.writeString(EUIUtils.serialize(this, type), false, HttpParametersUtils.defaultEncoding);
     }
 
-    public abstract U make();
+    protected abstract void recordBuilder();
+
+    protected abstract void setupBuilder(String filePath, String workshopPath, boolean isInternal);
 
     public static class EffectItemForm implements Serializable {
         static final long serialVersionUID = 1L;

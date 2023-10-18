@@ -10,6 +10,7 @@ import extendedui.ui.cardFilter.RelicKeywordFilters;
 import extendedui.ui.controls.EUIItemGrid;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.utilities.RelicInfo;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLGenericSelectRelicEffect;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
@@ -37,6 +38,11 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
     }
 
     @Override
+    protected String getFolder() {
+        return PCLCustomRelicSlot.getFolder();
+    }
+
+    @Override
     protected EUIItemGrid<RelicInfo> getGrid() {
         return new EUIRelicGrid();
     }
@@ -47,13 +53,13 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
     }
 
     @Override
-    protected PCLCustomEditEntityScreen<PCLCustomRelicSlot, ?> getScreen(PCLCustomRelicSlot slot) {
+    protected PCLCustomRelicEditScreen getScreen(PCLCustomRelicSlot slot) {
         return new PCLCustomRelicEditScreen(slot);
     }
 
     @Override
     protected Iterable<PCLCustomRelicSlot> getSlots(AbstractCard.CardColor co) {
-        return PCLCustomRelicSlot.getRelics(co);
+        return EUIUtils.filter(PCLCustomRelicSlot.getRelics(co), c -> !c.getIsInternal());
     }
 
     @Override

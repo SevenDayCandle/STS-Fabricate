@@ -9,7 +9,7 @@ import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 
 public class PCLCustomBlockEffectPage extends PCLCustomEffectPage {
-    public PCLCustomBlockEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomBlockEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }
 

@@ -3,10 +3,12 @@ package pinacolada.powers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.utilities.TupleT2;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
@@ -108,6 +110,10 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         return CUSTOM_POWERS;
     }
 
+    public static String getFolder() {
+        return FOLDER + "/" + SUBFOLDER;
+    }
+
     /*
      * Clear out custom powers and registered tooltips from those powers, then reload custom items from the custom folders
      * */
@@ -116,9 +122,12 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             EUIKeywordTooltip.removeTemp(id);
         }
         CUSTOM_POWERS.clear();
-        loadFolder(getCustomFolder(SUBFOLDER));
+        loadFolder(getCustomFolder(SUBFOLDER), null, false);
+        for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
+            loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
+        }
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder());
+            loadFolder(provider.getFolder(), null, true);
         }
 
         // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured
@@ -129,18 +138,18 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         return isIDDuplicateByKey(input, CUSTOM_POWERS.keySet());
     }
 
-    private static void loadFolder(FileHandle folder) {
+    private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSinglePowerImpl(f);
+            loadSinglePowerImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSinglePowerImpl(FileHandle f) {
+    private static void loadSinglePowerImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomPowerSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path);
+            slot.setupBuilder(path, workshopPath, isInternal);
             slot.registerTooltip();
             CUSTOM_POWERS.put(slot.ID, slot);
         }
@@ -173,18 +182,6 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         if (PGR.debugPotions != null) {
             PGR.debugPotions.refresh();
         }
-    }
-
-    public PCLDynamicPowerData getBuilder(int i) {
-        return (builders.size() > i) ? builders.get(i) : null;
-    }
-
-    public FileHandle getImageHandle() {
-        return Gdx.files.local(imagePath);
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 
     @Override
@@ -234,8 +231,10 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         }
     }
 
-    protected void setupBuilder(String fp) {
+    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
         builders = new ArrayList<>();
+        this.workshopFolder = workshopPath;
+        this.isInternal = isInternal;
 
         for (String[] f : effects) {
             PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f);
@@ -247,17 +246,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             builder.setImagePath(imagePath);
         }
 
-        filePath = fp;
+        this.filePath = filePath;
         EUIUtils.logInfo(PCLCustomPowerSlot.class, "Loaded Custom Power: " + filePath);
     }
-
-    protected void wipeBuilder() {
-        FileHandle writer = getImageHandle();
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomPowerSlot.class, "Deleted Custom Power Image: " + imagePath);
-        writer = Gdx.files.local(filePath);
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomPowerSlot.class, "Deleted Custom Power: " + filePath);
-    }
-
 }

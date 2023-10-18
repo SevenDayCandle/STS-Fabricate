@@ -1,15 +1,20 @@
 package pinacolada.cards.base;
 
+import basemod.BaseMod;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIUtils;
+import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.resources.PGR;
 
 import java.io.Serializable;
@@ -187,12 +192,19 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return res;
     }
 
+    public static String getFolder() {
+        return FOLDER + "/" + SUBFOLDER;
+    }
+
     public static void initialize() {
         CUSTOM_COLOR_LISTS.clear();
         CUSTOM_MAPPING.clear();
-        loadFolder(getCustomFolder(SUBFOLDER));
+        loadFolder(getCustomFolder(SUBFOLDER), null, false);
+        for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
+            loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
+        }
         for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder());
+            loadFolder(provider.getFolder(), null, true);
         }
         if (PGR.debugCards != null) {
             PGR.debugCards.refresh();
@@ -203,20 +215,33 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return isIDDuplicate(input, getCards(color));
     }
 
-    private static void loadFolder(FileHandle folder) {
+    private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleCardImpl(f);
+            loadSingleCardImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleCardImpl(FileHandle f) {
+    private static void loadSingleCardImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path);
+            slot.setupBuilder(path, workshopPath, isInternal);
             getCards(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
+
+            if (isInternal) {
+                // Use direct library to avoid grabbing custom items
+                AbstractCard actualCard = CardLibraryPatches.getDirectCard(slot.ID);
+                if (actualCard != null) {
+                    if (actualCard instanceof PCLDynamicCard) {
+                        ((PCLDynamicCard) actualCard).fullReset();
+                    }
+                }
+                else {
+                    BaseMod.addCard(slot.make());
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -243,18 +268,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         }
     }
 
-    public PCLDynamicCardData getBuilder(int i) {
-        return (builders.size() > i) ? builders.get(i) : null;
-    }
-
-    public FileHandle getImageHandle() {
-        return Gdx.files.local(imagePath);
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
     @Override
     protected String getSubfolderPath() {
         return SUBFOLDER;
@@ -263,8 +276,10 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     /**
      * Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc.
      */
+    @Override
     public PCLDynamicCard make() {
-        return getBuilder(0).createImplWithForms(0, 0);
+        PCLDynamicCardData builder = getBuilder(0);
+        return builder != null ? builder.createImplWithForms(0, 0) : null;
     }
 
     // Copy down the properties from all builders into this slot
@@ -322,9 +337,11 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         forms = tempForms.toArray(new String[]{});
     }
 
-    protected void setupBuilder(String fp) {
+    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
+        this.workshopFolder = workshopPath;
+        this.isInternal = isInternal;
 
         for (String fo : forms) {
             CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
@@ -337,17 +354,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             builder.setImagePath(imagePath);
         }
 
-        filePath = fp;
+        this.filePath = filePath;
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Card: " + filePath);
-    }
-
-    protected void wipeBuilder() {
-        FileHandle writer = getImageHandle();
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Card Image: " + imagePath);
-        writer = Gdx.files.local(filePath);
-        writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Card: " + filePath);
     }
 
     public static class CardForm implements Serializable {

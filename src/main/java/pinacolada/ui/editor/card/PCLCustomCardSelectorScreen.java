@@ -48,6 +48,11 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
     }
 
     @Override
+    protected String getFolder() {
+        return PCLCustomCardSlot.getFolder();
+    }
+
+    @Override
     protected EUIItemGrid<AbstractCard> getGrid() {
         return new EUICardGrid(0.42f);
     }
@@ -58,13 +63,13 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
     }
 
     @Override
-    protected PCLCustomEditEntityScreen<PCLCustomCardSlot, ?> getScreen(PCLCustomCardSlot slot) {
+    protected PCLCustomCardEditScreen getScreen(PCLCustomCardSlot slot) {
         return new PCLCustomCardEditScreen(slot);
     }
 
     @Override
     protected Iterable<PCLCustomCardSlot> getSlots(AbstractCard.CardColor co) {
-        return PCLCustomCardSlot.getCards(co);
+        return EUIUtils.filter(PCLCustomCardSlot.getCards(co), c -> !c.getIsInternal());
     }
 
     @Override

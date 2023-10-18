@@ -17,6 +17,7 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -28,7 +29,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, ?>, U extends EditorMaker> extends PCLEffectWithCallback<Object> {
+public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V>, V extends FabricateItem> extends PCLEffectWithCallback<Object> {
     public static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
     public static final float CARD_X = Settings.WIDTH * 0.10f;
     public static final float CARD_Y = Settings.HEIGHT * 0.76f;
@@ -237,7 +238,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         updateVariant();
     }
 
-    public PCLCustomEditEntityScreen<T, U> setOnSave(ActionT0 onSave) {
+    public PCLCustomEditEntityScreen<T, U, V> setOnSave(ActionT0 onSave) {
         this.onSave = onSave;
 
         return this;

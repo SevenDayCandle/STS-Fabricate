@@ -16,6 +16,7 @@ import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.potions.PCLPotion;
+import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
@@ -35,6 +36,11 @@ public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<Potio
     }
 
     @Override
+    protected String getFolder() {
+        return PCLCustomPotionSlot.getFolder();
+    }
+
+    @Override
     protected EUIItemGrid<PotionInfo> getGrid() {
         return new EUIPotionGrid();
     }
@@ -45,13 +51,13 @@ public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<Potio
     }
 
     @Override
-    protected PCLCustomEditEntityScreen<PCLCustomPotionSlot, ?> getScreen(PCLCustomPotionSlot slot) {
+    protected PCLCustomPotionEditScreen getScreen(PCLCustomPotionSlot slot) {
         return new PCLCustomPotionEditScreen(slot);
     }
 
     @Override
     protected Iterable<PCLCustomPotionSlot> getSlots(AbstractCard.CardColor co) {
-        return PCLCustomPotionSlot.getPotions(co);
+        return EUIUtils.filter(PCLCustomPotionSlot.getPotions(co), c -> !c.getIsInternal());
     }
 
     @Override

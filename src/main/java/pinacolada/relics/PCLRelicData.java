@@ -37,7 +37,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;
     public int branchFactor = 0;
-    public int loadoutValue;
+    public Integer loadoutValue;
 
     public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -120,6 +120,13 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
     }
 
+    public int getLoadoutValue() {
+        if (loadoutValue != null) {
+            return loadoutValue;
+        }
+        return getValueForRarity(tier);
+    }
+
     public void initializeImage() {
         this.imagePath = PGR.getRelicImage(ID);
     }
@@ -177,10 +184,6 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
-    protected void setLoadoutValueFromTier() {
-        this.loadoutValue = getValueForRarity(this.tier);
-    }
-
     public PCLRelicData setMaxForms(int maxForms) {
         this.maxForms = maxForms;
 
@@ -201,7 +204,6 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
         this.tier = tier;
         this.sfx = sfx;
-        setLoadoutValueFromTier();
         return this;
     }
 
@@ -212,7 +214,6 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public PCLRelicData setTier(AbstractRelic.RelicTier tier) {
         this.tier = tier;
-        setLoadoutValueFromTier();
         return this;
     }
 

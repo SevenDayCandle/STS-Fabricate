@@ -62,6 +62,23 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, EUI.actingColor);
+        grid.group.sort(this::defaultSort);
+    }
+
+    private int defaultSort(RelicInfo a, RelicInfo b) {
+        int aVal = getRelicValue(a.relic);
+        int bVal = getRelicValue(b.relic);
+        if (aVal < 0) {
+            aVal = aVal * -1000;
+        }
+        if (bVal < 0) {
+            bVal = bVal * -1000;
+        }
+        return aVal - bVal;
+    }
+
+    private int getRelicValue(AbstractRelic relic) {
+        return (relic instanceof PCLRelic) ? ((PCLRelic) relic).relicData.getLoadoutValue() : relic != null ? PCLRelicData.getValueForRarity(relic.tier) : 0;
     }
 
     @Override
@@ -100,7 +117,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
     }
 
     private void onRelicRender(SpriteBatch sb, RelicInfo relic) {
-        int estimateValue = relic.relic instanceof PCLRelic ? ((PCLRelic) relic.relic).relicData.loadoutValue : PCLRelicData.getValueForRarity(relic.relic.tier);
+        int estimateValue = getRelicValue(relic.relic);
         cardValue_text
                 .setLabel(estimateValue)
                 .setFontColor(estimateValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)

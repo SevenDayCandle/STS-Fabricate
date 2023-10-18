@@ -3,6 +3,8 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
@@ -18,11 +20,10 @@ public class LoadoutRelicSlot extends LoadoutSlot {
     }
 
     public static int getLoadoutValue(String item) {
-        PCLRelicData data = PCLRelicData.getStaticData(item);
-        if (data != null) {
-            return data.loadoutValue;
-        }
         AbstractRelic r = RelicLibrary.getRelic(item);
+        if (r instanceof PCLRelic) {
+            return ((PCLRelic) r).relicData.getLoadoutValue();
+        }
         return r != null ? PCLRelicData.getValueForRarity(r.tier) : 0;
     }
 

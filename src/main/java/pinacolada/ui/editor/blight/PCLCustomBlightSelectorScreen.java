@@ -1,5 +1,7 @@
 package pinacolada.ui.editor.blight;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import extendedui.EUI;
@@ -13,7 +15,10 @@ import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.blights.PCLPointerBlight;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
+import pinacolada.misc.PCLCustomLoadable;
+import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
@@ -43,13 +48,13 @@ public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<Abstr
     }
 
     @Override
-    protected PCLCustomEditEntityScreen<PCLCustomBlightSlot, ?> getScreen(PCLCustomBlightSlot slot) {
+    protected PCLCustomBlightEditScreen getScreen(PCLCustomBlightSlot slot) {
         return new PCLCustomBlightEditScreen(slot);
     }
 
     @Override
     protected Iterable<PCLCustomBlightSlot> getSlots(AbstractCard.CardColor co) {
-        return PCLCustomBlightSlot.getBlights(co);
+        return EUIUtils.filter(PCLCustomBlightSlot.getBlights(co), c -> !c.getIsInternal());
     }
 
     @Override
@@ -71,6 +76,11 @@ public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<Abstr
                 }
             });
         }
+    }
+
+    @Override
+    protected String getFolder() {
+        return PCLCustomBlightSlot.getFolder();
     }
 
     @Override

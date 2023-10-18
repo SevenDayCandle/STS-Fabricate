@@ -31,7 +31,7 @@ import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData> {
+public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard> {
 
     protected EUIToggle upgradeToggle;
     protected PCardPrimary_DealDamage currentDamage;

@@ -126,6 +126,29 @@ public class PGR {
         PGR.LOADOUT_STRINGS.putAll(new HashMap<String, LoadoutStrings>(EUIUtils.deserialize(jsonString, LOADOUT_TYPE)));
     }
 
+    public static void addRelicToLibrary(AbstractRelic relic, AbstractCard.CardColor color) {
+        switch (color) {
+            case COLORLESS:
+            case CURSE:
+                BaseMod.addRelic(relic, RelicType.SHARED);
+                break;
+            case RED:
+                BaseMod.addRelic(relic, RelicType.RED);
+                break;
+            case GREEN:
+                BaseMod.addRelic(relic, RelicType.GREEN);
+                break;
+            case BLUE:
+                BaseMod.addRelic(relic, RelicType.BLUE);
+                break;
+            case PURPLE:
+                BaseMod.addRelic(relic, RelicType.PURPLE);
+                break;
+            default:
+                BaseMod.addRelicToCustomPool(relic, color);
+        }
+    }
+
     public static String createID(String prefix, String suffix) {
         return prefix + ":" + suffix;
     }
@@ -382,26 +405,7 @@ public class PGR {
             try {
                 AbstractRelic relic = (AbstractRelic) ct.getConstructor().newInstance();
                 AbstractCard.CardColor color = relic instanceof PCLRelic ? ((PCLRelic) relic).relicData.cardColor : ct.getAnnotation(VisibleRelic.class).color();
-                switch (color) {
-                    case COLORLESS:
-                    case CURSE:
-                        BaseMod.addRelic(relic, RelicType.SHARED);
-                        break;
-                    case RED:
-                        BaseMod.addRelic(relic, RelicType.RED);
-                        break;
-                    case GREEN:
-                        BaseMod.addRelic(relic, RelicType.GREEN);
-                        break;
-                    case BLUE:
-                        BaseMod.addRelic(relic, RelicType.BLUE);
-                        break;
-                    case PURPLE:
-                        BaseMod.addRelic(relic, RelicType.PURPLE);
-                        break;
-                    default:
-                        BaseMod.addRelicToCustomPool(relic, color);
-                }
+                addRelicToLibrary(relic, color);
             }
             catch (Exception e) {
                 e.printStackTrace();

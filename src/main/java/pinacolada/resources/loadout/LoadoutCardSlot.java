@@ -3,7 +3,10 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
 
@@ -24,11 +27,10 @@ public class LoadoutCardSlot extends LoadoutSlot {
     }
 
     public static int getLoadoutValue(String item) {
-        PCLCardData data = PCLCardData.getStaticData(item);
-        if (data != null) {
-            return data.getLoadoutValue();
-        }
         AbstractCard r = CardLibrary.getCard(item);
+        if (r instanceof PCLCard) {
+            return ((PCLCard) r).cardData.getLoadoutValue();
+        }
         return r != null ? PCLCardData.getValueForRarity(r.rarity) : 0;
     }
 

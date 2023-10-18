@@ -17,6 +17,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLDynamicPower;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerRenderable;
 import pinacolada.resources.PGR;
@@ -28,7 +29,7 @@ import pinacolada.ui.editor.relic.PCLCustomRelicPrimaryInfoPage;
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
-public class PCLCustomPowerEditScreen extends PCLCustomEditEntityScreen<PCLCustomPowerSlot, PCLDynamicPowerData> {
+public class PCLCustomPowerEditScreen extends PCLCustomEditEntityScreen<PCLCustomPowerSlot, PCLDynamicPowerData, PCLDynamicPower> {
 
     protected EUIToggle upgradeToggle;
     protected PCLPowerRenderable preview;
