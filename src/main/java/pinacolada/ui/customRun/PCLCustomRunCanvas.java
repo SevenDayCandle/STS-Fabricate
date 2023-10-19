@@ -232,7 +232,10 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void openCardPool() {
-        currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
+        currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards)
+                .addCallback(pool -> {
+                    screen.bannedCards = pool.bannedCards;
+                });
     }
 
     public void openLoadoutEditor() {
@@ -242,7 +245,10 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void openRelicPool() {
-        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
+        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics)
+                .addCallback(pool -> {
+                    screen.bannedRelics = pool.bannedRelics;
+                });;
     }
 
     protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {

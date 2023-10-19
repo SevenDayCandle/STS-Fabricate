@@ -710,6 +710,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     protected void useFromTrigger(PCLUseInfo info, PCLActions order) {
         // Use the super pass parent to bypass the cond check for the triggering cond
         // We also need to check if the child condition passes, so that the parent use doesn't get tacked down if the child did not pass
+        // TODO only check child cond node conditions once
         if (checkChildCondition(info, true, this) && super.tryPassParent(this, info)) {
             if (childEffect != null) {
                 childEffect.use(info, order);

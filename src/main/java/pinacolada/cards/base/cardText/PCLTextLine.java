@@ -8,12 +8,10 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.LinkedList;
 
+import static pinacolada.cards.base.cardText.PCLCardText.DESC_BOX_WIDTH;
+
 // Copied and modified from STS-AnimatorMod
 public class PCLTextLine {
-    protected final static float IMG_HEIGHT = 420f * Settings.scale;
-    protected final static float IMG_WIDTH = 300f * Settings.scale;
-    protected final static float DESC_BOX_WIDTH = IMG_WIDTH * 0.81f;//0.79f;
-    protected final static float DESC_OFFSET_Y = IMG_HEIGHT * 0.255f;
     protected final LinkedList<PCLTextToken> tokens = new LinkedList<>();
     protected final PCLCardText context;
 
@@ -28,7 +26,7 @@ public class PCLTextLine {
     public void add(PCLTextToken token) {
         float tokenWidth = token.getWidth(context);
         if ((tokens.isEmpty() && token.type != PCLTextTokenType.Whitespace) ||
-                ((tokenWidth + width) < context.lineWidth || (token.type == PCLTextTokenType.Punctuation && token.rawText.length() == 1))) {
+                ((tokenWidth + width) < DESC_BOX_WIDTH || (token.type == PCLTextTokenType.Punctuation && token.rawText.length() == 1))) {
             tokens.add(token);
             width += tokenWidth;
             additionalWidth += token.getAdditionalWidth(context);

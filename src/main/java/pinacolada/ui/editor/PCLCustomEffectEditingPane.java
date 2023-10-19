@@ -617,6 +617,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false)
                 .setTooltip(PGR.core.strings.cedit_origins, PGR.core.strings.cetut_origin);
         piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true)
+                .setLabelFunctionForButton((list, __) -> list.isEmpty() ? StringUtils.capitalize(PGR.core.strings.subjects_thisCard()) : piles.makeMultiSelectString(), false)
                 .setTooltip(PGR.core.strings.cedit_pile, PGR.core.strings.cetut_pile);
     }
 

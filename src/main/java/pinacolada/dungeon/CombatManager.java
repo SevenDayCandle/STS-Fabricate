@@ -518,15 +518,8 @@ public class CombatManager extends EUIBase {
         clearStats();
     }
 
-    public static void onBattleStart() {
-        refresh();
-
-        subscriberDo(OnBattleStartSubscriber.class, OnBattleStartSubscriber::onBattleStart);
-
-        PGR.dungeon.atBattleStart();
-    }
-
     public static void onBattleStartPostRefresh() {
+        subscriberDo(OnBattleStartSubscriber.class, OnBattleStartSubscriber::onBattleStart);
         for (AbstractCard c : player.drawPile.group) {
             onCardCreated(c, true);
         }
@@ -866,8 +859,9 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onStartup() {
-        refresh();
         clearStats();
+        refresh();
+        PGR.dungeon.atBattleStart();
         for (AbstractBlight blight : player.blights) {
             if (blight instanceof PCLBlight) {
                 ((PCLBlight) blight).atPreBattle();
@@ -968,7 +962,7 @@ public class CombatManager extends EUIBase {
             battleID = UUID.randomUUID();
         }
 
-        renderInstance.setActive(GameUtilities.inBattle());
+        renderInstance.setActive(CombatManager.battleID != null);
     }
 
     public static void refreshHandLayout() {

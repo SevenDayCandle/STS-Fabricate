@@ -49,6 +49,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -1361,11 +1362,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getXString() {
-        // Do not show the x value for powers
-        if (GameUtilities.inBattle() && sourceCard != null && !hasParentType(PTrigger.class)) {
+        // Do not show the x value for when powers
+        if (GameUtilities.inBattle() && sourceCard != null && !hasParentType(PTrigger_When.class)) {
             return " (" + getXValue() + ")";
         }
-        return "";
+        return EUIUtils.EMPTY_STRING;
     }
 
     public int getXValue() {

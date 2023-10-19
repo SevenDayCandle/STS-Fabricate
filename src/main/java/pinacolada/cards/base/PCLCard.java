@@ -2056,7 +2056,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         final TextureAtlas.AtlasRegion img = getBorderTexture();
 
-        if (GameUtilities.inBattle(false)) {
+        if (GameUtilities.inBattle()) {
             sb.setColor(this.glowColor);
         }
         else {

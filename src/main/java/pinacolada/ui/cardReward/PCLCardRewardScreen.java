@@ -115,7 +115,7 @@ public class PCLCardRewardScreen extends EUIBase {
     }
 
     public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
-        if (GameUtilities.inBattle(true) || cards == null || rItem == null) {
+        if (GameUtilities.inBattleForceRefresh() || cards == null || rItem == null) {
             close(true);
             return;
         }

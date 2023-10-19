@@ -128,7 +128,7 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
         super.openImpl(relic, group);
         this.group = group;
         relic.playLandingSFX();
-        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+        relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId) || relic.isSeen;
         this.relicFrameImg = EUIRM.getTexture(getFramePath(relic));
         setStrings();
         renderScale = relic instanceof PCLRelic ? 1f : 2f;

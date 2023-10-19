@@ -142,6 +142,12 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return 30;
     }
 
+    public static void invalidateTempCards() {
+        for (PCLCardData data : STATIC_DATA.values()) {
+            data.tempCard = null;
+        }
+    }
+
     protected static <T extends PCLCardData> T registerData(T cardData) {
         PCLCardData.STATIC_DATA.put(cardData.ID, cardData);
         return cardData;

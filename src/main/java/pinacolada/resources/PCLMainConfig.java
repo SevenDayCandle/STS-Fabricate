@@ -15,6 +15,7 @@ import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.tooltips.EUIPreview;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.utilities.GameUtilities;
 
@@ -80,7 +81,7 @@ public class PCLMainConfig extends AbstractConfig {
     // Whenever this setting is updated, we need to force all cards and powers everywhere to refresh their descriptions
     public static void updateAllDescriptions() {
         PCLCustomPowerSlot.refreshTooltips();
-
+        PCLCardData.invalidateTempCards();
         EUIPreview.invalidate();
         for (AbstractCard c : CardLibrary.getAllCards()) {
             c.initializeDescription();

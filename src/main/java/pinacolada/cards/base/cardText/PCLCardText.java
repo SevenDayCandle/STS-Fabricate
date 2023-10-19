@@ -33,23 +33,19 @@ import java.util.List;
 public class PCLCardText {
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
     private static final PCLTextParser internalParser = new PCLTextParser(false);
-    protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
-    protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
-    protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
-    protected final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
-    protected final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
-    protected final static float BANNER_OFFSET_Y = -AbstractCard.RAW_H * 0.04f;
-    protected final static float DESC_OFFSET_X = (AbstractCard.IMG_WIDTH * 0.5f);
-    protected final static float DESC_OFFSET_Y = (AbstractCard.IMG_HEIGHT * 0.10f);
-    protected final static float FOOTER_SIZE = 52f;
+    private final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
+    private final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
+    private final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
+    private final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
+    private final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
+    private final static float BANNER_OFFSET_Y = -AbstractCard.RAW_H * 0.04f;
+    private final static float FOOTER_SIZE = 52f;
     protected final static float IMG_HEIGHT = 420f * Settings.scale;
     protected final static float DESC_OFFSET_SUB_Y = Settings.BIG_TEXT_MODE ? IMG_HEIGHT * 0.24f : IMG_HEIGHT * 0.255f;
-    protected final static float IMG_WIDTH = 300f * Settings.scale;
-    protected final static float CN_DESC_BOX_WIDTH = IMG_WIDTH * 0.72f;
-    protected final static float DESC_BOX_WIDTH = Settings.BIG_TEXT_MODE ? IMG_WIDTH * 0.95f : IMG_WIDTH * 0.79f;
+    protected final static float DESC_BOX_WIDTH = 240f * Settings.scale;
     protected static final GlyphLayout layout = new GlyphLayout();
     protected final PCLCard card;
-    public final ArrayList<PCLTextLine> lines = new ArrayList<>();
+    private final ArrayList<PCLTextLine> lines = new ArrayList<>();
     private float badgeAlphaTargetOffset = 1f;
     private float badgeAlphaOffset = -0.2f;
     protected BitmapFont font;
@@ -57,7 +53,6 @@ public class PCLCardText {
     protected int lineIndex;
     protected String overrideDescription = EUIUtils.EMPTY_STRING;
     public Color color;
-    public float lineWidth = DESC_BOX_WIDTH;
     public float startX;
     public float startY;
 
@@ -65,7 +60,7 @@ public class PCLCardText {
         this.card = card;
     }
 
-    protected static boolean isIdeographicLanguage() {
+    public static boolean isIdeographicLanguage() {
         switch (Settings.language) {
             case ZHS:
             case ZHT:

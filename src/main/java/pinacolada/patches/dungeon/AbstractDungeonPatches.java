@@ -339,7 +339,7 @@ public class AbstractDungeonPatches {
                 locator = Locator.class
         )
         public static void Insert(AbstractDungeon __instance) {
-            CombatManager.onBattleStart();
+            CombatManager.onStartup();
         }
 
         private static class Locator extends SpireInsertLocator {

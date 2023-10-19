@@ -64,7 +64,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return l != null && l.has(card);
     }
 
-    public static boolean checkForLoadout(String loadout, String card) {
+    public static boolean checkForLoadout(String loadout, AbstractCard card) {
         PCLLoadout l = PCLLoadout.get(loadout);
         return l != null && l.isCardFromLoadout(card);
     }
@@ -125,7 +125,7 @@ public class PField_CardCategory extends PField_CardGeneric {
                 (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
                         && (colors.isEmpty() || colors.contains(c.color))
                         && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
-                        && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c.cardID)))
+                        && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c)))
                         && (flags.isEmpty() || EUIUtils.any(flags, loadout -> checkForFlag(loadout, c)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))

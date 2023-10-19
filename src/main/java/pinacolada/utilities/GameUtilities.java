@@ -1655,14 +1655,11 @@ public class GameUtilities {
     }
 
     public static boolean inBattle() {
-        return inBattle(false);
+        return CombatManager.battleID != null;
     }
 
-    public static boolean inBattle(boolean forceRefresh) {
-        if (forceRefresh) {
-            CombatManager.refresh();
-        }
-
+    public static boolean inBattleForceRefresh() {
+        CombatManager.refresh();
         return CombatManager.battleID != null;
     }
 

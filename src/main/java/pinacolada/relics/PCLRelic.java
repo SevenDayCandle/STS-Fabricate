@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
-import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -358,7 +357,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public void onEquip() {
         super.onEquip();
 
-        if (GameUtilities.inBattle(true)) {
+        if (GameUtilities.inBattleForceRefresh()) {
             activateBattleEffect();
         }
 
@@ -388,7 +387,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public void onUnequip() {
         super.onUnequip();
 
-        if (GameUtilities.inBattle(true)) {
+        if (GameUtilities.inBattleForceRefresh()) {
             deactivateBattleEffect();
         }
     }

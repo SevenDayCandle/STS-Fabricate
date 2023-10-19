@@ -492,6 +492,9 @@ public abstract class PCLLoadout {
     }
 
     public boolean isCardFromLoadout(AbstractCard card) {
+        if (card instanceof PCLCard) {
+            return ((PCLCard) card).cardData.loadout == this;
+        }
         return isCardFromLoadout(card.cardID);
     }
 

@@ -92,14 +92,6 @@ public class AbstractPlayerPatches {
         }
     }
 
-    @SpirePatch(clz = AbstractPlayer.class, method = "applyPreCombatLogic")
-    public static class AbstractPlayer_ApplyPreCombatLogic {
-        @SpirePrefixPatch
-        public static void method(AbstractPlayer __instance) {
-            CombatManager.onStartup();
-        }
-    }
-
     @SpirePatch(clz = AbstractPlayer.class, method = "damage", paramtypez = {DamageInfo.class})
     public static class AbstractPlayer_Damage {
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)

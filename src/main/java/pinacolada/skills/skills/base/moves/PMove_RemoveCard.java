@@ -17,6 +17,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCallbackMove;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> implements OutOfCombatMove {
@@ -70,6 +71,13 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     @Override
     public boolean isMetascaling() {
         return true;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerRequired(editor);
     }
 
     @Override

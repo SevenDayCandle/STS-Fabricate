@@ -32,6 +32,15 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        // In the case of triggerSource not being null, this will be passed through twice, once with triggerSource, and once without
+        // On the actual usage call, we need to reset conditionMetCache so that subsequent triggers immediately afterwards are independent
+        if (isUsing) {
+            boolean val = conditionMetCache;
+            if (conditionMetCache && triggerSource == null) {
+                conditionMetCache = GameUtilities.chance(amount);
+            }
+            return val;
+        }
         return GameUtilities.chance(amount);
     }
 
