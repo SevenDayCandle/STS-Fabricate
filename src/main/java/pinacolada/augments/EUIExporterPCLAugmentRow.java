@@ -1,5 +1,6 @@
 package pinacolada.augments;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -23,9 +24,9 @@ public class EUIExporterPCLAugmentRow extends EUIExporterRow {
     }
 
     public EUIExporterPCLAugmentRow(PCLAugment augment) {
-        super(augment.ID, EUIGameUtils.getModID(augment), "", augment.getName());
-        category = String.valueOf(augment.data.category);
-        subCategory = augment.data.categorySub.suffix;
+        super(augment.ID, augment, AbstractCard.CardColor.COLORLESS, augment.getName());
+        category = augment.data.category.getName();
+        subCategory = augment.data.categorySub.getName();
         tier = augment.data.tier;
         description = augment.getFullText();
     }

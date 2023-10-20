@@ -1,5 +1,6 @@
 package pinacolada.powers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -27,8 +28,8 @@ public class EUIExporterPCLPowerRow extends EUIExporterRow {
     }
 
     public EUIExporterPCLPowerRow(PCLPowerData power) {
-        super(power.ID, EUIGameUtils.getModID(power), "", power.getName());
-        endTurnBehavior = String.valueOf(power.endTurnBehavior);
+        super(power.ID, power, AbstractCard.CardColor.COLORLESS, power.getName());
+        endTurnBehavior = power.endTurnBehavior.getText();
         minAmount = power.minAmount;
         maxAmount = power.maxAmount;
         priority = power.priority;

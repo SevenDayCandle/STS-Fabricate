@@ -113,7 +113,7 @@ public class EUIPatches {
     @SpirePatch(clz = EUIExporterCardRow.class, method = "parseCardString")
     public static class EUIExporterCardRow_ParseCardString {
         @SpirePrefixPatch
-        public static SpireReturn<String> prefix(EUIExporterCardRow __instance, AbstractCard card) {
+        public static SpireReturn<String> prefix(AbstractCard card) {
             if (card instanceof PCLCard) {
                 return SpireReturn.Return(EUIUtils.joinStringsMap(" ", PSkill::getExportText, ((PCLCard) card).getFullEffects()));
             }

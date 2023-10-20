@@ -4,15 +4,14 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
 import extendedui.exporter.EUIExporterRow;
+import extendedui.utilities.TargetFilter;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardDataAffinityGroup;
 import pinacolada.skills.PSkill;
 
 public class PCLCardExportRow extends EUIExporterRow {
     public int form;
-    public String series;
+    public String set;
     public String type;
     public String rarity;
     public String cardTarget;
@@ -36,16 +35,15 @@ public class PCLCardExportRow extends EUIExporterRow {
     public String effects;
 
     public PCLCardExportRow(PCLCard card, EUIExporter.ExportType format) {
-        super(card.cardData.ID, EUIGameUtils.getModID(card), String.valueOf(card.cardData.cardColor), card.name);
+        super(card.cardData.ID, card, card.cardData.cardColor, card.name);
         PCLCardData data = card.cardData;
         int form = card.getForm();
         this.form = form;
-        series = data.loadout != null ? data.loadout.getName() : null;
-        type = String.valueOf(data.cardType);
-        rarity = String.valueOf(data.cardRarity);
-        color = String.valueOf(data.cardColor);
-        cardTarget = String.valueOf(data.cardTarget);
-        attackType = String.valueOf(data.attackType);
+        set = data.loadout != null ? data.loadout.getName() : null;
+        type = EUIGameUtils.textForType(data.cardType);
+        rarity = EUIGameUtils.textForRarity(data.cardRarity);
+        cardTarget = TargetFilter.forCard(card).name;
+        attackType = data.attackType.name();
         damage = data.getDamage(form);
         damageUpgrade = data.getDamageUpgrade(form);
         block = data.getBlock(form);
@@ -61,8 +59,8 @@ public class PCLCardExportRow extends EUIExporterRow {
         cost = data.getCost(form);
         costUpgrade = data.getCostUpgrade(form);
         if (format == EUIExporter.ExportType.CSV) {
-            affinities = EUIUtils.joinStringsMap("/", af -> String.valueOf(af.tooltip.title), data.affinities.getAffinities());
-            tags = EUIUtils.joinStringsMap("/", tagInfo -> String.valueOf(tagInfo.tag), data.tags.values());
+            affinities = EUIUtils.joinStringsMap("/", af -> af.tooltip.title, data.affinities.getAffinities());
+            tags = EUIUtils.joinStringsMap("/", tagInfo -> tagInfo.tag.getName(), data.tags.values());
         }
         else {
             affinities = data.affinities.getAffinities();
