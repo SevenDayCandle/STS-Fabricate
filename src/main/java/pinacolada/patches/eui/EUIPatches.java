@@ -12,6 +12,9 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
+import extendedui.exporter.EUIExporterCardRow;
+import extendedui.exporter.EUIExporterRow;
 import extendedui.patches.game.TooltipPatches;
 import extendedui.patches.screens.MenuPanelScreenPatches;
 import extendedui.ui.TextureCache;
@@ -21,11 +24,14 @@ import extendedui.utilities.BlightTier;
 import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.misc.PCLCardExportRow;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -90,6 +96,28 @@ public class EUIPatches {
         @SpirePrefixPatch
         public static void prefix(SpriteBatch sb) {
             PGR.augmentFilters.tryRender(sb);
+        }
+    }
+
+    @SpirePatch(clz = EUIExporter.class, method = "getRowsForCard")
+    public static class EUIExporter_GetRowsForCard {
+        @SpirePrefixPatch
+        public static SpireReturn<ArrayList<EUIExporterRow>> prefix(Iterable<? extends AbstractCard> items, EUIExporter.ExportType format) {
+            if (EUIUtils.all(items, c -> c instanceof PCLCard)) {
+                return SpireReturn.Return(EUIUtils.map(items, item -> new PCLCardExportRow((PCLCard) item, format)));
+            }
+            return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = EUIExporterCardRow.class, method = "parseCardString")
+    public static class EUIExporterCardRow_ParseCardString {
+        @SpirePrefixPatch
+        public static SpireReturn<String> prefix(EUIExporterCardRow __instance, AbstractCard card) {
+            if (card instanceof PCLCard) {
+                return SpireReturn.Return(EUIUtils.joinStringsMap(" ", PSkill::getExportText, ((PCLCard) card).getFullEffects()));
+            }
+            return SpireReturn.Continue();
         }
     }
 

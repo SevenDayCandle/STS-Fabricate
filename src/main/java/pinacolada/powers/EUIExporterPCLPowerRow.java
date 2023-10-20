@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class EUIExporterPCLPowerRow extends EUIExporterRow {
-    public static final EUIExporter.Exportable<PCLPowerRenderable> powerExportable = new EUIExporter.Exportable<>(EUIExporterPCLPowerRow::exportPowerCsv, EUIExporterPCLPowerRow::exportPowerJson);
+    public static final EUIExporter.Exportable<PCLPowerRenderable> powerExportable = new EUIExporter.Exportable<>(EUIExporterPCLPowerRow::exportPower);
 
     public String endTurnBehavior;
     public int minAmount;
@@ -38,35 +38,15 @@ public class EUIExporterPCLPowerRow extends EUIExporterRow {
         description = power.getText();
     }
 
-    public static void exportPowerCsv(PCLPowerRenderable c) {
-        exportPowerCsv(Collections.singleton(c));
-    }
-
-    public static void exportPowerCsv(Iterable<? extends PCLPowerRenderable> cards) {
-        File file = EUIUtils.saveFile(EUIUtils.getFileFilter(EUIExporter.EXT_CSV), EUIConfiguration.lastExportPath);
+    public static void exportPower(Iterable<? extends PCLPowerRenderable> cards, EUIExporter.ExportType type) {
+        File file = EUIUtils.saveFile(EUIUtils.getFileFilter(type.type), EUIConfiguration.lastExportPath);
         if (file != null) {
-            exportPowerCsv(cards, file.getAbsolutePath());
+            exportPower(cards, type, file.getAbsolutePath());
         }
     }
 
-    private static void exportPowerCsv(Iterable<? extends PCLPowerRenderable> cards, String path) {
+    private static void exportPower(Iterable<? extends PCLPowerRenderable> cards, EUIExporter.ExportType type, String path) {
         ArrayList<? extends EUIExporterRow> rows = EUIUtils.map(cards, EUIExporterPCLPowerRow::new);
-        EUIExporter.exportImplCsv(rows, path);
-    }
-
-    public static void exportPowerJson(PCLPowerRenderable c) {
-        exportPowerJson(Collections.singleton(c));
-    }
-
-    public static void exportPowerJson(Iterable<? extends PCLPowerRenderable> cards) {
-        File file = EUIUtils.saveFile(EUIUtils.getFileFilter(EUIExporter.EXT_JSON), EUIConfiguration.lastExportPath);
-        if (file != null) {
-            exportPowerJson(cards, file.getAbsolutePath());
-        }
-    }
-
-    public static void exportPowerJson(Iterable<? extends PCLPowerRenderable> cards, String path) {
-        ArrayList<? extends EUIExporterRow> rows = EUIUtils.map(cards, EUIExporterPCLPowerRow::new);
-        EUIExporter.exportImplJson(rows, path);
+        type.exportRows(rows, path);
     }
 }

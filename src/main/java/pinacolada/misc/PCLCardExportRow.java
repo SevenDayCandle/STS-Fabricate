@@ -2,6 +2,7 @@ package pinacolada.misc;
 
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
 import extendedui.exporter.EUIExporterRow;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -30,26 +31,11 @@ public class PCLCardExportRow extends EUIExporterRow {
     public int rightCountUpgrade;
     public int cost;
     public int costUpgrade;
-    public int red;
-    public int redUpgrade;
-    public int green;
-    public int greenUpgrade;
-    public int blue;
-    public int blueUpgrade;
-    public int orange;
-    public int orangeUpgrade;
-    public int light;
-    public int lightUpgrade;
-    public int dark;
-    public int darkUpgrade;
-    public int silver;
-    public int silverUpgrade;
-    public int star;
-    public int starUpgrade;
-    public String tags;
+    public Object affinities;
+    public Object tags;
     public String effects;
 
-    public PCLCardExportRow(PCLCard card) {
+    public PCLCardExportRow(PCLCard card, EUIExporter.ExportType format) {
         super(card.cardData.ID, EUIGameUtils.getModID(card), String.valueOf(card.cardData.cardColor), card.name);
         PCLCardData data = card.cardData;
         int form = card.getForm();
@@ -74,27 +60,15 @@ public class PCLCardExportRow extends EUIExporterRow {
         rightCountUpgrade = data.getRightCountUpgrade(form);
         cost = data.getCost(form);
         costUpgrade = data.getCostUpgrade(form);
-
-        PCLCardDataAffinityGroup affinities = data.affinities;
-        red = affinities.getLevel(PCLAffinity.Red, form);
-        redUpgrade = affinities.getUpgrade(PCLAffinity.Red, form);
-        green = affinities.getLevel(PCLAffinity.Green, form);
-        greenUpgrade = affinities.getUpgrade(PCLAffinity.Green, form);
-        blue = affinities.getLevel(PCLAffinity.Blue, form);
-        blueUpgrade = affinities.getUpgrade(PCLAffinity.Blue, form);
-        orange = affinities.getLevel(PCLAffinity.Orange, form);
-        orangeUpgrade = affinities.getUpgrade(PCLAffinity.Orange, form);
-        light = affinities.getLevel(PCLAffinity.Yellow, form);
-        lightUpgrade = affinities.getUpgrade(PCLAffinity.Yellow, form);
-        dark = affinities.getLevel(PCLAffinity.Purple, form);
-        darkUpgrade = affinities.getUpgrade(PCLAffinity.Purple, form);
-        silver = affinities.getLevel(PCLAffinity.Silver, form);
-        silverUpgrade = affinities.getUpgrade(PCLAffinity.Silver, form);
-        star = affinities.getLevel(PCLAffinity.Star, form);
-        starUpgrade = affinities.getUpgrade(PCLAffinity.Star, form);
-
-        tags = EUIUtils.joinStringsMap("/", tagInfo -> String.valueOf(tagInfo.tag), data.tags.values());
-        effects = EUIUtils.joinStringsMap(PSkill.EFFECT_SEPARATOR, PSkill::getExportText, card.getFullEffects());
+        if (format == EUIExporter.ExportType.CSV) {
+            affinities = EUIUtils.joinStringsMap("/", af -> String.valueOf(af.tooltip.title), data.affinities.getAffinities());
+            tags = EUIUtils.joinStringsMap("/", tagInfo -> String.valueOf(tagInfo.tag), data.tags.values());
+        }
+        else {
+            affinities = data.affinities.getAffinities();
+            tags = data.tags.keySet();
+        }
+        effects = EUIUtils.joinStringsMap(" ", PSkill::getExportText, card.getFullEffects());
     }
 
     @Override

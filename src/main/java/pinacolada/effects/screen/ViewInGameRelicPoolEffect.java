@@ -314,7 +314,8 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
             selectRandomButton.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.openFiltersButton.hb.hovered) {
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered
+                    || selectRandomButton.hb.hovered || importButton.hb.hovered || grid.isHovered() || EUI.sortHeader.isHovered() || EUI.openFiltersButton.hb.hovered || EUIExporter.exportButton.hb.hovered) {
                 return;
             }
 

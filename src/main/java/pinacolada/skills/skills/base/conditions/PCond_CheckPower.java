@@ -61,8 +61,8 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         PCLUseInfo info = generateInfo(owner, t);
         boolean eval = evaluateTargets(info, c -> c == t);
         // For single target powers, the power target needs to match the owner of this skill
-        if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : (fields.getPowerFilter().invoke(power) && eval)) {
+        if (fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF) : (fields.getPowerFilter().invoke(power))
+                && eval && fields.doesValueMatchThreshold(power.amount)) {
             useFromTrigger(info.setData(power));
         }
     }

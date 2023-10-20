@@ -1,7 +1,6 @@
 package pinacolada.patches.library;
 
 import basemod.ReflectionHacks;
-import basemod.devcommands.blight.Blight;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
@@ -11,15 +10,13 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.random.Random;
-import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.BlightTier;
 import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.blights.PCLCustomBlightSlot;
-import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -54,11 +51,39 @@ public class BlightHelperPatches {
                             blights.add(a);
                         }
                     }
+                case SPECIAL:
+                    for (String a : additionalBlights.keySet()) {
+                        PCLBlightData data = PCLBlightData.getStaticData(a);
+                        if (data != null && data.tier == BlightTier.SPECIAL) {
+                            blights.add(a);
+                        }
+                    }
             }
         }
         for (PCLBlightData data : PCLBlightData.getAllData(false, false, b -> tiers.contains(b.tier) && colors.contains(b.cardColor))) {
             blights.add(data.ID);
         }
+
+        // TODO make this better
+        PCLPlayerData<?,?,?> data = PGR.dungeon.getPlayerData();
+        if (data != null) {
+            String[] additional = data.getAdditionalBlightIDs(allowCustom);
+            if (additional != null) {
+                for (String s : additional) {
+                    PCLBlightData bd = PCLBlightData.getStaticData(s);
+                    if (bd == null) {
+                        PCLCustomBlightSlot slot = PCLCustomBlightSlot.get(s);
+                        if (slot != null) {
+                            bd = slot.getBuilder(0);
+                        }
+                    }
+                    if (bd != null && tiers.contains(bd.tier) && colors.contains(bd.cardColor)) {
+                        blights.add(s);
+                    }
+                }
+            }
+        }
+
         if (allowCustom) {
             for (AbstractCard.CardColor color : colors) {
                 for (PCLCustomBlightSlot slot : PCLCustomBlightSlot.getBlights(color)) {

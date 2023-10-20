@@ -246,6 +246,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return player.currentHealth / valueDivisor;
     }
 
+    public PCLPlayerData<?,?,?> getPlayerData() {return data;}
+
     public int getDivisor() {
         return valueDivisor;
     }

@@ -12,6 +12,8 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.relics.PCLRelic;
 import pinacolada.skills.PMove;
@@ -137,6 +139,6 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-        createPotion((p) -> AbstractDungeon.player.obtainPotion(p));
+        PCLEffects.Queue.callback(() -> createPotion((p) -> AbstractDungeon.player.obtainPotion(p)));
     }
 }

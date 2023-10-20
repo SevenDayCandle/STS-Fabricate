@@ -15,6 +15,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -98,6 +99,12 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                 GameUtilities.getIntent(m).addModifier(power, amount);
             }
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRandom(editor);
     }
 
     @Override

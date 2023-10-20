@@ -160,7 +160,15 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         }
     }
 
+    public String[] getAdditionalBlightIDs(boolean customEnabled) {
+        return null;
+    }
+
     public String[] getAdditionalCardIDs(boolean customEnabled) {
+        return null;
+    }
+
+    public String[] getAdditionalPotionIDs(boolean customEnabled) {
         return null;
     }
 

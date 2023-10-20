@@ -690,16 +690,27 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getExportString(char attributeID) {
+        int upgrade;
+        int base;
         switch (attributeID) {
             case EFFECT_CHAR:
-                return baseAmount + " (" + getUpgrade() + ")";
+                upgrade = getUpgrade();
+                base = baseAmount;
+                break;
             case EXTRA_CHAR:
-                return baseExtra + " (" + getUpgradeExtra() + ")";
+                upgrade = getUpgradeExtra();
+                base = baseExtra;
+                break;
             case SCOPE_CHAR:
-                return baseScope + " (" + getUpgradeScope() + ")";
+                upgrade = getUpgradeScope();
+                base = baseScope;
+                break;
             default:
-                return "";
+                upgrade = 0;
+                base = 0;
         }
+        int upSum = base + upgrade;
+        return upgrade != 0 ? base + " (" + upSum + ")" : String.valueOf(base);
     }
 
     public String getExportText() {

@@ -11,6 +11,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -106,7 +107,6 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-
-        doEffect();
+        PCLEffects.Queue.callback(this::doEffect); // Use callback to avoid concurrent modification if called from relic
     }
 }

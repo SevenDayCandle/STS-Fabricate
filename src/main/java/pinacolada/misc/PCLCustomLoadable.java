@@ -12,6 +12,7 @@ import extendedui.utilities.TupleT2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public abstract class PCLCustomLoadable implements Serializable {
     static final long serialVersionUID = 1L;
@@ -38,11 +39,22 @@ public abstract class PCLCustomLoadable implements Serializable {
 
     protected static ArrayList<TupleT2<SteamSearch.WorkshopInfo, FileHandle>> getWorkshopFolders(String subfolder) {
         ArrayList<TupleT2<SteamSearch.WorkshopInfo, FileHandle>> folders = new ArrayList<>();
-        for (SteamSearch.WorkshopInfo s : Loader.getWorkshopInfos()) {
-            FileHandle folder = Gdx.files.absolute(s.getInstallPath() + "/" + FOLDER + "/" + subfolder);
-            if (folder.exists()) {
-                folders.add(new TupleT2<>(s, folder));
+        List<SteamSearch.WorkshopInfo> infos = Loader.getWorkshopInfos();
+        if (infos != null) {
+            for (SteamSearch.WorkshopInfo s : infos) {
+                if (s != null) {
+                    FileHandle folder = Gdx.files.absolute(s.getInstallPath() + "/" + FOLDER + "/" + subfolder);
+                    if (folder.exists()) {
+                        folders.add(new TupleT2<>(s, folder));
+                    }
+                }
+                else {
+                    EUIUtils.logError(PCLCustomLoadable.class, "Workshop info had a null!");
+                }
             }
+        }
+        else {
+            EUIUtils.logError(PCLCustomLoadable.class, "Workshop infos was mssing!");
         }
         return folders;
     }

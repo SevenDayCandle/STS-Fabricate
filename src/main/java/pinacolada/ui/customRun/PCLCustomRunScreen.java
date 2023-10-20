@@ -94,7 +94,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         for (AbstractRelic c : GameUtilities.getRelics(color).values()) {
             if (isRelicEligible(c.tier) && !UnlockTracker.isRelicLocked(c.relicId)) {
                 AbstractRelic relic = c.makeCopy();
-                relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+                relic.isSeen = relic.isSeen || UnlockTracker.isRelicSeen(relic.relicId);
                 group.add(relic);
             }
         }
@@ -102,7 +102,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
                 if (isRelicEligible(AbstractRelic.RelicTier.valueOf(slot.tier))) {
                     AbstractRelic relic = slot.make();
-                    relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+                    relic.isSeen = relic.isSeen || UnlockTracker.isRelicSeen(relic.relicId);
                     group.add(relic);
                 }
             }
