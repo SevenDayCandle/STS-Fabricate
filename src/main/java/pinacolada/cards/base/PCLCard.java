@@ -147,6 +147,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public int baseRightCount;
     public int currentHealth = 1; // Used for storing the card's current HP in battle
     public int hitCount;
+    public int upgradeLevelIncrease;
     public int rightCount;
     public transient AbstractCreature owner;
     public transient ArrayList<AbstractCreature> multiDamageCreatures;
@@ -1268,6 +1269,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         copy.name = this.name;
         copy.target = this.target;
+        copy.upgradeLevelIncrease = this.upgradeLevelIncrease;
         copy.upgraded = this.upgraded;
         copy.timesUpgraded = this.timesUpgraded;
         copy.baseDamage = this.baseDamage;
@@ -1379,7 +1381,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public int maxUpgrades() {
-        return cardData != null ? cardData.maxUpgradeLevel : 1;
+        return (cardData != null ? cardData.maxUpgradeLevel : 1) + upgradeLevelIncrease;
     }
 
     protected float modifyBlock(PCLUseInfo info, float amount) {

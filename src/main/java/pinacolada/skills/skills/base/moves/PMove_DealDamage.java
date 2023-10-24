@@ -78,7 +78,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (target.targetsMulti()) {
-            ArrayList<AbstractCreature> targets = target.getTargets(info, scope);
+            ArrayList<AbstractCreature> targets = new ArrayList<>(target.getTargets(info, scope)); // Because the info list could get modified later
             int[] damage = getDamageMatrix(targets);
             order.dealDamageToAll(getSourceCreature(), targets, damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }

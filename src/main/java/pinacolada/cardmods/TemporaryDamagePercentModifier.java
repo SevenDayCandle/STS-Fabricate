@@ -3,42 +3,43 @@ package pinacolada.cardmods;
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
-// Copied and modified from STS-AnimatorMod
-public class TemporaryBlockModifier extends AbstractCardModifier {
+public class TemporaryDamagePercentModifier extends AbstractCardModifier {
     protected transient boolean temporary;
     protected transient boolean untilPlayed;
     public int change;
 
-    public TemporaryBlockModifier(int change) {
+    public TemporaryDamagePercentModifier(int change) {
         this(change, false, false);
     }
 
-    public TemporaryBlockModifier(int change, boolean temporary, boolean untilPlayed) {
+    public TemporaryDamagePercentModifier(int change, boolean temporary, boolean untilPlayed) {
         this.change = change;
         this.temporary = temporary;
         this.untilPlayed = untilPlayed;
     }
 
-    public static TemporaryBlockModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
-        TemporaryBlockModifier mod = get(c);
+    public static TemporaryDamagePercentModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
+        TemporaryDamagePercentModifier mod = get(c);
         if (mod == null) {
-            mod = new TemporaryBlockModifier(change, temporary, untilPlayed);
+            mod = new TemporaryDamagePercentModifier(change, temporary, untilPlayed);
             CardModifierManager.addModifier(c, mod);
         }
         else {
             mod.change += change;
             mod.temporary = mod.temporary & temporary;
             mod.untilPlayed = mod.untilPlayed & untilPlayed;
-            mod.onInitialApplication(c);
         }
+        mod.onInitialApplication(c);
         return mod;
     }
 
-    public static TemporaryBlockModifier get(AbstractCard c) {
+    public static TemporaryDamagePercentModifier get(AbstractCard c) {
         for (AbstractCardModifier mod : CardModifierManager.modifiers(c)) {
-            if (mod instanceof TemporaryBlockModifier) {
-                return (TemporaryBlockModifier) mod;
+            if (mod instanceof TemporaryDamagePercentModifier) {
+                return (TemporaryDamagePercentModifier) mod;
             }
         }
         return null;
@@ -46,18 +47,18 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new TemporaryBlockModifier(change, temporary, untilPlayed);
+        return new TemporaryDamagePercentModifier(change, temporary, untilPlayed);
     }
 
     @Override
-    public float modifyBaseBlock(float block, AbstractCard card) {
-        return block + change;
+    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+        return damage + damage * change / 100f;
     }
 
     @Override
     public void onInitialApplication(AbstractCard card) {
-        card.block = card.baseBlock + change;
-        card.isBlockModified = card.baseBlock != card.block;
+        card.damage = (int) (card.baseDamage + card.baseDamage * change / 100f);
+        card.isDamageModified = card.baseDamage != card.damage;
     }
 
     @Override

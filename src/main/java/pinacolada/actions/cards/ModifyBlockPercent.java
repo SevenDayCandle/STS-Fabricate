@@ -2,15 +2,16 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.TemporaryBlockPercentModifier;
 import pinacolada.utilities.GameUtilities;
 
-public class ModifyBlock extends ModifyCard {
+public class ModifyBlockPercent extends ModifyCard {
 
-    public ModifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+    public ModifyBlockPercent(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
         this(card, 1, costChange, permanent, relative, untilPlayed);
     }
 
-    protected ModifyBlock(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+    protected ModifyBlockPercent(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
         super(card, amount, costChange, permanent, relative, untilPlayed);
     }
 
@@ -19,7 +20,7 @@ public class ModifyBlock extends ModifyCard {
         return super.canSelect(card) && card.baseBlock >= 0;
     }
 
-    public ModifyBlock flash(Color flashColor) {
+    public ModifyBlockPercent flash(Color flashColor) {
         this.flashColor = flashColor;
 
         return this;
@@ -27,7 +28,7 @@ public class ModifyBlock extends ModifyCard {
 
     @Override
     protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseBlock + change : change;
+        return change;
     }
 
     @Override
@@ -38,6 +39,6 @@ public class ModifyBlock extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        GameUtilities.modifyBlock(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+        TemporaryBlockPercentModifier.apply(card, change, !permanent, untilPlayed);
     }
 }

@@ -2,6 +2,7 @@ package pinacolada.cardmods;
 
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.CommonKeywordIconsField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -33,6 +34,7 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
             mod.temporary = mod.temporary & temporary;
             mod.untilPlayed = mod.untilPlayed & untilPlayed;
         }
+        mod.onInitialApplication(c);
         return mod;
     }
 
@@ -53,6 +55,12 @@ public class TemporaryDamageModifier extends AbstractCardModifier {
     @Override
     public float modifyBaseDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         return damage + change;
+    }
+
+    @Override
+    public void onInitialApplication(AbstractCard card) {
+        card.damage = card.baseDamage + change;
+        card.isDamageModified = card.baseDamage != card.damage;
     }
 
     @Override

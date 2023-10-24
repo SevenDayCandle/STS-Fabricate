@@ -48,9 +48,4 @@ public class PMod_SelectPerCard extends PMod_Do {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.select;
     }
-
-    @Override
-    public String getThemString() {
-        return EUIRM.strings.numNounPlace(getAmountRawOrAllString(), fields.getFullCardString(), TEXT.subjects_in(fields.getGroupString()));
-    }
 }

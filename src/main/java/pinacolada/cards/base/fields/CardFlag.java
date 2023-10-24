@@ -27,6 +27,7 @@ public class CardFlag implements TooltipProvider {
     public final AbstractCard.CardTags gameFlag;
     public final AbstractCard.CardColor[] colors;
     public String name;
+    private EUITooltip tip;
 
     public CardFlag(String id, AbstractCard.CardColor... colors) {
         this(id, null, colors);
@@ -117,7 +118,10 @@ public class CardFlag implements TooltipProvider {
     }
 
     public EUITooltip getTip() {
-        return new EUITooltip(getName());
+        if (tip == null) {
+            tip = new EUITooltip(getName());
+        }
+        return tip;
     }
 
     @Override
@@ -139,6 +143,9 @@ public class CardFlag implements TooltipProvider {
 
     public CardFlag setName(String name) {
         this.name = name;
+        if (tip != null) {
+            tip.title = name;
+        }
         return this;
     }
 

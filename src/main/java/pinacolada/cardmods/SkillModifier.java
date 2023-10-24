@@ -51,6 +51,9 @@ public class SkillModifier extends AbstractCardModifier {
     }
 
     public PSkill<?> getSkill() {
+        if (skill == null) {
+            skill = PSkill.get(serialized);
+        }
         return skill;
     }
 
@@ -114,6 +117,7 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public void onInitialApplication(AbstractCard card) {
+        PSkill<?> skill = getSkill();
         if (card instanceof PointerProvider) {
             skill.setSource((PointerProvider) card).onAddToCard(card);
         }

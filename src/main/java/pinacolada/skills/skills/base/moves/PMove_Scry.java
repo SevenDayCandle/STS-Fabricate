@@ -15,7 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_Scry extends PMove_Select<PField_CardCategory> {
+public class PMove_Scry extends PMove_DoCard<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scry.class, PField_CardCategory.class)
             .noTarget()
             .setGroups(PCLCardGroupHelper.DrawPile)

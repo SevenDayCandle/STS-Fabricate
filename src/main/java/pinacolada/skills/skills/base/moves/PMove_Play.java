@@ -16,7 +16,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_Play extends PMove_Select<PField_CardCategory> {
+public class PMove_Play extends PMove_DoCard<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Play.class, PField_CardCategory.class)
             .setExtra(0, DEFAULT_MAX);
 

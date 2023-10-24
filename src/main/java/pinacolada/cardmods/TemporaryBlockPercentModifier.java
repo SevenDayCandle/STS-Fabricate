@@ -4,26 +4,25 @@ import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 
-// Copied and modified from STS-AnimatorMod
-public class TemporaryBlockModifier extends AbstractCardModifier {
+public class TemporaryBlockPercentModifier extends AbstractCardModifier {
     protected transient boolean temporary;
     protected transient boolean untilPlayed;
     public int change;
 
-    public TemporaryBlockModifier(int change) {
+    public TemporaryBlockPercentModifier(int change) {
         this(change, false, false);
     }
 
-    public TemporaryBlockModifier(int change, boolean temporary, boolean untilPlayed) {
+    public TemporaryBlockPercentModifier(int change, boolean temporary, boolean untilPlayed) {
         this.change = change;
         this.temporary = temporary;
         this.untilPlayed = untilPlayed;
     }
 
-    public static TemporaryBlockModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
-        TemporaryBlockModifier mod = get(c);
+    public static TemporaryBlockPercentModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
+        TemporaryBlockPercentModifier mod = get(c);
         if (mod == null) {
-            mod = new TemporaryBlockModifier(change, temporary, untilPlayed);
+            mod = new TemporaryBlockPercentModifier(change, temporary, untilPlayed);
             CardModifierManager.addModifier(c, mod);
         }
         else {
@@ -35,10 +34,10 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
         return mod;
     }
 
-    public static TemporaryBlockModifier get(AbstractCard c) {
+    public static TemporaryBlockPercentModifier get(AbstractCard c) {
         for (AbstractCardModifier mod : CardModifierManager.modifiers(c)) {
-            if (mod instanceof TemporaryBlockModifier) {
-                return (TemporaryBlockModifier) mod;
+            if (mod instanceof TemporaryBlockPercentModifier) {
+                return (TemporaryBlockPercentModifier) mod;
             }
         }
         return null;
@@ -46,17 +45,17 @@ public class TemporaryBlockModifier extends AbstractCardModifier {
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new TemporaryBlockModifier(change, temporary, untilPlayed);
+        return new TemporaryBlockPercentModifier(change, temporary, untilPlayed);
     }
 
     @Override
-    public float modifyBaseBlock(float block, AbstractCard card) {
-        return block + change;
+    public float modifyBlock(float block, AbstractCard card) {
+        return block + block * change / 100f;
     }
 
     @Override
     public void onInitialApplication(AbstractCard card) {
-        card.block = card.baseBlock + change;
+        card.block = (int) (card.baseBlock + card.baseBlock * change / 100f);
         card.isBlockModified = card.baseBlock != card.block;
     }
 

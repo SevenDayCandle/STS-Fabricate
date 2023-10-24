@@ -2,24 +2,26 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.TemporaryBlockPercentModifier;
+import pinacolada.cardmods.TemporaryDamagePercentModifier;
 import pinacolada.utilities.GameUtilities;
 
-public class ModifyBlock extends ModifyCard {
+public class ModifyDamagePercent extends ModifyCard {
 
-    public ModifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+    public ModifyDamagePercent(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
         this(card, 1, costChange, permanent, relative, untilPlayed);
     }
 
-    protected ModifyBlock(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+    protected ModifyDamagePercent(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
         super(card, amount, costChange, permanent, relative, untilPlayed);
     }
 
     @Override
     protected boolean canSelect(AbstractCard card) {
-        return super.canSelect(card) && card.baseBlock >= 0;
+        return super.canSelect(card) && card.baseDamage >= 0;
     }
 
-    public ModifyBlock flash(Color flashColor) {
+    public ModifyDamagePercent flash(Color flashColor) {
         this.flashColor = flashColor;
 
         return this;
@@ -27,7 +29,7 @@ public class ModifyBlock extends ModifyCard {
 
     @Override
     protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseBlock + change : change;
+        return change;
     }
 
     @Override
@@ -38,6 +40,6 @@ public class ModifyBlock extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        GameUtilities.modifyBlock(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+        TemporaryDamagePercentModifier.apply(card, change, !permanent, untilPlayed);
     }
 }

@@ -1483,6 +1483,16 @@ public class GameUtilities {
         return result;
     }
 
+    public static EUITooltip getTooltipForPowerType(AbstractPower.PowerType type) {
+        switch (type) {
+            case BUFF:
+                return PGR.core.tooltips.buff;
+            case DEBUFF:
+                return PGR.core.tooltips.debuff;
+        }
+        return null;
+    }
+
     public static EUITooltip getTooltipForType(AbstractCard.CardType type) {
         if (type == PCLEnum.CardType.SUMMON) {
             return PGR.core.tooltips.summon;

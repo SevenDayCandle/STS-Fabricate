@@ -20,6 +20,7 @@ import extendedui.ui.cardFilter.GenericFiltersObject;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.powers.EUIExporterPCLPowerRow;
@@ -29,6 +30,7 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -69,7 +71,11 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setItems(AbstractPower.PowerType.values())
                 .setIsMultiSelect(true)
-                .setCanAutosizeButton(true);
+                .setCanAutosizeButton(true)
+                .setTooltipFunction(item -> {
+                    EUITooltip tip = GameUtilities.getTooltipForPowerType(item);
+                    return tip != null ? Collections.singleton(tip) : Collections.emptyList();
+                });
 
         priorityDropdown = new EUIDropdown<Integer>(new EUIHitbox(0, 0, scale(240), scale(48))
                 , String::valueOf)

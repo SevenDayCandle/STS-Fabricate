@@ -77,12 +77,15 @@ public abstract class PCLMultiCard extends PCLCard {
 
     public void addInheritedCard(AbstractCard card) {
         if (card != null) {
-            for (int i = 0; i < timesUpgraded; i++) {
-                card.upgrade();
-            }
             inheritedCards.add(card);
             if (card instanceof PCLCard) {
                 ((PCLCard) card).parent = this;
+                ((PCLCard) card).changeForm(getForm(), timesUpgraded);
+            }
+            else {
+                for (int i = 0; i < timesUpgraded; i++) {
+                    card.upgrade();
+                }
             }
             addCardProperties(card);
         }
@@ -213,7 +216,7 @@ public abstract class PCLMultiCard extends PCLCard {
         inheritedCards.clear();
         if (data.additionalData != null) {
             for (String id : data.additionalData) {
-                AbstractCard card = CardLibrary.getCard(id);
+                AbstractCard card = CardLibrary.getCopy(id);
                 addInheritedCard(card);
             }
         }

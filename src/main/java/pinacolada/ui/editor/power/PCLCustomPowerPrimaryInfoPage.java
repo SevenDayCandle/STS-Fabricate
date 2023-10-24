@@ -15,6 +15,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.controls.EUITextBoxInput;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,8 @@ import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.Collections;
 
 public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLCustomPowerEditScreen effect;
@@ -104,7 +107,11 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setItems(AbstractPower.PowerType.values())
-                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType);
+                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType)
+                .setTooltipFunction(item -> {
+                    EUITooltip tip = GameUtilities.getTooltipForPowerType(item);
+                    return tip != null ? Collections.singleton(tip) : Collections.emptyList();
+                });;
         endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLPowerData.Behavior::getText)
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {

@@ -13,7 +13,9 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.powers.common.EnergizedPower;
@@ -493,13 +495,31 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return val;
     }
 
-    public enum Behavior {
+    public enum Behavior implements TooltipProvider {
         Permanent,
         TurnBased,
         TurnBasedNext,
         SingleTurn,
         SingleTurnNext,
         Special;
+
+        private EUITooltip tip;
+
+        public String getDesc() {
+            switch (this) {
+                case Permanent:
+                    return PGR.core.strings.power_permanentDesc;
+                case TurnBased:
+                    return PGR.core.strings.power_turnBasedDesc;
+                case TurnBasedNext:
+                    return PGR.core.strings.power_turnBasedNextDesc;
+                case SingleTurn:
+                    return PGR.core.strings.power_singleTurnDesc;
+                case SingleTurnNext:
+                    return PGR.core.strings.power_singleTurnNextDesc;
+            }
+            return EUIUtils.EMPTY_STRING;
+        }
 
         public String getText() {
             switch (this) {
@@ -515,6 +535,18 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurnNext;
             }
             return PGR.core.strings.power_custom;
+        }
+
+        public EUITooltip getTip() {
+            if (tip == null) {
+                tip = new EUITooltip(getText(), getDesc());
+            }
+            return tip;
+        }
+
+        @Override
+        public List<EUITooltip> getTips() {
+            return Collections.singletonList(getTip());
         }
     }
 
