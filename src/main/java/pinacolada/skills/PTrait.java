@@ -9,10 +9,12 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
+import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
@@ -147,7 +149,16 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (hasParentType(PTrigger_Passive.class)) {
-            String subject = parent instanceof PFacetCond ? parent.getSubText(perspective) : PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            String subject;
+            if (parent instanceof PFacetCond) {
+                subject = parent.getSubText(perspective);
+            }
+            else if (parent instanceof PMultiBase && parent.parent instanceof PFacetCond) {
+                subject = parent.parent.getSubText(perspective);
+            }
+            else {
+                subject = PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            }
             return TEXT.act_zHas(subject, getSubDescText(perspective));
         }
         if (isVerbose()) {

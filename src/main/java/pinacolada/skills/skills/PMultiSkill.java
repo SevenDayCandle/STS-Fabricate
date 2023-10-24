@@ -78,9 +78,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill<PField_Empty> addAmountForCombat(int amount) {
+    public PSkill<PField_Empty> setAmountForCombat(int amount) {
         for (PSkill<?> effect : effects) {
-            effect.addAmountForCombat(amount);
+            effect.setAmountForCombat(amount);
         }
         return this;
     }
@@ -92,9 +92,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill<PField_Empty> addExtraForCombat(int extra) {
+    public PSkill<PField_Empty> setExtraForCombat(int extra) {
         for (PSkill<?> effect : effects) {
-            effect.addExtraForCombat(extra);
+            effect.setExtraForCombat(extra);
         }
         return this;
     }

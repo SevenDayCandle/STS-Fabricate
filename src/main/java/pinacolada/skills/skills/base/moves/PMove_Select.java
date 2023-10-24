@@ -69,15 +69,19 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
             return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
-                    fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
+                    shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
                             fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
                                     : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard());
         }
         String dest = fields.getDestinationString(getDestinationGroup().name);
         return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
-                fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fcs, dest) :
+                shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fcs, dest) :
                         fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString(), dest)
                                 : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard(), dest);
+    }
+
+    public boolean shouldHideGroupNames() {
+        return false;
     }
 
     @Override

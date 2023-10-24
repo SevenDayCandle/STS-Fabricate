@@ -19,6 +19,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
 
     public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .setExtra(-1, DEFAULT_MAX)
             .noTarget();
 
     public PMod_IncreaseOnUse(PSkillSaveData content) {
@@ -59,7 +60,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", extra > 0 ? getSubText(perspective) + getMaxExtraString() : getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -75,7 +76,8 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
             order.callback(() -> {
-                this.childEffect.addAmountForCombat(amount);
+                int newAmount = extra > 0 ? Math.max(extra, this.childEffect.amount + amount) : this.childEffect.amount + amount;
+                this.childEffect.setAmountForCombat(newAmount);
             });
         }
     }

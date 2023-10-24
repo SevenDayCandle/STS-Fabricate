@@ -41,4 +41,9 @@ public class PMove_Upgrade extends PMove_Select<PField_CardCategory> {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.upgrade;
     }
+
+    @Override
+    public boolean shouldHideGroupNames() {
+        return fields.shouldHideGroupNames();
+    }
 }

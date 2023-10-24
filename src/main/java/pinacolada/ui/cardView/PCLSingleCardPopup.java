@@ -28,6 +28,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.screen.ApplyAugmentToCardEffect;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -44,13 +45,9 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     protected final ArrayList<PCLAugmentViewer> currentAugments = new ArrayList<>();
     protected final EUIToggle upgradeToggle;
     protected final EUIToggle betaArtToggle;
+    protected final PCLValueEditor changeVariantEditor;
     protected final EUIButton changeVariant;
-    protected final EUIButton changeVariantNext;
-    protected final EUIButton changeVariantPrev;
     protected final EUIButton toggleAugment;
-    protected final EUITextBox changeVariantNumber;
-    protected final EUILabel changeVariantLabel;
-    protected final EUILabel changeVariantDescription;
     protected final EUILabel maxUpgradesLabel;
     protected final EUILabel maxCopiesLabel;
     private PCLCard upgradedCard;
@@ -84,15 +81,12 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.WHITE)
                 .setDimensions(screenW(0.18f), screenH(0.07f))
                 .setText(PGR.core.strings.scp_changeVariant)
+                .setTooltip(PGR.core.strings.scp_changeVariant, PGR.core.strings.scp_changeVariantTooltipAlways)
                 .setOnClick(this::changeCardForm)
                 .setColor(Color.FIREBRICK);
         this.changeVariant.hb.move(Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 180 * Settings.scale);
-
-        this.changeVariantNext = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 3.5f, changeVariant.hb.height * 0.8f))
-                .setOnClick(() -> changePreviewForm(currentForm + 1));
-
-        this.changeVariantPrev = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 1.5f, changeVariant.hb.height * 0.8f))
-                .setOnClick(() -> changePreviewForm(currentForm - 1));
+        this.changeVariantEditor = new PCLValueEditor(
+                new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 2.5f, changeVariant.hb.height * 0.8f), PGR.core.strings.scp_variant, this::changePreviewForm);
 
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
@@ -101,23 +95,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments));
 
-        this.changeVariantNumber = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 2.5f, changeVariant.hb.height * 0.8f))
-                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
-                .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
-                .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
-
-        this.changeVariantLabel = new EUILabel(EUIFontHelper.cardDescriptionFontLarge,
-                new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 - ICON_SIZE * 2, changeVariant.hb.height * 0.85f))
-                .setAlignment(0.5f, 0.5f) // 0.1f
-                .setLabel(PGR.core.strings.scp_variant + ":");
-
         final float offX = changeVariant.hb.width / 2 - ICON_SIZE * 0.75f;
-
-        this.changeVariantDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), screenH(0.07f), changeVariant.hb.width / 2, -changeVariant.hb.height * 0.6f))
-                .setAlignment(0.9f, 0.1f, true)
-                .setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
 
         this.maxUpgradesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
                 new RelativeHitbox(changeVariant.hb, screenW(0.21f), EUIBase.scale(48), offX, changeVariant.hb.height * 3.7f))
@@ -146,14 +124,13 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     }
 
     public void changePreviewForm(int newForm) {
-        if (displayCard != null && newForm >= 0 && newForm <= displayCard.getMaxForms() - 1) {
+        if (displayCard != null && newForm >= 0 && newForm <= displayCard.maxForms() - 1) {
             this.currentForm = displayCard.changeForm(newForm, displayCard.timesUpgraded);
             upgradedCard = displayCard.makePopupCopy();
             upgradedCard.changeForm(newForm, displayCard.timesUpgraded);
             upgradedCard.upgrade();
             upgradedCard.displayUpgrades();
         }
-
     }
 
     public void close() {
@@ -286,12 +263,12 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         if (cardData != null) {
             String author = cardData.getAuthorString();
             viewChangeVariants = cardData.canToggleFromPopup && (currentItem.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
-            changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
+            changeVariant.tooltip.setDescription(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
         }
         else {
             viewChangeVariants = false;
-            changeVariantDescription.setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
+            changeVariant.tooltip.setDescription(PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel("");
         }
 
@@ -326,7 +303,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 (this.upgradeToggle.hb.hovered) ||
                 (this.betaArtToggle.hb.hovered) ||
                 (this.scrollBar.hb.hovered) ||
-                (this.viewVariants && (this.changeVariant.hb.hovered || this.changeVariantNext.hb.hovered || this.changeVariantPrev.hb.hovered || this.changeVariantNumber.hb.hovered));
+                (this.viewVariants && (this.changeVariant.hb.hovered || this.changeVariantEditor.hb.hovered));
     }
 
     public void open(PCLCard card, CardGroup group) {
@@ -342,6 +319,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.upgradedCard = null;
         this.group = group;
         this.currentForm = card.auxiliaryData.form;
+        this.changeVariantEditor.setLimits(0, card.maxForms() - 1);
         super.openImpl(currentItem, group != null ? group.group : null);
 
         initializeToggles();
@@ -412,17 +390,9 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         if (viewVariants) {
             changeVariant.setInteractable(currentItem.auxiliaryData.form != currentForm);
-            changeVariantNumber.renderImpl(sb);
-            changeVariantLabel.renderImpl(sb);
-            if (currentForm > 0) {
-                changeVariantPrev.renderImpl(sb);
-            }
-            if (currentForm < card.getMaxForms() - 1) {
-                changeVariantNext.renderImpl(sb);
-            }
+            changeVariantEditor.renderImpl(sb);
             if (viewChangeVariants) {
                 changeVariant.renderImpl(sb);
-                changeVariantDescription.renderImpl(sb);
             }
         }
 
@@ -475,20 +445,15 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).tryUpdate();
         this.betaArtToggle.setToggle(viewBetaArt).tryUpdate();
 
-        this.changeVariantNumber.setLabel(currentForm);
-        this.changeVariantNumber.tryUpdate();
-        this.changeVariantPrev.tryUpdate();
-        this.changeVariantNext.tryUpdate();
+        this.changeVariantEditor.setValue(currentForm, false).tryUpdate();
         this.changeVariant.tryUpdate();
-        this.changeVariantLabel.tryUpdate();
-        this.changeVariantDescription.tryUpdate();
         this.maxUpgradesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentUpgrades : PGR.core.strings.scp_maxUpgrades), getCardUpgradesText()));
         this.maxUpgradesLabel.tryUpdate();
         this.maxCopiesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentCopies : PGR.core.strings.scp_maxCopies), getCardCopiesText()));
         this.maxCopiesLabel.tryUpdate();
         this.toggleAugment.tryUpdate();
 
-        this.viewVariants = viewChangeVariants || currentItem != null && currentItem.cardData != null && currentItem.getMaxForms() > 1;
+        this.viewVariants = viewChangeVariants || (currentItem != null && currentItem.cardData != null && currentItem.maxForms() > 1 && currentItem.cardData.canToggleOnUpgrade && SingleCardViewPopup.isViewingUpgrade);
 
         if (showAugments) {
             for (PCLAugmentViewer augment : currentAugments) {

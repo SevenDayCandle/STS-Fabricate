@@ -66,14 +66,14 @@ public class GridCardSelectScreenPatches {
     public static void fillCardListWithUpgrades(PCLCard base) {
         cardList.clear();
         if (base.cardData.branchFactor <= 0) {
-            for (int i = 0; i < base.getMaxForms(); i++) {
+            for (int i = 0; i < base.maxForms(); i++) {
                 cardList.add(base.makeUpgradePreview(i));
             }
         }
         else {
             int minForm = getFormMin(base);
 
-            for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
+            for (int i = minForm; i < Math.min(base.maxForms(), minForm + base.cardData.branchFactor); i++) {
                 cardList.add(base.makeUpgradePreview(i));
             }
         }

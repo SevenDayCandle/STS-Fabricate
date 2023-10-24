@@ -164,11 +164,11 @@ public class PCLCardAlly extends PCLCardCreature {
             renderTip(sb);
             if (card.pclTarget == PCLCardTarget.AllEnemy) {
                 for (AbstractMonster mo : GameUtilities.getEnemies(true)) {
-                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, mo.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
+                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET, this.hb, mo.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
                 }
             }
             else if (card.pclTarget.targetsSingle() && target != null) {
-                PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
+                PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET, this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
 
                 AbstractCard card = preview != null ? preview.getCard() : null;
                 if (card != null) {

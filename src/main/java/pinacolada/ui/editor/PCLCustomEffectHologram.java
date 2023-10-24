@@ -2,6 +2,7 @@ package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
@@ -9,6 +10,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIImage;
+import extendedui.utilities.EUIColors;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -50,8 +52,11 @@ public class PCLCustomEffectHologram extends EUIBase {
     @Override
     public void renderImpl(SpriteBatch sb) {
         this.image.renderCentered(sb, EUIRenderHelpers.ShaderMode.Colorize, EUIRenderHelpers.BlendingMode.Glowing, image.hb, Color.SKY);
-        if (highlighted != null && highlighted.shouldReject(this)) {
-            PCLRenderHelpers.draw(sb, EUIRM.images.x.texture(), image.hb.x - scale(32), image.hb.y, scale(16), scale(16));
+        if (highlighted != null) {
+            PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCurve(s, ImageMaster.TARGET_UI_ARROW, EUIColors.white(1), highlighted.hb, image.hb, 0, 0.15f, 0f, 6));
+            if (highlighted.shouldReject(this)) {
+                PCLRenderHelpers.draw(sb, EUIRM.images.x.texture(), image.hb.x - scale(32), image.hb.y, scale(16), scale(16));
+            }
         }
     }
 

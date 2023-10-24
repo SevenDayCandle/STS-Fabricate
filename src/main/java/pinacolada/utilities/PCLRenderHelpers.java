@@ -29,6 +29,7 @@ import java.text.DecimalFormat;
 // Copied and modified from STS-AnimatorMod
 public class PCLRenderHelpers extends EUIRenderHelpers {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.##");
+    private static final Color LERP_TEMP = new Color();
 
     public static String decimalFormat(float number) {
         return DECIMAL_FORMAT.format(number);
@@ -64,7 +65,8 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
                 angle = tmp.nor().angle() + 270f;
             }
 
-            sb.setColor(EUIColors.lerpNew(c1, c2, divisor));
+            EUIColors.lerp(LERP_TEMP, c1, c2, divisor);
+            sb.setColor(LERP_TEMP);
             sb.draw(texture, cur.x - origin, cur.y - origin, origin, origin, texture.getWidth(), texture.getHeight(), scale, scale, angle, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
             scale += scaleGrowth;
         }

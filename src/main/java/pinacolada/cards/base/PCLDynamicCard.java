@@ -473,7 +473,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     protected void setupBuilder(PCLDynamicCardData builder) {
         this.builder = builder;
         this.showTypeText = builder.showTypeText;
-        this.maxUpgradeLevel = builder.maxUpgradeLevel;
 
         clearSkills();
         onAttackEffect = null;

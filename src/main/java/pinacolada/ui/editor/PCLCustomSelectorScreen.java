@@ -87,22 +87,22 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                 .setText(PGR.core.strings.cedit_newCard)
                 .setOnClick(this::add);
 
-        openButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
+                .setColor(Color.SKY)
+                .setText(PGR.core.strings.cedit_loadFromCard)
+                .setTooltip(PGR.core.strings.cedit_loadFromCard, PGR.core.strings.cetut_loadFromCardScreen)
+                .setOnClick(this::loadFromExisting);
+
+        openButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+                .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_openFolder)
                 .setTooltip(PGR.core.strings.cedit_openFolder, PGR.core.strings.cetut_openFolder)
                 .setOnClick(this::viewDesktopFolderBase);
 
-        loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
-                .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_loadFromCard)
-                .setTooltip(PGR.core.strings.cedit_loadFromCard, PGR.core.strings.cetut_loadFromCardScreen)
-                .setOnClick(this::loadFromExisting);
-
         reloadButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
-                .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
+                .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_reloadCards)
                 .setTooltip(PGR.core.strings.cedit_reloadCards, PGR.core.strings.cetut_selectorReload)

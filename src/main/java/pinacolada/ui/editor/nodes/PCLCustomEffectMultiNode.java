@@ -8,6 +8,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PRoot;
+import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -32,6 +33,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         subnodes.add(node);
         node.index = subnodes.size() - 1;
         node.parent = this;
+        resizeDropzone();
     }
 
     @Override
@@ -96,6 +98,53 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
             subnode.render(sb);
         }
         super.renderImpl(sb);
+    }
+
+    protected void resizeDropzone() {
+        dropZone.width = hb.width * 1.6f + subnodes.size() * hb.width;
+        dropZone.setOffsetX((hb.width - dropZone.width) / 2f);
+    }
+
+    @Override
+    public PCLCustomEffectNode tryHoverHologram() {
+        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
+            return this;
+        }
+        PCLCustomEffectNode res;
+        if (child != null) {
+            res = child.tryHoverHologram();
+            if (res != null) {
+                return res;
+            }
+        }
+        for (PCLCustomEffectNode subnode : subnodes) {
+            res = subnode.tryHoverHologram();
+            if (res != null) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public PCLCustomEffectNode tryHoverPostHologram() {
+        PCLCustomEffectNode res;
+        for (PCLCustomEffectNode subnode : subnodes) {
+            res = subnode.tryHoverPostHologram();
+            if (res != null) {
+                return res;
+            }
+        }
+        if (child != null) {
+            res = child.tryHoverPostHologram();
+            if (res != null) {
+                return res;
+            }
+        }
+        if (dropZone.hovered && hologram != PCLCustomEffectHologram.current) {
+            return this;
+        }
+        return null;
     }
 
     @Override

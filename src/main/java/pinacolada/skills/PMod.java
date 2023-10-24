@@ -395,13 +395,17 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new ColoredString(amount, Settings.CREAM_COLOR);
     }
 
+    protected String getMaxExtraString() {
+        return " (" + TEXT.subjects_max(extra) + ")";
+    }
+
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
         return 0;
     }
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String subText = extra > 0 ? getSubText(perspective) + " (" + TEXT.subjects_max(extra) + ")" : getSubText(perspective);
+        String subText = extra > 0 ? getSubText(perspective) + getMaxExtraString() : getSubText(perspective);
         return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "",
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }

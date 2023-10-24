@@ -424,18 +424,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return "0-" + input;
     }
 
-    public PSkill<T> addAmountForCombat(int amount) {
+    public PSkill<T> setAmountForCombat(int amount) {
         this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
         return this;
     }
 
-    public PSkill<T> addExtraForCombat(int amount) {
+    public PSkill<T> setExtraForCombat(int amount) {
         this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
-        return this;
-    }
-
-    public PSkill<T> addScopeForCombat(int amount) {
-        this.baseScope = this.scope = MathUtils.clamp(this.scope + amount, 1, DEFAULT_MAX);
         return this;
     }
 

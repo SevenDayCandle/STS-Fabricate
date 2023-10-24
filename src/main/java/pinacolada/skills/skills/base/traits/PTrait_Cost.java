@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.traits;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -48,7 +49,16 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (hasParentType(PTrigger_Passive.class)) {
-            String subject = parent instanceof PFacetCond ? parent.getSubText(perspective) : PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            String subject;
+            if (parent instanceof PFacetCond) {
+                subject = parent.getSubText(perspective);
+            }
+            else if (parent instanceof PMultiBase && parent.parent instanceof PFacetCond) {
+                subject = parent.parent.getSubText(perspective);
+            }
+            else {
+                subject = PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
+            }
             return TEXT.act_zCosts(subject, 2, getSubDescText(perspective));
         }
         return TEXT.act_costs(getSubDescText(perspective));

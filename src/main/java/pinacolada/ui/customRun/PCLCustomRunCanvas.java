@@ -179,7 +179,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.9f);
         seedInput.header.setAlignment(1f, 0);
 
-        ascensionEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], screen::setAscension)
+        ascensionEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], this::setAscension)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");
@@ -301,6 +301,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void setAscension(int i) {
+        screen.ascensionLevel = i;
         ascensionEditor.setValue(i, false);
         int value = ascensionEditor.getValue();
         ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));

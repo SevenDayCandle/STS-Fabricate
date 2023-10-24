@@ -17,14 +17,12 @@ import java.util.ArrayList;
 
 public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
     private final PCLMultiCard multicard;
-    private final PField_CardCategory filterFields;
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
 
     public ChooseMulticardAction(PCLMultiCard multicard) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);
 
         this.multicard = multicard;
-        this.filterFields = this.multicard.createFilterFields();
         initialize(multicard.getMultiCardMove().baseAmount);
     }
 
@@ -43,7 +41,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
 
 
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.MASTER_DECK);
-        FuncT1<Boolean, AbstractCard> filter = filterFields.getFullCardFilter();
+        FuncT1<Boolean, AbstractCard> filter = multicard.getFieldsForFilter().getFullCardFilter();
         for (AbstractCard c : player.masterDeck.getPurgeableCards().group) {
             if (!isBanned(c) && filter.invoke(c)) {
                 cardGroup.addToBottom(c);

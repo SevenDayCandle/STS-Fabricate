@@ -66,6 +66,10 @@ public class PCLValueEditor extends EUIHoverable {
         setValue(displayValue.getCachedValue() + 1);
     }
 
+    public boolean isHovered() {
+        return hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered;
+    }
+
     public EUITourTooltip makeTour(boolean canDismiss) {
         if (this.tooltip != null && isActive) {
             EUITourTooltip tip = new EUITourTooltip(this.hb, this.tooltip.title, this.tooltip.description);

@@ -7,11 +7,10 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
 // Copied and modified from STS-AnimatorMod
-@AbstractCardModifier.SaveIgnore
 public class TemporaryDamageModifier extends AbstractCardModifier {
     protected transient boolean temporary;
     protected transient boolean untilPlayed;
-    public transient int change;
+    public int change;
 
     public TemporaryDamageModifier(int change) {
         this(change, false, false);

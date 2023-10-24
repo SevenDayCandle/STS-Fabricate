@@ -13,6 +13,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.ui.tooltips.EUITooltip;
@@ -43,6 +44,7 @@ public class PCLCustomEffectNode extends EUIButton {
     private boolean dragging;
     protected List<PSkill<?>> effects;
     protected PCLCustomEffectHologram hologram;
+    protected EUIHitbox dropZone;
     public PSkill<?> skill;
     public PCLCustomEffectPage editor;
     public PCLCustomEffectNode parent;
@@ -55,6 +57,7 @@ public class PCLCustomEffectNode extends EUIButton {
     // Call getNodeForSkill instead to get the correct node constructor for the given skill type
     protected PCLCustomEffectNode(PCLCustomEffectPage editor, PSkill<?> skill, NodeType type, EUIHitbox hb) {
         super(type.getTexture(), hb);
+        this.dropZone = new OriginRelativeHitbox(hb, hb.width * 1.1f, hb.height * 5.5f, -hb.width * 0.05f, hb.height * -5f);
         this.setColor(type.getColor());
         this.setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
         this.label = new EUILabel(EUIFontHelper.buttonFont, hb, 0.45f, 0.68f, 0.4f, true);
@@ -306,17 +309,38 @@ public class PCLCustomEffectNode extends EUIButton {
         dragging = false;
     }
 
+    public PCLCustomEffectNode tryHoverHologram() {
+        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
+            return this;
+        }
+        if (child != null) {
+            return child.tryHoverHologram();
+        }
+        return null;
+    }
+
+    public PCLCustomEffectNode tryHoverPostHologram() {
+        if (child != null) {
+            PCLCustomEffectNode res = child.tryHoverPostHologram();
+            if (res != null) {
+                return res;
+            }
+        }
+        if (dropZone.hovered && hologram != PCLCustomEffectHologram.current) {
+            return this;
+        }
+        return null;
+    }
+
     @Override
     public void updateImpl() {
         super.updateImpl();
+        dropZone.update();
         if (child != null) {
             child.updateImpl();
         }
         if (dragging && !hb.hovered && hologram == null) {
             hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
-        }
-        if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
-            PCLCustomEffectHologram.setHighlighted(this);
         }
         deleteButton.update();
         warningImage.update();

@@ -124,7 +124,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         CardCrawlGame.mainMenuScreen.fadeOutMusic();
         Settings.isTrial = true;
         Settings.isDailyRun = false;
-        AbstractDungeon.isAscensionMode = this.ascensionLevel == 0;
+        AbstractDungeon.isAscensionMode = this.ascensionLevel >= 0;
         AbstractDungeon.ascensionLevel = this.ascensionLevel;
 
         if (this.currentSeed.isEmpty()) {
@@ -250,11 +250,6 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 
     public void renderImpl(SpriteBatch sb) {
         canvas.renderImpl(sb);
-    }
-
-    public void setAscension(int i) {
-        this.ascensionLevel = i;
-        canvas.setAscension(i);
     }
 
     public void setCharacter(CharacterOption c) {

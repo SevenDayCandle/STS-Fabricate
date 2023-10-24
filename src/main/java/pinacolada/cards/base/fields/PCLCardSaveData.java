@@ -4,15 +4,6 @@ import java.util.ArrayList;
 
 public class PCLCardSaveData {
     public int form;
-    public int modifiedDamage;
-    public int modifiedBlock;
-    public int modifiedMagicNumber;
-    public int modifiedHeal;
-    public int modifiedHitCount;
-    public int modifiedRightCount;
-    public int modifiedCost;
-    public int modifiedUpgradeLevel;
-    public int[] modifiedAffinities;
     public ArrayList<String> augments;
     public ArrayList<String> additionalData;
 
@@ -34,15 +25,6 @@ public class PCLCardSaveData {
 
     public PCLCardSaveData(PCLCardSaveData original) {
         this.form = original.form;
-        this.modifiedDamage = original.modifiedDamage;
-        this.modifiedBlock = original.modifiedBlock;
-        this.modifiedMagicNumber = original.modifiedMagicNumber;
-        this.modifiedHeal = original.modifiedHeal;
-        this.modifiedHitCount = original.modifiedHitCount;
-        this.modifiedRightCount = original.modifiedRightCount;
-        this.modifiedCost = original.modifiedCost;
-        this.modifiedUpgradeLevel = original.modifiedUpgradeLevel;
-        this.modifiedAffinities = original.modifiedAffinities;
         if (original.augments != null) {
             this.augments = new ArrayList<>();
             this.augments.addAll(original.augments);

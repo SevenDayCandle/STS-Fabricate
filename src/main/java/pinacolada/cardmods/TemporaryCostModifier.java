@@ -15,14 +15,13 @@ import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
 // Used by temporary cost modification effects on a specific card
-@AbstractCardModifier.SaveIgnore
 public class TemporaryCostModifier extends AbstractCardModifier implements OnCardResetSubscriber {
     protected transient AbstractCard card;
     protected transient int previousChange;
     protected transient boolean temporary;
     protected transient boolean untilPlayed;
-    protected transient int change;
-    protected transient int baseDiff;
+    protected int change;
+    protected int baseDiff;
 
     public TemporaryCostModifier(int change, boolean temporary, boolean untilPlayed) {
         this.change = change;

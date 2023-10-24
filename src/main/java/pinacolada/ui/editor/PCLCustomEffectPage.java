@@ -166,6 +166,15 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         if (this.root != null) {
             this.root.hb.targetCy = START_Y + (scale(scrollDelta));
             this.root.update();
+            // Do drop zone checks later because actual node hitboxes take priority
+            PCLCustomEffectNode toHover = this.root.tryHoverHologram();
+            if (toHover != null) {
+                PCLCustomEffectHologram.setHighlighted(toHover);
+            }
+            else {
+                toHover = this.root.tryHoverPostHologram();
+            }
+            PCLCustomEffectHologram.setHighlighted(toHover);
         }
 
         this.header.tryUpdate();

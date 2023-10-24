@@ -21,6 +21,8 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -94,12 +96,21 @@ public abstract class PCLMultiCard extends PCLCard {
         }
     }
 
-    public PField_CardCategory createFilterFields() {
-        return new PField_CardCategory();
+    @Override
+    public int changeForm(Integer form, int timesUpgraded) {
+        int res = super.changeForm(form, timesUpgraded);
+        if (inheritedCards != null) {
+            for (AbstractCard c : inheritedCards.getCards()) {
+                if (c instanceof PCLCard) {
+                    ((PCLCard) c).changeForm(form, timesUpgraded);
+                }
+            }
+        }
+        return res;
     }
 
     public PField_CardCategory createMysteryFilterFields() {
-        return createFilterFields().setCost(CostFilter.Cost0);
+        return getFieldsForFilter().makeCopy().setCost(CostFilter.Cost0);
     }
 
     public AbstractCard getCard(int index) {
@@ -111,6 +122,10 @@ public abstract class PCLMultiCard extends PCLCard {
             inheritedCards = new CardPreviewList();
         }
         return inheritedCards.getCards();
+    }
+
+    public PField_CardCategory getFieldsForFilter() {
+        return getMultiCardMove().fields;
     }
 
     // Should not use effects directly on it unless its primary skill is disabled
@@ -153,6 +168,33 @@ public abstract class PCLMultiCard extends PCLCard {
         other.refreshProperties();
 
         return other;
+    }
+
+    @Override
+    public int maxForms() {
+        if (inheritedCards != null && inheritedCards.size() > 0) {
+            return EUIUtils.max(inheritedCards.getCards(), c -> c instanceof PointerProvider ? ((PointerProvider) c).maxForms() : 1);
+        }
+        return super.maxForms();
+    }
+
+    @Override
+    public int maxUpgrades() {
+        int res = super.maxUpgrades();
+        if (inheritedCards != null && inheritedCards.size() > 0) {
+            for (AbstractCard c : inheritedCards.getCards()) {
+                if (c instanceof PointerProvider) {
+                    int u = ((PointerProvider) c).maxUpgrades();
+                    if (u < 0) {
+                        return u;
+                    }
+                    else {
+                        res = Math.max(res, u);
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     @Override
@@ -301,6 +343,20 @@ public abstract class PCLMultiCard extends PCLCard {
         refreshProperties();
     }
 
+    @Override
+    protected int setForm(Integer form, int timesUpgraded) {
+        int res = super.setForm(form, timesUpgraded);
+        if (inheritedCards != null) {
+            for (AbstractCard c : inheritedCards.getCards()) {
+                if (c instanceof PCLCard) {
+                    ((PCLCard) c).setForm(form, timesUpgraded);
+                }
+            }
+        }
+        cardData.tempCard = null; // Invalidate preview
+        return res;
+    }
+
     public void setup(Object input) {
         multiCardMove = createMulticardMove();
         addUseMove(multiCardMove);
@@ -355,6 +411,12 @@ public abstract class PCLMultiCard extends PCLCard {
                     childAction.invoke((PCLCard) c);
                 }
             }
+        }
+
+        @Override
+        public PCLMultiCardMove edit(ActionT1<PField_CardCategory> editFunc) {
+            super.edit(editFunc);
+            return this;
         }
 
         @Override

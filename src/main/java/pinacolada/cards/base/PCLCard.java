@@ -69,7 +69,6 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.powers.PCLPower;
@@ -148,7 +147,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public int baseRightCount;
     public int currentHealth = 1; // Used for storing the card's current HP in battle
     public int hitCount;
-    public int maxUpgradeLevel;
     public int rightCount;
     public transient AbstractCreature owner;
     public transient ArrayList<AbstractCreature> multiDamageCreatures;
@@ -165,7 +163,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.cardData = cardData;
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
-        this.maxUpgradeLevel = cardData.maxUpgradeLevel;
 
         for (int i = 0; i < cardData.slots; i++) {
             augments.add(null);
@@ -542,7 +539,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public boolean canUpgrade() {
-        return timesUpgraded < maxUpgradeLevel || maxUpgradeLevel < 0;
+        int max = maxUpgrades();
+        return timesUpgraded < max || max < 0;
     }
 
     @Override
@@ -583,7 +581,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         int costDiff = cost - ((baseCost + cardData.getCostUpgrade(this.auxiliaryData.form) * prevUpgrade));
 
 
-        form = MathUtils.clamp(form, 0, this.getMaxForms() - 1);
+        form = MathUtils.clamp(form, 0, this.maxForms() - 1);
 
         onFormChange(form, timesUpgraded);
         setNumbers(baseDamageDiff + cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
@@ -873,10 +871,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return cardID;
     }
 
-    public int getMaxForms() {
-        return cardData != null ? cardData.maxForms : 1;
-    }
-
     public String getName() {
         return name;
     }
@@ -1137,10 +1131,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : originalName;
         if (upgraded) {
             if (cardData != null) {
-                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, cardData.maxForms, maxUpgradeLevel, cardData.branchFactor);
+                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, maxForms(), maxUpgrades(), cardData.branchFactor);
             }
             else {
-                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, 1, maxUpgradeLevel, 0);
+                name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, 1, maxUpgrades(), 0);
             }
         }
 
@@ -1204,7 +1198,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public boolean isBranchingUpgrade() {
-        return cardData.maxForms > 1 && cardData.canToggleOnUpgrade;
+        return maxForms() > 1 && cardData.canToggleOnUpgrade;
     }
 
     protected boolean isEffectPlayable(AbstractMonster m) {
@@ -1218,7 +1212,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public boolean isMultiUpgrade() {
-        return maxUpgradeLevel < 0 || maxUpgradeLevel > 1;
+        int max = maxUpgrades();
+        return max < 0 || max > 1;
     }
 
     public boolean isOnScreen() {
@@ -1379,12 +1374,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @Override
     public int maxForms() {
-        return cardData.maxForms;
+        return cardData != null ? cardData.maxForms : 1;
     }
 
     @Override
     public int maxUpgrades() {
-        return maxUpgradeLevel;
+        return cardData != null ? cardData.maxUpgradeLevel : 1;
     }
 
     protected float modifyBlock(PCLUseInfo info, float amount) {
@@ -1462,35 +1457,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (data != null) {
             changeForm(data.form, timesUpgraded);
             this.auxiliaryData = new PCLCardSaveData(data);
-            if (data.modifiedUpgradeLevel != 0 && maxUpgradeLevel > 0) {
-                maxUpgradeLevel += data.modifiedUpgradeLevel;
-            }
-            if (data.modifiedDamage != 0) {
-                GameUtilities.modifyDamage(this, baseDamage + data.modifiedDamage, false, false);
-            }
-            if (data.modifiedBlock != 0) {
-                GameUtilities.modifyBlock(this, baseBlock + data.modifiedBlock, false, false);
-            }
-            if (data.modifiedMagicNumber != 0) {
-                GameUtilities.modifyMagicNumber(this, baseMagicNumber + data.modifiedMagicNumber, false);
-            }
-            if (data.modifiedHeal != 0) {
-                updateHeal(baseHeal + data.modifiedHeal);
-            }
-            if (data.modifiedHitCount != 0) {
-                updateHitCount(baseHitCount + data.modifiedHitCount);
-            }
-            if (data.modifiedRightCount != 0) {
-                updateRightCount(baseRightCount + data.modifiedRightCount);
-            }
-            if (cost >= 0 && data.modifiedCost != 0) {
-                GameUtilities.modifyCostForCombat(this, data.modifiedCost, true);
-            }
-            if (data.modifiedAffinities != null) {
-                for (PCLAffinity affinity : PCLAffinity.basic()) {
-                    affinities.add(affinity, data.modifiedAffinities[affinity.ID]);
-                }
-            }
             if (data.augments != null) {
                 for (String id : data.augments) {
                     PCLAugmentData augment = PCLAugmentData.get(id);
@@ -2275,7 +2241,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.timesUpgraded = timesUpgraded;
         this.upgraded = this.timesUpgraded > 0;
 
-        this.auxiliaryData.form = (form == null) ? 0 : MathUtils.clamp(form, 0, this.getMaxForms() - 1);
+        this.auxiliaryData.form = (form == null) ? 0 : MathUtils.clamp(form, 0, this.maxForms() - 1);
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));
         initializeName();
