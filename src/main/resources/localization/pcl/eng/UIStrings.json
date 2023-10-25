@@ -180,7 +180,7 @@
 												"The name of this item as it appears in-game. Selecting another language under the language dropdown will let you modify this item's name for that language. | If a name is missing for a given language, it will fall back on the English name.",
 												"#yRarity determines how often this card appears in rewards (#yCommon, #yUncommon, or #yRare only). Cards of other rarities must be spawned manually through events or other effects.",
 												"#yTypes categorize cards based on their effects.",
-												"Determines what creatures the card is allowed to be played against.",
+												"Determines what creatures the card is allowed to be played against. | This DOES NOT affecting the targeting of individual effects on this card (except for the primary damage effect).",
 												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per upgrade.",
 												"#yAttack #yTypes affect an #yAttack's damage calculations as well as its interaction with powers on the target.",
 												"The visual effect that plays on the target.",
@@ -225,7 +225,7 @@
 												"Determines what card piles this effect may source its cards from.",
 												"#yOrigin determines the position in the chosen piles that cards are chosen from.",
 												"#yDestination determines the position in this effect's target pile that cards will be placed into.",
-												"Determines the targets that this effect will be actioned on. This target is independent of the card's actual targeting (with the exception of the primary damage effect), but single-target effects require the card's targeting to be single-target as well.",
+												"Determines the targets that this effect will be actioned on. | This target is INDEPENDENT of the card's actual targeting (with the exception of the primary damage effect), but single-target effects require the card's targeting to be single-target as well.",
 												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per stack of this power (negative power stacks will decrease from the total value).",
 												"Determines the number of targets that will be chosen by random targeting.",
 												"Determines how many turns this power will last.",
@@ -687,7 +687,9 @@
 												"Nice! End your turn when you are ready for the next step of this tutorial.",
 												"You have completed this tutorial! If you ever need to see it again, click on the #yReset #yTutorial button on this character's character select page. End your turn to leave this tutorial.",
 												"Step Complete!",
-												"Tutorial Complete!"
+												"Tutorial Complete!",
+												"View Tour",
+												"Highlights various important UI elements on the screen with explanations"
 								]
 				}
 }

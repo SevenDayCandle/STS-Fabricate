@@ -203,6 +203,16 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    @Override
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                tagsDropdown.makeTour(true),
+                targetDropdown.makeTour(true),
+                timingDropdown.makeTour(true),
+                upgradeLabel.makeTour(true)
+        );
+    }
+
     // Lists start off as empty before they are selected. When they are first selected, set the value for the current form to 1
     protected void modifyTags(List<PCLCardTagInfo> tags) {
         int form = screen.currentBuilder;
@@ -240,10 +250,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
-                targetDropdown.makeTour(true),
-                tagsDropdown.makeTour(true),
-                upgradeLabel.makeTour(true));
+        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute, getTour());
     }
 
     @Override

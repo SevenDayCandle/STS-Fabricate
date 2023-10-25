@@ -559,6 +559,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String tutorial_tutorialComplete = tutorial.TEXT[19];
     public final String tutorial_tutorialStepHeader = tutorial.TEXT[20];
     public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[21];
+    public final String tutorial_tour = tutorial.TEXT[22];
+    public final String tutorial_tourDesc = tutorial.TEXT[23];
 
     public PCLCoreStrings(PCLResources<?, ?, ?, ?> resources) {
         super(resources);

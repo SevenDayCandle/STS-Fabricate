@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUILabel;
@@ -98,6 +99,14 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    @Override
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
+                        .setFlash(buttonsPane)
+        );
+    }
+
     public void initializeEffects() {
         rootEffect = deconstructEffect();
 
@@ -107,8 +116,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
-                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
-                        .setFlash(buttonsPane)
+                getTour()
         );
     }
 

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUICanvas;
+import extendedui.ui.tooltips.EUITourTooltip;
 
 public abstract class PCLCustomGenericPage extends EUICanvas {
     protected static final float START_X = screenW(0.25f);
@@ -28,6 +29,8 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
     abstract public TextureCache getTextureCache();
 
     abstract public String getTitle();
+
+    abstract public EUITourTooltip[] getTour();
 
     abstract public void refresh();
 }

@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.*;
@@ -18,10 +19,16 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.ui.EUIBase;
 import extendedui.ui.cardFilter.CountingPanel;
+import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
+import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.utilities.EUIColors;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
@@ -117,6 +124,7 @@ public class PGR {
     public static PCLDebugPotionPanel debugPotions;
     public static PCLDebugRelicPanel debugRelics;
     public static EUIImage blackScreen;
+    public static EUIButton helpMeButton;
 
     public static void addAugmentStrings(String jsonString) {
         PGR.AUGMENT_STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, AUGMENT_TYPE)));
@@ -278,6 +286,8 @@ public class PGR {
     }
 
     protected static void initializeUI() {
+        PGR.helpMeButton = new EUIButton(EUIRM.images.info.texture(), new EUIHitbox(Settings.WIDTH - EUIBase.scale(72f), Settings.HEIGHT - EUIBase.scale(72f), EUIBase.scale(48f), EUIBase.scale(48f)))
+                .setTooltip(PGR.core.strings.tutorial_tour, PGR.core.strings.tutorial_tourDesc);
         PGR.cardPopup = new PCLSingleCardPopup();
         PGR.relicPopup = new PCLSingleRelicPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();

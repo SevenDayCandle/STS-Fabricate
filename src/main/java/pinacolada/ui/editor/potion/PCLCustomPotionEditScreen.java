@@ -28,11 +28,8 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion> {
-    protected EUIToggle upgradeToggle;
     protected PCLDynamicPotion preview;
     protected PCLCustomImageEffect imageEditor;
-    protected PCLCustomFormEditor formEditor;
-    protected EUIButton imageButton;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
@@ -104,15 +101,6 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
                 .setOnToggle(this::toggleViewUpgrades);
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
-
-        invalidateItems();
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
-                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
-                formEditor.add.makeTour(true),
-                formEditor.remove.makeTour(true),
-                imageButton.makeTour(true),
-                undoButton.makeTour(true),
-                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {

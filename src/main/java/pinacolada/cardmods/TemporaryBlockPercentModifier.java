@@ -49,7 +49,7 @@ public class TemporaryBlockPercentModifier extends AbstractCardModifier {
     }
 
     @Override
-    public float modifyBlock(float block, AbstractCard card) {
+    public float modifyBaseBlock(float block, AbstractCard card) {
         return block + block * change / 100f;
     }
 

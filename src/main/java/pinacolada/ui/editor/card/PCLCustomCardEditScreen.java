@@ -32,13 +32,9 @@ import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
 public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard> {
-
-    protected EUIToggle upgradeToggle;
     protected PCardPrimary_DealDamage currentDamage;
     protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
-    protected PCLCustomFormEditor formEditor;
-    protected EUIButton imageButton;
     protected Texture loadedImage;
 
     public PCLCustomCardEditScreen(PCLCustomCardSlot slot) {
@@ -122,14 +118,6 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
                 .setOnToggle(this::toggleViewUpgrades);
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
-        invalidateItems();
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
-                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
-                formEditor.add.makeTour(true),
-                formEditor.remove.makeTour(true),
-                imageButton.makeTour(true),
-                undoButton.makeTour(true),
-                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {

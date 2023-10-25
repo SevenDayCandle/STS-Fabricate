@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUILabel;
@@ -150,14 +151,9 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
-    protected void modifyMaxUpgrades(int min, int max) {
-        effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
-        effect.upgradeToggle.setActive(max > 0);
-    }
-
     @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourPowerPrimary,
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
@@ -165,7 +161,18 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 endTurnBehaviorDropdown.makeTour(true),
                 minMaxAmount.makeTour(true),
                 priority.makeTour(true),
-                turns.makeTour(true));
+                turns.makeTour(true)
+        );
+    }
+
+    protected void modifyMaxUpgrades(int min, int max) {
+        effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
+        effect.upgradeToggle.setActive(max > 0);
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourPowerPrimary, getTour());
     }
 
     @Override

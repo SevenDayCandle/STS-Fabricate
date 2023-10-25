@@ -7,6 +7,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
+import extendedui.configuration.STSConfigItem;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUIToggle;
@@ -27,10 +29,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData, PCLDynamicRelic> {
-    protected EUIToggle upgradeToggle;
     protected PCLDynamicRelic previewRelic;
-    protected PCLCustomFormEditor formEditor;
-    protected EUIButton imageButton;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
@@ -102,15 +101,6 @@ public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCusto
                 .setOnToggle(this::toggleViewUpgrades);
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
-
-        invalidateItems();
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
-                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
-                formEditor.add.makeTour(true),
-                formEditor.remove.makeTour(true),
-                imageButton.makeTour(true),
-                undoButton.makeTour(true),
-                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {
@@ -160,5 +150,4 @@ public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCusto
     protected void updateVariant() {
         formEditor.refresh();
     }
-
 }

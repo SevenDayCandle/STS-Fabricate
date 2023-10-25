@@ -37,6 +37,7 @@ import pinacolada.actions.orbs.EvokeOrb;
 import pinacolada.actions.orbs.RemoveOrb;
 import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.piles.*;
+import pinacolada.actions.player.GainOrLoseGoldAction;
 import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.AddPowerEffectBonus;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
@@ -394,8 +395,8 @@ public final class PCLActions {
         return add(new GainEnergyAction(amount));
     }
 
-    public GainGoldAction gainGold(int amount) {
-        return add(new GainGoldAction(amount));
+    public GainOrLoseGoldAction gainGold(int amount) {
+        return add(new GainOrLoseGoldAction(amount));
     }
 
     public IncreaseMaxOrbAction gainOrbSlots(int slots) {

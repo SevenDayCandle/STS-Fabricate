@@ -241,7 +241,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
         updateEffect();
         if (this.hb.hovered) {
-            EUITooltip.queueTooltips(this);
+            renderTip();
             this.scale = 1.25F * Settings.scale;
         }
         else {
@@ -272,6 +272,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         if (this.hb != null) {
             this.hb.render(sb);
         }
+    }
+
+    public void renderTip() {
+        EUITooltip.queueTooltips(this);
     }
 
     @Override

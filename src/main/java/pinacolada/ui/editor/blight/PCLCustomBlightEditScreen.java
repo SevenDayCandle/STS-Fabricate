@@ -27,10 +27,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight> {
-    protected EUIToggle upgradeToggle;
     protected PCLDynamicBlight previewBlight;
-    protected PCLCustomFormEditor formEditor;
-    protected EUIButton imageButton;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
@@ -103,15 +100,6 @@ public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCust
                 .setOnToggle(this::toggleViewUpgrades);
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
-
-        invalidateItems();
-        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
-                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
-                formEditor.add.makeTour(true),
-                formEditor.remove.makeTour(true),
-                imageButton.makeTour(true),
-                undoButton.makeTour(true),
-                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {

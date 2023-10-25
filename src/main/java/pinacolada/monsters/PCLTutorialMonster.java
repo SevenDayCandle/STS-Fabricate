@@ -129,7 +129,6 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
                 PCLActions.bottom.add(new HealAction(this, this, this.maxHealth));
                 this.halfDead = false;
             }
-            EUITourTooltip.clearTutorialQueue();
             waitingTip = steps.get(current).invoke();
             waitingTip.setWaitOnProvider(this)
                     .setDescription(waitingTip.description + EUIUtils.DOUBLE_SPLIT_LINE + PCLCoreStrings.colorString("p", PGR.core.strings.tutorial_tutorialReplay));

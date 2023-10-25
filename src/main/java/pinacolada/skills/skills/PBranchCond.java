@@ -84,7 +84,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
                 return this.effects.get(0).getText(perspective, addPeriod);
             case 2:
                 if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, addPeriod) + " " +
+                    return getCapitalSubText(perspective, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, false) + EFFECT_SEPARATOR +
                             StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, addPeriod)));
                 }
             default:

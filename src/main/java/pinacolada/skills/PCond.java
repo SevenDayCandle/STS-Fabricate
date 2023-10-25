@@ -432,7 +432,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     protected boolean checkChildCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (childEffect instanceof PCond) {
+        if (childEffect instanceof PCond && !(childEffect instanceof PBranchCond)) {
             if (((PCond<?>) childEffect).checkCondition(info, isUsing, triggerSource)) {
                 return ((PCond<?>) childEffect).checkChildCondition(info, isUsing, triggerSource);
             }

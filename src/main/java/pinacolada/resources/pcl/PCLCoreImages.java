@@ -72,7 +72,6 @@ public class PCLCoreImages extends AbstractImages {
         public static final TextureCache editorBlock = new TextureCache("images/pcl/ui/menu/EditorBlock.png");
         public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/menu/EditorEffect.png");
         public static final TextureCache editorPower = new TextureCache("images/pcl/ui/menu/EditorPower.png");
-        public static final TextureCache info = new TextureCache("images/pcl/ui/menu/Info.png");
         public static final TextureCache menuAugmentLibrary = new TextureCache("images/pcl/ui/menu/MenuAugmentLibrary.png");
         public static final TextureCache menuBlight = new TextureCache("images/pcl/ui/menu/MenuBlight.png");
         public static final TextureCache menuCard = new TextureCache("images/pcl/ui/menu/MenuCard.png");

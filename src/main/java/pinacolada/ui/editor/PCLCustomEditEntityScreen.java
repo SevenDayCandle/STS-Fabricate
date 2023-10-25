@@ -7,10 +7,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
+import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
@@ -26,6 +28,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
+import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
@@ -44,7 +47,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public final T currentSlot;
     public final boolean fromInGame;
     protected ActionT0 onSave;
-    protected boolean upgraded;
+    public boolean upgraded;
+    public PCLCustomFormEditor formEditor;
+    public EUIButton imageButton;
+    public EUIToggle upgradeToggle;
     public ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
     public ArrayList<PTrigger> currentPowers = new ArrayList<>();
     public ArrayList<EUIButton> pageButtons = new ArrayList<>();
@@ -55,7 +61,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public EUIButton saveButton;
     public EUIButton undoButton;
     public int currentPage;
-    public ArrayList<U> prevBuilders;
+    private ArrayList<U> prevBuilders;
     public ArrayList<U> tempBuilders;
     public int currentBuilder;
     public PCLEffectWithCallback<?> currentDialog;
@@ -70,6 +76,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         tempBuilders = EUIUtils.map(currentSlot.builders, EditorMaker::makeCopy);
 
         preInitialize(currentSlot);
+        invalidateItems();
+        startTour();
         setupPages();
         openPageAtIndex(0);
     }
@@ -131,6 +139,15 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         return EFFECT_COUNT;
     }
 
+    protected EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                formEditor != null ? new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true) : null,
+                imageButton != null ? imageButton.makeTour(true) : null,
+                undoButton.makeTour(true),
+                saveButton.makeTour(true)
+        );
+    }
+
     protected void makeEffectPage(int index) {
         PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
                 , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1), (be) -> updateEffect(index, be));
@@ -167,6 +184,13 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             pageButtons.get(j).setColor(j == index ? Color.WHITE : Color.GRAY);
         }
         pages.get(index).onOpen();
+        PGR.helpMeButton.setOnClick(() -> {
+                if (EUITourTooltip.isQueueEmpty()) {
+                    EUITourTooltip.queueTutorial(pages.get(index).getTour());
+                    EUITourTooltip.queueTutorial(getTour());
+                }
+            }
+        );
     }
 
     public void preInitialize(T currentSlot) {
@@ -220,6 +244,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         for (EUIButton b : pageButtons) {
             b.tryRender(sb);
         }
+        PGR.helpMeButton.tryRender(sb);
     }
 
     protected void save() {
@@ -264,6 +289,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         setupPageButtons();
     }
 
+    protected void startTour() {
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm, getTour());
+    }
+
     protected void toggleViewUpgrades(boolean value) {
         upgraded = value;
     }
@@ -296,6 +325,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         for (EUIButton b : pageButtons) {
             b.tryUpdate();
         }
+        PGR.helpMeButton.tryUpdate();
     }
 
     @Override

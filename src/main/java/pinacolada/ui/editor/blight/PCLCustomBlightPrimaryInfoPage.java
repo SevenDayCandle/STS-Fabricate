@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -129,14 +130,9 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
-    protected void modifyMaxUpgrades(int val) {
-        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
-    }
-
     @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourBlightPrimary,
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
@@ -145,6 +141,16 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
                 branchUpgrades.makeTour(true),
                 uniqueToggle.makeTour(true)
         );
+    }
+
+    protected void modifyMaxUpgrades(int val) {
+        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
+        effect.upgradeToggle.setActive(val != 0);
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourBlightPrimary, getTour());
     }
 
     @Override

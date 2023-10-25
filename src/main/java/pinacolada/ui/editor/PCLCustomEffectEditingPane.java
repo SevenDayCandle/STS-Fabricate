@@ -21,6 +21,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.BlightTier;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.EUIFontHelper;
@@ -515,6 +516,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return editor.getTitle();
+    }
+
+    @Override
+    public EUITourTooltip[] getTour() {
+        return new EUITourTooltip[0];
     }
 
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {

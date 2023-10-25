@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -155,6 +156,19 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
+    @Override
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                idInput.makeTour(true),
+                nameInput.makeTour(true),
+                languageDropdown.makeTour(true),
+                tierDropdown.makeTour(true),
+                sfxDropdown.makeTour(true),
+                maxUpgrades.makeTour(true),
+                branchUpgrades.makeTour(true)
+        );
+    }
+
     protected void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
         effect.upgradeToggle.setActive(val != 0);
@@ -162,14 +176,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
-                idInput.makeTour(true),
-                nameInput.makeTour(true),
-                languageDropdown.makeTour(true),
-                tierDropdown.makeTour(true),
-                sfxDropdown.makeTour(true),
-                maxUpgrades.makeTour(true),
-                branchUpgrades.makeTour(true));
+        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary, getTour());
     }
 
     @Override

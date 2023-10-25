@@ -221,6 +221,15 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                 : ContextOption.values();
     }
 
+    protected EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                addButton.makeTour(true),
+                loadExistingButton.makeTour(true),
+                openButton.makeTour(true),
+                reloadButton.makeTour(true)
+        );
+    }
+
     public void loadFromExisting() {
     }
 
@@ -245,11 +254,8 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         super.open();
         savedFilters.clear(true);
         openImpl(playerClass, cardColor);
-        EUITourTooltip.queueFirstView(PGR.config.tourItemScreen,
-                addButton.makeTour(true),
-                openButton.makeTour(true),
-                loadExistingButton.makeTour(true),
-                reloadButton.makeTour(true));
+        PGR.helpMeButton.setOnClick(() -> EUITourTooltip.queueTutorial(getTour()));
+        EUITourTooltip.queueFirstView(PGR.config.tourItemScreen, getTour());
     }
 
     protected void openImpl(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor) {
@@ -314,6 +320,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
             currentDialog.render(sb);
         }
         else {
+            PGR.helpMeButton.tryRender(sb);
             grid.tryRender(sb);
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
@@ -347,6 +354,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
             contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !getFilters().tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
+                PGR.helpMeButton.tryUpdate();
                 EUI.openFiltersButton.tryUpdate();
                 EUIExporter.exportButton.tryUpdate();
                 EUI.sortHeader.update();

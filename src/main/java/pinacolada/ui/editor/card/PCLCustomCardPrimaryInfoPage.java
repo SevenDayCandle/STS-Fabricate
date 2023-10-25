@@ -241,14 +241,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         return header.text;
     }
 
-    protected void modifyMaxUpgrades(int val) {
-        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
-    }
-
     @Override
-    public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary,
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
@@ -258,8 +253,20 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 maxUpgrades.makeTour(true),
                 maxCopies.makeTour(true),
                 branchUpgrades.makeTour(true),
+                loadoutValue.makeTour(true),
                 uniqueToggle.makeTour(true),
-                soulboundToggle.makeTour(true));
+                soulboundToggle.makeTour(true)
+        );
+    }
+
+    protected void modifyMaxUpgrades(int val) {
+        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
+        effect.upgradeToggle.setActive(val != 0);
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary, getTour());
     }
 
     protected void openFlagCreator(String title, PCLCustomFlagInfo flag) {

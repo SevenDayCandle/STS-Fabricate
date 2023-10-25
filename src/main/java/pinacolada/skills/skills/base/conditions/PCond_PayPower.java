@@ -65,6 +65,10 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        if (!conditionMetCache) {
+            return order.callback(() -> onFail.invoke(info));
+        }
+
         AbstractCreature sourceCreature = getSourceCreature();
 
         if (baseAmount <= 0) {

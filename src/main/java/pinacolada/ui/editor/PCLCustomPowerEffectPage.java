@@ -57,8 +57,20 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     }
 
     @Override
+    public EUITourTooltip[] getTour() {
+        return EUIUtils.array(
+                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
+                        .setFlash(buttonsPane),
+                quickAddButton.makeTour(true)
+        );
+    }
+
+    @Override
     public void onOpen() {
-        super.onOpen();
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
+                new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
+                        .setFlash(buttonsPane)
+        );
         EUITourTooltip.queueFirstView(PGR.config.tourEditorPower,
                 quickAddButton.makeTour(true)
         );
