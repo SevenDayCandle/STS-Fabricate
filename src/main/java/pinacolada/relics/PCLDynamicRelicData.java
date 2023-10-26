@@ -48,6 +48,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         setBranchFactor(original.branchFactor);
         setCounter(original.counter.clone(), original.counterUpgrade.clone());
         setLoadoutValue(original.getLoadoutValue());
+        if (original.replacementIDs != null) {
+            setReplacementIDs(original.replacementIDs.clone());
+        }
     }
 
     public PCLDynamicRelicData(PCLDynamicRelicData original) {
@@ -64,6 +67,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
+        if (original.replacementIDs != null) {
+            setReplacementIDs(original.replacementIDs.clone());
+        }
     }
 
     public PCLDynamicRelicData(PCLCustomRelicSlot data, PCLCustomEditorLoadable.EffectItemForm f) {
@@ -79,6 +85,11 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
         safeLoadValue(() -> setLoadoutValue(data.loadoutValue));
+        safeLoadValue(() -> {
+            if (data.replacementIDs != null) {
+                setReplacementIDs(data.replacementIDs);
+            }
+        });
     }
 
     protected static RelicStrings getInitialStrings() {

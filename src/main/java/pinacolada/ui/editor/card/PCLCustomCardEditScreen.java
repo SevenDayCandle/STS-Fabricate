@@ -8,11 +8,9 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -27,7 +25,6 @@ import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
-import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 

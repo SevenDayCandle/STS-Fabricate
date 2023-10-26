@@ -327,29 +327,6 @@ public class AbstractDungeonPatches {
         }
     }
 
-    @SpirePatch(
-            clz = AbstractDungeon.class,
-            method = "nextRoomTransition"
-            , paramtypez = {SaveFile.class}
-    )
-    public static class AbstractDungeonPatches_NextRoomTransition {
-
-        // This must be initialized before the battle starts
-        @SpireInsertPatch(
-                locator = Locator.class
-        )
-        public static void Insert(AbstractDungeon __instance) {
-            CombatManager.onStartup();
-        }
-
-        private static class Locator extends SpireInsertLocator {
-            public int[] Locate(CtBehavior ctBehavior) throws Exception {
-                Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer.class, "preBattlePrep");
-                return LineFinder.findInOrder(ctBehavior, matcher);
-            }
-        }
-    }
-
     private static class RandomLocator extends SpireInsertLocator {
         public int[] Locate(CtBehavior ctBehavior) throws Exception {
             Matcher matcher = new Matcher.MethodCallMatcher(Random.class, "random");

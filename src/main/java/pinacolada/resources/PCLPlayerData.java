@@ -40,6 +40,8 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public static final int DEFAULT_DRAW = 5;
     public static final int DEFAULT_ENERGY = 3;
     public static final int DEFAULT_ORBS = 0;
+    public static final int MINIMUM_CARDS = 70;
+    public static final int MINIMUM_COLORLESS = 30;
     public static final ArrayList<AbstractGlyph> GLYPHS = new ArrayList<>();
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<String, PCLLoadoutStats> stats = new HashMap<>();
@@ -50,6 +52,8 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public final int baseDraw;
     public final int baseEnergy;
     public final int baseOrbs;
+    public final int minimumCards;
+    public final int minimumColorless;
     public final boolean useSummons;
     public final boolean useAugments;
     protected boolean hasTutorials;
@@ -57,10 +61,10 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public PCLLoadout selectedLoadout;
 
     public PCLPlayerData(T resources) {
-        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
+        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, MINIMUM_CARDS, MINIMUM_COLORLESS, true, true);
     }
 
-    public PCLPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
+    public PCLPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, int minCards, int minColorless, boolean useSummons, boolean useAugments) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
@@ -69,6 +73,8 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         this.baseDraw = draw;
         this.baseEnergy = energy;
         this.baseOrbs = orbs;
+        this.minimumCards = minCards;
+        this.minimumColorless = minColorless;
         this.useSummons = useSummons;
         this.useAugments = useAugments;
         this.characterID = resources.createID(getCharacterClass().getSimpleName());

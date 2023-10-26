@@ -40,10 +40,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.megacrit.cardcrawl.rewards.RewardItem.TEXT;
 
@@ -183,7 +180,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     public boolean canSpawn() {
-        return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
+        return (relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor())) &&
+                (relicData.replacementIDs == null || relicData.replacementIDs.length == 0 || EUIUtils.all(relicData.replacementIDs, r -> AbstractDungeon.player.hasRelic(r)));
     }
 
     public boolean canUpgrade() {
@@ -265,11 +263,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         final int w = texture.getWidth();
         final int section = h / 2;
         return new TextureAtlas.AtlasRegion(texture, (w / 2) - (section / 2), (h / 2) - (section / 2), section, section);
-    }
-
-    // Relics that are replaced with this one when obtained
-    public PCLRelicData[] getReplacementIDs() {
-        return null;
     }
 
     protected float getRotation() {
@@ -546,9 +539,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     }
 
     protected boolean tryRetain(boolean callOnEquip) {
-        PCLRelicData[] replacements = getReplacementIDs();
-        if (replacements != null) {
-            Set<String> ids = new HashSet<>(EUIUtils.map(replacements, r -> r.ID));
+        if (relicData.replacementIDs != null && relicData.replacementIDs.length > 0) {
+            Set<String> ids = EUIUtils.set(relicData.replacementIDs);
             ArrayList<AbstractRelic> relics = player.relics;
             for (int i = 0; i < relics.size(); i++) {
                 AbstractRelic old = relics.get(i);
@@ -572,9 +564,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = usedUp ? MSG[2] : getDescriptionImpl();
-        PCLRelicData[] replacements = getReplacementIDs();
-        if (replacements != null) {
-            String joinedNames = PCLCoreStrings.joinWithAnd(r -> r.strings.NAME, replacements);
+        if (relicData != null && relicData.replacementIDs != null && relicData.replacementIDs.length > 0) {
+            String joinedNames = PCLCoreStrings.joinWithAnd(GameUtilities::getRelicNameForID, relicData.replacementIDs);
             String replaceString = PCLCoreStrings.colorString("i", EUIUtils.format(PGR.core.strings.misc_replaces, joinedNames));
             this.description = EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, replaceString, this.description);
         }

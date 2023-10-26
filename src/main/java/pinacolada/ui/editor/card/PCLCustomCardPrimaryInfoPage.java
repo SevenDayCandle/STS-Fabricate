@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.relics.BlackBlood;
+import com.megacrit.cardcrawl.relics.BurningBlood;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
@@ -154,7 +156,10 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnClick(() -> this.openFlagCreator(PGR.core.strings.cedit_newFlag, null))
                 .setTooltip(PGR.core.strings.cedit_newFlag, "");
 
-        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
+        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.51f), MENU_WIDTH, MENU_HEIGHT), (item -> {
+                    String res = item.getName();
+                    return StringUtils.isEmpty(res) ? EUIRM.strings.ui_na : res;
+                }))
                 .setOnChange(selectedSeries -> {
                     setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null);
                 })
@@ -162,13 +167,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
                 .setTooltip(PGR.core.strings.sui_seriesUI, "");
-        addLoadoutButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+        addLoadoutButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(START_X, screenH(0.51f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_newLoadout, null))
                 .setTooltip(PGR.core.strings.cedit_newLoadout, "");
-        editLoadoutButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+        editLoadoutButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(START_X, screenH(0.51f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openLoadoutCreator(PGR.core.strings.cedit_renameItem, EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
                 .setTooltip(PGR.core.strings.cedit_renameItem, "");
-        deleteLoadoutButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new EUIHitbox(START_X, screenH(0.5f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+        deleteLoadoutButton = new EUIButton(PCLCoreImages.Menu.delete.texture(), new EUIHitbox(START_X, screenH(0.51f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> this.openLoadoutDelete(EUIUtils.safeCast(effect.getBuilder().loadout, PCLCustomLoadout.class)))
                 .setTooltip(PGR.core.strings.cedit_deleteItem, "");
 

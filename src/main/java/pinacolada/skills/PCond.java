@@ -24,6 +24,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PBranchCond;
 import pinacolada.skills.skills.PMultiCond;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
@@ -541,7 +542,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     public boolean isUnderWhen(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return callingSkill instanceof PTrigger_When && !(parentSkill instanceof PCond);
+        return callingSkill instanceof PTrigger_When && (parentSkill == callingSkill || parentSkill instanceof PMultiCond && parentSkill.parent == callingSkill);
     }
 
     /*

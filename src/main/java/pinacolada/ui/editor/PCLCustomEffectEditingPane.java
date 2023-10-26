@@ -67,11 +67,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.4f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 3.16f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
-    private static ArrayList<AbstractBlight> availableBlights;
-    private static ArrayList<AbstractCard> availableCards;
-    private static ArrayList<AbstractPotion> availablePotions;
-    private static ArrayList<PCLPowerData> availablePowers;
-    private static ArrayList<AbstractRelic> availableRelics;
     private final ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     private PSkill<?> lastEffect;
     private float additionalHeight;
@@ -98,14 +93,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.backdrop.setColor(Color.GRAY);
         initializeSelectors();
         refresh();
-    }
-
-    public static void invalidateItems() {
-        availableBlights = null;
-        availableCards = null;
-        availablePotions = null;
-        availablePowers = null;
-        availableRelics = null;
     }
 
     public void changeAmountForSkill(PSkill<?> skill, int val, int upVal) {
@@ -269,82 +256,19 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     protected ArrayList<AbstractCard> getAvailableCards() {
-        if (availableCards == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                boolean isPCLColor = GameUtilities.isPCLOnlyCardColor(getColor());
-                // Filter template replacements
-                availableCards = EUIUtils.filter(CardLibrary.cards.values(), c -> !PGR.core.filterColorless(c));
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), PCLCustomCardSlot::make));
-            }
-            else {
-                AbstractCard.CardColor cardColor = getColor();
-                availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
-                        EUIUtils.filterInPlace(CardLibrary.getAllCards(),
-                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
-                }
-            }
-            availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return availableCards;
+        return PCLCustomEditEntityScreen.getAvailableCards(getColor());
     }
 
     protected ArrayList<AbstractBlight> getAvailableBlights() {
-        if (availableBlights == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                availableBlights = EUIGameUtils.getAllBlights();
-                availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
-            }
-            else {
-                AbstractCard.CardColor cardColor = getColor();
-                availableBlights = EUIGameUtils.getAllBlights();
-                availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
-                }
-            }
-            availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return availableBlights;
+        return PCLCustomEditEntityScreen.getAvailableBlights(getColor());
     }
 
     protected ArrayList<AbstractPotion> getAvailablePotions() {
-        if (availablePotions == null) {
-            availablePotions = new ArrayList<>(GameUtilities.getPotions(null));
-            availablePotions.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return availablePotions;
-    }
-
-    protected ArrayList<PCLPowerData> getAvailablePowers() {
-        if (availablePowers == null) {
-            availablePowers = new ArrayList<>(PCLPowerData.getAllData());
-            availablePowers.addAll(EUIUtils.map(PCLCustomPowerSlot.getAll().values(), slot -> slot.getBuilder(0)));
-            availablePowers.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
-        }
-        return availablePowers;
+        return PCLCustomEditEntityScreen.getAvailablePotions(getColor());
     }
 
     protected ArrayList<AbstractRelic> getAvailableRelics() {
-        if (availableRelics == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                availableRelics = EUIGameUtils.getAllRelics();
-                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
-            }
-            else {
-                AbstractCard.CardColor cardColor = getColor();
-                availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
-                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
-                    availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
-                }
-            }
-            availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return availableRelics;
+        return PCLCustomEditEntityScreen.getAvailableRelics(getColor());
     }
 
     public EditorMaker getBuilder() {
@@ -1011,7 +935,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerPower(List<String> powerIDs) {
-        registerDropdown(initializeSmartSearchable(getAvailablePowers(), PGR.core.strings.cedit_powers, this::getSmartSearchableLabel),
+        registerDropdown(initializeSmartSearchable(PCLCustomEditEntityScreen.getAvailablePowers(), PGR.core.strings.cedit_powers, this::getSmartSearchableLabel),
                 powers -> {
                     powerIDs.clear();
                     powerIDs.addAll(EUIUtils.mapAsNonnull(powers, t -> t.ID));

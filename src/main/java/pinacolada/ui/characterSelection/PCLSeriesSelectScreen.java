@@ -48,8 +48,6 @@ import java.util.stream.Collectors;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractMenuScreen {
-    public static final int MINIMUM_CARDS = 75; // 75
-    public static final int MINIMUM_COLORLESS = 40;
     public final EUICardGrid cardGrid;
     public final EUIButton resetPoolButton;
     public final EUIButton resetBanButton;
@@ -214,6 +212,10 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
 
         for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
+            String replacement = data.resources.getReplacement(c.cardID);
+            if (replacement != null) {
+                c = CardLibrary.getCard(replacement);
+            }
             if (isRarityAllowed(c.rarity, c.type) &&
                     data.resources.containsColorless(c) && !bannedColorless.contains(c.cardID)) {
                 shownColorlessCards.add(c);
@@ -446,7 +448,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public boolean isValid() {
-        return shownCards.size() >= PCLSeriesSelectScreen.MINIMUM_CARDS && shownColorlessCards.size() >= PCLSeriesSelectScreen.MINIMUM_COLORLESS;
+        return shownCards.size() >= data.minimumCards && shownColorlessCards.size() >= data.minimumColorless;
     }
 
     protected void onCardClicked(AbstractCard card) {
@@ -647,18 +649,19 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         PCLLoadout cur = loadoutMap.get(currentSeriesCard);
         typesAmount.setLabel(PGR.core.strings.sui_totalCards(
                 cur != null && !selectedLoadouts.contains(cur.ID) ? 1 + selectedLoadouts.size() : selectedLoadouts.size(),
-                totalCards >= MINIMUM_CARDS ? "g" : "r",
+                totalCards >= data.minimumCards ? "g" : "r",
                 totalCards,
-                MINIMUM_CARDS,
-                totalColorless >= MINIMUM_COLORLESS ? "g" : "r",
+                data.minimumCards,
+                totalColorless >= data.minimumColorless ? "g" : "r",
                 totalColorless,
-                MINIMUM_COLORLESS));
+                data.minimumColorless));
 
         confirm.setInteractable(isValid());
     }
 
     public void unbanAll() {
         bannedCards.clear();
+        bannedColorless.clear();
         calculateCardCounts();
     }
 

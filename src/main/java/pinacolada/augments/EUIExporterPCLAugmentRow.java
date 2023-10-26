@@ -1,7 +1,6 @@
 package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.exporter.EUIExporter;
@@ -9,15 +8,14 @@ import extendedui.exporter.EUIExporterRow;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class EUIExporterPCLAugmentRow extends EUIExporterRow {
     public static final EUIExporter.Exportable<PCLAugmentRenderable> augmentExportable = new EUIExporter.Exportable<>(EUIExporterPCLAugmentRow::exportAugment);
 
-    public String category;
-    public String subCategory;
-    public int tier;
-    public String description;
+    public String Category;
+    public String Subcategory;
+    public int Tier;
+    public String Description;
 
     public EUIExporterPCLAugmentRow(PCLAugmentRenderable augment) {
         this(augment.augment);
@@ -25,10 +23,10 @@ public class EUIExporterPCLAugmentRow extends EUIExporterRow {
 
     public EUIExporterPCLAugmentRow(PCLAugment augment) {
         super(augment.ID, augment, AbstractCard.CardColor.COLORLESS, augment.getName());
-        category = augment.data.category.getName();
-        subCategory = augment.data.categorySub.getName();
-        tier = augment.data.tier;
-        description = augment.getFullText();
+        Category = augment.data.category.getName();
+        Subcategory = augment.data.categorySub.getName();
+        Tier = augment.data.tier;
+        Description = augment.getFullText();
     }
 
     public static void exportAugment(Iterable<? extends PCLAugmentRenderable> cards, EUIExporter.ExportType type) {

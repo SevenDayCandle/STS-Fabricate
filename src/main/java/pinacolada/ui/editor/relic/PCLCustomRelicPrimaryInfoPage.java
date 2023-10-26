@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -22,6 +23,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
@@ -30,6 +32,7 @@ import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
@@ -38,8 +41,8 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
-    protected EUITextBoxInput flavorInput; // TODO implement this once you have multi-line input available
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
+    protected EUISearchableDropdown<AbstractRelic> replacementDropdown;
     protected EUIDropdown<AbstractRelic.RelicTier> tierDropdown;
     protected EUIDropdown<AbstractRelic.LandingSound> sfxDropdown;
     protected EUILabel idWarning;
@@ -118,6 +121,14 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(AbstractRelic.LandingSound.values())
                 .setTooltip(EUIRM.strings.relic_landingSound, PGR.core.strings.cetut_landingSound);
+        replacementDropdown = (EUISearchableDropdown<AbstractRelic>) new EUISearchableDropdown<AbstractRelic>(new EUIHitbox(START_X, screenH(0.51f), MENU_WIDTH, MENU_HEIGHT), relic -> relic.name)
+                .setOnChange(selectedSeries -> {
+                    effect.modifyAllBuilders((e, i) -> e.setReplacementIDs(EUIUtils.arrayMapAsNonnull(selectedSeries, String.class, s -> s.relicId)));
+                })
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_relicReplace)
+                .setCanAutosizeButton(true)
+                .setIsMultiSelect(true)
+                .setTooltip(PGR.core.strings.cedit_relicReplace, PGR.core.strings.cetut_relicReplace);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
@@ -164,6 +175,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 languageDropdown.makeTour(true),
                 tierDropdown.makeTour(true),
                 sfxDropdown.makeTour(true),
+                replacementDropdown.makeTour(true),
                 maxUpgrades.makeTour(true),
                 branchUpgrades.makeTour(true)
         );
@@ -177,6 +189,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary, getTour());
+        replacementDropdown.setItems(PCLCustomEditEntityScreen.getAvailableRelics(effect.getBuilder().cardColor));
     }
 
     @Override
@@ -189,6 +202,14 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
         loadoutValue.setValue(effect.getBuilder().getLoadoutValue(), false);
 
+        String[] replacements = effect.getBuilder().replacementIDs;
+        if (replacements != null) {
+            replacementDropdown.setSelection(Arrays.asList(replacements), r -> r.relicId, false);
+        }
+        else {
+            replacementDropdown.setSelection(Collections.emptyList(), false);
+        }
+
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
 
@@ -198,6 +219,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idWarning.tryRender(sb);
         tierDropdown.tryRender(sb);
         sfxDropdown.tryRender(sb);
+        replacementDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
@@ -213,6 +235,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         idWarning.tryUpdate();
         tierDropdown.tryUpdate();
         sfxDropdown.tryUpdate();
+        replacementDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();

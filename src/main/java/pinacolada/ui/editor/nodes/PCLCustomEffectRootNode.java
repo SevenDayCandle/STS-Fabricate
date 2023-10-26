@@ -68,12 +68,16 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
 
     public void refresh() {
         setText(skill.getSampleText(null, null));
-        this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
+        this.tooltip = new EUIHeaderlessTooltip(
+                editor instanceof PCLCustomAttackEffectPage ? PGR.core.strings.cetut_blankAttack :
+                editor instanceof PCLCustomBlockEffectPage ? PGR.core.strings.cetut_blankBlock :
+                EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary)
+        );
     }
 
-    // On power pages, we should not be able to put in anything unless we have a primary set
+    // On power/attack/block pages, we should not be able to put in anything unless we have a primary set
     public boolean shouldReject(PCLCustomEffectHologram current) {
-        return editor instanceof PCLCustomPowerEffectPage;
+        return editor instanceof PCLCustomPowerEffectPage || editor instanceof PCLCustomAttackEffectPage || editor instanceof PCLCustomBlockEffectPage;
     }
 
     public void startEdit() {

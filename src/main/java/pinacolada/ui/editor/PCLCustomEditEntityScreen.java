@@ -3,11 +3,16 @@ package pinacolada.ui.editor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
-import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
@@ -17,18 +22,26 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
-import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
@@ -44,6 +57,11 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float BUTTON_CY = BUTTON_HEIGHT * 1.5f;
     public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
     public static final int EFFECT_COUNT = 3;
+    private static ArrayList<AbstractRelic> availableRelics;
+    private static ArrayList<PCLPowerData> availablePowers;
+    private static ArrayList<AbstractPotion> availablePotions;
+    private static ArrayList<AbstractCard> availableCards;
+    private static ArrayList<AbstractBlight> availableBlights;
     public final T currentSlot;
     public final boolean fromInGame;
     protected ActionT0 onSave;
@@ -80,6 +98,90 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         startTour();
         setupPages();
         openPageAtIndex(0);
+    }
+
+    public static ArrayList<AbstractCard> getAvailableCards(AbstractCard.CardColor cardColor) {
+        if (PCLCustomEditEntityScreen.availableCards == null) {
+            if (PGR.config.showIrrelevantProperties.get()) {
+                boolean isPCLColor = GameUtilities.isPCLOnlyCardColor(cardColor);
+                // Filter template replacements
+                PCLCustomEditEntityScreen.availableCards = EUIUtils.filter(CardLibrary.cards.values(), c -> !PGR.core.filterColorless(c));
+                PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), PCLCustomCardSlot::make));
+            }
+            else {
+                PCLCustomEditEntityScreen.availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
+                        EUIUtils.filterInPlace(CardLibrary.getAllCards(),
+                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
+                PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
+                }
+            }
+            PCLCustomEditEntityScreen.availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return PCLCustomEditEntityScreen.availableCards;
+    }
+
+    public static ArrayList<AbstractBlight> getAvailableBlights(AbstractCard.CardColor cardColor) {
+        if (PCLCustomEditEntityScreen.availableBlights == null) {
+            if (PGR.config.showIrrelevantProperties.get()) {
+                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
+                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
+            }
+            else {
+                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
+                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
+                }
+            }
+            PCLCustomEditEntityScreen.availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return PCLCustomEditEntityScreen.availableBlights;
+    }
+
+    public static ArrayList<AbstractPotion> getAvailablePotions(AbstractCard.CardColor cardColor) {
+        if (PCLCustomEditEntityScreen.availablePotions == null) {
+            PCLCustomEditEntityScreen.availablePotions = new ArrayList<>(GameUtilities.getPotions(null));
+            PCLCustomEditEntityScreen.availablePotions.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return PCLCustomEditEntityScreen.availablePotions;
+    }
+
+    public static ArrayList<PCLPowerData> getAvailablePowers() {
+        if (PCLCustomEditEntityScreen.availablePowers == null) {
+            PCLCustomEditEntityScreen.availablePowers = new ArrayList<>(PCLPowerData.getAllData());
+            PCLCustomEditEntityScreen.availablePowers.addAll(EUIUtils.map(PCLCustomPowerSlot.getAll().values(), slot -> slot.getBuilder(0)));
+            PCLCustomEditEntityScreen.availablePowers.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        }
+        return PCLCustomEditEntityScreen.availablePowers;
+    }
+
+    public static ArrayList<AbstractRelic> getAvailableRelics(AbstractCard.CardColor cardColor) {
+        if (PCLCustomEditEntityScreen.availableRelics == null) {
+            if (PGR.config.showIrrelevantProperties.get()) {
+                PCLCustomEditEntityScreen.availableRelics = EUIGameUtils.getAllRelics();
+                PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
+            }
+            else {
+                PCLCustomEditEntityScreen.availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
+                PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    PCLCustomEditEntityScreen.availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
+                    PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
+                }
+            }
+            PCLCustomEditEntityScreen.availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return PCLCustomEditEntityScreen.availableRelics;
+    }
+
+    public static void invalidateItems() {
+        availableBlights = null;
+        availableCards = null;
+        availablePotions = null;
+        availablePowers = null;
+        availableRelics = null;
     }
 
     public void addBuilder() {

@@ -55,7 +55,7 @@ public class PCLCustomEffectHologram extends EUIBase {
         if (highlighted != null) {
             PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCurve(s, ImageMaster.TARGET_UI_ARROW, EUIColors.white(1), highlighted.hb, image.hb, 0, 0.15f, 0f, 6));
             if (highlighted.shouldReject(this)) {
-                PCLRenderHelpers.draw(sb, EUIRM.images.x.texture(), image.hb.x - scale(32), image.hb.y, scale(16), scale(16));
+                PCLRenderHelpers.draw(sb, EUIRM.images.x.texture(), image.hb.x - scale(70), image.hb.y, scale(28), scale(28));
             }
         }
     }

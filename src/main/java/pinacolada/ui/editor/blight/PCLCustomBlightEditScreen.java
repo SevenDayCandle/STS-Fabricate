@@ -7,12 +7,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
-import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.blights.PCLCustomBlightSlot;
@@ -24,7 +22,6 @@ import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
-import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight> {
     protected PCLDynamicBlight previewBlight;

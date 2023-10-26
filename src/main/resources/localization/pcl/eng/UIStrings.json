@@ -148,7 +148,8 @@
 												"New Flag",
 												"Turns",
 												"Loadout Value",
-												"Augment Slots"
+												"Augment Slots",
+												"Replaced Relics"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -230,7 +231,10 @@
 												"Determines the number of targets that will be chosen by random targeting.",
 												"Determines how many turns this power will last.",
 												"#yRarity determines where this blight can appear. #yBasic blights can appear from any chest and from looping in #yEndless #yMode. #yBoss blights only appear in boss chests. #ySpecial blights cannot be randomly encountered in-game.",
-												"The total combined #yLoadout #Value of items in custom loadouts cannot exceed the maximum value for that character (this does not apply in #yCustom #yRuns)."
+												"The total combined #yLoadout #Value of items in custom loadouts cannot exceed the maximum value for that character (this does not apply in #yCustom #yRuns).",
+												"{#o:Click this to enable this card to deal damage.}",
+												"{#o:Click this to enable this card to give Block.}",
+												"If relics are specified here, this relic will not spawn unless the player has any of those relics, and obtaining this relic will replace those relics."
 								]
 				},
 				"pcl:CardPile": {
@@ -565,7 +569,7 @@
 												"Manage Relics",
 												"Choose which relics will appear in your runs. What relics are available depends on the selected sets.",
 												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes.",
-												"Import from File",
+												"Import from CSV",
 												"Set the card pool from a CSV table exported by EUI"
 								]
 				},

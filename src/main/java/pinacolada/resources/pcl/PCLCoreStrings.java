@@ -130,6 +130,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_newFlag = cedit.TEXT[81];
     public final String cedit_turns = cedit.TEXT[82];
     public final String cedit_loadoutValue = cedit.TEXT[83];
+    public final String cedit_augmentSlots = cedit.TEXT[84];
+    public final String cedit_relicReplace = cedit.TEXT[85];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -209,6 +211,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_turns = cetut.TEXT[75];
     public final String cetut_blightRarity = cetut.TEXT[76];
     public final String cetut_loadoutValue = cetut.TEXT[77];
+    public final String cetut_blankAttack = cetut.TEXT[78];
+    public final String cetut_blankBlock = cetut.TEXT[79];
+    public final String cetut_relicReplace = cetut.TEXT[80];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

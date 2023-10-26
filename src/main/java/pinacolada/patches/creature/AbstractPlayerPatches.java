@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.EnergyManager;
+import com.megacrit.cardcrawl.events.beyond.MindBloom;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import javassist.CannotCompileException;
@@ -21,6 +22,14 @@ import pinacolada.dungeon.GridCardSelectScreenHelper;
 import java.util.ArrayList;
 
 public class AbstractPlayerPatches {
+    @SpirePatch(clz = AbstractPlayer.class, method = "preBattlePrep")
+    public static class AbstractPlayer_ApplyPreCombatLogic {
+        @SpirePrefixPatch
+        public static void method(AbstractPlayer __instance) {
+            CombatManager.onStartup();
+        }
+    }
+
     @SpirePatch(clz = AbstractPlayer.class, method = "channelOrb")
     public static class AbstractPlayer_ChannelOrb {
 

@@ -44,6 +44,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public String sfx;
     public String color;
     public String languageStrings;
+    public String[] replacementIDs;
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
 
@@ -263,6 +264,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             maxUpgradeLevel = first.maxUpgradeLevel;
             branchUpgradeFactor = first.branchFactor;
             loadoutValue = first.getLoadoutValue();
+            replacementIDs = first.replacementIDs != null ? first.replacementIDs.clone() : EUIUtils.array();
         }
 
         for (PCLDynamicRelicData builder : builders) {

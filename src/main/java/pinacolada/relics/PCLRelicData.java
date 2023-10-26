@@ -33,6 +33,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public PCLLoadout loadout;
     public RelicStrings strings;
     public String imagePath;
+    public String[] replacementIDs;
     public boolean unique = false;
     public int maxForms = 1;
     public int maxUpgradeLevel = 0;
@@ -204,6 +205,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
         this.tier = tier;
         this.sfx = sfx;
+        return this;
+    }
+
+    public PCLRelicData setReplacementIDs(String... ids) {
+        this.replacementIDs = ids;
         return this;
     }
 
