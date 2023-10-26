@@ -29,7 +29,7 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
         ArrayList<AbstractCard> cards = EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
                 data -> {
                     PCLCard card = data.create();
-                    UnlockTracker.markCardAsSeen(data.ID);
+                    GameUtilities.forceMarkCardAsSeen(data.ID);
                     card.isSeen = true;
                     card.isLocked = false;
                     // Hide the affinities for colorless cards

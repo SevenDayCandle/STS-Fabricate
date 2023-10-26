@@ -298,6 +298,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             // Add this series cards to the total list of available cards
             for (PCLCardData cData : series.cardDatas) {
                 AbstractCard card = cData.makeCardFromLibrary(0);
+                card.isSeen = !cData.isLocked();
                 allCards.put(cData.ID, card);
                 if (card instanceof PCLCard) {
                     ((PCLCard) card).affinities.updateSortedList();

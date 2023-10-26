@@ -59,7 +59,7 @@ public class PTrigger_When extends PTrigger {
         return !(skill instanceof PCond)
                 || skill instanceof PMultiBase
                 || skill instanceof PCLCombatSubscriber
-                || skill.hasParentType(PCond.class);
+                || (skill.parent != null && skill.parent.hasParentType(PCond.class));
     }
 
     @Override

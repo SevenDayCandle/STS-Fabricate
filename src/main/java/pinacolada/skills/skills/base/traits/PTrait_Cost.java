@@ -49,17 +49,7 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (hasParentType(PTrigger_Passive.class)) {
-            String subject;
-            if (parent instanceof PFacetCond) {
-                subject = parent.getSubText(perspective);
-            }
-            else if (parent instanceof PMultiBase && parent.parent instanceof PFacetCond) {
-                subject = parent.parent.getSubText(perspective);
-            }
-            else {
-                subject = PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
-            }
-            return TEXT.act_zCosts(subject, 2, getSubDescText(perspective));
+            return TEXT.act_zCosts(getParentCardString(perspective), 2, getSubDescText(perspective));
         }
         return TEXT.act_costs(getSubDescText(perspective));
     }

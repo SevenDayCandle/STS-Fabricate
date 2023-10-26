@@ -72,6 +72,7 @@ public class PCLLoadoutData {
 
     public LoadoutBlightSlot addBlightSlot(String selection) {
         final LoadoutBlightSlot slot = new LoadoutBlightSlot(this, selection);
+        slot.onSelect(selection);
         blightSlots.add(slot);
 
         return slot;
@@ -86,6 +87,7 @@ public class PCLLoadoutData {
 
     public LoadoutCardSlot addCardSlot(String selection, int amount) {
         final LoadoutCardSlot slot = new LoadoutCardSlot(this, selection);
+        slot.onSelect(selection);
         slot.setAmount(amount);
         cardSlots.add(slot);
 
@@ -94,6 +96,7 @@ public class PCLLoadoutData {
 
     public LoadoutRelicSlot addRelicSlot(String selection) {
         final LoadoutRelicSlot slot = new LoadoutRelicSlot(this, selection);
+        slot.onSelect(selection);
         relicSlots.add(slot);
 
         return slot;

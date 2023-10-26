@@ -66,6 +66,7 @@ public class PCLLoadoutDataInfo extends PCLCustomLoadable {
     public static void reloadLoadouts() {
         for (PCLLoadout loadout : PCLLoadout.getAll()) {
             loadout.presets.clear();
+            loadout.getDefaultData(); // Ensure that necessary unlocks are carried out on new save files
         }
         for (FileHandle f : getCustomFolder(SUBFOLDER).list(JSON_FILTER)) {
             loadSingleLoadoutImpl(f);

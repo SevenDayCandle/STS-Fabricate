@@ -12,10 +12,11 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PActiveMod;
 import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
-public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
+public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
 
     public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)

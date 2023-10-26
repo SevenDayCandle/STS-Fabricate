@@ -91,7 +91,7 @@ public class LoadoutCardSlot extends LoadoutSlot {
 
     @Override
     protected void onSelect(String item) {
-        UnlockTracker.markCardAsSeen(selected);
+        GameUtilities.forceMarkCardAsSeen(selected);
     }
 
     public LoadoutCardSlot select(String item) {

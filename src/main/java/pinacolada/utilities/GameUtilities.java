@@ -387,6 +387,15 @@ public class GameUtilities {
         }
     }
 
+    public static void forceMarkCardAsSeen(String key) {
+        AbstractCard c = CardLibrary.getCard(key);
+        if (c != null) {
+            c.isSeen = true;
+            UnlockTracker.seenPref.putInteger(key, 1);
+            UnlockTracker.seenPref.flush();
+        }
+    }
+
     public static Random generateNewRNG(int a, int b) {
         return new Random(Settings.seed + (AbstractDungeon.actNum * a) + (AbstractDungeon.floorNum * b));
     }

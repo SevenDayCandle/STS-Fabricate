@@ -346,6 +346,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
 
             if (currentDialog.isDone) {
                 currentDialog = null;
+                PGR.helpMeButton.setOnClick(() -> EUITourTooltip.queueTutorial(getTour())); // Reset tour that could have been set by pages
             }
         }
         else {

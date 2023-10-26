@@ -126,7 +126,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     public void applyToCard(AbstractCard c, boolean conditionMet) {
     }
 
-    public String getDamageString(PCLCardTarget perspective) {
+    protected String getDamageString(PCLCardTarget perspective) {
         if (perspective != PCLCardTarget.Self || !EUIConfiguration.enableDescriptionIcons.get()) {
             return TEXT.subjects_damage;
         }
@@ -135,6 +135,17 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
             return TEXT.subjects_damage;
         }
         return tooltip.getTitleOrIcon();
+    }
+
+    protected String getParentCardString(PCLCardTarget perspective) {
+        PSkill<?> par = parent;
+        while (par != null) {
+            if (par instanceof PFacetCond) {
+                return par.getSubText(perspective);
+            }
+            par = par.parent;
+        }
+        return PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
     }
 
     public String getSampleAmount() {
@@ -149,17 +160,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         if (hasParentType(PTrigger_Passive.class)) {
-            String subject;
-            if (parent instanceof PFacetCond) {
-                subject = parent.getSubText(perspective);
-            }
-            else if (parent instanceof PMultiBase && parent.parent instanceof PFacetCond) {
-                subject = parent.parent.getSubText(perspective);
-            }
-            else {
-                subject = PCLCoreStrings.pluralForce(TEXT.subjects_cardN);
-            }
-            return TEXT.act_zHas(subject, getSubDescText(perspective));
+            return TEXT.act_zHas(getParentCardString(perspective), getSubDescText(perspective));
         }
         if (isVerbose()) {
             return TEXT.act_has(getSubDescText(perspective));
