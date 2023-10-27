@@ -9,12 +9,14 @@ import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIColorPicker;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBoxInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
+import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 
 public class PCLCustomColorEditor extends EUIHoverable {
@@ -47,11 +49,12 @@ public class PCLCustomColorEditor extends EUIHoverable {
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
-                RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 1.5f))
+                RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 1.3f))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(title);
 
+        hexInput.setLabel(current.toString());
     }
 
     public Color getColor() {
@@ -82,13 +85,21 @@ public class PCLCustomColorEditor extends EUIHoverable {
         header.tryRender(sb);
     }
 
+    public PCLCustomColorEditor setColor(EUIColorPicker value) {
+        if (value != null) {
+            return setColor(value.getReturnColor(), true);
+        }
+        onUpdate.invoke(current);
+        return this;
+    }
+
     public PCLCustomColorEditor setColor(Color value) {
         return setColor(value, true);
     }
 
     public PCLCustomColorEditor setColor(Color value, boolean invoke) {
         if (value != null) {
-            current = value.cpy();
+            EUIColors.copyFrom(current, value);
             colorButton.setColor(current);
             hexInput.setLabel(current.toString());
             if (invoke) {

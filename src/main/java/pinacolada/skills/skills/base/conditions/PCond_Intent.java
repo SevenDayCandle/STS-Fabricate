@@ -33,7 +33,7 @@ public class PCond_Intent extends PPassiveCond<PField_Intent> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.hasIntent(t));
+        return evaluateTargets(info, t -> fields.not ^ fields.hasIntent(t));
     }
 
     @Override

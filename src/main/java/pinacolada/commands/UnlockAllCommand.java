@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUI;
 import extendedui.patches.screens.RelicViewScreenPatches;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class UnlockAllCommand extends ConsoleCommand {
 
         UnlockTracker.unlockPref.flush();
         UnlockTracker.seenPref.flush();
+
+        EUI.customLibraryScreen.refreshGroups();
     }
 
     public ArrayList<String> extraOptions(String[] tokens, int depth) {

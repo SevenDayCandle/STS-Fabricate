@@ -14,15 +14,15 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.screens.CombatRewardScreen;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
+import extendedui.EUIInputManager;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUIToggle;
-import extendedui.ui.controls.EUIVerticalScrollBar;
+import extendedui.ui.EUIBase;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -58,13 +58,17 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private final EUIButton saveButton;
     private final EUIButton selectExistingButton;
     private final EUIVerticalScrollBar zoomBar;
-    private final PCLCustomColorEditor tintEditor;
+    private final PCLCustomColorEditor anchor1Editor;
+    private final PCLCustomColorEditor anchor2Editor;
+    private final PCLCustomColorEditor target1Editor;
+    private final PCLCustomColorEditor target2Editor;
+    private final EUIDialogColorPicker colorPicker;
     private final EUIToggle tintToggle;
     private final ShapeRenderer renderer;
     private final SpriteBatch sb;
     private final FrameBuffer imageBuffer;
     private final OrthographicCamera camera;
-    private Color tint;
+    private boolean enableTint;
     private Pixmap insideImage;
     private Texture baseTexture;
     private TextureRegion insideImageRenderable;
@@ -123,16 +127,36 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFile)
                 .setOnClick(this::getImageFromFileDialog);
 
-        tintEditor = new PCLCustomColorEditor(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 2f, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
-                , PGR.core.strings.cedit_tintColor,
-                this::openTint,
-                this::setTint);
-        tintEditor.setActive(false);
+        colorPicker = new EUIDialogColorPicker(new EUIHitbox(Settings.WIDTH * 0.7f, (Settings.HEIGHT - EUIBase.scale(800)) / 2f, EUIBase.scale(460), EUIBase.scale(800)), EUIUtils.EMPTY_STRING, EUIUtils.EMPTY_STRING);
+        colorPicker
+                .setShowDark(false)
+                .setActive(false);
 
-        tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, tintEditor.hb.y + tintEditor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
+        target2Editor = new PCLCustomColorEditor(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 2f, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+                , EUIUtils.format(PGR.core.strings.cedit_targetColor, 2),
+                this::openTint,
+                (__) -> this.tryUpdatePictures());
+        target1Editor = new PCLCustomColorEditor(new EUIHitbox(target2Editor.hb.x, target2Editor.hb.y + target2Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+                , EUIUtils.format(PGR.core.strings.cedit_targetColor, 1),
+                this::openTint,
+                (__) -> this.tryUpdatePictures());
+        anchor2Editor = new PCLCustomColorEditor(new EUIHitbox(target1Editor.hb.x, target1Editor.hb.y + target1Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+                , EUIUtils.format(PGR.core.strings.cedit_anchorColor, 2),
+                this::openTint,
+                (__) -> this.tryUpdatePictures());
+        anchor1Editor = new PCLCustomColorEditor(new EUIHitbox(anchor2Editor.hb.x, anchor2Editor.hb.y + anchor2Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
+                , EUIUtils.format(PGR.core.strings.cedit_anchorColor, 1),
+                this::openTint,
+                (__) -> this.tryUpdatePictures());
+        anchor1Editor.setActive(false);
+        anchor2Editor.setActive(false);
+        target1Editor.setActive(false);
+        target2Editor.setActive(false);
+
+        tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, anchor1Editor.hb.y + anchor1Editor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f)
                 .setText(PGR.core.strings.cedit_enableTint)
-                .setOnToggle(val -> setTint(tint = val ? tintEditor.getColor() : null))
+                .setOnToggle(this::setEnableTint)
                 .setTooltip(PGR.core.strings.cedit_enableTint, PGR.core.strings.cedit_tintDesc);
 
 
@@ -219,8 +243,18 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     }
 
     private void openTint(PCLCustomColorEditor editor) {
-        curEffect = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
-                .addCallback(editor::setColor);
+        Color prev = editor.getColor().cpy();
+        colorPicker
+                .setOnChange(editor::setColor)
+                .setOnComplete((res) -> {
+                    colorPicker.setActive(false);
+                    if (res == null) {
+                        editor.setColor(prev, true);
+                    }
+                })
+                .setHeaderText(editor.header.text)
+                .setActive(true);
+        colorPicker.open(prev);
     }
 
     @Override
@@ -236,7 +270,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             selectExistingButton.tryRender(sb);
             pasteButton.tryRender(sb);
             instructionsLabel.tryRender(sb);
-            tintEditor.tryRender(sb);
+            anchor1Editor.tryRender(sb);
+            anchor2Editor.tryRender(sb);
+            target1Editor.tryRender(sb);
+            target2Editor.tryRender(sb);
             tintToggle.tryRender(sb);
             zoomBar.tryRender(sb);
 
@@ -259,6 +296,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 sb.begin();
                 PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, renderW, renderY, 1, 0);
             }
+
+            colorPicker.tryRender(sb);
         }
     }
 
@@ -284,9 +323,18 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 );
     }
 
-    private void setTint(Color color) {
-        this.tint = color;
-        this.tintEditor.setActive(this.tint != null);
+    private void setEnableTint(boolean val) {
+        this.enableTint = val;
+        this.anchor1Editor.setActive(val);
+        this.anchor2Editor.setActive(val);
+        this.target1Editor.setActive(val);
+        this.target2Editor.setActive(val);
+        if (baseTexture != null) {
+            updatePictures();
+        }
+    }
+
+    private void tryUpdatePictures() {
         if (baseTexture != null) {
             updatePictures();
         }
@@ -302,17 +350,21 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         if (forCommit) {
             // Generate a temporary resized image and capture it into the framebuffer
             Texture resized = new Texture(PCLRenderHelpers.scalrScaleAsPixmap(baseTexture, scale, scale));
-            sb.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
-            if (tint != null) {
-                PCLRenderHelpers.drawColorized(sb, tint, s -> s.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false));
+            if (enableTint) {
+                PCLRenderHelpers.drawBicolor(sb, anchor1Editor.getColor(), anchor2Editor.getColor(), target1Editor.getColor(), target2Editor.getColor(), s -> s.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false));
+            }
+            else {
+                sb.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
             }
             updateBufferEnding();
             resized.dispose();
         }
         else {
-            sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
-            if (tint != null) {
-                PCLRenderHelpers.drawColorized(sb, tint, s -> s.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false));
+            if (enableTint) {
+                PCLRenderHelpers.drawBicolor(sb, anchor1Editor.getColor(), anchor2Editor.getColor(), target1Editor.getColor(), target2Editor.getColor(), s -> s.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false));
+            }
+            else {
+                sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
             }
 
             updateBufferEnding();
@@ -372,17 +424,22 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
             selectExistingButton.tryUpdate();
             pasteButton.tryUpdate();
             instructionsLabel.tryUpdate();
-            tintEditor.tryUpdate();
+            anchor1Editor.tryUpdate();
+            anchor2Editor.tryUpdate();
+            target1Editor.tryUpdate();
+            target2Editor.tryUpdate();
             tintToggle.tryUpdate();
             camera.update();
-            if (baseTexture != null) {
-                if (!hb.isDragging()) {
-                    zoomBar.tryUpdate();
-                }
-                if (!zoomBar.isDragging) {
-                    hb.update();
-                    if (hb.isDragging()) {
-                        updatePictures();
+            if (!colorPicker.tryUpdate()) {
+                if (baseTexture != null) {
+                    if (!hb.isDragging()) {
+                        zoomBar.tryUpdate();
+                    }
+                    if (!zoomBar.isDragging) {
+                        hb.update();
+                        if (hb.isDragging()) {
+                            updatePictures();
+                        }
                     }
                 }
             }

@@ -501,6 +501,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         TurnBasedNext,
         SingleTurn,
         SingleTurnNext,
+        Plated,
         Special;
 
         private EUITooltip tip;
@@ -517,6 +518,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurnDesc;
                 case SingleTurnNext:
                     return PGR.core.strings.power_singleTurnNextDesc;
+                case Plated:
+                    return PGR.core.strings.power_platedDesc;
             }
             return EUIUtils.EMPTY_STRING;
         }
@@ -533,6 +536,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurn;
                 case SingleTurnNext:
                     return PGR.core.strings.power_singleTurnNext;
+                case Plated:
+                    return PGR.core.strings.power_plated;
             }
             return PGR.core.strings.power_custom;
         }

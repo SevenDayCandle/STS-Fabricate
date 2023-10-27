@@ -35,11 +35,9 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         }
         this.cardGroup = group;
 
-        if (!UnlockTracker.isCardSeen(this.card.cardID) || !this.card.isSeen) {
-            UnlockTracker.markCardAsSeen(this.card.cardID);
-            this.card.isLocked = false;
-            this.card.isSeen = true;
-        }
+        UnlockTracker.markCardAsSeen(this.card.cardID);
+        this.card.isLocked = false;
+        this.card.isSeen = true;
 
         initialize(1);
     }

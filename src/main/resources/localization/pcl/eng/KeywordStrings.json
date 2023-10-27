@@ -572,7 +572,7 @@
 		"NAME": "Vitality"
 	},
 	"Warding":	{
-		"DESCRIPTION": "The next [Block] card grants additional [Block].",
+		"DESCRIPTION": "The next instance of [Block] gained directly from a card grants additional [Block].",
 		"NAME": "Warding"
 	},
 	"Withdraw":	{

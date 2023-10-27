@@ -74,11 +74,9 @@ public class SelectFromPile extends CardFilterAction {
     protected void addCard(CardGroup group, AbstractCard card) {
         group.group.add(card);
 
-        if (!card.isSeen) {
-            UnlockTracker.markCardAsSeen(card.cardID);
-            card.isLocked = false;
-            card.isSeen = true;
-        }
+        UnlockTracker.markCardAsSeen(card.cardID);
+        card.isLocked = false;
+        card.isSeen = true;
     }
 
     protected boolean canSelect(AbstractCard card) {

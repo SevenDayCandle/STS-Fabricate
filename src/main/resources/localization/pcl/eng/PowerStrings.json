@@ -147,7 +147,7 @@
 				},
 				"pcl:WardingPower":
 				{
-								"DESCRIPTIONS": ["The next time you gain [Block] from a card, gain {0} more."],
+								"DESCRIPTIONS": ["The next time you gain [Block] directly from a card, gain {0} more."],
 								"NAME": "Warding"
 				}
 }

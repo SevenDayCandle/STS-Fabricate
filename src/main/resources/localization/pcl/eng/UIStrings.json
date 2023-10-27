@@ -134,7 +134,8 @@
 												"Liquid Color",
 												"Hybrid Color",
 												"Spots Color",
-												"Tint Color",
+												"Anchor Color {0}",
+												"Target Color {0}",
 												"Enable Tint",
 												"If enabled, alters the color of the saved image",
 												"Repeat",
@@ -234,7 +235,8 @@
 												"The total combined #yLoadout #Value of items in custom loadouts cannot exceed the maximum value for that character (this does not apply in #yCustom #yRuns).",
 												"{#o:Click this to enable this card to deal damage.}",
 												"{#o:Click this to enable this card to give Block.}",
-												"If relics are specified here, this relic will not spawn unless the player has any of those relics, and obtaining this relic will replace those relics."
+												"If relics are specified here, this relic will not spawn unless the player has any of those relics, and obtaining this relic will replace those relics.",
+												"Occurences of Anchor Color 1 will be recolored to Target Color 1, and Anchor Color 2 to Target Color 2. Every other color will be made into a color between the two targets color, based on its distance to the anchors."
 								]
 				},
 				"pcl:CardPile": {
@@ -520,12 +522,14 @@
 						"Stack-Based Next",
 						"Fixed-Turns",
 						"Fixed-Turns Next",
+						"Plated",
 						"Custom Behavior",
 						"Does not change in amount or disappear unless acted upon by another effect.",
 						"Stacks decrease by 1 at the end of each turn. Removed upon reaching 0 stacks.",
 						"Stacks decrease by 1 at the start of each turn. Removed upon reaching 0 stacks.",
 						"Removed at the end of the turn after a set number of turns from the initial application, regardless of stacks.",
-						"Removed at the start of the turn after a set number of turns from the initial application, regardless of stacks."
+						"Removed at the start of the turn after a set number of turns from the initial application, regardless of stacks.",
+						"Stacks decrease by 1 upon receiving attack damage. Removed upon reaching 0 stacks."
 					]
 				},
 				"pcl:Rewards": {
@@ -652,6 +656,7 @@
 												"${0}@!1:they@:it$",
 												"this {0}",
 												"this",
+												"turn count",
 												"unblocked {0}",
 												"X",
 												"you",

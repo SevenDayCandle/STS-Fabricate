@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Interpolation;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
-import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -178,6 +177,33 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
         catch (Exception e) {
             return null;
+        }
+    }
+
+    public void manualAdjustHybrid(Color c) {
+        if (hybridColor == null) {
+            hybridColor = c.cpy();
+        }
+        else {
+            EUIColors.copyFrom(hybridColor, c);
+        }
+    }
+
+    public void manualAdjustLiquid(Color c) {
+        if (liquidColor == null) {
+            liquidColor = c.cpy();
+        }
+        else {
+            EUIColors.copyFrom(liquidColor, c);
+        }
+    }
+
+    public void manualAdjustSpots(Color c) {
+        if (spotsColor == null) {
+            spotsColor = c.cpy();
+        }
+        else {
+            EUIColors.copyFrom(spotsColor, c);
         }
     }
 

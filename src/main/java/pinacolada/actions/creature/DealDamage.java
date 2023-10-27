@@ -50,7 +50,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     }
 
     public DealDamage(AbstractCard card, AbstractCreature target, DamageInfo info, AttackEffect effect, int times) {
-        super(ActionType.DAMAGE, Settings.ACTION_DUR_XFAST);
+        super(ActionType.DAMAGE, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
         this.card = card;
         this.info = info;

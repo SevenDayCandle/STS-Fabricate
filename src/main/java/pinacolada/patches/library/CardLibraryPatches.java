@@ -34,6 +34,12 @@ public class CardLibraryPatches {
                 }
             }
 
+            // Direct mode, returns the actual library card
+            AbstractCard res = getDirectCard(key);
+            if (res != null) {
+                return SpireReturn.Return(res);
+            }
+
             // Allow getCard to get custom cards too
             PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
             if (slot != null) {

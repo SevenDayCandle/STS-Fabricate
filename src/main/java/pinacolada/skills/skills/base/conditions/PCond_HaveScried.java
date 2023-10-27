@@ -17,7 +17,7 @@ import pinacolada.skills.skills.PPassiveCond;
 @VisibleSkill
 public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScryActionSubscriber {
 
-    public static final PSkillData<PField_Not> DATA = register(PCond_HaveScried.class, PField_Not.class, 1, 1)
+    public static final PSkillData<PField_Not> DATA = register(PCond_HaveScried.class, PField_Not.class)
             .noTarget();
 
     public PCond_HaveScried() {
@@ -30,7 +30,7 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && (fields.not ^ CombatManager.scriesThisTurn >= amount);
+        return fields.doesValueMatchThreshold(CombatManager.scriesThisTurn);
     }
 
     @Override
