@@ -127,6 +127,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case All:
                 return PGR.core.strings.ctype_tagAll;
             case AllAlly:
+                return PGR.core.strings.ctype_tagAoEAlly;
             case Team:
                 return PGR.core.strings.ctype_team;
             case AllAllyEnemy:
@@ -139,6 +140,24 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return PGR.core.strings.ctype_tagRandom;
         }
         return null;
+    }
+
+    public final String getShortStringForTag() {
+        switch (this) {
+            case All:
+                return PGR.core.strings.ctype_tagAll;
+            case AllAlly:
+                return PGR.core.strings.ctype_tagAoEAlly;
+            case Team:
+                return PGR.core.strings.ctype_team;
+            case AllEnemy:
+                return PGR.core.strings.ctype_tagAoE;
+            case Single:
+                return PGR.core.strings.ctype_tagSingle;
+            case RandomEnemy:
+                return PGR.core.strings.ctype_tagRandom;
+        }
+        return getTitle();
     }
 
     public final AbstractCreature getTarget(PCLUseInfo info, int autoAmount) {

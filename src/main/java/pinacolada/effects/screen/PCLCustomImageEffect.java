@@ -136,18 +136,22 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 , EUIUtils.format(PGR.core.strings.cedit_targetColor, 2),
                 this::openTint,
                 (__) -> this.tryUpdatePictures());
+        target2Editor.setTooltip(target2Editor.header.text, PGR.core.strings.cetut_colorAnchor);
         target1Editor = new PCLCustomColorEditor(new EUIHitbox(target2Editor.hb.x, target2Editor.hb.y + target2Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
                 , EUIUtils.format(PGR.core.strings.cedit_targetColor, 1),
                 this::openTint,
                 (__) -> this.tryUpdatePictures());
+        target1Editor.setTooltip(target1Editor.header.text, PGR.core.strings.cetut_colorAnchor);
         anchor2Editor = new PCLCustomColorEditor(new EUIHitbox(target1Editor.hb.x, target1Editor.hb.y + target1Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
                 , EUIUtils.format(PGR.core.strings.cedit_anchorColor, 2),
                 this::openTint,
                 (__) -> this.tryUpdatePictures());
+        anchor2Editor.setTooltip(anchor2Editor.header.text, PGR.core.strings.cetut_colorAnchor);
         anchor1Editor = new PCLCustomColorEditor(new EUIHitbox(anchor2Editor.hb.x, anchor2Editor.hb.y + anchor2Editor.hb.height + labelHeight, EUIGameUtils.scale(160), EUIGameUtils.scale(60))
                 , EUIUtils.format(PGR.core.strings.cedit_anchorColor, 1),
                 this::openTint,
                 (__) -> this.tryUpdatePictures());
+        anchor1Editor.setTooltip(anchor1Editor.header.text, PGR.core.strings.cetut_colorAnchor);
         anchor1Editor.setActive(false);
         anchor2Editor.setActive(false);
         target1Editor.setActive(false);

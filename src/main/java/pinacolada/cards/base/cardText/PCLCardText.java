@@ -38,7 +38,10 @@ public class PCLCardText {
     private final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
     private final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
     private final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
+    private final static float BANNER_OFFSET_X = -AbstractCard.RAW_W * 0.349f;
+    private final static float BANNER_OFFSET_X2 = AbstractCard.RAW_W * 0.345f;
     private final static float BANNER_OFFSET_Y = -AbstractCard.RAW_H * 0.04f;
+    private final static float BANNER_OFFSET_Y2 = -AbstractCard.RAW_H * 0.06f;
     private final static float FOOTER_SIZE = 52f;
     protected final static float IMG_HEIGHT = 420f * Settings.scale;
     protected final static float DESC_OFFSET_SUB_Y = Settings.BIG_TEXT_MODE ? IMG_HEIGHT * 0.24f : IMG_HEIGHT * 0.255f;
@@ -106,7 +109,6 @@ public class PCLCardText {
             if (result != null) {
                 map.put(card.rarity, result);
             }
-
         }
 
         return result;
@@ -217,23 +219,24 @@ public class PCLCardText {
     protected void renderAttributeBanner(SpriteBatch sb, TextureCache icon, float sign, float offsetIconX) {
         final ColoredTexture panel = getPanelByRarity();
 
-        final float icon_x = offsetIconX + (sign * (AbstractCard.RAW_W * 0.43f));
-
         if (panel != null) {
             PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, sign * AbstractCard.RAW_W * 0.33f, BANNER_OFFSET_Y, 120f, 54f, panel.color, panel.color.a * card.transparency, 1, 0, sign < 0, false);
-            PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, BANNER_OFFSET_Y, 48, 48);
+            if (icon != null) {
+                final float icon_x = offsetIconX + (sign * (AbstractCard.RAW_W * 0.43f));
+                PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, BANNER_OFFSET_Y, 48, 48);
+            }
         }
     }
 
-    protected void renderAttributeBannerWithText(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, float offsetMult, float scaleMult, float sign) {
-        renderAttributeBanner(sb, icon, sign, 0);
+    protected void renderAttributeBannerWithText(SpriteBatch sb, TextureCache icon, String text, String suffix, Color textColor, float offsetX, float offsetY, float offsMult, float scaleMult, float sign, float offsetIconX) {
+        renderAttributeBanner(sb, icon, sign, offsetIconX);
 
         final float suffix_scale = scaleMult * 0.7f;
         BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
         largeFont.getData().setScale(card.isPopup ? 0.5f : 1);
-        layout.setText(largeFont, text.text);
+        layout.setText(largeFont, text);
 
-        float text_width = scaleMult * layout.width / Settings.scale;
+        float text_width = offsMult * layout.width / Settings.scale;
         float suffix_width = 0;
 
         if (suffix != null) {
@@ -242,22 +245,27 @@ public class PCLCardText {
         }
 
         largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
-        float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetMult);
+        float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetX);
 
-        PCLRenderHelpers.writeOnCard(sb, card, largeFont, text.text, text_x + (text_width * 0.5f), BANNER_OFFSET_Y, text.color, true);
+        PCLRenderHelpers.writeOnCard(sb, card, largeFont, text, offsetX + (text_width * 0.5f), offsetY, textColor, true);
 
         if (suffix != null) {
             largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
-            PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, text_x + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), BANNER_OFFSET_Y, text.color, true);
+            PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, offsetX + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), offsetY, textColor, true);
         }
 
         PCLRenderHelpers.resetFont(largeFont);
     }
 
     protected void renderAttributes(SpriteBatch sb) {
-        if (card.type == PCLEnum.CardType.SUMMON && card.showTypeText) {
-            renderAttributeBannerWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, 0.029f, 0.85f, -1);
-            renderAttributeBanner(sb, getPriorityIcon(), 1, -25f);
+        if (card.showTypeText) {
+            if (card.type == PCLEnum.CardType.SUMMON) {
+                renderAttributeBannerWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, card.getHPStringColor(), BANNER_OFFSET_X, BANNER_OFFSET_Y,0.85f,0.85f, -1, 0);
+                renderAttributeBannerWithText(sb, getPriorityIcon(), card.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y2,0,0.45f, 1, -25f);
+            }
+            else if (card.shouldUsePCLFrame()) {
+                renderAttributeBannerWithText(sb, null, card.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y,0,0.45f, 1, 0);
+            }
         }
     }
 

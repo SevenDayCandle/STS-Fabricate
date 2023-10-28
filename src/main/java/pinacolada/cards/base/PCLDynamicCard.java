@@ -519,7 +519,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     // These are null when rendering PCL colors
     @Override
-    protected boolean shouldUsePCLFrame() {
+    public boolean shouldUsePCLFrame() {
         return vanillaBg == null && customBg == null && super.shouldUsePCLFrame();
     }
 }

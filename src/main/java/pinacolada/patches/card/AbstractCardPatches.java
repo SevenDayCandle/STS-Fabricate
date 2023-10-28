@@ -15,6 +15,7 @@ import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
 import pinacolada.blights.PCLBlight;
 import pinacolada.cardmods.TemporaryCostModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
@@ -144,6 +145,9 @@ public class AbstractCardPatches {
         public static SpireReturn<Boolean> Insert(AbstractCard __instance) {
             if (CombatManager.hasEnoughEnergyForCard(__instance)) {
                 return SpireReturn.Return(true);
+            }
+            else if (!CombatManager.hasEnoughEnergyBlocker(__instance)) {
+                return SpireReturn.Return(false);
             }
             else {
                 return SpireReturn.Continue();

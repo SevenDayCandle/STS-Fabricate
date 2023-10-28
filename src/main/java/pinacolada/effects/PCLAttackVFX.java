@@ -37,7 +37,7 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX ELECTRIC = new PCLAttackVFX(PCLEnum.AttackEffect.ELECTRIC, null, Color.YELLOW, (sx, sy, cx, cy) -> new ElectricityEffect(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX FIRE = new PCLAttackVFX(AttackEffect.FIRE, ImageMaster.ATK_FIRE, Color.RED, PCLSFX.ATTACK_FIRE);
     public static final PCLAttackVFX GHOST = new PCLAttackVFX(PCLEnum.AttackEffect.GHOST, null, Color.VIOLET, (sx, sy, cx, cy) -> VFX.ghost(cx, cy), PCLSFX.ORB_DARK_CHANNEL);
-    public static final PCLAttackVFX GUNSHOT = new PCLAttackVFX(PCLEnum.AttackEffect.GUNSHOT, null, (sx, sy, cx, cy) -> VFX.gunshot(cx, cy));
+    public static final PCLAttackVFX GUNSHOT = new PCLAttackVFX(PCLEnum.AttackEffect.GUNSHOT, null, (sx, sy, cx, cy) -> VFX.gunshot(cx, cy), PCLSFX.PCL_SUPPORT_DAMAGE);
     public static final PCLAttackVFX HEMOKINESIS = new PCLAttackVFX(PCLEnum.AttackEffect.HEMOKINESIS, null, Color.RED, HemokinesisEffect::new, PCLSFX.ATTACK_REAPER);
     public static final PCLAttackVFX ICE = new PCLAttackVFX(PCLEnum.AttackEffect.ICE, null, Color.SKY, (sx, sy, cx, cy) -> new SnowballImpactEffect(cx, cy), PCLSFX.ORB_FROST_CHANNEL);
     public static final PCLAttackVFX IRON = new PCLAttackVFX(PCLEnum.AttackEffect.IRON, null, Color.WHITE, (sx, sy, cx, cy) -> new IronWaveEffect(sx, sy, cx), PCLSFX.ORB_FROST_CHANNEL);

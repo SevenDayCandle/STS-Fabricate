@@ -420,6 +420,21 @@ public class CombatManager extends EUIBase {
         return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap;
     }
 
+    public static boolean hasEnoughEnergyBlocker(AbstractCard card) {
+        boolean canUse = true;
+        boolean canUsePrev = true;
+        for (OnTryUsingCardSubscriber subscriber : getSubscriberGroup(OnTryUsingCardSubscriber.class)) {
+            if (!subscriber.hasEnoughEnergy(card, true)) {
+                canUse = false;
+                if (canUsePrev != canUse) {
+                    card.cantUseMessage = subscriber.getUnplayableMessage();
+                }
+            }
+            canUsePrev = canUse;
+        }
+        return canUse;
+    }
+
     public static boolean hasEnoughEnergyForCard(AbstractCard card) {
         boolean canPass = PCLCardTag.Suspensive.has(card) && card.costForTurn + energySuspended - EnergyPanel.totalCount <= player.energy.energy;
         return subscriberInout(OnTrySpendEnergySubscriber.class, canPass, (s, d) -> s.canSpendEnergy(card, d));

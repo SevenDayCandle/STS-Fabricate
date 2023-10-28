@@ -215,6 +215,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_blankAttack = cetut.TEXT[78];
     public final String cetut_blankBlock = cetut.TEXT[79];
     public final String cetut_relicReplace = cetut.TEXT[80];
+    public final String cetut_colorAnchor = cetut.TEXT[81];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -271,12 +272,15 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String ctype_secretRare = cardtype.TEXT[12];
     public final String ctype_general = cardtype.TEXT[13];
     public final String ctype_tagAll = cardtype.TEXT[14];
-    public final String ctype_tagAoE = cardtype.TEXT[15];
-    public final String ctype_tagRandom = cardtype.TEXT[16];
-    public final String ctype_turnStartFirst = cardtype.TEXT[17];
-    public final String ctype_turnStartLast = cardtype.TEXT[18];
-    public final String ctype_turnEndFirst = cardtype.TEXT[19];
-    public final String ctype_turnEndLast = cardtype.TEXT[20];
+    public final String ctype_tagAlly = cardtype.TEXT[15];
+    public final String ctype_tagAoE = cardtype.TEXT[16];
+    public final String ctype_tagAoEAlly = cardtype.TEXT[17];
+    public final String ctype_tagRandom = cardtype.TEXT[18];
+    public final String ctype_tagSingle = cardtype.TEXT[19];
+    public final String ctype_turnStartFirst = cardtype.TEXT[20];
+    public final String ctype_turnStartLast = cardtype.TEXT[21];
+    public final String ctype_turnEndFirst = cardtype.TEXT[22];
+    public final String ctype_turnEndLast = cardtype.TEXT[23];
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];

@@ -1502,25 +1502,6 @@ public class GameUtilities {
         return null;
     }
 
-    public static EUITooltip getTooltipForType(AbstractCard.CardType type) {
-        if (type == PCLEnum.CardType.SUMMON) {
-            return PGR.core.tooltips.summon;
-        }
-        switch (type) {
-            case ATTACK:
-                return PGR.core.tooltips.attack;
-            case SKILL:
-                return PGR.core.tooltips.skill;
-            case POWER:
-                return PGR.core.tooltips.power;
-            case CURSE:
-                return PGR.core.tooltips.curse;
-            case STATUS:
-                return PGR.core.tooltips.status;
-        }
-        return null;
-    }
-
     // TODO factor in prismatic shard
     public static int getTotalCardsInPlay() {
         return AbstractDungeon.colorlessCardPool.size()

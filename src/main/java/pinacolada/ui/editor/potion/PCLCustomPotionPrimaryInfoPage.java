@@ -11,18 +11,18 @@ import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
+import extendedui.ui.EUIBase;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUITextBoxInput;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.effects.screen.PCLCustomColorPickerEffect;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLPotion;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -44,6 +44,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUIDropdown<AbstractPotion.PotionRarity> rarityDropdown;
     protected EUIDropdown<AbstractPotion.PotionSize> sizeDropdown;
     protected EUIDropdown<AbstractPotion.PotionEffect> effectDropdown;
+    protected EUIDialogColorPicker colorPicker;
     protected EUILabel idWarning;
     protected PCLCustomColorEditor liquidColorEditor;
     protected PCLCustomColorEditor hybridColorEditor;
@@ -133,18 +134,27 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(AbstractPotion.PotionEffect.values())
                 .setTooltip(EUIRM.strings.potion_visualEffect, PGR.core.strings.cetut_potionEffect);
+
+        colorPicker = new EUIDialogColorPicker(new EUIHitbox(Settings.WIDTH * 0.7f, (Settings.HEIGHT - EUIBase.scale(800)) / 2f, EUIBase.scale(460), EUIBase.scale(800)), EUIUtils.EMPTY_STRING, EUIUtils.EMPTY_STRING);
+        colorPicker
+                .setShowDark(false)
+                .setActive(false);
+
         liquidColorEditor = new PCLCustomColorEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_liquidColor,
-                this::openColorEditor, color -> {
+                (e) -> this.openColorEditor(e, PCLPotion::manualAdjustLiquid),
+                color -> {
             effect.modifyAllBuilders((e, i) -> e.setLiquidColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_liquidColor, PGR.core.strings.cetut_potionColor);
         hybridColorEditor = new PCLCustomColorEditor(new EUIHitbox(liquidColorEditor.hb.x + liquidColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_hybridColor,
-                this::openColorEditor, color -> {
+                (e) -> this.openColorEditor(e, PCLPotion::manualAdjustHybrid),
+                color -> {
             effect.modifyAllBuilders((e, i) -> e.setHybridColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_hybridColor, PGR.core.strings.cetut_potionColor);
         spotsColorEditor = new PCLCustomColorEditor(new EUIHitbox(hybridColorEditor.hb.x + hybridColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_spotsColor,
-                this::openColorEditor, color -> {
+                (e) -> this.openColorEditor(e, PCLPotion::manualAdjustSpots),
+                color -> {
             effect.modifyAllBuilders((e, i) -> e.setSpotsColor(color));
         })
                 .setTooltip(PGR.core.strings.cedit_spotsColor, PGR.core.strings.cetut_potionColor);
@@ -202,9 +212,26 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourPotionPrimary, getTour());
     }
 
-    protected void openColorEditor(PCLCustomColorEditor editor) {
-        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
-                .addCallback(editor::setColor);
+    protected void openColorEditor(PCLCustomColorEditor editor, ActionT2<PCLPotion, Color> onChange) {
+        Color prev = editor.getColor().cpy();
+        colorPicker
+                .setOnChange((res) -> {
+                    if (effect.preview != null) {
+                        onChange.invoke(effect.preview, res.getReturnColor());
+                    }
+                })
+                .setOnComplete((res) -> {
+                    colorPicker.setActive(false);
+                    if (res == null) {
+                        editor.setColor(prev, true);
+                    }
+                    else {
+                        editor.setColor(res.getReturnColor(), true);
+                    }
+                })
+                .setHeaderText(editor.header.text)
+                .setActive(true);
+        colorPicker.open(prev);
     }
 
     @Override
@@ -238,6 +265,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryRender(sb);
         maxUpgrades.tryRender(sb);
         branchUpgrades.tryRender(sb);
+        colorPicker.tryRender(sb);
     }
 
     @Override
@@ -255,6 +283,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         idInput.tryUpdate();
         maxUpgrades.tryUpdate();
         branchUpgrades.tryUpdate();
+        colorPicker.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

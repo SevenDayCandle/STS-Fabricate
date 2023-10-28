@@ -172,11 +172,8 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (!costs.isEmpty()) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(CostFilter.getCostRangeStrings(costs))));
         }
-        if (!loadouts.isEmpty()) {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(loadouts, PField_CardCategory::getLoadoutName)));
-        }
-        if (!flags.isEmpty()) {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(flags, PField_CardCategory::getFlagName)));
+        if (!rarities.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(rarities, EUIGameUtils::textForRarity)));
         }
         if (!affinities.isEmpty()) {
             stringsToJoin.add(affinityFunc.invoke(affinities));
@@ -187,8 +184,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (!colors.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(colors, EUIGameUtils::getColorName)));
         }
-        if (!rarities.isEmpty()) {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(rarities, EUIGameUtils::textForRarity)));
+        if (!loadouts.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(loadouts, PField_CardCategory::getLoadoutName)));
+        }
+        if (!flags.isEmpty()) {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(flags, PField_CardCategory::getFlagName)));
         }
         return stringsToJoin;
     }
@@ -254,11 +254,8 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (costs.size() > i) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i).name));
         }
-        if (loadouts.size() > i) {
-            stringsToJoin.add(getLoadoutName(loadouts.get(i)));
-        }
-        if (flags.size() > i) {
-            stringsToJoin.add(getFlagName(flags.get(i)));
+        if (rarities.size() > i) {
+            stringsToJoin.add(EUIGameUtils.textForRarity(rarities.get(i)));
         }
         if (affinities.size() > i) {
             stringsToJoin.add(affinities.get(i).getTooltip().toString());
@@ -269,8 +266,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (colors.size() > i) {
             stringsToJoin.add(EUIGameUtils.getColorName(colors.get(i)));
         }
-        if (rarities.size() > i) {
-            stringsToJoin.add(EUIGameUtils.textForRarity(rarities.get(i)));
+        if (loadouts.size() > i) {
+            stringsToJoin.add(getLoadoutName(loadouts.get(i)));
+        }
+        if (flags.size() > i) {
+            stringsToJoin.add(getFlagName(flags.get(i)));
         }
         if (types.size() > i) {
             stringsToJoin.add(EUIGameUtils.textForType(types.get(i)));

@@ -242,8 +242,8 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         setAmountFromCard();
         forceResetUses();
 
-        // Only update child effects if uses per turn is infinite
-        if (rootAmount >= 0 && this.childEffect != null && other.getChild() != null) {
+        // Do not update effects if use-based
+        if ((fields.forced || rootAmount == -1) && this.childEffect != null && other.getChild() != null) {
             this.childEffect.stack(other.getChild());
         }
         return this;

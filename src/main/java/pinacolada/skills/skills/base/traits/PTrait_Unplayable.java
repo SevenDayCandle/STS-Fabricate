@@ -17,7 +17,8 @@ import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 
 @VisibleSkill
 public class PTrait_Unplayable extends PTrait<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_Unplayable.class, PField_Empty.class, 1, 1);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_Unplayable.class, PField_Empty.class)
+            .setAmounts(1, 1);
 
     public PTrait_Unplayable() {
         this(1);
@@ -53,11 +54,8 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            if (hasParentType(PFacetCond.class)) {
-                return TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
-            }
-            return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), PCLCoreStrings.pluralForce(TEXT.subjects_cardN));
+        if (hasParentType(PTrigger_Passive.class)) {
+            return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), getParentCardString(perspective));
         }
         return getSubDescText(perspective);
     }

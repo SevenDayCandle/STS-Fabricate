@@ -104,13 +104,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.2f, 1f);
     protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
-    protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
     public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
+    public static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
     public static AbstractPlayer player = null;
     public static Random rng = null;
     private final transient float[] fakeGlowList = new float[4];
@@ -864,8 +864,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return result;
     }
 
-    public ColoredString getHPString() {
-        return new ColoredString(currentHealth, currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
+    public String getHPString() {
+        return String.valueOf(currentHealth);
+    }
+
+    public Color getHPStringColor() {
+        return currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR;
     }
 
     public String getID() {
@@ -1745,6 +1749,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         hitCount = Math.max(0, MathUtils.floor(modifyHitCount(info, tempHitCount)));
         rightCount = Math.max(0, MathUtils.floor(modifyRightCount(info, tempRightCount)));
 
+        boolean prevHitCountModified = isHitCountModified;
+        boolean prevRightCountModified = isHitCountModified;
         this.isBlockModified = (baseBlock != block);
         this.isDamageModified = (baseDamage != damage);
         this.isHitCountModified = (baseHitCount != hitCount);
@@ -1763,16 +1769,22 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCardForUpdateOnly();
+            if (prevHitCountModified != isHitCountModified) {
+                initializeDescription();
+            }
         }
         if (onBlockEffect != null) {
             onBlockEffect.setAmountFromCardForUpdateOnly();
+            if (prevHitCountModified != isHitCountModified) {
+                initializeDescription();
+            }
         }
 
         addAttackResult(baseDamage, tempDamage);
         addDefendResult(baseBlock, tempBlock);
 
         // Invoke cost updates
-        int baseCostChange = cost - modifyCost(info, cost);
+        int baseCostChange = modifyCost(info, cost) - cost;
         TemporaryCostModifier.tryRefresh(this, owner, costForTurn, baseCostChange);
 
         // Release damage display for rendering
@@ -2386,7 +2398,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     // Determines whether the card frame used will be the base game's or the PCL frame
-    protected boolean shouldUsePCLFrame() {
+    public boolean shouldUsePCLFrame() {
         return PGR.getResources(this.color).usePCLFrame;
     }
 

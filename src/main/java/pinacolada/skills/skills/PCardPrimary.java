@@ -36,12 +36,11 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     }
 
     // Only set the amount for this effect and not its children. Used in refresh to avoid refreshing chained children twice
-    public PCardPrimary<T> setAmountFromCardForUpdateOnly() {
+    public void setAmountFromCardForUpdateOnly() {
         this.amount = getAmountFromCard();
         this.baseAmount = getAmountBaseFromCard();
         this.extra = getExtraFromCard();
         this.baseExtra = getExtraBaseFromCard();
-        return this;
     }
 
     // We want to execute children first because they affect card output, but we want the PCardPrimary to be the parent in order to ensure type safety in the skills object

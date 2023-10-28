@@ -25,11 +25,14 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     public final PTrigger trigger;
     public final AbstractCard card;
     private PCLClickableUse triggerCondition;
-    protected EUIKeywordTooltip triggerTip;
+    private EUIKeywordTooltip triggerTip;
+    private final String unplayableMessage;
 
     public CardTriggerConnection(PTrigger trigger, AbstractCard card) {
         this.trigger = trigger;
         this.card = card;
+
+        this.unplayableMessage = PCLCard.UNPLAYABLE_MESSAGE + " NL #r(" + EUIUtils.modifyString(card.name, " ", " ", 1, w -> "#r" + w) + ")";
     }
 
     @Override
@@ -54,6 +57,11 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     }
 
     @Override
+    public String getName() {
+        return this.card.name;
+    }
+
+    @Override
     public String getID() {
         return this.card.cardID;
     }
@@ -66,6 +74,11 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public EUIKeywordTooltip getTooltip() {
         return triggerTip;
+    }
+
+    @Override
+    public String getUnplayableMessage() {
+        return unplayableMessage;
     }
 
     public void initialize() {

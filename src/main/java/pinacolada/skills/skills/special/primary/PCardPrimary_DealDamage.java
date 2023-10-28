@@ -186,12 +186,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(EffekseerEFK.efk(effekseerKey, m.hb)).duration * 0.8f;
-        return this;
+        return setDamageEffect(effekseerKey, Settings.FAST_MODE ? 0.4f : 0.8f);
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color) {
-        return setDamageEffect(effekseerKey, color, 0.8f);
+        return setDamageEffect(effekseerKey, color, Settings.FAST_MODE ? 0.4f : 0.8f);
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color, float durationMult) {
