@@ -387,6 +387,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String options_madnessReplacements = options.TEXT[14];
     public final String options_fabricatePopup = options.TEXT[15];
     public final String options_alwaysPCLCard = options.TEXT[16];
+    public final String options_showCardTarget = options.TEXT[17];
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
@@ -402,6 +403,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String optionDesc_madnessReplacements = optionDesc.TEXT[11];
     public final String optionDesc_fabricatePopup = optionDesc.TEXT[12];
     public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[13];
+    public final String optionDesc_showCardTarget = optionDesc.TEXT[14];
     // Power
     public final String power_turnBehavior = power.TEXT[0];
     public final String power_priority = power.TEXT[1];

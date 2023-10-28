@@ -263,7 +263,7 @@ public class PCLCardText {
                 renderAttributeBannerWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, card.getHPStringColor(), BANNER_OFFSET_X, BANNER_OFFSET_Y,0.85f,0.85f, -1, 0);
                 renderAttributeBannerWithText(sb, getPriorityIcon(), card.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y2,0,0.45f, 1, -25f);
             }
-            else if (card.shouldUsePCLFrame()) {
+            else if (card.shouldUsePCLFrame() || PGR.config.showCardTarget.get()) {
                 renderAttributeBannerWithText(sb, null, card.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y,0,0.45f, 1, 0);
             }
         }

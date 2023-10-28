@@ -287,7 +287,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
             selectedLoadout = prepareLoadout();
         }
         config.lastLoadout.set(selectedLoadout.ID);
-        config.lastPreset.set(selectedLoadout.preset);
+        config.lastPreset.set(selectedLoadout.preset != null ? selectedLoadout.preset : EUIUtils.EMPTY_STRING);
     }
 
     public void saveStats() {

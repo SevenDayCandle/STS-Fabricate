@@ -31,7 +31,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
     public final PCLRelicSlotEditor slot;
-    private EUIRelicGrid grid;
+    private final EUIRelicGrid grid = new EUIRelicGrid();
     private AbstractRelic selectedRelic;
 
     public PCLRelicSlotSelectionEffect(PCLRelicSlotEditor slot) {
@@ -43,8 +43,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
             return;
         }
 
-        this.grid = (EUIRelicGrid) new EUIRelicGrid()
-                .addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
+        this.grid.addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
                 .setOnClick(this::onRelicClicked)
                 .setOnRender(this::onRelicRender);
 

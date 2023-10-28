@@ -41,6 +41,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("MadnessReplacements"), false);
     public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("RemoveLineBreaks"), false);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ReplaceCardsPCL"), false);
+    public STSConfigItem<Boolean> showCardTarget = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowCardTarget"), false);
     public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowEstimatedDamage"), false);
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowFormulaDisplay"), false);
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("ShowIrrelevantProperties"), false);
@@ -137,6 +138,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
+        yPos = addToggle(0, showCardTarget, PGR.core.strings.options_showCardTarget, yPos, PGR.core.strings.optionDesc_showCardTarget);
         yPos = addToggle(0, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
         yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
@@ -158,6 +160,7 @@ public class PCLMainConfig extends AbstractConfig {
         makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
         makeModToggle(removeLineBreaks, PGR.core.strings.options_removeLineBreaks, PGR.core.strings.optionDesc_removeLineBreaks);
+        makeModToggle(showCardTarget, PGR.core.strings.options_showCardTarget, PGR.core.strings.optionDesc_showCardTarget);
         makeModToggle(showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
@@ -199,6 +202,7 @@ public class PCLMainConfig extends AbstractConfig {
         fabricatePopup.addConfig(config);
         lowVRAM.addConfig(config);
         removeLineBreaks.addConfig(config);
+        showCardTarget.addConfig(config);
         showEstimatedDamage.addConfig(config);
         showFormulaDisplay.addConfig(config);
         showIrrelevantProperties.addConfig(config);

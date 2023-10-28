@@ -32,7 +32,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
     private final boolean draggingScreen = false;
     public final PCLCardSlotEditor slot;
     private AbstractCard selectedCard;
-    private EUICardGrid grid;
+    private final EUICardGrid grid = new EUICardGrid();
 
     public PCLCardSlotSelectionEffect(PCLCardSlotEditor slot) {
         super(0.7f, true);
@@ -44,8 +44,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             return;
         }
 
-        this.grid = (EUICardGrid) new EUICardGrid()
-                .addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
+        this.grid.addPadY(AbstractCard.IMG_HEIGHT * 0.15f)
                 .setEnlargeOnHover(false)
                 .setOnClick(this::onCardClicked)
                 .setOnRender(this::onCardRender);

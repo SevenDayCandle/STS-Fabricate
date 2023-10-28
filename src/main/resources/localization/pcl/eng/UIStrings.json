@@ -493,7 +493,8 @@
 												"Low VRAM mode",
 												"Use Madness for missing cards",
 												"Use Fabricate popup view for all relics",
-												"Use custom card framework for all cards"
+												"Use custom card framework for all cards",
+												"Show targeting indicators on custom cards"
 								]
 				},
 				"pcl:OptionDescriptions": {
@@ -511,7 +512,8 @@
 												"If checked, card images are loaded at half-resolution when viewed outside of the single card popup view. This may lower VRAM usage, but it may result in longer loading times. Requires restart, and disables Dynamic card portraits while active",
 												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
 												"If checked, all popup views for relics will be rendered with Fabricate, even if those items were not made with Fabricate. This setting may cause conflicts with mods that modify base game popup views.",
-												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods."
+												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods.",
+												"Adds a panel on the right-hand side of cards that describes the card's targeting. Note that certain cards may always have this panel visible regardless of this settings."
 								]
 				},
 				"pcl:Power": {
