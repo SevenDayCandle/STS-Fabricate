@@ -1,7 +1,9 @@
 package pinacolada.dungeon;
 
+import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.patches.CenterGridCardSelectScreen;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
@@ -127,6 +129,12 @@ public class GridCardSelectScreenHelper {
         for (AbstractCard c : mergedGroup.group) {
             c.stopGlowing();
         }
+    }
+
+    // CenterGridCardSelectScreen patch collides with Fabricate's patch, so we need to manually unset this to prevent issues with Pandora's Box
+    public static void unsetConfirm() {
+        AbstractDungeon.gridSelectScreen.isJustForConfirming = false;
+        ReflectionHacks.setPrivateStatic(CenterGridCardSelectScreen.class, "save_isJustForConfirming", false);
     }
 
     public static boolean updateCardPositionAndHover(GridCardSelectScreen selectScreen) {

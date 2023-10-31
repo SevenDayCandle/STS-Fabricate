@@ -164,7 +164,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         GridCardSelectScreenHelper.clear(true);
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
-        AbstractDungeon.gridSelectScreen.isJustForConfirming = false; // Manually unset before grid screen opens to avoid conflicts with stslib
+        GridCardSelectScreenHelper.unsetConfirm();
 
         for (ChoiceCardData<T> choice : choices) {
             group.addToTop(choice.create());

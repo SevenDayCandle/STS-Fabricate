@@ -15,7 +15,6 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
-import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.modifiers.*;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -75,8 +74,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return (PMod_PerCreature) new PMod_PerCreature(target, amount).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerDamage bonusPerDamage(int amount) {
-        return (PMod_PerDamage) new PMod_PerDamage(amount).edit(f -> f.setNot(true));
+    public static PMod_PerCardDamage bonusPerDamage(int amount) {
+        return (PMod_PerCardDamage) new PMod_PerCardDamage(amount).edit(f -> f.setNot(true));
     }
 
     public static PMod_PerOrb bonusPerOrb(int amount, PCLOrbHelper... aff) {

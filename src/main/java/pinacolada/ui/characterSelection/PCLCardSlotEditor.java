@@ -103,17 +103,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
             }
         }
 
-        cards.sort((a, b) -> {
-            int aEst = LoadoutCardSlot.getLoadoutValue(a);
-            if (aEst < 0) {
-                aEst = -aEst * 1000;
-            }
-            int bEst = LoadoutCardSlot.getLoadoutValue(b);
-            if (bEst < 0) {
-                bEst = -bEst * 1000;
-            }
-            return aEst - bEst;
-        });
+        cards.sort(LoadoutCardSlot::getLoadoutCardSort);
 
         return cards;
     }

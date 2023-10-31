@@ -544,13 +544,14 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_yourX = subjects.TEXT[61];
     public final String subjects_xOfY = subjects.TEXT[62];
     public final String subjects_xOnY = subjects.TEXT[63];
-    public final String subjects_xOrLessY = subjects.TEXT[64];
-    public final String subjects_xThisCombat = subjects.TEXT[65];
-    public final String subjects_xThisTurn = subjects.TEXT[66];
-    public final String subjects_xTimes = subjects.TEXT[67];
-    public final String subjects_xUntilY = subjects.TEXT[68];
-    public final String subjects_xWithY = subjects.TEXT[69];
-    public final String subjects_xCost = subjects.TEXT[70];
+    public final String subjects_xOnYInZ = subjects.TEXT[64];
+    public final String subjects_xOrLessY = subjects.TEXT[65];
+    public final String subjects_xThisCombat = subjects.TEXT[66];
+    public final String subjects_xThisTurn = subjects.TEXT[67];
+    public final String subjects_xTimes = subjects.TEXT[68];
+    public final String subjects_xUntilY = subjects.TEXT[69];
+    public final String subjects_xWithY = subjects.TEXT[70];
+    public final String subjects_xCost = subjects.TEXT[71];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -1388,6 +1389,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_xOfY(Object obj, Object t) {
         return EUIUtils.format(subjects_xOfY, obj, t);
+    }
+    public final String subjects_xOnYInZ(Object obj, Object t, Object pl) {
+        return EUIUtils.format(subjects_xOnYInZ, obj, t, pl);
     }
     public final String subjects_xOrLess(Object obj) {
         return EUIUtils.format(subjects_xOrLessY, obj);

@@ -3,10 +3,8 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.cards.base.*;
+import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
 
@@ -26,12 +24,56 @@ public class LoadoutCardSlot extends LoadoutSlot {
         this.currentMax = other.currentMax;
     }
 
+    public static int getLoadoutCardSort(AbstractCard a, AbstractCard b) {
+        return getLoadoutCardSort(a.cardID, b.cardID);
+    }
+
+    public static int getLoadoutCardSort(String a, String b) {
+        int aEst = LoadoutCardSlot.getLoadoutValue(a);
+        if (aEst < 0) {
+            aEst = -aEst * 1000;
+        }
+        int bEst = LoadoutCardSlot.getLoadoutValue(b);
+        if (bEst < 0) {
+            bEst = -bEst * 1000;
+        }
+        return aEst - bEst;
+    }
+
+    public static int getLoadoutValue(AbstractCard card) {
+        if (card != null) {
+            PCLCardData replacement = TemplateCardData.getTemplate(card.cardID);
+            if (replacement != null) {
+                return replacement.getLoadoutValue();
+            }
+
+            if (card instanceof PCLCard) {
+                return ((PCLCard) card).cardData.getLoadoutValue();
+            }
+            return PCLCardData.getValueForRarity(card.rarity);
+        }
+        return 0;
+    }
+
     public static int getLoadoutValue(String item) {
+        PCLCardData replacement = PCLCardData.getStaticData(item);
+        if (replacement != null) {
+            return replacement.getLoadoutValue();
+        }
+
+        replacement = TemplateCardData.getTemplate(item);
+        if (replacement != null) {
+            return replacement.getLoadoutValue();
+        }
+
         AbstractCard r = CardLibrary.getCard(item);
         if (r instanceof PCLCard) {
             return ((PCLCard) r).cardData.getLoadoutValue();
         }
-        return r != null ? PCLCardData.getValueForRarity(r.rarity) : 0;
+        if (r != null) {
+            return PCLCardData.getValueForRarity(r.rarity);
+        }
+        return 0;
     }
 
     public static int getMaxCardCopies(String item) {

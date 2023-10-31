@@ -133,13 +133,13 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
             case BASIC:
                 return 0;
             case COMMON:
-                return 7;
+                return 5;
             case UNCOMMON:
-                return 15;
+                return 14;
             case CURSE:
                 return -7;
         }
-        return 30;
+        return 27;
     }
 
     public static void invalidateTempCards() {

@@ -17,7 +17,9 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.resources.loadout.LoadoutCardSlot;
 import pinacolada.ui.characterSelection.PCLCardSlotEditor;
 
 // Copied and modified from STS-AnimatorMod
@@ -69,23 +71,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, EUI.actingColor);
-        grid.group.sort(this::defaultSort);
-    }
-
-    private int defaultSort(AbstractCard a, AbstractCard b) {
-        int aVal = getCardValue(a);
-        int bVal = getCardValue(b);
-        if (aVal < 0) {
-            aVal = aVal * -1000;
-        }
-        if (bVal < 0) {
-            bVal = bVal * -1000;
-        }
-        return aVal - bVal;
-    }
-
-    private int getCardValue(AbstractCard card) {
-        return (card instanceof PCLCard) ? ((PCLCard) card).cardData.getLoadoutValue() : card != null ? PCLCardData.getValueForRarity(card.rarity) : 0;
+        grid.group.sort(LoadoutCardSlot::getLoadoutCardSort);
     }
 
     public AbstractCard getSelectedCard() {
@@ -99,7 +85,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
     }
 
     private void onCardRender(SpriteBatch sb, AbstractCard card) {
-        int estimateValue = getCardValue(card);
+        int estimateValue = LoadoutCardSlot.getLoadoutValue(card);
         cardValue_text
                 .setLabel(estimateValue)
                 .setFontColor(estimateValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)

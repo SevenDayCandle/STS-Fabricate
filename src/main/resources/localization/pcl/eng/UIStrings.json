@@ -671,6 +671,7 @@
 												"your {0}",
 												"{0} of {1}",
 												"{0} on {1}",
+												"{0} on {1} in {2}",
 												"{0} or less",
 												"{0} this combat",
 												"{0} this turn",

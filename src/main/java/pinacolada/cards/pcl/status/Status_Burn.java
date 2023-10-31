@@ -17,7 +17,8 @@ public class Status_Burn extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.Self)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Red);
+            .setAffinities(PCLAffinity.Red)
+            .setLoadoutValue(-7);
 
     public Status_Burn() {
         super(DATA);

@@ -4,7 +4,7 @@
   "author_list": ["PinaColada"],
   "description": "In-game card creator and custom run menu overhaul for Slay the Spire.",
   "credits" : "Code: EatYourBeetS \n SFX: The Berklee College of Music, SquishiSprite, Zoltan Mihalyi, ViRiX, SilverIllusionist \n VFX: Effekseer, ashishlko11, Cethiel, GNOME Project, ManuGamingCreations, The Free Archives @ Dreams Circle, Sinestesia, J. W. Bjerk, Airarcs, Font Awesome, Stable Diffusion",
-  "version": "3.1.6",
+  "version": "3.1.7",
   "sts_version": "10-04-2022",
   "mts_version": "3.30.0",
   "dependencies": ["basemod", "stslib", "extendedui"],
