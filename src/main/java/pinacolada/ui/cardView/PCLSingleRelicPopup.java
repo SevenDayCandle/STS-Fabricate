@@ -11,14 +11,19 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUITextHelper;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.megacrit.cardcrawl.screens.SingleRelicViewPopup.TEXT;
 
@@ -120,6 +125,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
     }
 
     @Override
+    protected Iterable<? extends EUITooltip> getTipsToDisplay(AbstractRelic currentItem) {
+        return currentItem.isSeen ? super.getTipsToDisplay(currentItem) : Collections.emptyList();
+    }
+
+    @Override
     protected boolean isHovered() {
         return false;
     }
@@ -187,15 +197,29 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
                 sb.setColor(new Color(0.0F, 0.0F, 0.0F, 0.5F));
             }
 
-            sb.draw(currentItem.outlineImg, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
-            if (!currentItem.isSeen) {
-                sb.setColor(Color.BLACK);
+            if (currentItem instanceof PCLRelic) {
+                // TODO move popup render logic to PCLRelic
+                if (!currentItem.isSeen) {
+                    sb.setColor(Color.BLACK);
+                    EUIRenderHelpers.drawSilhouette(sb, Color.LIGHT_GRAY, s -> {
+                        s.draw(currentItem.img, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
+                    });
+                }
+                else {
+                    sb.setColor(Color.WHITE);
+                    sb.draw(currentItem.img, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
+                }
             }
             else {
-                sb.setColor(Color.WHITE);
+                sb.draw(currentItem.outlineImg, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
+                if (!currentItem.isSeen) {
+                    sb.setColor(Color.BLACK);
+                }
+                else {
+                    sb.setColor(Color.WHITE);
+                }
+                sb.draw(currentItem.img, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
             }
-
-            sb.draw(currentItem.img, (float) Settings.WIDTH / 2.0F - 64.0F, IMAGE_Y, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale * renderScale, Settings.scale * renderScale, 0.0F, 0, 0, 128, 128, false, false);
         }
     }
 

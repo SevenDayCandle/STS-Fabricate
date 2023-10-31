@@ -70,6 +70,7 @@ import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCardCreature;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
@@ -1534,8 +1535,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = CardModifierManager.onModifyBaseBlock(baseBlock, this);
         float tempDamage = CardModifierManager.onModifyBaseDamage(baseDamage, this, asEnemy);
-        float tempHitCount = baseHitCount;
-        float tempRightCount = baseRightCount;
+        float tempHitCount = CombatManager.onModifyHitCount(baseHitCount, this);
+        float tempRightCount = CombatManager.onModifyRightCount(baseRightCount, this);
         tempDamage = modifyDamage(info, tempDamage);
         tempBlock = modifyBlock(info, tempBlock);
         float oldBlock = tempBlock;
@@ -1663,6 +1664,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                         addDefendDisplay(r.img, oldBlock, tempBlock);
                     }
                 }
+            }
+            else if (owner instanceof PCLCardCreature) {
+                oldBlock = tempBlock;
+                oldDamage = tempDamage;
+                tempDamage = ((PCLCardCreature) owner).atDamageLastModify(info, tempDamage);
+                tempBlock = ((PCLCardCreature) owner).atBlockLastModify(info, tempBlock);
+                addAttackDisplay(oldDamage, tempDamage);
+                addDefendDisplay(oldBlock, tempBlock);
             }
 
             oldBlock = tempBlock;

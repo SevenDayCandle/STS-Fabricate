@@ -17,7 +17,8 @@ public class Curse_Pain extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Purple);
+            .setAffinities(PCLAffinity.Purple)
+            .setLoadoutValue(-8);
 
     public Curse_Pain() {
         super(DATA);

@@ -36,10 +36,7 @@ import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.random.Random;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.relics.CloakClasp;
-import com.megacrit.cardcrawl.relics.Orichalcum;
-import com.megacrit.cardcrawl.relics.PrismaticShard;
+import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
 import com.megacrit.cardcrawl.screens.stats.AchievementGrid;
@@ -202,6 +199,14 @@ public class GameUtilities {
 
     public static boolean canOrbApplyFocusToEvoke(AbstractOrb orb) {
         return (!Dark.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToEvoke));
+    }
+
+    public static boolean canPlayCurse() {
+        return GameUtilities.hasRelicEffect(BlueCandle.ID);
+    }
+
+    public static boolean canPlayStatus() {
+        return GameUtilities.hasRelicEffect(MedicalKit.ID);
     }
 
     public static boolean canPlayTwice(AbstractCard card) {
@@ -391,8 +396,11 @@ public class GameUtilities {
         AbstractCard c = CardLibrary.getCard(key);
         if (c != null) {
             c.isSeen = true;
-            UnlockTracker.seenPref.putInteger(key, 1);
-            UnlockTracker.seenPref.flush();
+            int val = UnlockTracker.seenPref.getInteger(key);
+            if (val != 1) {
+                UnlockTracker.seenPref.putInteger(key, 1);
+                UnlockTracker.seenPref.flush();
+            }
         }
     }
 

@@ -24,11 +24,13 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class SummonPool extends EUIBase {
-    public static int BASE_TRIGGER = 2;
+    public static int BASE_DAMAGE_BONUS = 100;
+    public static int BASE_TRIGGER = 1;
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(160);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
+    public int damageBonus = BASE_DAMAGE_BONUS;
     public int triggerTimes = BASE_TRIGGER;
 
     public void addSummon(int times) {
@@ -141,6 +143,7 @@ public class SummonPool extends EUIBase {
 
     public void initialize() {
         summons.clear();
+        damageBonus = BASE_DAMAGE_BONUS;
         triggerTimes = BASE_TRIGGER;
 
         if (AbstractDungeon.player != null) {
@@ -201,7 +204,7 @@ public class SummonPool extends EUIBase {
             if (summons.size() > 0) {
                 PCLCardAlly ally = summons.remove(summons.size() - 1);
                 if (ally.card != null) {
-                    PCLActions.bottom.withdrawAlly(ally);
+                    PCLActions.bottom.withdrawAlly(ally, triggerTimes);
                 }
             }
         }
@@ -248,11 +251,11 @@ public class SummonPool extends EUIBase {
     }
 
     public WithdrawAllyAction withdraw(PCLCardAlly target) {
-        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
+        return PCLActions.top.withdrawAlly(target, triggerTimes);
     }
 
     public WithdrawAllyAction withdraw(Collection<PCLCardAlly> target) {
-        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
+        return PCLActions.top.withdrawAlly(target, triggerTimes);
     }
 
     public enum DamageMode {

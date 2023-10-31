@@ -56,6 +56,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLClickableUse;
@@ -565,6 +566,10 @@ public class CombatManager extends EUIBase {
 
         playerSystem.onCardCreated(card, startOfBattle);
         subscriberDo(OnCardCreatedSubscriber.class, s -> s.onCardCreated(card, startOfBattle));
+
+        if (((card.type == AbstractCard.CardType.CURSE && GameUtilities.canPlayCurse()) || (card.type == AbstractCard.CardType.STATUS && GameUtilities.canPlayStatus())) && PCLCardTag.Unplayable.has(card)) {
+            PCLCardTag.Unplayable.set(card, 0);
+        }
     }
 
     public static void onCardDiscarded(AbstractCard card) {
@@ -781,6 +786,14 @@ public class CombatManager extends EUIBase {
         return subscriberInout(OnModifyDamageReceiveLastSubscriber.class, amount, (s, d) -> s.onModifyDamageReceiveLast(d, type, source, target, card));
     }
 
+    public static int onModifyHitCount(int amount, AbstractCard card) {
+        return subscriberInout(OnModifyHitCountSubscriber.class, amount, (s, d) -> s.onModifyHitCount(d, card));
+    }
+
+    public static int onModifyRightCount(int amount, AbstractCard card) {
+        return subscriberInout(OnModifyRightCountSubscriber.class, amount, (s, d) -> s.onModifyRightCount(d, card));
+    }
+
     public static float onModifySkillBonus(float amount, AbstractCard card) {
         return subscriberInout(OnModifySkillBonusSubscriber.class, amount, (s, d) -> s.onModifySkillBonus(d, card));
     }
@@ -933,6 +946,11 @@ public class CombatManager extends EUIBase {
                 pclCard.onUse(info);
             }
 
+            // Hardcoded surrounded checks
+            if (p != null && shouldFlipPlayer(p) && finalTarget != null) {
+                p.flipHorizontal = finalTarget.drawX < p.drawX;
+            }
+
             playerSystem.onCardPlayed(pclCard, info, false);
             return true;
         }
@@ -1025,6 +1043,9 @@ public class CombatManager extends EUIBase {
                 ((PCLPower) po).onRemoveDamagePowers();
             }
         }
+        if (creature instanceof PCLCreature) {
+            ((PCLCreature) creature).onRemoveDamagePowers();
+        }
     }
 
     public static <T> T setCombatData(String key, T data) {
@@ -1035,6 +1056,10 @@ public class CombatManager extends EUIBase {
     public static <T> T setTurnData(String key, T data) {
         turnData.put(key, data);
         return data;
+    }
+
+    public static boolean shouldFlipPlayer(AbstractPlayer p) {
+        return p.hasPower(SurroundedPower.POWER_ID);
     }
 
     public static void subscribe(PCLCombatSubscriber subscriber) {
@@ -1202,7 +1227,12 @@ public class CombatManager extends EUIBase {
                 if (summon.isHovered()) {
                     hoveredCard = summon.card;
                     target = summon.target;
-                    break;
+                    if (player.hoveredCard != null) {
+                        summon.onHover();
+                    }
+                }
+                else {
+                    summon.onUnhover();
                 }
             }
         }

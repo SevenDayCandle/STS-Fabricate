@@ -21,7 +21,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class CardTriggerConnection implements ClickableProvider, TriggerConnection, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber,
                                               OnModifyBlockLastSubscriber, OnModifyCostSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber,
-                                              OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnTryUsingCardSubscriber {
+                                              OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnModifyHitCountSubscriber, OnModifyRightCountSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
     public final AbstractCard card;
     private PCLClickableUse triggerCondition;
@@ -46,7 +46,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public boolean canUse(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse) {
         if (canActivate(trigger)) {
-            canUse = trigger.canPlay(trigger.getInfo(null), trigger);
+            canUse = trigger.canPlay(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), trigger);
         }
         return canUse;
     }
@@ -97,7 +97,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyBlockFirst(float amount, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyBlockFirst(trigger.getInfo(getOwner()), amount);
+            amount = trigger.modifyBlockFirst(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), amount);
         }
         return amount;
     }
@@ -105,7 +105,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyBlockLast(float amount, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyBlockLast(trigger.getInfo(getOwner()), amount);
+            amount = trigger.modifyBlockLast(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), amount);
         }
         return amount;
     }
@@ -113,7 +113,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public int onModifyCost(int amount, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyCost(trigger.getInfo(getOwner()), amount);
+            amount = trigger.modifyCost(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), amount);
         }
         return amount;
     }
@@ -121,7 +121,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyDamageGiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyDamageGiveFirst(trigger.getInfo(target), amount);
+            amount = trigger.modifyDamageGiveFirst(CombatManager.playerSystem.getInfo(card, source, target), amount);
         }
         return amount;
     }
@@ -129,7 +129,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyDamageGiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyDamageGiveLast(trigger.getInfo(target), amount);
+            amount = trigger.modifyDamageGiveLast(CombatManager.playerSystem.getInfo(card, source, target), amount);
         }
         return amount;
     }
@@ -137,7 +137,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyDamageReceiveFirst(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyDamageReceiveFirst(trigger.getInfo(target), amount, type);
+            amount = trigger.modifyDamageReceiveFirst(CombatManager.playerSystem.getInfo(card, source, target), amount, type);
         }
         return amount;
     }
@@ -145,7 +145,23 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public float onModifyDamageReceiveLast(float amount, DamageInfo.DamageType type, AbstractCreature source, AbstractCreature target, AbstractCard card) {
         if (canActivate(trigger)) {
-            amount = trigger.modifyDamageReceiveLast(trigger.getInfo(target), amount, type);
+            amount = trigger.modifyDamageReceiveLast(CombatManager.playerSystem.getInfo(card, source, target), amount, type);
+        }
+        return amount;
+    }
+
+    @Override
+    public int onModifyHitCount(int amount, AbstractCard card) {
+        if (canActivate(trigger)) {
+            amount = (int) trigger.modifyHitCount(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public int onModifyRightCount(int amount, AbstractCard card) {
+        if (canActivate(trigger)) {
+            amount = (int) trigger.modifyRightCount(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), amount);
         }
         return amount;
     }

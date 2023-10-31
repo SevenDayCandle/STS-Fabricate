@@ -233,4 +233,8 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     }
 
     public abstract void performActions(boolean manual);
+
+    public void onRemoveDamagePowers() {
+
+    }
 }

@@ -48,7 +48,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -887,7 +886,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo getInfo(AbstractCreature target) {
-        return generateInfo(getOwnerCreature(), target);
+        return getInfo(getOwnerCreature(), target);
     }
 
     public PCLUseInfo getInfo(AbstractCreature source, AbstractCreature target) {
@@ -1666,7 +1665,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this.childEffect == null || this.childEffect.removable();
     }
 
-    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY, boolean isPreview) {
         return startY;
     }
 

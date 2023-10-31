@@ -7,6 +7,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
 import extendedui.EUIUtils;
 import pinacolada.effects.PCLAttackVFX;
+import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -84,9 +86,10 @@ public class DamageHelper {
                 case CurlUpPower.POWER_ID:
                 case PlatedArmorPower.POWER_ID:
                 case ReactivePower.POWER_ID:
+                case AngryPower.POWER_ID:
                     return false;
             }
-            return true;
+            return !(power instanceof PCLPower && ((PCLPower) power).data.endTurnBehavior == PCLPowerData.Behavior.Plated);
         });
     }
 }

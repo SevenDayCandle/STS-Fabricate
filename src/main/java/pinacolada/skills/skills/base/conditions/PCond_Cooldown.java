@@ -117,7 +117,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY, boolean isPreview) {
         boolean canActivate = canActivate();
         boolean dim = ally.shouldDim();
         Color iconColor = dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE;

@@ -18,6 +18,7 @@ public class Curse_Necronomicurse extends PCLCard {
             .setCurse(-2, PCLCardTarget.None, true)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(2, PCLAffinity.Purple)
+            .setLoadoutValue(-9)
             .setRemovableFromDeck(false);
 
     public Curse_Necronomicurse() {

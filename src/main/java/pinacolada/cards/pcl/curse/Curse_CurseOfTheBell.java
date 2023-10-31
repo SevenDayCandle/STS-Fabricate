@@ -16,6 +16,7 @@ public class Curse_CurseOfTheBell extends PCLCard {
             .setCurse(-2, PCLCardTarget.None, true)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple)
+            .setLoadoutValue(-9)
             .setRemovableFromDeck(false);
 
     public Curse_CurseOfTheBell() {

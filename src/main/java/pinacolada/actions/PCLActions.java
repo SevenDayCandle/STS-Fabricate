@@ -794,12 +794,12 @@ public final class PCLActions {
         return add(new WaitRealtimeAction(duration));
     }
 
-    public WithdrawAllyAction withdrawAlly(PCLCardAlly ally) {
-        return add(new WithdrawAllyAction(ally));
+    public WithdrawAllyAction withdrawAlly(PCLCardAlly ally, int amount) {
+        return add(new WithdrawAllyAction(ally, amount));
     }
 
-    public WithdrawAllyAction withdrawAlly(Collection<PCLCardAlly> ally) {
-        return add(new WithdrawAllyAction(ally));
+    public WithdrawAllyAction withdrawAlly(Collection<PCLCardAlly> ally, int amount) {
+        return add(new WithdrawAllyAction(ally, amount));
     }
 
     public enum ActionOrder {

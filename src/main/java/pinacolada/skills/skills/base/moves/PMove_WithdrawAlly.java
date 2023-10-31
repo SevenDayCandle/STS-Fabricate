@@ -52,7 +52,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        order.withdrawAlly(targets).setTriggerTimes(amount).addCallback(cards ->
+        order.withdrawAlly(targets, amount).addCallback(cards ->
         {
             info.setData(cards);
             callback.invoke(info);

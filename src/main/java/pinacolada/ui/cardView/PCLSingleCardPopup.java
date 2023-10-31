@@ -213,7 +213,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     }
 
     @Override
-    protected Iterable<? extends EUITooltip> getTipsForRender(PCLCard currentItem) {
+    protected Iterable<? extends EUITooltip> getTipsToDisplay(PCLCard currentItem) {
         return currentItem != null ? ((TooltipProvider) currentItem).getTipsForRender() : Collections.emptyList();
     }
 

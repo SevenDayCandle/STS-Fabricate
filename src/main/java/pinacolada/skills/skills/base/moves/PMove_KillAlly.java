@@ -51,9 +51,9 @@ public class PMove_KillAlly extends PMove<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        order.withdrawAlly(targets)
+        order.withdrawAlly(targets, 0)
                 .setDestination(CombatManager.PURGED_CARDS)
-                .setTriggerTimes(0).showEffect(true).addCallback(cards ->
+                .showEffect(true).addCallback(cards ->
                 {
                     if (this.childEffect != null) {
                         info.setData(cards);

@@ -17,7 +17,8 @@ public class Curse_Normality extends PCLCard {
     public static final PCLCardData DATA = registerTemplate(Curse_Normality.class, Normality.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
-            .setTags(PCLCardTag.Unplayable);
+            .setTags(PCLCardTag.Unplayable)
+            .setLoadoutValue(-9);
 
     public Curse_Normality() {
         super(DATA);

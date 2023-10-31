@@ -49,6 +49,8 @@ public class PCLCardAlly extends PCLCardCreature {
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0, 0, 128, 128);
     public static final float INTENT_OFFSET = 14.0F * Settings.scale;
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
+    protected float damageMult = 1;
+    protected boolean forPreview;
     public int index;
 
     public PCLCardAlly(int index, float xPos, float yPos) {
@@ -59,6 +61,14 @@ public class PCLCardAlly extends PCLCardCreature {
 
     public static void registerAnimation(AbstractCard.CardColor color, FuncT1<PCLAllyAnimation, PCLCardAlly> animationFunc) {
         ANIMATION_MAP.putIfAbsent(color, animationFunc);
+    }
+
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        return block * damageMult;
+    }
+
+    public float atDamageLastModify(PCLUseInfo info, float damage) {
+        return damage * damageMult;
     }
 
     @Override
@@ -116,10 +126,30 @@ public class PCLCardAlly extends PCLCardCreature {
             this.animation = anim = new PCLGeneralAllyAnimation(this);
         }
         anim.fadeIn();
+
+        damageMult = 1;
+    }
+
+    public void onHover() {
+        damageMult = 1 + (CombatManager.summons.damageBonus / 100f);
+        forPreview = true;
     }
 
     public void onOtherAllyTrigger() {
 
+    }
+
+    public void onRemoveDamagePowers() {
+        damageMult = 1;
+    }
+
+    public void onUnhover() {
+        damageMult = 1;
+        forPreview = false;
+    }
+
+    public void onWithdraw() {
+        damageMult = 1 + (CombatManager.summons.damageBonus / 100f);
     }
 
     @Override
@@ -130,7 +160,7 @@ public class PCLCardAlly extends PCLCardCreature {
             PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
             card.useEffectsWithoutPowers(info);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
-            CombatManager.playerSystem.onCardPlayed(card, info, true);
+            CombatManager.playerSystem.onCardPlayed(card, info, manual);
             applyTurnPowers();
             CombatManager.onAllyTrigger(this.card, this.target, this);
         }
@@ -206,15 +236,15 @@ public class PCLCardAlly extends PCLCardCreature {
         else if (card != null) {
             float startY = this.intentHb.cY + getBobEffect().y - 12.0F * Settings.scale;
             if (card.onAttackEffect != null) {
-                startY = card.onAttackEffect.renderIntentIcon(sb, this, startY);
+                startY = card.onAttackEffect.renderIntentIcon(sb, this, startY, forPreview);
             }
             if (card.onBlockEffect != null) {
-                startY = card.onBlockEffect.renderIntentIcon(sb, this, startY);
+                startY = card.onBlockEffect.renderIntentIcon(sb, this, startY, forPreview);
             }
             for (PSkill<?> skill : card.getEffects()) {
                 PSkill<?> cur = skill;
                 while (cur != null) {
-                    startY = cur.renderIntentIcon(sb, this, startY);
+                    startY = cur.renderIntentIcon(sb, this, startY, forPreview);
                     cur = cur.getChild();
                 }
             }

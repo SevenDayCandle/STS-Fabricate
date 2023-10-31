@@ -21,8 +21,6 @@ import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
-import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.utilities.PCLRenderHelpers;
 
 @VisibleSkill
@@ -103,11 +101,13 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY) {
+    public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY, boolean isPreview) {
         boolean dim = ally.shouldDim();
         TextureRegion icon = PGR.core.tooltips.block.icon;
         PCLRenderHelpers.drawGrayscaleIf(sb, s -> PCLRenderHelpers.drawCentered(sb, dim ? PCLCreature.TAKEN_TURN_COLOR : Color.WHITE, icon, ally.intentHb.cX - PCLCardAlly.INTENT_OFFSET, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f), dim);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY, dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
+        FontHelper.renderFontLeftTopAligned(sb,
+                FontHelper.topPanelInfoFont, extra > 1 ? amount + "x" + extra : String.valueOf(amount), ally.intentHb.cX + PCLCardAlly.INTENT_OFFSET, startY,
+                isPreview ? Settings.GREEN_TEXT_COLOR : dim ? PCLCreature.TAKEN_TURN_NUMBER_COLOR : Settings.CREAM_COLOR);
         return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 

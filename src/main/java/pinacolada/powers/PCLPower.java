@@ -281,6 +281,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return data.create(owner, source, amount);
     }
 
+    public int maxAmount() {
+        return data.maxAmount;
+    }
+
     // Note that info.card and c may be DIFFERENT in the case of PCLMultiCard
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
         return modifyBlock(block, c);
@@ -478,7 +482,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     public void setupProperties(int amount) {
-        this.baseAmount = this.amount = Math.min(data.maxAmount, amount);
+        this.baseAmount = this.amount = Math.min(maxAmount(), amount);
         this.priority = data.priority;
         this.turns = data.turns;
         this.type = data.type;
@@ -490,11 +494,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     public void stackPower(int stackAmount, boolean updateBaseAmount) {
-        if (updateBaseAmount && (baseAmount += stackAmount) > data.maxAmount) {
-            baseAmount = data.maxAmount;
+        int maxAm = maxAmount();
+        if (updateBaseAmount && (baseAmount += stackAmount) > maxAm) {
+            baseAmount = maxAm;
         }
-        if ((amount + stackAmount) > data.maxAmount) {
-            stackAmount = data.maxAmount - amount;
+        if ((amount + stackAmount) > maxAm) {
+            stackAmount = maxAm - amount;
         }
 
         final int previous = amount;

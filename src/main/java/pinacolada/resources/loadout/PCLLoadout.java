@@ -410,7 +410,7 @@ public abstract class PCLLoadout {
             }
             return data;
         }
-        return getDefaultData();
+        return initializeData();
     }
 
     // This will never be null because the fallback will be core
@@ -446,22 +446,6 @@ public abstract class PCLLoadout {
             }
         }
 
-        if (cards.isEmpty()) {
-            EUIUtils.logWarning(this, "Starting loadout was empty");
-            PCLPlayerData<?, ?, ?> data = getPlayerData();
-            if (data != null) {
-                for (int i = 0; i < 2; i++) {
-                    for (PCLCardData card : data.getCoreLoadout().strikes) {
-                        cards.add(card.ID);
-                    }
-                    for (PCLCardData card : data.getCoreLoadout().defends) {
-                        cards.add(card.ID);
-                    }
-                }
-            }
-
-        }
-
         return cards;
     }
 
@@ -484,6 +468,16 @@ public abstract class PCLLoadout {
             return cardDatas.get(0);
         }
         return QuestionMark.DATA;
+    }
+
+    public PCLLoadoutData initializeData() {
+        PCLLoadoutData initData = getDefaultData(); // Ensure this is called and created, because some initialization and unlocking is done at this step
+        if (presets.isEmpty()) {
+            EUIUtils.logInfo(this, "Presets are empty, creating new temporary default preset");
+            preset = initData.ID;
+            presets.put(initData.ID, initData);
+        }
+        return initData;
     }
 
     public boolean isCardBanned(String cardID) {

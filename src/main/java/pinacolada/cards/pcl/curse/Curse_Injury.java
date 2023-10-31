@@ -15,7 +15,8 @@ public class Curse_Injury extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Purple);
+            .setAffinities(PCLAffinity.Purple)
+            .setLoadoutValue(-4);
 
     public Curse_Injury() {
         super(DATA);

@@ -15,7 +15,8 @@ public class Curse_Clumsy extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable, PCLCardTag.Ethereal)
-            .setAffinities(PCLAffinity.Purple);
+            .setAffinities(PCLAffinity.Purple)
+            .setLoadoutValue(-2);
 
     public Curse_Clumsy() {
         super(DATA);

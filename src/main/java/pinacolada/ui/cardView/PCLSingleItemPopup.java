@@ -15,6 +15,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIControllerButton;
@@ -94,8 +95,9 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
         this.fadeColor.a = 0.9F;
     }
 
-    protected Iterable<? extends EUITooltip> getTipsForRender(U currentItem) {
-        return currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : Collections.emptyList();
+    protected Iterable<? extends EUITooltip> getTipsToDisplay(U currentItem) {
+        return currentItem instanceof KeywordProvider ? ((KeywordProvider) currentItem).getTipsForFilters() :
+                currentItem instanceof TooltipProvider ? ((TooltipProvider) currentItem).getTipsForRender() : Collections.emptyList();
     }
 
     protected void initializeLabels() {
@@ -108,7 +110,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
 
     protected void initializeTips() {
         tooltips.clear();
-        for (EUITooltip tip : getTipsForRender(currentItem)) {
+        for (EUITooltip tip : getTipsToDisplay(currentItem)) {
             if (tip.isRenderable()) {
                 tooltips.add(tip);
             }

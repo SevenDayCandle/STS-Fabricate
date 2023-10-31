@@ -151,6 +151,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         return super.atDamageReceive(damage, type, card);
     }
 
+    @Override
     public void atStartOfTurn() {
         super.atStartOfTurn();
         for (PTrigger effect : ptriggers) {

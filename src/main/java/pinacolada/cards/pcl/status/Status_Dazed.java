@@ -13,7 +13,8 @@ public class Status_Dazed extends PCLCard {
     public static final PCLCardData DATA = registerTemplate(Status_Dazed.class, Dazed.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
-            .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable);
+            .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)
+            .setLoadoutValue(-2);
 
     public Status_Dazed() {
         super(DATA);

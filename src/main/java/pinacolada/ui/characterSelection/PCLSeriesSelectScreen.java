@@ -327,7 +327,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void dispose() {
         super.dispose();
 
-        toggleViewUpgrades(false);
+        SingleCardViewPopup.isViewingUpgrade = false;
 
         if (onClose != null) {
             onClose.invoke();
@@ -636,10 +636,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         toggleCards(find(EUIUtils.safeCast(card, PCLCard.class)), value);
         updateGlows();
         calculateCardCounts();
-    }
-
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = value;
     }
 
     protected void totalCardsChanged(int totalCards, int totalColorless) {

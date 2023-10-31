@@ -57,6 +57,14 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
         refreshAction();
     }
 
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atDamageLastModify(PCLUseInfo info, float damage) {
+        return damage;
+    }
+
     @Override
     public void atEndOfRound() {
         super.atEndOfRound();

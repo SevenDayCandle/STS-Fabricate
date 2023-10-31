@@ -18,20 +18,19 @@ import java.util.Collection;
 
 public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
     public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
-    public int triggerTimes = 2;
     public boolean clearPowers = true;
     public boolean showEffect = true;
     public CardGroup destination = AbstractDungeon.player.discardPile;
 
-    public WithdrawAllyAction(PCLCardAlly slot) {
+    public WithdrawAllyAction(PCLCardAlly slot, int amount) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
-        initialize(AbstractDungeon.player, slot, 1);
+        initialize(AbstractDungeon.player, slot, amount);
         allies.add(slot);
     }
 
-    public WithdrawAllyAction(Collection<PCLCardAlly> slot) {
+    public WithdrawAllyAction(Collection<PCLCardAlly> slot, int amount) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
-        initialize(AbstractDungeon.player, 1);
+        initialize(AbstractDungeon.player, amount);
         allies.addAll(slot);
     }
 
@@ -45,7 +44,8 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
                 PCLCard returnedCard = ally.card;
 
                 if (returnedCard != null) {
-                    for (int i = 0; i < triggerTimes; i++) {
+                    ally.onWithdraw();
+                    for (int i = 0; i < amount; i++) {
                         ally.takeTurn(true);
                     }
                     toRelease.add(ally);
@@ -96,11 +96,6 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
 
     public WithdrawAllyAction setDestination(CardGroup destination) {
         this.destination = destination;
-        return this;
-    }
-
-    public WithdrawAllyAction setTriggerTimes(int showEffect) {
-        this.triggerTimes = showEffect;
         return this;
     }
 

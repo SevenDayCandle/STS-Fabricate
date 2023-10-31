@@ -15,7 +15,8 @@ public class Status_Slimed extends PCLCard {
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(1, CardRarity.COMMON, PCLCardTarget.None)
             .setAffinities(PCLAffinity.Green)
-            .setTags(PCLCardTag.Exhaust);
+            .setTags(PCLCardTag.Exhaust)
+            .setLoadoutValue(-4);
 
     public Status_Slimed() {
         super(DATA);

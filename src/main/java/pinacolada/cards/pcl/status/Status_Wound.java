@@ -13,7 +13,8 @@ public class Status_Wound extends PCLCard {
     public static final PCLCardData DATA = registerTemplate(Status_Wound.class, Wound.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
-            .setTags(PCLCardTag.Unplayable);
+            .setTags(PCLCardTag.Unplayable)
+            .setLoadoutValue(-4);
 
     public Status_Wound() {
         super(DATA);

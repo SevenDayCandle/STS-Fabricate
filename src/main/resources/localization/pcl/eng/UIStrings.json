@@ -530,11 +530,13 @@
 						"Plated",
 						"Custom Behavior",
 						"Does not change in amount or disappear unless acted upon by another effect.",
-						"Stacks decrease by 1 at the end of each turn. Removed upon reaching 0 stacks.",
-						"Stacks decrease by 1 at the start of each turn. Removed upon reaching 0 stacks.",
-						"Removed at the end of the turn after a set number of turns from the initial application, regardless of stacks.",
-						"Removed at the start of the turn after a set number of turns from the initial application, regardless of stacks.",
-						"Stacks decrease by 1 upon receiving attack damage. Removed upon reaching 0 stacks."
+						"Reduced by 1 at turn end.",
+						"Reduced by 1 at turn start.",
+						"Removed at turn end after a set number of turns, regardless of stacks.",
+						"Removed at turn start after a set number of turns, regardless of stacks.",
+						"Reduced by 1 when attacked.",
+						"Removed at 0 stacks.",
+						"Lasts for {0} turn(s)"
 					]
 				},
 				"pcl:Rewards": {
