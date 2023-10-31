@@ -118,6 +118,7 @@ public class SelectFromPile extends CardFilterAction {
         GridCardSelectScreenHelper.setCondition(condition);
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
+        AbstractDungeon.gridSelectScreen.isJustForConfirming = false; // Manually unset before grid screen opens to avoid conflicts with stslib
         AbstractDungeon.player.hand.stopGlowing();
 
         for (CardGroup group : groups) {

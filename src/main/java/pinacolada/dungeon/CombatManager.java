@@ -947,7 +947,7 @@ public class CombatManager extends EUIBase {
             }
 
             // Hardcoded surrounded checks
-            if (p != null && shouldFlipPlayer(p) && finalTarget != null) {
+            if (p != null && shouldFlipPlayer(p) && finalTarget != null && !(finalTarget instanceof PCLCardAlly)) {
                 p.flipHorizontal = finalTarget.drawX < p.drawX;
             }
 

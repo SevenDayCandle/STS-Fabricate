@@ -39,7 +39,12 @@ public class PMove_GainEnergy extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.gainEnergy(amount);
+        if (amount > 0) {
+            order.gainEnergy(amount);
+        }
+        else {
+            order.spendEnergy(-amount, true);
+        }
         super.use(info, order);
     }
 }

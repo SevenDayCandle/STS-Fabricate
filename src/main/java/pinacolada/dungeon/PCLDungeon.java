@@ -563,7 +563,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 player.potions.remove(player.potions.size() - 1);
             }
             while (player.potionSlots > player.potions.size()) {
-                player.potions.add(new PotionSlot(player.potions.size() - 1));
+                player.potions.add(new PotionSlot(player.potions.size()));
             }
             player.adjustPotionPositions();
         }
