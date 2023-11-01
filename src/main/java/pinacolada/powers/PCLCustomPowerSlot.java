@@ -111,7 +111,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     public static String getFolder() {
-        return FOLDER + "/" + SUBFOLDER;
+        return EUIUtils.withSlash(FOLDER, SUBFOLDER);
     }
 
     /*

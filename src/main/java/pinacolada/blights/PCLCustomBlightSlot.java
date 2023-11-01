@@ -159,7 +159,7 @@ public class PCLCustomBlightSlot extends PCLCustomEditorLoadable<PCLDynamicBligh
     }
 
     public static String getFolder() {
-        return FOLDER + "/" + SUBFOLDER;
+        return EUIUtils.withSlash(FOLDER, SUBFOLDER);
     }
 
     public static void initialize() {

@@ -59,6 +59,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
+import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
@@ -850,6 +851,16 @@ public class CombatManager extends EUIBase {
         for (AbstractRelic r : AbstractDungeon.player.relics) {
             if (r instanceof OnRelicObtainedListener) {
                 ((OnRelicObtainedListener) r).onRelicObtained(relic);
+            }
+        }
+
+        for (AbstractPotion po : player.potions) {
+            if (po instanceof OnRelicObtainedListener) {
+                ((OnRelicObtainedListener) po).onRelicObtained(relic);
+            }
+            // If we obtained Sacred Bark, we need to update our potion values
+            if (po instanceof PCLPotion) {
+                ((PCLPotion) po).onUpgrade();
             }
         }
     }

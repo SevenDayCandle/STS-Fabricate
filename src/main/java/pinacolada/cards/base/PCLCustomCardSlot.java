@@ -193,7 +193,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     }
 
     public static String getFolder() {
-        return FOLDER + "/" + SUBFOLDER;
+        return EUIUtils.withSlash(FOLDER, SUBFOLDER);
     }
 
     public static void initialize() {

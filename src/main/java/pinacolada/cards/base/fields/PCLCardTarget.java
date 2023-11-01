@@ -38,15 +38,18 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     Team,
     UseParent;
 
+    public static final String S_SelfAllEnemy = selfPlus(PGR.core.strings.ctype_tagAoE);
+    public static final String S_SelfSingle = selfPlus(PGR.core.strings.ctype_tagSingle);
+    public static final String S_SelfSingleAlly = selfPlus(PGR.core.strings.ctype_tagAlly);
     public static final TargetFilter T_AllAlly = new TargetFilter(PGR.core.strings.ctype_allAlly);
     public static final TargetFilter T_AllAllyEnemy = new TargetFilter(PGR.core.strings.ctype_allAllyEnemy);
     public static final TargetFilter T_RandomAlly = new TargetFilter(PGR.core.strings.ctype_randomAlly);
     public static final TargetFilter T_RandomAllyEnemy = new TargetFilter(PGR.core.strings.ctype_randomAllyEnemy);
     public static final TargetFilter T_RandomEnemy = new TargetFilter(PGR.core.strings.ctype_randomEnemy);
-    public static final TargetFilter T_SelfAllEnemy = new TargetFilter(PGR.core.strings.ctype_selfAllEnemy);
-    public static final TargetFilter T_SelfPlayer = new TargetFilter(PGR.core.strings.ctype_selfPlayer);
-    public static final TargetFilter T_SelfSingle = new TargetFilter(PGR.core.strings.ctype_selfSingle);
-    public static final TargetFilter T_SelfSingleAlly = new TargetFilter(PGR.core.strings.ctype_selfSingleAlly);
+    public static final TargetFilter T_SelfAllEnemy = new TargetFilter(selfPlus(EUIRM.strings.target_allEnemy));
+    public static final TargetFilter T_SelfPlayer = new TargetFilter(selfPlus(EUIRM.strings.target_none));
+    public static final TargetFilter T_SelfSingle = new TargetFilter(selfPlus(EUIRM.strings.target_singleTarget));
+    public static final TargetFilter T_SelfSingleAlly = new TargetFilter(selfPlus(PGR.core.strings.ctype_singleAlly));
     public static final TargetFilter T_SingleAlly = new TargetFilter(PGR.core.strings.ctype_singleAlly);
     public static final TargetFilter T_Team = new TargetFilter(PGR.core.strings.ctype_team);
 
@@ -78,6 +81,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         while (source.size() > allowedSize) {
             source.retrieve(GameUtilities.getRNG());
         }
+    }
+
+    private static String selfPlus(String targ) {
+        return EUIUtils.withSlash(EUIRM.strings.target_self, targ);
     }
 
     public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> tFunc) {
@@ -156,6 +163,12 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return PGR.core.strings.ctype_tagSingle;
             case RandomEnemy:
                 return PGR.core.strings.ctype_tagRandom;
+            case SelfAllEnemy:
+                return S_SelfAllEnemy;
+            case SelfSingle:
+                return S_SelfSingle;
+            case SelfSingleAlly:
+                return S_SelfSingleAlly;
         }
         return getTitle();
     }
@@ -359,45 +372,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
     public final String getTitle() {
-        switch (this) {
-            case None:
-                return EUIRM.strings.target_none;
-            case AllEnemy:
-                return EUIRM.strings.target_allEnemy;
-            case AllAlly:
-                return PGR.core.strings.ctype_allAlly;
-            case AllAllyEnemy:
-                return PGR.core.strings.ctype_allAllyEnemy;
-            case Team:
-                return PGR.core.strings.ctype_team;
-            case All:
-                return EUIRM.strings.target_allCharacter;
-            case Self:
-                return EUIRM.strings.target_self;
-            case Single:
-                return EUIRM.strings.target_singleTarget;
-            case SingleAlly:
-                return PGR.core.strings.ctype_singleAlly;
-            case Any:
-                return EUIRM.strings.target_any;
-            case RandomAlly:
-                return PGR.core.strings.ctype_randomAlly;
-            case RandomAllyEnemy:
-                return PGR.core.strings.ctype_randomAllyEnemy;
-            case RandomEnemy:
-                return PGR.core.strings.ctype_randomEnemy;
-            case SelfAllEnemy:
-                return PGR.core.strings.ctype_selfAllEnemy;
-            case SelfPlayer:
-                return PGR.core.strings.ctype_selfPlayer;
-            case SelfSingle:
-                return PGR.core.strings.ctype_selfSingle;
-            case SelfSingleAlly:
-                return PGR.core.strings.ctype_selfSingleAlly;
-            case UseParent:
-                return PGR.core.strings.cedit_useParent;
-        }
-        return "";
+        return getTargetFilter().name;
     }
 
     public final boolean targetsAllies() {

@@ -97,7 +97,7 @@ public abstract class PCLCustomLoadable implements Serializable {
     }
 
     protected final String getBaseFolderPath() {
-        return FOLDER + "/" + getSubfolderPath();
+        return EUIUtils.withSlash(FOLDER, getSubfolderPath());
     }
 
     protected final FileHandle getCustomFolder() {

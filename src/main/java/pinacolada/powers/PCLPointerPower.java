@@ -158,7 +158,9 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         if (skills == null) {
             return EUIUtils.EMPTY_STRING;
         }
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, skill -> skill.getPowerText(null), getEffects()));
+        String base = StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, skill -> skill.getPowerText(null), getEffects()));
+        String add = data.endTurnBehavior.getAddendum(turns);
+        return add != null ? base + " " + add : base;
     }
 
     public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {

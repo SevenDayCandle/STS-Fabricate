@@ -506,6 +506,18 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
 
         private EUITooltip tip;
 
+        public String getAddendum(int turns) {
+            switch (this) {
+                case SingleTurn:
+                case SingleTurnNext:
+                    return EUIUtils.format(PGR.core.strings.power_lastsForX, turns);
+                case Permanent:
+                case Special:
+                    return null;
+            }
+            return getDesc();
+        }
+
         public String getDesc() {
             switch (this) {
                 case Permanent:

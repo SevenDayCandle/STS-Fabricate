@@ -142,7 +142,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     }
 
     public static String getFolder() {
-        return FOLDER + "/" + SUBFOLDER;
+        return EUIUtils.withSlash(FOLDER, SUBFOLDER);
     }
 
     public static ArrayList<PCLCustomPotionSlot> getPotions() {

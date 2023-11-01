@@ -257,10 +257,6 @@
 												"Random Ally",
 												"Random Ally + Enemy",
 												"Random Enemy",
-												"Self + All Enemies",
-												"Self + Player",
-												"Self + Single Ally",
-												"Self + Single Target",
 												"Single Ally",
 												"Team",
 												"Legendary",
@@ -535,8 +531,7 @@
 						"Removed at turn end after a set number of turns, regardless of stacks.",
 						"Removed at turn start after a set number of turns, regardless of stacks.",
 						"Reduced by 1 when attacked.",
-						"Removed at 0 stacks.",
-						"Lasts for {0} turn(s)"
+						"Lasts for #b{0} turn(s)."
 					]
 				},
 				"pcl:Rewards": {
@@ -691,7 +686,7 @@
 												"#ySummons with #yTurn #yStart #yTiming †Turn Start Timing] make their move at the start of your turn, while those with #yTurn #yEnd #yTiming †Turn End Timing] make their move at the end of your turn. This is referred to as a #yTrigger. #ySummons will not #yTrigger on the turn they are set onto the field.",
 												"The icon immediately above a #ySummon signifies how much damage it intends to deal. If the #ySummon has a #yCooldown effect, an additional icon will appear above the damage intent signifying the number of turns before the #yCooldown is activated.",
 												"Hover over a #ySummon to see what creature it will target. If the #ySummon targets a single non-random creature, you may #oRight-Click on it to select a new target for it.",
-												"#ySummoning a card onto a #ySummon #ySlot that already has a #ySummon will #yWithdraw the previous #ySummon, #yTriggering it #b2 times and moving it to your discard pile.",
+												"#ySummoning a card onto a #ySummon #ySlot that already has a #ySummon will #yWithdraw the previous #ySummon, #yTriggering it with doubled damage and block values, and moving it to your discard pile.",
 												"#ySummons can be targeted with Attacks and Skills like other monsters can.",
 												"If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged. You can view the expected damage your #ySummon will take by enabling the #yShow #yEstimated #yDamage option in #yFabricate.",
 												"Some cards have triangular symbols on their left-hand border. These symbols denote #yAugment #ySlots, which can be socketed with #yAugments to alter that card's effects.",

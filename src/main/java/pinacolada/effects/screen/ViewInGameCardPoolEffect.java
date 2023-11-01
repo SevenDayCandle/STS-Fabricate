@@ -285,16 +285,12 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         }
     }
 
-    public ViewInGameCardPoolEffect setCanImport(boolean canImport) {
-        importButton.setActive(canImport);
-        return this;
-    }
-
     public ViewInGameCardPoolEffect setCanToggle(boolean canToggle) {
         this.canToggle = canToggle;
         selectAllButton.setActive(canToggle);
         deselectAllButton.setActive(canToggle);
         selectRandomButton.setActive(canToggle);
+        importButton.setActive(canToggle);
         instructions.setActive(canToggle);
         return this;
     }

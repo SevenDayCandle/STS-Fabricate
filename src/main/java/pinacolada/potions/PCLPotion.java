@@ -220,7 +220,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return auxiliaryData;
     }
 
-    protected void onUpgrade() {
+    public void onUpgrade() {
         for (PSkill<?> ef : getEffects()) {
             ef.setAmountFromCard().onUpgrade();
         }

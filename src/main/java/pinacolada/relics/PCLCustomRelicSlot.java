@@ -140,7 +140,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static String getFolder() {
-        return FOLDER + "/" + SUBFOLDER;
+        return EUIUtils.withSlash(FOLDER, SUBFOLDER);
     }
 
     public static ArrayList<PCLCustomRelicSlot> getRelics() {
