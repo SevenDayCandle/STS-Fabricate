@@ -123,7 +123,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPrimary;
+        return EUIRM.images.tag;
     }
 
     public String getTitle() {

@@ -239,12 +239,6 @@ public class PCLCardAlly extends PCLCardCreature {
         }
         else if (card != null) {
             float startY = this.intentHb.cY + getBobEffect().y - 12.0F * Settings.scale;
-            if (card.onAttackEffect != null) {
-                startY = card.onAttackEffect.renderIntentIcon(sb, this, startY, forPreview);
-            }
-            if (card.onBlockEffect != null) {
-                startY = card.onBlockEffect.renderIntentIcon(sb, this, startY, forPreview);
-            }
             for (PSkill<?> skill : card.getEffects()) {
                 PSkill<?> cur = skill;
                 while (cur != null) {

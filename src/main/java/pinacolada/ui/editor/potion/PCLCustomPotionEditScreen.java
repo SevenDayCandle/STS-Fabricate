@@ -74,7 +74,7 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
     public void preInitialize(PCLCustomPotionSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
+                .setPosition(saveButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
                 .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)

@@ -16,8 +16,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLCustomEffectHologram extends EUIBase {
     public static PCLCustomEffectHologram current;
-    protected ActionT1<PCLCustomEffectHologram> onRelease;
-    public EUIImage image;
+    private final ActionT1<PCLCustomEffectHologram> onRelease;
+    public final EUIImage image;
     public PCLCustomEffectNode highlighted;
     public PCLCustomEffectNode.NodeType type;
 

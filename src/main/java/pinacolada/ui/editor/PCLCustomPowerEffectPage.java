@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
@@ -25,8 +23,8 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected EUIButton quickAddButton;
     protected EUIContextMenu<Integer> quickAddMenu;
 
-    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title) {
-        super(screen, hb, index, title);
+    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, PSkill<?> skill, String title) {
+        super(screen, hb, skill, title);
         quickAddMenu = new EUIContextMenu<>(new EUIHitbox(0, 0, 0, 0), this::getNameForEffect)
                 .setOnChange(options -> {
                     for (Integer i : options) {
@@ -34,7 +32,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                     }
                 })
                 .setCanAutosizeButton(true);
-        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.5f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
+        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.8f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)
@@ -44,8 +42,8 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     @Override
     public void fullRebuild() {
-        screen.updatePowerEffect(rootEffect, editorIndex);
-        initializeEffects();
+        screen.updatePowerEffect();
+        initializeEffects(rootEffect);
     }
 
     protected String getNameForEffect(int i) {
@@ -53,14 +51,13 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     }
 
     @Override
-    public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen.currentPowers.get(editorIndex);
-        return base != null ? base.makeCopy() : null;
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPower;
     }
 
     @Override
-    public TextureCache getTextureCache() {
-        return PCLCoreImages.Menu.editorPower;
+    public String getTitle() {
+        return EUIUtils.format(baseText, String.valueOf(screen.powerPages.indexOf(this) + 1));
     }
 
     @Override
@@ -74,6 +71,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     @Override
     public void onOpen() {
+        header.setLabel(getTitle());
         EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
                 new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
                         .setFlash(buttonsPane)
@@ -99,7 +97,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected void startPowerHologram(int i) {
         PCLCustomEffectPage page = screen.effectPages.get(i);
         screen.openPage(page);
-        PMove_StackCustomPower applyPower = new PMove_StackCustomPower(PCLCardTarget.Self, -1, editorIndex);
+        PMove_StackCustomPower applyPower = new PMove_StackCustomPower(PCLCardTarget.Self, -1, screen.powerPages.indexOf(this));
         PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(page, applyPower, PCLCustomEffectNode.NodeType.Move, page.hb);
         page.root.receiveNode(node);
         page.fullRebuild();
@@ -114,7 +112,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     @Override
     public void updateRootEffect() {
-        screen.updatePowerEffect(rootEffect, editorIndex);
+        screen.updatePowerEffect();
         refresh();
     }
 }

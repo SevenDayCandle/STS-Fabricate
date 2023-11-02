@@ -23,7 +23,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
     protected final EUIImage draggableIcon;
     private AbstractCard lastCard;
     private AbstractCreature lastTarget;
-    protected Vector2 meterSavedPosition;
+    private Vector2 meterSavedPosition;
     public DraggableHitbox hb;
 
     public EUICardDraggable(STSConfigItem<Vector2> config, DraggableHitbox hb, float iconSize) {

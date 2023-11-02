@@ -91,7 +91,7 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
-        List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.tempBuilders.size() - 1));
+        List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.getTempBuilders().size() - 1));
         editor.registerDropdown(range, fields.indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_form, false, false, false);
     }
 

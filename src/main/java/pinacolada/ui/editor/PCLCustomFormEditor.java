@@ -46,7 +46,7 @@ public class PCLCustomFormEditor extends EUIBase {
         formValues.setLabelFunctionForButton((items, strFunc) -> {
                     return items.size() > 0 ? strFunc.invoke(items.get(0)) + "/" + (formValues.size() - 1) : String.valueOf(formValues.size());
                 }, false)
-                .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
+                .setItems(EUIUtils.range(0, screen.getTempBuilders().size() - 1));
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))
                 .setOnClick(this::decrease);
 
@@ -71,8 +71,8 @@ public class PCLCustomFormEditor extends EUIBase {
     }
 
     public void refresh() {
-        formValues.setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1)).setSelection(screen.currentBuilder, false);
-        remove.setInteractable(screen.tempBuilders.size() > 1).setActive(!screen.fromInGame);
+        formValues.setItems(EUIUtils.range(0, screen.getTempBuilders().size() - 1)).setSelection(screen.currentBuilder, false);
+        remove.setInteractable(screen.getTempBuilders().size() > 1).setActive(!screen.fromInGame);
         add.setActive(!screen.fromInGame);
     }
 

@@ -19,7 +19,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
     public ArrayList<EUIButton> nodeCreateButtons = new ArrayList<>();
 
     public PCLCustomEffectSelectorPane(PCLCustomEffectPage editor) {
-        super(EUIRM.images.longInput.texture(), new EUIHitbox(editor.hb.x + scale(250), editor.hb.y - scale(20), editor.hb.width * 2, editor.hb.height * 1.5f));
+        super(EUIRM.images.longInput.texture(), new EUIHitbox(editor.hb.x + scale(270), editor.hb.y - scale(20), editor.hb.width * 2, editor.hb.height * 1.5f));
         this.editor = editor;
 
         initializeButtons();

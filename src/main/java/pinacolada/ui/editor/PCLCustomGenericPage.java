@@ -17,10 +17,6 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
     public static final float SPACING_WIDTH = screenW(0.02f);
     protected EUIButton button;
 
-    public String getIconText() {
-        return "";
-    }
-
     public void highlightButton() {
         if (button != null) {
             button.setColor(Color.WHITE);

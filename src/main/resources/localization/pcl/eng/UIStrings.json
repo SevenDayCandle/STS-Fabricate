@@ -111,7 +111,7 @@
 												"Are you sure you want to delete this item? This action cannot be undone.",
 												"Customize",
 												"Add to Effect",
-												"Primary Info",
+												"Main Info",
 												"These properties apply to ALL forms.",
 												"Choices",
 												"Not",
@@ -513,7 +513,7 @@
 												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
 												"If checked, all popup views for relics will be rendered with Fabricate, even if those items were not made with Fabricate. This setting may cause conflicts with mods that modify base game popup views.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods.",
-												"Adds a panel on the right-hand side of cards that describes the card's targeting. Note that certain cards may always have this panel visible regardless of this settings."
+												"Adds a panel on the right-hand side of cards that describes the card's targeting. Note that certain cards may always have this panel visible regardless of this setting."
 								]
 				},
 				"pcl:Power": {

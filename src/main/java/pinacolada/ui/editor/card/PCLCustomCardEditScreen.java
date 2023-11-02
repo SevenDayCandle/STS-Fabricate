@@ -51,6 +51,23 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
         super.addSkillPages();
     }
 
+    @Override
+    protected PCLCustomEffectPage createPageForEffect(PSkill<?> eff) {
+        if (eff instanceof PCardPrimary_DealDamage) {
+            return new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), eff
+                    , PGR.core.strings.cedit_damage);
+        }
+        else if (eff instanceof PCardPrimary_GainBlock) {
+            return new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), eff
+                    , PGR.core.strings.cedit_block);
+        }
+        else {
+            return new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), eff
+                    , PGR.core.strings.cedit_effectX);
+        }
+    }
+
+    @Override
     protected void complete() {
         super.complete();
         invalidateItems();
@@ -101,43 +118,20 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
     }
 
     @Override
-    protected PCLCustomEffectPage makeEffectPage(int index) {
-        PSkill<?> eff = currentEffects.get(index);
-        PCLCustomEffectPage page;
-        if (eff instanceof PCardPrimary_DealDamage) {
-            page = new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                    , PGR.core.strings.cedit_damage);
-        }
-        else if (eff instanceof PCardPrimary_GainBlock) {
-            page = new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                    , PGR.core.strings.cedit_block);
-        }
-        else {
-            page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                    , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1));
-        }
-        effectPages.add(page);
-        page.refresh();
-        return page;
-    }
-
-    @Override
     protected PCLCustomEffectPage makeNewBlockEffect() {
-        currentEffects.add(new PCardPrimary_GainBlock());
-        return makeEffectPage(currentEffects.size() - 1);
+        return makeEffectPage(new PCardPrimary_GainBlock());
     }
 
     @Override
     protected PCLCustomEffectPage makeNewDamageEffect() {
-        currentEffects.add(new PCardPrimary_DealDamage());
-        return makeEffectPage(currentEffects.size() - 1);
+        return makeEffectPage(new PCardPrimary_DealDamage());
     }
 
     @Override
     public void preInitialize(PCLCustomCardSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
+                .setPosition(saveButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
                 .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
@@ -159,7 +153,7 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
 
     protected void rebuildItem() {
         previewCard = getBuilder().createImplWithForms(currentBuilder, upgraded ? 1 : 0);
-        previewCard.setForms(tempBuilders);
+        previewCard.setForms(getTempBuilders());
 
         if (upgraded) {
             previewCard.displayUpgrades();

@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
@@ -32,38 +30,37 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public static final float START_Y = Settings.HEIGHT * (0.8f);
 
     public final PCLCustomEditEntityScreen<?, ?, ?> screen;
-    protected int editorIndex;
     protected EUIHitbox hb;
     protected EUILabel header;
     protected EUITextBox info;
     protected PCLCustomEffectEditingPane currentEditingSkill;
     protected PCLCustomEffectSelectorPane buttonsPane;
+    protected String baseText;
     public PPrimary<?> rootEffect;
     public PCLCustomEffectNode root;
 
-    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title) {
+    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, PSkill<?> sourceEffect, String title) {
         this.screen = screen;
-        this.editorIndex = index;
         this.hb = hb;
+        this.baseText = title;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge, hb)
                 .setAlignment(0.5f, 0.0f, false)
-                .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
+                .setFontScale(0.75f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
         this.buttonsPane = new PCLCustomEffectSelectorPane(this);
-        this.info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.11f), screenW(0.5f), screenH(0.15f)))
+        this.info = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(screenW(0.25f), screenH(0.155f), screenW(0.5f), screenH(0.10f)))
                 .setLabel(PGR.core.strings.cetut_nodeTutorial)
                 .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
+                .setFont(EUIFontHelper.cardTipBodyFont, 0.85f);
         this.canDragScreen = false;
 
-        initializeEffects();
+        initializeEffects(sourceEffect);
     }
 
-    protected PPrimary<?> deconstructEffect() {
-        PSkill<?> sourceEffect = getSourceEffect();
+    protected PPrimary<?> deconstructEffect(PSkill<?> sourceEffect) {
         // Ensure that root is a PPrimary, so that we do not have to put in a separate button for adding primaries and so that the user can just click on the root node to choose between primaries
         PPrimary<?> rootEffect = sourceEffect instanceof PPrimary ? (PPrimary<?>) sourceEffect : new PRoot();
         if (rootEffect != sourceEffect) {
@@ -74,18 +71,8 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     public void fullRebuild() {
-        screen.updateEffect(rootEffect, editorIndex);
-        initializeEffects();
-    }
-
-    @Override
-    public String getIconText() {
-        return String.valueOf(editorIndex + 1);
-    }
-
-    public PSkill<?> getSourceEffect() {
-        PSkill<?> base = screen.currentEffects.get(editorIndex);
-        return base != null ? base.makeCopy() : null;
+        screen.updateEffects();
+        initializeEffects(rootEffect);
     }
 
     @Override
@@ -95,7 +82,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
     @Override
     public String getTitle() {
-        return header.text;
+        return EUIUtils.format(baseText, String.valueOf(screen.effectPages.indexOf(this) + 1));
     }
 
     @Override
@@ -106,14 +93,15 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         );
     }
 
-    public void initializeEffects() {
-        rootEffect = deconstructEffect();
+    public void initializeEffects(PSkill<?> sourceEffect) {
+        rootEffect = deconstructEffect(sourceEffect);
 
         refresh();
     }
 
     @Override
     public void onOpen() {
+        header.setLabel(getTitle());
         EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
                 getTour()
         );
@@ -184,7 +172,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     public void updateRootEffect() {
-        screen.updateEffect(rootEffect, editorIndex);
+        screen.updateEffects();
         refresh();
     }
 
