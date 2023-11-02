@@ -133,6 +133,10 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_loadoutValue = cedit.TEXT[84];
     public final String cedit_augmentSlots = cedit.TEXT[85];
     public final String cedit_relicReplace = cedit.TEXT[86];
+    public final String cedit_newEffect = cedit.TEXT[87];
+    public final String cedit_generic = cedit.TEXT[88];
+    public final String cedit_moveLeft = cedit.TEXT[89];
+    public final String cedit_moveRight = cedit.TEXT[90];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];

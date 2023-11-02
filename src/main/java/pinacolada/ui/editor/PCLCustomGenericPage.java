@@ -1,8 +1,10 @@
 package pinacolada.ui.editor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.TextureCache;
+import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUICanvas;
 import extendedui.ui.tooltips.EUITourTooltip;
 
@@ -13,17 +15,24 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
     public static final float MENU_WIDTH = scale(160);
     public static final float MENU_HEIGHT = scale(40);
     public static final float SPACING_WIDTH = screenW(0.02f);
+    protected EUIButton button;
 
     public String getIconText() {
         return "";
+    }
+
+    public void highlightButton() {
+        if (button != null) {
+            button.setColor(Color.WHITE);
+        }
     }
 
     public void onOpen() {
 
     }
 
-    public void onUndo() {
-        refresh();
+    public void setButton(EUIButton button) {
+        this.button = button;
     }
 
     abstract public TextureCache getTextureCache();

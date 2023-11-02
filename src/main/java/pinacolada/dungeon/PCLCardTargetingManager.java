@@ -23,7 +23,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class CardTargetingManager extends TargetingHandler<AbstractCreature> {
+public class PCLCardTargetingManager extends TargetingHandler<AbstractCreature> {
     @SpireEnum
     public static AbstractCard.CardTarget PCL;
 

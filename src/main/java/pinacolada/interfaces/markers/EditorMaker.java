@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface EditorMaker<T> {
-    default EditorMaker<T> addPPower(PTrigger effect) {
+    default EditorMaker<T> addPPower(PSkill<?> effect) {
         return addPPower(effect, false);
     }
 
-    default EditorMaker<T> addPPower(PTrigger effect, boolean makeCopy) {
+    default EditorMaker<T> addPPower(PSkill<?> effect, boolean makeCopy) {
         if (makeCopy && effect != null) {
             effect = effect.makeCopy();
         }
@@ -37,6 +37,14 @@ public interface EditorMaker<T> {
         return this;
     }
 
+    default void clearPowers() {
+        getPowers().clear();
+    }
+
+    default void clearSkills() {
+        getMoves().clear();
+    }
+
     default void safeLoadValue(ActionT0 loadFunc) {
         try {
             loadFunc.invoke();
@@ -47,19 +55,19 @@ public interface EditorMaker<T> {
         }
     }
 
-    default EditorMaker<T> setPPower(PTrigger... effect) {
+    default EditorMaker<T> setPPower(PSkill<?>... effect) {
         return setPPower(Arrays.asList(effect));
     }
 
-    default EditorMaker<T> setPPower(Iterable<PTrigger> currentEffects) {
+    default EditorMaker<T> setPPower(Iterable<PSkill<?>> currentEffects) {
         return setPPower(currentEffects, false, true);
     }
 
-    default EditorMaker<T> setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear) {
+    default EditorMaker<T> setPPower(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
         if (clear) {
-            getPowers().clear();
+            clearPowers();
         }
-        for (PTrigger be : currentEffects) {
+        for (PSkill<?> be : currentEffects) {
             addPPower(be, makeCopy);
         }
         return this;
@@ -75,7 +83,7 @@ public interface EditorMaker<T> {
 
     default EditorMaker<T> setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
         if (clear) {
-            getMoves().clear();
+            clearSkills();
         }
         for (PSkill<?> be : currentEffects) {
             addPSkill(be, makeCopy);
@@ -91,7 +99,7 @@ public interface EditorMaker<T> {
 
     List<PSkill<?>> getMoves();
 
-    List<PTrigger> getPowers();
+    List<PSkill<?>> getPowers();
 
     <U extends EditorMaker<T>> U makeCopy();
 }

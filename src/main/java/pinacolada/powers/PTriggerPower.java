@@ -17,6 +17,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
@@ -69,7 +70,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         setupCustomProperties(turns);
     }
 
-    public static String createPowerID(PTrigger effect) {
+    public static String createPowerID(PSkill<?> effect) {
         return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
     }
 

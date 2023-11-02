@@ -157,7 +157,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
     }
 
     @Override
-    public List<PTrigger> getPowers() {
+    public List<PSkill<?>> getPowers() {
         return Collections.emptyList();
     }
 

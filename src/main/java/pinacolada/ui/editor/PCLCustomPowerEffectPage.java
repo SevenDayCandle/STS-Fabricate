@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
@@ -24,8 +25,8 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected EUIButton quickAddButton;
     protected EUIContextMenu<Integer> quickAddMenu;
 
-    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
-        super(screen, hb, index, title, onUpdate);
+    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title) {
+        super(screen, hb, index, title);
         quickAddMenu = new EUIContextMenu<>(new EUIHitbox(0, 0, 0, 0), this::getNameForEffect)
                 .setOnChange(options -> {
                     for (Integer i : options) {
@@ -39,6 +40,12 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                 .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)
                 .setTooltip(PGR.core.strings.cedit_addToEffect, PGR.core.strings.cetut_addToEffect)
                 .setOnClick(this::openDropdown);
+    }
+
+    @Override
+    public void fullRebuild() {
+        screen.updatePowerEffect(rootEffect, editorIndex);
+        initializeEffects();
     }
 
     protected String getNameForEffect(int i) {
@@ -91,7 +98,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     protected void startPowerHologram(int i) {
         PCLCustomEffectPage page = screen.effectPages.get(i);
-        screen.openPageAtIndex(screen.pages.indexOf(page));
+        screen.openPage(page);
         PMove_StackCustomPower applyPower = new PMove_StackCustomPower(PCLCardTarget.Self, -1, editorIndex);
         PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(page, applyPower, PCLCustomEffectNode.NodeType.Move, page.hb);
         page.root.receiveNode(node);
@@ -103,5 +110,11 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         super.updateInner();
         quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
         quickAddMenu.tryUpdate();
+    }
+
+    @Override
+    public void updateRootEffect() {
+        screen.updatePowerEffect(rootEffect, editorIndex);
+        refresh();
     }
 }

@@ -41,7 +41,7 @@ public class PCLCustomPowerEditScreen extends PCLCustomEditEntityScreen<PCLCusto
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomPowerPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomPowerPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }

@@ -141,15 +141,19 @@ public class PCLCardAlly extends PCLCardCreature {
 
     public void onRemoveDamagePowers() {
         damageMult = 1;
+        forPreview = false;
     }
 
     public void onUnhover() {
-        damageMult = 1;
-        forPreview = false;
+        if (forPreview) {
+            damageMult = 1;
+            forPreview = false;
+        }
     }
 
     public void onWithdraw() {
         damageMult = 1 + (CombatManager.summons.damageBonus / 100f);
+        forPreview = false;
     }
 
     @Override

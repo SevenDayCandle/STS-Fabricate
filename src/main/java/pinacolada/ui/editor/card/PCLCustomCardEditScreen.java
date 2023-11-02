@@ -18,9 +18,11 @@ import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
@@ -29,8 +31,6 @@ import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
 public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard> {
-    protected PCardPrimary_DealDamage currentDamage;
-    protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
     protected Texture loadedImage;
 
@@ -42,27 +42,13 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
         super(slot);
     }
 
+    @Override
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomCardPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomCardPrimaryInfoPage(this));
         }
-        pages.add(new PCLCustomCardAttributesPage(this));
-        pages.add(new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
-            currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
-            modifyBuilder(e -> e.setAttackSkill(currentDamage));
-        }));
-        pages.add(new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
-            currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
-            modifyBuilder(e -> e.setBlockSkill(currentBlock));
-        }));
+        primaryPages.add(new PCLCustomCardAttributesPage(this));
         super.addSkillPages();
-    }
-
-    protected void clearPages() {
-        super.clearPages();
-
-        currentDamage = getBuilder().attackSkill;
-        currentBlock = getBuilder().blockSkill;
     }
 
     protected void complete() {
@@ -90,10 +76,64 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
                 );
     }
 
+    @Override
+    protected NewPageOption[] getNewPageOptions() {
+        // Only allow one of each of damage and block
+        boolean hasDamage = false;
+        boolean hasBlock = false;
+        for (PCLCustomEffectPage pg : effectPages) {
+            if (pg instanceof PCLCustomAttackEffectPage) {
+                hasDamage = true;
+            }
+            else if (pg instanceof PCLCustomBlockEffectPage) {
+                hasBlock = true;
+            }
+        }
+        return hasDamage && hasBlock ? super.getNewPageOptions() :
+                hasDamage ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Block) :
+                hasBlock ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Damage) :
+                EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Damage, NewPageOption.Block);
+    }
+
+    @Override
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
 
+    @Override
+    protected PCLCustomEffectPage makeEffectPage(int index) {
+        PSkill<?> eff = currentEffects.get(index);
+        PCLCustomEffectPage page;
+        if (eff instanceof PCardPrimary_DealDamage) {
+            page = new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                    , PGR.core.strings.cedit_damage);
+        }
+        else if (eff instanceof PCardPrimary_GainBlock) {
+            page = new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                    , PGR.core.strings.cedit_block);
+        }
+        else {
+            page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                    , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1));
+        }
+        effectPages.add(page);
+        page.refresh();
+        return page;
+    }
+
+    @Override
+    protected PCLCustomEffectPage makeNewBlockEffect() {
+        currentEffects.add(new PCardPrimary_GainBlock());
+        return makeEffectPage(currentEffects.size() - 1);
+    }
+
+    @Override
+    protected PCLCustomEffectPage makeNewDamageEffect() {
+        currentEffects.add(new PCardPrimary_DealDamage());
+        return makeEffectPage(currentEffects.size() - 1);
+    }
+
+    @Override
     public void preInitialize(PCLCustomCardSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)

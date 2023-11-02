@@ -61,7 +61,7 @@ import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.dungeon.CardTargetingManager;
+import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
@@ -157,7 +157,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
 
     protected PCLCard(PCLCardData cardData) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, 0, 0, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, PCLCardTargetingManager.PCL, 0, 0, null);
     }
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input) {
@@ -178,15 +178,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected PCLCard(PCLCardData cardData, Object input) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, 0, 0, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, PCLCardTargetingManager.PCL, 0, 0, input);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, PCLCardTargetingManager.PCL, form, timesUpgraded, null);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded, Object input) {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, PCLCardTargetingManager.PCL, form, timesUpgraded, input);
     }
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target) {
@@ -318,48 +318,50 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected PCardPrimary_GainBlock addBlockMove() {
-        onBlockEffect = new PCardPrimary_GainBlock(this);
-        return onBlockEffect;
+        return addBlockMove(new PCardPrimary_GainBlock(this));
     }
 
     protected PCardPrimary_GainBlock addBlockMove(PCLCardTarget target) {
-        onBlockEffect = new PCardPrimary_GainBlock(this);
-        onBlockEffect.setTarget(target);
+        return addBlockMove((PCardPrimary_GainBlock) new PCardPrimary_GainBlock(this).setTarget(target));
+    }
+
+    protected PCardPrimary_GainBlock addBlockMove(PCardPrimary_GainBlock skill) {
+        onBlockEffect = skill;
+        addUseMove(skill);
         return onBlockEffect;
     }
 
     protected PCardPrimary_DealDamage addDamageMove() {
-        onAttackEffect = new PCardPrimary_DealDamage(this);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(PCLAttackVFX attackEffect) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this, attackEffect.key));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this, attackEffect));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx) {
-        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this).setDamageEffect(efx));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx, Color color) {
-        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx, color);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this).setDamageEffect(efx, color));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
-        return onAttackEffect;
+        return addDamageMove(new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx));
     }
 
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx, Color color) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx, color);
+        return addDamageMove(new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx, color));
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(PCardPrimary_DealDamage skill) {
+        onAttackEffect = skill;
+        addUseMove(skill);
         return onAttackEffect;
     }
 
@@ -401,8 +403,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return addApplyPower(PCLCardTarget.Self, amount, effect);
     }
 
-    public PTrigger addPowerMove(PTrigger effect) {
-        PTrigger added = (PTrigger) effect.setSource(this).onAddToCard(this);
+    public PSkill<?> addPowerMove(PSkill<?> effect) {
+        PSkill<?> added = effect.setSource(this).onAddToCard(this);
         getPowerEffects().add(added);
         return added;
     }
@@ -651,12 +653,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void displayUpgradesForSkills(boolean value) {
-        if (onAttackEffect != null) {
-            onAttackEffect.displayUpgrades(value);
-        }
-        if (onBlockEffect != null) {
-            onBlockEffect.displayUpgrades(value);
-        }
         for (PSkill<?> ef : getEffects()) {
             ef.displayUpgrades(value);
         }
@@ -854,12 +850,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public ArrayList<PSkill<?>> getFullEffects() {
         ArrayList<PSkill<?>> result = new ArrayList<>();
-        if (onAttackEffect != null) {
-            result.add(onAttackEffect);
-        }
-        if (onBlockEffect != null) {
-            result.add(onBlockEffect);
-        }
         result.addAll(getEffects());
         result.addAll(getAugmentSkills());
         return result;
@@ -2268,12 +2258,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));
         initializeName();
-        if (onAttackEffect != null) {
-            onAttackEffect.setAmountFromCard().onUpgrade();
-        }
-        if (onBlockEffect != null) {
-            onBlockEffect.setAmountFromCard().onUpgrade();
-        }
         for (PSkill<?> ef : getEffects()) {
             ef.setAmountFromCard().onUpgrade();
         }

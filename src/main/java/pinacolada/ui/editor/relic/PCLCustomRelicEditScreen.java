@@ -38,7 +38,7 @@ public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCusto
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomRelicPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomRelicPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }

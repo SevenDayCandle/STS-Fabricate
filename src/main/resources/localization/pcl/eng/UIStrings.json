@@ -69,8 +69,8 @@
 												"Tags",
 												"Value",
 												"Create New",
-												"Damage",
-												"Block",
+												"Damage Effect",
+												"Block Effect",
 												"Priority",
 												"HP",
 												"{0} Ct.",
@@ -150,7 +150,11 @@
 												"Turns",
 												"Loadout Value",
 												"Augment Slots",
-												"Replaced Relics"
+												"Replaced Relics",
+												"New Effect",
+												"Generic Effect",
+												"Move Left",
+												"Move Right"
 								]
 				},
 				"pcl:CardEditorTutorial": {

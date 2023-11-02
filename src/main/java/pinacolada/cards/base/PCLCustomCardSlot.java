@@ -89,8 +89,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
                 .setColor(color)
                 .setID(ID)
                 .setImagePath(imagePath)
-                .setAttackSkill(card.onAttackEffect)
-                .setBlockSkill(card.onBlockEffect)
                 .setFlags(CardFlag.getFromCard(card))
                 .setPSkill(card.getEffects(), true, true)
                 .setPPower(card.getPowerEffects(), true, true)
@@ -326,8 +324,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             f.target = builder.cardTarget.name();
             f.timing = builder.timing.name();
             f.attackType = builder.attackType.name();
-            f.damageEffect = builder.attackSkill != null ? builder.attackSkill.serialize() : null;
-            f.blockEffect = builder.blockSkill != null ? builder.blockSkill.serialize() : null;
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -361,7 +357,9 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     public static class CardForm implements Serializable {
         static final long serialVersionUID = 1L;
         public String attackType;
+        @Deprecated
         public String damageEffect;
+        @Deprecated
         public String blockEffect;
         public String target;
         public String timing;

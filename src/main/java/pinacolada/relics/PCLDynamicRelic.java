@@ -115,7 +115,7 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem, C
             addUseMove(effect.makeCopy());
         }
 
-        for (PTrigger pe : builder.powers) {
+        for (PSkill<?> pe : builder.powers) {
             if (PSkill.isSkillBlank(pe)) {
                 continue;
             }

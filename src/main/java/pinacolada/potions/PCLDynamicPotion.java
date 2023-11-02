@@ -62,7 +62,7 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
             addUseMove(effect.makeCopy());
         }
 
-        for (PTrigger pe : builder.powers) {
+        for (PSkill<?> pe : builder.powers) {
             if (PSkill.isSkillBlank(pe)) {
                 continue;
             }

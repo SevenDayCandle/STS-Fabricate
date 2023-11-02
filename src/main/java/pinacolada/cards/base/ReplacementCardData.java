@@ -94,11 +94,11 @@ public class ReplacementCardData extends PCLDynamicCardData {
     }
 
     protected static ReplacementCardData attackData(AbstractCard card, boolean copyNumbers) {
-        return (ReplacementCardData) new ReplacementCardData(card, copyNumbers).setAttackSkill(new PCardPrimary_DealDamage());
+        return (ReplacementCardData) new ReplacementCardData(card, copyNumbers).addPSkill(new PCardPrimary_DealDamage());
     }
 
     protected static ReplacementCardData blockData(AbstractCard card, boolean copyNumbers) {
-        return (ReplacementCardData) new ReplacementCardData(card, copyNumbers).setBlockSkill(new PCardPrimary_GainBlock());
+        return (ReplacementCardData) new ReplacementCardData(card, copyNumbers).addPSkill(new PCardPrimary_GainBlock());
     }
 
     // TODO add more stuff here

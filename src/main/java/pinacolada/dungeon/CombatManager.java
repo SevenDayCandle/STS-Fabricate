@@ -98,7 +98,7 @@ public class CombatManager extends EUIBase {
     private static final Map<String, Object> combatData = new HashMap<>();
     private static final Map<String, Object> turnData = new HashMap<>();
     public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
-    public static final CardTargetingManager targeting = new CardTargetingManager();
+    public static final PCLCardTargetingManager targeting = new PCLCardTargetingManager();
     public static final CombatManager renderInstance = new CombatManager();
     public static final ControllableCardPile controlPile = new ControllableCardPile();
     public static final DelayDisplay delayDisplay = new DelayDisplay();

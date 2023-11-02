@@ -58,7 +58,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip affinityGeneral = tryLoadTip("A-W");
     public EUIKeywordTooltip affinityUnknown = tryLoadTip("A-U");
     public EUIKeywordTooltip afterImage = tryLoadTip("After Image");
-    public EUIKeywordTooltip afterlife = tryLoadTip("Afterlife");
     public EUIKeywordTooltip artifact = tryLoadTip("Artifact");
     public EUIKeywordTooltip augment = tryLoadTip("Augment");
     public EUIKeywordTooltip autoplay = tryLoadTip("Autoplay");

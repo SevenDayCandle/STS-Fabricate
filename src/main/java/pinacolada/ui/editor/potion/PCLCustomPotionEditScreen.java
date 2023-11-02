@@ -40,7 +40,7 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomPotionPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomPotionPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }

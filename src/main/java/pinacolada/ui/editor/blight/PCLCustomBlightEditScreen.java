@@ -38,7 +38,7 @@ public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCust
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            pages.add(new PCLCustomBlightPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomBlightPrimaryInfoPage(this));
         }
         super.addSkillPages();
     }

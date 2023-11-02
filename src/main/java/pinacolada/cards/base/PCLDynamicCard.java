@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.dungeon.CardTargetingManager;
+import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.PCardPrimary;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
@@ -39,7 +40,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
     public PCLDynamicCard(PCLDynamicCardData builder, int form, int timesUpgraded, boolean shouldSetTextures) {
         super(builder, builder.ID, builder.imagePath,
-                builder.getCost(form), builder.cardType, builder.cardColor, builder.cardRarity, CardTargetingManager.PCL, form, timesUpgraded, builder);
+                builder.getCost(form), builder.cardType, builder.cardColor, builder.cardRarity, PCLCardTargetingManager.PCL, form, timesUpgraded, builder);
         assignActualColor();
         if (shouldSetTextures) {
             initializeTextures();
@@ -482,22 +483,24 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             if (PSkill.isSkillBlank(effect)) {
                 continue;
             }
-            addUseMove(effect.makeCopy());
+            // Add damage/block effects and set their source to this card
+            PSkill<?> eff = effect.makeCopy();
+            if (eff instanceof PCardPrimary_DealDamage) {
+                addDamageMove((PCardPrimary_DealDamage) eff);
+            }
+            else if (eff instanceof PCardPrimary_GainBlock) {
+                addBlockMove((PCardPrimary_GainBlock) eff);
+            }
+            else {
+                addUseMove(eff);
+            }
         }
 
-        for (PTrigger pe : builder.powers) {
+        for (PSkill<?> pe : builder.powers) {
             if (PSkill.isSkillBlank(pe)) {
                 continue;
             }
             addPowerMove(pe.makeCopy());
-        }
-
-        // Add damage/block effects and set their source to this card
-        if (builder.attackSkill != null) {
-            onAttackEffect = (PCardPrimary_DealDamage) builder.attackSkill.makeCopy().setProvider(this).onAddToCard(this);
-        }
-        if (builder.blockSkill != null) {
-            onBlockEffect = (PCardPrimary_GainBlock) builder.blockSkill.makeCopy().setProvider(this).onAddToCard(this);
         }
 
         initializeDescription();

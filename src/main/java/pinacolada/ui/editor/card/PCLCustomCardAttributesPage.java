@@ -129,7 +129,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         hitCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_hitCount, PGR.core.strings.cetut_amount);
+                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_damage), PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setRightCountForForm(screen.currentBuilder, screen.tempBuilders.size(), val, upVal)))
@@ -240,7 +240,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     protected void modifyTargets(List<PCLCardTarget> targets) {
         if (!targets.isEmpty()) {
             screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
-            for (PCLCustomGenericPage page : screen.pages) {
+            for (PCLCustomGenericPage page : screen.primaryPages) {
                 if (page != this) {
                     page.refresh();
                 }

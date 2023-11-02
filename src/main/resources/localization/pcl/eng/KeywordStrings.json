@@ -48,10 +48,6 @@
 		"DESCRIPTION": "Gain [Block] whenever you play a card.",
 		"NAME": "After Image"
 	},
-	"Afterlife":	{
-		"DESCRIPTION": "Cards in #yAfterlife may be played by #yPurging any number of different cards from your hand or #yExhaust pile that collectively have all of its [A-Gen]. This does not use [E].",
-		"NAME": "Afterlife"
-	},
 	"Augment":	{
 		"DESCRIPTION": "#yAugments modify the effect or properties of the card they are slotted into.",
 		"NAME": "Augment",

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
@@ -32,7 +33,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
     public final PCLCustomEditEntityScreen<?, ?, ?> screen;
     protected int editorIndex;
-    protected ActionT1<PSkill<?>> onUpdate;
     protected EUIHitbox hb;
     protected EUILabel header;
     protected EUITextBox info;
@@ -41,10 +41,9 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public PPrimary<?> rootEffect;
     public PCLCustomEffectNode root;
 
-    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, int index, String title) {
         this.screen = screen;
         this.editorIndex = index;
-        this.onUpdate = onUpdate;
         this.hb = hb;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
@@ -75,7 +74,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     public void fullRebuild() {
-        onUpdate.invoke(rootEffect);
+        screen.updateEffect(rootEffect, editorIndex);
         initializeEffects();
     }
 
@@ -118,11 +117,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
                 getTour()
         );
-    }
-
-    @Override
-    public void onUndo() {
-        initializeEffects();
     }
 
     @Override
@@ -190,7 +184,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     public void updateRootEffect() {
-        onUpdate.invoke(rootEffect);
+        screen.updateEffect(rootEffect, editorIndex);
         refresh();
     }
 

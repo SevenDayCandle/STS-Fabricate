@@ -79,8 +79,8 @@ public interface PointerProvider {
         }
     }
 
-    default PTrigger addPowerMove(PTrigger effect) {
-        PTrigger added = (PTrigger) effect.setSource(this);
+    default PSkill<?> addPowerMove(PSkill<?> effect) {
+        PSkill<?> added = effect.setSource(this);
         getPowerEffects().add(added);
         return added;
     }
@@ -193,12 +193,12 @@ public interface PointerProvider {
         return getSkills().getPointers();
     }
 
-    default PTrigger getPowerEffect(int i) {
-        List<PTrigger> effects = getPowerEffects();
+    default PSkill<?> getPowerEffect(int i) {
+        List<PSkill<?>> effects = getPowerEffects();
         return effects != null && effects.size() > i ? effects.get(i) : null;
     }
 
-    default List<PTrigger> getPowerEffects() {
+    default List<PSkill<?>> getPowerEffects() {
         return getSkills().getPowerEffects();
     }
 

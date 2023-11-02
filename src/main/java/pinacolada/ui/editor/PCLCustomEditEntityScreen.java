@@ -12,11 +12,11 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
-import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.*;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorMaker;
@@ -36,17 +37,21 @@ import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V>, V extends FabricateItem> extends PCLEffectWithCallback<Object> {
+public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V>, V extends FabricateItem>
+        extends PCLEffectWithCallback<Object> {
     public static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
+    public static final float BUTTON_START_X = Settings.WIDTH * (0.3f);
     public static final float CARD_X = Settings.WIDTH * 0.10f;
     public static final float CARD_Y = Settings.HEIGHT * 0.76f;
     public static final float START_X = Settings.WIDTH * (0.24f);
@@ -56,7 +61,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float LABEL_WIDTH = Settings.WIDTH * (0.20f);
     public static final float BUTTON_CY = BUTTON_HEIGHT * 1.5f;
     public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
-    public static final int EFFECT_COUNT = 3;
     private static ArrayList<AbstractRelic> availableRelics;
     private static ArrayList<PCLPowerData> availablePowers;
     private static ArrayList<AbstractPotion> availablePotions;
@@ -64,22 +68,29 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     private static ArrayList<AbstractBlight> availableBlights;
     public final T currentSlot;
     public final boolean fromInGame;
+    private PCLCustomEffectPage selectedPage;
+    private ArrayList<U> prevBuilders;
     protected ActionT0 onSave;
+    protected EUIContextMenu<ExistingPageOption> existingPageOptions;
+    protected EUIContextMenu<NewPageOption> newPageOptions;
+    protected PCLCustomGenericPage currentPage;
     public boolean upgraded;
     public PCLCustomFormEditor formEditor;
     public EUIButton imageButton;
     public EUIToggle upgradeToggle;
     public ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
-    public ArrayList<PTrigger> currentPowers = new ArrayList<>();
-    public ArrayList<EUIButton> pageButtons = new ArrayList<>();
-    public ArrayList<PCLCustomGenericPage> pages = new ArrayList<>();
+    public ArrayList<PSkill<?>> currentPowers = new ArrayList<>();
+    public ArrayList<EUIButton> primaryPageButtons = new ArrayList<>();
+    public ArrayList<EUIButton> effectPageButtons = new ArrayList<>();
+    public ArrayList<EUIButton> powerPageButtons = new ArrayList<>();
+    public ArrayList<PCLCustomGenericPage> primaryPages = new ArrayList<>();
     public ArrayList<PCLCustomEffectPage> effectPages = new ArrayList<>();
+    private ArrayList<? extends PCLCustomEffectPage> selectedPageList = effectPages;
     public ArrayList<PCLCustomPowerEffectPage> powerPages = new ArrayList<>();
+    public EUIButton addPageButton;
     public EUIButton cancelButton;
     public EUIButton saveButton;
     public EUIButton undoButton;
-    public int currentPage;
-    private ArrayList<U> prevBuilders;
     public ArrayList<U> tempBuilders;
     public int currentBuilder;
     public PCLEffectWithCallback<?> currentDialog;
@@ -97,7 +108,31 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         invalidateItems();
         startTour();
         setupPages();
-        openPageAtIndex(0);
+        modifyBuilder(__ -> {
+        });
+
+        PCLCustomGenericPage firstPage = primaryPages.get(0);
+        if (firstPage != null) {
+            openPage(firstPage);
+        }
+    }
+
+    public static ArrayList<AbstractBlight> getAvailableBlights(AbstractCard.CardColor cardColor) {
+        if (PCLCustomEditEntityScreen.availableBlights == null) {
+            if (PGR.config.showIrrelevantProperties.get()) {
+                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
+                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
+            }
+            else {
+                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
+                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
+                if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                    PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
+                }
+            }
+            PCLCustomEditEntityScreen.availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return PCLCustomEditEntityScreen.availableBlights;
     }
 
     public static ArrayList<AbstractCard> getAvailableCards(AbstractCard.CardColor cardColor) {
@@ -120,24 +155,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             PCLCustomEditEntityScreen.availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return PCLCustomEditEntityScreen.availableCards;
-    }
-
-    public static ArrayList<AbstractBlight> getAvailableBlights(AbstractCard.CardColor cardColor) {
-        if (PCLCustomEditEntityScreen.availableBlights == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
-                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
-            }
-            else {
-                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
-                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
-                }
-            }
-            PCLCustomEditEntityScreen.availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return PCLCustomEditEntityScreen.availableBlights;
     }
 
     public static ArrayList<AbstractPotion> getAvailablePotions(AbstractCard.CardColor cardColor) {
@@ -198,25 +215,76 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
+    protected void clearButtons() {
+        primaryPageButtons.clear();
+        effectPageButtons.clear();
+        powerPageButtons.clear();
+    }
+
     protected void clearPages() {
         createCurrentEffects();
-        pages.clear();
+        primaryPages.clear();
         effectPages.clear();
         powerPages.clear();
-        pageButtons.clear();
+        clearButtons();
     }
 
     protected void createCurrentEffects() {
         currentEffects.clear();
         currentEffects.addAll(getBuilder().getMoves());
-        while (currentEffects.size() < EFFECT_COUNT) {
-            currentEffects.add(null);
-        }
         currentPowers.clear();
         currentPowers.addAll(getBuilder().getPowers());
-        while (currentPowers.size() < getPowerLimit()) {
-            currentPowers.add(null);
+    }
+
+    protected EUIButton createEffectPageButton(PCLCustomEffectPage pg) {
+        EUIButton b = new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
+                .setPosition(BUTTON_START_X + (pg.editorIndex * BUTTON_HEIGHT), (BUTTON_HEIGHT * 1.65f))
+                .setOnClick(pg, this::openPage)
+                .setOnRightClick(() -> {
+                    openContextMenuForPage(effectPages, pg);
+                })
+                .setTooltip(getPageTooltip(pg));
+        pg.setButton(b);
+        return b;
+    }
+
+    protected EUIButton createPowerPageButton(PCLCustomEffectPage pg) {
+        EUIButton b = new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
+                .setPosition(BUTTON_START_X + (pg.editorIndex * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.5f))
+                .setOnClick(pg, this::openPage)
+                .setOnRightClick(() -> {
+                    openContextMenuForPage(powerPages, pg);
+                })
+                .setTooltip(getPageTooltip(pg));
+        pg.setButton(b);
+        return b;
+    }
+
+    protected EUIButton createPrimaryPageButton(int i) {
+        PCLCustomGenericPage pg = primaryPages.get(i);
+        EUIButton b = new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
+                .setPosition(BUTTON_START_X + (i * BUTTON_HEIGHT), (BUTTON_HEIGHT * 2.75f))
+                .setOnClick(pg, this::openPage)
+                .setTooltip(getPageTooltip(pg));
+        pg.setButton(b);
+        return b;
+    }
+
+    protected void deletePage(ArrayList<? extends PCLCustomEffectPage> list, PCLCustomEffectPage page) {
+        list.remove(page);
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).editorIndex = i;
         }
+        clearButtons();
+        setupPageButtons();
+        if (page == currentPage) {
+            PCLCustomGenericPage firstPage = primaryPages.get(0);
+            if (firstPage != null) {
+                openPage(firstPage);
+            }
+        }
+        modifyBuilder(__ -> {
+        });
     }
 
     protected void end() {
@@ -229,16 +297,16 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         return tempBuilders.get(currentBuilder);
     }
 
+    protected NewPageOption[] getNewPageOptions() {
+        return EUIUtils.array(NewPageOption.Generic, NewPageOption.Power);
+    }
+
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), "");
     }
 
     public int getPowerCount() {
         return powerPages.size();
-    }
-
-    public int getPowerLimit() {
-        return EFFECT_COUNT;
     }
 
     protected EUITourTooltip[] getTour() {
@@ -250,20 +318,49 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         );
     }
 
-    protected void makeEffectPage(int index) {
-        PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1), (be) -> updateEffect(index, be));
-        pages.add(page);
-        effectPages.add(page);
-        page.refresh();
+    protected void initializePage(PCLCustomEffectPage page) {
+        modifyBuilder(__ -> {});
+        openPage(page);
     }
 
-    protected void makePowerPage(int index) {
+    protected PCLCustomEffectPage makeEffectPage(int index) {
+        PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1));
+        effectPages.add(page);
+        page.refresh();
+        effectPageButtons.add(createEffectPageButton(page));
+        return page;
+    }
+
+    protected PCLCustomEffectPage makeNewBlockEffect() {
+        return null;
+    }
+
+    protected PCLCustomEffectPage makeNewDamageEffect() {
+        return null;
+    }
+
+    protected PCLCustomEffectPage makeNewGenericEffect() {
+        currentEffects.add(null);
+        return makeEffectPage(currentEffects.size() - 1);
+    }
+
+    protected PCLCustomPowerEffectPage makeNewPowerEffect() {
+        currentPowers.add(new PTrigger_When());
+        PCLCustomPowerEffectPage pEffect = makePowerPage(currentPowers.size() - 1);
+
+        currentEffects.add(new PMove_StackCustomPower(PCLCardTarget.Self, -1, pEffect.editorIndex));
+        makeEffectPage(currentEffects.size() - 1);
+        return pEffect;
+    }
+
+    protected PCLCustomPowerEffectPage makePowerPage(int index) {
         PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
-                , EUIUtils.format(PGR.core.strings.cedit_powerX, index + 1), (be) -> updatePowerEffect(index, be));
-        pages.add(page);
+                , EUIUtils.format(PGR.core.strings.cedit_powerX, index + 1));
         powerPages.add(page);
         page.refresh();
+        powerPageButtons.add(createPowerPageButton(page));
+        return page;
     }
 
     public void modifyAllBuilders(ActionT2<U, Integer> updateFunc) {
@@ -280,18 +377,27 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         rebuildItem();
     }
 
-    public void openPageAtIndex(int index) {
-        currentPage = index;
-        for (int j = 0; j < pageButtons.size(); j++) {
-            pageButtons.get(j).setColor(j == index ? Color.WHITE : Color.GRAY);
-        }
-        pages.get(index).onOpen();
+    protected void openContextMenuForNewEffect() {
+        this.newPageOptions.setItems(getNewPageOptions());
+        this.newPageOptions.positionToOpen();
+    }
+
+    protected void openContextMenuForPage(ArrayList<? extends PCLCustomEffectPage> selectedPageList, PCLCustomEffectPage page) {
+        this.selectedPageList = selectedPageList;
+        this.selectedPage = page;
+        this.existingPageOptions.positionToOpen();
+    }
+
+    protected void openPage(PCLCustomGenericPage page) {
+        currentPage = page;
+        currentPage.onOpen();
+        refreshButtons();
         PGR.helpMeButton.setOnClick(() -> {
-                if (EUITourTooltip.isQueueEmpty()) {
-                    EUITourTooltip.queueTutorial(pages.get(index).getTour());
-                    EUITourTooltip.queueTutorial(getTour());
+                    if (EUITourTooltip.isQueueEmpty()) {
+                        EUITourTooltip.queueTutorial(currentPage.getTour());
+                        EUITourTooltip.queueTutorial(getTour());
+                    }
                 }
-            }
         );
     }
 
@@ -315,10 +421,53 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_undo)
                 .setTooltip(PGR.core.strings.cedit_undo, PGR.core.strings.cetut_undo)
                 .setOnClick(this::undo);
+
+        addPageButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT * 0.8f, BUTTON_HEIGHT * 0.8f))
+                .setOnClick(this::openContextMenuForNewEffect)
+                .setTooltip(new EUITooltip(PGR.core.strings.cedit_newEffect));
+
+        existingPageOptions = (EUIContextMenu<ExistingPageOption>) new EUIContextMenu<ExistingPageOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
+                .setOnChange(options -> {
+                    for (ExistingPageOption o : options) {
+                        o.onSelect.invoke(selectedPageList, selectedPage, this);
+                    }
+                })
+                .setCanAutosizeButton(true)
+                .setItems(ExistingPageOption.values());
+
+        newPageOptions = (EUIContextMenu<NewPageOption>) new EUIContextMenu<NewPageOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
+                .setOnChange(options -> {
+                    for (NewPageOption o : options) {
+                        initializePage(o.onSelect.invoke(this));
+                    }
+                })
+                .setCanAutosizeButton(true)
+                .setItems(NewPageOption.values());
+    }
+
+    protected void refreshButtons() {
+        for (EUIButton pb : primaryPageButtons) {
+            pb.setColor(Color.GRAY);
+        }
+        for (EUIButton pb : powerPageButtons) {
+            pb.setColor(Color.GRAY);
+        }
+        for (EUIButton pb : effectPageButtons) {
+            pb.setColor(Color.GRAY);
+        }
+        if (currentPage != null) {
+            currentPage.highlightButton();
+        }
     }
 
     public void refreshPages() {
-        for (PCLCustomGenericPage b : pages) {
+        for (PCLCustomGenericPage b : primaryPages) {
+            b.refresh();
+        }
+        for (PCLCustomGenericPage b : effectPages) {
+            b.refresh();
+        }
+        for (PCLCustomGenericPage b : powerPages) {
             b.refresh();
         }
     }
@@ -335,6 +484,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
         else {
             renderInnerElements(sb);
+            newPageOptions.tryRender(sb);
+            existingPageOptions.tryRender(sb);
         }
     }
 
@@ -342,8 +493,17 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         cancelButton.tryRender(sb);
         saveButton.tryRender(sb);
         undoButton.tryRender(sb);
-        pages.get(currentPage).tryRender(sb);
-        for (EUIButton b : pageButtons) {
+        addPageButton.tryRender(sb);
+        if (currentPage != null) {
+            currentPage.tryRender(sb);
+        }
+        for (EUIButton b : primaryPageButtons) {
+            b.tryRender(sb);
+        }
+        for (EUIButton b : effectPageButtons) {
+            b.tryRender(sb);
+        }
+        for (EUIButton b : powerPageButtons) {
             b.tryRender(sb);
         }
         PGR.helpMeButton.tryRender(sb);
@@ -372,17 +532,17 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     protected void setupPageButtons() {
-        float offset = Settings.WIDTH * 0.5f - (pages.size() / 2f * BUTTON_HEIGHT);
-        for (int i = 0; i < pages.size(); i++) {
-            PCLCustomGenericPage pg = pages.get(i);
-            pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
-                    .setPosition(offset + (i * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))
-                    .setColor(i == 0 ? Color.WHITE : Color.GRAY)
-                    .setOnClick(i, this::openPageAtIndex)
-                    .setTooltip(getPageTooltip(pg)));
+        int i = 0;
+        for (i = 0; i < primaryPages.size(); i++) {
+            primaryPageButtons.add(createPrimaryPageButton(i));
         }
-        modifyBuilder(__ -> {
-        });
+        addPageButton.setPosition(BUTTON_START_X + (i * BUTTON_HEIGHT), (BUTTON_HEIGHT * 2.75f));
+        for (i = 0; i < effectPages.size(); i++) {
+            effectPageButtons.add(createEffectPageButton(effectPages.get(i)));
+        }
+        for (i = 0; i < powerPages.size(); i++) {
+            powerPageButtons.add(createPowerPageButton(powerPages.get(i)));
+        }
     }
 
     protected void setupPages() {
@@ -395,6 +555,25 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         EUITourTooltip.queueFirstView(PGR.config.tourEditorForm, getTour());
     }
 
+    protected void swapEffectPages(ArrayList<? extends PCLCustomGenericPage> pages, int dest, int targ) {
+        if (dest >= 0 && targ < pages.size()) {
+            Collections.swap(pages, dest, targ);
+            PCLCustomGenericPage pg = pages.get(dest);
+            if (pg instanceof PCLCustomEffectPage) {
+                ((PCLCustomEffectPage) pg).editorIndex = dest;
+            }
+            PCLCustomGenericPage pg2 = pages.get(targ);
+            if (pg2 instanceof PCLCustomEffectPage) {
+                ((PCLCustomEffectPage) pg2).editorIndex = targ;
+            }
+            clearButtons();
+            setupPageButtons();
+            refreshButtons();
+            modifyBuilder(__ -> {
+            });
+        }
+    }
+
     protected void toggleViewUpgrades(boolean value) {
         upgraded = value;
     }
@@ -405,16 +584,13 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             prevBuilders = tempBuilders;
             tempBuilders = backups;
             currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 1);
-            createCurrentEffects();
+            setupPages();
             updateVariant();
-            for (PCLCustomGenericPage b : pages) {
-                b.onUndo();
-            }
             rebuildItem();
         }
     }
 
-    protected void updateEffect(int index, PSkill<?> be) {
+    protected void updateEffect(PSkill<?> be, int index) {
         currentEffects.set(index, be);
         modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
     }
@@ -423,8 +599,17 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         cancelButton.tryUpdate();
         saveButton.tryUpdate();
         undoButton.tryUpdate();
-        pages.get(currentPage).tryUpdate();
-        for (EUIButton b : pageButtons) {
+        addPageButton.tryUpdate();
+        if (currentPage != null) {
+            currentPage.tryUpdate();
+        }
+        for (EUIButton b : primaryPageButtons) {
+            b.tryUpdate();
+        }
+        for (EUIButton b : effectPageButtons) {
+            b.tryUpdate();
+        }
+        for (EUIButton b : powerPageButtons) {
             b.tryUpdate();
         }
         PGR.helpMeButton.tryUpdate();
@@ -438,18 +623,15 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 currentDialog = null;
             }
         }
-        else {
+        else if (!newPageOptions.isOpen() && !existingPageOptions.isOpen()) {
             updateInnerElements();
         }
+        newPageOptions.tryUpdate();
+        existingPageOptions.tryUpdate();
     }
 
-    protected void updatePowerEffect(int index, PSkill<?> be) {
-        if (be instanceof PTrigger) {
-            currentPowers.set(index, (PTrigger) be);
-        }
-        else {
-            currentPowers.set(index, null);
-        }
+    protected void updatePowerEffect(PSkill<?> be, int index) {
+        currentPowers.set(index, be);
         modifyBuilder(e -> e.setPPower(currentPowers, true, true));
     }
 
@@ -458,4 +640,33 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     abstract protected void rebuildItem();
+
+    public enum ExistingPageOption {
+        MoveLeft(PGR.core.strings.cedit_moveLeft, (ls, pg, sc) -> sc.swapEffectPages(ls, pg.editorIndex - 1, pg.editorIndex)),
+        MoveRight(PGR.core.strings.cedit_moveRight, (ls, pg, sc) -> sc.swapEffectPages(ls, pg.editorIndex, pg.editorIndex + 1)),
+        Delete(PGR.core.strings.cedit_delete, (ls, pg, sc) -> sc.deletePage(ls, pg));
+
+        public final String name;
+        public final ActionT3<ArrayList<? extends PCLCustomEffectPage>, PCLCustomEffectPage, PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
+
+        ExistingPageOption(String name, ActionT3<ArrayList<? extends PCLCustomEffectPage>, PCLCustomEffectPage, PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
+            this.name = name;
+            this.onSelect = onSelect;
+        }
+    }
+
+    public enum NewPageOption {
+        Generic(PGR.core.strings.cedit_generic, PCLCustomEditEntityScreen::makeNewGenericEffect),
+        Power(PGR.core.strings.cedit_customPower, PCLCustomEditEntityScreen::makeNewPowerEffect),
+        Damage(PGR.core.strings.cedit_damage, PCLCustomEditEntityScreen::makeNewDamageEffect),
+        Block(PGR.core.strings.cedit_block, PCLCustomEditEntityScreen::makeNewBlockEffect);
+
+        public final String name;
+        public final FuncT1<PCLCustomEffectPage, PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
+
+        NewPageOption(String name, FuncT1<PCLCustomEffectPage, PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
+            this.name = name;
+            this.onSelect = onSelect;
+        }
+    }
 }

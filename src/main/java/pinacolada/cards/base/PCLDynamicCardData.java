@@ -28,12 +28,10 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
-    public final ArrayList<PTrigger> powers = new ArrayList<>();
+    public final ArrayList<PSkill<?>> powers = new ArrayList<>();
     public ColoredTexture portraitForeground;
     public ColoredTexture portraitImage;
     public PCLCard source;
-    public PCardPrimary_DealDamage attackSkill;
-    public PCardPrimary_GainBlock blockSkill;
     public boolean showTypeText = true;
 
     public PCLDynamicCardData(String id) {
@@ -78,12 +76,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
-        if (original.attackSkill != null) {
-            setAttackSkill(original.attackSkill.makeCopy());
-        }
-        if (original.blockSkill != null) {
-            setBlockSkill(original.blockSkill.makeCopy());
-        }
     }
 
     public PCLDynamicCardData(PCLCardData original, String name, String text, boolean copyProperties) {
@@ -150,14 +142,18 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(f.target)));
         safeLoadValue(() -> setTiming(DelayTiming.valueOf(f.timing)));
         safeLoadValue(() -> setAttackType(PCLAttackType.valueOf(f.attackType)));
+        clearPowers();
+        clearSkills();
+        // Legacy damage/block
         if (f.damageEffect != null) {
-            safeLoadValue(() -> setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class)));
+            safeLoadValue(() -> addPSkill(PSkill.get(f.damageEffect)));
         }
         if (f.blockEffect != null) {
-            safeLoadValue(() -> setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class)));
+            safeLoadValue(() -> addPSkill(PSkill.get(f.blockEffect)));
         }
-        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
-        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
+        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, false));
+        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, PSkill::get), true, false));
+
         setMultiformData(data.forms.length);
         safeLoadValue(() -> setLoadoutValue(data.loadoutValue));
         // TODO convert to safeLoadValue
@@ -229,7 +225,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     }
 
     @Override
-    public ArrayList<PTrigger> getPowers() {
+    public ArrayList<PSkill<?>> getPowers() {
         return powers;
     }
 
@@ -269,20 +265,8 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return this;
     }
 
-    public PCLDynamicCardData setAttackSkill(PCardPrimary_DealDamage damageEffect) {
-        this.attackSkill = damageEffect;
-
-        return this;
-    }
-
     public PCLDynamicCardData setAttackType(PCLAttackType attackType) {
         this.attackType = attackType;
-
-        return this;
-    }
-
-    public PCLDynamicCardData setBlockSkill(PCardPrimary_GainBlock blockEffect) {
-        this.blockSkill = blockEffect;
 
         return this;
     }

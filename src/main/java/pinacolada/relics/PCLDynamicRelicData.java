@@ -23,7 +23,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     };
     public final HashMap<Settings.GameLanguage, RelicStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
-    public final ArrayList<PTrigger> powers = new ArrayList<>();
+    public final ArrayList<PSkill<?>> powers = new ArrayList<>();
     public Texture portraitImage;
 
     public PCLDynamicRelicData(String cardID) {
@@ -138,7 +138,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     }
 
     @Override
-    public ArrayList<PTrigger> getPowers() {
+    public ArrayList<PSkill<?>> getPowers() {
         return powers;
     }
 

@@ -28,7 +28,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
     };
     public final HashMap<Settings.GameLanguage, BlightStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
-    public final ArrayList<PTrigger> powers = new ArrayList<>();
+    public final ArrayList<PSkill<?>> powers = new ArrayList<>();
     public Texture portraitImage;
 
     public PCLDynamicBlightData(String cardID) {
@@ -128,7 +128,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
     }
 
     @Override
-    public ArrayList<PTrigger> getPowers() {
+    public ArrayList<PSkill<?>> getPowers() {
         return powers;
     }
 

@@ -25,10 +25,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
-import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIColors;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
@@ -40,7 +37,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.commands.*;
-import pinacolada.dungeon.CardTargetingManager;
+import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.EffekseerEFK;
@@ -437,7 +434,7 @@ public class PGR {
         CardFlag.postInitialize();
         reloadCustoms();
         CountingPanel.register(new PCLAffinityPanelFilter());
-        CustomTargeting.registerCustomTargeting(CardTargetingManager.PCL, CombatManager.targeting);
+        CustomTargeting.registerCustomTargeting(PCLCardTargetingManager.PCL, CombatManager.targeting);
         core.receivePostInitialize();
         for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {
             resources.receivePostInitialize();

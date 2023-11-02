@@ -60,10 +60,10 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
         if (source != null) {
-            List<PTrigger> powerEffects = source.getPowerEffects();
+            List<PSkill<?>> powerEffects = source.getPowerEffects();
             for (Integer i : fields.indexes) {
                 if (i >= 0 && powerEffects.size() > i) {
-                    PTrigger poEff = powerEffects.get(i);
+                    PSkill<?> poEff = powerEffects.get(i);
                     referencesSelf = doesPowerReferenceSelf(poEff);
                     if (referencesSelf) {
                         break;
@@ -110,7 +110,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
             return;
         }
 
-        List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> source.getPowerEffect(i));
+        List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> EUIUtils.safeCast(source.getPowerEffect(i), PTrigger.class));
         if (triggers.isEmpty()) {
             super.use(info, order);
             return;
@@ -118,10 +118,10 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
 
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        List<PTrigger> powerEffects = source.getPowerEffects();
+        List<PSkill<?>> powerEffects = source.getPowerEffects();
         for (Integer i : fields.indexes) {
             if (i >= 0 && powerEffects.size() > i) {
-                PTrigger poEff = powerEffects.get(i);
+                PSkill<?> poEff = powerEffects.get(i);
                 referencesSelf = doesPowerReferenceSelf(poEff);
                 if (referencesSelf) {
                     break;

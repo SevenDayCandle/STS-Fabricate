@@ -77,7 +77,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected int totalCardsCache = 0;
     protected int totalColorlessCache = 0;
     public PCLCard currentSeriesCard;
-    public boolean isScreenDisabled;
+    private boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
         final Texture panelTexture = EUIRM.images.panelRounded.texture();
