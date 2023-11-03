@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -13,6 +14,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -27,9 +30,12 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.cards.TryChooseChoice;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.cardText.ConditionToken;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -435,6 +441,37 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
         return this.childEffect == null || this.childEffect.canPlay(info, triggerSource);
+    }
+
+    public TryChooseChoice<PSkill<?>> chooseEffect(PCLUseInfo info, PCLActions order, List<? extends PSkill<?>> effects) {
+        return chooseEffect(info.source, info.target, order, effects);
+    }
+
+    public TryChooseChoice<PSkill<?>> chooseEffect(AbstractCreature sc, AbstractCreature tc, PCLActions order, List<? extends PSkill<?>> effects) {
+        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        PCLCardData cardData;
+        if (choiceCard == null) {
+            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
+                    .showTypeText(false);
+
+            if (source instanceof AbstractRelic) {
+                cardData.strings.NAME = ((AbstractRelic) source).name;
+            }
+            else if (source instanceof AbstractPotion) {
+                cardData.strings.NAME = ((AbstractPotion) source).name;
+            }
+            else if (source instanceof AbstractBlight) {
+                cardData.strings.NAME = ((AbstractBlight) source).name;
+            }
+            else {
+                cardData.strings.NAME = getSourceCreature().name;
+            }
+        }
+        else {
+            cardData = choiceCard.cardData;
+        }
+
+        return order.tryChooseSkill(cardData, amount, sc, tc, effects);
     }
 
     public void displayUpgrades(boolean value) {
@@ -929,14 +966,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
      */
     public AbstractCreature getOwnerCreature() {
         return parent != null ? parent.getOwnerCreature() : getSourceCreature();
-    }
-
-    public PCLCard getPCLSource() {
-        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        if (choiceCard == null) {
-            choiceCard = new QuestionMark();
-        }
-        return choiceCard;
     }
 
     public final PSkill<?> getParent() {

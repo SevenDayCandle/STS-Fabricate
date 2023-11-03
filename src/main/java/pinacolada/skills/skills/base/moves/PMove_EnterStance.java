@@ -37,12 +37,12 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
         fields.setStance(stance);
     }
 
-    public void chooseEffect(PCLUseInfo info, PCLActions order, List<PCLStanceHelper> choices) {
+    public void chooseStance(PCLUseInfo info, PCLActions order, List<PCLStanceHelper> choices) {
         if (fields.random) {
             order.changeStance(GameUtilities.getRandomElement(choices));
             return;
         }
-        order.tryChooseSkill(getPCLSource().cardData, amount, info.source, info.target, EUIUtils.map(choices, PMove::enterStance));
+        chooseEffect(info, order, EUIUtils.map(choices, PMove::enterStance));
     }
 
     @Override
@@ -67,13 +67,13 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
             order.changeStance(NeutralStance.STANCE_ID);
         }
         else if (extra > 0) {
-            chooseEffect(info, order, PCLStanceHelper.inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS));
+            chooseStance(info, order, PCLStanceHelper.inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS));
         }
         else if (fields.stances.size() == 1) {
             order.changeStance(fields.stances.get(0));
         }
         else {
-            chooseEffect(info, order, fields.stances);
+            chooseStance(info, order, fields.stances);
         }
         super.use(info, order);
     }

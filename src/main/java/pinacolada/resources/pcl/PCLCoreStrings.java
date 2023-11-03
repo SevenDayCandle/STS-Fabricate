@@ -12,6 +12,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.dungeon.SummonPool;
 import pinacolada.resources.AbstractStrings;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -517,42 +518,43 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_hits = subjects.TEXT[33];
     public final String subjects_intendedX = subjects.TEXT[34];
     public final String subjects_intent = subjects.TEXT[35];
-    public final String subjects_nonX = subjects.TEXT[36];
-    public final String subjects_ofX = subjects.TEXT[37];
-    public final String subjects_permanentlyX = subjects.TEXT[38];
-    public final String subjects_playingXWithY = subjects.TEXT[39];
-    public final String subjects_potion = subjects.TEXT[40];
-    public final String subjects_randomX = subjects.TEXT[41];
-    public final String subjects_randomlyX = subjects.TEXT[42];
-    public final String subjects_relic = subjects.TEXT[43];
-    public final String subjects_shuffle = subjects.TEXT[44];
-    public final String subjects_shuffleYourDeck = subjects.TEXT[45];
-    public final String subjects_bottomOfX = subjects.TEXT[46];
-    public final String subjects_leftmostX = subjects.TEXT[47];
-    public final String subjects_rightmostX = subjects.TEXT[48];
-    public final String subjects_target = subjects.TEXT[49];
-    public final String subjects_topOfX = subjects.TEXT[50];
-    public final String subjects_theirX = subjects.TEXT[51];
-    public final String subjects_themX = subjects.TEXT[52];
-    public final String subjects_theyX = subjects.TEXT[53];
-    public final String subjects_thisX = subjects.TEXT[54];
-    public final String subjects_this = subjects.TEXT[55];
-    public final String subjects_turnCount = subjects.TEXT[56];
-    public final String subjects_unblockedX = subjects.TEXT[57];
-    public final String subjects_x = subjects.TEXT[58];
-    public final String subjects_you = subjects.TEXT[59];
-    public final String subjects_yourFirstX = subjects.TEXT[60];
-    public final String subjects_yourX = subjects.TEXT[61];
-    public final String subjects_xOfY = subjects.TEXT[62];
-    public final String subjects_xOnY = subjects.TEXT[63];
-    public final String subjects_xOnYInZ = subjects.TEXT[64];
-    public final String subjects_xOrLessY = subjects.TEXT[65];
-    public final String subjects_xThisCombat = subjects.TEXT[66];
-    public final String subjects_xThisTurn = subjects.TEXT[67];
-    public final String subjects_xTimes = subjects.TEXT[68];
-    public final String subjects_xUntilY = subjects.TEXT[69];
-    public final String subjects_xWithY = subjects.TEXT[70];
-    public final String subjects_xCost = subjects.TEXT[71];
+    public final String subjects_missingX = subjects.TEXT[36];
+    public final String subjects_nonX = subjects.TEXT[37];
+    public final String subjects_ofX = subjects.TEXT[38];
+    public final String subjects_permanentlyX = subjects.TEXT[39];
+    public final String subjects_playingXWithY = subjects.TEXT[40];
+    public final String subjects_potion = subjects.TEXT[41];
+    public final String subjects_randomX = subjects.TEXT[42];
+    public final String subjects_randomlyX = subjects.TEXT[43];
+    public final String subjects_relic = subjects.TEXT[44];
+    public final String subjects_shuffle = subjects.TEXT[45];
+    public final String subjects_shuffleYourDeck = subjects.TEXT[46];
+    public final String subjects_bottomOfX = subjects.TEXT[47];
+    public final String subjects_leftmostX = subjects.TEXT[48];
+    public final String subjects_rightmostX = subjects.TEXT[49];
+    public final String subjects_target = subjects.TEXT[50];
+    public final String subjects_topOfX = subjects.TEXT[51];
+    public final String subjects_theirX = subjects.TEXT[52];
+    public final String subjects_themX = subjects.TEXT[53];
+    public final String subjects_theyX = subjects.TEXT[54];
+    public final String subjects_thisX = subjects.TEXT[55];
+    public final String subjects_this = subjects.TEXT[56];
+    public final String subjects_turnCount = subjects.TEXT[57];
+    public final String subjects_unblockedX = subjects.TEXT[58];
+    public final String subjects_x = subjects.TEXT[59];
+    public final String subjects_you = subjects.TEXT[60];
+    public final String subjects_yourFirstX = subjects.TEXT[61];
+    public final String subjects_yourX = subjects.TEXT[62];
+    public final String subjects_xOfY = subjects.TEXT[63];
+    public final String subjects_xOnY = subjects.TEXT[64];
+    public final String subjects_xOnYInZ = subjects.TEXT[65];
+    public final String subjects_xOrLessY = subjects.TEXT[66];
+    public final String subjects_xThisCombat = subjects.TEXT[67];
+    public final String subjects_xThisTurn = subjects.TEXT[68];
+    public final String subjects_xTimes = subjects.TEXT[69];
+    public final String subjects_xUntilY = subjects.TEXT[70];
+    public final String subjects_xWithY = subjects.TEXT[71];
+    public final String subjects_xCost = subjects.TEXT[72];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -562,7 +564,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String tutorial_summonTutorial3 = tutorial.TEXT[5];
     public final String tutorial_summonTutorial4 = tutorial.TEXT[6];
     public final String tutorial_summonTutorial5 = tutorial.TEXT[7];
-    public final String tutorial_summonTutorial6 = tutorial.TEXT[8];
+    public final String tutorial_summonTutorial6 = EUIUtils.format(tutorial.TEXT[8], SummonPool.BASE_DAMAGE_BONUS);
     public final String tutorial_summonTutorial7 = tutorial.TEXT[9];
     public final String tutorial_summonTutorial8 = tutorial.TEXT[10];
     public final String tutorial_augmentTutorial1 = tutorial.TEXT[11];
@@ -1306,6 +1308,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_min(Object amount) {
         return EUIUtils.format(subjects_minX, amount);
+    }
+    public final String subjects_missingX(Object object, Object target) {
+        return EUIUtils.format(subjects_missingX, object, target);
     }
     public final String subjects_non(Object place) {
         return EUIUtils.format(subjects_nonX, place);

@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public class PField_CardModify extends PField_CardCategory {
@@ -22,6 +23,10 @@ public class PField_CardModify extends PField_CardCategory {
     @Override
     public PField_CardModify makeCopy() {
         return new PField_CardModify(this);
+    }
+
+    public void registerOrBoolean(PCLCustomEffectEditingPane editor) {
+        registerOrBoolean(editor, PGR.core.strings.cedit_or, null);
     }
 
     public void registerOrBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {

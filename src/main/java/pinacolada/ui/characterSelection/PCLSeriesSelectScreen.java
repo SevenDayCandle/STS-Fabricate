@@ -142,12 +142,12 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setOnClick(this::unbanAll)
                 .setColor(Color.FIREBRICK);
 
-        cancel = EUIButton.createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.25f)
+        cancel = EUIButton.createHexagonalButton(screenW(0.015f), getY.invoke(12.5f), buttonWidth, buttonHeight * 1.28f)
                 .setText(GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::cancel)
                 .setColor(Color.FIREBRICK);
 
-        confirm = EUIButton.createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.25f)
+        confirm = EUIButton.createHexagonalButton(xPos, getY.invoke(12.5f), buttonWidth, buttonHeight * 1.28f)
                 .setText(GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::proceed)
                 .setColor(Color.FOREST);

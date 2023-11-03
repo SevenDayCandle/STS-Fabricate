@@ -750,27 +750,27 @@ public final class PCLActions {
         return add(TryChooseChoice.chooseAffinity(name, choices, source, target, affinities));
     }
 
-    public TryChooseChoice<PCLAffinity> tryChooseAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PCLAffinity> tryChooseAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useAffinitySkill(name, choices, source, target, skills));
     }
 
-    public TryChooseChoice<PCLAffinity> tryChooseAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PCLAffinity> tryChooseAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useAffinitySkill(name, choices, cost, source, target, skills));
     }
 
-    public TryChooseChoice<PSkill<?>> tryChooseSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PSkill<?>> tryChooseSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useSkill(sourceData, choices, source, target, skills));
     }
 
-    public TryChooseChoice<PSkill<?>> tryChooseSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PSkill<?>> tryChooseSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useSkill(sourceData, choices, cost, source, target, skills));
     }
 
-    public TryChooseChoice<PSkill<?>> tryChooseTargetSkill(PCLCardData sourceData, int choices, AbstractCreature source, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PSkill<?>> tryChooseTargetSkill(PCLCardData sourceData, int choices, AbstractCreature source, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useSkillWithTargeting(sourceData, choices, source, skills));
     }
 
-    public TryChooseChoice<PSkill<?>> tryChooseTargetSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill<?>> skills) {
+    public TryChooseChoice<PSkill<?>> tryChooseTargetSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<? extends PSkill<?>> skills) {
         return add(TryChooseChoice.useSkillWithTargeting(sourceData, choices, cost, source, skills));
     }
 

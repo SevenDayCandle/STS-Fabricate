@@ -18,7 +18,7 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 
 public class PCLValueEditor extends EUIHoverable {
-    protected static final float ICON_SIZE = scale(36f);
+    public static final float ICON_SIZE = scale(36f);
     protected ActionT1<Integer> onUpdate;
     protected EUIButton decreaseButton;
     protected EUIButton increaseButton;
@@ -27,15 +27,19 @@ public class PCLValueEditor extends EUIHoverable {
     public EUILabel header;
 
     public PCLValueEditor(EUIHitbox hb, String title, ActionT1<Integer> onUpdate) {
+        this(hb, title, onUpdate, ICON_SIZE);
+    }
+
+    public PCLValueEditor(EUIHitbox hb, String title, ActionT1<Integer> onUpdate, float iconSize) {
         super(hb);
 
         final float w = hb.width;
         final float h = hb.height;
 
-        decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, h * 0.5f))
+        decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, iconSize, iconSize, iconSize * -0.4f, h * 0.5f))
                 .setOnClick(this::decrease);
 
-        increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, w + (ICON_SIZE * 0.4f), h * 0.5f))
+        increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, iconSize, iconSize, w + (iconSize * 0.4f), h * 0.5f))
                 .setOnClick(this::increase);
 
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), hb)

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class SummonPool extends EUIBase {
-    public static int BASE_DAMAGE_BONUS = 100;
+    public static int BASE_DAMAGE_BONUS = 150;
     public static int BASE_TRIGGER = 1;
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(160);

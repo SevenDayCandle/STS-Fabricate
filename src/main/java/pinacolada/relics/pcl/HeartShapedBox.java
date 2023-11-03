@@ -14,6 +14,7 @@ import pinacolada.utilities.GameUtilities;
 public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider {
     public static final PCLRelicData DATA = registerTemplate(HeartShapedBox.class)
             .setTier(RelicTier.SPECIAL)
+            .setLoadoutValue(10)
             .setUnique(true);
     public static final int BASE_CHANCE = 1;
     public static final int BASE_OFFSET = 50;

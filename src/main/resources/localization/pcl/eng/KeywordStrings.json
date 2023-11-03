@@ -572,7 +572,7 @@
 		"NAME": "Warding"
 	},
 	"Withdraw":	{
-		"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it with doubled damage and block values, and returns it to your discard pile.",
+		"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it with #b+{0}% damage and block values, and returns it to your discard pile.",
 		"NAME": "Withdraw",
 		"PAST": "Withdrawn",
 		"PRESENT": "Withdraws",

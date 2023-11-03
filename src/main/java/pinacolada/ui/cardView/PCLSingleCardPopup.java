@@ -55,8 +55,6 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     private ApplyAugmentToCardEffect effect;
     protected boolean showAugments;
     protected boolean viewBetaArt;
-    protected boolean viewVariants;
-    protected boolean viewChangeVariants;
     protected int currentForm;
     public PCLCard displayCard;
 
@@ -77,17 +75,6 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setFont(FontHelper.cardTitleFont, 1)
                 .setOnToggle(this::toggleBetaArt);
 
-        this.changeVariant = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(200f * Settings.scale, 150f * Settings.scale))
-                .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.WHITE)
-                .setDimensions(screenW(0.18f), screenH(0.07f))
-                .setText(PGR.core.strings.scp_changeVariant)
-                .setTooltip(PGR.core.strings.scp_changeVariant, PGR.core.strings.scp_changeVariantTooltipAlways)
-                .setOnClick(this::changeCardForm)
-                .setColor(Color.FIREBRICK);
-        this.changeVariant.hb.move(Settings.WIDTH / 2f - 700f * Settings.scale, Settings.HEIGHT / 2f + 180 * Settings.scale);
-        this.changeVariantEditor = new PCLValueEditor(
-                new RelativeHitbox(changeVariant.hb, ICON_SIZE, ICON_SIZE, changeVariant.hb.width / 2 + ICON_SIZE * 2.5f, changeVariant.hb.height * 0.8f), PGR.core.strings.scp_variant, this::changePreviewForm);
-
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
                 .setLabel(EUIFontHelper.buttonFont, 0.9f, PGR.core.strings.scp_viewTooltips)
@@ -95,17 +82,29 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments));
 
-        final float offX = changeVariant.hb.width / 2 - ICON_SIZE * 0.75f;
-
         this.maxUpgradesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), EUIBase.scale(48), offX, changeVariant.hb.height * 3.7f))
+                new EUIHitbox(screenW(0.008f), screenH(0.88f), screenW(0.21f), EUIBase.scale(32)))
                 .setAlignment(0.9f, 0.1f, true);
         this.maxUpgradesLabel.setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades);
 
         this.maxCopiesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
-                new RelativeHitbox(changeVariant.hb, screenW(0.21f), EUIBase.scale(48), offX, changeVariant.hb.height * 3.25f))
+                new EUIHitbox(screenW(0.008f), screenH(0.855f), screenW(0.21f), EUIBase.scale(32)))
                 .setAlignment(0.9f, 0.1f, true);
         this.maxCopiesLabel.setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies);
+
+        this.changeVariantEditor = new PCLValueEditor(
+                new EUIHitbox(screenW(0.1f), screenH(0.8f), ICON_SIZE, ICON_SIZE), PGR.core.strings.scp_variant, this::changePreviewForm);
+        this.changeVariantEditor.header.setFont(EUIFontHelper.cardTooltipTitleFontNormal)
+                .setAlignment(0.9f, 0.1f, false)
+                .setColor(Color.WHITE)
+                .setHitbox(new EUIHitbox(screenW(0.008f), screenH(0.76f), screenW(0.21f), EUIBase.scale(32)));
+        this.changeVariant = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(screenW(0.012f), screenH(0.76f), 200f * Settings.scale, 150f * Settings.scale))
+                .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.WHITE)
+                .setDimensions(screenW(0.18f), screenH(0.07f))
+                .setText(PGR.core.strings.scp_changeVariant)
+                .setTooltip(PGR.core.strings.scp_changeVariant, PGR.core.strings.scp_changeVariantTooltipAlways)
+                .setOnClick(this::changeCardForm)
+                .setColor(Color.FIREBRICK);
     }
 
     private void applyAugment(PCLAugment augment) {
@@ -262,12 +261,12 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         PCLCardData cardData = currentItem != null ? currentItem.cardData : null;
         if (cardData != null) {
             String author = cardData.getAuthorString();
-            viewChangeVariants = cardData.canToggleFromPopup && (currentItem.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
+            changeVariant.setActive(cardData.canToggleFromPopup && (currentItem.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame());
             changeVariant.tooltip.setDescription(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + COLON_SEPARATOR + EUIUtils.modifyString(author, w -> "#y" + w) : "");
         }
         else {
-            viewChangeVariants = false;
+            changeVariant.setActive(false);
             changeVariant.tooltip.setDescription(PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel("");
         }
@@ -303,7 +302,8 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 (this.upgradeToggle.hb.hovered) ||
                 (this.betaArtToggle.hb.hovered) ||
                 (this.scrollBar.hb.hovered) ||
-                (this.viewVariants && (this.changeVariant.hb.hovered || this.changeVariantEditor.hb.hovered));
+                (this.changeVariant.hb.hovered) ||
+                (this.changeVariantEditor.isHovered());
     }
 
     public void open(PCLCard card, CardGroup group) {
@@ -388,13 +388,8 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
             }
         }
 
-        if (viewVariants) {
-            changeVariant.setInteractable(currentItem.auxiliaryData.form != currentForm);
-            changeVariantEditor.renderImpl(sb);
-            if (viewChangeVariants) {
-                changeVariant.renderImpl(sb);
-            }
-        }
+        changeVariantEditor.tryRender(sb);
+        changeVariant.tryRender(sb);
 
         if (AbstractDungeon.player != null || card.cardData != null) {
             maxUpgradesLabel.renderImpl(sb);
@@ -445,15 +440,18 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).tryUpdate();
         this.betaArtToggle.setToggle(viewBetaArt).tryUpdate();
 
-        this.changeVariantEditor.setValue(currentForm, false).tryUpdate();
-        this.changeVariant.tryUpdate();
         this.maxUpgradesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentUpgrades : PGR.core.strings.scp_maxUpgrades), getCardUpgradesText()));
         this.maxUpgradesLabel.tryUpdate();
         this.maxCopiesLabel.setLabel(EUIUtils.format((AbstractDungeon.player != null ? PGR.core.strings.scp_currentCopies : PGR.core.strings.scp_maxCopies), getCardCopiesText()));
         this.maxCopiesLabel.tryUpdate();
         this.toggleAugment.tryUpdate();
 
-        this.viewVariants = viewChangeVariants || (currentItem != null && currentItem.cardData != null && currentItem.maxForms() > 1 && currentItem.cardData.canToggleOnUpgrade && SingleCardViewPopup.isViewingUpgrade);
+        if (currentItem != null) {
+            this.changeVariantEditor.setValue(currentForm, false)
+                    .setActive(currentItem.cardData != null && currentItem.maxForms() > 1 && currentItem.cardData.canToggleOnUpgrade && SingleCardViewPopup.isViewingUpgrade)
+                    .tryUpdate();
+            this.changeVariant.setInteractable(currentItem.auxiliaryData.form != currentForm).tryUpdate();
+        }
 
         if (showAugments) {
             for (PCLAugmentViewer augment : currentAugments) {

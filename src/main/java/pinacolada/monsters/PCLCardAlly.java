@@ -253,6 +253,7 @@ public class PCLCardAlly extends PCLCardCreature {
         return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
     }
 
+    @Override
     public boolean shouldShowIntents() {
         return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
     }

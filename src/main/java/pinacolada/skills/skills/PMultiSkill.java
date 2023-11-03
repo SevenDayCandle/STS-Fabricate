@@ -21,6 +21,7 @@ import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -108,33 +109,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return canPlay;
     }
 
-    public void chooseEffect(PCLUseInfo info, PCLActions order) {
-        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        PCLCardData cardData;
-        if (choiceCard == null) {
-            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
-                    .showTypeText(false);
-
-            if (source instanceof AbstractRelic) {
-                cardData.strings.NAME = ((AbstractRelic) source).name;
-            }
-            else if (source instanceof AbstractPotion) {
-                cardData.strings.NAME = ((AbstractPotion) source).name;
-            }
-            else if (source instanceof AbstractBlight) {
-                cardData.strings.NAME = ((AbstractBlight) source).name;
-            }
-            else {
-                cardData.strings.NAME = getSourceCreature().name;
-            }
-        }
-        else {
-            cardData = choiceCard.cardData;
-        }
-
-        order.tryChooseSkill(cardData, amount, info.source, info.target, effects);
-    }
-
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
@@ -150,6 +124,11 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
             }
         }
         return c;
+    }
+
+    @Override
+    public String getHeaderTextForAmount() {
+        return PGR.core.strings.cedit_choices;
     }
 
     @Override
@@ -193,7 +172,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + COLON_SEPARATOR +
+        return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR +
                 capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, addPeriod))), true)) :
                 generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
@@ -485,7 +464,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (amount > 0) {
-            chooseEffect(info, order);
+            chooseEffect(info, order, effects);
         }
         else {
             if (useParent) {

@@ -11,6 +11,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory> {
 
@@ -46,6 +47,12 @@ public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory>
             return TEXT.subjects_xOnYInZ(subjectString, fields.getFullCardString(), fields.getGroupString());
         }
         return TEXT.subjects_onTarget(subjectString, TEXT.subjects_thisCard());
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
     }
 
     protected abstract int getCardProperty(AbstractCard c);

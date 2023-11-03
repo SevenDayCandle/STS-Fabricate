@@ -2,14 +2,21 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModifyTag;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+
+import java.util.Collections;
+import java.util.List;
 
 @VisibleSkill
 public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
@@ -29,6 +36,16 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
 
     public PMove_ModifyTag(PSkillSaveData content) {
         super(DATA, content);
+    }
+
+    @Override
+    public void cardAction(List<AbstractCard> cards, PCLActions order) {
+        if (fields.or && fields.addTags.size() > 1) {
+            chooseEffect(getSourceCreature(), null, order, EUIUtils.map(fields.addTags, a -> PMove.modifyTag(amount, extra, a)));
+        }
+        else {
+            super.cardAction(cards, order);
+        }
     }
 
     @Override
@@ -58,6 +75,12 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     @Override
     public String getSubText(PCLCardTarget perspective) {
         return amount < 0 ? getBasicRemoveString() : getBasicGiveString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerOrBoolean(editor);
     }
 
     @Override

@@ -1742,7 +1742,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
         }
 
-        // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
         block = Math.max(0, MathUtils.floor(tempBlock));
         damage = Math.max(0, MathUtils.floor(tempDamage));
         hitCount = Math.max(0, MathUtils.floor(modifyHitCount(info, tempHitCount)));
@@ -1766,6 +1765,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                     }));
         }
 
+        // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCardForUpdateOnly();
             if (prevHitCountModified != isHitCountModified) {

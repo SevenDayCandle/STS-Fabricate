@@ -18,7 +18,7 @@ import pinacolada.utilities.GameUtilities;
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID)
-            .setLoadoutValue(6)
+            .setLoadoutValue(5)
             .setUnique(true);
 
     public GenericDice() {

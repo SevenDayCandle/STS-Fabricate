@@ -86,11 +86,11 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 EUIUtils.map(affinities, ChoiceCardData::affinity));
     }
 
-    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return useAffinitySkill(name, choices, -2, source, target, skills);
     }
 
-    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, cost,
                 EUIUtils.map(skills, ChoiceCardData::skillAffinity))
                 .addCallback(choiceCards -> {
@@ -100,11 +100,11 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 });
     }
 
-    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return useSkill(sourceData, choices, -2, source, target, skills);
     }
 
-    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<? extends PSkill<?>> skills) {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceCardData.skill(sourceData, i)))
                 .addCallback(choiceCards -> {
@@ -114,11 +114,11 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 });
     }
 
-    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, AbstractCreature source, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, AbstractCreature source, Collection<? extends PSkill<?>> skills) {
         return useSkillWithTargeting(sourceData, choices, -2, source, skills);
     }
 
-    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill<?>> skills) {
+    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<? extends PSkill<?>> skills) {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceCardData.skill(sourceData, i)))
                 .addCallback(choiceCards -> {

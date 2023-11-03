@@ -140,10 +140,11 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     }
 
     public void render(SpriteBatch sb) {
-        if (!this.isDead && !this.escaped) {
+        AbstractRoom r = GameUtilities.getCurrentRoom();
+        if (!this.isDead && !this.escaped && r != null) {
             this.renderAnimation(sb);
 
-            if (this == AbstractDungeon.getCurrRoom().monsters.hoveredMonster && this.atlas == null && this.animation == null) {
+            if (this == r.monsters.hoveredMonster && this.atlas == null && this.animation == null) {
                 sb.setBlendFunction(770, 1);
                 sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.1F));
                 sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
@@ -210,6 +211,7 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     }
 
     protected boolean shouldShowIntents() {
+        // Room should never be null when this check is hit
         return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewAnyEnemyIntent() && !Settings.hideCombatElements;
     }
 

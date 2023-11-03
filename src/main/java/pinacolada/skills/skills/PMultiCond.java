@@ -11,12 +11,14 @@ import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.ChoiceCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -30,7 +32,7 @@ import java.util.List;
 
 @VisibleSkill
 public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>> {
-    public static final PSkillData<PField_Not> DATA = register(PMultiCond.class, PField_Not.class, 0, 0)
+    public static final PSkillData<PField_Not> DATA = register(PMultiCond.class, PField_Not.class, 0, 1)
             .noTarget();
     protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
@@ -71,10 +73,26 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
     }
 
+    protected void chooseCond(PCLUseInfo info, PCLActions order) {
+        chooseEffect(info, order, getEligibleConds(info)).addCallback(choices -> {
+            ChoiceCard<PSkill<?>> chosen = choices.get(0);
+            if (chosen.value instanceof PActiveCond) {
+                ((PActiveCond<?>) chosen.value).useImpl(info, order, (i) -> useDirectly(info, order), (i) -> {});
+            }
+            else {
+                useDirectly(info, order);
+            }
+        });
+    }
+
     @Override
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
+    }
+
+    protected ArrayList<PCond<?>> getEligibleConds(PCLUseInfo info) {
+        return EUIUtils.filter(effects, c -> c.checkCondition(info, false, null));
     }
 
     @Override
@@ -87,6 +105,11 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             }
         }
         return c;
+    }
+
+    @Override
+    public String getHeaderTextForAmount() {
+        return PGR.core.strings.cedit_choices;
     }
 
     @Override
@@ -131,8 +154,9 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
 
     @Override
     public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
+        String base = effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
                 : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+        return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR + base) : base;
     }
 
     @Override
@@ -396,9 +420,55 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        if (amount > 0) {
+            chooseCond(info, order);
+        }
+        else if (EUIUtils.any(effects, e -> e instanceof PActiveCond)) {
+            useIndividually(info, order, 0);
+        }
+        else {
+            super.use(info, order);
+        }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if (shouldPay) {
+            if (amount > 0) {
+                chooseCond(info, order);
+            }
+            else if (EUIUtils.any(effects, e -> e instanceof PActiveCond)) {
+                useIndividually(info, order, 0);
+            }
+            else {
+                super.use(info, order, true);
+            }
+        }
+        else {
+            super.use(info, order, false);
+        }
+    }
+
     public void useDirectly(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
+        }
+    }
+
+    protected void useIndividually(PCLUseInfo info, PCLActions order, int index) {
+        if (index < effects.size()) {
+            PCond<?> cond = effects.get(index);
+            if (cond instanceof PActiveCond) {
+                ((PActiveCond<?>) cond).useImpl(info, order, (i) -> useDirectly(info, order), (i) -> useIndividually(info, order, index + 1));
+            }
+            else if (cond.checkCondition(info, true, null)) {
+                useDirectly(info, order);
+            }
+            else {
+                useIndividually(info, order, index + 1);
+            }
         }
     }
 

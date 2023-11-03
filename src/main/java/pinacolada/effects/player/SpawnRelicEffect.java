@@ -3,7 +3,9 @@ package pinacolada.effects.player;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import pinacolada.utilities.GameUtilities;
 
 public class SpawnRelicEffect extends AbstractGameEffect {
     private final AbstractRelic relic;
@@ -27,7 +29,10 @@ public class SpawnRelicEffect extends AbstractGameEffect {
 
     public void update() {
         if (!this.isDone) {
-            AbstractDungeon.getCurrRoom().spawnRelicAndObtain(x, y, relic);
+            AbstractRoom r = GameUtilities.getCurrentRoom();
+            if (r != null) {
+                r.spawnRelicAndObtain(x, y, relic);
+            }
         }
 
         this.isDone = true;

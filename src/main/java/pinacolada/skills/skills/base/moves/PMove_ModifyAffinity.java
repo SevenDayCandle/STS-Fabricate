@@ -14,6 +14,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardModifyAffinity;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +52,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public void cardAction(List<AbstractCard> cards, PCLActions order) {
         if (fields.addAffinities.size() == 0) {
             if (fields.or) {
-                chooseEffect(cards, PCLAffinity.getAvailableAffinitiesAsList(), order);
+                chooseEffect(PCLAffinity.getAvailableAffinitiesAsList(), order);
             }
             else {
                 PCLAffinity random = PCLAffinity.getRandomAvailableAffinity();
@@ -61,15 +62,15 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
             }
         }
         else if (fields.or && fields.addAffinities.size() > 1) {
-            chooseEffect(cards, fields.addAffinities, order);
+            chooseEffect(fields.addAffinities, order);
         }
         else {
             super.cardAction(cards, order);
         }
     }
 
-    public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices, PCLActions order) {
-        order.tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
+    public void chooseEffect(List<PCLAffinity> choices, PCLActions order) {
+        order.tryChooseAffinitySkill(getName(), Math.max(1, extra2), getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, extra, a)));
     }
 
     @Override
@@ -102,6 +103,12 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
                             TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard(), giveString);
         }
         return amount < 0 ? getBasicRemoveString() : getBasicGiveString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerOrBoolean(editor);
     }
 
     @Override

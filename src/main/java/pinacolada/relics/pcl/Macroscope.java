@@ -14,6 +14,7 @@ import pinacolada.utilities.GameUtilities;
 public class Macroscope extends PCLRelic {
     public static final PCLRelicData DATA = register(Macroscope.class)
             .setTier(RelicTier.SPECIAL)
+            .setLoadoutValue(0)
             .setUnique(true);
     public static final int MULTIPLIER = 10;
 

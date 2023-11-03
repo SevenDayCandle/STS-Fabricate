@@ -1069,6 +1069,10 @@ public class CombatManager extends EUIBase {
         return data;
     }
 
+    private static boolean shouldBlockUpdate() {
+        return player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden || GameUtilities.getCurrentRoom() == null;
+    }
+
     public static boolean shouldFlipPlayer(AbstractPlayer p) {
         return p.hasPower(SurroundedPower.POWER_ID);
     }
@@ -1177,8 +1181,9 @@ public class CombatManager extends EUIBase {
         estimatedDamages = summons.estimateDamage(expectedDamage);
     }
 
+    @Override
     public void renderImpl(SpriteBatch sb) {
-        if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden) {
+        if (shouldBlockUpdate()) {
             return;
         }
 
@@ -1204,8 +1209,9 @@ public class CombatManager extends EUIBase {
         }
     }
 
+    @Override
     public void updateImpl() {
-        if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden) {
+        if (shouldBlockUpdate()) {
             return;
         }
 

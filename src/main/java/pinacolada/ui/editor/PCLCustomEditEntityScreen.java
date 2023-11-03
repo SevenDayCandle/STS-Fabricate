@@ -387,19 +387,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public void preInitialize(T currentSlot) {
         SingleCardViewPopup.isViewingUpgrade = false; // To avoid glitches while rendering card upgrades, as the renderUpgradePreview function fetches the card's saved forms
         cancelButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(Settings.WIDTH - BUTTON_WIDTH * 0.59f, BUTTON_HEIGHT)
+                .setPosition(BUTTON_WIDTH * 0.6f, BUTTON_HEIGHT)
                 .setColor(Color.FIREBRICK)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::end);
 
-        saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(BUTTON_WIDTH * 0.6f, BUTTON_HEIGHT)
+        saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH * 1.16f, BUTTON_HEIGHT * 1.3f)
+                .setPosition(Settings.WIDTH - BUTTON_WIDTH * 0.69f, BUTTON_HEIGHT)
                 .setColor(Color.FOREST)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[0])
+                .setLabel(EUIFontHelper.buttonFont, 1f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::save);
 
         undoButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(saveButton.hb.cX, saveButton.hb.y + saveButton.hb.height + LABEL_HEIGHT * 0.8f)
+                .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + LABEL_HEIGHT * 1.8f)
                 .setColor(Color.WHITE)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_undo)
                 .setTooltip(PGR.core.strings.cedit_undo, PGR.core.strings.cetut_undo)

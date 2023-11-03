@@ -15,6 +15,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.SummonPool;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLLockOnPower;
@@ -209,6 +210,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
         invigorated.formatDescription(InvigoratedPower.MULTIPLIER);
         lockOn.formatDescription(PCLLockOnPower.BASE);
         provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
+        withdraw.formatDescription(SummonPool.BASE_DAMAGE_BONUS);
 
         ranged.setIcon(PCLCoreImages.Tooltips.ranged.texture());
         piercing.setIcon(PCLCoreImages.Tooltips.piercing.texture());

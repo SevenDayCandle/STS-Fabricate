@@ -37,20 +37,15 @@ public class PMove_Stun extends PMove<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective) {
-        return target == PCLCardTarget.None ? TEXT.act_skipTurn() : TEXT.act_stun(getTargetStringPerspective(perspective));
+        return TEXT.act_stun(getTargetStringPerspective(perspective));
     }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (target == PCLCardTarget.None) {
-            order.add(new PressEndTurnButtonAction());
-        }
-        else {
-            // This power cannot be applied to players
-            for (AbstractCreature c : getTargetList(info)) {
-                if (c instanceof AbstractMonster) {
-                    order.add(new StunMonsterAction((AbstractMonster) c, info.source, amount));
-                }
+        // This power cannot be applied to players
+        for (AbstractCreature c : getTargetList(info)) {
+            if (c instanceof AbstractMonster) {
+                order.add(new StunMonsterAction((AbstractMonster) c, info.source, amount));
             }
         }
         super.use(info, order);
