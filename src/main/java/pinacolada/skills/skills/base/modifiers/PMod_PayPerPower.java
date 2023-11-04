@@ -55,14 +55,14 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return this.amount <= 1 ? fields.getPowerAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getPowerAndString());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String pay = extra > 0 ? zeroToRangeString(extra) : TEXT.subjects_all;
-        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, addPeriod);
+        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, requestor, addPeriod);
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {

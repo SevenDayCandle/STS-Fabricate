@@ -47,7 +47,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.getOrbAmountString();
         if (extra > 0) {
             base = TEXT.subjects_withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));

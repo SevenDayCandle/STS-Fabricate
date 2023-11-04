@@ -35,7 +35,7 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
         }
 
         // Otherwise, estimate from the damage effect
-        PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
+        PCardPrimary_DealDamage damageEff = source != null ? source.getCardDamage() : null;
         if (damageEff != null && damageEff.target != null) {
             return sumTargets(info, t -> damageEff.extra * GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false)) / PGR.dungeon.getDivisor();
         }
@@ -47,7 +47,7 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetOnStringPerspective(perspective, TEXT.subjects_unblocked(TEXT.subjects_damage));
     }
 }

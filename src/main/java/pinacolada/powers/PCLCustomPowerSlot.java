@@ -11,6 +11,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     public String type;
     public String endTurnBehavior;
     public String languageStrings;
+    public String[] forms;
+    @Deprecated
     public String[][] effects;
 
     public PCLCustomPowerSlot() {
@@ -199,7 +202,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
 
     // Copy down the properties from all builders into this slot
     protected void recordBuilder() {
-        ArrayList<String[]> tempForms = new ArrayList<>();
+        ArrayList<String> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
         PCLDynamicPowerData first = getBuilder(0);
@@ -218,10 +221,15 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         }
 
         for (PCLDynamicPowerData builder : builders) {
-            tempForms.add(EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{}));
+            EffectItemForm f = new EffectItemForm();
+            f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+
+            tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }
 
-        effects = tempForms.toArray(new String[][]{});
+        forms = tempForms.toArray(new String[]{});
+        effects = null;
     }
 
     protected void registerTooltip() {
@@ -236,10 +244,20 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         this.workshopFolder = workshopPath;
         this.isInternal = isInternal;
 
-        for (String[] f : effects) {
-            PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f);
-            builders.add(builder);
+        if (effects != null) {
+            for (String[] f : effects) {
+                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f, null);
+                builders.add(builder);
+            }
         }
+        else {
+            for (String fo : forms) {
+                EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f.effects, f.powerEffects);
+                builders.add(builder);
+            }
+        }
+
 
         imagePath = makeImagePath();
         for (PCLDynamicPowerData builder : builders) {

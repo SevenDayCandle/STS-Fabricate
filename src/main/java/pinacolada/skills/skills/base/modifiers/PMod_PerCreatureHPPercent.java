@@ -9,7 +9,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.fields.PField_Random;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -46,7 +45,7 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Random> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (fields.random) {
             return TEXT.subjects_missingX(getSubSampleText(), getTargetStringPerspective(perspective));
         }

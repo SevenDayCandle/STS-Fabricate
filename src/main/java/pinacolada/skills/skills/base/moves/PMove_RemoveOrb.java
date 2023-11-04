@@ -36,7 +36,7 @@ public class PMove_RemoveOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_remove(fields.getOrbAmountString());
     }
 

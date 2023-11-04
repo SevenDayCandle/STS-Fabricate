@@ -18,16 +18,14 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
-import pinacolada.blights.PCLBlight;
-import pinacolada.blights.PCLBlightData;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillPowerContainer;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
-    public PSkillPowerContainer skills;
+    public PSkillContainer skills;
     public PCLClickableUse triggerCondition;
 
     public PCLPointerBlight(PCLBlightData data) {
@@ -191,7 +189,7 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
     }
 
     @Override
-    public PSkillPowerContainer getSkills() {
+    public PSkillContainer getSkills() {
         return skills;
     }
 
@@ -271,7 +269,7 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
 
     @Override
     protected void preSetup(PCLBlightData data) {
-        skills = new PSkillPowerContainer();
+        skills = new PSkillContainer();
         setup();
     }
 
@@ -283,7 +281,7 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
     }
 
     public void reset() {
-        skills = new PSkillPowerContainer();
+        skills = new PSkillContainer();
         setup();
         initializeTips();
     }

@@ -42,7 +42,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = fields.getPowerOrString();

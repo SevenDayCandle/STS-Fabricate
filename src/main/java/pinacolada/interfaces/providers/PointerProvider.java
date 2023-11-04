@@ -26,7 +26,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.UniqueList;
@@ -142,8 +141,9 @@ public interface PointerProvider {
         return 1;
     }
 
-    default PSkill<?> getEffect(int index) {
-        return index < getEffects().size() ? getEffects().get(index) : null;
+    default PSkill<?> getEffect(int i) {
+        List<PSkill<?>> effects = getEffects();
+        return i < effects.size() ? effects.get(i) : null;
     }
 
     // Get a particular PSkill on the card using a pointer
@@ -195,11 +195,11 @@ public interface PointerProvider {
 
     default PSkill<?> getPowerEffect(int i) {
         List<PSkill<?>> effects = getPowerEffects();
-        return effects != null && effects.size() > i ? effects.get(i) : null;
+        return i < effects.size() ? effects.get(i) : null;
     }
 
     default List<PSkill<?>> getPowerEffects() {
-        return getSkills().getPowerEffects();
+        return getSkills().powerEffects;
     }
 
     default AbstractCreature getSourceCreature() {
@@ -224,7 +224,7 @@ public interface PointerProvider {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
-                            sb.append(makeExportString(move.getCapitalSubText(PCLCardTarget.Self, capital)));
+                            sb.append(makeExportString(move.getCapitalSubText(PCLCardTarget.Self, null, capital)));
                         }
                         i += 3;
                     }
@@ -311,7 +311,7 @@ public interface PointerProvider {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         boolean capital = baseString.charAt(i + 1) == CAPITAL_CHAR;
                         if (move != null) {
-                            sb.append(makePowerString(move.getCapitalSubText(PCLCardTarget.Self, capital)));
+                            sb.append(makePowerString(move.getCapitalSubText(PCLCardTarget.Self, null, capital)));
                         }
                         i += 3;
                     }

@@ -41,7 +41,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String baseString = TEXT.subjects_unblocked(TEXT.subjects_damage);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString), perspective);

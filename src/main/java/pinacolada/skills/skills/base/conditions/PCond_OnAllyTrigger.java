@@ -33,11 +33,11 @@ public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTrig
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return TEXT.cond_aObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
-        return super.getSubText(perspective);
+        return super.getSubText(perspective, requestor);
     }
 
     // When the ally is triggered, trigger the effect on the ally

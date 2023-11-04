@@ -380,7 +380,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target) {
-        setRarityType(rarity, AbstractCard.CardType.ATTACK);
+        setRarityTypeAndCopies(rarity, AbstractCard.CardType.ATTACK);
 
         cardTarget = target;
         this.attackType = attackType;
@@ -509,7 +509,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special) {
-        setRarityType(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
+        setRarityTypeAndCopies(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
 
         cardColor = AbstractCard.CardColor.CURSE;
         cardTarget = target;
@@ -719,7 +719,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
-    protected PCLCardData setMaxCopiesFromLoadoutType() {
+    protected PCLCardData setMaxCopiesFromType() {
         if (maxCopies == -1) {
             switch (cardRarity) {
                 case COMMON:
@@ -777,7 +777,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setPower(int cost, AbstractCard.CardRarity rarity) {
-        setRarityType(rarity, AbstractCard.CardType.POWER);
+        setRarityTypeAndCopies(rarity, AbstractCard.CardType.POWER);
 
         cardTarget = PCLCardTarget.None;
         this.cost = array(cost);
@@ -796,10 +796,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
-    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
+    private PCLCardData setRarityTypeAndCopies(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
         cardRarity = rarity;
         cardType = type;
-        setMaxCopiesFromLoadoutType();
+        setMaxCopiesFromType();
 
         return this;
     }
@@ -829,7 +829,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target) {
-        setRarityType(rarity, AbstractCard.CardType.SKILL);
+        setRarityTypeAndCopies(rarity, AbstractCard.CardType.SKILL);
 
         cardTarget = target;
         this.cost = array(cost);
@@ -852,7 +852,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target) {
-        setRarityType(rarity, AbstractCard.CardType.STATUS);
+        setRarityTypeAndCopies(rarity, AbstractCard.CardType.STATUS);
         setColorless();
         cardTarget = target;
         this.cost = array(cost);
@@ -873,7 +873,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target) {
-        setRarityType(rarity, PCLEnum.CardType.SUMMON);
+        setRarityTypeAndCopies(rarity, PCLEnum.CardType.SUMMON);
 
         cardTarget = target;
         this.attackType = attackType;
@@ -887,7 +887,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target, DelayTiming timing) {
-        setRarityType(rarity, PCLEnum.CardType.SUMMON);
+        setRarityTypeAndCopies(rarity, PCLEnum.CardType.SUMMON);
         this.timing = timing;
         this.cardTarget = target;
         this.attackType = attackType;

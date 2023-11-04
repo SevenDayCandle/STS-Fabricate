@@ -29,11 +29,11 @@ public abstract class PFacetCond<T extends PField> extends PCond<T> {
 
     // Child effects use this skill's subtext directly in their description when used in powers
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         if ((isWhenClause() || isPassiveClause()) && childEffect != null) {
-            return childEffect.getText(perspective, addPeriod);
+            return childEffect.getText(perspective, requestor, addPeriod);
         }
-        return super.getText(perspective, addPeriod);
+        return super.getText(perspective, requestor, addPeriod);
     }
 
     // TODO in the use condition, have the effect pass for "each" of the items that pass

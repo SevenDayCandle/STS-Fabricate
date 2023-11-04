@@ -35,18 +35,18 @@ public class PTrigger_When extends PTrigger {
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String subText = getCapitalSubText(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String subText = getCapitalSubText(perspective, requestor, addPeriod);
         String childText;
 
         // Every x times
         if (fields.forced && childEffect != null) {
-            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(), childEffect.getText(perspective, false)) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(), childEffect.getText(perspective, false)))
+            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(), childEffect.getText(perspective, requestor, false)) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(), childEffect.getText(perspective, requestor, false)))
                     + PCLCoreStrings.period(addPeriod);
         }
         else {
             childText = childEffect != null ?
-                    (childEffect.shouldUseWhenText() ? TEXT.cond_when(childEffect.getText(perspective, false)) : childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod)
+                    (childEffect.shouldUseWhenText() ? TEXT.cond_when(childEffect.getText(perspective, requestor, false)) : childEffect.getText(perspective, requestor, false)) + PCLCoreStrings.period(addPeriod)
                     : PCLCoreStrings.period(addPeriod);
         }
 

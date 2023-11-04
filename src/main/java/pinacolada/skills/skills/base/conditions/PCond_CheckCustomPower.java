@@ -55,7 +55,7 @@ public class PCond_CheckCustomPower extends PPassiveCond<PField_CustomPowerCheck
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String baseString = fields.getThresholdRawString(fields.random ? fields.getCardIDOrString() : fields.getCardIDAndString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), baseString), perspective);

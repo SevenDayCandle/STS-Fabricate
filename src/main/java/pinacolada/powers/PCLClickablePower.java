@@ -78,7 +78,7 @@ public class PCLClickablePower extends PCLPower implements ClickableProvider {
     @Override
     protected void onSamePowerApplied(AbstractPower power) {
         if (triggerCondition != null && triggerCondition.pool.stackAutomatically) {
-            triggerCondition.addUses(1);
+            triggerCondition.addUses(power instanceof PCLClickablePower && ((PCLClickablePower) power).triggerCondition != null ? ((PCLClickablePower) power).triggerCondition.getCurrentUses() : 1);
         }
     }
 

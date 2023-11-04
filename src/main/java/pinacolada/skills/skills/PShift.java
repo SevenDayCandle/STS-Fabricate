@@ -32,13 +32,13 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.cond_when(getDelegateText());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? (": " + childEffect.getText(perspective, addPeriod)) : "");
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null ? (": " + childEffect.getText(perspective, requestor, addPeriod)) : "");
     }
 
     @Override

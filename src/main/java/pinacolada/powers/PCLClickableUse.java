@@ -63,7 +63,9 @@ public class PCLClickableUse {
     }
 
     public PCLClickableUse addUses(int uses) {
-        this.pool.addUses(uses);
+        if (!pool.hasInfiniteUses()) {
+            this.pool.addUses(uses);
+        }
         refresh(false, true);
 
         return this;

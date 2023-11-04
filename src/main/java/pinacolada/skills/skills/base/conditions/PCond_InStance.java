@@ -46,7 +46,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.getAnyStanceString();
         if (isWhenClause()) {
             return getWheneverYouString(TEXT.act_enterStance(base));

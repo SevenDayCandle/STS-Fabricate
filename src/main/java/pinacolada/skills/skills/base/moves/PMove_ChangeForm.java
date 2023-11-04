@@ -77,7 +77,7 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String forms = PCLCoreStrings.joinWithOr(this::getSourceName, fields.indexes);
         return TEXT.act_changeXToY(TEXT.subjects_this, forms);
     }

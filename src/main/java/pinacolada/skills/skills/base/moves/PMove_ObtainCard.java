@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
@@ -26,6 +27,7 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setExtra2(0, DEFAULT_MAX)
+            .setOrigins(PCLCardSelection.Manual)
             .setGroups(PCLCardGroupHelper.MasterDeck)
             .noTarget();
 

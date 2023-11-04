@@ -56,14 +56,14 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return (amount <= 0 ? getTiming().getDesc() :
                 (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)) + COMMA_SEPARATOR + getTiming().getDesc());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ", " + childEffect.getText(perspective, addPeriod) : PCLCoreStrings.period(addPeriod));
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null ? ", " + childEffect.getText(perspective, requestor, addPeriod) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override

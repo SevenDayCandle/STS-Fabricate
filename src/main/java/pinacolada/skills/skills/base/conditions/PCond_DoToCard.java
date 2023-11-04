@@ -73,15 +73,15 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         return fields.hasGroups() && !fields.shouldHideGroupNames() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return capital(childEffect == null ? getSubText(perspective) : TEXT.cond_xToY(getSubText(perspective), childEffect.getText(perspective, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return capital(childEffect == null ? getSubText(perspective, requestor) : TEXT.cond_xToY(getSubText(perspective, requestor), childEffect.getText(perspective, requestor, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     public PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

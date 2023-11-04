@@ -37,7 +37,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getConditionText(PCLCardTarget perspective, String childText) {
+    public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
                     fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
@@ -59,7 +59,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.orb.title;
     }
 

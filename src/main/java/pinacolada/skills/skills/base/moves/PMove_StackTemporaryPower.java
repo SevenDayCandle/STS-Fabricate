@@ -41,7 +41,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerOrString());

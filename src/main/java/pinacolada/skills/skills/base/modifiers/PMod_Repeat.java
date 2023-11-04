@@ -41,13 +41,13 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_doThis(getAmountRawString());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return (childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(perspective), true) : capital(getSubText(perspective), addPeriod)) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return (childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(perspective, requestor), true) : capital(getSubText(perspective, requestor), addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     // Does not update child amounts

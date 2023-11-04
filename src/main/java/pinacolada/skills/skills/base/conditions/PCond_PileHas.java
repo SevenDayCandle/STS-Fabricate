@@ -47,7 +47,7 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         // Set ordinal to 1 to treat as a singular target
         return TEXT.cond_ifTargetHas(fields.getGroupString(), 1, fields.getThresholdRawString(fields.getFullCardString()));
     }

@@ -29,8 +29,8 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
-    public String getConditionText(PCLCardTarget perspective) {
-        return EUIRM.strings.generic2(getAmountRawString(), getSubText(perspective));
+    public String getConditionText(PCLCardTarget perspective, Object requestor) {
+        return EUIRM.strings.generic2(getAmountRawString(), getSubText(perspective, requestor));
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (fields.groupTypes.isEmpty() && sourceCard != null) {
             String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
                     TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());

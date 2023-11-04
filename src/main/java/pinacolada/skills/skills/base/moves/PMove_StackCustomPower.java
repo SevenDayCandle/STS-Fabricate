@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.powers.PTriggerPower;
 import pinacolada.resources.PGR;
@@ -53,14 +54,14 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         // If this skill is under a PTrigger and this references that same PTrigger, this will cause an infinite loop
         // In this instance, we should describe the power itself instead
         ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        if (source != null) {
-            List<PSkill<?>> powerEffects = source.getPowerEffects();
+        List<PSkill<?>> powerEffects = source != null ? source.getPowerEffects() : requestor instanceof EditorMaker ? ((EditorMaker<?>) requestor).getPowers() : null;
+        if (powerEffects != null) {
             for (Integer i : fields.indexes) {
                 if (i >= 0 && powerEffects.size() > i) {
                     PSkill<?> poEff = powerEffects.get(i);
@@ -80,7 +81,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         }
 
         // Perpsective of self depends on the target this is applied to
-        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, true);
+        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, requestor, true);
         if (baseAmount > 0) {
             return (TEXT.cond_forTurns(getAmountRawString()) + ", " + StringUtils.uncapitalize(base));
         }
@@ -89,10 +90,10 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String subtext = getCapitalSubText(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String subtext = getCapitalSubText(perspective, requestor, addPeriod);
         // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
-        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(perspective, addPeriod) : "");
+        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(perspective, requestor, addPeriod) : "");
     }
 
     // Indexes should correspond to the indexes of powers in the card being built

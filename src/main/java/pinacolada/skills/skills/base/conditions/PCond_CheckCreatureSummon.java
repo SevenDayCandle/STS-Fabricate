@@ -41,7 +41,7 @@ public class PCond_CheckCreatureSummon extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.cond_ifTargetIs(getTargetStringPerspective(perspective), getTargetOrdinal(target), PGR.core.tooltips.summon.title);
     }
 }

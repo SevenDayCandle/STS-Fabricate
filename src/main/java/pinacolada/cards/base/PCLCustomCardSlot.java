@@ -326,6 +326,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             f.attackType = builder.attackType.name();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.damageEffect = null;
+            f.blockEffect = null;
 
             tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }

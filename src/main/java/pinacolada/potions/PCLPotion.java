@@ -31,7 +31,7 @@ import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillPowerContainer;
+import pinacolada.skills.PSkillContainer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public final PCLPotionData potionData;
     private float flashTime;
-    public PSkillPowerContainer skills;
+    public PSkillContainer skills;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
@@ -116,7 +116,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     @Override
-    public PSkillPowerContainer getSkills() {
+    public PSkillContainer getSkills() {
         return skills;
     }
 
@@ -140,7 +140,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void initialize() {
-        skills = new PSkillPowerContainer();
+        skills = new PSkillContainer();
         setup();
         initializeTargetRequired();
         initializeTips();

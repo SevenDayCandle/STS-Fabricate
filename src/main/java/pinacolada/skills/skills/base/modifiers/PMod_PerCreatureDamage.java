@@ -41,7 +41,7 @@ public class PMod_PerCreatureDamage extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.subjects_intendedDamage(getTargetStringPerspective(perspective));
     }
 }

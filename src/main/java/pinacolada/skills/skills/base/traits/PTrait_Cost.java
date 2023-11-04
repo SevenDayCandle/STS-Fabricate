@@ -3,14 +3,11 @@ package pinacolada.skills.skills.base.traits;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -47,9 +44,9 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class)) {
-            return TEXT.act_zCosts(getParentCardString(perspective), 2, getSubDescText(perspective));
+            return TEXT.act_zCosts(getParentCardString(perspective, requestor), 2, getSubDescText(perspective));
         }
         return TEXT.act_costs(getSubDescText(perspective));
     }

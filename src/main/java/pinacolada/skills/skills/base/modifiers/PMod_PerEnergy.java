@@ -36,7 +36,7 @@ public class PMod_PerEnergy extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.energy.getTitleOrIcon();
     }
 }

@@ -5,7 +5,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cardmods.TemporaryBlockModifier;
-import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
@@ -60,8 +59,8 @@ public class PMove_PermanentModifyBlock extends PMove_Modify<PField_CardModify> 
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective));
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
     }
 
     @Override

@@ -46,13 +46,13 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return TEXT.act_evoke(TEXT.subjects_allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(perspective, addPeriod));
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return TEXT.act_evoke(TEXT.subjects_allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(perspective, requestor, addPeriod));
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {

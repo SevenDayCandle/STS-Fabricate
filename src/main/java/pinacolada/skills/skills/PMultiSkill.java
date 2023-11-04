@@ -1,23 +1,16 @@
 package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -161,20 +154,20 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return null;
     }
 
     @Override
-    public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
-        return effects.size() > index ? effects.get(index).getText(perspective, addPeriod) : "";
+    public String getText(int index, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return effects.size() > index ? effects.get(index).getText(perspective, requestor, addPeriod) : "";
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR +
-                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, addPeriod))), true)) :
-                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, addPeriod)) + PCLCoreStrings.period(addPeriod);
+                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod))), true)) :
+                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class PCond_CheckBlight extends PPassiveCond<PField_Blight> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetHasStringPerspective(perspective, EUIRM.strings.numNoun(getAmountRawString(), fields.getFullBlightString()));
 
     }

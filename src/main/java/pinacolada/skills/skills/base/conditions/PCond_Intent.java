@@ -42,7 +42,7 @@ public class PCond_Intent extends PPassiveCond<PField_Intent> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetIsString(getTargetForPerspective(perspective), fields.not ? TEXT.cond_not(fields.getAnyIntentString()) : fields.getAnyIntentString());
     }
 }

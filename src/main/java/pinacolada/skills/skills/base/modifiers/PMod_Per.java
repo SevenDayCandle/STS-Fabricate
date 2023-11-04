@@ -50,12 +50,12 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return new ColoredString(amString, Settings.CREAM_COLOR);
     }
 
-    public String getConditionText(PCLCardTarget perspective, String childText) {
+    public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective)));
+            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective, requestor)));
         }
         return TEXT.cond_xPerY(childText,
-                this.amount <= 1 ? getSubText(perspective) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective)));
+                this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective, requestor)));
     }
 
     @Override
@@ -69,14 +69,14 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     public String getSubSampleText() {
-        return getSubText(PCLCardTarget.Self);
+        return getSubText(PCLCardTarget.Self, null);
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
-        String childText = childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "";
-        return getConditionText(perspective, childText) + appendix + PCLCoreStrings.period(addPeriod);
+        String childText = childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "";
+        return getConditionText(perspective, requestor, childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

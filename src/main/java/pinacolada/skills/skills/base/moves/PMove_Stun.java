@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.evacipated.cardcrawl.mod.stslib.actions.common.StunMonsterAction;
-import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
@@ -36,7 +35,7 @@ public class PMove_Stun extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_stun(getTargetStringPerspective(perspective));
     }
 

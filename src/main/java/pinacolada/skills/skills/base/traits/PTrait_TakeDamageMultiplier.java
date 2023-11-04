@@ -47,7 +47,7 @@ public class PTrait_TakeDamageMultiplier extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (!perspective.targetsSelf()) {
             return TEXT.act_targetTakesDamage(getTargetString(perspective), getTargetOrdinal(perspective), getAmountRawString() + "%");
         }

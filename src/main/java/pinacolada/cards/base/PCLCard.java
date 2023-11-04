@@ -80,7 +80,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillPowerContainer;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PSpecialCond;
 import pinacolada.skills.skills.PSpecialPowerSkill;
@@ -115,7 +115,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static AbstractPlayer player = null;
     public static Random rng = null;
     private final transient float[] fakeGlowList = new float[4];
-    public final PSkillPowerContainer skills = new PSkillPowerContainer();
+    public final PSkillContainer skills = new PSkillContainer();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final ArrayList<PCLAugment> augments = new ArrayList<>();
     public final PCLCardAffinities affinities;
@@ -986,7 +986,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "renderColor");
     }
 
-    public PSkillPowerContainer getSkills() {
+    public PSkillContainer getSkills() {
         return skills;
     }
 

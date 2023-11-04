@@ -56,13 +56,13 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return description;
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return EUIUtils.format(getSubText(perspective), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return EUIUtils.format(getSubText(perspective, requestor), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     // Assume that special card skill powers are always beneficial to the player (i.e. they are debuffs on enemies and buffs on you/allies)

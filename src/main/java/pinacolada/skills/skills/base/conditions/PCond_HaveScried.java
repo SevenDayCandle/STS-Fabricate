@@ -34,7 +34,7 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return getWheneverYouString(PGR.core.tooltips.scry.title);
         }

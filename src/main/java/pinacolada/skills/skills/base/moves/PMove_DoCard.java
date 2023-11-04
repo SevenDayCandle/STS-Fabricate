@@ -65,7 +65,7 @@ public abstract class PMove_DoCard<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
         if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
             return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :

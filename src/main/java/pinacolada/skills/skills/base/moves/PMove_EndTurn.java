@@ -1,8 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
-import com.megacrit.cardcrawl.cards.purple.Vault;
-import com.megacrit.cardcrawl.powers.watcher.VaultPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -31,7 +29,7 @@ public class PMove_EndTurn extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_skipTurn();
     }
 

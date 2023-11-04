@@ -37,7 +37,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isBranch()) {
             return getWheneverYouString(TEXT.subjects_shuffle);
         }

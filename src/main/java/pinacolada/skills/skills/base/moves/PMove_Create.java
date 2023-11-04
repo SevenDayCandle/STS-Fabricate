@@ -19,6 +19,7 @@ public class PMove_Create extends PMove_GenerateCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Create.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setExtra2(0, DEFAULT_MAX)
+            .setOrigins(PCLCardSelection.Manual)
             .noTarget();
 
     public PMove_Create() {
@@ -47,10 +48,9 @@ public class PMove_Create extends PMove_GenerateCard {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String groupName = fields.getDestinationString(fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).name : PCLCardGroupHelper.Hand.name);
-        String base = TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), groupName);
-        return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
+        return TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), groupName);
     }
 
     @Override

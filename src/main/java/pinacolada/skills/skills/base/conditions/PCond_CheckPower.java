@@ -46,7 +46,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), fields.getThresholdRawString(fields.powers.isEmpty() ? fields.getBuffString(2) : fields.getPowerOrString())), perspective);
         }

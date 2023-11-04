@@ -90,7 +90,7 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(PCLCardTarget.Self, true);
+        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(PCLCardTarget.Self, null, true);
     }
 
     @Override

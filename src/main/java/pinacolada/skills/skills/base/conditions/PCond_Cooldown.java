@@ -77,7 +77,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
         }
@@ -85,9 +85,9 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
-        return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, addPeriod)) : "");
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, requestor, addPeriod) : getConditionRawString(perspective, requestor, addPeriod);
+        return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, requestor, addPeriod)) : "");
     }
 
     @Override

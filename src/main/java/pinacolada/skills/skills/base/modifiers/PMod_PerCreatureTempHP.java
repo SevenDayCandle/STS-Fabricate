@@ -40,7 +40,7 @@ public class PMod_PerCreatureTempHP extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetOnStringPerspective(perspective, getSubSampleText());
     }
 }

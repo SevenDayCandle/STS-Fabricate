@@ -18,13 +18,13 @@ import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillPowerContainer;
+import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
-    public PSkillPowerContainer skills;
+    public PSkillContainer skills;
     public PCLClickableUse triggerCondition;
 
     public PCLPointerRelic(PCLRelicData data) {
@@ -215,7 +215,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public PSkillPowerContainer getSkills() {
+    public PSkillContainer getSkills() {
         return skills;
     }
 
@@ -325,7 +325,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     protected void preSetup(PCLRelicData data) {
-        skills = new PSkillPowerContainer();
+        skills = new PSkillContainer();
         setup();
     }
 
@@ -337,7 +337,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     public void reset() {
-        skills = new PSkillPowerContainer();
+        skills = new PSkillContainer();
         setup();
         usedUp = false;
         initializePCLTips();

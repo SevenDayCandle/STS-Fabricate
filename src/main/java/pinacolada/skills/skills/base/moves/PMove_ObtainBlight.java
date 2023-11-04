@@ -16,7 +16,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.OutOfCombatMove;
-import pinacolada.blights.PCLBlight;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
@@ -98,7 +97,7 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return fields.blightIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullBlightString()) : TEXT.act_obtain(fields.not ? fields.getBlightIDOrString() : fields.getBlightIDAndString());
     }
 

@@ -48,7 +48,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isBranch()) {
             return getWheneverString(PGR.core.tooltips.trigger.title, perspective);
         }

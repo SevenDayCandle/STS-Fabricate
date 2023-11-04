@@ -28,7 +28,7 @@ public class PLimit_Limited extends PLimit {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.limited.title;
     }
 

@@ -69,7 +69,7 @@ public class MysteryCard extends PCLCard {
         }
 
         @Override
-        public String getSubText(PCLCardTarget perspective) {
+        public String getSubText(PCLCardTarget perspective, Object requestor) {
             return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], fields.getFullCardString());
         }
 

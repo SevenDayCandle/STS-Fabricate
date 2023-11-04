@@ -40,7 +40,7 @@ public class PMod_PerCreatureIntent extends PMod_Per<PField_Intent> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return EUIRM.strings.adjNoun(fields.getAnyIntentString(), getTargetStringSingular());
     }
 }

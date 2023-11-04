@@ -121,7 +121,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForRarity)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setRarityType(rarities.get(0), e.cardType));
+                        effect.modifyAllBuilders((e, i) -> e.setRarity(rarities.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -132,7 +132,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
                         // Pages need to refresh because changing card type affects available skill options or attributes
-                        effect.modifyAllBuilders((e, i) -> e.setRarityType(e.cardRarity, types.get(0)));
+                        effect.modifyAllBuilders((e, i) -> e.setType(types.get(0)));
                         effect.refreshPages();
                     }
                 })

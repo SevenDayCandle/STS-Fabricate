@@ -32,11 +32,11 @@ public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdra
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return TEXT.cond_aObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }
-        return super.getSubText(perspective);
+        return super.getSubText(perspective, requestor);
     }
 
     @Override

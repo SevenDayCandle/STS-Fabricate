@@ -46,8 +46,8 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String base = super.getSubText(perspective);
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        String base = super.getSubText(perspective, requestor);
         if (!fields.forced) {
             base = TEXT.subjects_thisTurn(base);
         }

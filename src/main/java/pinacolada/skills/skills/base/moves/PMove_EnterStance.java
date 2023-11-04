@@ -51,7 +51,7 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (fields.stances.isEmpty()) {
             return TEXT.act_exitStance();
         }

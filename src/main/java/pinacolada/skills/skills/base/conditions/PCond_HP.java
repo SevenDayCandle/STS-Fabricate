@@ -44,7 +44,7 @@ public class PCond_HP extends PPassiveCond<PField_Not> implements OnCreatureHeal
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String baseString = fields.getThresholdRawString(PGR.core.tooltips.hp.title);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_generic2(PGR.core.tooltips.heal.present(), baseString), perspective);

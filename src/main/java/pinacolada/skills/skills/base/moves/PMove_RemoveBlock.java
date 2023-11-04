@@ -35,7 +35,7 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetStringPerspective(perspective));
     }
 

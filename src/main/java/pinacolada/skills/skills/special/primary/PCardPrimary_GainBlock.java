@@ -67,7 +67,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count != 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 

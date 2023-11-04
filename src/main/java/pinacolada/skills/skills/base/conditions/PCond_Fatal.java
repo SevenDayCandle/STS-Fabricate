@@ -44,7 +44,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             if (fields.random) {
                 return getWheneverAreString(PGR.core.tooltips.fatal.title, perspective);

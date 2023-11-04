@@ -119,7 +119,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = null;
         if (sourceCard instanceof PointerProvider && ((PointerProvider) sourceCard).getEffects().contains(this)) {
             String gString = fields.getGroupString();
@@ -135,9 +135,9 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String subText = getCapitalSubText(perspective, addPeriod);
-        String childText = (childEffect != null ? childEffect.getText(perspective, addPeriod) : "");
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String subText = getCapitalSubText(perspective, requestor, addPeriod);
+        String childText = (childEffect != null ? childEffect.getText(perspective, requestor, addPeriod) : "");
         return subText.isEmpty() ? childText : subText + COLON_SEPARATOR + StringUtils.capitalize(childText);
     }
 
@@ -233,7 +233,11 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     public PTrigger stack(PSkill<?> other) {
-        if (rootAmount > 0 && other.rootAmount > 0) {
+        // Do not update effects if use-based
+        if ((fields.forced || rootAmount == -1) && this.childEffect != null && other.getChild() != null) {
+            this.childEffect.stack(other.getChild());
+        }
+        else if (rootAmount > 0 && other.rootAmount > 0) {
             setAmount(rootAmount + other.rootAmount);
         }
         if (rootExtra > 0 && other.rootExtra > 0) {
@@ -242,10 +246,6 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         setAmountFromCard();
         forceResetUses();
 
-        // Do not update effects if use-based
-        if ((fields.forced || rootAmount == -1) && this.childEffect != null && other.getChild() != null) {
-            this.childEffect.stack(other.getChild());
-        }
         return this;
     }
 

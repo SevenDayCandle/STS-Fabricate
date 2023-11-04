@@ -21,10 +21,8 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
-import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PBranchCond;
 import pinacolada.skills.skills.PMultiCond;
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
@@ -482,13 +480,13 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, requestor, addPeriod) : getConditionRawString(perspective, requestor, addPeriod);
         if (childEffect != null) {
             if (childEffect instanceof PCond && !isWhenClause()) {
-                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod);
+                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, requestor, false)) + PCLCoreStrings.period(addPeriod);
             }
-            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
+            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, requestor, false) + PCLCoreStrings.period(addPeriod);
         }
         return condString + PCLCoreStrings.period(addPeriod);
     }

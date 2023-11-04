@@ -48,7 +48,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_healOn(getAmountRawString(),
                 useParent ? getInheritedThemString() :
                         fields.hasGroups() ? fields.getFullCardString(getExtraRawString()) : TEXT.subjects_this);

@@ -49,13 +49,13 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String condString = isWhenClause() ? getCapitalSubText(perspective, addPeriod) : getConditionRawString(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String condString = isWhenClause() ? getCapitalSubText(perspective, requestor, addPeriod) : getConditionRawString(perspective, requestor, addPeriod);
         if (childEffect != null) {
             if (childEffect instanceof PCond && !isWhenClause()) {
-                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, false)) + PCLCoreStrings.period(addPeriod);
+                return PCLCoreStrings.joinWithAnd(condString, childEffect.getText(perspective, requestor, false)) + PCLCoreStrings.period(addPeriod);
             }
-            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, false) + PCLCoreStrings.period(addPeriod);
+            return condString + COMMA_SEPARATOR + childEffect.getText(perspective, requestor, false) + PCLCoreStrings.period(addPeriod);
         }
         return condString + PCLCoreStrings.period(addPeriod);
     }

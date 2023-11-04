@@ -58,7 +58,7 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isBranch()) {
             return getWheneverString(PGR.core.tooltips.channel.title, perspective);
         }

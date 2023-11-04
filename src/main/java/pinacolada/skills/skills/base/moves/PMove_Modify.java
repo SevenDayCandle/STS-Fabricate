@@ -97,7 +97,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getBasicGiveString();
     }
 

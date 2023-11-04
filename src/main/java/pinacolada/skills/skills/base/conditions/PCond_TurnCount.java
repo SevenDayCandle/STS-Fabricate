@@ -1,15 +1,11 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.subscribers.OnScryActionSubscriber;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -41,7 +37,7 @@ public class PCond_TurnCount extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return fields.getThresholdRawString(PGR.core.strings.subjects_turnCount);
     }
 }

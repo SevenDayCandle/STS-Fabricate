@@ -185,7 +185,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.not && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
-                : isOutOf() || fields.origin != PCLCardSelection.Manual || fields.random ? fields.getFullCardOrString(getExtraRawString()) : fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() ? fields.getFullCardOrString(getExtraRawString()) :
+                fields.random ? fields.getFullCardOrString(getAmountRawString()) :
+                fields.getFullCardAndString(getAmountRawString());
     }
 
     @Override
@@ -195,16 +197,13 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {
         if (fields.random || fields.isFilterSolo()) {
-            if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
+            if (!fields.colors.isEmpty()
                     || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
                     || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
                 return GameUtilities.getCardsFromAllColorCombatPool(getSourceFilter(), limit);
             }
-            else if (!fields.rarities.isEmpty() || !fields.types.isEmpty()) {
-                return GameUtilities.getCardsFromFullCombatPool(getSourceFilter(), limit);
-            }
             else {
-                return GameUtilities.getCardsFromStandardCombatPool(getSourceFilter(), limit);
+                return GameUtilities.getCardsFromFullCombatPool(getSourceFilter(), limit);
             }
         }
         else if (!fields.isFilterEmpty()) {
@@ -256,9 +255,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return (fields.origin != PCLCardSelection.Manual || fields.random) && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
+        return (fields.random) && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 
     protected boolean isOutOf() {

@@ -38,11 +38,11 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (source instanceof AbstractRelic || source instanceof AbstractBlight) {
             return TEXT.cond_atStartOfCombat();
         }
-        if (source instanceof AbstractPower) {
+        if (source instanceof AbstractPower || requestor instanceof PCLDynamicPowerData) {
             return TEXT.cond_when(PGR.core.tooltips.create.past());
         }
         return EUIUtils.EMPTY_STRING;
@@ -52,21 +52,12 @@ public class PRoot extends PPrimary<PField_Empty> {
     // For relics, this activates the effect at the start of battle
     // For powers, this activates when the power is first applied
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String sub = getCapitalSubText(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String sub = getCapitalSubText(perspective, requestor, addPeriod);
         if (!sub.isEmpty()) {
-            return sub + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+            return sub + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(perspective, requestor, addPeriod)) : PCLCoreStrings.period(addPeriod));
         }
-        return childEffect != null ? childEffect.getText(perspective, addPeriod) : "";
-    }
-
-    @Override
-    public String getTextForPreview(Object requestor) {
-        if (requestor instanceof PCLDynamicPowerData) {
-            return capital(TEXT.cond_when(PGR.core.tooltips.create.past()), true)
-                    + (childEffect != null ? COLON_SEPARATOR + capital(childEffect.getText(PCLCardTarget.Self, true)) : PCLCoreStrings.period(true));
-        }
-        return super.getTextForPreview(requestor);
+        return childEffect != null ? childEffect.getText(perspective, requestor, addPeriod) : "";
     }
 
     @Override

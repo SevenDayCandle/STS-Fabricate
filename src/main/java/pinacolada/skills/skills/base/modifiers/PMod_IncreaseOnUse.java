@@ -13,7 +13,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveMod;
-import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
 public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
@@ -55,13 +54,13 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", extra > 0 ? getSubText(perspective) + getMaxExtraString() : getSubText(perspective)) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "", extra > 0 ? getSubText(perspective, requestor) + getMaxExtraString() : getSubText(perspective, requestor)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

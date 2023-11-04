@@ -43,7 +43,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return getWheneverString(TEXT.subjects_attacks(getTargetOrdinalPerspective(perspective)), perspective);
         }

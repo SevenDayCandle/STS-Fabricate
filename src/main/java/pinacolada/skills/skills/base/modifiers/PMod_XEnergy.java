@@ -44,13 +44,13 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.energy.getTitleOrIcon();
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return childEffect != null ? childEffect.getText(perspective, addPeriod) : EUIUtils.EMPTY_STRING;
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return childEffect != null ? childEffect.getText(perspective, requestor, addPeriod) : EUIUtils.EMPTY_STRING;
     }
 
     @Override

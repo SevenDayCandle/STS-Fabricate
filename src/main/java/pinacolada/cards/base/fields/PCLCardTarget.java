@@ -372,7 +372,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
     public final String getTitle() {
-        return getTargetFilter().name;
+        return this == UseParent ? PGR.core.strings.cedit_useParent : getTargetFilter().name;
     }
 
     public final boolean targetsAllies() {

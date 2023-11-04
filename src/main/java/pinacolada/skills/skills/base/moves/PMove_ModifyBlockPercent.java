@@ -5,7 +5,6 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyBlockPercent;
-import pinacolada.actions.cards.ModifyDamagePercent;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -53,8 +52,8 @@ public class PMove_ModifyBlockPercent extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        String base = super.getSubText(perspective);
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        String base = super.getSubText(perspective, requestor);
         if (!fields.forced) {
             base = TEXT.subjects_thisTurn(base);
         }

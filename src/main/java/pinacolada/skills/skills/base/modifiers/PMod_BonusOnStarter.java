@@ -26,7 +26,7 @@ public class PMod_BonusOnStarter extends PMod_BonusOn<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.starter.title;
     }
 

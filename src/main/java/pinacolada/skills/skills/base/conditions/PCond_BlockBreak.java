@@ -41,7 +41,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String baseString = TEXT.cond_xOnYIsBroken(PGR.core.tooltips.block.title, getTargetSubjectStringPerspective(perspective));
         if (isWhenClause()) {
             return baseString;

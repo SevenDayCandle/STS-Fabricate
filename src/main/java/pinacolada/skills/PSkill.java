@@ -227,12 +227,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EFFECT_MAP.get(id);
     }
 
-    public static List<String> getEffectTexts(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, boolean addPeriod) {
-        return EUIUtils.mapAsNonnull(effects, e -> e.getText(perspective, addPeriod));
+    public static List<String> getEffectTexts(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return EUIUtils.mapAsNonnull(effects, e -> e.getText(perspective, requestor, addPeriod));
     }
 
-    public static List<String> getEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, boolean capitalize) {
-        List<String> efTexts = getEffectTexts(effects, perspective, false);
+    public static List<String> getEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean capitalize) {
+        List<String> efTexts = getEffectTexts(effects, perspective, requestor, false);
         if (capitalize && efTexts.size() > 0) {
             efTexts.set(0, capital(efTexts.get(0), true));
         }
@@ -375,27 +375,27 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
      * Creates a conglomerate string consisting of the text of all of the effects in the collection, in order
      */
     public static String joinEffectTexts(Collection<? extends PSkill<?>> effects) {
-        return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, PCLCardTarget.Self, true);
+        return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, PCLCardTarget.Self, null, true);
     }
 
     public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, boolean addPeriod) {
-        return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, PCLCardTarget.Self, addPeriod);
+        return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, PCLCardTarget.Self, null, addPeriod);
     }
 
-    public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, String delimiter, PCLCardTarget perspective, boolean addPeriod) {
-        return EUIUtils.joinStrings(delimiter, getEffectTexts(effects, perspective, addPeriod));
+    public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, String delimiter, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return EUIUtils.joinStrings(delimiter, getEffectTexts(effects, perspective, requestor, addPeriod));
     }
 
     public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects) {
-        return joinEffectTextsWithoutPeriod(effects, ", ", PCLCardTarget.Self, true);
+        return joinEffectTextsWithoutPeriod(effects, ", ", PCLCardTarget.Self, null, true);
     }
 
     public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, boolean addPeriod) {
-        return joinEffectTextsWithoutPeriod(effects, ", ", PCLCardTarget.Self, addPeriod);
+        return joinEffectTextsWithoutPeriod(effects, ", ", PCLCardTarget.Self, null, addPeriod);
     }
 
-    public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, String delimiter, PCLCardTarget perspective, boolean capitalize) {
-        return EUIUtils.joinStrings(delimiter, getEffectTextsWithoutPeriod(effects, perspective, capitalize));
+    public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, String delimiter, PCLCardTarget perspective, Object requestor, boolean capitalize) {
+        return EUIUtils.joinStrings(delimiter, getEffectTextsWithoutPeriod(effects, perspective, requestor, capitalize));
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType) {
@@ -608,8 +608,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public String getCapitalSubText(PCLCardTarget perspective, boolean addPeriod) {
-        return capital(getSubText(perspective), addPeriod);
+    public String getCapitalSubText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return capital(getSubText(perspective, requestor), addPeriod);
     }
 
     public final char getCardPointer() {
@@ -700,8 +700,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return null;
     }
 
-    public final String getConditionRawString(PCLCardTarget perspective, boolean addPeriod) {
-        return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, addPeriod);
+    public final String getConditionRawString(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
     }
 
     public final List<PCLCardSelection> getEligibleDestinations() {
@@ -974,16 +974,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public String getPowerText(Object requestor) {
         if (source != null) {
-            return source.makePowerString(getTextForPreview(requestor));
+            return source.makePowerString(getText(requestor));
         }
-        return getTextForPreview(requestor);
+        return getText(requestor);
     }
 
     public String getPowerTextForTooltip(Object requestor) {
         if (source != null) {
-            return source.makePowerString(getTextForPreview(requestor), true);
+            return source.makePowerString(getText(requestor), true);
         }
-        return getTextForPreview(requestor);
+        return getText(requestor);
     }
 
     public int getQualifierRange() {
@@ -1012,7 +1012,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return getSubText(PCLCardTarget.Self);
+        return getSubText(PCLCardTarget.Self, null);
     }
 
     public final int getScopeBaseFromCard() {
@@ -1321,20 +1321,20 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return getTargetSubjectString(getTargetForPerspective(target));
     }
 
-    public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
-        return childEffect != null ? childEffect.getText(index, perspective, addPeriod) : getText(perspective, addPeriod);
+    public String getText(int index, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return childEffect != null ? childEffect.getText(index, perspective, requestor, addPeriod) : getText(perspective, requestor, addPeriod);
     }
 
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return getCapitalSubText(perspective, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + capital(childEffect.getText(perspective, addPeriod), true) : PCLCoreStrings.period(addPeriod));
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + capital(childEffect.getText(perspective, requestor, addPeriod), true) : PCLCoreStrings.period(addPeriod));
     }
 
     public final String getText() {
-        return getText(PCLCardTarget.Self, true);
+        return getText(PCLCardTarget.Self, null, true);
     }
 
-    public String getTextForPreview(Object source) {
-        return getText();
+    public final String getText(Object source) {
+        return getText(PCLCardTarget.Self, source, true);
     }
 
     public String getThemString() {
@@ -2112,7 +2112,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return parent != null ? parent.wrapExtraChild(source, input) : input;
     }
 
-    public abstract String getSubText(PCLCardTarget perspective);
+    public abstract String getSubText(PCLCardTarget perspective, Object requestor);
 
     public enum PCLCardValueSource {
         None,

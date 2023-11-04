@@ -45,9 +45,9 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (fields.destination == PCLCardSelection.Manual) {
-            return super.getSubText(perspective);
+            return super.getSubText(perspective, requestor);
         }
         String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
         return fields.hasGroups() && !fields.shouldHideGroupNames() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)

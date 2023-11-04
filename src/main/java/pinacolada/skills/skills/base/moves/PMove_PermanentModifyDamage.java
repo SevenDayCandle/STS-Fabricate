@@ -4,19 +4,16 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModify;
-import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -61,8 +58,8 @@ public class PMove_PermanentModifyDamage extends PMove_Modify<PField_CardModify>
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective));
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
     }
 
     @Override

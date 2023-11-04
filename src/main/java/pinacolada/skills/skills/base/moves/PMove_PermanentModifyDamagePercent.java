@@ -6,7 +6,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyDamagePercent;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cardmods.TemporaryDamagePercentModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -69,8 +68,8 @@ public class PMove_PermanentModifyDamagePercent extends PMove_Modify<PField_Card
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective));
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
     }
 
     @Override

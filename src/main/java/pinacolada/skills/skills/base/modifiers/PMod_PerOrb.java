@@ -40,7 +40,7 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
     }
 

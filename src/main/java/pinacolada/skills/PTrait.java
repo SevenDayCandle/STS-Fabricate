@@ -9,12 +9,10 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
-import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
@@ -137,11 +135,11 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return tooltip.getTitleOrIcon();
     }
 
-    protected String getParentCardString(PCLCardTarget perspective) {
+    protected String getParentCardString(PCLCardTarget perspective, Object requestor) {
         PSkill<?> par = parent;
         while (par != null) {
             if (par instanceof PFacetCond) {
-                return par.getSubText(perspective);
+                return par.getSubText(perspective, requestor);
             }
             par = par.parent;
         }
@@ -158,9 +156,9 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class)) {
-            return TEXT.act_zHas(getParentCardString(perspective), getSubDescText(perspective));
+            return TEXT.act_zHas(getParentCardString(perspective, requestor), getSubDescText(perspective));
         }
         if (isVerbose()) {
             return TEXT.act_has(getSubDescText(perspective));

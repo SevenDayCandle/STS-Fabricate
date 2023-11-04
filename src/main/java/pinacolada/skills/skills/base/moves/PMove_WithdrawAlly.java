@@ -45,7 +45,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_withdraw(getTargetStringPerspective(perspective));
     }
 

@@ -29,7 +29,7 @@ public class PLimit_SemiLimited extends PLimit {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.semiLimited.title;
     }
 

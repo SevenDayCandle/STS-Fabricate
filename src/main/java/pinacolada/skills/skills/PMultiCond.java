@@ -143,19 +143,19 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, false))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, false));
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, requestor, false))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, requestor, false));
     }
 
     @Override
-    public String getText(int index, PCLCardTarget perspective, boolean addPeriod) {
-        return effects.size() > index ? effects.get(index).getText(index, perspective, addPeriod) : getText(perspective, addPeriod);
+    public String getText(int index, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return effects.size() > index ? effects.get(index).getText(index, perspective, requestor, addPeriod) : getText(perspective, requestor, addPeriod);
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String base = effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, addPeriod) : "")
-                : getCapitalSubText(perspective, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, addPeriod)) : PCLCoreStrings.period(addPeriod));
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String base = effects.isEmpty() ? (childEffect != null ? childEffect.getText(perspective, requestor, addPeriod) : "")
+                : getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : COMMA_SEPARATOR) + childEffect.getText(perspective, requestor, addPeriod)) : PCLCoreStrings.period(addPeriod));
         return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR + base) : base;
     }
 

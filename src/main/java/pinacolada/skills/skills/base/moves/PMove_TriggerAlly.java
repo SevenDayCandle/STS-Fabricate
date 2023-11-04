@@ -41,7 +41,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return amount == 1 ? TEXT.act_trigger(getTargetStringPerspective(perspective)) : TEXT.act_triggerXTimes(getTargetStringPerspective(perspective), getAmountRawString());
     }
 

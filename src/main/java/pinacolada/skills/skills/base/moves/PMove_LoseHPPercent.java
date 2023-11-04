@@ -43,7 +43,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String percentLoss = getAmountRawString() + "%";
         if (target == PCLCardTarget.Self && !isFromCreature() && perspective == PCLCardTarget.Self) {
             return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);

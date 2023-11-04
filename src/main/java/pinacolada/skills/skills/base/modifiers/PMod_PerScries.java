@@ -37,7 +37,7 @@ public class PMod_PerScries extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.subjects_thisTurn(PCLCoreStrings.pluralForce(PGR.core.tooltips.scry.plural()));
     }
 }

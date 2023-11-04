@@ -63,7 +63,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause() || isPassiveClause()) {
             // Force plural
             return !fields.cardIDs.isEmpty() ? fields.getCardIDAndString() : fields.getCardAndString(2);

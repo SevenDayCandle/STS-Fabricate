@@ -38,8 +38,8 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return capital(childEffect == null ? getSubText(perspective) : TEXT.cond_xToY(getSubText(perspective), childEffect.getText(perspective, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return capital(childEffect == null ? getSubText(perspective, requestor) : TEXT.cond_xToY(getSubText(perspective, requestor), childEffect.getText(perspective, requestor, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

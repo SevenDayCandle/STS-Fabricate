@@ -41,7 +41,7 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause() || isPassiveClause()) {
             return EUIRM.strings.adjNoun(fields.getThresholdRawString(plural(PGR.core.tooltips.counter)), TEXT.subjects_card);
         }
@@ -49,8 +49,8 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        String base = super.getText(perspective, addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        String base = super.getText(perspective, requestor, addPeriod);
         if (!isWhenClause() && !isPassiveClause()) {
             return base + getXRawString();
         }

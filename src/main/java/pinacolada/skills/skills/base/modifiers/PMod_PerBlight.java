@@ -38,7 +38,7 @@ public class PMod_PerBlight extends PMod_Per<PField_Blight> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return this.amount <= 1 ? fields.getFullBlightStringSingular() : fields.getFullBlightString();
     }
 

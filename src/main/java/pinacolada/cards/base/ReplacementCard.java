@@ -117,7 +117,7 @@ public class ReplacementCard extends PCLDynamicCard {
         }
 
         @Override
-        public String getSubText(PCLCardTarget perspective) {
+        public String getSubText(PCLCardTarget perspective, Object requestor) {
             return card.original.rawDescription;
         }
 

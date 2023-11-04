@@ -44,7 +44,7 @@ public class PMove_KillAlly extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_kill(getTargetStringPerspective(perspective));
     }
 

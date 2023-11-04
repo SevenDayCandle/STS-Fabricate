@@ -64,8 +64,8 @@ public class PMove_PermanentModifyCost extends PMove_Modify<PField_CardModify> i
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective));
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
     }
 
     @Override

@@ -56,7 +56,7 @@ public class PMod_PerParentAmount extends PMod_Per<PField_Random> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.subjects_amount;
     }
 

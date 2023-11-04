@@ -30,7 +30,7 @@ public class PCond_Starter extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.starter.title) : PGR.core.tooltips.starter.title);
     }
 }

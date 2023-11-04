@@ -29,6 +29,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
     };
     public final HashMap<Settings.GameLanguage, PowerStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
+    public final ArrayList<PSkill<?>> powers = new ArrayList<>();
     public Texture portraitImage;
 
     public PCLDynamicPowerData(String cardID) {
@@ -70,9 +71,10 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         setImage(original.portraitImage);
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
+        setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicPowerData(PCLCustomPowerSlot data, String[] effects) {
+    public PCLDynamicPowerData(PCLCustomPowerSlot data, String[] effects, String[] powers) {
         this(data.ID);
         safeLoadValue(() -> setEndTurnBehavior(Behavior.valueOf(data.endTurnBehavior)));
         safeLoadValue(() -> setType(AbstractPower.PowerType.valueOf(data.type)));
@@ -84,6 +86,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         safeLoadValue(() -> setTurns(data.turns));
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(effects, PSkill::get), true, true));
+        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(powers, PSkill::get), true, true));
     }
 
     protected static PowerStrings getInitialStrings() {
@@ -158,7 +161,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
 
     @Override
     public List<PSkill<?>> getPowers() {
-        return Collections.emptyList();
+        return powers;
     }
 
     public PowerStrings getStringsForLanguage(Settings.GameLanguage language) {

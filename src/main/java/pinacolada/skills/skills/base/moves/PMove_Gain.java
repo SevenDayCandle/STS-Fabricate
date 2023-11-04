@@ -32,7 +32,7 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isSelfOnlyTarget(perspective)) {
             return amount < 0 ? TEXT.act_loseAmount(gainAmountText(), gainText()) : TEXT.act_gainAmount(gainAmountText(), gainText());
         }

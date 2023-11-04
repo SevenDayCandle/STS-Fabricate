@@ -6,7 +6,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
@@ -15,7 +14,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModifyTag;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
-import java.util.Collections;
 import java.util.List;
 
 @VisibleSkill
@@ -73,7 +71,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return amount < 0 ? getBasicRemoveString() : getBasicGiveString();
     }
 

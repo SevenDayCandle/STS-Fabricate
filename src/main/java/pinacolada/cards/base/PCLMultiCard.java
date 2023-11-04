@@ -21,7 +21,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
@@ -423,9 +422,9 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public String getSubText(PCLCardTarget perspective) {
+        public String getSubText(PCLCardTarget perspective, Object requestor) {
             return multicard.getCards().size() > 0 ?
-                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText(perspective);
+                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText(perspective, requestor);
         }
 
         @Override

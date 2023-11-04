@@ -38,8 +38,8 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         return new ColoredString(amount >= 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
     }
 
-    public String getConditionText(PCLCardTarget perspective) {
-        return TEXT.cond_bonusIf(getAmountRawString(), getSubText(perspective));
+    public String getConditionText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.cond_bonusIf(getAmountRawString(), getSubText(perspective, requestor));
     }
 
     @Override
@@ -49,12 +49,12 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_bonusIf(TEXT.subjects_x, getSubText(PCLCardTarget.Self));
+        return TEXT.cond_bonusIf(TEXT.subjects_x, getSubText(PCLCardTarget.Self, null));
     }
 
     @Override
-    public String getText(PCLCardTarget perspective, boolean addPeriod) {
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, false), addPeriod) : "", getConditionText(perspective)) + PCLCoreStrings.period(addPeriod);
+    public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "", getConditionText(perspective, requestor)) + PCLCoreStrings.period(addPeriod);
     }
 
     public abstract boolean meetsCondition(PCLUseInfo info, boolean isUsing);

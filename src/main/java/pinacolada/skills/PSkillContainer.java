@@ -8,20 +8,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class PSkillContainer {
-    private static final List<PSkill<?>> FAKE_POWER_LIST = Collections.emptyList();
-    public final UniqueList<PSkill<?>> effectTextMapping = new UniqueList<>();
+    private final UniqueList<PSkill<?>> effectTextMapping = new UniqueList<>();
     public final ArrayList<PSkill<?>> onUseEffects = new ArrayList<>();
+    public final ArrayList<PSkill<?>> powerEffects = new ArrayList<>();
 
     public void clear() {
-        onUseEffects.clear();
         effectTextMapping.clear();
+        onUseEffects.clear();
+        powerEffects.clear();
     }
 
     public UniqueList<PSkill<?>> getPointers() {
         return effectTextMapping;
-    }
-
-    public List<PSkill<?>> getPowerEffects() {
-        return FAKE_POWER_LIST;
     }
 }

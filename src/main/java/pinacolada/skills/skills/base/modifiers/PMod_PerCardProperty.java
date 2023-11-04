@@ -3,8 +3,6 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -38,7 +36,7 @@ public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory>
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String subjectString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getCardPropertyString()) : getCardPropertyString();
         if (useParent) {
             return TEXT.subjects_onTarget(subjectString, getInheritedThemString());

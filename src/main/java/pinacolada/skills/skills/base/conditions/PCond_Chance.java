@@ -55,7 +55,7 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.cond_ifX(TEXT.act_generic2(PGR.core.tooltips.chance.title, getAmountRawString() + "%"));
     }
 }

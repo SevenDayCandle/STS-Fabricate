@@ -6,13 +6,11 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 
 @VisibleSkill
@@ -53,9 +51,9 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class)) {
-            return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), getParentCardString(perspective));
+            return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), getParentCardString(perspective, requestor));
         }
         return getSubDescText(perspective);
     }

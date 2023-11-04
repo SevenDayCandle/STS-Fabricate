@@ -34,7 +34,7 @@ public class PDelay_StartOfTurn extends PDelay {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return (amount <= 0 ? getTiming().getDesc() :
                 (amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount)));
     }

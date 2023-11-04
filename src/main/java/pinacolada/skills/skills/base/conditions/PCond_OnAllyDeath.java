@@ -32,7 +32,7 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             return TEXT.cond_aObjectIs(fields.getFullSummonStringSingular(), getDelegatePastText());
         }

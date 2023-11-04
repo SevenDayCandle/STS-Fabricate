@@ -36,7 +36,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public String getConditionText(PCLCardTarget perspective, String childText) {
+    public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.groupTypes.isEmpty() && sourceCard != null) {
             return fields.forced ? TEXT.cond_perThisCombat(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()))
                     : TEXT.cond_perThisTurn(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()));
@@ -63,7 +63,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return fields.getFullCardString();
     }
 

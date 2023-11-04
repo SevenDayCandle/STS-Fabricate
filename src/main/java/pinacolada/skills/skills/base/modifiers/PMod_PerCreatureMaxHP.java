@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -40,7 +39,7 @@ public class PMod_PerCreatureMaxHP extends PMod_Per<PField_Not> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetOnStringPerspective(perspective, getSubSampleText());
     }
 }

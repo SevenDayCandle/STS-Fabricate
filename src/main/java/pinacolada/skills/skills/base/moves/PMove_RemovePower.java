@@ -38,7 +38,7 @@ public class PMove_RemovePower extends PMove<PField_Power> {
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective) {
+    public String getSubText(PCLCardTarget perspective, Object requestor) {
         String powerString = fields.getPowerSubjectString();
         powerString = target == PCLCardTarget.Self && perspective == PCLCardTarget.Self ? TEXT.act_remove(TEXT.subjects_onYou(powerString)) : TEXT.act_removeFrom(powerString, getTargetStringPerspective(perspective));
         return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
