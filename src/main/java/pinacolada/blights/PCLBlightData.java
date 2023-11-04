@@ -26,7 +26,6 @@ public class PCLBlightData extends PCLGenericData<PCLBlight> {
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public BlightTier tier = BlightTier.SPECIAL;
     public BlightStrings strings;
-    public String imagePath;
     public Integer[] counter = array(0);
     public Integer[] counterUpgrade = array(0);
     public boolean unique = false;

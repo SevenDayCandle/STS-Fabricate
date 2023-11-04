@@ -13,7 +13,7 @@ import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.augments.PCLAugmentRenderable;
+import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentGrid;
 

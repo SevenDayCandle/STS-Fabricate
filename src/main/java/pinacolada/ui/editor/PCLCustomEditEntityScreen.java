@@ -392,8 +392,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::end);
 
-        saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH * 1.16f, BUTTON_HEIGHT * 1.3f)
-                .setPosition(Settings.WIDTH - BUTTON_WIDTH * 0.69f, BUTTON_HEIGHT)
+        saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH * 1.16f, BUTTON_HEIGHT * 1.31f)
+                .setPosition(Settings.WIDTH - BUTTON_WIDTH * 0.85f, BUTTON_HEIGHT)
                 .setColor(Color.FOREST)
                 .setLabel(EUIFontHelper.buttonFont, 1f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::save);

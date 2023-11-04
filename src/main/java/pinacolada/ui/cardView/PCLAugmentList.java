@@ -10,6 +10,7 @@ import extendedui.ui.controls.EUICanvasGrid;
 import extendedui.ui.hitboxes.EUIHitbox;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
 
 import java.util.ArrayList;
 
@@ -43,11 +44,11 @@ public class PCLAugmentList extends EUICanvasGrid {
         sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(135), scale(32)), this::sortAugments);
     }
 
-    public void addListItem(PCLAugment augment, float amount) {
+    public void addListItem(PCLAugmentData augment, float amount) {
         this.augments.add(new PCLAugmentListItem(onComplete, augment, amount));
     }
 
-    public void addPanelItem(PCLAugment augment, int count) {
+    public void addPanelItem(PCLAugmentData augment, int count) {
         this.augments.add(new PCLAugmentButtonListItem(onComplete, augment, count));
     }
 
@@ -85,13 +86,13 @@ public class PCLAugmentList extends EUICanvasGrid {
     protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
         switch (sortType) {
             case Name:
-                return StringUtils.compare(a.augment.augment.getName(), b.augment.augment.getName());
+                return StringUtils.compare(a.augment.item.strings.NAME, b.augment.item.strings.NAME);
             case Count:
                 return Float.compare(a.amount, b.amount);
             case Category:
-                return a.augment.augment.data.category.ordinal() - b.augment.augment.data.category.ordinal();
+                return a.augment.item.category.ordinal() - b.augment.item.category.ordinal();
             case Level:
-                return a.augment.augment.data.tier - b.augment.augment.data.tier;
+                return a.augment.item.tier - b.augment.item.tier;
         }
         return 0;
     }

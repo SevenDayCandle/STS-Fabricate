@@ -204,7 +204,7 @@
 												"Activates when this item is removed from the player's inventory. | Greyed-out effects will have no effect.",
 												"Activates if this item exists at the end of a combat. | Greyed-out effects will have no effect.",
 												"If checked, this modifier's amount will add itself onto the effect's base value instead of multiplying that value.",
-												"#oLeft-Click a node to edit it. Hold and drag it onto another node to move it underneath that node. | To add new nodes underneath an existing one, drag one of the node buttons from the top bar onto an existing node.",
+												"#oLeft-Click a node to edit it. Hold and drag it onto another node to move it underneath that node. To add new nodes underneath an existing one, drag one of the node buttons from the top bar onto an existing node.",
 												"{#o:Click this to add a Primary node here.}",
 												"{#o:Drag a node here to set this node's child.}",
 												"#yRarity determines how often this relic appears in rewards (#yCommon, #yUncommon, or #yRare only). #yShop relics only appear in shops. #yBoss relics only appear in boss chests. Relics of other rarities must be spawned manually through events or other effects.",

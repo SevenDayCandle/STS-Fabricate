@@ -23,7 +23,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentCategorySub;
-import pinacolada.augments.PCLAugmentRenderable;
+import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -82,27 +82,27 @@ public class PCLAugmentKeywordFilters
     }
 
     public static String getDescriptionForSort(PCLAugmentRenderable c) {
-        return c.augment.getText();
+        return c.getTooltip().description;
     }
 
     public static String getNameForSort(PCLAugmentRenderable c) {
-        return c.augment.getName();
+        return c.getTooltip().title;
     }
 
     public static int rankByCategory(PCLAugmentRenderable a, PCLAugmentRenderable b) {
         return (a == null ? -1 : b == null ? 1 :
                 (
-                        a.augment.data.category == b.augment.data.category ? StringUtils.compare(a.augment.data.categorySub.suffix, b.augment.data.categorySub.suffix) :
-                                a.augment.data.category.ordinal() - b.augment.data.category.ordinal()
+                        a.item.category == b.item.category ? StringUtils.compare(a.item.categorySub.suffix, b.item.categorySub.suffix) :
+                                a.item.category.ordinal() - b.item.category.ordinal()
                 ));
     }
 
     public static int rankByName(PCLAugmentRenderable a, PCLAugmentRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.augment.getName(), b.augment.getName()));
+        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.item.getName(), b.item.getName()));
     }
 
     public static int rankByTier(PCLAugmentRenderable a, PCLAugmentRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : (a.augment.data.tier - b.augment.data.tier));
+        return (a == null ? -1 : b == null ? 1 : (a.item.tier - b.item.tier));
     }
 
     @Override
@@ -154,17 +154,17 @@ public class PCLAugmentKeywordFilters
         }
 
         //Category check
-        if (!evaluateItem(filters.currentCategories, c.augment.data.category)) {
+        if (!evaluateItem(filters.currentCategories, c.item.category)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(filters.currentSubCategories, c.augment.data.categorySub)) {
+        if (!evaluateItem(filters.currentSubCategories, c.item.categorySub)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(filters.currentTiers, c.augment.data.tier)) {
+        if (!evaluateItem(filters.currentTiers, c.item.tier)) {
             return false;
         }
 
@@ -220,7 +220,7 @@ public class PCLAugmentKeywordFilters
                 }
 
                 availableMods.add(EUIGameUtils.getModInfo(augment));
-                maxTier = Math.max(augment.augment.data.tier, maxTier);
+                maxTier = Math.max(augment.item.tier, maxTier);
             }
             doForFilters(m -> m.initializeSelection(originalGroup));
         }

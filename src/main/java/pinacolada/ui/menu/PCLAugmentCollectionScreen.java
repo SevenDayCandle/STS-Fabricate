@@ -25,7 +25,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;
     protected FuncT0<HashMap<PCLAugmentData, Integer>> getEntries;
-    protected ActionT2<PCLAugment, Integer> addItem;
+    protected ActionT2<PCLAugmentData, Integer> addItem;
     protected boolean canSelect;
 
     public PCLAugmentCollectionScreen() {
@@ -81,8 +81,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
             PCLAugmentData data = params.getKey();
             int amount = params.getValue();
             if (data != null && amount > 0) {
-                PCLAugment augment = data.create();
-                addItem.invoke(augment, amount);
+                addItem.invoke(data, amount);
             }
         }
         EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {

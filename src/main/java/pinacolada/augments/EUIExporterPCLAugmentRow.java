@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.exporter.EUIExporter;
 import extendedui.exporter.EUIExporterRow;
+import pinacolada.ui.PCLAugmentRenderable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class EUIExporterPCLAugmentRow extends EUIExporterRow {
     public String Description;
 
     public EUIExporterPCLAugmentRow(PCLAugmentRenderable augment) {
-        this(augment.augment);
+        this(augment.item.create());
     }
 
     public EUIExporterPCLAugmentRow(PCLAugment augment) {

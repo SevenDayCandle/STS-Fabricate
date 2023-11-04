@@ -25,7 +25,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.powers.EUIExporterPCLPowerRow;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.powers.PCLPowerRenderable;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -89,27 +89,27 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
     }
 
     public static String getDescriptionForSort(PCLPowerRenderable c) {
-        return c.power.getText();
+        return c.item.getText();
     }
 
     public static String getNameForSort(PCLPowerRenderable c) {
-        return c.power.getName();
+        return c.item.getName();
     }
 
     public static int rankByEndTurnBehavior(PCLPowerRenderable a, PCLPowerRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : (a.power.endTurnBehavior.ordinal() - b.power.endTurnBehavior.ordinal()));
+        return (a == null ? -1 : b == null ? 1 : (a.item.endTurnBehavior.ordinal() - b.item.endTurnBehavior.ordinal()));
     }
 
     public static int rankByName(PCLPowerRenderable a, PCLPowerRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.power.getName(), b.power.getName()));
+        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.item.getName(), b.item.getName()));
     }
 
     public static int rankByPriority(PCLPowerRenderable a, PCLPowerRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : (a.power.priority - b.power.priority));
+        return (a == null ? -1 : b == null ? 1 : (a.item.priority - b.item.priority));
     }
 
     public static int rankByType(PCLPowerRenderable a, PCLPowerRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : (a.power.type.ordinal() - b.power.type.ordinal()));
+        return (a == null ? -1 : b == null ? 1 : (a.item.type.ordinal() - b.item.type.ordinal()));
     }
 
     @Override
@@ -160,17 +160,17 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
         }
 
         //Category check
-        if (!evaluateItem(filters.currentPriorities, c.power.priority)) {
+        if (!evaluateItem(filters.currentPriorities, c.item.priority)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(filters.currentEndTurnBehaviors, c.power.endTurnBehavior)) {
+        if (!evaluateItem(filters.currentEndTurnBehaviors, c.item.endTurnBehavior)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(filters.currentTypes, c.power.type)) {
+        if (!evaluateItem(filters.currentTypes, c.item.type)) {
             return false;
         }
 
@@ -226,7 +226,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
                 }
 
                 availableMods.add(EUIGameUtils.getModInfo(augment));
-                availablePriorities.add(augment.power.priority);
+                availablePriorities.add(augment.item.priority);
             }
             doForFilters(m -> m.initializeSelection(originalGroup));
         }

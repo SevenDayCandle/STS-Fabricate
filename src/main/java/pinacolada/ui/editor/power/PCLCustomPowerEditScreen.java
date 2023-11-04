@@ -17,7 +17,7 @@ import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLDynamicPower;
 import pinacolada.powers.PCLDynamicPowerData;
-import pinacolada.powers.PCLPowerRenderable;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFormEditor;

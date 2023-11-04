@@ -8,13 +8,14 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     public final EUIImage background;
 
-    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugment augment, int count) {
+    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugmentData augment, int count) {
         super(panel, augment, count, 1.4f, 4.2f);
         this.amount = count;
         amountText.setColor(Settings.BLUE_TEXT_COLOR);

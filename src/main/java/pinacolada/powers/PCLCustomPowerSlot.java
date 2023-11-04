@@ -1,6 +1,5 @@
 package pinacolada.powers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
@@ -11,8 +10,8 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLPowerRenderable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,6 +6,7 @@ import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
@@ -268,7 +269,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
-    public EUITooltip getTooltip() {
+    public EUIKeywordTooltip getTooltip() {
         return super.getTooltip();
     }
 

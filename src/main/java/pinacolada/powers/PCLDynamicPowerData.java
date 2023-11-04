@@ -18,7 +18,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.*;

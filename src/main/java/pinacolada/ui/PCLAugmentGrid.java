@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import extendedui.EUIRenderHelpers;
 import extendedui.ui.controls.EUIItemGrid;
-import pinacolada.augments.PCLAugmentRenderable;
 
 public class PCLAugmentGrid extends EUIItemGrid<PCLAugmentRenderable> {
 

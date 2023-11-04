@@ -4,13 +4,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUIItemGrid;
-import pinacolada.blights.PCLCustomBlightSlot;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLPowerRenderable;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLPowerGrid;
-import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
 import pinacolada.ui.menu.PCLPowerKeywordFilters;
 

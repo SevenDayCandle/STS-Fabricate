@@ -26,7 +26,6 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
     private static final ArrayList<PCLPotionData> TEMPLATES = new ArrayList<>();
 
     public PotionStrings strings;
-    public String imagePath;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractPotion.PotionEffect effect = AbstractPotion.PotionEffect.NONE;
     public AbstractPotion.PotionRarity rarity = AbstractPotion.PotionRarity.PLACEHOLDER;

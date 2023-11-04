@@ -1,5 +1,6 @@
 package pinacolada.misc;
 
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLResources;
 
 import java.lang.reflect.Constructor;
@@ -11,6 +12,7 @@ public class PCLGenericData<T> {
     public final Class<? extends T> invokeClass;
     protected Constructor<? extends T> constructor;
     public String ID;
+    public String imagePath;
 
     public PCLGenericData(String id, Class<? extends T> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this.ID = id;

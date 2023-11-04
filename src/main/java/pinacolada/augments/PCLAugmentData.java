@@ -1,15 +1,20 @@
 package pinacolada.augments;
 
 import basemod.ReflectionHacks;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.random.Random;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PMultiSkill;
@@ -17,12 +22,9 @@ import pinacolada.skills.skills.PMultiTrait;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
-public class PCLAugmentData extends PCLGenericData<PCLAugment> {
+public class PCLAugmentData extends PCLGenericData<PCLAugment> implements KeywordProvider {
     private static final HashMap<String, PCLAugmentData> AUGMENT_MAP = new HashMap<>();
     private static final ArrayList<PCLAugmentData> AVAILABLE_AUGMENTS = new ArrayList<>();
 
@@ -32,6 +34,7 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     public AugmentStrings strings;
     public PSkill<?> skill;
     public PCLAugmentReqs reqs;
+    public EUIKeywordTooltip tooltip;
     public boolean isSpecial;
 
     public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub categorySub, int tier) {
@@ -119,6 +122,40 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
                 && (category.isTypeValid(c.type))
                 && (reqs == null || reqs.check(c))
                 && (categorySub == null || !EUIUtils.any(c.getAugments(), a -> a.data.categorySub == categorySub));
+    }
+
+    public String getName() {
+        return strings.NAME;
+    }
+
+    public String getReqsString() {
+        return reqs == null ? null : reqs.getString();
+    }
+
+    public Texture getTexture() {
+        return categorySub.getTexture();
+    }
+
+    public Texture getTextureBase() {
+        return category.getIcon();
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(tooltip);
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        if (tooltip == null) {
+            String reqs = getReqsString();
+            String desc = EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
+                    PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, tier), category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
+                    reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
+                    skill.getPowerText(null));
+            tooltip = new EUIKeywordTooltip(strings.NAME, desc);
+        }
+        return tooltip;
     }
 
     public PCLAugmentData setReqs(PCLAugmentReqs reqs) {

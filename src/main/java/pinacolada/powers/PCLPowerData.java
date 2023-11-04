@@ -157,7 +157,6 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public AbstractPower.PowerType type = NeutralPowertypePatch.NEUTRAL;
     public EUIKeywordTooltip tooltip;
     public PowerStrings strings;
-    public String imagePath;
     public Behavior endTurnBehavior = Behavior.Permanent;
     public boolean isCommon;
     public boolean isMetascaling;
