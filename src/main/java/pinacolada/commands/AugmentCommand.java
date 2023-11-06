@@ -3,6 +3,7 @@ package pinacolada.commands;
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.ConvertHelper;
+import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PGR;
 
@@ -13,7 +14,7 @@ public class AugmentCommand extends ConsoleCommand {
     public AugmentCommand() {
         this.requiresPlayer = true;
         this.minExtraTokens = 1;
-        this.maxExtraTokens = 2;
+        this.maxExtraTokens = 4;
         this.simpleCheck = true;
     }
 
@@ -24,9 +25,11 @@ public class AugmentCommand extends ConsoleCommand {
     @Override
     protected void execute(String[] tokens, int depth) {
         PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
-        int amount = tokens.length > 2 ? ConvertHelper.tryParseInt(tokens[2], 1) : 1;
+        int timesUpgraded = tokens.length > 2 ? ConvertHelper.tryParseInt(tokens[2], 0) : 0;
+        int form = tokens.length > 3 ? ConvertHelper.tryParseInt(tokens[3], 0) : 0;
+        int amount = tokens.length > 4 ? ConvertHelper.tryParseInt(tokens[4], 1) : 1;
         if (augment != null) {
-            PGR.dungeon.addAugment(augment.ID, amount);
+            PGR.dungeon.addAugment(new PCLAugment.SaveData(augment.ID, timesUpgraded, form));
             DevConsole.log("Obtained " + amount + " " + tokens[1]);
         }
         else {

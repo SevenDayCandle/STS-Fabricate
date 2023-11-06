@@ -16,22 +16,22 @@ import pinacolada.powers.PCLPowerData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PCLAugmentRenderable extends PCLGridRenderable<PCLAugmentData> {
+public class PCLAugmentRenderable extends PCLGridRenderable<PCLAugment> {
     public static final float BASE_SCALE = Settings.scale * 0.45f;
     protected Texture texture;
     protected Texture textureBase;
 
-    public PCLAugmentRenderable(PCLAugmentData power) {
+    public PCLAugmentRenderable(PCLAugment power) {
         super(power, power.getTooltip(), new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
         scale = BASE_SCALE;
     }
 
-    public PCLAugmentRenderable(PCLAugmentData power, EUIKeywordTooltip tip) {
+    public PCLAugmentRenderable(PCLAugment power, EUIKeywordTooltip tip) {
         super(power, tip, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
         scale = BASE_SCALE;
     }
 
-    public PCLAugmentRenderable(PCLAugmentData power, EUIKeywordTooltip tip, Hitbox hb) {
+    public PCLAugmentRenderable(PCLAugment power, EUIKeywordTooltip tip, Hitbox hb) {
         super(power, tip, hb);
         scale = BASE_SCALE;
     }

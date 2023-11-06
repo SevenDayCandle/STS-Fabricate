@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.screens.EUIPoolScreen;
@@ -14,6 +15,7 @@ import pinacolada.effects.card.ChooseCardForAugmentEffect;
 import pinacolada.ui.cardView.PCLAugmentList;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +26,8 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;
-    protected FuncT0<HashMap<PCLAugmentData, Integer>> getEntries;
-    protected ActionT2<PCLAugmentData, Integer> addItem;
+    protected FuncT0<ArrayList<PCLAugment.SaveData>> getEntries;
+    protected ActionT1<PCLAugment> addItem;
     protected boolean canSelect;
 
     public PCLAugmentCollectionScreen() {
@@ -60,12 +62,12 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         }
     }
 
-    public void openScreen(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
+    public void openScreen(FuncT0<ArrayList<PCLAugment.SaveData>> getEntries, int rows, boolean canSelect) {
         super.reopen();
         this.getEntries = getEntries;
         this.canSelect = canSelect;
         panel = new PCLAugmentList(this::doAction, rows).enableCancel(false);
-        addItem = canSelect ? (a, b) -> panel.addPanelItem(a, b) : panel::addListItem;
+        addItem = canSelect ? (a) -> panel.addPanelItem(a) : panel::addListItem;
         refreshAugments();
     }
 
@@ -76,16 +78,11 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     public void refreshAugments() {
         panel.clear();
-        HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
-        for (Map.Entry<PCLAugmentData, Integer> params : entries.entrySet()) {
-            PCLAugmentData data = params.getKey();
-            int amount = params.getValue();
-            if (data != null && amount > 0) {
-                addItem.invoke(data, amount);
-            }
+        ArrayList<PCLAugment.SaveData> entries = getEntries != null ? getEntries.invoke() : new ArrayList<>();
+        for (PCLAugment.SaveData save : entries) {
+            addItem.invoke(save.create());
         }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {
-        }, false);
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
     }
 
     @Override

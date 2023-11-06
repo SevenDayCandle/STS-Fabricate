@@ -95,6 +95,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -311,7 +312,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             augments.add(augment);
         }
         if (save) {
-            auxiliaryData.addAugment(augment.ID);
+            auxiliaryData.addAugment(augment.save);
         }
         augment.onAddToCard(this);
         refresh(null);
@@ -692,7 +693,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public ArrayList<PSkill<?>> getAugmentSkills() {
-        return EUIUtils.mapAsNonnull(augments, aug -> aug != null ? aug.skill : null);
+        return EUIUtils.flatMap(augments, aug -> aug != null ? aug.skills.onUseEffects : Collections.emptyList());
     }
 
     public ArrayList<PCLAugment> getAugments() {
@@ -1455,10 +1456,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             changeForm(data.form, timesUpgraded);
             this.auxiliaryData = new PCLCardSaveData(data);
             if (data.augments != null) {
-                for (String id : data.augments) {
-                    PCLAugmentData augment = PCLAugmentData.get(id);
+                for (PCLAugment.SaveData dat : data.augments) {
+                    PCLAugmentData augment = PCLAugmentData.get(dat.ID);
                     if (augment != null) {
-                        addAugment(augment.create(), false);
+                        addAugment(augment.create(dat.timesUpgraded, dat.form), false);
                     }
                 }
             }
@@ -1471,7 +1472,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(PSkill::triggerOnRemoval);
         for (PCLAugment augment : getAugments()) {
             if (augment.canRemove()) {
-                PGR.dungeon.addAugment(augment.ID, 1);
+                PGR.dungeon.addAugment(augment.save);
             }
         }
     }

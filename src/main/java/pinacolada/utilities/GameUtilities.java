@@ -173,13 +173,13 @@ public class GameUtilities {
         return EUIUtils.safeCast(c, AbstractMonster.class);
     }
 
-    public static CountingPanelStats<PCLAugmentCategory, Map.Entry<PCLAugmentData, Integer>, Map.Entry<PCLAugmentData, Integer>> augmentStats(HashMap<PCLAugmentData, Integer> augments) {
-        return new CountingPanelStats<PCLAugmentCategory, Map.Entry<PCLAugmentData, Integer>, Map.Entry<PCLAugmentData, Integer>>(
+    public static CountingPanelStats<PCLAugmentCategory, PCLAugment.SaveData, PCLAugment.SaveData> augmentStats(ArrayList<PCLAugment.SaveData> augments) {
+        return new CountingPanelStats<PCLAugmentCategory, PCLAugment.SaveData, PCLAugment.SaveData>(
                 Collections::singleton,
-                entry -> entry.getKey().category,
-                Map.Entry::getValue,
-                (entries, entry) -> entry.getValue(),
-                augments.entrySet());
+                entry -> entry.getData().category,
+                entry -> 1,
+                (entries, entry) -> 1,
+                augments);
     }
 
     public static boolean canAcceptInput(boolean canHoverCard) {
@@ -979,10 +979,16 @@ public class GameUtilities {
     }
 
     public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor) {
+        return getMultiformName(base, form, timesUpgraded, maxForms, maxUpgrades, branchFactor, true);
+    }
+
+    public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor, boolean addPlus) {
         StringBuilder sb = new StringBuilder(base);
 
         if (timesUpgraded != 0) {
-            sb.append("+");
+            if (addPlus) {
+                sb.append("+");
+            }
             if (maxUpgrades < 0 || maxUpgrades > 1) {
                 sb.append(timesUpgraded);
             }

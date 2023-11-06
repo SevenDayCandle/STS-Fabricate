@@ -31,7 +31,7 @@ public class AugmentReward extends PCLReward {
     @Override
     public boolean claimReward() {
         PCLSFX.play(PCLSFX.RELIC_DROP_MAGICAL);
-        PGR.dungeon.addAugment(augment.ID, 1);
+        PGR.dungeon.addAugment(augment.save);
         this.isDone = true;
         return true;
     }
@@ -46,7 +46,7 @@ public class AugmentReward extends PCLReward {
     public void update() {
         super.update();
         if (this.hb.hovered) {
-            EUITooltip.queueTooltip(augment.getTip());
+            EUITooltip.queueTooltip(augment.getTooltip());
         }
     }
 
@@ -60,7 +60,7 @@ public class AugmentReward extends PCLReward {
         public RewardSave onSave(CustomReward customReward) {
             AugmentReward reward = EUIUtils.safeCast(customReward, AugmentReward.class);
             if (reward != null) {
-                return new RewardSave(reward.type.toString(), reward.augment.ID, 1, 0);
+                return new RewardSave(reward.type.toString(), reward.augment.save.ID, 1, 0);
             }
 
             return null;

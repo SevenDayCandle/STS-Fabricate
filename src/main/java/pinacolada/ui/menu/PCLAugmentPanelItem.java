@@ -20,6 +20,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static pinacolada.dungeon.PCLPlayerMeter.makeTitle;
@@ -39,17 +40,9 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         lerpAmount = 0;
     }
 
-    protected HashMap<PCLAugmentData, Integer> getAugmentData() {
-        HashMap<PCLAugmentData, Integer> map = new HashMap<>();
-        for (String key : PGR.dungeon.augments.keySet()) {
-            map.put(PCLAugmentData.get(key), PGR.dungeon.augments.get(key));
-        }
-        return map;
-    }
-
     protected void onClick() {
         super.onClick();
-        PGR.augmentScreen.openScreen(this::getAugmentData, PCLAugmentList.DEFAULT, true);
+        PGR.augmentScreen.openScreen(() -> new ArrayList<>(PGR.dungeon.augments), PCLAugmentList.DEFAULT, true);
     }
 
     protected void onRightClick() {

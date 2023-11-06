@@ -8,69 +8,47 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillContainer;
+import pinacolada.utilities.GameUtilities;
 
-import java.lang.reflect.Constructor;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class PCLAugment implements KeywordProvider {
+public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     public static final int WEIGHT_MODIFIER = 3;
     public final PCLAugmentData data;
-    public final String ID;
-    public PSkill<?> skill;
+    public SaveData save;
+    public PSkillContainer skills;
     public PCLCard card;
 
     public PCLAugment(PCLAugmentData data) {
-        this(data, data.skill);
+        this(data, 0, 0);
     }
 
-    public PCLAugment(PCLAugmentData data, PSkill<?> skill) {
+    public PCLAugment(PCLAugmentData data, int timesUpgraded, int form) {
+        this(data, data.ID, timesUpgraded, form);
+    }
+
+    public PCLAugment(PCLAugmentData data, String id, int timesUpgraded, int form) {
         this.data = data;
-        this.ID = data.ID;
-        this.skill = skill.makeCopy();
+        this.save = new SaveData(id, timesUpgraded, form);
+        skills = new PSkillContainer();
+        setup();
     }
 
-    protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategorySub category, int tier) {
-        return register(type, category.resources, category, tier);
+    protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategory category) {
+        return register(type, PGR.core, category);
     }
 
-    protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub category, int tier) {
-        return PCLAugmentData.registerData(new PCLAugmentData(type, resources, category, tier));
-    }
-
-    public static PCLAugmentReqs setAffinities(PCLAffinity... values) {
-        return new PCLAugmentReqs().setAffinities(values);
-    }
-
-    public static PCLAugmentReqs setAffinitiesNot(PCLAffinity... values) {
-        return new PCLAugmentReqs().setAffinitiesNot(values);
-    }
-
-    public static PCLAugmentReqs setRarities(AbstractCard.CardRarity... values) {
-        return new PCLAugmentReqs().setRarities(values);
-    }
-
-    public static PCLAugmentReqs setTags(PCLCardTag... values) {
-        return new PCLAugmentReqs().setTags(values);
-    }
-
-    public static PCLAugmentReqs setTagsNot(PCLCardTag... values) {
-        return new PCLAugmentReqs().setTagsNot(values);
-    }
-
-    public static PCLAugmentReqs setTargets(PCLCardTarget... values) {
-        return new PCLAugmentReqs().setTargets(values);
-    }
-
-    public static PCLAugmentReqs setTypes(AbstractCard.CardType... values) {
-        return new PCLAugmentReqs().setTypes(values);
+    protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategory category) {
+        return PCLAugmentData.registerData(new PCLAugmentData(type, resources, category));
     }
 
     public void addToCard(PCLCard c) {
@@ -94,7 +72,7 @@ public abstract class PCLAugment implements KeywordProvider {
     }
 
     public boolean canRemove() {
-        return !data.isSpecial;
+        return !data.permanent;
     }
 
     public String getFullText() {
@@ -102,65 +80,92 @@ public abstract class PCLAugment implements KeywordProvider {
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
                 PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, data.tier), data.category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
                 reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
-                getPowerText());
+                getEffectPowerTextStrings());
+    }
+
+    public String getID() {
+        return save.ID;
     }
 
     public String getName() {
-        return data.strings.NAME;
-    }
-
-    public String getPowerText() {
-        return skill.getPowerText(null);
+        return GameUtilities.getMultiformName(data.getName(), save.form, save.timesUpgraded, data.maxForms, data.maxUpgradeLevel, data.branchFactor, false);
     }
 
     public String getReqsString() {
         return data.reqs == null ? null : data.reqs.getString();
     }
 
-    public String getText() {
-        return skill.getText();
+    public PSkillContainer getSkills() {
+        return skills;
     }
 
     public Texture getTexture() {
-        return data.categorySub.getTexture();
+        return data.getTexture();
     }
 
     public Texture getTextureBase() {
         return data.category.getIcon();
     }
 
-    public EUIKeywordTooltip getTip() {
+    public int getTier() {
+        return data.getTier(save.form) + data.getTierUpgrade(save.form);
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
         return new EUIKeywordTooltip(getName(), getFullText());
     }
 
     @Override
     public List<EUIKeywordTooltip> getTips() {
-        return Collections.singletonList(getTip());
+        return Collections.singletonList(getTooltip());
     }
 
     public PCLAugment makeCopy() {
-        PCLAugment copy = null;
-        try {
-            Constructor<? extends PCLAugment> c = EUIUtils.tryGetConstructor(this.getClass(), PSkill.class);
-            if (c != null) {
-                copy = c.newInstance(skill);
-                copy.card = card;
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            EUIUtils.logError(this, "Failed to copy");
-        }
-        return copy;
+        return data.create(save.timesUpgraded, save.form);
     }
 
     public void onAddToCard(PCLCard c) {
-        this.skill.setSource(c).onAddToCard(c);
+        for (PSkill<?> skill : skills.onUseEffects) {
+            skill.setSource(c).onAddToCard(c);
+        }
         card = c;
     }
 
     public void onRemoveFromCard(PCLCard c) {
-        this.skill.onRemoveFromCard(c);
+        for (PSkill<?> skill : skills.onUseEffects) {
+            skill.onRemoveFromCard(c);
+        }
         card = null;
+    }
+
+    public void reset() {
+        skills.clear();
+        setup();
+    }
+
+    protected void setup() {
+
+    }
+
+    public static class SaveData implements Serializable {
+        public String ID;
+        public int form;
+        public int timesUpgraded;
+
+        public SaveData(String id, int timesUpgraded, int form) {
+            this.ID = id;
+            this.timesUpgraded = timesUpgraded;
+            this.form = form;
+        }
+
+        public PCLAugment create() {
+            PCLAugmentData data = getData();
+            return data != null ? data.create(timesUpgraded, form) : null;
+        }
+
+        public PCLAugmentData getData() {
+            return PCLAugmentData.get(ID);
+        }
     }
 }

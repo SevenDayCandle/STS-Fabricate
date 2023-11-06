@@ -44,12 +44,12 @@ public class PCLAugmentList extends EUICanvasGrid {
         sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(135), scale(32)), this::sortAugments);
     }
 
-    public void addListItem(PCLAugmentData augment, float amount) {
-        this.augments.add(new PCLAugmentListItem(onComplete, augment, amount));
+    public void addListItem(PCLAugment augment) {
+        this.augments.add(new PCLAugmentListItem(onComplete, augment));
     }
 
-    public void addPanelItem(PCLAugmentData augment, int count) {
-        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment, count));
+    public void addPanelItem(PCLAugment augment) {
+        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment));
     }
 
     public void clear() {
@@ -86,13 +86,11 @@ public class PCLAugmentList extends EUICanvasGrid {
     protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
         switch (sortType) {
             case Name:
-                return StringUtils.compare(a.augment.item.strings.NAME, b.augment.item.strings.NAME);
-            case Count:
-                return Float.compare(a.amount, b.amount);
+                return StringUtils.compare(a.augment.item.getName(), b.augment.item.getName());
             case Category:
-                return a.augment.item.category.ordinal() - b.augment.item.category.ordinal();
+                return a.augment.item.data.category.ordinal() - b.augment.item.data.category.ordinal();
             case Level:
-                return a.augment.item.tier - b.augment.item.tier;
+                return a.augment.item.getTier() - b.augment.item.getTier();
         }
         return 0;
     }

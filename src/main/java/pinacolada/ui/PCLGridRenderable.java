@@ -12,7 +12,7 @@ import pinacolada.misc.PCLGenericData;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLGridRenderable<T extends PCLGenericData<?> & KeywordProvider> implements KeywordProvider {
+public abstract class PCLGridRenderable<T extends KeywordProvider> implements KeywordProvider {
     public static final float BASE_SCALE = Settings.scale * 0.6f;
     public final T item;
     public Hitbox hb;

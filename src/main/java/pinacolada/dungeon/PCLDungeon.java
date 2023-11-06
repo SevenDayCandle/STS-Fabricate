@@ -21,6 +21,7 @@ import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
@@ -53,7 +54,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();
     public transient final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
     private transient boolean panelAdded;
-    private transient int totalAugmentCount = 0;
     protected ArrayList<String> loadoutIDs = new ArrayList<>();
     protected Integer highestScore = 0;
     protected Integer rNGCounter = 0;
@@ -70,8 +70,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public Boolean allowCustomCards = false;
     public Boolean allowCustomPotions = false;
     public Boolean allowCustomRelics = false;
-    public HashMap<PCLAffinity, Integer> fragments = new HashMap<>();
-    public HashMap<String, Integer> augments = new HashMap<>();
+    public ArrayList<PCLAugment.SaveData> augments = new ArrayList<>();
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public transient PCLLoadout loadout;
@@ -94,12 +93,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return data;
     }
 
-    public void addAugment(String id, int count) {
-        augments.merge(id, count, Integer::sum);
-        totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
-        if (augments.get(id) <= 0) {
-            augments.remove(id);
-        }
+    public void addAugment(PCLAugment.SaveData data) {
+        augments.add(data);
         PGR.augmentPanel.flash();
     }
 
@@ -231,15 +226,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     public int getAugmentTotal() {
-        return totalAugmentCount;
-    }
-
-    public HashMap<PCLAugmentCategory, Integer> getAugmentTotals() {
-        HashMap<PCLAugmentCategory, Integer> counts = new HashMap<>();
-        for (String key : augments.keySet()) {
-            counts.merge(PCLAugmentData.get(key).category, augments.get(key), Integer::sum);
-        }
-        return counts;
+        return augments.size();
     }
 
     public int getCurrentHealth(AbstractPlayer player) {
@@ -344,7 +331,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         bannedCards.clear();
         bannedRelics.clear();
         augments.clear();
-        fragments.clear();
         ascensionGlyphCounters.clear();
         valueDivisor = 1;
         if (dungeon != null) {
@@ -359,9 +345,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             rng = dungeon.rng;
             bannedCards.addAll(dungeon.bannedCards);
             bannedRelics.addAll(dungeon.bannedRelics);
-            augments.putAll(dungeon.augments);
-            fragments.putAll(dungeon.fragments);
-            totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
+            augments.addAll(dungeon.augments);
             if (this.data != null) {
                 loadout = PCLLoadout.get(dungeon.startingLoadout);
                 for (String proxy : dungeon.loadoutIDs) {
@@ -381,7 +365,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
-            totalAugmentCount = 0;
 
             // TODO add ascension glyph information to ascension panel tooltip
             rng = null;
@@ -787,7 +770,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         bannedCards.clear();
         bannedRelics.clear();
         augments.clear();
-        fragments.clear();
         loadout = new FakeLoadout();
         startingLoadout = loadout.ID;
         loadoutIDs.clear();

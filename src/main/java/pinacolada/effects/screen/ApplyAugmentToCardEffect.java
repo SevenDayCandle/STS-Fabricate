@@ -15,12 +15,10 @@ public class ApplyAugmentToCardEffect extends PCLEffectWithCallback<PCLAugment> 
 
     public ApplyAugmentToCardEffect(PCLCard card) {
         panel = new PCLAugmentList(this::complete);
-        for (Map.Entry<String, Integer> params : PGR.dungeon.augments.entrySet()) {
-            PCLAugmentData data = PCLAugmentData.get(params.getKey());
-            int amount = params.getValue();
-            if (data != null && amount > 0 && data.canApply(card)) {
-                PCLAugment augment = data.create();
-                panel.addPanelItem(augment, amount);
+        for (PCLAugment.SaveData save : PGR.dungeon.augments) {
+            PCLAugment augment = save.create();
+            if (augment != null) {
+                panel.addPanelItem(augment);
             }
         }
         if (panel.augments.size() == 0) {

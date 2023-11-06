@@ -1,10 +1,12 @@
 package pinacolada.cards.base.fields;
 
+import pinacolada.augments.PCLAugment;
+
 import java.util.ArrayList;
 
 public class PCLCardSaveData {
     public int form;
-    public ArrayList<String> augments;
+    public ArrayList<PCLAugment.SaveData> augments;
     public ArrayList<String> additionalData;
 
     public PCLCardSaveData() {
@@ -35,7 +37,7 @@ public class PCLCardSaveData {
         }
     }
 
-    public void addAugment(String id) {
+    public void addAugment(PCLAugment.SaveData id) {
         if (augments == null) {
             augments = new ArrayList<>();
         }

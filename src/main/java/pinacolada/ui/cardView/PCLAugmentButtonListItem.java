@@ -8,17 +8,15 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     public final EUIImage background;
 
-    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugmentData augment, int count) {
-        super(panel, augment, count, 1.4f, 4.2f);
-        this.amount = count;
-        amountText.setColor(Settings.BLUE_TEXT_COLOR);
+    public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, PCLAugment augment) {
+        super(panel, augment, 1.4f, 4.2f);
+        ownerText.setColor(Settings.BLUE_TEXT_COLOR);
         background = new EUIImage(ImageMaster.REWARD_SCREEN_ITEM, RelativeHitbox.fromPercentages(hb, 5, 1.12f, 2.2f, 0.7f))
                 .setBackgroundTexture(ImageMaster.REWARD_SCREEN_ITEM, new Color(0.2f, 0.4f, 0.4f, 1f), 1.05f)
                 .setColor(new Color(0.45f, 0.6f, 0.6f, 1f));

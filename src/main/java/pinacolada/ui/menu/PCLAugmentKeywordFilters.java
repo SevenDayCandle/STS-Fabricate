@@ -22,7 +22,6 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
 
@@ -35,7 +34,6 @@ public class PCLAugmentKeywordFilters
     public static final ArrayList<CustomFilterModule<PCLAugmentRenderable>> globalFilters = new ArrayList<>();
     public final EUIDropdown<ModInfo> originsDropdown;
     public final EUIDropdown<PCLAugmentCategory> categoryDropdown;
-    public final EUIDropdown<PCLAugmentCategorySub> subCategoryDropdown;
     public final EUIDropdown<Integer> tierDropdown;
 
     public PCLAugmentKeywordFilters() {
@@ -57,16 +55,6 @@ public class PCLAugmentKeywordFilters
                 .setLabelFunctionForButton(this::filterNameFunction, false)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_category)
                 .setItems(PCLAugmentCategory.values())
-                .setIsMultiSelect(true)
-                .setCanAutosizeButton(true);
-
-        subCategoryDropdown = new EUIDropdown<PCLAugmentCategorySub>(new EUIHitbox(0, 0, scale(240), scale(48))
-                , PCLAugmentCategorySub::getName)
-                .setOnOpenOrClose(this::updateActive)
-                .setOnChange(costs -> this.onFilterChanged(filters.currentSubCategories, costs))
-                .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_subCategory)
-                .setItems(PCLAugmentCategorySub.sortedValues())
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
 
@@ -92,8 +80,8 @@ public class PCLAugmentKeywordFilters
     public static int rankByCategory(PCLAugmentRenderable a, PCLAugmentRenderable b) {
         return (a == null ? -1 : b == null ? 1 :
                 (
-                        a.item.category == b.item.category ? StringUtils.compare(a.item.categorySub.suffix, b.item.categorySub.suffix) :
-                                a.item.category.ordinal() - b.item.category.ordinal()
+                        a.item.data.category == b.item.data.category ? StringUtils.compare(a.item.data.category.getName(), b.item.data.category.getName()) :
+                                a.item.data.category.ordinal() - b.item.data.category.ordinal()
                 ));
     }
 
@@ -102,7 +90,7 @@ public class PCLAugmentKeywordFilters
     }
 
     public static int rankByTier(PCLAugmentRenderable a, PCLAugmentRenderable b) {
-        return (a == null ? -1 : b == null ? 1 : (a.item.tier - b.item.tier));
+        return (a == null ? -1 : b == null ? 1 : (a.item.getTier() - b.item.getTier()));
     }
 
     @Override
@@ -110,7 +98,6 @@ public class PCLAugmentKeywordFilters
         super.clear(shouldInvoke, shouldClearColors);
         originsDropdown.setSelectionIndices((int[]) null, false);
         categoryDropdown.setSelectionIndices((int[]) null, false);
-        subCategoryDropdown.setSelectionIndices((int[]) null, false);
         tierDropdown.setSelectionIndices((int[]) null, false);
         nameInput.setLabel("");
         descriptionInput.setLabel("");
@@ -120,7 +107,6 @@ public class PCLAugmentKeywordFilters
     public void cloneFrom(AugmentFilters filters) {
         originsDropdown.setSelection(filters.currentOrigins, true);
         categoryDropdown.setSelection(filters.currentCategories, true);
-        subCategoryDropdown.setSelection(filters.currentSubCategories, true);
         tierDropdown.setSelection(filters.currentTiers, true);
     }
 
@@ -154,17 +140,12 @@ public class PCLAugmentKeywordFilters
         }
 
         //Category check
-        if (!evaluateItem(filters.currentCategories, c.item.category)) {
+        if (!evaluateItem(filters.currentCategories, c.item.data.category)) {
             return false;
         }
 
         //Category check
-        if (!evaluateItem(filters.currentSubCategories, c.item.categorySub)) {
-            return false;
-        }
-
-        //Category check
-        if (!evaluateItem(filters.currentTiers, c.item.tier)) {
+        if (!evaluateItem(filters.currentTiers, c.item.getTier())) {
             return false;
         }
 
@@ -220,7 +201,7 @@ public class PCLAugmentKeywordFilters
                 }
 
                 availableMods.add(EUIGameUtils.getModInfo(augment));
-                maxTier = Math.max(augment.item.tier, maxTier);
+                maxTier = Math.max(augment.item.getTier(), maxTier);
             }
             doForFilters(m -> m.initializeSelection(originalGroup));
         }
@@ -235,7 +216,6 @@ public class PCLAugmentKeywordFilters
     public boolean isHoveredImpl() {
         return originsDropdown.areAnyItemsHovered()
                 || categoryDropdown.areAnyItemsHovered()
-                || subCategoryDropdown.areAnyItemsHovered()
                 || tierDropdown.areAnyItemsHovered()
                 || nameInput.hb.hovered
                 || descriptionInput.hb.hovered
@@ -247,7 +227,6 @@ public class PCLAugmentKeywordFilters
     public void renderFilters(SpriteBatch sb) {
         originsDropdown.tryRender(sb);
         categoryDropdown.tryRender(sb);
-        subCategoryDropdown.tryRender(sb);
         tierDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         descriptionInput.tryRender(sb);
@@ -266,7 +245,6 @@ public class PCLAugmentKeywordFilters
     public void updateFilters() {
         float xPos = updateDropdown(originsDropdown, hb.x - SPACING * 3.65f);
         xPos = updateDropdown(categoryDropdown, xPos);
-        xPos = updateDropdown(subCategoryDropdown, xPos);
         xPos = updateDropdown(tierDropdown, xPos);
         nameInput.setPosition(hb.x + SPACING * 5.15f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
         descriptionInput.setPosition(nameInput.hb.cX + nameInput.hb.width + SPACING * 2.95f, DRAW_START_Y + scrollDelta - SPACING * 3.8f).tryUpdate();
@@ -276,26 +254,22 @@ public class PCLAugmentKeywordFilters
 
     public static class AugmentFilters extends GenericFiltersObject {
         public final HashSet<PCLAugmentCategory> currentCategories = new HashSet<>();
-        public final HashSet<PCLAugmentCategorySub> currentSubCategories = new HashSet<>();
         public final HashSet<Integer> currentTiers = new HashSet<>();
 
         public void clear(boolean shouldClearColors) {
             super.clear(shouldClearColors);
             currentCategories.clear();
-            currentSubCategories.clear();
             currentTiers.clear();
         }
 
         public void cloneFrom(AugmentFilters other) {
             super.cloneFrom(other);
             EUIUtils.replaceContents(currentCategories, other.currentCategories);
-            EUIUtils.replaceContents(currentSubCategories, other.currentSubCategories);
             EUIUtils.replaceContents(currentTiers, other.currentTiers);
         }
 
         public boolean isEmpty() {
-            return super.isEmpty() && currentCategories.isEmpty()
-                    && currentSubCategories.isEmpty() && currentTiers.isEmpty();
+            return super.isEmpty() && currentCategories.isEmpty() && currentTiers.isEmpty();
         }
     }
 }
