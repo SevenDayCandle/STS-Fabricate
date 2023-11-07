@@ -865,6 +865,10 @@ public class CombatManager extends EUIBase {
         }
     }
 
+    public static void onRemovePower(AbstractCreature source, AbstractCreature target, AbstractPower power) {
+        subscriberDo(OnRemovePowerSubscriber.class, s -> s.onRemovePower(power, target, source));
+    }
+
     public static void onScryAction(AbstractGameAction action) {
         scriesThisTurn += 1;
         subscriberDo(OnScryActionSubscriber.class, s -> s.onScryAction(action));

@@ -14,6 +14,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnSummon.class, PField_CardCategory.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power)
             .pclOnly()
             .noTarget();
 

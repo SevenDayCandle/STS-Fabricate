@@ -12,7 +12,9 @@ import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.effects.PCLSFX;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.delay.DelayTiming;
@@ -33,9 +35,9 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     public Color flareColor2 = Color.WHITE;
     public EUIKeywordTooltip tooltip;
     public OrbStrings strings;
+    public String sfx = PCLSFX.ORB_LIGHTNING_CHANNEL;
     public boolean applyFocusToEvoke = true;
     public boolean applyFocusToPassive = true;
-    public boolean showEvokeValue = true;
     public int baseEvokeValue = 1;
     public int basePassiveValue = 1;
     public float rotationSpeed;
@@ -159,6 +161,56 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         if (tooltip != null && tooltip.icon == null) {
             tooltip.setIconFromPath(imagePath);
         }
+    }
+
+    public PCLOrbData setApplyFocusToEvoke(boolean val) {
+        this.applyFocusToEvoke = val;
+        return this;
+    }
+
+    public PCLOrbData setApplyFocusToPassive(boolean val) {
+        this.applyFocusToPassive = val;
+        return this;
+    }
+
+    public PCLOrbData setBaseEvokeValue(int val) {
+        this.baseEvokeValue = val;
+        return this;
+    }
+
+    public PCLOrbData setBasePassiveValue(int val) {
+        this.basePassiveValue = val;
+        return this;
+    }
+
+    public PCLOrbData setFlareColor1(Color val) {
+        this.flareColor1 = val != null ? val : Color.WHITE;
+        return this;
+    }
+
+    public PCLOrbData setFlareColor2(Color val) {
+        this.flareColor2 = val != null ? val : Color.WHITE;
+        return this;
+    }
+
+    public PCLOrbData setRotationSpeed(float val) {
+        this.rotationSpeed = val;
+        return this;
+    }
+
+    public PCLOrbData setSfx(String val) {
+        this.sfx = val;
+        return this;
+    }
+
+    public PCLOrbData setTiming(DelayTiming val) {
+        this.timing = val;
+        return this;
+    }
+
+    public PCLOrbData setTooltip(EUIKeywordTooltip tooltip) {
+        this.tooltip = tooltip;
+        return this;
     }
 
     public static class PCLOrbDataAdapter extends TypeAdapter<PCLOrbData> {

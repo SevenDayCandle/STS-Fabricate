@@ -1,13 +1,17 @@
 package pinacolada.patches.actions;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.ui.buttons.DynamicBanner;
 import com.megacrit.cardcrawl.vfx.combat.PowerExpireTextEffect;
+import extendedui.EUI;
 import javassist.CannotCompileException;
+import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.powers.PCLExpirePowerEffect;
@@ -50,6 +54,18 @@ public class RemoveSpecificPowerPatches {
                     }
                 }
             };
+        }
+
+        @SpireInsertPatch(locator = Locator.class, localvars = {"removeMe"})
+        public static void insert(RemoveSpecificPowerAction __instance, AbstractPower removeMe) {
+            CombatManager.onRemovePower(__instance.source, __instance.target, removeMe);
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractDungeon.class, "onModifyPower");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
         }
     }
 }

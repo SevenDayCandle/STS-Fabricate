@@ -14,6 +14,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 @VisibleSkill
 public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCardPlayedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnOtherCardPlayed.class, PField_CardCategory.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power)
             .noTarget();
 
     public PCond_OnOtherCardPlayed() {

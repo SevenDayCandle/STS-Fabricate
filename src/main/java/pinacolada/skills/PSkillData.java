@@ -1,13 +1,18 @@
 package pinacolada.skills;
 
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.fields.PField;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
+import pinacolada.ui.editor.blight.PCLCustomBlightEditScreen;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
@@ -150,7 +155,19 @@ public class PSkillData<T extends PField> {
                 case Collectible:
                     return !(node.editor.screen instanceof PCLCustomCardEditScreen);
                 case Power:
-                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditScreen || node.editor.screen instanceof PCLCustomPowerEditScreen;
+                    return node.editor instanceof PCLCustomPowerEffectPage || node.editor.screen instanceof PCLCustomRelicEditScreen || node.editor.screen instanceof PCLCustomBlightEditScreen || node.editor.screen instanceof PCLCustomPowerEditScreen;
+            }
+            return true;
+        }
+
+        public boolean isSourceAllowed(PSkill<?> skill) {
+            switch (this) {
+                case Card:
+                    return skill.source instanceof AbstractCard;
+                case Collectible:
+                    return !(skill.source instanceof AbstractCard);
+                case Power:
+                    return skill.source instanceof AbstractRelic || skill.source instanceof AbstractBlight || skill.source instanceof AbstractPower;
             }
             return true;
         }

@@ -1954,6 +1954,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public void triggerOnCreateGeneric(Object o) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnCreateGeneric(o);
+        }
+    }
+
     public void triggerOnDiscard(AbstractCard c) {
         if (this instanceof OnCardDiscardedSubscriber) {
             ((OnCardDiscardedSubscriber) this).onCardDiscarded(c);
@@ -2013,7 +2019,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void triggerOnRemoval() {
+    public void triggerOnRemove(Object o) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnRemove(o);
+        }
+    }
+
+    public void triggerOnRemoveFromInventory() {
     }
 
     public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile) {
@@ -2053,6 +2065,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public void triggerOnStartOfBattleForRelic() {
+    }
+
+    public boolean triggerOnStartOfTurn() {
+        if (this instanceof OnStartOfTurnPostDrawSubscriber) {
+            ((OnStartOfTurnPostDrawSubscriber) this).onStartOfTurnPostDraw();
+            return true;
+        }
+        else if (this.childEffect != null) {
+            return this.childEffect.triggerOnStartOfTurn();
+        }
+        return false;
     }
 
     public void triggerOnUpgrade(AbstractCard c) {

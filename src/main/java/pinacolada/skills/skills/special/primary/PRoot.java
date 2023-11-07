@@ -14,7 +14,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PDelegateCond;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
 @VisibleSkill
@@ -70,7 +69,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(source instanceof AbstractRelic || source instanceof AbstractBlight || source instanceof AbstractPower) || !(skill instanceof PDelegateCond);
+        return skill.data.sourceTypes == null || EUIUtils.any(skill.data.sourceTypes, s -> s.isSourceAllowed(this));
     }
 
     @Override

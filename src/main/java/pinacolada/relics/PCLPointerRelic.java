@@ -8,7 +8,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -303,7 +302,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     public void onUnequip() {
         super.onUnequip();
         for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnRemoval();
+            effect.triggerOnRemoveFromInventory();
             effect.unsubscribeChildren();
         }
     }

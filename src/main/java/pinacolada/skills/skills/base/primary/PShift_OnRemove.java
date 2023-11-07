@@ -38,7 +38,7 @@ public class PShift_OnRemove extends PShift {
     }
 
     @Override
-    public void triggerOnRemoval() {
+    public void triggerOnRemoveFromInventory() {
         useOutsideOfBattle();
     }
 }

@@ -10,6 +10,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
+import java.util.Collections;
+
 @VisibleSkill
 public class PCond_OnCreate extends PDelegateCardCond implements OnCardCreatedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnCreate.class, PField_CardCategory.class, 1, 1)
@@ -31,5 +33,10 @@ public class PCond_OnCreate extends PDelegateCardCond implements OnCardCreatedSu
     @Override
     public void onCardCreated(AbstractCard card, boolean startOfBattle) {
         triggerOnCard(card);
+    }
+
+    @Override
+    public void triggerOnCreateGeneric(Object o) {
+        useFromTrigger(generateInfo(null).setData(Collections.singletonList(o)));
     }
 }

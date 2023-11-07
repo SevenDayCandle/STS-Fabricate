@@ -265,6 +265,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         for (PSkill<?> effect : getEffects()) {
             effect.subscribeChildren();
             effect.triggerOnStartOfBattleForRelic();
+            effect.triggerOnCreateGeneric(this);
         }
     }
 
@@ -272,6 +273,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         super.onRemove();
         for (PSkill<?> effect : getEffects()) {
             effect.unsubscribeChildren();
+            effect.triggerOnRemove(this);
         }
     }
 
@@ -281,6 +283,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         }
     }
 
+    @Override
     public void setup() {
         skills = new PSkillContainer();
     }

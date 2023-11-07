@@ -1468,7 +1468,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public void onRemoveFromMasterDeck() {
         super.onRemoveFromMasterDeck();
-        doEffects(PSkill::triggerOnRemoval);
+        doEffects(PSkill::triggerOnRemoveFromInventory);
         for (PCLAugment augment : getAugments()) {
             if (augment.canRemove()) {
                 PGR.dungeon.addAugment(augment.save);
@@ -2481,6 +2481,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Triggered when this is shuffled along with the deck
     public void triggerOnShuffle() {
         doEffects(PSkill::triggerOnShuffle);
+    }
+
+    @Override
+    public void triggerAtStartOfTurn() {
+        super.triggerAtStartOfTurn();
+        doEffects(PSkill::triggerOnStartOfTurn);
     }
 
     // Only called if the card is upgraded in battle through an action

@@ -3,6 +3,7 @@ package pinacolada.orbs;
 import basemod.interfaces.CloneablePowerInterface;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -46,6 +47,7 @@ import java.util.List;
 public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     public static final int IMAGE_SIZE = 96;
     protected float rotationSpeed;
+    protected AbstractCreature target;
     protected OrbStrings orbStrings;
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final PCLOrbData data;
@@ -95,6 +97,10 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
             this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
         }
         CombatManager.onOrbApplyFocus(this);
+    }
+
+    public void flash() {
+        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
     }
 
     protected String formatDescription(int index, Object... args) {
@@ -164,17 +170,35 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     }
 
     public void onClick() {
+    }
 
+    @Override
+    public void onEndOfTurn() {
+        if (timing == DelayTiming.EndOfTurnFirst || timing == DelayTiming.EndOfTurnLast) {
+            passive();
+        }
     }
 
     @Override
     public void onEvoke() {
-        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
+        flash();
+    }
+
+    @Override
+    public void onStartOfTurn() {
+        if (timing == DelayTiming.StartOfTurnFirst || timing == DelayTiming.StartOfTurnLast) {
+            passive();
+        }
     }
 
     public void passive() {
-        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
+        flash();
         CombatManager.onOrbPassiveEffect(this);
+    }
+
+    @Override
+    public void playChannelSFX() {
+        PCLSFX.play(data.sfx);
     }
 
     public void setBaseEvokeAmount(int amount, boolean relative) {
@@ -221,7 +245,7 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
         this.basePassiveAmount = this.passiveAmount = data.basePassiveValue;
         this.timing = data.timing;
         this.orbStrings = data.strings;
-        this.showEvokeValue = data.showEvokeValue;
+        this.showEvokeValue = data.applyFocusToEvoke || data.applyFocusToPassive; // Hide evoke value if orb does not scale with focus at all
         this.rotationSpeed = data.rotationSpeed;
     }
 

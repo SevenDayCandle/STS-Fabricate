@@ -34,12 +34,12 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
+        return !isUnderWhen(callingSkill, parentSkill) && sourceCard != null ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return isWhenClause() ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
+        return !isWhenClause() && sourceCard != null ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
     }
 
     @Override

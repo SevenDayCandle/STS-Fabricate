@@ -13,6 +13,7 @@ import pinacolada.skills.skills.PDelegateCardCond;
 @VisibleSkill
 public class PCond_OnRetain extends PDelegateCardCond implements OnCardRetainSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnRetain.class, PField_CardCategory.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power)
             .noTarget();
 
     public PCond_OnRetain() {

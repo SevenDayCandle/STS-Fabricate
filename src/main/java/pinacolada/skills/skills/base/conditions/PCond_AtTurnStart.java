@@ -34,12 +34,12 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
+        return !isUnderWhen(callingSkill, parentSkill) && sourceCard != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return isWhenClause() ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
+        return !isWhenClause() && sourceCard != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
     }
 
     @Override

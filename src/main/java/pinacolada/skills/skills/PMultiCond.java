@@ -354,6 +354,12 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    public void triggerOnCreateGeneric(Object c) {
+        for (PSkill<?> effect : effects) {
+            effect.triggerOnCreateGeneric(c);
+        }
+    }
+
     public void triggerOnDiscard(AbstractCard c) {
         for (PSkill<?> effect : effects) {
             effect.triggerOnDiscard(c);
@@ -402,6 +408,26 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         for (PSkill<?> effect : effects) {
             effect.triggerOnRetain(c);
         }
+    }
+
+    public void triggerOnRemove(Object c) {
+        for (PSkill<?> effect : effects) {
+            effect.triggerOnRemove(c);
+        }
+    }
+
+    public void triggerOnShuffle() {
+        for (PSkill<?> effect : effects) {
+            effect.triggerOnShuffle();
+        }
+    }
+
+    public boolean triggerOnStartOfTurn() {
+        boolean trigger = false;
+        for (PSkill<?> effect : effects) {
+            trigger = trigger | effect.triggerOnStartOfTurn();
+        }
+        return trigger;
     }
 
     // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
