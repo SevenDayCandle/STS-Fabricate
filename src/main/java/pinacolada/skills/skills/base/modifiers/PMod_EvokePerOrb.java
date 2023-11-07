@@ -8,7 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -30,7 +30,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
         super(DATA);
     }
 
-    public PMod_EvokePerOrb(int amount, PCLOrbHelper... orbs) {
+    public PMod_EvokePerOrb(int amount, PCLOrbData... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }

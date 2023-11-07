@@ -16,6 +16,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.SummonPool;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLLockOnPower;
@@ -234,10 +235,6 @@ public class PCLCoreTooltips extends AbstractTooltips {
         status.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.STATUS));
         summon.setIcon(EUIGameUtils.iconForType(PCLEnum.CardType.SUMMON));
 
-        lightning.setIcon(PCLCoreImages.Tooltips.lightning.texture(), 6);
-        plasma.setIcon(PCLCoreImages.Tooltips.plasma.texture(), 6);
-        dark.setIcon(PCLCoreImages.Tooltips.dark.texture(), 6);
-        frost.setIcon(PCLCoreImages.Tooltips.frost.texture(), 6);
         gold.setIcon(PCLCoreImages.Tooltips.gold.texture(), 6);
         orbSlot.setIcon(PCLCoreImages.Tooltips.orbSlot.texture(), 6);
 
@@ -245,6 +242,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
             tag.getTooltip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
         }
         PCLAffinity.loadIconsIntoKeywords();
+        PCLOrbData.loadIconsIntoKeywords();
         PCLPowerData.loadIconsIntoKeywords();
         EUIKeywordTooltip.updateTooltipIcons();
 

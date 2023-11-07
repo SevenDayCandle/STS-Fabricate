@@ -7,6 +7,7 @@ import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
+import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.resources.PGR;
 
@@ -23,6 +24,8 @@ public class PCLDebugAugmentPanel {
     protected DEUIFilteredSuffixListBox<PCLAugmentData> augmentList = new DEUIFilteredSuffixListBox<PCLAugmentData>("##all augments",
             sortedAugments, p -> p.ID, p -> p.strings.NAME, this::passes);
     protected DEUITabItem augments = new DEUITabItem("Augments");
+    protected DEUIIntInput upgradeCount = new DEUIIntInput("Upgrades", 0, 0, Integer.MAX_VALUE);
+    protected DEUIIntInput formCount = new DEUIIntInput("Form", 0, 0, Integer.MAX_VALUE);
     protected DEUIIntInput augmentCount = new DEUIIntInput("Count", 1, 1, Integer.MAX_VALUE);
     protected DEUIButton obtain = new DEUIButton("Obtain");
     protected DEUICombo<String> modList = new DEUICombo<String>("##modid", sortedModIDs, p -> p);
@@ -39,7 +42,9 @@ public class PCLDebugAugmentPanel {
     private void obtain() {
         PCLAugmentData chosen = augmentList.get();
         if (chosen != null) {
-            PGR.dungeon.addAugment(chosen.create().save);
+            for (int j = 0; j < augmentCount.get(); ++j) {
+                PGR.dungeon.addAugment(chosen.create(formCount.get(), upgradeCount.get()).save);
+            }
         }
     }
 
@@ -66,13 +71,18 @@ public class PCLDebugAugmentPanel {
 
     public void render() {
         augments.render(() -> {
+            DEUIUtils.withWidth(90, () -> modList.renderInline());
             DEUIUtils.withFullWidth(() ->
             {
                 augmentFilter.draw("##");
                 augmentList.render();
             });
             DEUIUtils.withWidth(90, () ->
-                    augmentCount.renderInline());
+                    {
+                        upgradeCount.renderInline();
+                        formCount.renderInline();
+                        augmentCount.render();
+                    });
             DEUIUtils.disabledIf(AbstractDungeon.player == null || augmentList.get() == null, () ->
                     obtain.render(this::obtain));
         });

@@ -9,7 +9,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -36,7 +36,7 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
         super(DATA, content);
     }
 
-    public PCond_HaveOrbChanneled(int amount, PCLOrbHelper... orbs) {
+    public PCond_HaveOrbChanneled(int amount, PCLOrbData... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }

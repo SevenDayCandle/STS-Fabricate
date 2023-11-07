@@ -9,7 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -36,7 +36,7 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
         super(DATA, content);
     }
 
-    public PCond_HaveOrbEvoked(int amount, PCLOrbHelper... orbs) {
+    public PCond_HaveOrbEvoked(int amount, PCLOrbData... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }

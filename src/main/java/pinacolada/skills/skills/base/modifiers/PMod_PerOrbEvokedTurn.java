@@ -7,7 +7,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -31,7 +31,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
         super(DATA);
     }
 
-    public PMod_PerOrbEvokedTurn(int amount, PCLOrbHelper... orbs) {
+    public PMod_PerOrbEvokedTurn(int amount, PCLOrbData... orbs) {
         super(DATA, amount);
         fields.setOrb(orbs);
     }
@@ -50,7 +50,7 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         List<AbstractOrb> orbs = fields.random ? CombatManager.orbsEvokedThisCombat() : CombatManager.orbsEvokedThisTurn();
         return (fields.orbs.isEmpty() ? orbs.size() :
-                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));
+                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.equals(o.ID))));
     }
 
     @Override

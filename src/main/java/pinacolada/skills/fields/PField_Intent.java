@@ -3,7 +3,6 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.resources.PGR;

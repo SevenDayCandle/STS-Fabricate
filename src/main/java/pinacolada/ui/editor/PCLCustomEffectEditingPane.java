@@ -33,7 +33,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -883,9 +883,15 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.sui_seriesUI, "");
     }
 
-    public void registerOrb(List<PCLOrbHelper> items) {
-        registerDropdown(initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title), items)
-                .setTooltip(PGR.core.tooltips.orb);
+    public void registerOrb(List<String> orbIDs) {
+        registerDropdown(initializeSmartSearchable(PCLCustomEditEntityScreen.getAvailableOrbs(), PGR.core.tooltips.orb.title, this::getSmartSearchableLabel),
+                powers -> {
+                    orbIDs.clear();
+                    orbIDs.addAll(EUIUtils.mapAsNonnull(powers, t -> t.ID));
+                },
+                orbIDs,
+                power -> power.ID
+        ).setTooltip(PGR.core.tooltips.orb);
     }
 
     public void registerOrigin(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl) {

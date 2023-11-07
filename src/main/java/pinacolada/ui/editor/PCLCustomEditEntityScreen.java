@@ -32,6 +32,8 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.orbs.PCLCustomOrbSlot;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -63,6 +65,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float START_Y = Settings.HEIGHT * (0.93f);
     private static ArrayList<AbstractBlight> availableBlights;
     private static ArrayList<AbstractCard> availableCards;
+    private static ArrayList<PCLOrbData> availableOrbs;
     private static ArrayList<AbstractPotion> availablePotions;
     private static ArrayList<AbstractRelic> availableRelics;
     private static ArrayList<PCLPowerData> availablePowers;
@@ -153,6 +156,15 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             PCLCustomEditEntityScreen.availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return PCLCustomEditEntityScreen.availableCards;
+    }
+
+    public static ArrayList<PCLOrbData> getAvailableOrbs() {
+        if (PCLCustomEditEntityScreen.availableOrbs == null) {
+            PCLCustomEditEntityScreen.availableOrbs = new ArrayList<>(PCLOrbData.getAllData());
+            PCLCustomEditEntityScreen.availableOrbs.addAll(EUIUtils.map(PCLCustomOrbSlot.getAll().values(), slot -> slot.getBuilder(0)));
+            PCLCustomEditEntityScreen.availableOrbs.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        }
+        return PCLCustomEditEntityScreen.availableOrbs;
     }
 
     public static ArrayList<AbstractPotion> getAvailablePotions(AbstractCard.CardColor cardColor) {

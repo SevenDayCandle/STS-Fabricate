@@ -6,7 +6,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnOrbPassiveEffectSubscriber;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -29,7 +29,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         super(DATA, content);
     }
 
-    public PCond_CheckOrb(int amount, PCLOrbHelper... orb) {
+    public PCond_CheckOrb(int amount, PCLOrbData... orb) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orb);
     }
@@ -39,7 +39,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (fields.orbs.isEmpty()) {
             return amount <= 0 ? GameUtilities.getOrbCount() == 0 : GameUtilities.getOrbCount() >= amount;
         }
-        return fields.allOrAnyR(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount);
+        return fields.allOrAnyR(fields.orbs, o -> GameUtilities.getOrbCount(o) >= amount);
     }
 
     @Override

@@ -1,11 +1,8 @@
 package pinacolada.skills;
 
-import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class PSkillContainer {
     private final UniqueList<PSkill<?>> effectTextMapping = new UniqueList<>();

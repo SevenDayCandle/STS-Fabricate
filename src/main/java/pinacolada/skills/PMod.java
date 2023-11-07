@@ -11,7 +11,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
@@ -78,7 +78,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return (PMod_PerCardDamage) new PMod_PerCardDamage(amount).edit(f -> f.setNot(true));
     }
 
-    public static PMod_PerOrb bonusPerOrb(int amount, PCLOrbHelper... aff) {
+    public static PMod_PerOrb bonusPerOrb(int amount, PCLOrbData... aff) {
         return new PMod_PerOrb(amount, aff);
     }
 
@@ -146,7 +146,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_DrawPerCard(amount);
     }
 
-    public static PMod_EvokePerOrb evokePerOrb(int amount, PCLOrbHelper... aff) {
+    public static PMod_EvokePerOrb evokePerOrb(int amount, PCLOrbData... aff) {
         return new PMod_EvokePerOrb(amount, aff);
     }
 
@@ -266,11 +266,11 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerEnergy(amount);
     }
 
-    public static PMod_PerOrb perOrb(PCLOrbHelper... orbs) {
+    public static PMod_PerOrb perOrb(PCLOrbData... orbs) {
         return perOrb(1, orbs);
     }
 
-    public static PMod_PerOrb perOrb(int amount, PCLOrbHelper... orbs) {
+    public static PMod_PerOrb perOrb(int amount, PCLOrbData... orbs) {
         return new PMod_PerOrb(amount, orbs);
     }
 

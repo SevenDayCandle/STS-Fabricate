@@ -17,7 +17,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLIntentType;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
@@ -97,7 +97,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_CheckEnergy(amount);
     }
 
-    public static PCond_CheckOrb checkOrb(int amount, PCLOrbHelper... orbs) {
+    public static PCond_CheckOrb checkOrb(int amount, PCLOrbData... orbs) {
         return new PCond_CheckOrb(amount, orbs);
     }
 
@@ -149,7 +149,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(f -> f.setOrigin(PCLCardSelection.Random));
     }
 
-    public static PCond_EvokeTo evokeTo(int amount, PCLOrbHelper... h) {
+    public static PCond_EvokeTo evokeTo(int amount, PCLOrbData... h) {
         return new PCond_EvokeTo(amount, h);
     }
 

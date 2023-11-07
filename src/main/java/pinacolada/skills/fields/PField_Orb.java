@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
@@ -16,10 +16,17 @@ import java.util.Collection;
 import static pinacolada.skills.PSkill.EXTRA_CHAR;
 
 public class PField_Orb extends PField_Random {
-    public ArrayList<PCLOrbHelper> orbs = new ArrayList<>();
+    public ArrayList<String> orbs = new ArrayList<>();
 
-    public PField_Orb addOrb(PCLOrbHelper... orbs) {
-        this.orbs.addAll(Arrays.asList(orbs));
+    public PField_Orb addOrb(PCLOrbData... powers) {
+        for (PCLOrbData power : powers) {
+            this.orbs.add(power.ID);
+        }
+        return this;
+    }
+
+    public PField_Orb addOrb(String... powers) {
+        this.orbs.addAll(Arrays.asList(powers));
         return this;
     }
 
@@ -60,7 +67,7 @@ public class PField_Orb extends PField_Random {
     }
 
     public final FuncT1<Boolean, AbstractOrb> getOrbFilter() {
-        return (c -> (orbs.isEmpty() || EUIUtils.any(orbs, orb -> orb.ID.equals(c.ID))));
+        return (c -> (orbs.isEmpty() || EUIUtils.any(orbs, orb -> orb.equals(c.ID))));
     }
 
     public String getOrbOrString() {
@@ -80,14 +87,18 @@ public class PField_Orb extends PField_Random {
         return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random).setNot(not);
     }
 
-    public PField_Orb setOrb(Collection<PCLOrbHelper> orbs) {
+    public PField_Orb setOrb(Collection<String> orbs) {
         this.orbs.clear();
         this.orbs.addAll(orbs);
         return this;
     }
 
-    public PField_Orb setOrb(PCLOrbHelper... orbs) {
-        return setOrb(Arrays.asList(orbs));
+    public PField_Orb setOrb(PCLOrbData... powers) {
+        return setOrb(EUIUtils.map(powers, po -> po.ID));
+    }
+
+    public PField_Orb setOrb(String... powers) {
+        return setOrb(Arrays.asList(powers));
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

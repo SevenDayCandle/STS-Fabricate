@@ -54,7 +54,6 @@ import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.blights.PCLBlightData;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.blights.PCLDynamicBlightData;
@@ -83,7 +82,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrb;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.patches.library.CardLibraryPatches;
@@ -1055,7 +1054,7 @@ public class GameUtilities {
         return player != null && player.orbs != null ? player.filledOrbCount() : 0;
     }
 
-    public static int getOrbCount(PCLOrbHelper orb) {
+    public static int getOrbCount(PCLOrbData orb) {
         return getOrbCount(orb.ID);
     }
 

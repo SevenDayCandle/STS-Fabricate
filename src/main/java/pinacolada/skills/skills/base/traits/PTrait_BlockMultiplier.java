@@ -7,7 +7,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PBlockTrait;
 

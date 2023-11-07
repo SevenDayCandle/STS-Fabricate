@@ -1,13 +1,13 @@
 package pinacolada.skills.fields;
 
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUIBlightPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.BlightTier;
 import extendedui.utilities.RotatingList;
 import pinacolada.resources.pcl.PCLCoreStrings;

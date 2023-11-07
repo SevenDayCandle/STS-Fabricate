@@ -11,7 +11,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLIntentType;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -90,16 +90,16 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithOr(PCLIntentType::getActionString, intents);
     }
 
-    public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value) {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(PField::safeInvokeTip, orbs);
+    public static String getOrbAndString(ArrayList<String> orbs, Object value) {
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(PField::safeInvokeTipForOrbID, orbs);
     }
 
-    public static String getOrbOrString(ArrayList<PCLOrbHelper> orbs, Object value) {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(PField::safeInvokeTip, orbs);
+    public static String getOrbOrString(ArrayList<String> orbs, Object value) {
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(PField::safeInvokeTipForOrbID, orbs);
     }
 
-    public static String getOrbString(ArrayList<PCLOrbHelper> orbs) {
-        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, orbs) : getOrbAndString(orbs, 1);
+    public static String getOrbString(ArrayList<String> orbs) {
+        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTipForOrbID, orbs) : getOrbAndString(orbs, 1);
     }
 
     public static String getOriginWrappedString(String base, PCLCardSelection origin) {
@@ -158,6 +158,11 @@ public abstract class PField implements Serializable {
 
     protected static String safeInvokeTip(TooltipProvider provider) {
         return provider != null ? String.valueOf(provider.getTooltip()) : null;
+    }
+
+    protected static String safeInvokeTipForOrbID(String id) {
+        PCLOrbData data = PCLOrbData.getStaticDataOrCustom(id);
+        return data != null ? safeInvokeTip(data) : id;
     }
 
     protected static String safeInvokeTipForPowerID(String id) {

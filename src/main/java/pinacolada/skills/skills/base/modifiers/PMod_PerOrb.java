@@ -4,7 +4,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -24,7 +24,7 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
         super(DATA);
     }
 
-    public PMod_PerOrb(int amount, PCLOrbHelper... orbs) {
+    public PMod_PerOrb(int amount, PCLOrbData... orbs) {
         super(DATA, amount);
         fields.setOrb(orbs);
     }

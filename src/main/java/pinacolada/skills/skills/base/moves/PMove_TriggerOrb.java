@@ -4,7 +4,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -22,7 +22,7 @@ public class PMove_TriggerOrb extends PMove<PField_Orb> {
         this(1, 1);
     }
 
-    public PMove_TriggerOrb(int amount, int extra, PCLOrbHelper... orb) {
+    public PMove_TriggerOrb(int amount, int extra, PCLOrbData... orb) {
         super(DATA, PCLCardTarget.None, amount, extra);
         fields.setOrb(orb);
     }
@@ -31,7 +31,7 @@ public class PMove_TriggerOrb extends PMove<PField_Orb> {
         super(DATA, content);
     }
 
-    public PMove_TriggerOrb(int amount, PCLOrbHelper... orb) {
+    public PMove_TriggerOrb(int amount, PCLOrbData... orb) {
         this(amount, 1, orb);
     }
 

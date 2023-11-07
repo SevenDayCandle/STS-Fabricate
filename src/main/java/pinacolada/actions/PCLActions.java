@@ -53,7 +53,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
@@ -246,16 +246,12 @@ public final class PCLActions {
         return add(new ChannelOrb(orb));
     }
 
-    public ChannelOrb channelOrbs(PCLOrbHelper orbHelper, int amount) {
+    public ChannelOrb channelOrbs(PCLOrbData orbHelper, int amount) {
         return add(new ChannelOrb(orbHelper, amount));
     }
 
     public ChannelOrb channelRandomOrbs(int amount) {
-        return add(new ChannelOrb(PCLOrbHelper.randomHelper(true), amount));
-    }
-
-    public ChannelOrb channelRandomOrbs(int amount, boolean weighted) {
-        return add(new ChannelOrb(PCLOrbHelper.randomHelper(weighted), amount));
+        return add(new ChannelOrb(PCLOrbData.getRandom(), amount));
     }
 
     public CycleCards cycle(String sourceName, int amount) {

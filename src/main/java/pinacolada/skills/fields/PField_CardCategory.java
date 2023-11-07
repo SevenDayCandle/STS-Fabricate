@@ -27,7 +27,10 @@ import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();

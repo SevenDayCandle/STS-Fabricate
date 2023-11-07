@@ -17,10 +17,9 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.fields.PField;
-import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.moves.*;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -95,7 +94,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return apply(PCLCardTarget.Team, amount, powers);
     }
 
-    public static PMove_ChannelOrb channelOrb(int amount, PCLOrbHelper... orb) {
+    public static PMove_ChannelOrb channelOrb(int amount, PCLOrbData... orb) {
         return new PMove_ChannelOrb(amount, orb);
     }
 
@@ -217,11 +216,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_EnterStance(helper);
     }
 
-    public static PMove_EvokeOrb evokeOrb(int amount, PCLOrbHelper... orb) {
+    public static PMove_EvokeOrb evokeOrb(int amount, PCLOrbData... orb) {
         return new PMove_EvokeOrb(amount, 1, orb);
     }
 
-    public static PMove_EvokeOrb evokeOrb(int amount, int extra, PCLOrbHelper... orb) {
+    public static PMove_EvokeOrb evokeOrb(int amount, int extra, PCLOrbData... orb) {
         return new PMove_EvokeOrb(amount, extra, orb);
     }
 
@@ -551,11 +550,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_TriggerAlly(target, amount);
     }
 
-    public static PMove_TriggerOrb triggerOrb(int amount, PCLOrbHelper... orb) {
+    public static PMove_TriggerOrb triggerOrb(int amount, PCLOrbData... orb) {
         return new PMove_TriggerOrb(amount, 1, orb);
     }
 
-    public static PMove_TriggerOrb triggerOrb(int amount, int extra, PCLOrbHelper... orb) {
+    public static PMove_TriggerOrb triggerOrb(int amount, int extra, PCLOrbData... orb) {
         return new PMove_TriggerOrb(amount, extra, orb);
     }
 

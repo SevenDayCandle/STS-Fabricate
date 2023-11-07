@@ -6,6 +6,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.Dark;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.ChokePower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
@@ -31,6 +34,11 @@ import static extendedui.EUIUtils.array;
 
 public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordProvider {
     private static final Map<String, PCLOrbData> STATIC_DATA = new HashMap<>();
+
+    public static final PCLOrbData Dark = registerBase(com.megacrit.cardcrawl.orbs.Dark.class, com.megacrit.cardcrawl.orbs.Dark.ORB_ID, PGR.core.tooltips.dark).setTiming(DelayTiming.EndOfTurnFirst);
+    public static final PCLOrbData Frost = registerBase(com.megacrit.cardcrawl.orbs.Frost.class, com.megacrit.cardcrawl.orbs.Frost.ORB_ID, PGR.core.tooltips.frost).setTiming(DelayTiming.EndOfTurnFirst);
+    public static final PCLOrbData Lightning = registerBase(com.megacrit.cardcrawl.orbs.Lightning.class, com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning).setTiming(DelayTiming.EndOfTurnFirst);
+    public static final PCLOrbData Plasma = registerBase(com.megacrit.cardcrawl.orbs.Plasma.class, com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma).setTiming(DelayTiming.StartOfTurnFirst);
 
     public DelayTiming timing;
     public Color flareColor1 = Color.WHITE;
@@ -123,6 +131,11 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         }
     }
 
+    public static PCLOrbData registerBase(Class<? extends AbstractOrb> powerClass, String id, EUIKeywordTooltip tip) {
+        return registerData(new PCLOrbData(powerClass, PGR.core, id, tip))
+                .setImagePath(PGR.getOrbImage(PGR.core.createID(id)));
+    }
+
     // Should only be used by equivalents
     private static <T extends PCLOrbData> T registerData(String id, T cardData) {
         STATIC_DATA.put(id, cardData);
@@ -195,6 +208,12 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
 
     public PCLOrbData setFlareColor2(Color val) {
         this.flareColor2 = val != null ? val : Color.WHITE;
+        return this;
+    }
+
+    public PCLOrbData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
         return this;
     }
 

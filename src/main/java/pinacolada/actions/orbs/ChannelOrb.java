@@ -5,14 +5,14 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import pinacolada.actions.PCLAction;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class ChannelOrb extends PCLAction<ArrayList<AbstractOrb>> {
     private final ArrayList<AbstractOrb> channeledOrbs = new ArrayList<>();
-    private final PCLOrbHelper orbConstructor;
+    private final PCLOrbData orbConstructor;
     private AbstractOrb orb;
     private boolean autoEvoke;
 
@@ -26,7 +26,7 @@ public class ChannelOrb extends PCLAction<ArrayList<AbstractOrb>> {
         initialize(1);
     }
 
-    public ChannelOrb(PCLOrbHelper orbConstructor, int amount) {
+    public ChannelOrb(PCLOrbData orbConstructor, int amount) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
         this.orb = null;

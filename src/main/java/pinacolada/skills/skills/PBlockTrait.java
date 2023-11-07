@@ -3,7 +3,6 @@ package pinacolada.skills.skills;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 

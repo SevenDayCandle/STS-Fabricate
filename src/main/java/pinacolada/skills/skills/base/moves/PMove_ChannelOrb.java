@@ -6,7 +6,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -27,7 +27,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
         this(1);
     }
 
-    public PMove_ChannelOrb(int amount, PCLOrbHelper... orb) {
+    public PMove_ChannelOrb(int amount, PCLOrbData... orb) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orb);
     }
@@ -36,7 +36,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
         super(DATA, content);
     }
 
-    public PMove_ChannelOrb(int amount, int extra, PCLOrbHelper... orb) {
+    public PMove_ChannelOrb(int amount, int extra, PCLOrbData... orb) {
         super(DATA, PCLCardTarget.None, amount, extra);
         fields.setOrb(orb);
     }
@@ -68,14 +68,20 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
     public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.orbs.isEmpty()) {
             if (fields.random) {
-                PCLOrbHelper orb = GameUtilities.getRandomElement(fields.orbs);
+                String orb = GameUtilities.getRandomElement(fields.orbs);
                 if (orb != null) {
-                    order.channelOrbs(orb, amount).addCallback(this::modifyFocus);
+                    PCLOrbData data = PCLOrbData.getStaticDataOrCustom(orb);
+                    if (data != null) {
+                        order.channelOrbs(data, amount).addCallback(this::modifyFocus);
+                    }
                 }
             }
             else {
-                for (PCLOrbHelper orb : fields.orbs) {
-                    order.channelOrbs(orb, amount).addCallback(this::modifyFocus);
+                for (String orb : fields.orbs) {
+                    PCLOrbData data = PCLOrbData.getStaticDataOrCustom(orb);
+                    if (data != null) {
+                        order.channelOrbs(data, amount).addCallback(this::modifyFocus);
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package pinacolada.skills.fields;
 
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
