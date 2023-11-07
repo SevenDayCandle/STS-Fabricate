@@ -57,6 +57,7 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
     }
 
     public void setupMoves(PCLDynamicPowerData data) {
+        clearSkills();
         for (PSkill<?> skill : data.moves) {
             if (!PSkill.isSkillBlank(skill)) {
                 PSkill<?> effect = skill.makeCopy();

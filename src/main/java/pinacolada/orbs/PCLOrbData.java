@@ -12,8 +12,10 @@ import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.effects.PCLSFX;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -63,7 +65,7 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, OrbStrings strings) {
         super(cardID, invokeClass, resources);
         this.strings = strings != null ? strings : new OrbStrings();
-        //this.initializeImage();
+        this.initializeImage();
     }
 
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, OrbStrings strings, EUIKeywordTooltip tip) {
@@ -108,7 +110,10 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         if (data != null) {
             return data;
         }
-
+        PCLCustomOrbSlot slot = PCLCustomOrbSlot.get(key);
+        if (slot != null) {
+            return slot.getBuilder(0);
+        }
         return null;
     }
 
@@ -154,7 +159,7 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     }
 
     public void initializeImage() {
-        this.imagePath = PGR.getPowerImage(ID); // TODO fix
+        this.imagePath = PGR.getOrbImage(ID);
     }
 
     public void loadImageIntoTooltip() {

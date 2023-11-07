@@ -4,9 +4,14 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleAugment;
+import pinacolada.annotations.VisibleRelic;
+import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
@@ -18,6 +23,8 @@ import pinacolada.utilities.GameUtilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static extendedui.EUIUtils.array;
 
@@ -25,10 +32,11 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     private static final HashMap<String, PCLAugmentData> AUGMENT_MAP = new HashMap<>();
     private static final ArrayList<PCLAugmentData> AVAILABLE_AUGMENTS = new ArrayList<>();
 
+    public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
+    public AugmentStrings strings;
     public Integer[] tier = array(1);
     public Integer[] tierUpgrade = array(1);
     public PCLAugmentCategory category;
-    public AugmentStrings strings;
     public PCLAugmentReqs reqs;
     public boolean permanent;
     public boolean unique;
@@ -41,14 +49,34 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     }
 
     public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategory category, String id) {
+        this(invokeClass, resources, category, id, PGR.getAugmentStrings(id));
+    }
+
+    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategory category, String id, AugmentStrings strings) {
         super(id, invokeClass, resources);
         this.category = category;
-        strings = PGR.getAugmentStrings(ID);
+        this.strings = strings != null ? strings : new AugmentStrings();
         initializeImage();
     }
 
-    public static PCLAugmentData get(String id) {
-        return AUGMENT_MAP.get(id);
+    public static List<PCLAugmentData> getAllData() {
+        return getAllData(false, true, (FuncT1<Boolean, PCLAugmentData>) null);
+    }
+
+    public static List<PCLAugmentData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLAugmentData> filterFunc) {
+        Stream<PCLAugmentData> stream = AUGMENT_MAP
+                .values()
+                .stream();
+        if (!showHidden) {
+            stream = stream.filter(a -> a.invokeClass.isAnnotationPresent(VisibleAugment.class));
+        }
+        if (filterFunc != null) {
+            stream = stream.filter(filterFunc::invoke);
+        }
+        if (sort) {
+            stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
+        }
+        return stream.collect(Collectors.toList());
     }
 
     public static Collection<PCLAugmentData> getAvailable() {
@@ -57,6 +85,10 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
 
     public static Set<String> getIDs() {
         return AUGMENT_MAP.keySet();
+    }
+
+    public static PCLAugmentData getStaticData(String id) {
+        return AUGMENT_MAP.get(id);
     }
 
     public static Collection<PCLAugmentData> getValues() {
@@ -175,6 +207,18 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         return this;
     }
 
+    public PCLAugmentData setColor(AbstractCard.CardColor color) {
+        this.cardColor = color;
+
+        return this;
+    }
+
+    public PCLAugmentData setCategory(PCLAugmentCategory factor) {
+        this.category = factor;
+
+        return this;
+    }
+
     public PCLAugmentData setImagePath(String imagePath) {
         this.imagePath = imagePath;
 
@@ -211,6 +255,21 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     public PCLAugmentData setTier(int heal, int healUpgrade) {
         this.tier[0] = heal;
         this.tierUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLAugmentData setTier(int thp, Integer[] thpUpgrade) {
+        return setTier(array(thp), thpUpgrade);
+    }
+
+    public PCLAugmentData setTier(Integer[] heal, Integer[] healUpgrade) {
+        this.tier = heal;
+        this.tierUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLAugmentData setUnique(boolean value) {
+        this.unique = value;
         return this;
     }
 }

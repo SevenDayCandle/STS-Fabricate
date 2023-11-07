@@ -13,16 +13,17 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class PCLAugmentReqs {
+public class PCLAugmentReqs implements Serializable {
+    static final long serialVersionUID = 1L;
     public HashSet<AbstractCard.CardColor> colors = new HashSet<>();
     public HashSet<AbstractCard.CardRarity> rarities = new HashSet<>();
     public HashSet<AbstractCard.CardType> types = new HashSet<>();
     public HashSet<PCLAffinity> affinities = new HashSet<>();
     public HashSet<PCLAffinity> affinitiesNot = new HashSet<>();
-    public HashSet<PCLAttackType> attackTypesNot = new HashSet<>();
     public HashSet<PCLCardTag> tags = new HashSet<>();
     public HashSet<PCLCardTag> tagsNot = new HashSet<>();
     public HashSet<PCLCardTarget> cardTargets = new HashSet<>();
@@ -33,6 +34,28 @@ public class PCLAugmentReqs {
     public int hitsMax = Integer.MAX_VALUE;
     public int rightMax = Integer.MAX_VALUE;
     public int maxEffects = Integer.MAX_VALUE;
+
+    public PCLAugmentReqs() {
+
+    }
+
+    public PCLAugmentReqs(PCLAugmentReqs other) {
+        colors.addAll(other.colors);
+        rarities.addAll(other.rarities);
+        types.addAll(other.types);
+        affinities.addAll(other.affinities);
+        affinitiesNot.addAll(other.affinitiesNot);
+        tags.addAll(other.tags);
+        tagsNot.addAll(other.tagsNot);
+        cardTargets.addAll(other.cardTargets);
+        blockMax = other.blockMax;
+        costMax = other.costMax;
+        costMin = other.costMin;
+        damageMax = other.damageMax;
+        hitsMax = other.hitsMax;
+        rightMax = other.rightMax;
+        maxEffects = other.maxEffects;
+    }
 
     public boolean check(PCLCard c) {
         return c != null && (

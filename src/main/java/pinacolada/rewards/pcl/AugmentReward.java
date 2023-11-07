@@ -53,7 +53,7 @@ public class AugmentReward extends PCLReward {
     public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {
         @Override
         public CustomReward onLoad(RewardSave rewardSave) {
-            return new AugmentReward(PCLAugmentData.get(rewardSave.id).create());
+            return new AugmentReward(PCLAugmentData.getStaticData(rewardSave.id).create());
         }
 
         @Override

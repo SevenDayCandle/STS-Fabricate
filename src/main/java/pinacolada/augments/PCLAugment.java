@@ -2,7 +2,6 @@ package pinacolada.augments;
 
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -16,7 +15,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
-import pinacolada.skills.PTrait;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.Serializable;
@@ -178,6 +176,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     }
 
     public static class SaveData implements Serializable {
+        static final long serialVersionUID = 1L;
         public String ID;
         public int form;
         public int timesUpgraded;
@@ -194,7 +193,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
         }
 
         public PCLAugmentData getData() {
-            return PCLAugmentData.get(ID);
+            return PCLAugmentData.getStaticData(ID);
         }
     }
 }

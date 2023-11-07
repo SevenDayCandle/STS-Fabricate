@@ -14,7 +14,6 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.TemplateCardData;
@@ -40,7 +39,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     private static final String JSON_CARDS = "CardStrings.json";
     private static final String JSON_KEYWORDS = "KeywordStrings.json";
     private static final String JSON_LOADOUTS = "LoadoutStrings.json";
-    protected final String id;
+    public final String ID;
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
     public final boolean usePCLFrame;
@@ -55,7 +54,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images, boolean usePCLFrame) {
-        this.id = id;
+        this.ID = id;
         this.usePCLFrame = usePCLFrame;
         this.cardColor = color;
         this.playerClass = playerClass;
@@ -96,7 +95,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public String createID(String suffix) {
-        return PGR.createID(id, suffix);
+        return PGR.createID(ID, suffix);
     }
 
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card should be removed when playing as a non-PCL character
@@ -115,7 +114,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public FileHandle getFallbackFile(String fileName) {
-        return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
+        return Gdx.files.internal("localization/" + ID.toLowerCase() + "/eng/" + fileName);
     }
 
     public <Z> Z getFallbackStrings(String fileName, Type typeOfT) {
@@ -130,7 +129,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public FileHandle getFile(Settings.GameLanguage language, String fileName) {
-        return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
+        return Gdx.files.internal("localization/" + ID.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
     }
 
     // Intercepts CardLibrary's getCopy to return a different card. By default, this prevents example templates from showing up for regular characters
@@ -140,7 +139,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public UIStrings getUIStrings(String stringID) {
-        return PGR.getLanguagePack().getUIString(PGR.createID(id, stringID));
+        return PGR.getLanguagePack().getUIString(PGR.createID(ID, stringID));
     }
 
     public int getUnlockCost() {

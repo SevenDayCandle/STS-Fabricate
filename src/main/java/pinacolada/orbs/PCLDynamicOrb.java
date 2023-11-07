@@ -51,6 +51,7 @@ public class PCLDynamicOrb extends PCLPointerOrb implements FabricateItem {
     }
 
     public void setupMoves(PCLDynamicOrbData data) {
+        clearSkills();
         for (PSkill<?> skill : data.moves) {
             if (!PSkill.isSkillBlank(skill)) {
                 PSkill<?> effect = skill.makeCopy();

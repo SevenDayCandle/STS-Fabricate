@@ -1456,7 +1456,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             this.auxiliaryData = new PCLCardSaveData(data);
             if (data.augments != null) {
                 for (PCLAugment.SaveData dat : data.augments) {
-                    PCLAugmentData augment = PCLAugmentData.get(dat.ID);
+                    PCLAugmentData augment = PCLAugmentData.getStaticData(dat.ID);
                     if (augment != null) {
                         addAugment(augment.create(dat.form, dat.timesUpgraded), false);
                     }

@@ -24,7 +24,7 @@ public class InfuseAugmentCommand extends ConsoleCommand {
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
+        PCLAugmentData augment = PCLAugmentData.getStaticData(tokens[1]);
         String targetCard = tokens[2];
         AbstractCard c = AbstractDungeon.player.masterDeck.findCardById(targetCard);
         if (augment != null && c != null) {

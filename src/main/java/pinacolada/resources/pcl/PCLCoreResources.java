@@ -13,10 +13,9 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
 public class PCLCoreResources extends PCLResources<PCLPlayerData<?, ?, ?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
-    public static final String ID = PGR.BASE_PREFIX;
 
     public PCLCoreResources() {
-        super(ID, AbstractCard.CardColor.COLORLESS, PCLEnum.PlayerClass.CORE, new PCLCoreImages(ID));
+        super(PGR.BASE_PREFIX, AbstractCard.CardColor.COLORLESS, PCLEnum.PlayerClass.CORE, new PCLCoreImages(PGR.BASE_PREFIX));
     }
 
     // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards

@@ -24,7 +24,7 @@ public class AugmentCommand extends ConsoleCommand {
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
+        PCLAugmentData augment = PCLAugmentData.getStaticData(tokens[1]);
         int timesUpgraded = tokens.length > 2 ? ConvertHelper.tryParseInt(tokens[2], 0) : 0;
         int form = tokens.length > 3 ? ConvertHelper.tryParseInt(tokens[3], 0) : 0;
         int amount = tokens.length > 4 ? ConvertHelper.tryParseInt(tokens[4], 1) : 1;

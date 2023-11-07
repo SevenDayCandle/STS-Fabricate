@@ -31,6 +31,7 @@ import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -44,6 +45,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
+import pinacolada.orbs.PCLCustomOrbSlot;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotion;
@@ -204,6 +206,10 @@ public class PGR {
 
     public static MonsterStrings getMonsterStrings(String monsterID) {
         return getLanguagePack().getMonsterStrings(monsterID);
+    }
+
+    public static String getOrbImage(String id) {
+        return getPng(id, "orbs");
     }
 
     public static OrbStrings getOrbStrings(String orbID) {
@@ -505,9 +511,11 @@ public class PGR {
         PCLCustomFlagInfo.initialize();
         PCLCustomLoadoutInfo.initialize();
         PCLCustomPowerSlot.initialize();
+        PCLCustomOrbSlot.initialize();
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
         PCLCustomPotionSlot.initialize();
         PCLCustomBlightSlot.initialize();
+        PCLCustomAugmentSlot.initialize();
     }
 }
