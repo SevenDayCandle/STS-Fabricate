@@ -15,18 +15,18 @@ import extendedui.ui.AbstractMenuScreen;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
-import pinacolada.ui.PCLAugmentGrid;
+import pinacolada.ui.PCLGenericItemGrid;
 
 import java.util.ArrayList;
 
 public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     public static final ArrayList<CustomPoolModule<PCLAugmentRenderable>> globalModules = new ArrayList<>();
     public final MenuCancelButton cancelButton;
-    public PCLAugmentGrid grid;
+    public PCLGenericItemGrid<PCLAugmentRenderable> grid;
 
     public PCLAugmentLibraryScreen() {
-        grid = (PCLAugmentGrid) new PCLAugmentGrid()
-                .setVerticalStart(Settings.HEIGHT * 0.74f)
+        grid = new PCLGenericItemGrid<>();
+        grid.setVerticalStart(Settings.HEIGHT * 0.74f)
                 .showScrollbar(true);
         cancelButton = new MenuCancelButton();
     }

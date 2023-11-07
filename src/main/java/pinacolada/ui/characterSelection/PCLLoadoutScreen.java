@@ -433,13 +433,20 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void updateValidation() {
         val.refresh(getCurrentPreset());
 
-        hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel));
-        hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
         cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1, getCurrentPreset().loadout.minTotalCards))
                 .setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        cardsvalueText
-                .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue < 0 ? PGR.core.strings.subjects_infinite : loadout.maxValue))
-                .setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        if (loadout.maxValue < 0) {
+            hindrancevalueText.setActive(false);
+            cardsvalueText.setActive(false);
+        }
+        else {
+            hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel)).setActive(true);
+            hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
+            cardsvalueText
+                    .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue < 0 ? PGR.core.strings.subjects_infinite : loadout.maxValue))
+                    .setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                    .setActive(true);
+        }
 
         saveButton.setInteractable(val.isValid);
         if (val.isValid) {

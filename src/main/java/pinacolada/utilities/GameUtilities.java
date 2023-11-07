@@ -194,11 +194,11 @@ public class GameUtilities {
     }
 
     public static boolean canOrbApplyFocus(AbstractOrb orb) {
-        return (!Plasma.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToPassive));
+        return (!Plasma.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).data.applyFocusToPassive));
     }
 
     public static boolean canOrbApplyFocusToEvoke(AbstractOrb orb) {
-        return (!Dark.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToEvoke));
+        return (!Dark.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).data.applyFocusToEvoke));
     }
 
     public static boolean canPlayCurse() {

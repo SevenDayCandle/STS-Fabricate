@@ -6,17 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
-import pinacolada.powers.PCLPowerData;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PCLAugmentRenderable extends PCLGridRenderable<PCLAugment> {
+public class PCLAugmentRenderable extends PCLGenericItemRenderable<PCLAugment> {
     public static final float BASE_SCALE = Settings.scale * 0.45f;
     protected Texture texture;
     protected Texture textureBase;

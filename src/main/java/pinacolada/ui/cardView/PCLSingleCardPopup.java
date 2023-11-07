@@ -76,7 +76,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
-                .setLabel(EUIFontHelper.buttonFont, 0.9f, PGR.core.strings.scp_viewTooltips)
+                .setLabel(EUIFontHelper.buttonFont, 0.75f, showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments)
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments));

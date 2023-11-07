@@ -14,7 +14,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class PCLPowerRenderable extends PCLGridRenderable<PCLPowerData> {
+public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
     public static final float BASE_SCALE = Settings.scale * 0.6f;
     protected Texture texture;
     protected TextureRegion region;

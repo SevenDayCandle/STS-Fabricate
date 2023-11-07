@@ -7,7 +7,7 @@ import extendedui.ui.controls.EUIItemGrid;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.resources.PGR;
-import pinacolada.ui.PCLPowerGrid;
+import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
 import pinacolada.ui.menu.PCLPowerKeywordFilters;
 
@@ -32,8 +32,8 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
     }
 
     @Override
-    protected EUIItemGrid<PCLPowerRenderable> getGrid() {
-        return new PCLPowerGrid();
+    protected PCLGenericItemGrid<PCLPowerRenderable> getGrid() {
+        return new PCLGenericItemGrid<PCLPowerRenderable>();
     }
 
     @Override

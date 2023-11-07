@@ -6,25 +6,25 @@ import com.megacrit.cardcrawl.helpers.MathHelper;
 import extendedui.EUIRenderHelpers;
 import extendedui.ui.controls.EUIItemGrid;
 
-public class PCLPowerGrid extends EUIItemGrid<PCLPowerRenderable> {
+public class PCLGenericItemGrid<T extends PCLGenericItemRenderable<?>> extends EUIItemGrid<T> {
 
-    public PCLPowerGrid() {
+    public PCLGenericItemGrid() {
         this(0.5f, true);
         targetScale = PCLPowerRenderable.BASE_SCALE;
         startingScale = targetScale;
         hoveredScale = 0.9f;
     }
 
-    public PCLPowerGrid(float horizontalAlignment, boolean autoShowScrollbar) {
+    public PCLGenericItemGrid(float horizontalAlignment, boolean autoShowScrollbar) {
         super(horizontalAlignment, autoShowScrollbar);
     }
 
-    public PCLPowerGrid(float horizontalAlignment) {
+    public PCLGenericItemGrid(float horizontalAlignment) {
         this(horizontalAlignment, true);
     }
 
     @Override
-    public void forceUpdateItemPosition(PCLPowerRenderable augment, float x, float y) {
+    public void forceUpdateItemPosition(T augment, float x, float y) {
         augment.currentX = augment.targetX = x;
         augment.currentY = augment.targetY = y;
         augment.hb.update();
@@ -32,12 +32,12 @@ public class PCLPowerGrid extends EUIItemGrid<PCLPowerRenderable> {
     }
 
     @Override
-    public Hitbox getHitbox(PCLPowerRenderable item) {
+    public Hitbox getHitbox(T item) {
         return item.hb;
     }
 
     @Override
-    protected float getScrollDistance(PCLPowerRenderable augment, int index) {
+    protected float getScrollDistance(T augment, int index) {
         float scrollDistance = 1f / getRowCount();
         if (augment.targetY > drawTopY) {
             return -scrollDistance;
@@ -58,12 +58,12 @@ public class PCLPowerGrid extends EUIItemGrid<PCLPowerRenderable> {
     }
 
     @Override
-    protected void renderItem(SpriteBatch sb, PCLPowerRenderable augment) {
+    protected void renderItem(SpriteBatch sb, T augment) {
         augment.render(sb);
     }
 
     @Override
-    protected void updateHoverLogic(PCLPowerRenderable augment, int i) {
+    protected void updateHoverLogic(T augment, int i) {
         augment.hb.update();
         augment.hb.move(augment.currentX, augment.currentY);
 
@@ -79,7 +79,7 @@ public class PCLPowerGrid extends EUIItemGrid<PCLPowerRenderable> {
     }
 
     @Override
-    public void updateItemPosition(PCLPowerRenderable augment, float x, float y) {
+    public void updateItemPosition(T augment, float x, float y) {
         augment.targetX = x;
         augment.targetY = y;
         augment.currentX = EUIRenderHelpers.lerpSnap(augment.currentX, augment.targetX, LERP_SPEED);

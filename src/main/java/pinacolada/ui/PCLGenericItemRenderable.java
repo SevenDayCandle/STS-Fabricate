@@ -7,12 +7,11 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.misc.PCLGenericData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLGridRenderable<T extends KeywordProvider> implements KeywordProvider {
+public abstract class PCLGenericItemRenderable<T extends KeywordProvider> implements KeywordProvider {
     public static final float BASE_SCALE = Settings.scale * 0.6f;
     public final T item;
     public Hitbox hb;
@@ -26,15 +25,15 @@ public abstract class PCLGridRenderable<T extends KeywordProvider> implements Ke
     public float targetX;
     public float targetY;
 
-    public PCLGridRenderable(T item) {
+    public PCLGenericItemRenderable(T item) {
         this(item, item.getTooltip(), new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
     }
 
-    public PCLGridRenderable(T item, EUIKeywordTooltip tip) {
+    public PCLGenericItemRenderable(T item, EUIKeywordTooltip tip) {
         this(item, tip, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
     }
 
-    public PCLGridRenderable(T item, EUIKeywordTooltip tip, Hitbox hb) {
+    public PCLGenericItemRenderable(T item, EUIKeywordTooltip tip, Hitbox hb) {
         this.item = item;
         this.hb = hb;
         tips = new ArrayList<>();

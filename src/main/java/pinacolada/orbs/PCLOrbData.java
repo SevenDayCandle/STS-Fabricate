@@ -1,28 +1,44 @@
 package pinacolada.orbs;
 
-import com.megacrit.cardcrawl.localization.PowerStrings;
+import com.badlogic.gdx.graphics.Color;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.powers.AbstractPower;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.misc.PCLGenericData;
-import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static extendedui.EUIUtils.array;
+
 public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordProvider {
     private static final Map<String, PCLOrbData> STATIC_DATA = new HashMap<>();
 
+    public DelayTiming timing;
+    public Color flareColor1 = Color.WHITE;
+    public Color flareColor2 = Color.WHITE;
     public EUIKeywordTooltip tooltip;
-    public PowerStrings strings;
+    public OrbStrings strings;
+    public boolean applyFocusToEvoke = true;
+    public boolean applyFocusToPassive = true;
+    public boolean showEvokeValue = true;
+    public int baseEvokeValue = 1;
+    public int basePassiveValue = 1;
+    public float rotationSpeed;
 
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -34,7 +50,7 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     }
 
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
-        this(invokeClass, resources, cardID, PGR.getPowerStrings(cardID));
+        this(invokeClass, resources, cardID, PGR.getOrbStrings(cardID));
     }
 
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, EUIKeywordTooltip tip) {
@@ -42,13 +58,13 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         this.tooltip = tip;
     }
 
-    public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, PowerStrings strings) {
+    public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, OrbStrings strings) {
         super(cardID, invokeClass, resources);
-        this.strings = strings != null ? strings : new PowerStrings();
+        this.strings = strings != null ? strings : new OrbStrings();
         //this.initializeImage();
     }
 
-    public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, PowerStrings strings, EUIKeywordTooltip tip) {
+    public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, OrbStrings strings, EUIKeywordTooltip tip) {
         this(invokeClass, resources, cardID, strings);
         this.tooltip = tip;
     }
@@ -94,8 +110,72 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         return null;
     }
 
+    public static void loadIconsIntoKeywords() {
+        for (PCLOrbData data : STATIC_DATA.values()) {
+            data.loadImageIntoTooltip();
+        }
+    }
+
+    // Should only be used by equivalents
+    private static <T extends PCLOrbData> T registerData(String id, T cardData) {
+        STATIC_DATA.put(id, cardData);
+        return cardData;
+    }
+
+    protected static <T extends PCLOrbData> T registerData(T cardData) {
+        STATIC_DATA.put(cardData.ID, cardData);
+        return cardData;
+    }
+
+    protected static <T extends PCLOrbData> T registerPCLData(T cardData) {
+        registerData(cardData);
+        cardData.initializeImage();
+        return cardData;
+    }
+
+    public String getName() {
+        return strings.NAME;
+    }
+
+    public String getText() {
+        return tooltip != null ? tooltip.description : strings.DESCRIPTION.length > 0 ? strings.DESCRIPTION[0] : EUIUtils.EMPTY_STRING;
+    }
+
     @Override
     public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getPowerImage(ID); // TODO fix
+    }
+
+    public void loadImageIntoTooltip() {
+        if (tooltip != null && tooltip.icon == null) {
+            tooltip.setIconFromPath(imagePath);
+        }
+    }
+
+    public static class PCLOrbDataAdapter extends TypeAdapter<PCLOrbData> {
+        @Override
+        public PCLOrbData read(JsonReader in) throws IOException {
+            String key = in.nextString();
+            PCLOrbData data = getStaticDataOrCustom(key);
+            if (data != null) {
+                return data;
+            }
+            EUIUtils.logError(PCLOrbData.PCLOrbDataAdapter.class, "Failed to read orb " + key);
+            return null; // TODO fix
+        }
+
+        @Override
+        public void write(JsonWriter writer, PCLOrbData value) throws IOException {
+            writer.value(value.ID);
+        }
     }
 }

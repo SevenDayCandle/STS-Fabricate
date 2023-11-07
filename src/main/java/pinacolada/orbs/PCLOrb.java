@@ -1,15 +1,26 @@
 package pinacolada.orbs;
 
+import basemod.interfaces.CloneablePowerInterface;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.OrbStrings;
+import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
+import extendedui.EUI;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
@@ -19,62 +30,71 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.OrbFlareNotActuallyNeedingOrbEffect;
+import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Make into a PointerProvider
-public abstract class PCLOrb extends AbstractOrb {
+public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     public static final int IMAGE_SIZE = 96;
-    protected final OrbStrings orbStrings;
-    public final PCLAffinity affinity;
-    public final boolean canOrbApplyFocusToEvoke;
-    public final boolean canOrbApplyFocusToPassive;
-    public boolean clickable;
-    public EUITooltip tooltip;
+    protected float rotationSpeed;
+    protected OrbStrings orbStrings;
+    public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
+    public final PCLOrbData data;
+    public DelayTiming timing;
+    public EUIKeywordTooltip mainTip;
 
-    public PCLOrb(String id, PCLAffinity affinity) {
-        this(id, affinity, true, true);
-    }
-
-    public PCLOrb(String id, PCLAffinity affinity, boolean canOrbApplyFocusToEvoke, boolean canOrbApplyFocusToPassive) {
-        this.orbStrings = PGR.getOrbStrings(id);
-        this.ID = id;
-        this.name = orbStrings.NAME;
-        this.affinity = affinity;
-        this.tooltip = new EUITooltip(name, description);
-        this.canOrbApplyFocusToEvoke = canOrbApplyFocusToEvoke;
-        this.canOrbApplyFocusToPassive = canOrbApplyFocusToPassive;
-    }
-
-    public PCLOrb(String id, PCLAffinity affinity, boolean canOrbApplyFocusToEvoke) {
-        this(id, affinity, canOrbApplyFocusToEvoke, true);
+    public PCLOrb(PCLOrbData data) {
+        this.data = data;
+        this.ID = data.ID;
+        setup();
+        setupProperties();
+        setupImages();
+        setupDescription();
     }
 
     public static String createFullID(Class<? extends PCLOrb> type) {
-        return PGR.core.createID(type.getSimpleName());
+        return createFullID(PGR.core, type);
+    }
+
+    public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLOrb> type) {
+        return resources.createID(type.getSimpleName());
     }
 
     public static int getFocus() {
         return GameUtilities.getPowerAmount(AbstractDungeon.player, FocusPower.POWER_ID);
     }
 
+    protected static PCLOrbData register(Class<? extends AbstractOrb> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLOrbData register(Class<? extends AbstractOrb> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerPowerData(new PCLOrbData(type, resources));
+    }
+
+    protected static <T extends PCLOrbData> T registerPowerData(T cardData) {
+        return PCLOrbData.registerPCLData(cardData);
+    }
+
     @Override
     public void applyFocus() {
         int focus = getFocus();
-        if (canOrbApplyFocusToPassive) {
+        if (data.applyFocusToPassive) {
             this.passiveAmount = Math.max(0, this.basePassiveAmount + focus);
-            if (canOrbApplyFocusToEvoke) {
-                this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
-            }
+        }
+        if (data.applyFocusToEvoke) {
+            this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
         }
         CombatManager.onOrbApplyFocus(this);
-    }
-
-    public void evoke() {
-        // Orb Evoke event is already broadcast
     }
 
     protected String formatDescription(int index, Object... args) {
@@ -94,19 +114,38 @@ public abstract class PCLOrb extends AbstractOrb {
     }
 
     protected Color getColor1() {
-        return Color.WHITE;
+        return data.flareColor1;
     }
 
     protected Color getColor2() {
-        return Color.LIGHT_GRAY;
+        return data.flareColor2;
     }
 
     protected OrbFlareNotActuallyNeedingOrbEffect getOrbFlareEffect() {
         return new OrbFlareNotActuallyNeedingOrbEffect(this.cX, this.cY).setColors(getColor1(), getColor2());
     }
 
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tooltips;
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return mainTip;
+    }
+
     public String getUpdatedDescription() {
         return formatDescription(0);
+    }
+
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, false);
+        if (t == null) {
+            path = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(path, true, false);
+        }
+        this.img = t;
     }
 
     @Override
@@ -124,17 +163,17 @@ public abstract class PCLOrb extends AbstractOrb {
     public void onChannel() {
     }
 
+    public void onClick() {
+
+    }
+
     @Override
     public void onEvoke() {
-        evoke();
+        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
     }
 
     public void passive() {
-        final OrbFlareNotActuallyNeedingOrbEffect effect = getOrbFlareEffect();
-        if (effect != null) {
-            PCLActions.bottom.playVFX(effect, Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
-        }
-
+        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
         CombatManager.onOrbPassiveEffect(this);
     }
 
@@ -150,6 +189,42 @@ public abstract class PCLOrb extends AbstractOrb {
         this.updateDescription();
     }
 
+    public void setup() {
+
+    }
+
+    protected void setupDescription() {
+        this.name = orbStrings.NAME;
+        String desc = getUpdatedDescription();
+        mainTip = new EUIKeywordTooltip(name, desc);
+        mainTip.icon = img != null ? new TextureRegion(img) : null;
+        tooltips.add(mainTip);
+        // Should not contain the tooltip associated with this orb
+        if (data.tooltip != null) {
+            tooltips.add(data.tooltip);
+            EUITooltip.scanForTips(desc, tooltips);
+            tooltips.remove(data.tooltip);
+        }
+        else {
+            EUITooltip.scanForTips(desc, tooltips);
+        }
+        // Base game descriptions don't support special characters. Just gonna reuse PCLPower's here
+        this.description = PCLPower.sanitizePowerDescription(desc);
+    }
+
+    protected void setupImages() {
+        loadImage(data.imagePath);
+    }
+
+    public void setupProperties() {
+        this.baseEvokeAmount = this.evokeAmount = data.baseEvokeValue;
+        this.basePassiveAmount = this.passiveAmount = data.basePassiveValue;
+        this.timing = data.timing;
+        this.orbStrings = data.strings;
+        this.showEvokeValue = data.showEvokeValue;
+        this.rotationSpeed = data.rotationSpeed;
+    }
+
     @Override
     public void triggerEvokeAnimation() {
         for (int i = 0; i < 4; i++) {
@@ -161,19 +236,17 @@ public abstract class PCLOrb extends AbstractOrb {
     public void update() {
         hb.update();
         if (hb.hovered) {
-            EUITooltip.queueTooltip(tooltip, InputHelper.mX + hb.width, InputHelper.mY + (hb.height * 0.5f));
+            EUITooltip.queueTooltips(tooltips, InputHelper.mX + hb.width, InputHelper.mY + (hb.height * 0.5f));
         }
         this.fontScale = MathHelper.scaleLerpSnap(this.fontScale, 0.7F);
+        this.angle += EUI.delta() * rotationSpeed;
 
-        if (clickable) {
-            if (InputHelper.justClickedLeft) {
-                hb.clickStarted = true;
-                PCLSFX.play(PCLSFX.UI_CLICK_1);
-            }
-            else if (hb.clicked) {
-                hb.clicked = false;
-                evoke();
-            }
+        if (InputHelper.justClickedLeft) {
+            hb.clickStarted = true;
+        }
+        else if (hb.clicked) {
+            hb.clicked = false;
+            onClick();
         }
     }
 
@@ -181,6 +254,6 @@ public abstract class PCLOrb extends AbstractOrb {
     public void updateDescription() {
         this.applyFocus();
         this.description = getUpdatedDescription();
-        tooltip.setDescription(this.description);
+        mainTip.setDescription(this.description);
     }
 }
