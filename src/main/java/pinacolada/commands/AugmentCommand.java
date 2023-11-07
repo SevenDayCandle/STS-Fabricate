@@ -29,7 +29,7 @@ public class AugmentCommand extends ConsoleCommand {
         int form = tokens.length > 3 ? ConvertHelper.tryParseInt(tokens[3], 0) : 0;
         int amount = tokens.length > 4 ? ConvertHelper.tryParseInt(tokens[4], 1) : 1;
         if (augment != null) {
-            PGR.dungeon.addAugment(new PCLAugment.SaveData(augment.ID, timesUpgraded, form));
+            PGR.dungeon.addAugment(new PCLAugment.SaveData(augment.ID, form, timesUpgraded));
             DevConsole.log("Obtained " + amount + " " + tokens[1]);
         }
         else {

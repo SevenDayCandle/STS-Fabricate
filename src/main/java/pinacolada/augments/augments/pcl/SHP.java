@@ -8,14 +8,15 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class GGreen extends PCLAugment {
-    public static final PCLAugmentData DATA = register(GGreen.class, PCLAugmentCategory.General);
+public class SHP extends PCLAugment {
+    public static final PCLAugmentData DATA = register(SHP.class, PCLAugmentCategory.Summon)
+            .setMaxUpgrades(3);
 
-    public GGreen(int timesUpgraded, int level) {
-        super(DATA);
+    public SHP(SaveData save) {
+        super(DATA, save);
     }
 
     public void setup() {
-        addUseMove(PTrait.affinity(PCLAffinity.Green));
+        addUseMove(PTrait.hp(2).setUpgrade(2));
     }
 }

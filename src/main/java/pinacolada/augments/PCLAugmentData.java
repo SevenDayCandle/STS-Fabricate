@@ -4,23 +4,15 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrait;
-import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.PMultiTrait;
+import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -105,13 +97,18 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
 
     @Override
     public PCLAugment create() {
-        return create(0, 0);
+        return create(new PCLAugment.SaveData(ID, 0, 0));
     }
 
-    public PCLAugment create(int timesUpgraded, int form) {
+    public PCLAugment create(int form, int timesUpgraded) {
+        return create(new PCLAugment.SaveData(ID, form, timesUpgraded));
+    }
+
+    // Should not get called by anything else other than the save data file
+    PCLAugment create(PCLAugment.SaveData save) {
         try {
             if (constructor == null) {
-                constructor = createConstructor(int.class, int.class);
+                constructor = createConstructor(PCLAugment.SaveData.class);
                 if (constructor == null) {
                     constructor = invokeClass.getConstructor();
                 }
@@ -119,7 +116,7 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
             }
 
             if (constructor.getParameterCount() > 0) {
-                return constructor.newInstance(timesUpgraded, form);
+                return constructor.newInstance(save);
             }
             else {
                 return constructor.newInstance();
@@ -137,6 +134,11 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         catch (NoSuchMethodException ignored) {
             return null;
         }
+    }
+
+    public PCLAugmentRenderable createRenderable(int form, int timesUpgraded) {
+        PCLAugment augment = create(form, timesUpgraded);
+        return augment != null ? new PCLAugmentRenderable(augment) : null;
     }
 
     public String getName() {

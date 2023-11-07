@@ -2,19 +2,21 @@ package pinacolada.augments;
 
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
+import pinacolada.skills.PTrait;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.Serializable;
@@ -26,21 +28,22 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     public final PCLAugmentData data;
     public SaveData save;
     public PSkillContainer skills;
-    public PCLCard card;
+    public AbstractCard card;
 
     public PCLAugment(PCLAugmentData data) {
         this(data, 0, 0);
     }
 
-    public PCLAugment(PCLAugmentData data, int timesUpgraded, int form) {
-        this(data, data.ID, timesUpgraded, form);
+    public PCLAugment(PCLAugmentData data, int form, int timesUpgraded) {
+        this(data, new SaveData(data.ID, form, timesUpgraded));
     }
 
-    public PCLAugment(PCLAugmentData data, String id, int timesUpgraded, int form) {
+    public PCLAugment(PCLAugmentData data, SaveData save) {
         this.data = data;
-        this.save = new SaveData(id, timesUpgraded, form);
+        this.save = save;
         skills = new PSkillContainer();
         setup();
+        setForm(save.form, save.timesUpgraded);
     }
 
     protected static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategory category) {
@@ -75,10 +78,24 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
         return !data.permanent;
     }
 
+    @Override
+    public String getEffectPowerTextStrings() {
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null ? StringUtils.capitalize(ef.getPowerText(null)) : null,
+                getFullEffects());
+    }
+
+    @Override
+    public String getEffectStrings() {
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null ? StringUtils.capitalize(ef.getText(null)) : null,
+                getFullEffects());
+    }
+
     public String getFullText() {
         String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, data.tier), data.category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
+                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, getTier()), data.category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
                 reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
                 getEffectPowerTextStrings());
     }
@@ -88,7 +105,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     }
 
     public String getName() {
-        return GameUtilities.getMultiformName(data.getName(), save.form, save.timesUpgraded, data.maxForms, data.maxUpgradeLevel, data.branchFactor, false);
+        return GameUtilities.getMultiformName(data.getName(), save.form, save.timesUpgraded + 1, data.maxForms, data.maxUpgradeLevel, data.branchFactor, true);
     }
 
     public String getReqsString() {
@@ -108,7 +125,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     }
 
     public int getTier() {
-        return data.getTier(save.form) + data.getTierUpgrade(save.form);
+        return data.getTier(save.form) + data.getTierUpgrade(save.form) * save.timesUpgraded;
     }
 
     @Override
@@ -122,17 +139,17 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     }
 
     public PCLAugment makeCopy() {
-        return data.create(save.timesUpgraded, save.form);
+        return data.create(save.form, save.timesUpgraded);
     }
 
-    public void onAddToCard(PCLCard c) {
+    public void onAddToCard(AbstractCard c) {
         for (PSkill<?> skill : skills.onUseEffects) {
-            skill.setSource(c).onAddToCard(c);
+            skill.onAddToCard(c); // Do not set source, values should be sourced from augment instead
         }
         card = c;
     }
 
-    public void onRemoveFromCard(PCLCard c) {
+    public void onRemoveFromCard(AbstractCard c) {
         for (PSkill<?> skill : skills.onUseEffects) {
             skill.onRemoveFromCard(c);
         }
@@ -144,6 +161,18 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
         setup();
     }
 
+    public void setForm(int form, int timesUpgraded) {
+        this.save.form = form;
+        this.save.timesUpgraded = timesUpgraded;
+
+        for (PSkill<?> ef : getEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.setAmountFromCard().onUpgrade();
+        }
+    }
+
     protected void setup() {
 
     }
@@ -153,7 +182,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
         public int form;
         public int timesUpgraded;
 
-        public SaveData(String id, int timesUpgraded, int form) {
+        public SaveData(String id, int form, int timesUpgraded) {
             this.ID = id;
             this.timesUpgraded = timesUpgraded;
             this.form = form;
@@ -161,7 +190,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
 
         public PCLAugment create() {
             PCLAugmentData data = getData();
-            return data != null ? data.create(timesUpgraded, form) : null;
+            return data != null ? data.create(this) : null;
         }
 
         public PCLAugmentData getData() {

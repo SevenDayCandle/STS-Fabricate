@@ -1,6 +1,7 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.PCLActions;
@@ -9,12 +10,14 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
+import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
 import pinacolada.skills.skills.special.traits.PTrait_HP;
@@ -164,6 +167,10 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
             return TEXT.act_has(getSubDescText(perspective));
         }
         return getSubDescText(perspective);
+    }
+
+    public boolean isPassiveOnly() {
+        return true;
     }
 
     @Override

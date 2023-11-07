@@ -20,7 +20,6 @@ import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
@@ -108,7 +107,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     }
 
     private void applyAugment(PCLAugment augment) {
-        PGR.dungeon.addAugment(augment.ID, -1);
+        PGR.dungeon.removeAugment(augment.save);
         currentItem.addAugment(augment);
         this.displayCard = currentItem.makePopupCopy();
         this.upgradedCard = getUpgradeCard();
@@ -234,7 +233,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 PCLAugmentViewer viewer = new PCLAugmentViewer(new EUIHitbox(AUGMENT_X, curY, scale(300), scale(360)), currentItem, i)
                         .setOnClick(() -> {
                             if (currentItem.augments.get(finalI) == null) {
-                                if (PGR.dungeon.augments.size() > 0) {
+                                if (PGR.dungeon.augmentList.size() > 0) {
                                     this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(currentItem)
                                             .addCallback((augment -> {
                                                 if (augment != null) {
@@ -348,7 +347,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         if (augment != null) {
             this.displayCard = currentItem.makePopupCopy();
             this.upgradedCard = getUpgradeCard();
-            PGR.dungeon.addAugment(augment.ID, 1);
+            PGR.dungeon.addAugment(augment.save);
             refreshAugments();
         }
     }

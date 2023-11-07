@@ -37,7 +37,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
         this.cancelButton.show(CardLibraryScreen.TEXT[0]);
 
         grid.clear();
-        grid.add(EUIUtils.map(PCLAugmentData.getAvailable(), PCLAugmentRenderable::new));
+        grid.add(EUIUtils.map(PCLAugmentData.getAvailable(), a -> a.createRenderable(0, 0)));
 
         PGR.augmentFilters.initializeForSort(grid.group, __ -> {
             for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {

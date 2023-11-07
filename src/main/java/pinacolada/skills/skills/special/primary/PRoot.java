@@ -8,13 +8,11 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PPrimary;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
 
@@ -63,6 +61,11 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public boolean isBlank() {
         return this.childEffect == null;
+    }
+
+    @Override
+    public boolean isPassiveOnly() {
+        return childEffect instanceof PTrait || (childEffect instanceof PMultiBase<?> && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), ef -> ef instanceof PTrait));
     }
 
     @Override

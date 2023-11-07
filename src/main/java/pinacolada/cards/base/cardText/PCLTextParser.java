@@ -158,7 +158,7 @@ public class PCLTextParser {
         if (amount > 0) {
             return amount;
         }
-        EUIUtils.logError(this, "Error parsing card text, Character: " + character + ", Text: " + this.text);
+        EUIUtils.logError(this, "Error parsing card text on card " + card + ", Character: " + character + ", Text: " + this.text);
         return 1;
     }
 

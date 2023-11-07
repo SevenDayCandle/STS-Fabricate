@@ -22,11 +22,8 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
@@ -70,7 +67,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public Boolean allowCustomCards = false;
     public Boolean allowCustomPotions = false;
     public Boolean allowCustomRelics = false;
-    public ArrayList<PCLAugment.SaveData> augments = new ArrayList<>();
+    public ArrayList<PCLAugment.SaveData> augmentList = new ArrayList<>();
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public transient PCLLoadout loadout;
@@ -94,7 +91,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     public void addAugment(PCLAugment.SaveData data) {
-        augments.add(data);
+        augmentList.add(data);
         PGR.augmentPanel.flash();
     }
 
@@ -226,7 +223,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     public int getAugmentTotal() {
-        return augments.size();
+        return augmentList.size();
     }
 
     public int getCurrentHealth(AbstractPlayer player) {
@@ -330,7 +327,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         loadouts.clear();
         bannedCards.clear();
         bannedRelics.clear();
-        augments.clear();
+        augmentList.clear();
         ascensionGlyphCounters.clear();
         valueDivisor = 1;
         if (dungeon != null) {
@@ -345,7 +342,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             rng = dungeon.rng;
             bannedCards.addAll(dungeon.bannedCards);
             bannedRelics.addAll(dungeon.bannedRelics);
-            augments.addAll(dungeon.augments);
+            augmentList.addAll(dungeon.augmentList);
             if (this.data != null) {
                 loadout = PCLLoadout.get(dungeon.startingLoadout);
                 for (String proxy : dungeon.loadoutIDs) {
@@ -738,6 +735,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         initializeRun();
     }
 
+    public void removeAugment(PCLAugment.SaveData data) {
+        augmentList.remove(data);
+        PGR.augmentPanel.flash();
+    }
+
     private void removeCardFromPools(AbstractCard card) {
         final AbstractCard.CardRarity rarity = card.color == AbstractCard.CardColor.COLORLESS ? null : card.rarity;
         final CardGroup srcPool = GameUtilities.getCardPoolSource(rarity);
@@ -769,7 +771,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         loadouts.clear();
         bannedCards.clear();
         bannedRelics.clear();
-        augments.clear();
+        augmentList.clear();
         loadout = new FakeLoadout();
         startingLoadout = loadout.ID;
         loadoutIDs.clear();

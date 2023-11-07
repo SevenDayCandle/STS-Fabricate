@@ -30,7 +30,7 @@ public class PCLDebugAugmentPanel {
     private void obtain() {
         PCLAugmentData chosen = augmentList.get();
         if (chosen != null) {
-            PGR.dungeon.addAugment(chosen.ID, augmentCount.get());
+            PGR.dungeon.addAugment(chosen.create().save);
         }
     }
 

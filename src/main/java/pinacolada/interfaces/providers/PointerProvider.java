@@ -25,7 +25,6 @@ import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.UniqueList;
@@ -153,13 +152,13 @@ public interface PointerProvider {
 
     default String getEffectPowerTextStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getPowerText(null)) : null,
+                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getPowerText(null)) : null,
                 getFullEffects());
     }
 
     default String getEffectStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef instanceof PTrait) ? StringUtils.capitalize(ef.getText()) : null,
+                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getText()) : null,
                 getFullEffects());
     }
 

@@ -91,22 +91,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }
@@ -118,22 +118,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }
@@ -145,22 +145,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }
@@ -172,22 +172,22 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
-                    sc.modifyBuilder(e -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case Block:
-                    sc.modifyBuilder(e -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setBlockForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case MagicNumber:
-                    sc.modifyBuilder(e -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setMagicNumberForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case SecondaryNumber:
-                    sc.modifyBuilder(e -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHpForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case HitCount:
-                    sc.modifyBuilder(e -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setHitCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
                 case RightCount:
-                    sc.modifyBuilder(e -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
+                    sc.modifyAllBuilders((e, i) -> e.setRightCountForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
             }
         }
@@ -206,17 +206,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamage(0);
+                    return sc.getBuilder().getDamage(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlock(0);
+                    return sc.getBuilder().getBlock(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
+                    return sc.getBuilder().getMagicNumber(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
+                    return sc.getBuilder().getHp(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCount(0);
+                    return sc.getBuilder().getHitCount(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCount(0);
+                    return sc.getBuilder().getRightCount(sc.currentBuilder);
             }
         }
         return skill.amount;
@@ -230,17 +230,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getAmountSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
+                    return sc.getBuilder().getDamageUpgrade(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
+                    return sc.getBuilder().getBlockUpgrade(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                    return sc.getBuilder().getMagicNumberUpgrade(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
+                    return sc.getBuilder().getHpUpgrade(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
+                    return sc.getBuilder().getHitCountUpgrade(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
+                    return sc.getBuilder().getRightCountUpgrade(sc.currentBuilder);
             }
         }
         return skill.getUpgrade();
@@ -282,17 +282,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtra2Source()) {
                 case Damage:
-                    return sc.getBuilder().getDamage(0);
+                    return sc.getBuilder().getDamage(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlock(0);
+                    return sc.getBuilder().getBlock(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
+                    return sc.getBuilder().getMagicNumber(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
+                    return sc.getBuilder().getHp(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCount(0);
+                    return sc.getBuilder().getHitCount(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCount(0);
+                    return sc.getBuilder().getRightCount(sc.currentBuilder);
             }
         }
         return skill.extra2;
@@ -306,17 +306,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtra2Source()) {
                 case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
+                    return sc.getBuilder().getDamageUpgrade(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
+                    return sc.getBuilder().getBlockUpgrade(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                    return sc.getBuilder().getMagicNumberUpgrade(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
+                    return sc.getBuilder().getHpUpgrade(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
+                    return sc.getBuilder().getHitCountUpgrade(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
+                    return sc.getBuilder().getRightCountUpgrade(sc.currentBuilder);
             }
         }
         return skill.getUpgradeExtra2();
@@ -330,17 +330,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamage(0);
+                    return sc.getBuilder().getDamage(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlock(0);
+                    return sc.getBuilder().getBlock(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
+                    return sc.getBuilder().getMagicNumber(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
+                    return sc.getBuilder().getHp(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCount(0);
+                    return sc.getBuilder().getHitCount(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCount(0);
+                    return sc.getBuilder().getRightCount(sc.currentBuilder);
             }
         }
         return skill.extra;
@@ -354,17 +354,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getExtraSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
+                    return sc.getBuilder().getDamageUpgrade(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
+                    return sc.getBuilder().getBlockUpgrade(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                    return sc.getBuilder().getMagicNumberUpgrade(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
+                    return sc.getBuilder().getHpUpgrade(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
+                    return sc.getBuilder().getHitCountUpgrade(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
+                    return sc.getBuilder().getRightCountUpgrade(sc.currentBuilder);
             }
         }
         return skill.getUpgradeExtra();
@@ -378,17 +378,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamage(0);
+                    return sc.getBuilder().getDamage(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlock(0);
+                    return sc.getBuilder().getBlock(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumber(0);
+                    return sc.getBuilder().getMagicNumber(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHp(0);
+                    return sc.getBuilder().getHp(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCount(0);
+                    return sc.getBuilder().getHitCount(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCount(0);
+                    return sc.getBuilder().getRightCount(sc.currentBuilder);
             }
         }
         return skill.scope;
@@ -402,17 +402,17 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         if (sc != null) {
             switch (skill.getScopeSource()) {
                 case Damage:
-                    return sc.getBuilder().getDamageUpgrade(0);
+                    return sc.getBuilder().getDamageUpgrade(sc.currentBuilder);
                 case Block:
-                    return sc.getBuilder().getBlockUpgrade(0);
+                    return sc.getBuilder().getBlockUpgrade(sc.currentBuilder);
                 case MagicNumber:
-                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                    return sc.getBuilder().getMagicNumberUpgrade(sc.currentBuilder);
                 case SecondaryNumber:
-                    return sc.getBuilder().getHpUpgrade(0);
+                    return sc.getBuilder().getHpUpgrade(sc.currentBuilder);
                 case HitCount:
-                    return sc.getBuilder().getHitCountUpgrade(0);
+                    return sc.getBuilder().getHitCountUpgrade(sc.currentBuilder);
                 case RightCount:
-                    return sc.getBuilder().getRightCountUpgrade(0);
+                    return sc.getBuilder().getRightCountUpgrade(sc.currentBuilder);
             }
         }
         return skill.getUpgradeScope();

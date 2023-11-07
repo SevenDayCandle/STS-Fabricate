@@ -55,6 +55,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -1489,6 +1490,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     /* Determines whether this effect should render cards unobtainable through card generation effects */
     public boolean isMetascaling() {
+        return false;
+    }
+
+    /* Effects that consist only of passive elements (i.e. no conds, modifiers) should be hidden in text, except on augments */
+    public boolean isPassiveOnly() {
         return false;
     }
 

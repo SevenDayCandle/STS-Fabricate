@@ -14,14 +14,12 @@ import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static pinacolada.dungeon.PCLPlayerMeter.makeTitle;
 
@@ -42,7 +40,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
 
     protected void onClick() {
         super.onClick();
-        PGR.augmentScreen.openScreen(() -> new ArrayList<>(PGR.dungeon.augments), PCLAugmentList.DEFAULT, true);
+        PGR.augmentScreen.openScreen(() -> new ArrayList<>(PGR.dungeon.augmentList), PCLAugmentList.DEFAULT, true);
     }
 
     protected void onRightClick() {

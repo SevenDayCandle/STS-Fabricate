@@ -35,7 +35,7 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
     }
 
     public void onCardSelected(AbstractCard c) {
-        PGR.dungeon.addAugment(augment.ID, -1);
+        PGR.dungeon.removeAugment(augment.save);
         augment.addToCard((PCLCard) c);
     }
 

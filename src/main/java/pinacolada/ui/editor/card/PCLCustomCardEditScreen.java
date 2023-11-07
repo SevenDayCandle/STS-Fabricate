@@ -124,7 +124,7 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
 
     @Override
     protected PCLCustomEffectPage makeNewDamageEffect() {
-        return makeEffectPage(new PCardPrimary_DealDamage());
+        return makeEffectPage(new PCardPrimary_DealDamage().setTarget(getBuilder().cardTarget));
     }
 
     @Override

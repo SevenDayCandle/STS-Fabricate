@@ -979,16 +979,18 @@ public class GameUtilities {
     }
 
     public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor) {
-        return getMultiformName(base, form, timesUpgraded, maxForms, maxUpgrades, branchFactor, true);
+        return getMultiformName(base, form, timesUpgraded, maxForms, maxUpgrades, branchFactor, false);
     }
 
-    public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor, boolean addPlus) {
+    public static String getMultiformName(String base, int form, int timesUpgraded, int maxForms, int maxUpgrades, int branchFactor, boolean alwaysShowUpgrade) {
         StringBuilder sb = new StringBuilder(base);
 
-        if (timesUpgraded != 0) {
-            if (addPlus) {
-                sb.append("+");
-            }
+        if (alwaysShowUpgrade && maxUpgrades != 0) {
+            sb.append(" ");
+            sb.append(timesUpgraded);
+        }
+        else if (timesUpgraded != 0) {
+            sb.append("+");
             if (maxUpgrades < 0 || maxUpgrades > 1) {
                 sb.append(timesUpgraded);
             }

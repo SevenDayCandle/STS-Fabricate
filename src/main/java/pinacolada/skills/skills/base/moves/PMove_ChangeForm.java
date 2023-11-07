@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -59,6 +60,9 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
             }
             else if (source instanceof PCLDynamicPower) {
                 ((PCLDynamicPower) source).setForm(index);
+            }
+            else if (source instanceof PCLAugment) {
+                ((PCLAugment) source).setForm(index, ((PCLAugment) source).save.timesUpgraded);
             }
         }
     }

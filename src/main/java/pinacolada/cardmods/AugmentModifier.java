@@ -13,29 +13,29 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrait;
 
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 public class AugmentModifier extends AbstractCardModifier {
-    protected String augmentID;
+    protected PCLAugment.SaveData save;
     protected transient PCLAugment augment;
     protected transient PCLUseInfo info;
+    private String cachedDesc;
 
-    public AugmentModifier(String augmentID) {
-        this.augmentID = augmentID;
-        this.augment = PCLAugmentData.get(augmentID).create();
+    public AugmentModifier(PCLAugment.SaveData save) {
+        this.save = save;
+        this.augment = save.create();
     }
 
     public AugmentModifier(PCLAugment augment) {
         this.augment = augment;
-        this.augmentID = augment.ID;
+        this.save = augment.save;
     }
 
     public static AugmentModifier apply(PCLAugment augment, AbstractCard c) {
@@ -49,7 +49,29 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     public boolean canPlayCard(AbstractCard card) {
-        return augment.skill.canPlay(getInfo(card, null), null);
+        PCLUseInfo info = getInfo(card, null);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            if (!be.canPlay(info, null)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private String getDesc() {
+        if (cachedDesc == null) {
+            String breakStr = PGR.config.removeLineBreaks.get() ? " " : EUIUtils.LEGACY_DOUBLE_SPLIT_LINE;
+            StringJoiner sb = new StringJoiner(breakStr);
+            // Do not display skills that consist solely of traits
+            for (PSkill<?> skill : augment.getFullEffects()) {
+                if (!skill.isPassiveOnly()) {
+                    sb.add(skill.getText(PCLCardTarget.Self, null, true));
+                }
+            }
+            String res = sb.toString();
+            cachedDesc = res.isEmpty() ? res : breakStr + res;
+        }
+        return cachedDesc;
     }
 
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {
@@ -59,44 +81,56 @@ public class AugmentModifier extends AbstractCardModifier {
         return info;
     }
 
-    public PSkill<?> getSkill() {
-        return augment.skill;
-    }
-
     @Override
     public String identifier(AbstractCard card) {
-        return augment.skill.effectID + augment.skill.getUUID();
+        return save.ID;
     }
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new AugmentModifier(augment.ID);
+        return new AugmentModifier(augment.makeCopy());
     }
 
     // Generate infos manually because we cannot attach the augment.skill to the card if it is not an EditorCard
     @Override
     public float modifyBlock(float block, AbstractCard card) {
-        return augment.skill.modifyBlockFirst(getInfo(card, null), block);
+        PCLUseInfo info = getInfo(card, null);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            block = be.modifyBlockFirst(info, block);
+        }
+        return block;
     }
 
     @Override
     public float modifyBlockFinal(float block, AbstractCard card) {
-        return augment.skill.modifyBlockLast(getInfo(card, null), block);
+        PCLUseInfo info = getInfo(card, null);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            block = be.modifyBlockLast(info, block);
+        }
+        return block;
     }
 
     @Override
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return augment.skill.modifyDamageGiveFirst(getInfo(card, target), damage);
+        PCLUseInfo info = getInfo(card, target);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            damage = be.modifyDamageGiveFirst(info, damage);
+        }
+        return damage;
     }
 
     @Override
     public float modifyDamageFinal(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return augment.skill.modifyDamageGiveLast(getInfo(card, target), damage);
+        PCLUseInfo info = getInfo(card, target);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            damage = be.modifyDamageGiveLast(info, damage);
+        }
+        return damage;
     }
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return augment.skill instanceof PTrait ? rawDescription : rawDescription + EUIUtils.SPLIT_LINE + augment.skill.getText(PCLCardTarget.Self, null, true);
+        return rawDescription + getDesc();
     }
 
     @Override
@@ -115,51 +149,67 @@ public class AugmentModifier extends AbstractCardModifier {
     }
 
     public void onDiscard(AbstractCard card) {
-        augment.skill.triggerOnDiscard(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnDiscard(card);
+        }
     }
 
     public void onDrawn(AbstractCard card) {
-        augment.skill.triggerOnDraw(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnDraw(card);
+        }
     }
 
     public void onExhausted(AbstractCard card) {
-        augment.skill.triggerOnExhaust(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnExhaust(card);
+        }
     }
 
     @Override
     public void onInitialApplication(AbstractCard card) {
-        if (card instanceof PointerProvider) {
-            augment.skill.setSource((PointerProvider) card).onAddToCard(card);
-        }
-        else {
-            augment.skill.sourceCard = card;
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.onAddToCard(card);
         }
     }
 
     public void onOtherCardPlayed(AbstractCard card, AbstractCard otherCard, CardGroup group) {
-        augment.skill.triggerOnOtherCardPlayed(otherCard);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnOtherCardPlayed(otherCard);
+        }
     }
 
     public void onPurged(AbstractCard card) {
-        augment.skill.triggerOnPurge(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnPurge(card);
+        }
     }
 
     @Override
     public void onRemove(AbstractCard card) {
-        augment.skill.onRemoveFromCard(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.onRemoveFromCard(card);
+        }
     }
 
     public void onReshuffled(AbstractCard card, CardGroup group) {
-        augment.skill.triggerOnReshuffle(card, group);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnReshuffle(card, group);
+        }
     }
 
     public void onUpgraded(AbstractCard card) {
-        augment.skill.triggerOnUpgrade(card);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnUpgrade(card);
+        }
     }
 
     @Override
     public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
-        augment.skill.use(getInfo(card, target), PCLActions.bottom);
+        PCLUseInfo info = getInfo(card, target);
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.use(info, PCLActions.bottom);
+        }
     }
 
     public PCLUseInfo refreshInfo(AbstractCard card, AbstractCreature target) {

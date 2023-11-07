@@ -1261,8 +1261,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected PCLCard makeCopyProperties(PCLCard copy) {
-        copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
+        for (PCLAugment augment : getAugments()) {
+            copy.addAugment(augment.makeCopy());
+        }
 
+        copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
         copy.name = this.name;
         copy.target = this.target;
         copy.upgradeLevelIncrease = this.upgradeLevelIncrease;
@@ -1308,10 +1311,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         copy.tags.addAll(tags);
         copy.originalName = originalName;
         copy.name = name;
-
-        for (PCLAugment augment : getAugments()) {
-            copy.addAugment(augment.makeCopy());
-        }
 
         // Only copy modifiers if they exist, to avoid unnecessary text re-initialization
         if (!CardModifierManager.modifiers(this).isEmpty()) {
@@ -1459,7 +1458,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 for (PCLAugment.SaveData dat : data.augments) {
                     PCLAugmentData augment = PCLAugmentData.get(dat.ID);
                     if (augment != null) {
-                        addAugment(augment.create(dat.timesUpgraded, dat.form), false);
+                        addAugment(augment.create(dat.form, dat.timesUpgraded), false);
                     }
                 }
             }

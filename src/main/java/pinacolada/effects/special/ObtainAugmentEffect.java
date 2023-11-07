@@ -29,7 +29,7 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
     }
 
     protected void firstUpdate(float deltaTime) {
-        PGR.dungeon.addAugment(augment.ID, 1);
+        PGR.dungeon.addAugment(augment.save);
     }
 
     public void render(SpriteBatch sb) {
