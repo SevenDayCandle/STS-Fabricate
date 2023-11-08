@@ -9,13 +9,17 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -27,10 +31,12 @@ import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.OrbFlareNotActuallyNeedingOrbEffect;
+import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
@@ -38,6 +44,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -45,7 +52,7 @@ import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
-    public static final int IMAGE_SIZE = 96;
+    public static final float IMAGE_SIZE = 96;
     protected float rotationSpeed;
     protected AbstractCreature target;
     protected OrbStrings orbStrings;
@@ -53,6 +60,8 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     public final PCLOrbData data;
     public DelayTiming timing;
     public EUIKeywordTooltip mainTip;
+    public int form;
+    public int timesUpgraded;
 
     public PCLOrb(PCLOrbData data) {
         this.data = data;
@@ -99,8 +108,13 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
         CombatManager.onOrbApplyFocus(this);
     }
 
+    public boolean canUpgrade() {
+        return timesUpgraded < data.maxUpgradeLevel || data.maxUpgradeLevel < 0;
+    }
+
     public void flash() {
-        PCLActions.bottom.playVFX(getOrbFlareEffect(), Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
+        fontScale = 3f;
+        PCLEffects.Queue.add(getOrbFlareEffect());
     }
 
     protected String formatDescription(int index, Object... args) {
@@ -127,7 +141,7 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
         return data.flareColor2;
     }
 
-    protected OrbFlareNotActuallyNeedingOrbEffect getOrbFlareEffect() {
+    protected AbstractGameEffect getOrbFlareEffect() {
         return new OrbFlareNotActuallyNeedingOrbEffect(this.cX, this.cY).setColors(getColor1(), getColor2());
     }
 
@@ -191,14 +205,41 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
         }
     }
 
+    protected void onUpgrade() {
+        if (data.applyFocusToEvoke) {
+            this.baseEvokeAmount = this.evokeAmount = data.getBaseEvoke(form) + data.getBaseEvokeUpgrade(form) * timesUpgraded;
+        }
+        if (data.applyFocusToPassive) {
+            this.basePassiveAmount = this.passiveAmount = data.getBasePassive(form) + data.getBasePassiveUpgrade(form) * timesUpgraded;
+        }
+    }
+
     public void passive() {
         flash();
+        playChannelSFX();
         CombatManager.onOrbPassiveEffect(this);
     }
 
     @Override
     public void playChannelSFX() {
         PCLSFX.play(data.sfx);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        this.renderText(sb);
+        this.hb.render(sb);
+    }
+
+    @Override
+    protected void renderText(SpriteBatch sb) {
+        if (data.applyFocusToPassive || data.applyFocusToEvoke || basePassiveAmount != baseEvokeAmount) {
+            if (this.showEvokeValue) {
+                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET, EUIColors.green(this.c.a), this.fontScale);
+            } else {
+                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.passiveAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET, this.c, this.fontScale);
+            }
+        }
     }
 
     public void setBaseEvokeAmount(int amount, boolean relative) {
@@ -214,7 +255,6 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     }
 
     public void setup() {
-
     }
 
     protected void setupDescription() {
@@ -241,11 +281,10 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
     }
 
     public void setupProperties() {
-        this.baseEvokeAmount = this.evokeAmount = data.baseEvokeValue;
-        this.basePassiveAmount = this.passiveAmount = data.basePassiveValue;
+        this.baseEvokeAmount = this.evokeAmount = data.getBaseEvoke(form) + data.getBaseEvokeUpgrade(form) * timesUpgraded;
+        this.basePassiveAmount = this.passiveAmount = data.getBasePassive(form) + data.getBasePassiveUpgrade(form) * timesUpgraded;
         this.timing = data.timing;
         this.orbStrings = data.strings;
-        this.showEvokeValue = data.applyFocusToEvoke || data.applyFocusToPassive; // Hide evoke value if orb does not scale with focus at all
         this.rotationSpeed = data.rotationSpeed;
     }
 
@@ -272,6 +311,14 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
             hb.clicked = false;
             onClick();
         }
+    }
+
+    public PCLOrb upgrade() {
+        if (this.canUpgrade()) {
+            timesUpgraded += 1;
+            onUpgrade();
+        }
+        return this;
     }
 
     @Override

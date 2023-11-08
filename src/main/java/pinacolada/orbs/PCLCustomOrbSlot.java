@@ -16,6 +16,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.PCLOrbRenderable;
 import pinacolada.ui.PCLPowerRenderable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -25,19 +26,21 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData, PCLDynamicOrb> {
     private static final TypeToken<PCLCustomOrbSlot> TTOKEN = new TypeToken<PCLCustomOrbSlot>() {
     };
+    private static final TypeToken<OrbForm> TTOKENFORM = new TypeToken<OrbForm>() {
+    };
     private static final HashMap<String, PCLCustomOrbSlot> CUSTOM_ORBS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_POWER_ID = "PCLO";
     public static final String SUBFOLDER = "orbs";
 
-    public String timing;
     public String flareColor1;
     public String flareColor2;
     public String sfx;
-    public boolean applyFocusToEvoke;
-    public boolean applyFocusToPassive;
-    public int baseEvokeValue;
-    public int basePassiveValue;
+    public Integer[] baseEvokeValue;
+    public Integer[] baseEvokeValueUpgrade;
+    public Integer[] basePassiveValue;
+    public Integer[] basePassiveValueUpgrade;
+    public int maxUpgrades;
     public float rotationSpeed;
     public String languageStrings;
     public String[] forms;
@@ -209,21 +212,25 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         if (first != null) {
             ID = first.ID;
             languageStrings = EUIUtils.serialize(first.languageMap);
-            applyFocusToEvoke = first.applyFocusToEvoke;
-            applyFocusToPassive = first.applyFocusToPassive;
-            baseEvokeValue = first.baseEvokeValue;
-            basePassiveValue = first.basePassiveValue;
+            baseEvokeValue = first.baseEvokeValue.clone();
+            baseEvokeValueUpgrade = first.baseEvokeValueUpgrade.clone();
+            basePassiveValue = first.basePassiveValue.clone();
+            basePassiveValueUpgrade = first.basePassiveValueUpgrade.clone();
             flareColor1 = first.flareColor1.toString();
             flareColor2 = first.flareColor2.toString();
+            maxUpgrades = first.maxUpgradeLevel;
             rotationSpeed = first.rotationSpeed;
             sfx = first.sfx;
-            timing = first.timing.name();
+
         }
 
         for (PCLDynamicOrbData builder : builders) {
-            EffectItemForm f = new EffectItemForm();
+            OrbForm f = new OrbForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.timing = builder.timing.name();
+            f.applyFocusToEvoke = builder.applyFocusToEvoke;
+            f.applyFocusToPassive = builder.applyFocusToPassive;
 
             tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }
@@ -244,11 +251,10 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         this.isInternal = isInternal;
 
         for (String fo : forms) {
-            EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            OrbForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
             PCLDynamicOrbData builder = new PCLDynamicOrbData(this, f);
             builders.add(builder);
         }
-
 
         imagePath = makeImagePath();
         for (PCLDynamicOrbData builder : builders) {
@@ -257,5 +263,14 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
 
         this.filePath = filePath;
         EUIUtils.logInfo(PCLCustomOrbSlot.class, "Loaded Custom Power: " + filePath);
+    }
+
+    public static class OrbForm implements Serializable {
+        static final long serialVersionUID = 1L;
+        public boolean applyFocusToEvoke;
+        public boolean applyFocusToPassive;
+        public String timing;
+        public String[] effects;
+        public String[] powerEffects;
     }
 }

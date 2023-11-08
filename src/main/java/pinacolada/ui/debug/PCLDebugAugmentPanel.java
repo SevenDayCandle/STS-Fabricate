@@ -59,7 +59,7 @@ public class PCLDebugAugmentPanel {
     }
 
     protected void regenerate() {
-        originalSortedAugments.addAll(PCLAugmentData.getValues());
+        originalSortedAugments.addAll(PCLAugmentData.getAllData());
         originalSortedAugments.addAll(EUIUtils.map(PCLCustomAugmentSlot.getAugments(), slot -> slot.getBuilder(0)));
         originalSortedAugments.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         sortedModIDs.add(PCLDebugCardPanel.ALL);

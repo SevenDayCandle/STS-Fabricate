@@ -6,6 +6,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     public PCardPrimary(PSkillData<T> data, PSkillSaveData content) {
@@ -30,7 +31,7 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return (skill instanceof PCond && !(skill instanceof PActiveNonCheckCond))
                 || (skill instanceof PMod);
     }

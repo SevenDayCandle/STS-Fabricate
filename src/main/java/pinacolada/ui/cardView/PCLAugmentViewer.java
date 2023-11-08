@@ -1,6 +1,7 @@
 package pinacolada.ui.cardView;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -49,10 +50,11 @@ public class PCLAugmentViewer extends EUIHoverable {
     public void refreshAugment() {
         PCLAugment augment = card.getAugment(index);
         if (augment != null) {
+            Texture tex = augment.getTexture();
             augmentTitle.setLabel(augment.getName());
             augmentButton
                     .setBackground(augment.getTextureBase())
-                    .setBorder(new EUIImage(augment.getTexture()));
+                    .setBorder(tex != null ? new EUIImage(tex) : null);
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(augment.canRemove() ? PGR.core.strings.scp_clickToRemove : PGR.core.strings.scp_cannotRemove);
             augmentDescription.setLabel(augment.getFullText());
         }

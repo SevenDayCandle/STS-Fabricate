@@ -8,19 +8,18 @@ import extendedui.ui.controls.EUIItemGrid;
 
 public class PCLGenericItemGrid<T extends PCLGenericItemRenderable<?>> extends EUIItemGrid<T> {
 
-    public PCLGenericItemGrid() {
-        this(0.5f, true);
-        targetScale = PCLPowerRenderable.BASE_SCALE;
-        startingScale = targetScale;
-        hoveredScale = 0.9f;
+    public PCLGenericItemGrid(float targetScale, float hoveredScale) {
+        this(targetScale, hoveredScale,0.5f, true);
     }
 
-    public PCLGenericItemGrid(float horizontalAlignment, boolean autoShowScrollbar) {
+    public PCLGenericItemGrid(float targetScale, float hoveredScale, float horizontalAlignment) {
+        this(targetScale, hoveredScale, horizontalAlignment, true);
+    }
+
+    public PCLGenericItemGrid(float targetScale, float hoveredScale, float horizontalAlignment, boolean autoShowScrollbar) {
         super(horizontalAlignment, autoShowScrollbar);
-    }
-
-    public PCLGenericItemGrid(float horizontalAlignment) {
-        this(horizontalAlignment, true);
+        this.targetScale = this.startingScale = targetScale;
+        this.hoveredScale = hoveredScale;
     }
 
     @Override

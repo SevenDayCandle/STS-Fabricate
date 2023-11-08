@@ -33,7 +33,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.monsters.PCLIntentType;
-import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -271,7 +270,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public Color getColorForEffect(PSkill<?> effect) {
-        return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
+        return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect, editor) ? Color.WHITE : Color.GRAY;
     }
 
     public int getExtra2ForSkill(PSkill<?> skill) {

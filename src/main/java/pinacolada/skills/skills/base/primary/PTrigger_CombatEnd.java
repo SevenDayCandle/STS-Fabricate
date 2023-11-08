@@ -15,6 +15,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 import java.util.Collections;
 
@@ -50,7 +51,7 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return skill instanceof PMultiBase ||
                 skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||

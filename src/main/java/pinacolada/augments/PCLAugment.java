@@ -93,7 +93,8 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     public String getFullText() {
         String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, getTier()), data.category.getName(), PGR.core.tooltips.augment.title)), // TODO show unremovable string if data is special
+                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, getTier()), data.category.getName(), PGR.core.tooltips.augment.title)),
+                !canRemove() ? PGR.core.strings.misc_unremovableDesc : null,
                 reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
                 getEffectPowerTextStrings());
     }
@@ -119,7 +120,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     }
 
     public Texture getTextureBase() {
-        return data.category.getIcon();
+        return data.getTextureBase();
     }
 
     public int getTier() {

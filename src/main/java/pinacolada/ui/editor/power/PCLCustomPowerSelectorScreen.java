@@ -1,6 +1,7 @@
 package pinacolada.ui.editor.power;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUIItemGrid;
@@ -33,7 +34,7 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
 
     @Override
     protected PCLGenericItemGrid<PCLPowerRenderable> getGrid() {
-        return new PCLGenericItemGrid<PCLPowerRenderable>();
+        return new PCLGenericItemGrid<PCLPowerRenderable>(PCLPowerRenderable.BASE_SCALE, PCLPowerRenderable.BASE_SCALE * 1.5f);
     }
 
     @Override

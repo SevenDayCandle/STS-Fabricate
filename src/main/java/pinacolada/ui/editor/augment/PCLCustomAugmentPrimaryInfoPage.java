@@ -1,55 +1,48 @@
-package pinacolada.ui.editor.power;
+package pinacolada.ui.editor.augment;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUITextBoxInput;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
+import extendedui.utilities.BlightTier;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLDynamicAugmentData;
+import pinacolada.blights.PCLCustomBlightSlot;
+import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLDynamicPowerData;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-import pinacolada.ui.editor.PCLCustomUpgradableEditor;
-import pinacolada.utilities.GameUtilities;
 
-import java.util.Collections;
-
-public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomPowerEditScreen effect;
+public class PCLCustomAugmentPrimaryInfoPage extends PCLCustomGenericPage {
+    protected PCLCustomAugmentEditScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected EUIDropdown<AbstractPower.PowerType> typeDropdown;
-    protected EUIDropdown<PCLPowerData.Behavior> endTurnBehaviorDropdown;
+    protected EUIDropdown<PCLAugmentCategory> categoryDropdown;
     protected EUILabel idWarning;
-    protected PCLCustomUpgradableEditor minMaxAmount;
-    protected PCLValueEditor priority;
-    protected PCLValueEditor turns;
+    protected PCLValueEditor maxUpgrades;
+    protected PCLValueEditor branchUpgrades;
+    protected EUIToggle permanentToggle;
+    protected EUIToggle uniqueToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditScreen effect) {
+    public PCLCustomAugmentPrimaryInfoPage(PCLCustomAugmentEditScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,
@@ -99,44 +92,39 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
-        typeDropdown = new EUIDropdown<AbstractPower.PowerType>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), GameUtilities::textForPowerType)
-                .setOnChange(types -> {
-                    if (!types.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setType(types.get(0)));
+        categoryDropdown = new EUIDropdown<PCLAugmentCategory>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLAugmentCategory::getName)
+                .setOnChange(rarities -> {
+                    if (!rarities.isEmpty()) {
+                        effect.modifyAllBuilders((e, i) -> e.setCategory(rarities.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
-                .setItems(AbstractPower.PowerType.values())
-                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType)
-                .setTooltipFunction(item -> {
-                    EUITooltip tip = GameUtilities.getTooltipForPowerType(item);
-                    return tip != null ? Collections.singleton(tip) : Collections.emptyList();
-                });;
-        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLPowerData.Behavior::getText)
-                .setOnChange(types -> {
-                    if (!types.isEmpty()) {
-                        PCLPowerData.Behavior type = types.get(0);
-                        effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(type));
-                        turns.setActive(type == PCLPowerData.Behavior.SingleTurn || type == PCLPowerData.Behavior.SingleTurnNext);
-                    }
-                })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
-                .setCanAutosizeButton(true)
-                .setItems(PCLPowerData.Behavior.values())
-                .setTooltip(PGR.core.strings.power_turnBehavior, PGR.core.strings.cetut_powerTurnBehavior);
-        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(screenW(0.26f), screenH(0.41f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);
-        priority = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.power_priority, (val) -> effect.modifyAllBuilders((e, i) -> e.setPriority(val)))
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_category)
+                .setItems(PCLAugmentCategory.values())
+                .setTooltip(PGR.core.strings.misc_category, PGR.core.strings.cetut_augmentCategory);
+        maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
+                .setLimits(-1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        turns = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_turns, (val) -> effect.modifyAllBuilders((e, i) -> e.setTurns(val)))
-                .setLimits(1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_turns, PGR.core.strings.cetut_turns);
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders((e, i) -> e.setBranchFactor(val)))
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
+                .setHasInfinite(true, true);
+        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setText(PGR.core.tooltips.unique.title)
+                .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
+                    e.setUnique(val);
+                }))
+                .setTooltip(PGR.core.tooltips.unique);
+        permanentToggle = new EUIToggle(new EUIHitbox(screenW(0.562f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setText(PGR.core.strings.misc_unremovable)
+                .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
+                    e.setPermanent(val);
+                }))
+                .setTooltip(new EUITooltip(PGR.core.strings.misc_unremovable, PGR.core.strings.misc_unremovableDesc));
 
         refresh();
     }
@@ -156,65 +144,64 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
-                typeDropdown.makeTour(true),
-                endTurnBehaviorDropdown.makeTour(true),
-                minMaxAmount.makeTour(true),
-                priority.makeTour(true),
-                turns.makeTour(true)
+                categoryDropdown.makeTour(true),
+                maxUpgrades.makeTour(true),
+                branchUpgrades.makeTour(true),
+                uniqueToggle.makeTour(true),
+                permanentToggle.makeTour(true)
         );
     }
 
-    protected void modifyMaxUpgrades(int min, int max) {
-        effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
-        effect.upgradeToggle.setLimits(min, max).setActive(max > 0);
+    protected void modifyMaxUpgrades(int val) {
+        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourPowerPrimary, getTour());
+        EUITourTooltip.queueFirstView(PGR.config.tourBlightPrimary, getTour());
     }
 
     @Override
     public void refresh() {
-        PCLDynamicPowerData builder = effect.getBuilder();
-
-        idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomPowerSlot.BASE_POWER_ID));
+        PCLDynamicAugmentData builder = effect.getBuilder();
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomBlightSlot.getBaseIDPrefix(builder.cardColor)));
         nameInput.setLabel(builder.strings.NAME);
-        typeDropdown.setSelection(builder.type, false);
-        endTurnBehaviorDropdown.setSelection(builder.endTurnBehavior, false);
-        minMaxAmount.setValue(builder.minAmount, builder.maxAmount, false);
-        priority.setValue(builder.priority, false);
-        turns.setValue(builder.turns, false).setActive(builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurn || builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext);
+        categoryDropdown.setSelection(builder.category, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
+        branchUpgrades.setValue(builder.branchFactor, false);
+        uniqueToggle.setToggle(builder.unique);
+        permanentToggle.setToggle(builder.permanent);
 
-        effect.upgradeToggle.setLimits(0, builder.maxAmount).setValue(effect.currentBuilder, false).setActive(builder.maxAmount > 0);
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
     }
 
     @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
-        typeDropdown.tryRender(sb);
-        endTurnBehaviorDropdown.tryRender(sb);
+        categoryDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
-        minMaxAmount.tryRender(sb);
-        priority.tryRender(sb);
-        turns.tryRender(sb);
+        maxUpgrades.tryRender(sb);
+        branchUpgrades.tryRender(sb);
+        uniqueToggle.tryRender(sb);
+        permanentToggle.tryRender(sb);
     }
 
     @Override
     public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
-        typeDropdown.tryUpdate();
-        endTurnBehaviorDropdown.tryUpdate();
+        categoryDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
-        minMaxAmount.tryUpdate();
-        priority.tryUpdate();
-        turns.tryUpdate();
+        maxUpgrades.tryUpdate();
+        branchUpgrades.tryUpdate();
+        uniqueToggle.tryUpdate();
+        permanentToggle.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {
@@ -224,8 +211,8 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     private void validifyCardID(String cardID) {
-        String fullID = PCLCustomPowerSlot.BASE_POWER_ID + cardID;
-        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomPowerSlot.isIDDuplicate(fullID)) {
+        String fullID = PCLCustomBlightSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomBlightSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
             idWarning.setActive(true);
             effect.saveButton.setInteractable(false);
         }

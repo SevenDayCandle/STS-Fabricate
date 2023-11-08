@@ -1,4 +1,4 @@
-package pinacolada.ui.editor.power;
+package pinacolada.ui.editor.orb;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,24 +10,26 @@ import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT2;
+import extendedui.ui.EUIBase;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUITextBoxInput;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.effects.PCLSFX;
+import pinacolada.orbs.PCLDynamicOrbData;
+import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.PCLValueEditor;
+import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
@@ -35,21 +37,22 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.Collections;
 
-public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
-    protected PCLCustomPowerEditScreen effect;
+public class PCLCustomOrbPrimaryInfoPage extends PCLCustomGenericPage {
+    protected PCLCustomOrbEditScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected EUIDropdown<AbstractPower.PowerType> typeDropdown;
-    protected EUIDropdown<PCLPowerData.Behavior> endTurnBehaviorDropdown;
+    protected EUIDialogColorPicker colorPicker;
+    protected EUIDropdown<String> sfxDropdown;
     protected EUILabel idWarning;
-    protected PCLCustomUpgradableEditor minMaxAmount;
-    protected PCLValueEditor priority;
-    protected PCLValueEditor turns;
+    protected PCLValueEditor rotationSpeed;
+    protected PCLValueEditor maxUpgrades;
+    protected PCLCustomColorEditor flashColor1Editor;
+    protected PCLCustomColorEditor flashColor2Editor;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomPowerPrimaryInfoPage(PCLCustomPowerEditScreen effect) {
+    public PCLCustomOrbPrimaryInfoPage(PCLCustomOrbEditScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,
@@ -99,44 +102,48 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
-        typeDropdown = new EUIDropdown<AbstractPower.PowerType>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), GameUtilities::textForPowerType)
+        sfxDropdown = new EUIDropdown<String>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        effect.modifyAllBuilders((e, i) -> e.setType(types.get(0)));
+                        String type = types.get(0);
+                        effect.modifyAllBuilders((e, i) -> e.setSfx(type));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
-                .setItems(AbstractPower.PowerType.values())
-                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_powerType)
-                .setTooltipFunction(item -> {
-                    EUITooltip tip = GameUtilities.getTooltipForPowerType(item);
-                    return tip != null ? Collections.singleton(tip) : Collections.emptyList();
-                });;
-        endTurnBehaviorDropdown = new EUIDropdown<PCLPowerData.Behavior>(new EUIHitbox(typeDropdown.hb.x + typeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), PCLPowerData.Behavior::getText)
-                .setOnChange(types -> {
-                    if (!types.isEmpty()) {
-                        PCLPowerData.Behavior type = types.get(0);
-                        effect.modifyAllBuilders((e, i) -> e.setEndTurnBehavior(type));
-                        turns.setActive(type == PCLPowerData.Behavior.SingleTurn || type == PCLPowerData.Behavior.SingleTurnNext);
-                    }
-                })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.power_turnBehavior)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_orbSfx)
                 .setCanAutosizeButton(true)
-                .setItems(PCLPowerData.Behavior.values())
-                .setTooltip(PGR.core.strings.power_turnBehavior, PGR.core.strings.cetut_powerTurnBehavior);
-        minMaxAmount = new PCLCustomUpgradableEditor(new EUIHitbox(screenW(0.26f), screenH(0.41f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_minMaxStacks, this::modifyMaxUpgrades)
+                .setItems(PCLSFX.getAll())
+                .setTooltip(PGR.core.strings.cedit_orbSfx, PGR.core.strings.cetut_orbSfx);
+        rotationSpeed = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.62f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_orbRotation, (val -> {
+                    effect.modifyAllBuilders((e, i) -> e.setRotationSpeed(val));
+                }))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_minMaxStacks, PGR.core.strings.cetut_powerMinMaxStacks);
-        priority = new PCLValueEditor(new EUIHitbox(screenW(0.362f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.power_priority, (val) -> effect.modifyAllBuilders((e, i) -> e.setPriority(val)))
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.power_priority, PGR.core.strings.cetut_powerPriority)
+                .setTooltip(PGR.core.strings.cedit_orbRotation, PGR.core.strings.cetut_orbRotation)
+                .setHasInfinite(false, true);
+
+        colorPicker = new EUIDialogColorPicker(new EUIHitbox(Settings.WIDTH * 0.7f, (Settings.HEIGHT - EUIBase.scale(800)) / 2f, EUIBase.scale(460), EUIBase.scale(800)), EUIUtils.EMPTY_STRING, EUIUtils.EMPTY_STRING);
+        colorPicker
+                .setShowDark(false)
+                .setActive(false);
+
+        flashColor1Editor = new PCLCustomColorEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), EUIUtils.format(PGR.core.strings.cedit_orbFlash, 1),
+                this::openColorEditor,
+                color -> {
+                    effect.modifyAllBuilders((e, i) -> e.setFlareColor1(color));
+                })
+                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_orbFlash, 1), PGR.core.strings.cetut_orbFlash);
+        flashColor2Editor = new PCLCustomColorEditor(new EUIHitbox(flashColor1Editor.hb.x + flashColor1Editor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), EUIUtils.format(PGR.core.strings.cedit_orbFlash, 2),
+                this::openColorEditor,
+                color -> {
+                    effect.modifyAllBuilders((e, i) -> e.setFlareColor2(color));
+                })
+                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_orbFlash, 2), PGR.core.strings.cetut_orbFlash);
+
+        maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
+                .setLimits(-1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        turns = new PCLValueEditor(new EUIHitbox(screenW(0.462f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_turns, (val) -> effect.modifyAllBuilders((e, i) -> e.setTurns(val)))
-                .setLimits(1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_turns, PGR.core.strings.cetut_turns);
 
         refresh();
     }
@@ -156,17 +163,17 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
-                typeDropdown.makeTour(true),
-                endTurnBehaviorDropdown.makeTour(true),
-                minMaxAmount.makeTour(true),
-                priority.makeTour(true),
-                turns.makeTour(true)
+                sfxDropdown.makeTour(true),
+                rotationSpeed.makeTour(true),
+                flashColor1Editor.makeTour(true),
+                flashColor2Editor.makeTour(true),
+                maxUpgrades.makeTour(true)
         );
     }
 
-    protected void modifyMaxUpgrades(int min, int max) {
-        effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
-        effect.upgradeToggle.setLimits(min, max).setActive(max > 0);
+    private void modifyMaxUpgrades(int val) {
+        effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
@@ -174,47 +181,66 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourPowerPrimary, getTour());
     }
 
+    private void openColorEditor(PCLCustomColorEditor editor) {
+        Color prev = editor.getColor().cpy();
+        colorPicker
+                .setOnComplete((res) -> {
+                    colorPicker.setActive(false);
+                    if (res == null) {
+                        editor.setColor(prev, true);
+                    }
+                    else {
+                        editor.setColor(res.getReturnColor(), true);
+                    }
+                })
+                .setHeaderText(editor.header.text)
+                .setActive(true);
+        colorPicker.open(prev);
+    }
+
     @Override
     public void refresh() {
-        PCLDynamicPowerData builder = effect.getBuilder();
+        PCLDynamicOrbData builder = effect.getBuilder();
 
         idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomPowerSlot.BASE_POWER_ID));
         nameInput.setLabel(builder.strings.NAME);
-        typeDropdown.setSelection(builder.type, false);
-        endTurnBehaviorDropdown.setSelection(builder.endTurnBehavior, false);
-        minMaxAmount.setValue(builder.minAmount, builder.maxAmount, false);
-        priority.setValue(builder.priority, false);
-        turns.setValue(builder.turns, false).setActive(builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurn || builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext);
+        sfxDropdown.setSelection(builder.sfx, false);
+        rotationSpeed.setValue((int) builder.rotationSpeed, false);
+        flashColor1Editor.setColor(builder.flareColor1, false);
+        flashColor2Editor.setColor(builder.flareColor2, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
 
-        effect.upgradeToggle.setLimits(0, builder.maxAmount).setValue(effect.currentBuilder, false).setActive(builder.maxAmount > 0);
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel > 0);
     }
 
     @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
-        typeDropdown.tryRender(sb);
-        endTurnBehaviorDropdown.tryRender(sb);
+        rotationSpeed.tryRender(sb);
+        sfxDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
-        minMaxAmount.tryRender(sb);
-        priority.tryRender(sb);
-        turns.tryRender(sb);
+        flashColor1Editor.tryRender(sb);
+        flashColor2Editor.tryRender(sb);
+        maxUpgrades.tryRender(sb);
+        colorPicker.tryRender(sb);
     }
 
     @Override
     public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
-        typeDropdown.tryUpdate();
-        endTurnBehaviorDropdown.tryUpdate();
+        rotationSpeed.tryUpdate();
+        sfxDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
-        minMaxAmount.tryUpdate();
-        priority.tryUpdate();
-        turns.tryUpdate();
+        flashColor1Editor.tryUpdate();
+        flashColor2Editor.tryUpdate();
+        maxUpgrades.tryUpdate();
+        colorPicker.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

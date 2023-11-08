@@ -154,7 +154,12 @@
 												"New Effect",
 												"Generic Effect",
 												"Move Left",
-												"Move Right"
+												"Move Right",
+												"Channel SFX",
+												"Rotation Speed",
+												"Flash Color {0}",
+												"Allow Focus to Scale Evoke",
+												"Allow Focus to Scale Trigger"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -240,7 +245,12 @@
 												"{#o:Click this to enable this card to deal damage.}",
 												"{#o:Click this to enable this card to give Block.}",
 												"If relics are specified here, this relic will not spawn unless the player has any of those relics, and obtaining this relic will replace those relics.",
-												"Occurences of Anchor Color 1 will be recolored to Target Color 1, and Anchor Color 2 to Target Color 2. Every other color will be made into a color between the two targets color, based on its distance to the anchors."
+												"Occurrences of Anchor Color 1 will be recolored to Target Color 1, and Anchor Color 2 to Target Color 2. Every other color will be made into a color between the two targets color, based on its distance to the anchors.",
+												"The sound that plays when this #yOrb is #yChanneled or #yEvoked.",
+												"How quickly this item's image rotates. Positive values produce counter-clockwise rotations, and negative values produce clockwise rotations.",
+												"Determines the color of the flash that appears when this #yOrb is #yChanneled or #yEvoked.",
+												"Determines whether this #yOrb's #yTrigger amount is affected by #yOrb modifiers.",
+												"Determines whether this #yOrb's #yEvoke amount is affected by #yOrb modifiers."
 								]
 				},
 				"pcl:CardPile": {
@@ -440,6 +450,8 @@
 												"View, create, or edit custom blights to use in Custom Runs.",
 												"Power Maker",
 												"View, create, or edit custom powers to use with other custom items.",
+												"Orb Generator",
+												"View, create, or edit custom orbs to use with other custom items.",
 												"Augment Database",
 												"Discover various Augments that can be used to enhance your cards.",
 												"Augment Factory",
@@ -472,7 +484,9 @@
 												"Overwrite the starting character's deck and attributes with a custom loadout",
 												"Enable Augments",
 												"Allows #yAugments to appear in runs, which can be used to enhance your cards",
-												"Replaces {0}"
+												"Replaces {0}",
+												"Unremovable",
+												"Cannot be removed from cards"
 								]
 				},
 				"pcl:Options": {

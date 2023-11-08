@@ -17,15 +17,18 @@ public class PCLDynamicAugment extends PCLAugment implements FabricateItem {
     public int form;
 
     public PCLDynamicAugment(PCLDynamicAugmentData data) {
-        super(data);
+        this(data, 0, 0);
+
     }
 
     public PCLDynamicAugment(PCLDynamicAugmentData data, int form, int timesUpgraded) {
-        super(data, form, timesUpgraded);
+        this(data, new SaveData(data.ID, form, timesUpgraded));
     }
 
     public PCLDynamicAugment(PCLDynamicAugmentData data, SaveData save) {
         super(data, save);
+        this.builder = data;
+        setupMoves(builder);
     }
 
     @Override

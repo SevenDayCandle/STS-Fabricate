@@ -988,7 +988,7 @@ public class GameUtilities {
             sb.append(" ");
             sb.append(timesUpgraded);
         }
-        else if (timesUpgraded != 0) {
+        else if (!alwaysShowUpgrade && timesUpgraded != 0) {
             sb.append("+");
             if (maxUpgrades < 0 || maxUpgrades > 1) {
                 sb.append(timesUpgraded);

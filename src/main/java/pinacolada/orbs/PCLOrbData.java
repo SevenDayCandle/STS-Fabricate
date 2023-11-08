@@ -1,25 +1,21 @@
 package pinacolada.orbs;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.orbs.Dark;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.ChokePower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.augments.PCLCustomAugmentSlot;
+import pinacolada.blights.PCLBlightData;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLSFX;
 import pinacolada.misc.PCLGenericData;
-import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.delay.DelayTiming;
@@ -40,7 +36,7 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     public static final PCLOrbData Lightning = registerBase(com.megacrit.cardcrawl.orbs.Lightning.class, com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning).setTiming(DelayTiming.EndOfTurnFirst);
     public static final PCLOrbData Plasma = registerBase(com.megacrit.cardcrawl.orbs.Plasma.class, com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma).setTiming(DelayTiming.StartOfTurnFirst);
 
-    public DelayTiming timing;
+    public DelayTiming timing = DelayTiming.EndOfTurnFirst;
     public Color flareColor1 = Color.WHITE;
     public Color flareColor2 = Color.WHITE;
     public EUIKeywordTooltip tooltip;
@@ -48,9 +44,13 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
     public String sfx = PCLSFX.ORB_LIGHTNING_CHANNEL;
     public boolean applyFocusToEvoke = true;
     public boolean applyFocusToPassive = true;
-    public int baseEvokeValue = 1;
-    public int basePassiveValue = 1;
-    public float rotationSpeed;
+    public Integer[] baseEvokeValue = array(1);
+    public Integer[] baseEvokeValueUpgrade = array(0);
+    public Integer[] basePassiveValue = array(1);
+    public Integer[] basePassiveValueUpgrade = array(0);
+    public int maxForms = 0;
+    public int maxUpgradeLevel = 0;
+    public float rotationSpeed = 45f;
 
     public PCLOrbData(Class<? extends AbstractOrb> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -153,6 +153,22 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         return cardData;
     }
 
+    public int getBaseEvoke(int form) {
+        return baseEvokeValue[Math.min(baseEvokeValue.length - 1, form)];
+    }
+
+    public int getBaseEvokeUpgrade(int form) {
+        return baseEvokeValueUpgrade[Math.min(baseEvokeValueUpgrade.length - 1, form)];
+    }
+
+    public int getBasePassive(int form) {
+        return basePassiveValue[Math.min(basePassiveValue.length - 1, form)];
+    }
+
+    public int getBasePassiveUpgrade(int form) {
+        return basePassiveValueUpgrade[Math.min(basePassiveValueUpgrade.length - 1, form)];
+    }
+
     public String getName() {
         return strings.NAME;
     }
@@ -191,13 +207,71 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
         return this;
     }
 
-    public PCLOrbData setBaseEvokeValue(int val) {
-        this.baseEvokeValue = val;
+    public PCLOrbData setBaseEvoke(int heal) {
+        this.baseEvokeValue[0] = heal;
         return this;
     }
 
-    public PCLOrbData setBasePassiveValue(int val) {
-        this.basePassiveValue = val;
+    public PCLOrbData setBaseEvoke(int heal, int healUpgrade) {
+        this.baseEvokeValue[0] = heal;
+        this.baseEvokeValueUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLOrbData setBaseEvoke(int thp, Integer[] thpUpgrade) {
+        return setBaseEvoke(array(thp), thpUpgrade);
+    }
+
+    public PCLOrbData setBaseEvoke(Integer[] heal, Integer[] healUpgrade) {
+        this.baseEvokeValue = heal;
+        this.baseEvokeValueUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLOrbData setBaseEvokeForForm(int form, int targetSize, int val, int upgrade) {
+        if (form >= this.baseEvokeValue.length) {
+            this.baseEvokeValue = expandArray(this.baseEvokeValue, targetSize);
+        }
+        if (form >= this.baseEvokeValueUpgrade.length) {
+            this.baseEvokeValueUpgrade = expandArray(this.baseEvokeValueUpgrade, targetSize);
+        }
+        this.baseEvokeValue[form] = val;
+        this.baseEvokeValueUpgrade[form] = upgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.baseEvokeValue.length, this.baseEvokeValueUpgrade.length);
+        return this;
+    }
+
+    public PCLOrbData setBasePassive(int heal) {
+        this.basePassiveValue[0] = heal;
+        return this;
+    }
+
+    public PCLOrbData setBasePassive(int heal, int healUpgrade) {
+        this.basePassiveValue[0] = heal;
+        this.basePassiveValueUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLOrbData setBasePassive(int thp, Integer[] thpUpgrade) {
+        return setBasePassive(array(thp), thpUpgrade);
+    }
+
+    public PCLOrbData setBasePassive(Integer[] heal, Integer[] healUpgrade) {
+        this.basePassiveValue = heal;
+        this.basePassiveValueUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLOrbData setBasePassiveForForm(int form, int targetSize, int val, int upgrade) {
+        if (form >= this.basePassiveValue.length) {
+            this.basePassiveValue = expandArray(this.basePassiveValue, targetSize);
+        }
+        if (form >= this.basePassiveValueUpgrade.length) {
+            this.basePassiveValueUpgrade = expandArray(this.basePassiveValueUpgrade, targetSize);
+        }
+        this.basePassiveValue[form] = val;
+        this.basePassiveValueUpgrade[form] = upgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.basePassiveValue.length, this.basePassiveValueUpgrade.length);
         return this;
     }
 
@@ -213,6 +287,18 @@ public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordPr
 
     public PCLOrbData setImagePath(String imagePath) {
         this.imagePath = imagePath;
+
+        return this;
+    }
+
+    public PCLOrbData setMaxForms(int maxForms) {
+        this.maxForms = maxForms;
+
+        return this;
+    }
+
+    public PCLOrbData setMaxUpgrades(int maxUpgradeLevel) {
+        this.maxUpgradeLevel = MathUtils.clamp(maxUpgradeLevel, -1, Integer.MAX_VALUE);
 
         return this;
     }

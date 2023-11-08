@@ -273,7 +273,10 @@ public class PCLCardText {
         PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augmentSlot.texture(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, card.transparency, 1);
         if (augment != null) {
             PCLRenderHelpers.drawOnCardAuto(sb, card, augment.getTextureBase(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, card.transparency, 1);
-            PCLRenderHelpers.drawOnCardAuto(sb, card, augment.getTexture(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, card.transparency, 1);
+            Texture tex = augment.getTexture();
+            if (tex != null) {
+                PCLRenderHelpers.drawOnCardAuto(sb, card, tex, AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, card.transparency, 1);
+            }
         }
         else {
             PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augmentSlot.texture(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, card.transparency, 1);

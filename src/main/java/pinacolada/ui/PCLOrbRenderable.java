@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -18,7 +19,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 public class PCLOrbRenderable extends PCLGenericItemRenderable<PCLOrbData> {
     public static final float BASE_SCALE = Settings.scale * 0.6f;
     protected Texture texture;
-    protected TextureRegion region;
     public PCLOrbRenderable(PCLOrbData power) {
         super(power, power.tooltip, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
     }
@@ -32,7 +32,12 @@ public class PCLOrbRenderable extends PCLGenericItemRenderable<PCLOrbData> {
     }
 
     public void initializeImage() {
-        this.texture = EUIRM.getTexture(this.item.imagePath);
+        if (item instanceof PCLDynamicOrbData && ((PCLDynamicOrbData) item).portraitImage != null) {
+            this.texture = ((PCLDynamicOrbData) item).portraitImage;
+        }
+        else {
+            this.texture = EUIRM.getTexture(this.item.imagePath);
+        }
         if (this.texture == null) {
             this.texture = PCLCoreImages.CardAffinity.unknown.texture();
         }

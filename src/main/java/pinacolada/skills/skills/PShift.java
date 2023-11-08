@@ -12,6 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.primary.PShift_OnObtain;
 import pinacolada.skills.skills.base.primary.PShift_OnRemove;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 public abstract class PShift extends PPrimary<PField_Empty> {
 
@@ -42,7 +43,7 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return skill instanceof PMultiBase ||
                 skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||

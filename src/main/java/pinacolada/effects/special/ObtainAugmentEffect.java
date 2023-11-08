@@ -1,7 +1,9 @@
 package pinacolada.effects.special;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
 import extendedui.EUIRenderHelpers;
@@ -33,9 +35,14 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
     }
 
     public void render(SpriteBatch sb) {
+        Texture base = augment.getTextureBase();
+        Texture tex = augment.getTexture();
         EUI.addPriorityPostRender(s -> {
-            EUIRenderHelpers.draw(sb, augment.getTexture(), color, x, y, augment.getTexture().getWidth(), augment.getTexture().getHeight());
-            FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, augment.getName(), x + augment.getTexture().getWidth() * 2f, y + augment.getTexture().getHeight() / 2f, color);
+            EUIRenderHelpers.drawCentered(sb, color, base, x, y, base.getWidth(), base.getHeight(), Settings.scale, Settings.scale);
+            if (tex != null) {
+                EUIRenderHelpers.drawCentered(sb, color, tex, x, y, tex.getWidth(), tex.getHeight(), Settings.scale, Settings.scale);
+            }
+            FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, augment.getName(), x + base.getWidth() * 2f, y + base.getHeight() / 2f, color);
         });
     }
 

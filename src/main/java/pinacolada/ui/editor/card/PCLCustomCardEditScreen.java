@@ -127,35 +127,11 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
         return makeEffectPage(new PCardPrimary_DealDamage().setTarget(getBuilder().cardTarget));
     }
 
-    @Override
-    public void preInitialize(PCLCustomCardSlot slot) {
-        super.preInitialize(slot);
-        imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(undoButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
-                .setColor(Color.WHITE)
-                .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
-                .setOnClick(this::editImage);
-
-        formEditor = new PCLCustomFormEditor(
-                new EUIHitbox(Settings.WIDTH * 0.04f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f, Settings.scale * 90f, Settings.scale * 48f), this);
-
-        upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
-                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
-                .setText(SingleCardViewPopup.TEXT[6])
-                .setToggle(SingleCardViewPopup.isViewingUpgrade)
-                .setOnToggle(this::toggleViewUpgrades);
-
-        upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
-    }
-
     protected void rebuildItem() {
-        previewCard = getBuilder().createImplWithForms(currentBuilder, upgraded ? 1 : 0);
+        previewCard = getBuilder().createImplWithForms(currentBuilder, upgradeLevel);
         previewCard.setForms(getTempBuilders());
 
-        if (upgraded) {
+        if (upgradeLevel > 0) {
             previewCard.displayUpgrades();
         }
         else {
@@ -182,14 +158,15 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
                 .setImage(new ColoredTexture(texture)));
     }
 
-    protected void toggleViewUpgrades(boolean value) {
+    protected void toggleViewUpgrades(int value) {
+        int prevValue = upgradeLevel;
         super.toggleViewUpgrades(value);
-        if (upgraded) {
-            previewCard.changeForm(previewCard.getForm(), 0, 1);
+        if (upgradeLevel > 0) {
+            previewCard.changeForm(previewCard.getForm(), prevValue, value);
             previewCard.displayUpgrades();
         }
         else {
-            previewCard.changeForm(previewCard.getForm(), 1, 0);
+            previewCard.changeForm(previewCard.getForm(), prevValue, value);
             previewCard.displayUpgradesForSkills(false);
             previewCard.initializeDescription();
         }

@@ -72,36 +72,16 @@ public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCust
 
     public void preInitialize(PCLCustomBlightSlot slot) {
         super.preInitialize(slot);
-        imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
-                .setPosition(undoButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
-                .setColor(Color.WHITE)
-                .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
-                .setOnClick(this::editImage);
-
-        formEditor = new PCLCustomFormEditor(
-                new EUIHitbox(Settings.WIDTH * 0.04f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f, Settings.scale * 90f, Settings.scale * 48f), this);
-
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f)
                 .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT * 2);
         previewDescription.label.setSmartText(true);
-
-        upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
-                .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
-                .setText(SingleCardViewPopup.TEXT[6])
-                .setToggle(SingleCardViewPopup.isViewingUpgrade)
-                .setOnToggle(this::toggleViewUpgrades);
-
-        upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
     }
 
     protected void rebuildItem() {
         previewBlight = getBuilder().create();
-        previewBlight.setTimesUpgraded(upgraded ? 1 : 0);
+        previewBlight.setTimesUpgraded(upgradeLevel);
         previewBlight.scale = 1f;
         previewBlight.currentX = previewBlight.targetX = CARD_X;
         previewBlight.currentY = previewBlight.targetY = RELIC_Y;
@@ -125,9 +105,9 @@ public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCust
                 .setImage(texture));
     }
 
-    protected void toggleViewUpgrades(boolean value) {
+    protected void toggleViewUpgrades(int value) {
         super.toggleViewUpgrades(value);
-        previewBlight.setTimesUpgraded(upgraded ? 1 : 0);
+        previewBlight.setTimesUpgraded(upgradeLevel);
         previewDescription.setLabel(previewBlight.getUpdatedDescription());
     }
 

@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 import java.util.Collections;
 
@@ -55,7 +56,7 @@ public class PTrigger_When extends PTrigger {
 
     // Restrict conditions that do not subscribe to anything and are not under a condition that does so
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return !(skill instanceof PCond)
                 || skill instanceof PMultiBase
                 || skill instanceof PCLCombatSubscriber

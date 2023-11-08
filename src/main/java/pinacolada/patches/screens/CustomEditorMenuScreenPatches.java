@@ -12,6 +12,7 @@ import extendedui.ui.controls.EUIMainMenuPanelButton;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.ui.editor.augment.PCLCustomAugmentSelectorScreen;
 import pinacolada.ui.editor.blight.PCLCustomBlightSelectorScreen;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
@@ -30,6 +31,8 @@ public class CustomEditorMenuScreenPatches {
         available.add(new EUIMainMenuPanelButton(ImageMaster.MENU_PANEL_BG_RED, PCLCoreImages.Menu.menuPotion.texture(), PGR.core.strings.menu_potion, PGR.core.strings.menu_potionDesc, () -> PGR.customPotions.open(null, PCLCustomPotionSelectorScreen.currentColor)));
         available.add(new EUIMainMenuPanelButton(new Color(0.6f, 0.7f, 0.5f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuBlight.texture(), PGR.core.strings.menu_blight, PGR.core.strings.menu_blightDesc, () -> PGR.customBlights.open(null, PCLCustomBlightSelectorScreen.currentColor)));
         available.add(new EUIMainMenuPanelButton(new Color(0.8f, 0.65f, 0.4f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuPower.texture(), PGR.core.strings.menu_power, PGR.core.strings.menu_powerDesc, () -> PGR.customPowers.open(null, AbstractCard.CardColor.COLORLESS)));
+        available.add(new EUIMainMenuPanelButton(new Color(0.4f, 0.5f, 0.8f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuOrb.texture(), PGR.core.strings.menu_orb, PGR.core.strings.menu_orbDesc, () -> PGR.customOrbs.open(null, AbstractCard.CardColor.COLORLESS)));
+        available.add(new EUIMainMenuPanelButton(new Color(0.4f, 0.75f, 0.75f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuAugment.texture(), PGR.core.strings.menu_augmentCreator, PGR.core.strings.menu_augmentCreatorDesc, () -> PGR.customAugments.open(null, PCLCustomAugmentSelectorScreen.currentColor)));
         return available;
     }
 

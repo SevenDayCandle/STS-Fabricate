@@ -17,6 +17,7 @@ import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.utilities.GameUtilities;
 
@@ -89,10 +90,6 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
 
     public static PCLAugmentData getStaticData(String id) {
         return AUGMENT_MAP.get(id);
-    }
-
-    public static Collection<PCLAugmentData> getValues() {
-        return AUGMENT_MAP.values();
     }
 
     // Each ID must be called at least once to have it selectable in the console

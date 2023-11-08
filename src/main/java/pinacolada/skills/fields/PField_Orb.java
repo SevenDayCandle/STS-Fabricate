@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -67,7 +68,7 @@ public class PField_Orb extends PField_Random {
     }
 
     public final FuncT1<Boolean, AbstractOrb> getOrbFilter() {
-        return (c -> (orbs.isEmpty() || EUIUtils.any(orbs, orb -> orb.equals(c.ID))));
+        return (c -> ((orbs.isEmpty() && !(c instanceof EmptyOrbSlot)) || EUIUtils.any(orbs, orb -> orb.equals(c.ID))));
     }
 
     public String getOrbOrString() {

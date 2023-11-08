@@ -138,6 +138,11 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_generic = cedit.TEXT[88];
     public final String cedit_moveLeft = cedit.TEXT[89];
     public final String cedit_moveRight = cedit.TEXT[90];
+    public final String cedit_orbSfx = cedit.TEXT[91];
+    public final String cedit_orbRotation = cedit.TEXT[92];
+    public final String cedit_orbFlash = cedit.TEXT[93];
+    public final String cedit_orbFocusEvoke = cedit.TEXT[94];
+    public final String cedit_orbFocusPassive = cedit.TEXT[95];
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -221,6 +226,11 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_blankBlock = cetut.TEXT[79];
     public final String cetut_relicReplace = cetut.TEXT[80];
     public final String cetut_colorAnchor = cetut.TEXT[81];
+    public final String cetut_orbSfx = cetut.TEXT[82];
+    public final String cetut_orbRotation = cetut.TEXT[83];
+    public final String cetut_orbFlash = cetut.TEXT[84];
+    public final String cetut_orbFocusPassive = cetut.TEXT[85];
+    public final String cetut_orbFocusEvoke = cetut.TEXT[86];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -340,10 +350,12 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String menu_blightDesc = menu.TEXT[8];
     public final String menu_power = menu.TEXT[9];
     public final String menu_powerDesc = menu.TEXT[10];
-    public final String menu_augmentLibrary = menu.TEXT[11];
-    public final String menu_augmentLibraryDesc = menu.TEXT[12];
-    public final String menu_augmentCreator = menu.TEXT[13];
-    public final String menu_augmentCreatorDesc = menu.TEXT[14];
+    public final String menu_orb = menu.TEXT[11];
+    public final String menu_orbDesc = menu.TEXT[12];
+    public final String menu_augmentLibrary = menu.TEXT[13];
+    public final String menu_augmentLibraryDesc = menu.TEXT[14];
+    public final String menu_augmentCreator = menu.TEXT[15];
+    public final String menu_augmentCreatorDesc = menu.TEXT[16];
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
@@ -370,6 +382,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String misc_customAugment = misc.TEXT[22];
     public final String misc_customAugmentDesc = misc.TEXT[23];
     public final String misc_replaces = misc.TEXT[24];
+    public final String misc_unremovable = misc.TEXT[25];
+    public final String misc_unremovableDesc = misc.TEXT[26];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];

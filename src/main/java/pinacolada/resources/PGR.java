@@ -66,8 +66,10 @@ import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.*;
+import pinacolada.ui.editor.augment.PCLCustomAugmentSelectorScreen;
 import pinacolada.ui.editor.blight.PCLCustomBlightSelectorScreen;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
+import pinacolada.ui.editor.orb.PCLCustomOrbSelectorScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
@@ -105,14 +107,17 @@ public class PGR {
     public static PCLAugmentCollectionScreen augmentScreen;
     public static PCLCardRewardScreen rewardScreen;
     public static PCLCharacterSelectOverlay charSelectProvider;
+    public static PCLCustomAugmentSelectorScreen customAugments;
     public static PCLCustomBlightSelectorScreen customBlights;
     public static PCLCustomCardSelectorScreen customCards;
+    public static PCLCustomOrbSelectorScreen customOrbs;
     public static PCLCustomPotionSelectorScreen customPotions;
     public static PCLCustomPowerSelectorScreen customPowers;
     public static PCLCustomRelicSelectorScreen customRelics;
     public static PCLCustomRunScreen customMode;
     public static PCLColorlessGroupLibraryModule colorlessGroups;
     public static PCLLoadoutScreen loadoutEditor;
+    public static PCLOrbKeywordFilters orbFilters;
     public static PCLPowerKeywordFilters powerFilters;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
@@ -295,8 +300,10 @@ public class PGR {
         PGR.relicPopup = new PCLSingleRelicPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
         PGR.loadoutEditor = new PCLLoadoutScreen();
+        PGR.customAugments = new PCLCustomAugmentSelectorScreen();
         PGR.customBlights = new PCLCustomBlightSelectorScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
+        PGR.customOrbs = new PCLCustomOrbSelectorScreen();
         PGR.customPotions = new PCLCustomPotionSelectorScreen();
         PGR.customPowers = new PCLCustomPowerSelectorScreen();
         PGR.customRelics = new PCLCustomRelicSelectorScreen();
@@ -308,6 +315,7 @@ public class PGR {
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.augmentFilters = new PCLAugmentKeywordFilters();
         PGR.augmentLibrary = new PCLAugmentLibraryScreen();
+        PGR.orbFilters = new PCLOrbKeywordFilters();
         PGR.powerFilters = new PCLPowerKeywordFilters();
         PGR.blackScreen = new EUIImage(ImageMaster.WHITE_SQUARE_IMG, new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))

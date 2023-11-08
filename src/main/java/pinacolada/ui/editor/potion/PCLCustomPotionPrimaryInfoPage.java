@@ -21,7 +21,9 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.potions.PCLPotion;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -202,9 +204,9 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         );
     }
 
-    protected void modifyMaxUpgrades(int val) {
+    private void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
@@ -212,7 +214,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourPotionPrimary, getTour());
     }
 
-    protected void openColorEditor(PCLCustomColorEditor editor, ActionT2<PCLPotion, Color> onChange) {
+    private void openColorEditor(PCLCustomColorEditor editor, ActionT2<PCLPotion, Color> onChange) {
         Color prev = editor.getColor().cpy();
         colorPicker
                 .setOnChange((res) -> {
@@ -236,18 +238,20 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomPotionSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        rarityDropdown.setSelection(effect.getBuilder().rarity, false);
-        sizeDropdown.setSelection(effect.getBuilder().size, false);
-        effectDropdown.setSelection(effect.getBuilder().effect, false);
-        liquidColorEditor.setColor(effect.getBuilder().liquidColor, false);
-        hybridColorEditor.setColor(effect.getBuilder().hybridColor, false);
-        spotsColorEditor.setColor(effect.getBuilder().spotsColor, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
+        PCLDynamicPotionData builder = effect.getBuilder();
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomPotionSlot.getBaseIDPrefix(builder.cardColor)));
+        nameInput.setLabel(builder.strings.NAME);
+        rarityDropdown.setSelection(builder.rarity, false);
+        sizeDropdown.setSelection(builder.size, false);
+        effectDropdown.setSelection(builder.effect, false);
+        liquidColorEditor.setColor(builder.liquidColor, false);
+        hybridColorEditor.setColor(builder.hybridColor, false);
+        spotsColorEditor.setColor(builder.spotsColor, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
+        branchUpgrades.setValue(builder.branchFactor, false);
+
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
     }
 
     @Override

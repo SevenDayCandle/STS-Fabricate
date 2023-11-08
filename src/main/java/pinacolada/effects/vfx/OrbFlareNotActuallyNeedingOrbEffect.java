@@ -29,17 +29,13 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
 
         this.cX = cX;
         this.cY = cY;
-        this.renderBehind = true;
         this.scale = 2.0F * Settings.scale;
         this.scaleY = 0.0F;
 
         setColors(OrbFlareEffect.OrbFlareColor.DARK);
     }
 
-    public void dispose() {
-
-    }
-
+    @Override
     public void render(SpriteBatch sb) {
         sb.setColor(this.color2);
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
@@ -81,13 +77,9 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         return this;
     }
 
-    public void updateInternal() {
-        this.duration -= Gdx.graphics.getRawDeltaTime();
-        if (this.duration < 0.0F) {
-            this.duration = 0.0F;
-            this.isDone = true;
-        }
-
+    @Override
+    protected void updateInternal(float deltaTime) {
+        super.updateInternal(deltaTime);
         this.scaleY = Interpolation.elasticIn.apply(2.2F, 0.8F, this.duration * 2.0F);
         this.scale = Interpolation.elasticIn.apply(2.1F, 1.9F, this.duration * 2.0F);
         this.color.a = Interpolation.pow2Out.apply(0.0F, 0.6F, this.duration * 2.0F);

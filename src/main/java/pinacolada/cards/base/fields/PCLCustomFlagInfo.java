@@ -85,7 +85,7 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Loadout: " + path);
+            EUIUtils.logError(PCLCustomFlagInfo.class, "Could not load Custom Flag: " + path);
         }
     }
 
@@ -108,14 +108,14 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
         FileHandle writer = Gdx.files.local(filePath);
         if (writer.exists() && !newFilePath.equals(filePath)) {
             writer.moveTo(Gdx.files.local(newFilePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Loadout: " + filePath + ", New: " + newFilePath);
+            EUIUtils.logInfo(this, "Moved Custom Flag: " + filePath + ", New: " + newFilePath);
         }
         writer = Gdx.files.local(newFilePath);
 
         filePath = newFilePath;
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false, HttpParametersUtils.defaultEncoding);
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Loadout: " + filePath);
+        EUIUtils.logInfo(this, "Saved Custom Flag: " + filePath);
     }
 
     @Override
@@ -137,13 +137,13 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
         }
         filePath = fp;
         linkFlag();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Loadout: " + fp);
+        EUIUtils.logInfo(this, "Loaded Custom Flag: " + fp);
     }
 
     public void wipe() {
         CUSTOM_FLAGS.remove(ID);
         FileHandle writer = Gdx.files.local(filePath);
         writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Loadout: " + filePath);
+        EUIUtils.logInfo(this, "Deleted Custom Flag: " + filePath);
     }
 }

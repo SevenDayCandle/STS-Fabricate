@@ -18,6 +18,8 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.BlightTier;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.blights.PCLDynamicBlight;
+import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.resources.PGR;
@@ -32,7 +34,6 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
-    protected EUITextBoxInput flavorInput; // TODO implement this once you have multi-line input available
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
     protected EUIDropdown<BlightTier> tierDropdown;
     protected EUILabel idWarning;
@@ -145,7 +146,7 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
 
     protected void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
@@ -155,14 +156,15 @@ public class PCLCustomBlightPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomBlightSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        tierDropdown.setSelection(effect.getBuilder().tier, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        uniqueToggle.setToggle(effect.getBuilder().unique);
+        PCLDynamicBlightData builder = effect.getBuilder();
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomBlightSlot.getBaseIDPrefix(builder.cardColor)));
+        nameInput.setLabel(builder.strings.NAME);
+        tierDropdown.setSelection(builder.tier, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
+        branchUpgrades.setValue(builder.branchFactor, false);
+        uniqueToggle.setToggle(builder.unique);
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
     }
 
     @Override

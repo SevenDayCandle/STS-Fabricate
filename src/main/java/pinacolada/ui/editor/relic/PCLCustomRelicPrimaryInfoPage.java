@@ -20,7 +20,9 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -181,9 +183,9 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         );
     }
 
-    protected void modifyMaxUpgrades(int val) {
+    private void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
@@ -194,15 +196,17 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomRelicSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        tierDropdown.setSelection(effect.getBuilder().tier, false);
-        sfxDropdown.setSelection(effect.getBuilder().sfx, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        loadoutValue.setValue(effect.getBuilder().getLoadoutValue(), false);
+        PCLDynamicRelicData builder = effect.getBuilder();
 
-        String[] replacements = effect.getBuilder().replacementIDs;
+        idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomRelicSlot.getBaseIDPrefix(builder.cardColor)));
+        nameInput.setLabel(builder.strings.NAME);
+        tierDropdown.setSelection(builder.tier, false);
+        sfxDropdown.setSelection(builder.sfx, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
+        branchUpgrades.setValue(builder.branchFactor, false);
+        loadoutValue.setValue(builder.getLoadoutValue(), false);
+
+        String[] replacements = builder.replacementIDs;
         if (replacements != null) {
             replacementDropdown.setSelection(Arrays.asList(replacements), r -> r.relicId, false);
         }
@@ -210,7 +214,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
             replacementDropdown.setSelection(Collections.emptyList(), false);
         }
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
     }
 
     @Override

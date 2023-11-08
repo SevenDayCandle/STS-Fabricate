@@ -35,6 +35,7 @@ import pinacolada.skills.skills.PCardPrimary;
 import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -124,8 +125,8 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return super.isSkillAllowed(skill) ||
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
+        return super.isSkillAllowed(skill, editor) ||
                 skill instanceof PDamageTrait;
     }
 

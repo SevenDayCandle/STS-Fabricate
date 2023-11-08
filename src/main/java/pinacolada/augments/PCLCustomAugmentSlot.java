@@ -14,6 +14,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLAugmentRenderable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,6 +227,15 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
 
     public PCLDynamicAugment make() {
         return getBuilder(0).create();
+    }
+
+    public PCLAugmentRenderable makeRenderable() {
+        return getBuilder(0).createRenderable(0, 0);
+    }
+
+    public PCLAugmentRenderable makeRenderable(int form, int timesUpgraded) {
+        PCLDynamicAugmentData augment = getBuilder(form);
+        return augment != null ? augment.createRenderable(form, timesUpgraded) : null;
     }
 
     // Copy down the properties from all builders into this slot

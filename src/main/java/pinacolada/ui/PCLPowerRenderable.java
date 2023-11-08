@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreImages;
 
@@ -31,7 +32,10 @@ public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
     }
 
     public void initializeImage() {
-        if (this.item.useRegionImage) {
+        if (this.item instanceof PCLDynamicPowerData && ((PCLDynamicPowerData) this.item).portraitImage != null) {
+            this.texture = ((PCLDynamicPowerData) this.item).portraitImage;
+        }
+        else if (this.item.useRegionImage) {
             this.region = AbstractPower.atlas.findRegion("128/" + this.item.imagePath);
         }
         else {

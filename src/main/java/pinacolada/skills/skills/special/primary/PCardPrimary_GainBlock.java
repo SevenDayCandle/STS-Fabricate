@@ -21,6 +21,7 @@ import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
 @VisibleSkill
@@ -90,8 +91,8 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return super.isSkillAllowed(skill) ||
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
+        return super.isSkillAllowed(skill, editor) ||
                 skill instanceof PBlockTrait;
     }
 

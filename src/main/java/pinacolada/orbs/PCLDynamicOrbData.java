@@ -4,27 +4,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.OrbStrings;
-import com.megacrit.cardcrawl.localization.PowerStrings;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.powers.PCLCustomPowerSlot;
-import pinacolada.powers.PCLDynamicPower;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.PCLOrbRenderable;
-import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -57,10 +50,11 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         setImagePath(original.imagePath);
         setApplyFocusToEvoke(original.applyFocusToEvoke);
         setApplyFocusToPassive(original.applyFocusToPassive);
-        setBaseEvokeValue(original.baseEvokeValue);
-        setBasePassiveValue(original.basePassiveValue);
+        setBaseEvoke(original.baseEvokeValue, original.baseEvokeValueUpgrade);
+        setBasePassive(original.basePassiveValue, original.basePassiveValueUpgrade);
         setFlareColor1(original.flareColor1);
         setFlareColor2(original.flareColor2);
+        setMaxUpgrades(original.maxUpgradeLevel);
         setRotationSpeed(original.rotationSpeed);
         setSfx(original.sfx);
         setTiming(original.timing);
@@ -71,10 +65,11 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         setImagePath(original.imagePath);
         setApplyFocusToEvoke(original.applyFocusToEvoke);
         setApplyFocusToPassive(original.applyFocusToPassive);
-        setBaseEvokeValue(original.baseEvokeValue);
-        setBasePassiveValue(original.basePassiveValue);
+        setBaseEvoke(original.baseEvokeValue, original.baseEvokeValueUpgrade);
+        setBasePassive(original.basePassiveValue, original.basePassiveValueUpgrade);
         setFlareColor1(original.flareColor1);
         setFlareColor2(original.flareColor2);
+        setMaxUpgrades(original.maxUpgradeLevel);
         setRotationSpeed(original.rotationSpeed);
         setSfx(original.sfx);
         setTiming(original.timing);
@@ -84,18 +79,18 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicOrbData(PCLCustomOrbSlot data, PCLCustomEditorLoadable.EffectItemForm form) {
+    public PCLDynamicOrbData(PCLCustomOrbSlot data, PCLCustomOrbSlot.OrbForm form) {
         this(data.ID);
-        safeLoadValue(() -> setApplyFocusToEvoke(data.applyFocusToEvoke));
-        safeLoadValue(() -> setApplyFocusToPassive(data.applyFocusToPassive));
-        safeLoadValue(() -> setBaseEvokeValue(data.baseEvokeValue));
-        safeLoadValue(() -> setBasePassiveValue(data.basePassiveValue));
-        safeLoadValue(() -> setBaseEvokeValue(data.baseEvokeValue));
+        safeLoadValue(() -> setApplyFocusToEvoke(form.applyFocusToEvoke));
+        safeLoadValue(() -> setApplyFocusToPassive(form.applyFocusToPassive));
+        safeLoadValue(() -> setBaseEvoke(data.baseEvokeValue, data.baseEvokeValueUpgrade));
+        safeLoadValue(() -> setBasePassive(data.basePassiveValue, data.basePassiveValueUpgrade));
         safeLoadValue(() -> setFlareColor1(Color.valueOf(data.flareColor1)));
         safeLoadValue(() -> setFlareColor2(Color.valueOf(data.flareColor2)));
+        safeLoadValue(() -> setMaxUpgrades(data.maxUpgrades));
         safeLoadValue(() -> setRotationSpeed(data.rotationSpeed));
         safeLoadValue(() -> setSfx(data.sfx));
-        safeLoadValue(() -> setTiming(DelayTiming.valueOf(data.timing)));
+        safeLoadValue(() -> setTiming(DelayTiming.valueOf(form.timing)));
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(form.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(form.powerEffects, PSkill::get), true, true));

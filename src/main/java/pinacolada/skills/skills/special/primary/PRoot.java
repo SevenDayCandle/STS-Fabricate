@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
@@ -9,11 +10,14 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.orbs.PCLDynamicOrbData;
+import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
 @VisibleSkill
@@ -42,12 +46,17 @@ public class PRoot extends PPrimary<PField_Empty> {
         if (source instanceof AbstractPower || requestor instanceof PCLDynamicPowerData) {
             return TEXT.cond_when(PGR.core.tooltips.create.past());
         }
+        if (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) {
+            String timingString = requestor != null ? ((PCLDynamicOrbData)requestor).timing.getTitle() : source instanceof PCLOrb ? ((PCLOrb) source).timing.getTitle() : null;
+            return PCLCoreStrings.colorString("y", timingString != null ? PGR.core.tooltips.trigger.title + COMMA_SEPARATOR + timingString : PGR.core.tooltips.trigger.title);
+        }
         return EUIUtils.EMPTY_STRING;
     }
 
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
     // For powers, this activates when the power is first applied
+    // For orbs, this activates when triggered
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String sub = getCapitalSubText(perspective, requestor, addPeriod);
@@ -68,8 +77,8 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill.data.sourceTypes == null || EUIUtils.any(skill.data.sourceTypes, s -> s.isSourceAllowed(this));
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
+        return skill.data.sourceTypes == null || EUIUtils.any(skill.data.sourceTypes, s -> s.isSourceAllowed(editor));
     }
 
     @Override

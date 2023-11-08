@@ -19,9 +19,11 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
@@ -266,7 +268,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     protected void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setActive(val != 0);
+        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
     }
 
     @Override
@@ -316,21 +318,22 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
-        nameInput.setLabel(effect.getBuilder().strings.NAME);
-        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
-        typesDropdown.setSelection(effect.getBuilder().cardType, false);
-        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
-        flagsDropdown.setSelection(effect.getBuilder().flags, false);
-        maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
-        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        loadoutValue.setValue(effect.getBuilder().getLoadoutValue(), false);
-        maxCopies.setValue(effect.getBuilder().maxCopies, false);
-        uniqueToggle.setToggle(effect.getBuilder().unique);
-        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
+        PCLDynamicCardData builder = effect.getBuilder();
+        idInput.setLabel(StringUtils.removeStart(builder.ID, PCLCustomCardSlot.getBaseIDPrefix(builder.cardColor)));
+        nameInput.setLabel(builder.strings.NAME);
+        raritiesDropdown.setSelection(builder.cardRarity, false);
+        typesDropdown.setSelection(builder.cardType, false);
+        loadoutDropdown.setSelection(builder.loadout, false);
+        flagsDropdown.setSelection(builder.flags, false);
+        maxUpgrades.setValue(builder.maxUpgradeLevel, false);
+        branchUpgrades.setValue(builder.branchFactor, false);
+        loadoutValue.setValue(builder.getLoadoutValue(), false);
+        maxCopies.setValue(builder.maxCopies, false);
+        uniqueToggle.setToggle(builder.unique);
+        soulboundToggle.setToggle(!builder.removableFromDeck);
 
-        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
-        editLoadoutButton.setActive(loadoutDropdown.isActive && effect.getBuilder().loadout instanceof PCLCustomLoadout);
+        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
+        editLoadoutButton.setActive(loadoutDropdown.isActive && builder.loadout instanceof PCLCustomLoadout);
         deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }
 

@@ -148,7 +148,7 @@ public class PCLCustomEffectNode extends EUIButton {
         if (effects == null) {
             effects = new ArrayList<>();
             for (PSkill<?> sk : type.getSkills(editor.screen.getBuilder().getCardColor())) {
-                if (sk.data.sourceTypes == null || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(this))) {
+                if (sk.data.sourceTypes == null || EUIUtils.any(sk.data.sourceTypes, s -> s.isSourceAllowed(editor))) {
                     if (skill != null && sk.effectID.equals(skill.effectID)) {
                         skill.scanForTips(sk.getSampleText(editor.rootEffect, parent != null ? parent.skill : null));
                         effects.add(skill);
@@ -166,7 +166,7 @@ public class PCLCustomEffectNode extends EUIButton {
     protected EUIHeaderlessTooltip getWarningTooltip() {
         StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
 
-        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill))) {
+        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill, editor))) {
             sj.add(PGR.core.strings.cetut_primaryWarning);
         }
 
@@ -180,7 +180,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public void initializeDefaultSkill() {
         getEffects();
-        this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef));
+        this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef, editor));
 
         if (this.skill == null) {
             try {

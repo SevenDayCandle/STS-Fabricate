@@ -2,6 +2,7 @@ package pinacolada.skills;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.fields.PField;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 public abstract class PPrimary<T extends PField> extends PSkill<T> {
     public PPrimary(PSkillData<T> data, PSkillSaveData content) {
@@ -25,7 +26,7 @@ public abstract class PPrimary<T extends PField> extends PSkill<T> {
         return false;
     }
 
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return true;
     }
 

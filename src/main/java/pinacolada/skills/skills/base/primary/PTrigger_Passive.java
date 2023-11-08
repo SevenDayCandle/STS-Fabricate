@@ -13,6 +13,7 @@ import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.editor.PCLCustomEffectPage;
 
 import java.util.Collections;
 
@@ -43,7 +44,7 @@ public class PTrigger_Passive extends PTrigger {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return skill instanceof PMultiBase ||
                 skill instanceof PPassiveCond ||
                 skill instanceof PFacetCond ||

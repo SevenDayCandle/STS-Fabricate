@@ -1,4 +1,4 @@
-package pinacolada.ui.editor.potion;
+package pinacolada.ui.editor.orb;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,35 +12,37 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.screen.PCLCustomImageEffect;
-import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.potions.PCLDynamicPotion;
-import pinacolada.potions.PCLDynamicPotionData;
+import pinacolada.orbs.PCLCustomOrbSlot;
+import pinacolada.orbs.PCLDynamicOrb;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLOrbRenderable;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
-public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion> {
-    protected PCLDynamicPotion preview;
-    protected PCLCustomImageEffect imageEditor;
+public class PCLCustomOrbEditScreen extends PCLCustomEditEntityScreen<PCLCustomOrbSlot, PCLDynamicOrbData, PCLDynamicOrb> {
+    protected PCLOrbRenderable preview;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
-    public PCLCustomPotionEditScreen(PCLCustomPotionSlot slot) {
+    public PCLCustomOrbEditScreen(PCLCustomOrbSlot slot) {
         this(slot, false);
     }
 
-    public PCLCustomPotionEditScreen(PCLCustomPotionSlot slot, boolean fromInGame) {
+    public PCLCustomOrbEditScreen(PCLCustomOrbSlot slot, boolean fromInGame) {
         super(slot);
     }
 
     protected void addSkillPages() {
         if (!fromInGame) {
-            primaryPages.add(new PCLCustomPotionPrimaryInfoPage(this));
+            primaryPages.add(new PCLCustomOrbPrimaryInfoPage(this));
         }
+        primaryPages.add(new PCLCustomOrbAttributesPage(this));
         super.addSkillPages();
     }
 
@@ -57,7 +59,7 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
+        currentDialog = PCLCustomImageEffect.forOrb(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));
@@ -67,10 +69,15 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
     }
 
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
-        return new EUITooltip(page.getTitle(), page instanceof PCLCustomPotionPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
+        return new EUITooltip(page.getTitle(), page instanceof PCLCustomOrbPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
 
-    public void preInitialize(PCLCustomPotionSlot slot) {
+    // Does not use power effects
+    public int getPowerLimit() {
+        return 0;
+    }
+
+    public void preInitialize(PCLCustomOrbSlot slot) {
         super.preInitialize(slot);
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
@@ -80,31 +87,21 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
     }
 
     protected void rebuildItem() {
-        preview = getBuilder().create();
-        preview.setTimesUpgraded(upgradeLevel);
+        preview = getBuilder().makeRenderableWithLevel(upgradeLevel);
         preview.scale = 1f;
-        preview.posX = CARD_X;
-        preview.posY = RELIC_Y;
-        preview.hb.move(preview.posX, preview.posY);
-        previewDescription.setLabel(preview.getUpdatedDescription());
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (imageEditor != null) {
-            imageEditor.render(sb);
-        }
-        else {
-            super.render(sb);
-        }
+        preview.currentX = preview.targetX = CARD_X;
+        preview.currentY = preview.targetY = RELIC_Y;
+        preview.hb.move(preview.currentX, preview.currentY);
+        previewDescription.setLabel(!StringUtils.isEmpty(preview.mainTooltip.description) ? preview.mainTooltip.description : getBuilder().getEffectTextForPreview(upgradeLevel));
+        preview.amountText = String.valueOf(upgradeLevel);
     }
 
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
-        //imageButton.tryRender(sb);
+        imageButton.tryRender(sb);
         formEditor.tryRender(sb);
         upgradeToggle.tryRender(sb);
-        preview.labRender(sb);
+        preview.render(sb);
         previewDescription.tryRender(sb);
     }
 
@@ -117,32 +114,18 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
 
     protected void toggleViewUpgrades(int value) {
         super.toggleViewUpgrades(value);
-        preview.setTimesUpgraded(upgradeLevel);
-        previewDescription.setLabel(preview.getUpdatedDescription());
+        rebuildItem();
     }
 
     public void updateInnerElements() {
         super.updateInnerElements();
-        //imageButton.tryUpdate();
+        imageButton.tryUpdate();
         formEditor.tryUpdate();
         upgradeToggle.tryUpdate();
         preview.hb.update();
         previewDescription.tryUpdate();
         if (preview.hb.hovered) {
-            EUITooltip.queueTooltips(preview);
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (imageEditor != null) {
-            imageEditor.update();
-            if (imageEditor.isDone) {
-                imageEditor = null;
-            }
-        }
-        else {
-            super.updateInternal(deltaTime);
+            EUITooltip.queueTooltips(preview.tips);
         }
     }
 

@@ -121,16 +121,46 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
 
     @Override
     public PCLDynamicAugment create() {
+        return create(new PCLAugment.SaveData(ID, 0, 0));
+    }
+
+    @Override
+    public PCLDynamicAugment create(int form, int timesUpgraded) {
+        return create(new PCLAugment.SaveData(ID, form, timesUpgraded));
+    }
+
+    @Override
+    PCLDynamicAugment create(PCLAugment.SaveData save) {
         setTextForLanguage();
         if (imagePath == null) {
             imagePath = PCLCoreImages.CardAffinity.unknown.path();
         }
-        return new PCLDynamicAugment(this);
+        return new PCLDynamicAugment(this, save);
+    }
+
+    public PCLAugmentRenderable createRenderable(int form, int timesUpgraded) {
+        PCLDynamicAugment augment = create(form, timesUpgraded);
+        return new PCLAugmentRenderable(augment);
     }
 
     @Override
     public AbstractCard.CardColor getCardColor() {
         return PGR.core.cardColor;
+    }
+
+    public String getEffectTextForPreview(int level) {
+        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+        for (PSkill<?> move : moves) {
+            if (!PSkill.isSkillBlank(move)) {
+                move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
+                String pText = move.getPowerText(this);
+                if (!StringUtils.isEmpty(pText)) {
+                    sj.add(StringUtils.capitalize(pText));
+                }
+                move.recurse(m -> m.setTemporaryAmount(m.baseAmount));
+            }
+        }
+        return sj.toString();
     }
 
     @Override

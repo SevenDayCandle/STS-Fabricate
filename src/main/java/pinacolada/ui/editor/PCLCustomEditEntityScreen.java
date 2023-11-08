@@ -41,6 +41,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -90,10 +91,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public EUIButton imageButton;
     public EUIButton saveButton;
     public EUIButton undoButton;
-    public EUIToggle upgradeToggle;
+    public PCLValueEditor upgradeToggle;
     public PCLCustomFormEditor formEditor;
     public PCLEffectWithCallback<?> currentDialog;
-    public boolean upgraded;
+    protected int upgradeLevel;
     public int currentBuilder;
 
     public PCLCustomEditEntityScreen(T slot) {
@@ -423,6 +424,21 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setOnClick(this::openContextMenuForNewEffect)
                 .setTooltip(new EUITooltip(PGR.core.strings.cedit_newEffect));
 
+        imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
+                .setPosition(undoButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
+                .setColor(Color.WHITE)
+                .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
+                .setOnClick(this::editImage);
+
+        formEditor = new PCLCustomFormEditor(
+                new EUIHitbox(Settings.WIDTH * 0.04f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f, Settings.scale * 90f, MENU_HEIGHT), this);
+
+        upgradeToggle = new PCLValueEditor(new EUIHitbox(Settings.WIDTH * 0.08f, formEditor.hb.y + formEditor.hb.height + LABEL_HEIGHT * 1.2f, Settings.scale * 70f, MENU_HEIGHT)
+                , SingleCardViewPopup.TEXT[6], this::toggleViewUpgrades)
+                .setLimits(0, PSkill.DEFAULT_MAX);
+        upgradeToggle.header.hb.setOffsetX(upgradeToggle.hb.width * 0.25f);
+
         existingPageOptions = (EUIContextMenu<ExistingPageOption>) new EUIContextMenu<ExistingPageOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
                 .setOnChange(options -> {
                     for (ExistingPageOption o : options) {
@@ -570,8 +586,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
-    protected void toggleViewUpgrades(boolean value) {
-        upgraded = value;
+    protected void toggleViewUpgrades(int value) {
+        upgradeLevel = value;
     }
 
     protected void undo() {
@@ -641,6 +657,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     protected void updateVariant() {
 
     }
+
+    abstract protected void editImage();
 
     abstract protected void rebuildItem();
 

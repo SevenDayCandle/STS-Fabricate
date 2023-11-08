@@ -17,7 +17,6 @@ public class PCLDynamicOrb extends PCLPointerOrb implements FabricateItem {
 
     protected ArrayList<PCLDynamicOrbData> forms;
     public PCLDynamicOrbData builder;
-    public int form;
 
     public PCLDynamicOrb(PCLDynamicOrbData data) {
         super(data);
@@ -32,9 +31,8 @@ public class PCLDynamicOrb extends PCLPointerOrb implements FabricateItem {
 
     @Override
     public void render(SpriteBatch sb) {
-        if (this.img != null) {
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.img, cX, cY, IMAGE_SIZE, IMAGE_SIZE, scale, angle);
-        }
+        PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.img, cX, cY + this.bobEffect.y, IMAGE_SIZE, IMAGE_SIZE, scale * 0.5f, angle);
+        super.render(sb);
     }
 
     public PCLDynamicOrb setForm(int form) {

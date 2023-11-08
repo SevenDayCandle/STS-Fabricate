@@ -3,6 +3,11 @@ package pinacolada.effects;
 import basemod.BaseMod;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import extendedui.EUIUtils;
+import extendedui.utilities.EUIClassUtils;
+
+import java.util.Collection;
+import java.util.Collections;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLSFX {
@@ -419,8 +424,8 @@ public class PCLSFX {
         this(key, pitchMin, pitchMax, 1);
     }
 
-    public static String getRandom(String... keys) {
-        return keys[MathUtils.random(keys.length - 1)];
+    public static Collection<String> getAll() {
+        return EUIUtils.filterMap(PCLSFX.class.getDeclaredFields(), field -> EUIClassUtils.isFieldStatic(field) && field.getType() == String.class, field -> String.valueOf(field.getName()));
     }
 
     public static void initialize() {

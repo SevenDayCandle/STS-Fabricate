@@ -3,6 +3,7 @@ package pinacolada.rewards.pcl;
 import basemod.BaseMod;
 import basemod.abstracts.CustomReward;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.rewards.RewardItem;
@@ -23,7 +24,7 @@ public class AugmentReward extends PCLReward {
     public final PCLAugment augment;
 
     public AugmentReward(PCLAugment augment) {
-        super(augment.getTexture(), augment.getName(), PCLEnum.Rewards.AUGMENT);
+        super(augment.getTextureBase(), augment.getName(), PCLEnum.Rewards.AUGMENT);
 
         this.augment = augment;
     }
@@ -39,6 +40,10 @@ public class AugmentReward extends PCLReward {
     @Override
     public void renderIcon(SpriteBatch sb) {
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, augment.getTextureBase(), RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
+        Texture tex = augment.getTexture();
+        if (tex != null) {
+            EUIRenderHelpers.drawCentered(sb, Color.WHITE, tex, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
+        }
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, this.icon, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
     }
 

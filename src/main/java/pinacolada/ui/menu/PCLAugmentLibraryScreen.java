@@ -16,6 +16,7 @@ import pinacolada.augments.PCLAugmentData;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLGenericItemGrid;
+import pinacolada.ui.PCLPowerRenderable;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     public PCLGenericItemGrid<PCLAugmentRenderable> grid;
 
     public PCLAugmentLibraryScreen() {
-        grid = new PCLGenericItemGrid<>();
+        grid = new PCLGenericItemGrid<>(PCLAugmentRenderable.BASE_SCALE, PCLAugmentRenderable.BASE_SCALE * 1.5f);
         grid.setVerticalStart(Settings.HEIGHT * 0.74f)
                 .showScrollbar(true);
         cancelButton = new MenuCancelButton();
