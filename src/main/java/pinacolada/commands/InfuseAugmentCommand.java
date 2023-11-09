@@ -4,7 +4,9 @@ import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUIUtils;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.cardmods.AugmentModifier;
 
 import java.util.ArrayList;
@@ -19,12 +21,14 @@ public class InfuseAugmentCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return new ArrayList<>(PCLAugmentData.getIDs());
+        ArrayList<String> res = EUIUtils.map(PCLAugmentData.getAllData(), a -> a.ID);
+        res.addAll(EUIUtils.map(PCLCustomAugmentSlot.getAugments(), a -> a.ID));
+        return res;
     }
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLAugmentData augment = PCLAugmentData.getStaticData(tokens[1]);
+        PCLAugmentData augment = PCLAugmentData.getStaticDataOrCustom(tokens[1]);
         String targetCard = tokens[2];
         AbstractCard c = AbstractDungeon.player.masterDeck.findCardById(targetCard);
         if (augment != null && c != null) {

@@ -18,6 +18,8 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.PCLReward;
 
+import java.util.ArrayList;
+
 public class AugmentReward extends PCLReward {
     public static final String ID = createFullID(AugmentReward.class);
 
@@ -58,7 +60,17 @@ public class AugmentReward extends PCLReward {
     public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {
         @Override
         public CustomReward onLoad(RewardSave rewardSave) {
-            return new AugmentReward(PCLAugmentData.getStaticData(rewardSave.id).create());
+            PCLAugmentData data = PCLAugmentData.getStaticDataOrCustom(rewardSave.id);
+            if (data == null) {
+                ArrayList<PCLAugmentData> available = PCLAugmentData.getAvailable();
+                if (available.size() > 0) {
+                    data = available.get(0);
+                }
+                else {
+                    return null;
+                }
+            }
+            return new AugmentReward(data.create());
         }
 
         @Override

@@ -1,7 +1,6 @@
 package pinacolada.ui.editor.card;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CardKeywordFilters;
@@ -13,13 +12,8 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.effects.screen.PCLGenericSelectCardEffect;
-import pinacolada.effects.screen.PCLGenericSelectRelicEffect;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PGR;
-import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -55,6 +49,11 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
     @Override
     protected EUIItemGrid<AbstractCard> getGrid() {
         return new EUICardGrid(0.42f);
+    }
+
+    @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorCard;
     }
 
     @Override

@@ -7,8 +7,6 @@ import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
-import pinacolada.blights.PCLBlight;
-import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -17,10 +15,9 @@ import java.util.stream.Collectors;
 public class PCLDebugAugmentPanel {
     protected static final String ALL = "Any";
     protected static final String BASE_GAME = "Base";
-    protected ArrayList<PCLAugmentData> originalSortedAugments = new ArrayList<>();
-    protected ArrayList<PCLAugmentData> sortedAugments = originalSortedAugments;
+    protected ArrayList<PCLAugmentData> sortedAugments = new ArrayList<>();
     protected ArrayList<String> sortedModIDs = new ArrayList<>();
-    protected ImGuiTextFilter augmentFilter = new ImGuiTextFilter();
+    protected ImGuiTextFilter filter = new ImGuiTextFilter();
     protected DEUIFilteredSuffixListBox<PCLAugmentData> augmentList = new DEUIFilteredSuffixListBox<PCLAugmentData>("##all augments",
             sortedAugments, p -> p.ID, p -> p.strings.NAME, this::passes);
     protected DEUITabItem augments = new DEUITabItem("Augments");
@@ -49,21 +46,22 @@ public class PCLDebugAugmentPanel {
     }
 
     private boolean passes(PCLAugmentData augment) {
-        return (augmentFilter.passFilter(augment.ID) || augmentFilter.passFilter(augment.strings.NAME));
+        String mod = modList.get();
+        return (filter.passFilter(augment.ID) || filter.passFilter(augment.strings.NAME)) && (PCLDebugCardPanel.ALL.equals(mod) || getModID(augment).equals(mod));
     }
 
     public void refresh() {
-        originalSortedAugments.clear();
+        sortedAugments.clear();
         sortedModIDs.clear();
         regenerate();
     }
 
     protected void regenerate() {
-        originalSortedAugments.addAll(PCLAugmentData.getAllData());
-        originalSortedAugments.addAll(EUIUtils.map(PCLCustomAugmentSlot.getAugments(), slot -> slot.getBuilder(0)));
-        originalSortedAugments.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+        sortedAugments.addAll(PCLAugmentData.getAllData());
+        sortedAugments.addAll(EUIUtils.map(PCLCustomAugmentSlot.getAugments(), slot -> slot.getBuilder(0)));
+        sortedAugments.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         sortedModIDs.add(PCLDebugCardPanel.ALL);
-        sortedModIDs.addAll(originalSortedAugments.stream()
+        sortedModIDs.addAll(sortedAugments.stream()
                 .map(PCLDebugAugmentPanel::getModID)
                 .distinct()
                 .collect(Collectors.toList()));
@@ -74,7 +72,7 @@ public class PCLDebugAugmentPanel {
             DEUIUtils.withWidth(90, () -> modList.renderInline());
             DEUIUtils.withFullWidth(() ->
             {
-                augmentFilter.draw("##");
+                filter.draw("##");
                 augmentList.render();
             });
             DEUIUtils.withWidth(90, () ->

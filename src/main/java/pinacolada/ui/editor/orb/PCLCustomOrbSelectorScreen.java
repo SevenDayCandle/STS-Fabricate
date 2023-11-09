@@ -38,6 +38,11 @@ public class PCLCustomOrbSelectorScreen extends PCLCustomSelectorScreen<PCLOrbRe
     }
 
     @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorGeneric;
+    }
+
+    @Override
     protected PCLOrbKeywordFilters.OrbFilters getSavedFilters() {
         return new PCLOrbKeywordFilters.OrbFilters();
     }

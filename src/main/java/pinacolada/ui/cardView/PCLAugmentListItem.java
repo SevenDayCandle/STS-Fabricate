@@ -11,6 +11,7 @@ import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.ui.PCLAugmentRenderable;
@@ -60,9 +61,12 @@ public class PCLAugmentListItem extends EUIHoverable {
     @Override
     public void updateImpl() {
         augment.update();
-        if (augment.hb.hovered && EUIInputManager.leftClick.isJustPressed()) {
-            augment.hb.unhover();
-            panel.invoke(augment.item);
+        if (augment.hb.hovered)  {
+            EUITooltip.queueTooltips(augment.getTips());
+            if (EUIInputManager.leftClick.isJustPressed()) {
+                augment.hb.unhover();
+                panel.invoke(augment.item);
+            }
         }
         ownerText.updateImpl();
         title.updateImpl();

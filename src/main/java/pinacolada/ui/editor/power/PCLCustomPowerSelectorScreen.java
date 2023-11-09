@@ -38,6 +38,11 @@ public class PCLCustomPowerSelectorScreen extends PCLCustomSelectorScreen<PCLPow
     }
 
     @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorGeneric;
+    }
+
+    @Override
     protected PCLPowerKeywordFilters.PowerFilters getSavedFilters() {
         return new PCLPowerKeywordFilters.PowerFilters();
     }

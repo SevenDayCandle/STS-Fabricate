@@ -164,9 +164,12 @@
 				},
 				"pcl:CardEditorTutorial": {
 								"TEXT": [
+												"{#o:Left-Click} an item to edit it. {#o:Right-Click} an item for more options. | These items can be referenced in effects on other custom items.",
 												"{#o:Left-Click} a card to edit it. {#o:Right-Click} a card for more options. | Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckcustom commands in Basemod's console.",
 												"{#o:Left-Click} a relic to edit it. {#o:Right-Click} a relic for more options. | Custom relics can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yRelics option selected or through the #orelic or #oobtaincustomrelic commands in Basemod's console.",
-												"{#o:Left-Click} a potion to edit it. {#o:Right-Click} a potion for more options. | Custom potion can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yPotions option selected or through the #opotion or #oobtaincustompotion commands in Basemod's console.",
+												"{#o:Left-Click} a potion to edit it. {#o:Right-Click} a potion for more options. | Custom potions can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yPotions option selected or through the #opotion or #oobtaincustompotion commands in Basemod's console.",
+												"{#o:Left-Click} a blight to edit it. {#o:Right-Click} a blight for more options. | Custom blights can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yBlights option selected or through the #oblight command in Basemod's console.",
+												"{#o:Left-Click} an augment to edit it. {#o:Right-Click} an augment for more options. | Augments can be obtained in #yCustom #yRuns with the #yEnable #yAugments option selected or through the #oaugment command in Basemod's console.",
 												"Refreshes this grid to reflect the item present in your custom items folder. | This will remove any items that have been moved out of the custom folder.",
 												"An item's form can be changed when manually upgrading it. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this item's portrait",
@@ -508,7 +511,8 @@
 												"Use Madness for missing cards",
 												"Use Fabricate popup view for all relics",
 												"Use custom card framework for all cards",
-												"Show targeting indicators on custom cards"
+												"Show targeting indicators on custom cards",
+												"Augment base chance"
 								]
 				},
 				"pcl:OptionDescriptions": {

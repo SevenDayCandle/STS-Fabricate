@@ -46,6 +46,11 @@ public class PCLCustomPotionSelectorScreen extends PCLCustomSelectorScreen<Potio
     }
 
     @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorPotion;
+    }
+
+    @Override
     protected PotionKeywordFilters.PotionFilters getSavedFilters() {
         return new PotionKeywordFilters.PotionFilters();
     }

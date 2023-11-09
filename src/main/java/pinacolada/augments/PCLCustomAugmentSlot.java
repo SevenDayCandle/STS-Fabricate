@@ -171,8 +171,8 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getFolder(), null, true);
         }
-        if (PGR.debugBlights != null) {
-            PGR.debugBlights.refresh();
+        if (PGR.debugAugments != null) {
+            PGR.debugAugments.refresh();
         }
     }
 

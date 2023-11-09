@@ -194,7 +194,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
         }
 
         public PCLAugmentData getData() {
-            return PCLAugmentData.getStaticData(ID);
+            return PCLAugmentData.getStaticDataOrCustom(ID);
         }
     }
 }

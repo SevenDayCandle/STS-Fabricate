@@ -15,6 +15,8 @@ import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.powers.PCLCustomPowerSlot;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -80,16 +82,24 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         return stream.collect(Collectors.toList());
     }
 
-    public static Collection<PCLAugmentData> getAvailable() {
+    public static ArrayList<PCLAugmentData> getAvailable() {
         return AVAILABLE_AUGMENTS;
-    }
-
-    public static Set<String> getIDs() {
-        return AUGMENT_MAP.keySet();
     }
 
     public static PCLAugmentData getStaticData(String id) {
         return AUGMENT_MAP.get(id);
+    }
+
+    public static PCLAugmentData getStaticDataOrCustom(String key) {
+        PCLAugmentData data = getStaticData(key);
+        if (data != null) {
+            return data;
+        }
+        PCLCustomAugmentSlot slot = PCLCustomAugmentSlot.get(key);
+        if (slot != null) {
+            return slot.getBuilder(0);
+        }
+        return null;
     }
 
     // Each ID must be called at least once to have it selectable in the console

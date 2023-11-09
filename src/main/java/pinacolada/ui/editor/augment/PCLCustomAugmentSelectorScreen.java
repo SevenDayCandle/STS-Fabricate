@@ -32,6 +32,11 @@ public class PCLCustomAugmentSelectorScreen extends PCLCustomSelectorScreen<PCLA
     }
 
     @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorAugment;
+    }
+
+    @Override
     protected PCLAugmentKeywordFilters.AugmentFilters getSavedFilters() {
         return new PCLAugmentKeywordFilters.AugmentFilters();
     }

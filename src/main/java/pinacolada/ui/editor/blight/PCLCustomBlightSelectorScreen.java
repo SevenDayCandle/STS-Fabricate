@@ -43,6 +43,11 @@ public class PCLCustomBlightSelectorScreen extends PCLCustomSelectorScreen<Abstr
     }
 
     @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorBlight;
+    }
+
+    @Override
     protected BlightKeywordFilters.BlightFilters getSavedFilters() {
         return new BlightKeywordFilters.BlightFilters();
     }

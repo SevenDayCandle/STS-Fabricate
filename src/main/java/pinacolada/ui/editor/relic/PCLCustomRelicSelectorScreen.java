@@ -16,6 +16,7 @@ import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
+import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
 
@@ -45,6 +46,11 @@ public class PCLCustomRelicSelectorScreen extends PCLCustomSelectorScreen<RelicI
     @Override
     protected EUIItemGrid<RelicInfo> getGrid() {
         return new EUIRelicGrid();
+    }
+
+    @Override
+    protected String getInfoText() {
+        return PGR.core.strings.cetut_selectorRelic;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.augments.PCLAugment;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -34,6 +35,9 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem {
     @Override
     public void updateImpl() {
         background.updateImpl();
+        if (background.hb.hovered) {
+            EUITooltip.queueTooltips(augment.getTips());
+        }
         super.updateImpl();
     }
 }

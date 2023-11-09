@@ -1,6 +1,7 @@
 package pinacolada.patches.screens;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -37,6 +38,16 @@ public class CombatRewardScreenPatches {
 
             final AbstractPlayer p = AbstractDungeon.player;
             for (AbstractRelic r : p.relics) {
+                if (r instanceof OnReceiveRewardsListener) {
+                    ((OnReceiveRewardsListener) r).onReceiveRewards(__instance.rewards, currentRoom);
+                }
+                if (r instanceof PointerProvider) {
+                    for (PSkill<?> move : ((PointerProvider) r).getFullEffects()) {
+                        move.invokeCastChildren(OnReceiveRewardsListener.class, target -> target.onReceiveRewards(__instance.rewards, currentRoom));
+                    }
+                }
+            }
+            for (AbstractBlight r : p.blights) {
                 if (r instanceof OnReceiveRewardsListener) {
                     ((OnReceiveRewardsListener) r).onReceiveRewards(__instance.rewards, currentRoom);
                 }
