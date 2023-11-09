@@ -26,7 +26,7 @@ import java.nio.file.Files;
 
 public abstract class AbstractConfig {
     private static final String CONFIG_ID = "PCLConfig";
-    protected static final int BASE_OPTION_OFFSET_X = 400;
+    protected static final int BASE_OPTION_OFFSET_X = 380;
     protected static final int BASE_OPTION_OFFSET_Y = 720;
     protected static ExtraModSettingsPanel.Category pclCategory;
 

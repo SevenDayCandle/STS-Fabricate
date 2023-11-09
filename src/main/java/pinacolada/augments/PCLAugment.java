@@ -93,9 +93,9 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     public String getFullText() {
         String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.misc_tier, getTier()), data.category.getName(), PGR.core.tooltips.augment.title)),
-                !canRemove() ? PGR.core.strings.misc_unremovableDesc : null,
-                reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
+                PCLCoreStrings.colorString("i", EUIRM.strings.numAdjNoun(EUIRM.strings.numNoun(PGR.core.strings.augment_tier, getTier()), data.category.getName(), PGR.core.tooltips.augment.title)),
+                !canRemove() ? PGR.core.strings.augment_unremovableDesc : null,
+                reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.augment_requirement, getReqsString()) : reqs,
                 getEffectPowerTextStrings());
     }
 

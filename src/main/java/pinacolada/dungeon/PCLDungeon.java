@@ -272,20 +272,19 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return rng;
     }
 
-
     /*
      * Obtain a random augment with the specified tier restrictions. Higher tier augments will appear less often
      * */
     public PCLAugment getAugment(int minTier, int maxTier) {
         WeightedList<PCLAugment> weightedList = getAugmentsChoices(minTier, maxTier);
-        return weightedList.retrieve(PCLRelic.rng, false);
+        return weightedList.retrieve(AbstractDungeon.treasureRng, false);
     }
 
     public ArrayList<PCLAugment> getAugments(int minTier, int maxTier, int picks) {
         WeightedList<PCLAugment> weightedList = getAugmentsChoices(minTier, maxTier);
         ArrayList<PCLAugment> ret = new ArrayList<>();
         for (int i = 0; i < picks; i++) {
-            ret.add(weightedList.retrieve(PCLRelic.rng, true));
+            ret.add(weightedList.retrieve(AbstractDungeon.treasureRng, true));
         }
         return ret;
     }
@@ -444,7 +443,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     // Also handle adding banned augments here
     public void initializeCardPool() {
-        final AbstractPlayer player = CombatManager.refreshPlayer();
+        final AbstractPlayer player = AbstractDungeon.player;
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
@@ -572,7 +571,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     public void initializeData() {
         loadouts.clear();
-        final AbstractPlayer player = CombatManager.refreshPlayer();
+        final AbstractPlayer player = AbstractDungeon.player;
         data = PGR.getPlayerData(player.chosenClass);
 
         // Add or remove the augment panel
@@ -768,7 +767,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     @Override
     public void onLoad(PCLDungeon loaded) {
-        AbstractPlayer player = CombatManager.refreshPlayer();
+        AbstractPlayer player = AbstractDungeon.player;
         this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
         importBaseData(loaded);
 

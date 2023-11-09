@@ -63,7 +63,6 @@ import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
-import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
@@ -295,7 +294,6 @@ public class CombatManager extends EUIBase {
     }
 
     private static void clearStats() {
-        refreshPlayer();
         EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing Stats");
         for (ConcurrentLinkedQueue<?> event : EVENTS.values()) {
             event.clear();
@@ -840,8 +838,6 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onRelicObtained(AbstractRelic relic) {
-        refreshPlayer();
-
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
             if (c instanceof OnRelicObtainedListener) {
                 ((OnRelicObtainedListener) c).onRelicObtained(relic);
@@ -994,8 +990,6 @@ public class CombatManager extends EUIBase {
     }
 
     public static void refresh() {
-        refreshPlayer();
-
         room = GameUtilities.getCurrentRoom();
 
         if (room == null || AbstractDungeon.player == null) {
@@ -1019,11 +1013,6 @@ public class CombatManager extends EUIBase {
             player.hand.applyPowers();
             player.hand.glowCheck();
         }
-    }
-
-    public static AbstractPlayer refreshPlayer() {
-        PCLCard.rng = PCLPower.rng = PCLRelic.rng = AbstractDungeon.cardRandomRng;
-        return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
     }
 
     public static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> registerSubscribeGroup(Class<T> eventClass) {

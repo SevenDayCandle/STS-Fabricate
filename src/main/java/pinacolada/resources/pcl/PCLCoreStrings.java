@@ -22,6 +22,7 @@ import java.util.StringJoiner;
 
 public class PCLCoreStrings extends AbstractStrings {
     private final UIStrings actions = getUIStrings("Actions");
+    private final UIStrings augment = getUIStrings("Augment");
     private final UIStrings cedit = getUIStrings("CardEditor");
     private final UIStrings cetut = getUIStrings("CardEditorTutorial");
     private final UIStrings cardPile = getUIStrings("CardPile");
@@ -46,6 +47,20 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String grid_exhaust = ExhaustAction.TEXT[0];
     public final String grid_cycle = GamblingChipAction.TEXT[1];
     public final String grid_chooseOneCard = CardRewardScreen.TEXT[1];
+    // Augment
+    public final String augment_category = augment.TEXT[0];
+    public final String augment_requirement = augment.TEXT[1];
+    public final String augment_tier = augment.TEXT[2];
+    public final String augment_unremovable = augment.TEXT[3];
+    public final String augment_unremovableDesc = augment.TEXT[4];
+    public final String augment_general = augment.TEXT[5];
+    public final String augment_played = augment.TEXT[6];
+    public final String augment_hindrance = augment.TEXT[7];
+    public final String augment_generalDesc = augment.TEXT[8];
+    public final String augment_playedDesc = augment.TEXT[9];
+    public final String augment_summonDesc = augment.TEXT[10];
+    public final String augment_hindranceDesc = augment.TEXT[11];
+    public final String augment_specialDesc = augment.TEXT[12];
     // Card Editor
     public final String cedit_attributes = cedit.TEXT[0];
     public final String cedit_effects = cedit.TEXT[1];
@@ -284,17 +299,16 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String ctype_team = cardtype.TEXT[6];
     public final String ctype_legendary = cardtype.TEXT[7];
     public final String ctype_secretRare = cardtype.TEXT[8];
-    public final String ctype_general = cardtype.TEXT[9];
-    public final String ctype_tagAll = cardtype.TEXT[10];
-    public final String ctype_tagAlly = cardtype.TEXT[11];
-    public final String ctype_tagAoE = cardtype.TEXT[12];
-    public final String ctype_tagAoEAlly = cardtype.TEXT[13];
-    public final String ctype_tagRandom = cardtype.TEXT[14];
-    public final String ctype_tagSingle = cardtype.TEXT[15];
-    public final String ctype_turnStartFirst = cardtype.TEXT[16];
-    public final String ctype_turnStartLast = cardtype.TEXT[17];
-    public final String ctype_turnEndFirst = cardtype.TEXT[18];
-    public final String ctype_turnEndLast = cardtype.TEXT[19];
+    public final String ctype_tagAll = cardtype.TEXT[9];
+    public final String ctype_tagAlly = cardtype.TEXT[10];
+    public final String ctype_tagAoE = cardtype.TEXT[11];
+    public final String ctype_tagAoEAlly = cardtype.TEXT[12];
+    public final String ctype_tagRandom = cardtype.TEXT[13];
+    public final String ctype_tagSingle = cardtype.TEXT[14];
+    public final String ctype_turnStartFirst = cardtype.TEXT[15];
+    public final String ctype_turnStartLast = cardtype.TEXT[16];
+    public final String ctype_turnEndFirst = cardtype.TEXT[17];
+    public final String ctype_turnEndLast = cardtype.TEXT[18];
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];
@@ -369,24 +383,18 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String misc_leftClick = misc.TEXT[6];
     public final String misc_rightClick = misc.TEXT[7];
     public final String misc_tempPowerPrefix = misc.TEXT[8];
-    public final String misc_requirement = misc.TEXT[9];
-    public final String misc_edit = misc.TEXT[10];
-    public final String misc_customRelics = misc.TEXT[11];
-    public final String misc_customRelicsDesc = misc.TEXT[12];
-    public final String misc_customPotions = misc.TEXT[13];
-    public final String misc_customPotionsDesc = misc.TEXT[14];
-    public final String misc_customBlights = misc.TEXT[15];
-    public final String misc_customBlightsDesc = misc.TEXT[16];
-    public final String misc_category = misc.TEXT[17];
-    public final String misc_subCategory = misc.TEXT[18];
-    public final String misc_tier = misc.TEXT[19];
-    public final String misc_customLoadout = misc.TEXT[20];
-    public final String misc_customLoadoutDesc = misc.TEXT[21];
-    public final String misc_customAugment = misc.TEXT[22];
-    public final String misc_customAugmentDesc = misc.TEXT[23];
-    public final String misc_replaces = misc.TEXT[24];
-    public final String misc_unremovable = misc.TEXT[25];
-    public final String misc_unremovableDesc = misc.TEXT[26];
+    public final String misc_edit = misc.TEXT[9];
+    public final String misc_customRelics = misc.TEXT[10];
+    public final String misc_customRelicsDesc = misc.TEXT[11];
+    public final String misc_customPotions = misc.TEXT[12];
+    public final String misc_customPotionsDesc = misc.TEXT[13];
+    public final String misc_customBlights = misc.TEXT[14];
+    public final String misc_customBlightsDesc = misc.TEXT[15];
+    public final String misc_customLoadout = misc.TEXT[16];
+    public final String misc_customLoadoutDesc = misc.TEXT[17];
+    public final String misc_customAugment = misc.TEXT[18];
+    public final String misc_customAugmentDesc = misc.TEXT[19];
+    public final String misc_replaces = misc.TEXT[20];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];

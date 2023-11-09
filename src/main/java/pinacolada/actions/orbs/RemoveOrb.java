@@ -1,8 +1,10 @@
 package pinacolada.actions.orbs;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -59,7 +61,7 @@ public class RemoveOrb extends PCLAction<ArrayList<AbstractOrb>> {
             }
 
             for (int i = 0; i < amount; i++) {
-                removeOrb(randomOrbs.retrieve(GameUtilities.getRNG(), false));
+                removeOrb(randomOrbs.retrieve(PGR.dungeon.getRNG(), false));
             }
         }
         else {

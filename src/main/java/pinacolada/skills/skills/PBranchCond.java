@@ -2,9 +2,12 @@ package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +23,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +80,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         displayChildUpgrades(value);
     }
 
-    protected String getEffectTexts(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+    private String getEffectTexts(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         switch (effects.size()) {
             case 0:
                 return EUIUtils.EMPTY_STRING;
@@ -193,6 +197,72 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public float modifyBlockFirst(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyBlockFirst(info, a));
+    }
+
+    @Override
+    public float modifyBlockLast(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyBlockLast(info, a));
+    }
+
+    @Override
+    public int modifyCost(PCLUseInfo info, int amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyCost(info, a));
+    }
+
+    @Override
+    public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageGiveFirst(info, a));
+    }
+
+    @Override
+    public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageGiveLast(info, a));
+    }
+
+    @Override
+    public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageReceiveFirst(info, a, type));
+    }
+
+    @Override
+    public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageReceiveLast(info, a, type));
+    }
+
+    @Override
+    public float modifyHeal(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyHeal(info, a));
+    }
+
+    @Override
+    public float modifyHitCount(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyHitCount(info, a));
+    }
+
+    @Override
+    public float modifyOrbIncoming(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyOrbIncoming(info, a));
+    }
+
+    @Override
+    public float modifyOrbOutgoing(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyOrbOutgoing(info, a));
+    }
+
+    @Override
+    public float modifyRightCount(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyRightCount(info, a));
+    }
+
+    @Override
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
+        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifySkillBonus(info, a));
+    }
+
+
+    @Override
     public PBranchCond onAddToCard(AbstractCard card) {
         for (PSkill<?> effect : effects) {
             effect.onAddToCard(card);
@@ -307,6 +377,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    @Override
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         return source == childEffect ? (parent == null || parent.tryPassParent(source, info)) : super.tryPassParent(source, info);
     }
@@ -325,25 +396,41 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect instanceof PActiveCond) {
             ((PActiveCond<?>) childEffect).useImpl(info, order,
-                    (i) -> useSubEffect(i, order, childEffect.getQualifiers(i, true)),
-                    (i) -> useSubEffect(i, order, childEffect.getQualifiers(i, false)));
+                    (i) -> useSubEffect(childEffect.getQualifiers(i, true), sk -> sk.use(i, order)),
+                    (i) -> useSubEffect(childEffect.getQualifiers(i, false), sk -> sk.use(i, order))
+            );
         }
         else if (childEffect instanceof PCallbackMove) {
-            ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i, true)));
+            ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(childEffect.getQualifiers(i, true), sk -> sk.use(i, order)));
         }
         else if (childEffect != null) {
-            useSubEffect(info, order, childEffect.getQualifiers(info, true));
+            useSubEffect(childEffect.getQualifiers(info, true), sk -> sk.use(info, order));
         }
     }
 
-    public void useSubEffect(PCLUseInfo info, PCLActions order, ArrayList<Integer> qualifiers) {
+    private <T> T useModify(T input, List<Integer> qualifiers, FuncT2<T, PSkill<?>, T> onDo) {
         if (this.effects.size() > 0) {
-            boolean canGoOver = this.childEffect.getQualifierRange() < this.effects.size();
+            int qr = this.childEffect.getQualifierRange();
+            boolean canGoOver = qr < this.effects.size();
             for (int i : qualifiers) {
-                this.effects.get(i).use(info, order);
+                input = onDo.invoke(this.effects.get(i), input);
             }
             if (qualifiers.isEmpty() && canGoOver) {
-                this.effects.get(this.childEffect.getQualifierRange()).use(info, order);
+                input = onDo.invoke(this.effects.get(qr), input);
+            }
+        }
+        return input;
+    }
+
+    private void useSubEffect(List<Integer> qualifiers, ActionT1<PSkill<?>> onDo) {
+        if (this.effects.size() > 0) {
+            int qr = this.childEffect.getQualifierRange();
+            boolean canGoOver = qr < this.effects.size();
+            for (int i : qualifiers) {
+                onDo.invoke(this.effects.get(i));
+            }
+            if (qualifiers.isEmpty() && canGoOver) {
+                onDo.invoke(this.effects.get(qr));
             }
         }
     }

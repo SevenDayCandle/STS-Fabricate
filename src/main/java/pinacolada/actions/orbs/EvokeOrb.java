@@ -1,10 +1,12 @@
 package pinacolada.actions.orbs;
 
 import com.evacipated.cardcrawl.mod.stslib.actions.defect.EvokeSpecificOrbAction;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -84,7 +86,7 @@ public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>> {
             }
 
             for (int i = 0; i < limit; i++) {
-                doEvoke(randomOrbs.retrieve(GameUtilities.getRNG(), false), amount);
+                doEvoke(randomOrbs.retrieve(PGR.dungeon.getRNG(), false), amount);
             }
         }
         else {

@@ -1,7 +1,7 @@
 package pinacolada.cards.base.fields;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public enum PCLCardSelection {
 
     public static <T> void addRandom(List<T> list, T item) {
         if (list.size() > 0) {
-            list.add(GameUtilities.getRNG().random(list.size()), item);
+            list.add(AbstractDungeon.cardRandomRng.random(list.size()), item);
         }
         else {
             list.add(item);
@@ -50,7 +50,7 @@ public enum PCLCardSelection {
     public static <T> T getRandom(List<T> list, int index) {
         T card = null;
         if (list.size() > 0) {
-            int position = GameUtilities.getRNG().random(list.size() - 1);
+            int position = AbstractDungeon.cardRandomRng.random(list.size() - 1);
             card = list.get(position);
             list.remove(position);
         }

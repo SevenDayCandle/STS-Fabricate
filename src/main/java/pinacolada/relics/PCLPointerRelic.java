@@ -2,6 +2,7 @@ package pinacolada.relics;
 
 import basemod.abstracts.CustomSavable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
@@ -54,7 +55,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public float atBlockLastModify(float block, AbstractCard c) {
-        return atBlockLastModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+        return atBlockLastModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
     }
 
     @Override
@@ -70,7 +71,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public float atBlockModify(float block, AbstractCard c) {
-        return atBlockModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+        return atBlockModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
     }
 
     @Override
@@ -86,7 +87,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public int atCostModify(int block, AbstractCard c) {
-        return atCostModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+        return atCostModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
     }
 
 
@@ -103,7 +104,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public float atDamageLastModify(float block, AbstractCard c) {
-        return atDamageLastModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+        return atDamageLastModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
     }
 
     @Override
@@ -119,7 +120,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public float atDamageModify(float block, AbstractCard c) {
-        return atDamageModify(CombatManager.playerSystem.getInfo(c, player, player), block);
+        return atDamageModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
     }
 
     @Override

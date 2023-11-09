@@ -233,7 +233,7 @@ public class GameUtilities {
     }
 
     public static boolean chance(float amount) {
-        return getRNG().random(100) < amount;
+        return PGR.dungeon.getRNG().random(100) < amount;
     }
 
     public static void changeCardForm(AbstractCard card, int amount) {
@@ -1330,15 +1330,6 @@ public class GameUtilities {
         return result;
     }
 
-    public static Random getRNG() {
-        if (PCLCard.rng == null) {
-            EUIUtils.logInfo(GameUtilities.class, "PCLCard.rng was null");
-            return new Random();
-        }
-
-        return PCLCard.rng;
-    }
-
     public static AbstractCard getRandomAnyColorCombatCard() {
         return getRandomElement(getAvailableCardsForAllColors(null));
     }
@@ -1348,7 +1339,7 @@ public class GameUtilities {
     }
 
     public static AbstractCreature getRandomCharacter(boolean aliveOnly) {
-        return getRandomElement(getAllCharacters(aliveOnly), getRNG());
+        return getRandomElement(getAllCharacters(aliveOnly), PGR.dungeon.getRNG());
     }
 
     public static AbstractCard getRandomCombatCard() {
@@ -1361,7 +1352,7 @@ public class GameUtilities {
     }
 
     public static <T> T getRandomElement(List<T> list) {
-        return getRandomElement(list, getRNG());
+        return getRandomElement(list, PGR.dungeon.getRNG());
     }
 
     public static <T> T getRandomElement(List<T> list, Random rng) {
@@ -1370,7 +1361,7 @@ public class GameUtilities {
     }
 
     public static <T> T getRandomElement(T[] arr) {
-        return getRandomElement(arr, getRNG());
+        return getRandomElement(arr, PGR.dungeon.getRNG());
     }
 
     public static <T> T getRandomElement(T[] arr, com.megacrit.cardcrawl.random.Random rng) {
@@ -1379,11 +1370,11 @@ public class GameUtilities {
     }
 
     public static AbstractMonster getRandomEnemy(boolean aliveOnly) {
-        return getRandomElement(getEnemies(aliveOnly), getRNG());
+        return getRandomElement(getEnemies(aliveOnly), PGR.dungeon.getRNG());
     }
 
     public static PCLCardAlly getRandomSummon(Boolean isAlive) {
-        return getRandomElement(getSummons(isAlive), getRNG());
+        return getRandomElement(getSummons(isAlive), PGR.dungeon.getRNG());
     }
 
     public static int getRelicCount() {
@@ -1887,7 +1878,7 @@ public class GameUtilities {
         final RandomizedList<AbstractCard> choices = new RandomizedList<>(source);
         CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         while (choice.size() < limit) {
-            AbstractCard c = choices.retrieve(PCLCard.rng);
+            AbstractCard c = choices.retrieve(AbstractDungeon.cardRandomRng);
             if (c != null) {
                 choice.addToBottom(makeCopy ? c.makeCopy() : c);
             }
@@ -2125,7 +2116,7 @@ public class GameUtilities {
     public static ArrayList<AbstractCard> pickCardsFromList(RandomizedList<AbstractCard> possible, int count) {
         ArrayList<AbstractCard> returned = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            AbstractCard c = possible.retrieve(getRNG(), true);
+            AbstractCard c = possible.retrieve(AbstractDungeon.cardRandomRng, true);
             if (c != null) {
                 returned.add(c);
             }

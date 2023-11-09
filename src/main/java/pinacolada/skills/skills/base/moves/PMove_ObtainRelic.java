@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
@@ -51,7 +52,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
             if (fields.not) {
                 RandomizedList<String> choices = new RandomizedList<>(fields.relicIDs);
                 for (int i = 0; i < amount; i++) {
-                    AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(PCLRelic.rng, true));
+                    AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(AbstractDungeon.relicRng, true));
                     if (relic != null) {
                         onCreate.invoke(relic.makeCopy());
                     }
@@ -91,7 +92,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
             }
 
             for (int i = 0; i < amount; i++) {
-                AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(PCLRelic.rng, true));
+                AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(AbstractDungeon.relicRng, true));
                 if (relic != null) {
                     onCreate.invoke(relic.makeCopy());
                 }

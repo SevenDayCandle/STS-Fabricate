@@ -1,6 +1,7 @@
 package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleRelic;
@@ -38,12 +39,12 @@ public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider 
             while (chance > 100) {
                 chance -= 100;
                 if (GameUtilities.chance(chance)) {
-                    goldVal += GameUtilities.getRNG().random(REWARD_GOLD / 2, REWARD_GOLD);
-                    hpVal += GameUtilities.getRNG().random(REWARD_HP / 2, REWARD_HP);
+                    goldVal += AbstractDungeon.treasureRng.random(REWARD_GOLD / 2, REWARD_GOLD);
+                    hpVal += AbstractDungeon.treasureRng.random(REWARD_HP / 2, REWARD_HP);
                 }
             }
 
-            int value = GameUtilities.getRNG().random(0, 9);
+            int value = AbstractDungeon.treasureRng.random(0, 9);
             switch (value) {
                 case 1:
                 case 2:

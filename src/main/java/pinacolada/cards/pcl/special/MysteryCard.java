@@ -1,6 +1,7 @@
 package pinacolada.cards.pcl.special;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
@@ -58,7 +59,7 @@ public class MysteryCard extends PCLCard {
 
         public final AbstractCard createObscuredCard() {
             RandomizedList<AbstractCard> possiblePicks = GameUtilities.getCardsFromFullCombatPools(this::checkCondition);
-            AbstractCard card = possiblePicks.retrieve(rng);
+            AbstractCard card = possiblePicks.retrieve(AbstractDungeon.cardRandomRng);
             if (card != null) {
                 card = card.makeCopy();
                 for (int i = 0; i < extra; i++) {

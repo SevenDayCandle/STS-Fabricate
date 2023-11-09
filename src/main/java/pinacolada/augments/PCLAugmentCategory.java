@@ -6,23 +6,43 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CountingPanelItem;
+import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public enum PCLAugmentCategory implements CountingPanelItem {
+public enum PCLAugmentCategory implements CountingPanelItem, TooltipProvider {
     General,
     Summon,
     Played,
-    AttackSkill,
+    Hindrance,
     Special;
+
+    private EUITooltip tip;
 
     @Override
     public Color getColor() {
         return Color.WHITE;
+    }
+
+    public String getDesc() {
+        switch (this) {
+            case Summon:
+                return PGR.core.strings.augment_summonDesc;
+            case Played:
+                return PGR.core.strings.augment_playedDesc;
+            case Hindrance:
+                return PGR.core.strings.augment_hindranceDesc;
+            case General:
+                return PGR.core.strings.augment_generalDesc;
+        }
+        return PGR.core.strings.augment_specialDesc;
     }
 
     @Override
@@ -32,8 +52,8 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                 return PCLCoreImages.CardUI.augmentSummon.texture();
             case Played:
                 return PCLCoreImages.CardUI.augmentPlayed.texture();
-            case AttackSkill:
-                return PCLCoreImages.CardUI.augmentAttackSkill.texture();
+            case Hindrance:
+                return PCLCoreImages.CardUI.augmentHindrance.texture();
             case Special:
                 return PCLCoreImages.CardUI.augmentSpecial.texture();
         }
@@ -45,11 +65,11 @@ public enum PCLAugmentCategory implements CountingPanelItem {
             case Summon:
                 return PGR.core.tooltips.summon.title;
             case Played:
-                return PGR.core.tooltips.attack.title + "/" + PGR.core.tooltips.skill.title + "/" + PGR.core.tooltips.power.title;
-            case AttackSkill:
-                return PGR.core.tooltips.attack.title + "/" + PGR.core.tooltips.skill.title;
+                return PGR.core.strings.augment_played;
+            case Hindrance:
+                return PGR.core.strings.augment_hindrance;
             case General:
-                return PGR.core.strings.ctype_general;
+                return PGR.core.strings.augment_general;
             case Special:
                 return RunHistoryScreen.TEXT[15];
         }
@@ -60,6 +80,19 @@ public enum PCLAugmentCategory implements CountingPanelItem {
     public int getRank(AbstractCard c) {
         ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
         return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
+    }
+
+    @Override
+    public List<? extends EUITooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
+    @Override
+    public EUITooltip getTooltip() {
+        if (tip == null) {
+            tip = new EUITooltip(getName(), getDesc());
+        }
+        return tip;
     }
 
     public boolean isTypeValid(AbstractCard.CardType type) {
@@ -75,10 +108,10 @@ public enum PCLAugmentCategory implements CountingPanelItem {
                     default:
                         return false;
                 }
-            case AttackSkill:
+            case Hindrance:
                 switch (type) {
-                    case ATTACK:
-                    case SKILL:
+                    case CURSE:
+                    case STATUS:
                         return true;
                     default:
                         return false;

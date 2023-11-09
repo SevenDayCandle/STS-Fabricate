@@ -1,9 +1,11 @@
 package pinacolada.actions.orbs;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -30,8 +32,8 @@ public class ShuffleOrbs extends PCLAction<Void> {
         }
 
         while (randomOrbs.size() >= 2) {
-            AbstractOrb orb1 = randomOrbs.retrieve(PCLCard.rng);
-            AbstractOrb orb2 = randomOrbs.retrieve(PCLCard.rng);
+            AbstractOrb orb1 = randomOrbs.retrieve(PGR.dungeon.getRNG());
+            AbstractOrb orb2 = randomOrbs.retrieve(PGR.dungeon.getRNG());
 
             int index1 = player.orbs.indexOf(orb1);
             int index2 = player.orbs.indexOf(orb2);

@@ -1,9 +1,11 @@
 package pinacolada.actions.orbs;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -61,7 +63,7 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> 
             }
 
             for (int i = 0; i < limit; i++) {
-                triggerPassiveEffect(randomOrbs.retrieve(GameUtilities.getRNG(), false), amount);
+                triggerPassiveEffect(randomOrbs.retrieve(PGR.dungeon.getRNG(), false), amount);
             }
         }
         else {

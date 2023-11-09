@@ -57,7 +57,7 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
                 RandomizedList<String> choices = new RandomizedList<>(fields.blightIDs);
                 for (int i = 0; i < amount; i++) {
                     // BlightHelper blights are always copies
-                    String choice = choices.retrieve(PCLRelic.rng, true);
+                    String choice = choices.retrieve(AbstractDungeon.relicRng, true);
                     if (choice != null) {
                         AbstractBlight blight = BlightHelper.getBlight(choice);
                         if (blight != null) {
@@ -83,7 +83,7 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
                             : fields.colors,
                     PGR.dungeon.allowCustomBlights);
             for (int i = 0; i < amount; i++) {
-                String choice = choices.retrieve(PCLRelic.rng, true);
+                String choice = choices.retrieve(AbstractDungeon.relicRng, true);
                 if (choice != null) {
                     AbstractBlight blight = BlightHelper.getBlight(choice);
                     if (blight != null) {

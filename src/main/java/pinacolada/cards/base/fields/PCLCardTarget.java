@@ -79,7 +79,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
 
     public static void popRandomTargets(RandomizedList<? extends AbstractCreature> source, int allowedSize) {
         while (source.size() > allowedSize) {
-            source.retrieve(GameUtilities.getRNG());
+            source.retrieve(AbstractDungeon.cardRandomRng);
         }
     }
 

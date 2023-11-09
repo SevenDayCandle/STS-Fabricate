@@ -113,8 +113,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
     public static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
-    public static AbstractPlayer player = null;
-    public static Random rng = null;
     private final transient float[] fakeGlowList = new float[4];
     public final PSkillContainer skills = new PSkillContainer();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
@@ -806,7 +804,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
         }
 
-        if (player != null && player.hand.contains(this) && (!CombatManager.canPlayCard(this, player, null, hasEnoughEnergy()))) {
+        if (AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this) && (!CombatManager.canPlayCard(this, AbstractDungeon.player, null, hasEnoughEnergy()))) {
             result.color = new Color(1f, 0.3f, 0.3f, transparency);
         }
         else if (isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
@@ -992,7 +990,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public AbstractCreature getSourceCreature() {
-        return owner != null ? owner : player;
+        return owner != null ? owner : AbstractDungeon.player;
     }
 
     protected PSpecialCond getSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
@@ -1073,7 +1071,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         // Only show these tooltips outside of combat
-        if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
+        if (!GameUtilities.inBattle() || isPopup || (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(this))) {
             if (isSoulbound()) {
                 dynamicTooltips.add(PGR.core.tooltips.soulbound);
             }
@@ -1161,7 +1159,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         this.hovered = true;
 
-        if (player != null && player.hand.contains(this)) {
+        if (AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this)) {
             if (hb.justHovered) {
                 triggerOnGlowCheck();
             }
@@ -1533,7 +1531,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float oldDamage = tempDamage;
 
         // Do not update damage display for summons in your hand
-        if (owner != null && (type != PCLEnum.CardType.SUMMON || owner != player)) {
+        if (owner != null && (type != PCLEnum.CardType.SUMMON || owner != AbstractDungeon.player)) {
             int applyCount = attackType == PCLAttackType.Brutal ? 2 : 1;
 
             if (owner instanceof AbstractPlayer) {
@@ -1872,7 +1870,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @SpireOverride
     protected void renderBannerImage(SpriteBatch sb, float drawX, float drawY) {
         if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this))) {
-            affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
+            affinities.renderOnCard(sb, this, AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this));
         }
         float sc = isPopup ? 0.5f : 1f;
         if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), sc)) {
@@ -1996,13 +1994,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @SpireOverride
     public void renderImage(SpriteBatch sb, boolean hovered, boolean selected) {
-        if (player != null) {
+        if (AbstractDungeon.player != null) {
             if (selected) {
                 renderAtlas(sb, Color.SKY, getCardBgAtlas(), current_x, current_y, 1.03f);
             }
 
             renderAtlas(sb, new Color(0, 0, 0, transparency * 0.25f), getCardBgAtlas(), current_x + SHADOW_OFFSET_X * drawScale, current_y - SHADOW_OFFSET_Y * drawScale);
-            if ((player.hoveredCard == this) && ((player.isDraggingCard && player.isHoveringDropZone) || player.inSingleTargetMode)) {
+            if ((AbstractDungeon.player.hoveredCard == this) && ((AbstractDungeon.player.isDraggingCard && AbstractDungeon.player.isHoveringDropZone) || AbstractDungeon.player.inSingleTargetMode)) {
                 renderAtlas(sb, HOVER_IMG_COLOR, getCardBgAtlas(), current_x, current_y);
             }
             else if (selected) {
@@ -2510,7 +2508,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         super.triggerWhenDrawn();
 
         if (PCLCardTag.Autoplay.tryProgress(this)) {
-            PCLActions.last.playCard(this, player.hand, null)
+            PCLActions.last.playCard(this, AbstractDungeon.player.hand, null)
                     .spendEnergy(true)
                     .setCondition(AbstractCard::hasEnoughEnergy);
         }

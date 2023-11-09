@@ -62,6 +62,23 @@
 												"{0} {1} {2} to {3}"
 								]
 				},
+				"pcl:Augment": {
+					"TEXT": [
+						"Category",
+						"Requirement",
+						"Tier",
+						"Unremovable",
+						"Cannot be removed from cards",
+						"General",
+						"Played",
+						"Hindrance",
+						"Can be slotted on any card.",
+						"Can be slotted on Attacks, Skills, and Powers.",
+						"Can be slotted on #ySummons. Does not spawn if there are no #ySummons in the card pool.",
+						"Can be slotted on Curses and Statuses. Does not spawn in rewards.",
+						"Requirements may vary. Does not spawn in rewards."
+					]
+				},
 				"pcl:CardEditor": {
 								"TEXT": [
 												"Attributes",
@@ -278,11 +295,10 @@
 												"Team",
 												"Legendary",
 												"Secret Rare",
-												"General",
 												"ALL",
 												"Ally",
-												"AoE Enemy",
-												"AoE Ally",
+												"ALL Enemy",
+												"ALL Ally",
 												"Random",
 												"Single",
 												"Turn Start First",
@@ -472,7 +488,6 @@
 												"Left-Click",
 												"Right-Click",
 												"Temp. {0}",
-												"Requirement",
 												"Edit",
 												"Custom Relics",
 												"Allow relics created with Fabricate to appear in runs",
@@ -480,16 +495,11 @@
 												"Allow potions created with Fabricate to appear in runs",
 												"Custom Blights",
 												"Allow blights created with Fabricate to appear in runs",
-												"Category",
-												"Sub-Category",
-												"Tier",
 												"Enable Custom Loadout",
 												"Overwrite the starting character's deck and attributes with a custom loadout",
 												"Enable Augments",
 												"Enables #yAugments, including those created with Fabricate, to appear in combat rewards",
-												"Replaces {0}",
-												"Unremovable",
-												"Cannot be removed from cards"
+												"Replaces {0}"
 								]
 				},
 				"pcl:Options": {

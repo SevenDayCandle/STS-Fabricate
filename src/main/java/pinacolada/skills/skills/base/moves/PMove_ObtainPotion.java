@@ -89,7 +89,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
 
             choices.addAll(uniques);
             for (int i = 0; i < amount; i++) {
-                AbstractPotion potion = choices.retrieve(PCLRelic.rng, true);
+                AbstractPotion potion = choices.retrieve(AbstractDungeon.potionRng, true);
                 if (potion != null) {
                     onCreate.invoke(potion.makeCopy());
                 }

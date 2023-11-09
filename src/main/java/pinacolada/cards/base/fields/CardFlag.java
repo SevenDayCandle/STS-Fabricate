@@ -117,7 +117,8 @@ public class CardFlag implements TooltipProvider {
         return name != null ? name : ID;
     }
 
-    public EUITooltip getTip() {
+    @Override
+    public EUITooltip getTooltip() {
         if (tip == null) {
             tip = new EUITooltip(getName());
         }
@@ -126,7 +127,7 @@ public class CardFlag implements TooltipProvider {
 
     @Override
     public List<EUITooltip> getTips() {
-        return Collections.singletonList(getTip());
+        return Collections.singletonList(getTooltip());
     }
 
     public boolean has(AbstractCard card) {

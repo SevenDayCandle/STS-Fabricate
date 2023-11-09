@@ -98,9 +98,9 @@ public class PCLCustomAugmentPrimaryInfoPage extends PCLCustomGenericPage {
                         effect.modifyAllBuilders((e, i) -> e.setCategory(rarities.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_category)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.augment_category)
                 .setItems(PCLAugmentCategory.values())
-                .setTooltip(PGR.core.strings.misc_category, PGR.core.strings.cetut_augmentCategory);
+                .setTooltip(PGR.core.strings.augment_category, PGR.core.strings.cetut_augmentCategory);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.262f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, this::modifyMaxUpgrades)
                 .setLimits(-1, PSkill.DEFAULT_MAX)
@@ -120,11 +120,11 @@ public class PCLCustomAugmentPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.tooltips.unique);
         permanentToggle = new EUIToggle(new EUIHitbox(screenW(0.562f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
-                .setText(PGR.core.strings.misc_unremovable)
+                .setText(PGR.core.strings.augment_unremovable)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setPermanent(val);
                 }))
-                .setTooltip(new EUITooltip(PGR.core.strings.misc_unremovable, PGR.core.strings.misc_unremovableDesc));
+                .setTooltip(new EUITooltip(PGR.core.strings.augment_unremovable, PGR.core.strings.augment_unremovableDesc));
 
         refresh();
     }

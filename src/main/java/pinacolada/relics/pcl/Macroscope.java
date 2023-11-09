@@ -46,9 +46,9 @@ public class Macroscope extends PCLRelic {
     @Override
     public void onVictory() {
         super.onVictory();
-        player.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
-        player.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
-        player.healthBarUpdatedEvent();
+        AbstractDungeon.player.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
+        AbstractDungeon.player.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
+        AbstractDungeon.player.healthBarUpdatedEvent();
         PGR.dungeon.setDivisor(1);
     }
 }

@@ -53,7 +53,7 @@ public class PCLAugmentKeywordFilters
                 .setOnOpenOrClose(this::updateActive)
                 .setOnChange(costs -> this.onFilterChanged(filters.currentCategories, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_category)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.augment_category)
                 .setItems(PCLAugmentCategory.values())
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
@@ -63,7 +63,7 @@ public class PCLAugmentKeywordFilters
                 .setOnOpenOrClose(this::updateActive)
                 .setOnChange(costs -> this.onFilterChanged(filters.currentTiers, costs))
                 .setLabelFunctionForButton(this::filterNameFunction, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.misc_tier)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.augment_tier)
                 .setItems(EUIUtils.range(1, 3))
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
@@ -236,9 +236,9 @@ public class PCLAugmentKeywordFilters
     @Override
     protected void setupSortHeader(FilterSortHeader header, float startX) {
 
-        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByCategory, PGR.core.strings.misc_category, startX);
+        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByCategory, PGR.core.strings.augment_category, startX);
         startX = makeToggle(header, PCLAugmentKeywordFilters::rankByName, CardLibSortHeader.TEXT[2], startX);
-        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByTier, PGR.core.strings.misc_tier, startX);
+        startX = makeToggle(header, PCLAugmentKeywordFilters::rankByTier, PGR.core.strings.augment_tier, startX);
     }
 
     @Override

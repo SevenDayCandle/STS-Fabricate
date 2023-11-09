@@ -48,8 +48,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     private static EUITooltip hiddenTooltip;
     private static EUITooltip sapphireTooltip;
 
-    public static AbstractPlayer player;
-    public static Random rng;
     public final PCLRelicData relicData;
     public ArrayList<EUIKeywordTooltip> euiTips;
     public EUIKeywordTooltip mainTooltip;
@@ -313,14 +311,14 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public void instantObtain(AbstractPlayer p, int slot, boolean callOnEquip) {
-        if (tryRetain(callOnEquip)) {
+        if (tryRetain(p, callOnEquip)) {
             super.instantObtain(p, slot, callOnEquip);
         }
     }
 
     @Override
     public void instantObtain() {
-        if (tryRetain(true)) {
+        if (tryRetain(AbstractDungeon.player, true)) {
             super.instantObtain();
         }
     }
@@ -341,7 +339,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     @Override
     public void obtain() {
-        if (tryRetain(true)) {
+        if (tryRetain(AbstractDungeon.player, true)) {
             super.obtain();
         }
     }
@@ -538,7 +536,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         this.outlineImg = t;
     }
 
-    protected boolean tryRetain(boolean callOnEquip) {
+    protected boolean tryRetain(AbstractPlayer player, boolean callOnEquip) {
         if (relicData.replacementIDs != null && relicData.replacementIDs.length > 0) {
             Set<String> ids = EUIUtils.set(relicData.replacementIDs);
             ArrayList<AbstractRelic> relics = player.relics;

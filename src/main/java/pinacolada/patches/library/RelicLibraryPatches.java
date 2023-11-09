@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class RelicLibraryPatches {
     /**
-     * Directly get a card from the card library, bypassing postfixes attached to getRelic. Returns NULL instead of circlet if nothing was found
+     * Directly get a relic from the library, bypassing postfixes attached to getRelic. Returns NULL instead of circlet if nothing was found
      */
     public static AbstractRelic getDirectRelic(String id) {
         AbstractRelic relic = null;

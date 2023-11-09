@@ -68,7 +68,9 @@ public class DrawCards extends CardFilterAction {
         else {
             if (filter != null) {
                 AbstractCard filtered = null;
-                for (AbstractCard card : player.drawPile.group) {
+                // Iterate from top to bottom
+                for (int i = player.drawPile.group.size() - 1; i >= 0; i--) {
+                    AbstractCard card = player.drawPile.group.get(i);
                     if (filter.invoke(card)) {
                         filtered = card;
                         break;
