@@ -26,6 +26,7 @@ public class PCLCustomTrial extends CustomTrial {
     public final ArrayList<String> cardIds = new ArrayList<>();
     public final ArrayList<String> modIds = new ArrayList<>();
     public final ArrayList<String> relicIds = new ArrayList<>();
+    public final HashSet<String> bannedAugments;
     public final HashSet<String> bannedCards;
     public final HashSet<String> bannedRelics;
     protected Integer maxHpOverride = null;
@@ -36,12 +37,14 @@ public class PCLCustomTrial extends CustomTrial {
     public boolean allowCustomCards;
     public boolean allowCustomPotions;
     public boolean allowCustomRelics;
+    public int augmentChance;
     public FakeLoadout fakeLoadout;
 
-    public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics) {
+    public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics, HashSet<String> bannedAugments) {
         super();
         this.bannedCards = bannedCards;
         this.bannedRelics = bannedRelics;
+        this.bannedAugments = bannedAugments;
     }
 
     // TODO Add custom mods

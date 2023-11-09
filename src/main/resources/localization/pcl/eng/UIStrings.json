@@ -486,7 +486,7 @@
 												"Enable Custom Loadout",
 												"Overwrite the starting character's deck and attributes with a custom loadout",
 												"Enable Augments",
-												"Allows #yAugments to appear in runs, which can be used to enhance your cards",
+												"Enables #yAugments, including those created with Fabricate, to appear in combat rewards",
 												"Replaces {0}",
 												"Unremovable",
 												"Cannot be removed from cards"
@@ -512,7 +512,8 @@
 												"Use Fabricate popup view for all relics",
 												"Use custom card framework for all cards",
 												"Show targeting indicators on custom cards",
-												"Augment base chance"
+												"Enable augments in normal runs",
+												"Augment reward chance"
 								]
 				},
 				"pcl:OptionDescriptions": {
@@ -531,7 +532,9 @@
 												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
 												"If checked, all popup views for relics will be rendered with Fabricate, even if those items were not made with Fabricate. This setting may cause conflicts with mods that modify base game popup views.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods.",
-												"Adds a panel on the right-hand side of cards that describes the card's targeting. Note that certain cards may always have this panel visible regardless of this setting."
+												"Adds a panel on the right-hand side of cards that describes the card's targeting. NL Certain cards may always have this panel visible regardless of this setting.",
+												"Enables #yAugments, including those created with Fabricate, to appear as combat rewards for all characters.",
+												"The chance for an #yAugment to appear in a card reward."
 								]
 				},
 				"pcl:Power": {

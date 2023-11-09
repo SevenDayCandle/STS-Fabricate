@@ -19,6 +19,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLResources;
@@ -38,6 +39,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     protected CharacterOption currentOption;
     protected String currentSeed = EUIUtils.EMPTY_STRING;
     protected boolean initialized;
+    public HashSet<String> bannedAugments = new HashSet<>();
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
@@ -51,6 +53,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public boolean isEndless;
     public boolean isFinalActAvailable;
     public int ascensionLevel;
+    public int augmentChance = PCLDungeon.DEFAULT_AUGMENT_CHANCE;
     public FakeLoadout fakeLoadout = new FakeLoadout();
 
     public PCLCustomRunScreen() {
@@ -134,16 +137,18 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         }
         AbstractDungeon.generateSeeds();
 
-        PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>(bannedRelics));
+        PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>(bannedRelics), new HashSet<>(bannedAugments));
         if (allowLoadout) {
             trial.fakeLoadout = fakeLoadout;
         }
 
         trial.addMods(activeMods);
+        trial.allowAugments = allowAugments;
         trial.allowCustomBlights = allowCustomBlights;
         trial.allowCustomCards = allowCustomCards;
         trial.allowCustomPotions = allowCustomPotions;
         trial.allowCustomRelics = allowCustomRelics;
+        trial.augmentChance = augmentChance;
         Settings.isEndless = isEndless;
         CustomModeScreen.finalActAvailable = isFinalActAvailable;
         CardCrawlGame.trial = trial;

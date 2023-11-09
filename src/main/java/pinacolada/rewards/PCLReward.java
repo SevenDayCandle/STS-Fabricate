@@ -33,10 +33,6 @@ public abstract class PCLReward extends CustomReward {
         super(rewardImage, text, type);
     }
 
-    public static String createFullID(Class<? extends PCLReward> type) {
-        return PGR.core.createID(type.getSimpleName());
-    }
-
     public void render(SpriteBatch sb) {
         if (this.hb.hovered) {
             sb.setColor(new Color(0.4F, 0.6F, 0.6F, 1.0F));
@@ -85,70 +81,12 @@ public abstract class PCLReward extends CustomReward {
         this.hb.render(sb);
     }
 
-    public void renderIcon(SpriteBatch sb) {
+    protected void renderIcon(SpriteBatch sb) {
         sb.draw(this.icon, RewardItem.REWARD_ITEM_X - 32.0F, this.y - 32.0F - 2.0F * Settings.scale, 32.0F, 32.0F, 64.0F, 64.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 64, 64, false, false);
     }
 
     protected void renderRelicLink(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
         sb.draw(ImageMaster.RELIC_LINKED, this.hb.cX - 64.0F, this.y - 64.0F + 52.0F * Settings.scale, 64.0F, 64.0F, 128.0F, 128.0F, Settings.scale, Settings.scale, 0.0F, 0, 0, 128, 128, false, false);
-    }
-
-    private static class RewardContext {
-        public PCLLoadout series;
-        public int rewardSize;
-        public int rareCardChance;
-        public int uncommonCardChance;
-        public int commonCardChance;
-
-        public RewardContext(PCLLoadout series) {
-            this.series = series;
-            this.rewardSize = 3;
-
-            if (GameUtilities.getAscensionLevel() < 12) {
-                this.rareCardChance = 3;
-                this.uncommonCardChance = 37;
-                this.commonCardChance = 60;
-            }
-            else {
-                this.rareCardChance = 2;
-                this.uncommonCardChance = 33;
-                this.commonCardChance = 65;
-            }
-
-            for (AbstractRelic relic : AbstractDungeon.player.relics) {
-                this.rewardSize = relic.changeNumberOfCardsInReward(rewardSize);
-                this.uncommonCardChance = relic.changeUncommonCardRewardChance(uncommonCardChance);
-                this.rareCardChance = relic.changeRareCardRewardChance(rareCardChance);
-            }
-
-            if (ModHelper.isModEnabled(Binary.ID)) {
-                this.rewardSize -= 1;
-            }
-        }
-
-        public void addCard(AbstractCard card, ArrayList<AbstractCard> rewards) {
-            for (AbstractRelic relic : AbstractDungeon.player.relics) {
-                relic.onPreviewObtainCard(card);
-            }
-
-            rewards.add(card);
-        }
-
-        public int getRarityWeight(AbstractCard.CardRarity rarity) {
-            switch (rarity) {
-                case COMMON:
-                    return commonCardChance;
-
-                case UNCOMMON:
-                    return uncommonCardChance;
-
-                case RARE:
-                    return rareCardChance;
-
-                default:
-                    return 0;
-            }
-        }
     }
 }

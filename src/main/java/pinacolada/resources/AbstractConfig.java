@@ -8,11 +8,16 @@ import com.evacipated.cardcrawl.modthespire.lib.ConfigUtils;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIHoverable;
+import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.settings.ModSettingsToggle;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 
 import java.io.File;
@@ -23,7 +28,6 @@ public abstract class AbstractConfig {
     private static final String CONFIG_ID = "PCLConfig";
     protected static final int BASE_OPTION_OFFSET_X = 400;
     protected static final int BASE_OPTION_OFFSET_Y = 720;
-    protected static final int BASE_OPTION_OPTION_HEIGHT = 32;
     protected static ExtraModSettingsPanel.Category pclCategory;
 
     protected final String id;
@@ -57,10 +61,9 @@ public abstract class AbstractConfig {
         return (int) (ypos - renderable.hb.height);
     }
 
-    protected int addToggle(int page, STSConfigItem<Boolean> option, String label, int ypos, String tip) {
-        settingsBlock.addUIElement(page, new ModLabeledToggleButton(label, tip, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), EUIFontHelper.cardDescriptionFontNormal, option.get(), panel, (__) -> {
-        }, (c) -> option.set(c.enabled)));
-        return ypos - BASE_OPTION_OPTION_HEIGHT;
+    protected float addToggle(int page, STSConfigItem<Boolean> option, String label, float ypos, String tip) {
+        settingsBlock.addUIElement(page, EUIConfiguration.createToggle(option, label, ypos, tip));
+        return ypos - ExtraModSettingsPanel.OPTION_SIZE;
     }
 
     public FileHandle getConfigFolder() {

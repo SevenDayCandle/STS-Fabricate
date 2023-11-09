@@ -21,8 +21,6 @@ import pinacolada.rewards.PCLReward;
 import java.util.ArrayList;
 
 public class AugmentReward extends PCLReward {
-    public static final String ID = createFullID(AugmentReward.class);
-
     public final PCLAugment augment;
 
     public AugmentReward(PCLAugment augment) {
@@ -35,7 +33,6 @@ public class AugmentReward extends PCLReward {
     public boolean claimReward() {
         PCLSFX.play(PCLSFX.RELIC_DROP_MAGICAL);
         PGR.dungeon.addAugment(augment.save);
-        this.isDone = true;
         return true;
     }
 
@@ -60,24 +57,22 @@ public class AugmentReward extends PCLReward {
     public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {
         @Override
         public CustomReward onLoad(RewardSave rewardSave) {
-            PCLAugmentData data = PCLAugmentData.getStaticDataOrCustom(rewardSave.id);
-            if (data == null) {
-                ArrayList<PCLAugmentData> available = PCLAugmentData.getAvailable();
-                if (available.size() > 0) {
-                    data = available.get(0);
-                }
-                else {
-                    return null;
-                }
+            PCLAugment.SaveData save = EUIUtils.deserialize(rewardSave.id, PCLAugment.SaveData.class);
+            if (save != null) {
+                return new AugmentReward(save.create());
             }
-            return new AugmentReward(data.create());
+            ArrayList<PCLAugmentData> available = PCLAugmentData.getAvailable();
+            if (available.size() > 0) {
+                return new AugmentReward(available.get(0).create());
+            }
+            return null;
         }
 
         @Override
         public RewardSave onSave(CustomReward customReward) {
             AugmentReward reward = EUIUtils.safeCast(customReward, AugmentReward.class);
             if (reward != null) {
-                return new RewardSave(reward.type.toString(), reward.augment.save.ID, 1, 0);
+                return new RewardSave(reward.type.toString(), EUIUtils.serialize(reward.augment.save), 1, 0);
             }
 
             return null;

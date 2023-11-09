@@ -5,6 +5,7 @@ import basemod.ModPanel;
 import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIUtils;
@@ -16,6 +17,7 @@ import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.tooltips.EUIPreview;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.utilities.GameUtilities;
 
@@ -25,13 +27,13 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public class PCLMainConfig extends AbstractConfig {
-    private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
     private static ExtraModSettingsPanel.Category pclCategory;
     private HashSet<String> tips = null;
     public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("AbbreviateEffects"), false);
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("UseCroppedPortrait"), false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("DisplayCardTagDescription"), false);
+    public STSConfigItem<Boolean> enableCustomAugments = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomAugments"), false);
     public STSConfigItem<Boolean> enableCustomBlights = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomBlights"), false);
     public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomCards"), false);
     public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomPotions"), false);
@@ -62,9 +64,9 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("TourSeriesSelect"), false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph0"), 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AscensionGlyph1"), 0);
+    public STSConfigItem<Integer> augmentChance = new STSConfigItem<Integer>(PCLMainConfig.createFullID("AugmentChance"), PCLDungeon.DEFAULT_AUGMENT_CHANCE);
     public STSStringConfigItem lastCSVPath = new STSStringConfigItem(PCLMainConfig.createFullID("LastCSVPath"), "");
     public STSStringConfigItem lastImagePath = new STSStringConfigItem(PCLMainConfig.createFullID("LastImagePath"), "");
-    public STSStringConfigItem lastSeed = new STSStringConfigItem(LAST_SEED_KEY, "");
     public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(PCLMainConfig.createFullID("DamageFormulaPosition"), new Vector2(0.6f, 0.8f));
 
     public PCLMainConfig() {
@@ -133,7 +135,7 @@ public class PCLMainConfig extends AbstractConfig {
         settingsBlock = new BasemodSettingsPage();
         panel.addUIElement(settingsBlock);
 
-        int yPos = BASE_OPTION_OFFSET_Y;
+        float yPos = BASE_OPTION_OFFSET_Y * Settings.scale;
         yPos = addToggle(0, abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
@@ -146,11 +148,12 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, fabricatePopup, PGR.core.strings.options_fabricatePopup, yPos, PGR.core.strings.optionDesc_fabricatePopup);
 
-        yPos = BASE_OPTION_OFFSET_Y;
+        yPos = BASE_OPTION_OFFSET_Y * Settings.scale;
         yPos = addToggle(1, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, enableCustomBlights, PGR.core.strings.options_enableCustomBlights, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(1, enableCustomAugments, PGR.core.strings.options_enableAugments, yPos, PGR.core.strings.optionDesc_enableAugments + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(1, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
         yPos = addToggle(1, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
 
@@ -192,9 +195,11 @@ public class PCLMainConfig extends AbstractConfig {
         abbreviateEffects.addConfig(config);
         ascensionGlyph0.addConfig(config);
         ascensionGlyph1.addConfig(config);
+        augmentChance.addConfig(config);
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
         displayCardTagDescription.addConfig(config);
+        enableCustomAugments.addConfig(config);
         enableCustomBlights.addConfig(config);
         enableCustomCards.addConfig(config);
         enableCustomPotions.addConfig(config);
@@ -210,7 +215,6 @@ public class PCLMainConfig extends AbstractConfig {
         vanillaLibraryScreen.addConfig(config);
         lastCSVPath.addConfig(config);
         lastImagePath.addConfig(config);
-        lastSeed.addConfig(config);
         madnessReplacements.addConfig(config);
         replaceCardsPCL.addConfig(config);
         tourBlightPrimary.addConfig(config);

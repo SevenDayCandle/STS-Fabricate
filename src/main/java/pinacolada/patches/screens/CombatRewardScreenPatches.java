@@ -12,6 +12,7 @@ import javassist.CtBehavior;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnReceiveRewardsListener;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
@@ -61,6 +62,8 @@ public class CombatRewardScreenPatches {
             if (p instanceof OnReceiveRewardsListener) {
                 ((OnReceiveRewardsListener) p).onReceiveRewards(__instance.rewards, currentRoom);
             }
+
+            PGR.dungeon.tryCreateAugmentReward(__instance.rewards);
         }
 
         private static class Locator extends SpireInsertLocator {

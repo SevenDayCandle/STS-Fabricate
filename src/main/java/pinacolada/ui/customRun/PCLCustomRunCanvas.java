@@ -61,6 +61,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUIToggle customRelicToggle;
     public final EUIToggle customPotionToggle;
     public final EUIToggle customBlightToggle;
+    public final EUIToggle customAugmentToggle;
     public final EUIToggle allowLoadoutToggle;
     public final EUIButton editCardPoolButton;
     public final EUIButton editRelicPoolButton;
@@ -157,10 +158,19 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
                 .setText(PGR.core.strings.misc_customBlights)
                 .setOnToggle(v -> {
-                    screen.allowCustomPotions = v;
+                    screen.allowCustomBlights = v;
                 })
                 .setToggle(screen.allowCustomBlights)
                 .setTooltip(PGR.core.strings.misc_customBlights, PGR.core.strings.misc_customBlightsDesc);
+
+        customAugmentToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setText(PGR.core.strings.misc_customAugment)
+                .setOnToggle(v -> {
+                    screen.allowAugments = v;
+                })
+                .setToggle(screen.allowAugments)
+                .setTooltip(PGR.core.strings.misc_customAugment, PGR.core.strings.misc_customAugmentDesc);
 
         allowLoadoutToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
@@ -281,6 +291,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customRelicToggle.tryRender(sb);
             customPotionToggle.tryRender(sb);
             customBlightToggle.tryRender(sb);
+            customAugmentToggle.tryRender(sb);
             allowLoadoutToggle.tryRender(sb);
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
@@ -348,6 +359,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             customRelicToggle.tryUpdate();
             customPotionToggle.tryUpdate();
             customBlightToggle.tryUpdate();
+            customAugmentToggle.tryUpdate();
             allowLoadoutToggle.tryUpdate();
             seedInput.tryUpdate();
             ascensionEditor.tryUpdate();
@@ -401,6 +413,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(customRelicToggle, yPos, scale(35));
         yPos = positionElement(customPotionToggle, yPos, scale(35));
         yPos = positionElement(customBlightToggle, yPos, scale(35));
+        yPos = positionElement(customAugmentToggle, yPos, scale(35));
         yPos = positionElement(allowLoadoutToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
