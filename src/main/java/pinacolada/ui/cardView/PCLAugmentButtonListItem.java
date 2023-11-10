@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.RelativeHitbox;
@@ -37,6 +38,10 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem {
         background.updateImpl();
         if (background.hb.hovered) {
             EUITooltip.queueTooltips(augment.getTips());
+            if (EUIInputManager.leftClick.isJustPressed()) {
+                background.hb.unhover();
+                panel.invoke(augment.item);
+            }
         }
         super.updateImpl();
     }

@@ -78,6 +78,7 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
         fields.setupEditor(editor);
     }
 
+    // Only subscribes self
     @Override
     public void subscribeChildren() {
         subscribeToAll();

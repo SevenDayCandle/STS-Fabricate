@@ -15,7 +15,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
-import pinacolada.skills.skills.special.traits.PTrait_Affinity;
+import pinacolada.skills.skills.base.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
 import pinacolada.skills.skills.special.traits.PTrait_HP;
 
@@ -102,7 +102,15 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     public static PTrait_Tag tags(int amount, PCLCardTag... tags) {
-        return new PTrait_Tag(tags);
+        return new PTrait_Tag(amount, tags);
+    }
+
+    public static PTrait_Tag tagsExact(PCLCardTag... tags) {
+        return (PTrait_Tag) new PTrait_Tag(tags).edit(f -> f.setNot(true));
+    }
+
+    public static PTrait_Tag tagsExact(int amount, PCLCardTag... tags) {
+        return (PTrait_Tag) new PTrait_Tag(amount, tags).edit(f -> f.setNot(true));
     }
 
     public static PTrait_Tag tagsNot(PCLCardTag... tags) {

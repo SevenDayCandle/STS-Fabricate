@@ -54,6 +54,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUILabel modifiersLabel;
     public final EUITextBoxInput seedInput;
     public final PCLValueEditor ascensionEditor;
+    public final PCLValueEditor augmentChanceEditor;
     public final EUILabel selectedCharacterLabel;
     public final EUIToggle endlessToggle;
     public final EUIToggle endingActToggle;
@@ -195,6 +196,12 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(CustomModeScreen.TEXT[3], "");
         ascensionEditor.header.setAlignment(0.4f, 0.25f);
 
+        augmentChanceEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), PGR.core.strings.options_augmentChance, this::setAugmentChance)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, PGR.core.strings.options_augmentChance)
+                .setLimits(0, 100)
+                .setTooltip(PGR.core.strings.options_augmentChance, PGR.core.strings.optionDesc_augmentChance);
+        augmentChanceEditor.header.setAlignment(0.4f, 0.25f);
+
         modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)), mod -> mod.name)
                 .setRowFunction(PCLCustomModDropdownRow::new)
                 .setOnChange(this::onUpdateModifiers)
@@ -295,6 +302,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             allowLoadoutToggle.tryRender(sb);
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
+            augmentChanceEditor.tryRender(sb);
             modifierDropdown.tryRender(sb);
             for (PCLCustomRunCharacterButton b : characters) {
                 b.tryRenderCentered(sb);
@@ -317,6 +325,10 @@ public class PCLCustomRunCanvas extends EUICanvas {
         int value = ascensionEditor.getValue();
         ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
         ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
+    }
+
+    public void setAugmentChance(int i) {
+        screen.augmentChance = i;
     }
 
     public void setCharacter(CharacterOption c) {
@@ -363,6 +375,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             allowLoadoutToggle.tryUpdate();
             seedInput.tryUpdate();
             ascensionEditor.tryUpdate();
+            augmentChanceEditor.tryUpdate();
             modifierDropdown.tryUpdate();
             editCardPoolButton.updateImpl();
             editRelicPoolButton.updateImpl();
@@ -417,6 +430,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(allowLoadoutToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
+        augmentChanceEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, augmentChanceEditor.hb.y - ascensionEditor.hb.height * 2f);
         seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, modifierDropdown.hb.y + scale(20));
 
         yPos = positionElement(editCardPoolButton, yPos, scale(66));

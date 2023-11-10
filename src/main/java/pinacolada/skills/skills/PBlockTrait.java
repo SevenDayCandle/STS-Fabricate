@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import pinacolada.skills.PMod;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -23,6 +24,11 @@ public abstract class PBlockTrait<T extends PField_Not> extends PTrait<T> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
+    }
+
+    @Override
+    public boolean shouldHideText() {
+        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
     }
 
     @Override

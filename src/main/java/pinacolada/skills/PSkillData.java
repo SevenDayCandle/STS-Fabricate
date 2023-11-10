@@ -148,7 +148,8 @@ public class PSkillData<T extends PField> {
     public enum SourceType {
         Card,
         Collectible,
-        Power;
+        Power,
+        Augment;
 
         public boolean isSourceAllowed(PCLCustomEffectPage editor) {
             switch (this) {
@@ -162,6 +163,8 @@ public class PSkillData<T extends PField> {
                             || editor.screen instanceof PCLCustomBlightEditScreen
                             || editor.screen instanceof PCLCustomPowerEditScreen
                             || editor.screen instanceof PCLCustomAugmentEditScreen;
+                case Augment:
+                    return editor.screen instanceof PCLCustomAugmentEditScreen;
             }
             return true;
         }

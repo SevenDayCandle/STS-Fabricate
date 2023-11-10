@@ -10,13 +10,13 @@ import pinacolada.skills.PTrait;
 @VisibleAugment
 public class SHP extends PCLAugment {
     public static final PCLAugmentData DATA = register(SHP.class, PCLAugmentCategory.Summon)
-            .setMaxUpgrades(3);
+            .setMaxUpgrades(2);
 
     public SHP(SaveData save) {
         super(DATA, save);
     }
 
     public void setup() {
-        addUseMove(PTrait.hp(2).setUpgrade(2));
+        addUseMove(PTrait.hp(2).setUpgrade(6), PTrait.cost(0).setUpgrade(1));
     }
 }

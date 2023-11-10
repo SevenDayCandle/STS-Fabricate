@@ -23,9 +23,12 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.resources.PGR;
@@ -127,6 +130,11 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         for (AbstractCard.CardColor color : getAllColors()) {
             makeColorButton(color);
         }
+    }
+
+    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
+    public static boolean canFullyCopy(PointerProvider card) {
+        return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
     }
 
     public static void viewDesktopFolder() {

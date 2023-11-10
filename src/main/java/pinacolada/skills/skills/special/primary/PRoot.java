@@ -17,6 +17,8 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.skills.skills.PMultiCond;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
@@ -47,8 +49,10 @@ public class PRoot extends PPrimary<PField_Empty> {
             return TEXT.cond_when(PGR.core.tooltips.create.past());
         }
         if (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) {
-            String timingString = requestor != null ? ((PCLDynamicOrbData)requestor).timing.getTitle() : source instanceof PCLOrb ? ((PCLOrb) source).timing.getTitle() : null;
-            return PCLCoreStrings.colorString("y", timingString != null ? PGR.core.tooltips.trigger.title + COMMA_SEPARATOR + timingString : PGR.core.tooltips.trigger.title);
+            if (!(childEffect instanceof PDelegateCond || childEffect instanceof PMultiCond && EUIUtils.all(((PMultiCond) childEffect).getSubEffects(), c -> c instanceof PDelegateCond))) {
+                String timingString = requestor != null ? ((PCLDynamicOrbData)requestor).timing.getTitle() : source instanceof PCLOrb ? ((PCLOrb) source).timing.getTitle() : null;
+                return PCLCoreStrings.colorString("y", timingString != null ? PGR.core.tooltips.trigger.title + COMMA_SEPARATOR + timingString : PGR.core.tooltips.trigger.title);
+            }
         }
         return EUIUtils.EMPTY_STRING;
     }
@@ -79,6 +83,11 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return skill.data.sourceTypes == null || EUIUtils.any(skill.data.sourceTypes, s -> s.isSourceAllowed(editor));
+    }
+
+    // No-Op, should not subscribe children
+    @Override
+    public void subscribeChildren() {
     }
 
     @Override

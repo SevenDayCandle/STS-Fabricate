@@ -30,7 +30,7 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
                     if (!PGR.config.showIrrelevantProperties.get() && GameUtilities.isColorlessCardColor(currentColor)) {
                         card.affinities.sorted.clear();
                     }
-                    return PCLCustomCardSlot.canFullyCopy(card) ? card : null;
+                    return PCLCustomSelectorScreen.canFullyCopy(card) ? card : null;
                 });
         cards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         return cards;

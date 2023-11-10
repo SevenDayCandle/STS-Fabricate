@@ -50,6 +50,11 @@ public abstract class PShift extends PPrimary<PField_Empty> {
                 skill instanceof OutOfCombatMove;
     }
 
+    // No-Op, should not subscribe children
+    @Override
+    public void subscribeChildren() {
+    }
+
     // Should not activate effects when played normally in battle
     @Override
     public void use(PCLUseInfo info, PCLActions order) {

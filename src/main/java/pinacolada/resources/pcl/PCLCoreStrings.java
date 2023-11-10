@@ -224,7 +224,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_potionColor = cetut.TEXT[62];
     public final String cetut_blightUnique = cetut.TEXT[63];
     public final String cetut_augmentCategory = cetut.TEXT[64];
-    public final String cetut_augmentSubCategory = cetut.TEXT[65];
+    public final String cetut_augmentSlots = cetut.TEXT[65];
     public final String cetut_augmentTier = cetut.TEXT[66];
     public final String cetut_powerType = cetut.TEXT[67];
     public final String cetut_powerTurnBehavior = cetut.TEXT[68];

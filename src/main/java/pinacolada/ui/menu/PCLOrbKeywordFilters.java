@@ -92,8 +92,7 @@ public class PCLOrbKeywordFilters extends GenericFilters<PCLOrbRenderable, PCLOr
 
     @Override
     public void defaultSort() {
-        this.group.sort(PCLOrbKeywordFilters::rankByName);
-        this.group.sort(PCLOrbKeywordFilters::rankByTiming);
+        this.group.sort(PCLOrbKeywordFilters::rankByName, PCLOrbKeywordFilters::rankByTiming);
     }
 
     public boolean evaluate(PCLOrbRenderable c) {

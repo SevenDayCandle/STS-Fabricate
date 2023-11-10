@@ -53,7 +53,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public boolean isEndless;
     public boolean isFinalActAvailable;
     public int ascensionLevel;
-    public int augmentChance = PCLDungeon.DEFAULT_AUGMENT_CHANCE;
+    public int augmentChance = 100;
     public FakeLoadout fakeLoadout = new FakeLoadout();
 
     public PCLCustomRunScreen() {

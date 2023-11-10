@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon.CurrentScreen;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<GenericChooseCardsEffect> {
     protected final Color screenColor;
     protected final FuncT1<Boolean, AbstractCard> filter;
+    protected ActionT1<GenericChooseCardsEffect> onCancel;
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
     protected int cardsToChoose;
     protected boolean selected;
@@ -126,13 +128,20 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
 
         if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
         {
+            if (onCancel != null) {
+                onCancel.invoke(this);
+            }
             complete();
         }
     }
 
     protected abstract ArrayList<AbstractCard> getGroup();
 
+    public GenericChooseCardsEffect setOnCancel(ActionT1<GenericChooseCardsEffect> onCompletion) {
+        onCancel = onCompletion;
+
+        return this;
+    }
+
     public abstract void onCardSelected(AbstractCard c);
-
-
 }

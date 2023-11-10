@@ -13,6 +13,7 @@ import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.interfaces.providers.CustomFileProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.resources.PGR;
@@ -128,14 +129,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         getCards(slot.slotColor).add(slot);
         CUSTOM_MAPPING.put(slot.ID, slot);
         slot.commitBuilder();
-    }
-
-    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
-    public static boolean canFullyCopy(AbstractCard card) {
-        if (card instanceof PCLCard) {
-            return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
-        }
-        return false;
     }
 
     public static void deleteSlot(PCLCustomCardSlot slot) {

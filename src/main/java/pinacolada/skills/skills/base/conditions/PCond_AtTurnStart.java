@@ -51,8 +51,4 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
     public boolean shouldUseWhenText() {
         return false;
     }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
 }

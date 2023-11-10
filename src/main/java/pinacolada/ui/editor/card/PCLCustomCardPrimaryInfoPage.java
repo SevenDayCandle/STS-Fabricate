@@ -17,6 +17,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -62,6 +63,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor maxCopies;
     protected PCLValueEditor branchUpgrades;
+    protected PCLValueEditor augmentSlots;
     protected PCLValueEditor loadoutValue;
     protected EUIToggle uniqueToggle;
     protected EUIToggle soulboundToggle;
@@ -191,12 +193,16 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
-        loadoutValue = new PCLValueEditor(new EUIHitbox(screenW(0.562f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        augmentSlots = new PCLValueEditor(new EUIHitbox(screenW(0.562f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_augmentSlots, (val) -> effect.modifyAllBuilders((e, i) -> e.setSlots(val)))
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_augmentSlots, PGR.core.strings.cetut_augmentSlots);
+        loadoutValue = new PCLValueEditor(new EUIHitbox(screenW(0.662f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_loadoutValue, (val) -> effect.modifyAllBuilders((e, i) -> e.setLoadoutValue(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_loadoutValue, PGR.core.strings.cetut_loadoutValue)
                 .setHasInfinite(true, true);
-        resetLoadoutValue = new EUIButton(PCLCoreImages.Core.backArrow.texture(), new EUIHitbox(screenW(0.602f), screenH(0.403f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
+        resetLoadoutValue = new EUIButton(PCLCoreImages.Core.backArrow.texture(), new EUIHitbox(screenW(0.702f), screenH(0.403f), MENU_HEIGHT * 0.75f, MENU_HEIGHT * 0.75f))
                 .setOnClick(() -> {
                     int val = PCLCardData.getValueForRarity(effect.getBuilder().cardRarity);
                     loadoutValue.setValue(val, true);
@@ -257,6 +263,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 maxUpgrades.makeTour(true),
                 maxCopies.makeTour(true),
                 branchUpgrades.makeTour(true),
+                augmentSlots.makeTour(true),
                 loadoutValue.makeTour(true),
                 uniqueToggle.makeTour(true),
                 soulboundToggle.makeTour(true)
@@ -324,6 +331,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         flagsDropdown.setSelection(builder.flags, false);
         maxUpgrades.setValue(builder.maxUpgradeLevel, false);
         branchUpgrades.setValue(builder.branchFactor, false);
+        augmentSlots.setValue(builder.slots, false);
         loadoutValue.setValue(builder.getLoadoutValue(), false);
         maxCopies.setValue(builder.maxCopies, false);
         uniqueToggle.setToggle(builder.unique);
@@ -406,6 +414,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
         branchUpgrades.tryRender(sb);
+        augmentSlots.tryRender(sb);
         loadoutValue.tryRender(sb);
         resetLoadoutValue.tryRender(sb);
         uniqueToggle.tryRender(sb);
@@ -436,6 +445,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         nameInput.tryUpdate();
         idInput.tryUpdate();
         branchUpgrades.tryUpdate();
+        augmentSlots.tryUpdate();
         loadoutValue.tryUpdate();
         resetLoadoutValue.tryUpdate();
         uniqueToggle.tryUpdate();

@@ -3,10 +3,7 @@ package pinacolada.skills.skills.base.traits;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
@@ -65,6 +62,11 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
+    }
+
+    @Override
+    public boolean shouldHideText() {
+        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
     }
 
     @Override

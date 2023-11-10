@@ -7,6 +7,7 @@ import extendedui.EUI;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
+import extendedui.patches.game.AbstractDungeonPatches;
 import extendedui.ui.screens.EUIPoolScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
@@ -50,9 +51,14 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
+            AbstractDungeon.CurrentScreen wayBack = AbstractDungeonPatches.coolerPreviousScreen;
+            AbstractDungeonPatches.coolerPreviousScreen = AUGMENT_SCREEN; // So that the effect will return to this screen once we are done
             curEffect = new ChooseCardForAugmentEffect(augment)
-                    .addCallback(__ ->
-                            {
+                    .setOnCancel(__ -> {
+                        AbstractDungeonPatches.coolerPreviousScreen = wayBack; // Prevent previous screen before this from going poof
+                    })
+                    .addCallback(__ -> {
+                                AbstractDungeonPatches.coolerPreviousScreen = wayBack;
                                 refreshAugments();
                             }
                     );

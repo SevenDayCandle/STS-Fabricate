@@ -85,6 +85,10 @@ public class PCLAugmentKeywordFilters
                 ));
     }
 
+    public static int rankByID(PCLAugmentRenderable a, PCLAugmentRenderable b) {
+        return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.item.save.ID, b.item.save.ID));
+    }
+
     public static int rankByName(PCLAugmentRenderable a, PCLAugmentRenderable b) {
         return (a == null ? -1 : b == null ? 1 : StringUtils.compare(a.item.getName(), b.item.getName()));
     }
@@ -112,9 +116,7 @@ public class PCLAugmentKeywordFilters
 
     @Override
     public void defaultSort() {
-        this.group.sort(PCLAugmentKeywordFilters::rankByName);
-        this.group.sort(PCLAugmentKeywordFilters::rankByTier);
-        this.group.sort(PCLAugmentKeywordFilters::rankByCategory);
+        this.group.sort(PCLAugmentKeywordFilters::rankByTier, PCLAugmentKeywordFilters::rankByID, PCLAugmentKeywordFilters::rankByCategory);
     }
 
     public boolean evaluate(PCLAugmentRenderable c) {

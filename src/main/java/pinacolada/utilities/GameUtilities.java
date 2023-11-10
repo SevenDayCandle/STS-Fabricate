@@ -1331,11 +1331,11 @@ public class GameUtilities {
     }
 
     public static AbstractCard getRandomAnyColorCombatCard() {
-        return getRandomElement(getAvailableCardsForAllColors(null));
+        return getRandomElement(getAvailableCardsForAllColors(null), AbstractDungeon.cardRandomRng);
     }
 
     public static AbstractCard getRandomAnyColorCombatCard(FuncT1<Boolean, AbstractCard> filter) {
-        return getRandomElement(getAvailableCardsForAllColors(filter));
+        return getRandomElement(getAvailableCardsForAllColors(filter), AbstractDungeon.cardRandomRng);
     }
 
     public static AbstractCreature getRandomCharacter(boolean aliveOnly) {
@@ -1343,12 +1343,12 @@ public class GameUtilities {
     }
 
     public static AbstractCard getRandomCombatCard() {
-        return getRandomElement(getCardsFromStandardCombatPools(null));
+        return getRandomElement(getCardsFromStandardCombatPools(null), AbstractDungeon.cardRandomRng);
     }
 
     // Create a random card that matches the given parameters. Note that these random card methods poll from the in-combat card pool, so healing cards are already filtered out
     public static AbstractCard getRandomCombatCard(FuncT1<Boolean, AbstractCard> filter) {
-        return getRandomElement(getCardsFromStandardCombatPools(filter));
+        return getRandomElement(getCardsFromStandardCombatPools(filter), AbstractDungeon.cardRandomRng);
     }
 
     public static <T> T getRandomElement(List<T> list) {

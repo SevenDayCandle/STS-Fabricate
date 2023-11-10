@@ -133,8 +133,7 @@ public class PCLPowerKeywordFilters extends GenericFilters<PCLPowerRenderable, P
 
     @Override
     public void defaultSort() {
-        this.group.sort(PCLPowerKeywordFilters::rankByName);
-        this.group.sort(PCLPowerKeywordFilters::rankByType);
+        this.group.sort(PCLPowerKeywordFilters::rankByName, PCLPowerKeywordFilters::rankByType);
     }
 
     public boolean evaluate(PCLPowerRenderable c) {

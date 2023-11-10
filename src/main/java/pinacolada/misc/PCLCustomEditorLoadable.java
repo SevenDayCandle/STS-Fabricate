@@ -32,6 +32,10 @@ public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U>, U extend
         return workshopFolder != null ? Gdx.files.absolute(filePath) : Gdx.files.local(filePath);
     }
 
+    public final T getFirstBuilder() {
+        return builders.get(0);
+    }
+
     protected final FileHandle getGenericHandle(String path) {
         return workshopFolder != null ? Gdx.files.absolute(path) : Gdx.files.local(path);
     }

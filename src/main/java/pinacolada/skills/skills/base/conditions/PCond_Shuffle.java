@@ -53,8 +53,4 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
             useFromTrigger(generateInfo(null));
         }
     }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
 }

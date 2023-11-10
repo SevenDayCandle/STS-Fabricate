@@ -35,7 +35,6 @@ public abstract class PCLLoadout {
     public static final int MAX_LIMIT = 6;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
-    public static final int CARD_SLOTS = 4;
     public final String ID;
     public AbstractCard.CardColor color;
     public String preset;

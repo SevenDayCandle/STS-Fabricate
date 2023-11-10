@@ -166,6 +166,10 @@ public interface PointerProvider {
         return getSkills().onUseEffects;
     }
 
+    default int getForm() {
+        return 0;
+    }
+
     // GetEffects plus any additional temporary effects not attached to Skills
     default ArrayList<PSkill<?>> getFullEffects() {
         return getEffects();

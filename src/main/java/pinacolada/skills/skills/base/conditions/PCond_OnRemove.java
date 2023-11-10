@@ -6,11 +6,13 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnRemovePowerSubscriber;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.ui.editor.orb.PCLCustomOrbEditScreen;
 
 import java.util.Collections;
 
@@ -36,7 +38,7 @@ public class PCond_OnRemove extends PDelegateCond<PField_Power> implements OnRem
         if (isWhenClause()) {
             return TEXT.cond_aObjectIs(fields.getPowerOrString(), PGR.core.tooltips.remove.past());
         }
-        return TEXT.cond_onGeneric(source instanceof AbstractOrb ? PGR.core.tooltips.evoke.title : PGR.core.tooltips.remove.title);
+        return TEXT.cond_onGeneric(source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData ? PGR.core.tooltips.evoke.title : PGR.core.tooltips.remove.title);
     }
 
     @Override

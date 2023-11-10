@@ -32,13 +32,25 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
         cancelButton = new MenuCancelButton();
     }
 
+    private static ArrayList<PCLAugmentRenderable> createAll() {
+        ArrayList<PCLAugmentRenderable> ret = new ArrayList<>();
+        for (PCLAugmentData data : PCLAugmentData.getAvailable()) {
+            for (int i = 0; i < data.maxForms; i++) {
+                for (int j = 0; j <= Math.max(0, data.maxUpgradeLevel); j++) {
+                    ret.add(data.createRenderable(i, j));
+                }
+            }
+        }
+        return ret;
+    }
+
     @Override
     public void open() {
         super.open();
         this.cancelButton.show(CardLibraryScreen.TEXT[0]);
 
         grid.clear();
-        grid.add(EUIUtils.map(PCLAugmentData.getAvailable(), a -> a.createRenderable(0, 0)));
+        grid.add(createAll());
 
         PGR.augmentFilters.initializeForSort(grid.group, __ -> {
             for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
@@ -51,6 +63,8 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
         for (CustomPoolModule<PCLAugmentRenderable> module : globalModules) {
             module.open(grid.group.group, AbstractCard.CardColor.COLORLESS, true, null);
         }
+
+        PGR.augmentFilters.sort();
     }
 
     @Override

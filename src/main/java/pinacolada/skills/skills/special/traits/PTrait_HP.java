@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.special.traits;
 
 import extendedui.EUIRM;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -9,8 +10,10 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 
+@VisibleSkill
 public class PTrait_HP extends PTrait<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_HP.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_HP.class, PField_Empty.class)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_HP() {
         this(1);

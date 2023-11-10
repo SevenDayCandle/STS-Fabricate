@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -41,5 +42,10 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
             return getCapitalSubText(perspective, requestor, addPeriod) + COMMA_SEPARATOR + childEffect.getText(perspective, requestor, false) + PCLCoreStrings.period(addPeriod);
         }
         return getCapitalSubText(perspective, requestor, addPeriod) + PCLCoreStrings.period(addPeriod);
+    }
+
+    // Does not trigger when played normally
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 }

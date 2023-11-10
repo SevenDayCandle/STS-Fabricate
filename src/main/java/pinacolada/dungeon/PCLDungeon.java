@@ -22,6 +22,8 @@ import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
+import extendedui.interfaces.delegates.FuncT3;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
@@ -34,7 +36,7 @@ import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLRelic;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
@@ -45,10 +47,7 @@ import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
@@ -69,6 +68,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     private transient ArrayList<AbstractCard> anyColorCards;
     private transient boolean canJumpAnywhere;
     private transient boolean canJumpNextFloor;
+    private transient boolean hasSummons;
+    private transient Long lastSeed;
     private transient int valueDivisor = 1;
     public Boolean allowAugments = false;
     public Boolean allowCustomAugments = false;
@@ -177,6 +178,17 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         log("Banned " + relicID + ", Total: " + bannedRelics.size());
     }
 
+    public boolean canAugmentSpawn(PCLAugmentData aug, int tier) {
+        switch (aug.category) {
+            case Special:
+            case Hindrance:
+                return false;
+            case Summon:
+                return hasSummons;
+        }
+        return true;
+    }
+
     public boolean canJumpAnywhere() {
         return canJumpAnywhere;
     }
@@ -208,7 +220,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public AbstractCard getAnyColorRewardCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowOtherRarities, boolean allowHealing) {
         ArrayList<AbstractCard> available = getAnyColorRewardCards(rarity, type, allowHealing);
         if (!available.isEmpty()) {
-            return GameUtilities.getRandomElement(available);
+            return GameUtilities.getRandomElement(available, AbstractDungeon.cardRng);
         }
         else if (allowOtherRarities && rarity != null) {
             EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
@@ -264,8 +276,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     public Random getRNG() {
-        if (rng == null) {
-            rng = new Random(Settings.seed);
+        if (rng == null || !Objects.equals(lastSeed, Settings.seed)) {
+            lastSeed = Settings.seed != null ? Settings.seed : 0;
+            rng = new Random(lastSeed);
             rng.setCounter(rNGCounter);
         }
 
@@ -275,13 +288,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     /*
      * Obtain a random augment with the specified tier restrictions. Higher tier augments will appear less often
      * */
-    public PCLAugment getAugment(int minTier, int maxTier) {
-        WeightedList<PCLAugment> weightedList = getAugmentsChoices(minTier, maxTier);
+    public PCLAugment getAugment(FuncT2<Boolean, PCLAugmentData, Integer> evalFunc) {
+        WeightedList<PCLAugment> weightedList = getAugmentsChoices(evalFunc);
         return weightedList.retrieve(AbstractDungeon.treasureRng, false);
     }
 
-    public ArrayList<PCLAugment> getAugments(int minTier, int maxTier, int picks) {
-        WeightedList<PCLAugment> weightedList = getAugmentsChoices(minTier, maxTier);
+    public ArrayList<PCLAugment> getAugments(FuncT2<Boolean, PCLAugmentData, Integer> evalFunc, int picks) {
+        WeightedList<PCLAugment> weightedList = getAugmentsChoices(evalFunc);
         ArrayList<PCLAugment> ret = new ArrayList<>();
         for (int i = 0; i < picks; i++) {
             ret.add(weightedList.retrieve(AbstractDungeon.treasureRng, true));
@@ -289,14 +302,14 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return ret;
     }
 
-    private WeightedList<PCLAugment> getAugmentsChoices(int minTier, int maxTier) {
+    private WeightedList<PCLAugment> getAugmentsChoices(FuncT2<Boolean, PCLAugmentData, Integer> evalFunc) {
         WeightedList<PCLAugment> weightedList = new WeightedList<>();
         for (PCLAugmentData data : PCLAugmentData.getAvailable()) {
             if (!bannedAugments.contains(data.ID)) {
                 for (int i = 0; i < data.maxForms; i++) { // TODO factor in branch factor
                     for (int j = 0; j < data.maxUpgradeLevel; j++) {
                         int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
-                        if (tier >= minTier && tier <= maxTier) {
+                        if (evalFunc.invoke(data, tier)) {
                             weightedList.add(data.create(i, j), getAugmentWeight(tier));
                         }
                     }
@@ -311,7 +324,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                         if (data != null) {
                             for (int j = 0; j < data.maxUpgradeLevel; j++) {
                                 int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
-                                if (tier >= minTier && tier <= maxTier) {
+                                if (evalFunc.invoke(data, tier)) {
                                     weightedList.add(data.create(i, j), getAugmentWeight(tier));
                                 }
                             }
@@ -389,7 +402,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return replacement;
     }
 
-    protected void importBaseData(PCLDungeon dungeon) {
+    public boolean hasSummons() {
+        return hasSummons;
+    }
+
+    private void importBaseData(PCLDungeon dungeon) {
         loadouts.clear();
         bannedAugments.clear();
         bannedCards.clear();
@@ -524,7 +541,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         if (allowCustomCards) {
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
                 if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
+                    AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
                     CardGroup pool = GameUtilities.getCardPool(rarity);
                     if (pool != null) {
                         pool.addToBottom(c.make());
@@ -539,22 +556,24 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             }
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
                 if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
+                    AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
                     switch (rarity) {
                         case COMMON:
                         case UNCOMMON:
                         case RARE:
-                            AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
-                            AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
+                            AbstractDungeon.srcColorlessCardPool.addToBottom(c.getFirstBuilder().create());
+                            AbstractDungeon.colorlessCardPool.addToBottom(c.getFirstBuilder().create());
                             break;
                         case CURSE:
-                            AbstractDungeon.srcCurseCardPool.addToBottom(c.getBuilder(0).create());
-                            AbstractDungeon.curseCardPool.addToBottom(c.getBuilder(0).create());
+                            AbstractDungeon.srcCurseCardPool.addToBottom(c.getFirstBuilder().create());
+                            AbstractDungeon.curseCardPool.addToBottom(c.getFirstBuilder().create());
                     }
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
                 }
             }
         }
+
+        hasSummons = EUIUtils.any(groups, g -> EUIUtils.any(g.group, c -> c.type == PCLEnum.CardType.SUMMON));
     }
 
     private void initializeCharacterBlight(String id) {
@@ -723,7 +742,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
-        AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
+        AbstractRelic.RelicTier tier = c.getFirstBuilder().tier;
         ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
         if (relicPool != null && !relicPool.contains(c.ID) && !bannedRelics.contains(c.ID)) {
             relicPool.add(c.ID);
@@ -889,12 +908,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     }
 
     public boolean tryCreateAugmentReward(ArrayList<RewardItem> rewards) {
-        return tryCreateAugmentReward(rewards, augmentChance, 0, Integer.MAX_VALUE);
+        return tryCreateAugmentReward(rewards, augmentChance);
     }
 
-    public boolean tryCreateAugmentReward(ArrayList<RewardItem> rewards, float chance, int min, int max) {
+    public boolean tryCreateAugmentReward(ArrayList<RewardItem> rewards, float chance) {
         if (allowAugments && GameUtilities.chance(chance)) {
-            PCLAugment found = getAugment(min, max);
+            PCLAugment found = getAugment(this::canAugmentSpawn);
             if (found != null) {
                 rewards.add(new AugmentReward(found));
                 return true;

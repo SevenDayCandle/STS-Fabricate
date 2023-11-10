@@ -77,9 +77,5 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         }
     }
 
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-    }
-
     public abstract EUIKeywordTooltip getDelegateTooltip();
 }

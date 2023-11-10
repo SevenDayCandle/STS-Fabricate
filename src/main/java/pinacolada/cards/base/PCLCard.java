@@ -834,6 +834,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return (isPopup ? resources.images.cardEnergyOrbL : resources.images.cardEnergyOrb).texture();
     }
 
+    @Override
     public int getForm() {
         return auxiliaryData.form;
     }

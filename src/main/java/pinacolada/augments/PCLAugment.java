@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class PCLAugment implements KeywordProvider, PointerProvider {
-    public static final int WEIGHT_MODIFIER = 3;
     public final PCLAugmentData data;
     public SaveData save;
     public PSkillContainer skills;
@@ -174,6 +173,11 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
 
     protected void setup() {
 
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return save.timesUpgraded;
     }
 
     public static class SaveData implements Serializable {

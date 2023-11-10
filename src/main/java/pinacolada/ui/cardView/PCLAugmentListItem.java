@@ -33,7 +33,7 @@ public class PCLAugmentListItem extends EUIHoverable {
         this.augment = new PCLAugmentRenderable(augment, augment.getTooltip(), hb);
         this.panel = panel;
         title = new EUILabel(EUIFontHelper.cardTitleFontLarge, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.7f))
-                .setFontScale(0.7f)
+                .setFontScale(0.6f)
                 .setLabel(augment.getName())
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);

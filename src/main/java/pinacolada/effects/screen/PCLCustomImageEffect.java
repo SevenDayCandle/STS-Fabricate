@@ -39,6 +39,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
@@ -229,13 +230,24 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-            try {
-                BufferedImage image = ((BufferedImage) transferable.getTransferData(DataFlavor.imageFlavor));
-                updateImage(new Texture(PCLRenderHelpers.getPixmapFromBufferedImage(image), true));
+        if (transferable != null) {
+            if (transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                try {
+                    BufferedImage image = ((BufferedImage) transferable.getTransferData(DataFlavor.imageFlavor));
+                    updateImage(new Texture(PCLRenderHelpers.getPixmapFromBufferedImage(image), true));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            else if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                try {
+                    java.util.List<File> droppedFiles = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    updateImage(new Texture(new FileHandle(droppedFiles.get(0)), true));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
