@@ -166,7 +166,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
 
     protected void modifyMaxUpgrades(int min, int max) {
         effect.modifyAllBuilders((e, i) -> e.setLimits(min, max));
-        effect.upgradeToggle.setLimits(min, max).setActive(max > 0);
+        effect.updateUpgradeEditorLimits(min, max);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class PCLCustomPowerPrimaryInfoPage extends PCLCustomGenericPage {
         priority.setValue(builder.priority, false);
         turns.setValue(builder.turns, false).setActive(builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurn || builder.endTurnBehavior == PCLPowerData.Behavior.SingleTurnNext);
 
-        effect.upgradeToggle.setLimits(0, builder.maxAmount).setValue(effect.currentBuilder, false).setActive(builder.maxAmount > 0);
+        effect.updateUpgradeEditorLimits(builder.minAmount, builder.maxAmount);
     }
 
     @Override

@@ -3,12 +3,9 @@ package pinacolada.ui.editor.potion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
@@ -18,10 +15,7 @@ import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
-import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-
-import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion> {
     protected PCLDynamicPotion preview;
@@ -145,9 +139,4 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
             super.updateInternal(deltaTime);
         }
     }
-
-    protected void updateVariant() {
-        formEditor.refresh();
-    }
-
 }

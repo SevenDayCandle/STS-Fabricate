@@ -718,14 +718,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return upgrade;
     }
 
-    public ColoredTexture getCardAttributeBanner() {
+    public Texture getCardAttributeBanner() {
         if (shouldUsePCLFrame()) {
             if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
-                return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
+                return (isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture();
             }
-            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
+            return (isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture();
         }
-        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeVanillaL : PCLCoreImages.CardUI.cardBannerAttributeVanilla).texture(), getRarityColor());
+        return (isPopup ? PCLCoreImages.CardUI.cardBannerAttributeVanillaL : PCLCoreImages.CardUI.cardBannerAttributeVanilla).texture();
     }
 
     protected Texture getCardBackground() {
@@ -1260,8 +1260,25 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected PCLCard makeCopyProperties(PCLCard copy) {
+        // Modifiers and augments are copied first to avoid incorrect numbers in previews
         for (PCLAugment augment : getAugments()) {
             copy.addAugment(augment.makeCopy());
+        }
+
+        // Only copy modifiers if they exist, to avoid unnecessary text re-initialization
+        if (!CardModifierManager.modifiers(this).isEmpty()) {
+            CardModifierManager.copyModifiers(this, copy, false, true, false);
+        }
+
+        for (AbstractBlockModifier mod : BlockModifierManager.modifiers(this)) {
+            if (!mod.isInherent()) {
+                BlockModifierManager.addModifier(copy, mod);
+            }
+        }
+        for (AbstractDamageModifier mod : DamageModifierManager.modifiers(this)) {
+            if (!mod.isInherent()) {
+                DamageModifierManager.addModifier(copy, mod);
+            }
         }
 
         copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
@@ -1310,22 +1327,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         copy.tags.addAll(tags);
         copy.originalName = originalName;
         copy.name = name;
-
-        // Only copy modifiers if they exist, to avoid unnecessary text re-initialization
-        if (!CardModifierManager.modifiers(this).isEmpty()) {
-            CardModifierManager.copyModifiers(this, copy, false, true, false);
-        }
-
-        for (AbstractBlockModifier mod : BlockModifierManager.modifiers(this)) {
-            if (!mod.isInherent()) {
-                BlockModifierManager.addModifier(copy, mod);
-            }
-        }
-        for (AbstractDamageModifier mod : DamageModifierManager.modifiers(this)) {
-            if (!mod.isInherent()) {
-                DamageModifierManager.addModifier(copy, mod);
-            }
-        }
 
         copy.initializeDescription();
         return copy;
@@ -2727,7 +2728,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public void upgrade() {
         if (canUpgrade()) {
             onUpgrade();
-            changeForm(auxiliaryData.form, timesUpgraded, timesUpgraded + 1);
+            int minPossibleForm = GridCardSelectScreenPatches.clampUpgradeForm(auxiliaryData.form, cardData.branchFactor, timesUpgraded, maxForms());
+            changeForm(minPossibleForm, timesUpgraded, timesUpgraded + 1);
             affinities.applyUpgrades(cardData.affinities, auxiliaryData.form);
         }
     }

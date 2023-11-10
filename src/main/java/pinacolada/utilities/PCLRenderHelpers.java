@@ -266,8 +266,4 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
     public static void setBlending(SpriteBatch sb, BlendingMode blendingMode) {
         sb.setBlendFunction(blendingMode.srcFunc, blendingMode.dstFunc);
     }
-
-    public static ColoredTexture toEYBTexture(ColoredTexture texture) {
-        return new ColoredTexture(texture.texture, texture.color);
-    }
 }

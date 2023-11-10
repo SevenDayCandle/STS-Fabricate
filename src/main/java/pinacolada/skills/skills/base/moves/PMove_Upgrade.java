@@ -44,6 +44,6 @@ public class PMove_Upgrade extends PMove_DoCard<PField_CardCategory> {
 
     @Override
     public boolean shouldHideGroupNames() {
-        return fields.shouldHideGroupNames();
+        return false;
     }
 }

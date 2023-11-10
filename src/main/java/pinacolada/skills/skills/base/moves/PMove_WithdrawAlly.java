@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.dungeon.SummonPool;
 import pinacolada.monsters.PCLCardAlly;
@@ -24,7 +25,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
             .pclOnly();
 
     public PMove_WithdrawAlly() {
-        this(SummonPool.BASE_TRIGGER);
+        this(0);
     }
 
     public PMove_WithdrawAlly(int amount) {
@@ -52,7 +53,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        order.withdrawAlly(targets, amount).addCallback(cards ->
+        order.withdrawAlly(targets, amount <= 0 ? CombatManager.summons.triggerTimes : amount).addCallback(cards ->
         {
             info.setData(cards);
             callback.invoke(info);

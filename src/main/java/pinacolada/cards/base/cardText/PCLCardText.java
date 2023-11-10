@@ -34,8 +34,6 @@ public class PCLCardText {
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     private final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
-    private final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
-    private final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
     private final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
     private final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
     private final static float BANNER_OFFSET_X = -AbstractCard.RAW_W * 0.349f;
@@ -99,19 +97,6 @@ public class PCLCardText {
 
     protected TextureCache getHPIcon() {
         return card.isPopup ? PCLCoreImages.CardIcons.hpL : PCLCoreImages.CardIcons.hp;
-    }
-
-    protected ColoredTexture getPanelByRarity() {
-        HashMap<AbstractCard.CardRarity, ColoredTexture> map = card.isPopup ? panelsLarge : panels;
-        ColoredTexture result = map.getOrDefault(card.rarity, null);
-        if (result == null) {
-            result = card.getCardAttributeBanner();
-            if (result != null) {
-                map.put(card.rarity, result);
-            }
-        }
-
-        return result;
     }
 
     protected TextureCache getPriorityIcon() {
@@ -217,10 +202,11 @@ public class PCLCardText {
     }
 
     protected void renderAttributeBanner(SpriteBatch sb, TextureCache icon, float sign, float offsetIconX) {
-        final ColoredTexture panel = getPanelByRarity();
+        final Texture panel = card.getCardAttributeBanner();
+        final Color rarityColor = card.getRarityColor();
 
         if (panel != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, sign * AbstractCard.RAW_W * 0.33f, BANNER_OFFSET_Y, 120f, 54f, panel.color, panel.color.a * card.transparency, 1, 0, sign < 0, false);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, panel, sign * AbstractCard.RAW_W * 0.33f, BANNER_OFFSET_Y, 120f, 54f, rarityColor, rarityColor.a * card.transparency, 1, 0, sign < 0, false);
             if (icon != null) {
                 final float icon_x = offsetIconX + (sign * (AbstractCard.RAW_W * 0.43f));
                 PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, BANNER_OFFSET_Y, 48, 48);

@@ -63,6 +63,15 @@ public class GridCardSelectScreenPatches {
         }
     }
 
+    /* Constrains the above form to the lowest possible form for the next upgrade */
+    public static int clampUpgradeForm(int form, int branchFactor, int timesUpgraded, int maxForms) {
+        // Ignore if branch factor is 0 or less
+        if (branchFactor <= 0) {
+            return form;
+        }
+        return Math.max(form, Math.min(maxForms, getFormMin(form, branchFactor, timesUpgraded)));
+    }
+
     public static void fillCardListWithUpgrades(PCLCard base) {
         cardList.clear();
         if (base.cardData.branchFactor <= 0) {
@@ -88,6 +97,10 @@ public class GridCardSelectScreenPatches {
         return cardList;
     }
 
+    public static int getFormMin(PCLCard base) {
+        return getFormMin(base.getForm(), base.cardData.branchFactor, base.timesUpgraded);
+    }
+
     /* Find the minimum possible upgrade form M at your current upgrade level and form
     Let B = branch factor, U = current upgrade, F = current form
     Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
@@ -98,10 +111,10 @@ public class GridCardSelectScreenPatches {
 
     See https://en.wikipedia.org/wiki/Geometric_series
     */
-    public static int getFormMin(PCLCard base) {
-        return base.cardData.branchFactor != 1 ?
-                getFormSum(base.cardData.branchFactor, base.timesUpgraded + 1) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded))
-                : base.timesUpgraded + 1;
+    public static int getFormMin(int form, int branchFactor, int timesUpgraded) {
+        return branchFactor != 1 ?
+                getFormSum(branchFactor, timesUpgraded + 1) + branchFactor * (form - getFormSum(branchFactor, timesUpgraded))
+                : timesUpgraded + 1;
     }
 
     /**

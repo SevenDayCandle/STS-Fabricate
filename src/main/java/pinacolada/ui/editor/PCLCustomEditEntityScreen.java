@@ -17,7 +17,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.*;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
@@ -94,7 +93,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public PCLValueEditor upgradeToggle;
     public PCLCustomFormEditor formEditor;
     public PCLEffectWithCallback<?> currentDialog;
-    protected int upgradeLevel;
+    public int upgradeLevel;
     public int currentBuilder;
 
     public PCLCustomEditEntityScreen(T slot) {
@@ -214,6 +213,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public void addBuilder() {
         tempBuilders.add(getBuilder().makeCopy());
+        modifyBuilder(__ -> {
+        });
         setCurrentBuilder(tempBuilders.size() - 1);
     }
 
@@ -488,6 +489,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public void removeBuilder() {
         tempBuilders.remove(getBuilder());
         setCurrentBuilder(currentBuilder);
+        modifyBuilder(__ -> {
+        });
     }
 
     @Override
@@ -530,12 +533,31 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         end();
     }
 
-    public void setCurrentBuilder(int index) {
+    protected void setCurrentBuilder(int index) {
+        ArrayList<? extends PCLCustomGenericPage> pageList = effectPages;
+        // Attempt to predict the page to open
+        int ind = pageList.indexOf(currentPage);
+        if (ind < 0) {
+            pageList = powerPages;
+            ind = pageList.indexOf(currentPage);
+            if (ind < 0) {
+                pageList = primaryPages;
+                ind = Math.max(0, pageList.indexOf(currentPage));
+            }
+        }
+
         currentBuilder = MathUtils.clamp(index, 0, tempBuilders.size() - 1);
-        modifyBuilder(__ -> {
-        });
         setupPages();
-        updateVariant();
+        formEditor.refresh();
+
+        PCLCustomGenericPage firstPage = pageList.get(ind);
+        if (firstPage != null) {
+            openPage(firstPage);
+        }
+        else {
+            currentPage = null;
+            refreshButtons();
+        }
     }
 
     public PCLCustomEditEntityScreen<T, U, V> setOnSave(ActionT0 onSave) {
@@ -597,7 +619,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             tempBuilders = backups;
             currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 1);
             setupPages();
-            updateVariant();
+            formEditor.refresh();
             rebuildItem();
         }
     }
@@ -654,8 +676,12 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         modifyBuilder(e -> e.setPPower(EUIUtils.map(powerPages, p -> p.rootEffect), true, true));
     }
 
-    protected void updateVariant() {
+    public void updateUpgradeEditorLimits(int maxUpgradeLevel) {
+        updateUpgradeEditorLimits(0, maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : maxUpgradeLevel);
+    }
 
+    public void updateUpgradeEditorLimits(int min, int max) {
+        upgradeToggle.setLimits(min, max).setValue(upgradeLevel, false).setActive(min != max);
     }
 
     abstract protected void editImage();

@@ -34,6 +34,7 @@ import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLEnum;
@@ -306,11 +307,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         WeightedList<PCLAugment> weightedList = new WeightedList<>();
         for (PCLAugmentData data : PCLAugmentData.getAvailable()) {
             if (!bannedAugments.contains(data.ID)) {
-                for (int i = 0; i < data.maxForms; i++) { // TODO factor in branch factor
-                    for (int j = 0; j < data.maxUpgradeLevel; j++) {
-                        int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
-                        if (evalFunc.invoke(data, tier)) {
-                            weightedList.add(data.create(i, j), getAugmentWeight(tier));
+                if (data.branchFactor > 0) {
+                    getAugmentsChoicesBranching(weightedList, evalFunc, data, 0, 0);
+                }
+                else {
+                    for (int i = 0; i < data.maxForms; i++) {
+                        for (int j = 0; j < data.maxUpgradeLevel; j++) {
+                            int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
+                            if (evalFunc.invoke(data, tier)) {
+                                weightedList.add(data.create(i, j), getAugmentWeight(tier));
+                            }
                         }
                     }
                 }
@@ -319,13 +325,18 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         if (allowCustomAugments) {
             for (PCLCustomAugmentSlot slot : PCLCustomAugmentSlot.getAugments()) {
                 if (!bannedAugments.contains(slot.ID)) {
-                    for (int i = 0; i < slot.builders.size(); i++) { // TODO factor in branch factor
-                        PCLDynamicAugmentData data = slot.getBuilder(i);
-                        if (data != null) {
-                            for (int j = 0; j < data.maxUpgradeLevel; j++) {
-                                int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
-                                if (evalFunc.invoke(data, tier)) {
-                                    weightedList.add(data.create(i, j), getAugmentWeight(tier));
+                    if (slot.branchUpgradeFactor > 0) {
+                        getAugmentsChoicesBranching(weightedList, evalFunc, slot, 0, 0);
+                    }
+                    else {
+                        for (int i = 0; i < slot.builders.size(); i++) {
+                            PCLDynamicAugmentData data = slot.getBuilder(i);
+                            if (data != null) {
+                                for (int j = 0; j < data.maxUpgradeLevel; j++) {
+                                    int tier = data.getTier(i) + data.getTierUpgrade(i) * j;
+                                    if (evalFunc.invoke(data, tier)) {
+                                        weightedList.add(data.create(i, j), getAugmentWeight(tier));
+                                    }
                                 }
                             }
                         }
@@ -334,6 +345,35 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             }
         }
         return weightedList;
+    }
+
+    private void getAugmentsChoicesBranching(WeightedList<PCLAugment> weightedList, FuncT2<Boolean, PCLAugmentData, Integer> evalFunc, PCLAugmentData data, int form, int upgrade) {
+        for (int i = form; i < Math.min(form + data.branchFactor, data.maxForms); i++) {
+            int tier = data.getTier(i) + data.getTierUpgrade(i) * upgrade;
+            if (evalFunc.invoke(data, tier)) {
+                weightedList.add(data.create(i, upgrade), getAugmentWeight(tier));
+            }
+        }
+        int minFormNext = GridCardSelectScreenPatches.getFormMin(form, data.branchFactor, upgrade);
+        if (minFormNext < data.maxForms) {
+            getAugmentsChoicesBranching(weightedList, evalFunc, data, minFormNext, upgrade + 1);
+        }
+    }
+
+    private void getAugmentsChoicesBranching(WeightedList<PCLAugment> weightedList, FuncT2<Boolean, PCLAugmentData, Integer> evalFunc, PCLCustomAugmentSlot slot, int form, int upgrade) {
+        for (int i = form; i < Math.min(form + slot.branchUpgradeFactor, slot.builders.size()); i++) {
+            PCLDynamicAugmentData data = slot.getBuilder(i);
+            if (data != null) {
+                int tier = data.getTier(i) + data.getTierUpgrade(i) * upgrade;
+                if (evalFunc.invoke(data, tier)) {
+                    weightedList.add(data.create(i, upgrade), getAugmentWeight(tier));
+                }
+            }
+        }
+        int minFormNext = GridCardSelectScreenPatches.getFormMin(form, slot.branchUpgradeFactor, upgrade);
+        if (minFormNext < slot.builders.size()) {
+            getAugmentsChoicesBranching(weightedList, evalFunc, slot, minFormNext, upgrade + 1);
+        }
     }
 
     public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {

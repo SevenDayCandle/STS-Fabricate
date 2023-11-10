@@ -577,11 +577,15 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     public static PMove_WithdrawAlly withdrawAlly() {
-        return new PMove_WithdrawAlly(2);
+        return new PMove_WithdrawAlly(0);
     }
 
     public static PMove_WithdrawAlly withdrawAlly(int amount) {
         return new PMove_WithdrawAlly(amount);
+    }
+
+    public static PMove_WithdrawAlly withdrawAlly(PCLCardTarget target) {
+        return new PMove_WithdrawAlly(target, 0);
     }
 
     public static PMove_WithdrawAlly withdrawAlly(PCLCardTarget target, int amount) {

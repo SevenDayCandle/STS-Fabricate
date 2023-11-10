@@ -120,9 +120,4 @@ public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCus
             EUITooltip.queueTooltips(preview.tips);
         }
     }
-
-    protected void updateVariant() {
-        formEditor.refresh();
-    }
-
 }

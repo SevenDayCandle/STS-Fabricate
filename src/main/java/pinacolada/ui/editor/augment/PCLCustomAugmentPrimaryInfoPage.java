@@ -154,7 +154,7 @@ public class PCLCustomAugmentPrimaryInfoPage extends PCLCustomGenericPage {
 
     protected void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
+        effect.updateUpgradeEditorLimits(val);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class PCLCustomAugmentPrimaryInfoPage extends PCLCustomGenericPage {
         uniqueToggle.setToggle(builder.unique);
         permanentToggle.setToggle(builder.permanent);
 
-        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
+        effect.updateUpgradeEditorLimits(builder.maxUpgradeLevel);
     }
 
     @Override

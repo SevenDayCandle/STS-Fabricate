@@ -272,7 +272,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     protected void modifyMaxUpgrades(int val) {
         effect.modifyAllBuilders((e, i) -> e.setMaxUpgrades(val));
-        effect.upgradeToggle.setLimits(0, val < 0 ? PSkill.DEFAULT_MAX : val).setActive(val != 0);
+        effect.updateUpgradeEditorLimits(val);
     }
 
     @Override
@@ -337,7 +337,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         uniqueToggle.setToggle(builder.unique);
         soulboundToggle.setToggle(!builder.removableFromDeck);
 
-        effect.upgradeToggle.setLimits(0, builder.maxUpgradeLevel < 0 ? PSkill.DEFAULT_MAX : builder.maxUpgradeLevel).setValue(effect.currentBuilder, false).setActive(builder.maxUpgradeLevel != 0);
+        effect.updateUpgradeEditorLimits(builder.maxUpgradeLevel);
         editLoadoutButton.setActive(loadoutDropdown.isActive && builder.loadout instanceof PCLCustomLoadout);
         deleteLoadoutButton.setActive(editLoadoutButton.isActive);
     }

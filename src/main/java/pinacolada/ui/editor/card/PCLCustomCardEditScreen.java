@@ -1,18 +1,11 @@
 package pinacolada.ui.editor.card;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredTexture;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.PCLDynamicCardData;
@@ -23,10 +16,8 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomEffectPage;
-import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
@@ -183,9 +174,4 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
             EUITooltip.queueTooltips(previewCard);
         }
     }
-
-    protected void updateVariant() {
-        formEditor.refresh();
-    }
-
 }

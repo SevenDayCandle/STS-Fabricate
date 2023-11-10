@@ -10,13 +10,17 @@ import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
+import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.PCLPowerRenderable;
+import pinacolada.utilities.WeightedList;
 
 import java.util.ArrayList;
 
@@ -35,13 +39,28 @@ public class PCLAugmentLibraryScreen extends AbstractMenuScreen {
     private static ArrayList<PCLAugmentRenderable> createAll() {
         ArrayList<PCLAugmentRenderable> ret = new ArrayList<>();
         for (PCLAugmentData data : PCLAugmentData.getAvailable()) {
-            for (int i = 0; i < data.maxForms; i++) {
-                for (int j = 0; j <= Math.max(0, data.maxUpgradeLevel); j++) {
-                    ret.add(data.createRenderable(i, j));
+            if (data.branchFactor > 0) {
+                createAugmentsImpl(ret, data, 0, 0);
+            }
+            else {
+                for (int i = 0; i < data.maxForms; i++) {
+                    for (int j = 0; j <= Math.max(0, data.maxUpgradeLevel); j++) {
+                        ret.add(data.createRenderable(i, j));
+                    }
                 }
             }
         }
         return ret;
+    }
+
+    private static void createAugmentsImpl(ArrayList<PCLAugmentRenderable> ret, PCLAugmentData data, int form, int upgrade) {
+        for (int i = form; i < Math.min(form + data.branchFactor, data.maxForms); i++) {
+            ret.add(data.createRenderable(i, upgrade));
+        }
+        int minFormNext = GridCardSelectScreenPatches.getFormMin(form, data.branchFactor, upgrade);
+        if (minFormNext < data.maxForms) {
+            createAugmentsImpl(ret, data, minFormNext, upgrade + 1);
+        }
     }
 
     @Override

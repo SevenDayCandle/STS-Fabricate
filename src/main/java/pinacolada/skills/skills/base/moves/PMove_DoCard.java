@@ -81,7 +81,7 @@ public abstract class PMove_DoCard<T extends PField_CardGeneric> extends PCallba
     }
 
     public boolean shouldHideGroupNames() {
-        return false;
+        return fields.shouldHideGroupNames();
     }
 
     @Override

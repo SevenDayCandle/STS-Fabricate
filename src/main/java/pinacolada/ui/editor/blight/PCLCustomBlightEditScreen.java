@@ -3,12 +3,9 @@ package pinacolada.ui.editor.blight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
@@ -18,10 +15,7 @@ import pinacolada.blights.PCLDynamicBlight;
 import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
-import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-
-import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight> {
     protected PCLDynamicBlight previewBlight;
@@ -122,9 +116,4 @@ public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCust
             EUITooltip.queueTooltips(previewBlight);
         }
     }
-
-    protected void updateVariant() {
-        formEditor.refresh();
-    }
-
 }
