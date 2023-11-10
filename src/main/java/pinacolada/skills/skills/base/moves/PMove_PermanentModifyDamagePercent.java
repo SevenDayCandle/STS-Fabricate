@@ -6,6 +6,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyDamagePercent;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentDamagePercentModifier;
 import pinacolada.cardmods.TemporaryDamagePercentModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -86,7 +87,7 @@ public class PMove_PermanentModifyDamagePercent extends PMove_Modify<PField_Card
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            TemporaryDamagePercentModifier.apply(c, amount, false, false);
+            PermanentDamagePercentModifier.apply(c, amount);
         }));
     }
 }

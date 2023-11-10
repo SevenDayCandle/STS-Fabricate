@@ -114,9 +114,9 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setTooltip(CardLibSortHeader.TEXT[3], PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         damageEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.subjects_damage, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setDamageForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))
+                , StringUtils.capitalize(PGR.core.strings.subjects_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setDamageForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.subjects_damage, PGR.core.strings.cetut_amount);
+                .setTooltip(StringUtils.capitalize(PGR.core.strings.subjects_damage), PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         blockEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.tooltips.block.title, (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setBlockForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))
@@ -124,9 +124,9 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.tooltips.block.title, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.subjects_damage), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cedit_hitCount, StringUtils.capitalize(PGR.core.strings.subjects_damage)), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setHitCountForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.subjects_damage), PGR.core.strings.cetut_amount);
+                .setTooltip(EUIUtils.format(PGR.core.strings.cedit_hitCount, StringUtils.capitalize(PGR.core.strings.subjects_damage)), PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.tooltips.block.title), (val, upVal) -> screen.modifyAllBuilders((e, i) -> e.setRightCountForForm(screen.currentBuilder, screen.getTempBuilders().size(), val, upVal)))

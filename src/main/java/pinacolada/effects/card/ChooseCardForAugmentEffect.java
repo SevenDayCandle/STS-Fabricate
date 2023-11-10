@@ -35,8 +35,18 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
     }
 
     public void onCardSelected(AbstractCard c) {
-        PGR.dungeon.removeAugment(augment.save);
-        augment.addToCard((PCLCard) c);
+        // Transfer augment if it was already attached
+        if (augment.card instanceof PCLCard) {
+            PCLAugment retrieved = ((PCLCard) augment.card).removeAugment(augment);
+            if (retrieved != null) {
+                PGR.dungeon.removeAugment(retrieved.save);
+                retrieved.addToCard((PCLCard) c);
+            }
+        }
+        else {
+            PGR.dungeon.removeAugment(augment.save);
+            augment.addToCard((PCLCard) c);
+        }
     }
 
     @Override

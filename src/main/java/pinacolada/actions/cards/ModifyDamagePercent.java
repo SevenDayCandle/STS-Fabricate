@@ -2,8 +2,8 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cardmods.TemporaryBlockPercentModifier;
-import pinacolada.cardmods.TemporaryDamagePercentModifier;
+import pinacolada.cardmods.*;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyDamagePercent extends ModifyCard {
@@ -40,6 +40,22 @@ public class ModifyDamagePercent extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        TemporaryDamagePercentModifier.apply(card, change, !permanent, untilPlayed);
+        modifyDamage(card, change, !permanent, untilPlayed);
+    }
+
+    public static void modifyDamage(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryDamagePercentModifier.apply(card, amount, temporary, untilPlayed);
+        }
+        else {
+            PermanentDamagePercentModifier.apply(card, amount);
+        }
+
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).updateDamageVars();
+        }
+        else {
+            card.isDamageModified = false;
+        }
     }
 }

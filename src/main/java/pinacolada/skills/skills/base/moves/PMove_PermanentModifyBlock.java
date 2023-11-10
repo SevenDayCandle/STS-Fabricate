@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentBlockModifier;
 import pinacolada.cardmods.TemporaryBlockModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -77,7 +78,7 @@ public class PMove_PermanentModifyBlock extends PMove_Modify<PField_CardModify> 
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            TemporaryBlockModifier.apply(c, !fields.not ? c.baseBlock + amount : amount, false, false);
+            PermanentBlockModifier.apply(c, !fields.not ? c.baseBlock + amount : amount);
         }));
     }
 }

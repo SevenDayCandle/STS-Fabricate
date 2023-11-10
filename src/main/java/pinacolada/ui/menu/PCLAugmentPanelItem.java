@@ -3,6 +3,7 @@ package pinacolada.ui.menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -14,6 +15,10 @@ import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
+import pinacolada.cardmods.AugmentModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -38,9 +43,23 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         lerpAmount = 0;
     }
 
+    private ArrayList<PCLAugment> getAugments() {
+        ArrayList<PCLAugment> augs = EUIUtils.map(PGR.dungeon.augmentList, PCLAugment.SaveData::create);
+        for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
+            if (c instanceof PCLCard) {
+                for (PCLAugment augment : ((PCLCard) c).augments) {
+                    if (augment != null && augment.canRemove()) {
+                        augs.add(augment);
+                    }
+                }
+            }
+        }
+        return augs;
+    }
+
     protected void onClick() {
         super.onClick();
-        PGR.augmentScreen.openScreen(() -> new ArrayList<>(PGR.dungeon.augmentList), PCLAugmentList.DEFAULT, true);
+        PGR.augmentScreen.openScreen(this::getAugments, PCLAugmentList.DEFAULT, true);
     }
 
     protected void onRightClick() {

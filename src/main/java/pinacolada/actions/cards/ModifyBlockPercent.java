@@ -2,7 +2,11 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.PermanentBlockModifier;
+import pinacolada.cardmods.PermanentBlockPercentModifier;
+import pinacolada.cardmods.TemporaryBlockModifier;
 import pinacolada.cardmods.TemporaryBlockPercentModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyBlockPercent extends ModifyCard {
@@ -39,6 +43,22 @@ public class ModifyBlockPercent extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        TemporaryBlockPercentModifier.apply(card, change, !permanent, untilPlayed);
+        modifyBlock(card, change, !permanent, untilPlayed);
+    }
+
+    public static void modifyBlock(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryBlockPercentModifier.apply(card, amount, temporary, untilPlayed);
+        }
+        else {
+            PermanentBlockPercentModifier.apply(card, amount);
+        }
+
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).updateBlockVars();
+        }
+        else {
+            card.isBlockModified = false;
+        }
     }
 }

@@ -1,7 +1,11 @@
 package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.PermanentCostModifier;
+import pinacolada.cardmods.PermanentDamagePercentModifier;
 import pinacolada.cardmods.TemporaryCostModifier;
+import pinacolada.cardmods.TemporaryDamagePercentModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyCost extends ModifyCard {
@@ -14,15 +18,17 @@ public class ModifyCost extends ModifyCard {
         super(card, amount, costChange, permanent, relative, untilPlayed);
     }
 
+    // 0-cost cards shouldn't get targeted by cost lowering effects
     public static boolean canCardPass(AbstractCard card, int change) {
         return card.costForTurn >= 0 && (card.costForTurn != 0 || change > 0);
     }
 
     @Override
     protected boolean canSelect(AbstractCard card) {
-        return super.canSelect(card) && canCardPass(card, getActualChange(card));
+        return super.canSelect(card) && canCardPass(card, change);
     }
 
+    @Override
     protected int getActualChange(AbstractCard card) {
         return relative ? change : change - card.costForTurn;
     }
@@ -31,17 +37,15 @@ public class ModifyCost extends ModifyCard {
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
 
-        if (untilPlayed) {
-            TemporaryCostModifier.apply(card, getActualChange(card), !permanent, true);
+        modifyCost(card, getActualChange(card), !permanent, untilPlayed);
+    }
+
+    public static void modifyCost(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryCostModifier.apply(card, amount, temporary, untilPlayed);
         }
         else {
-            if (permanent) {
-                GameUtilities.modifyCostForCombat(card, change, relative);
-            }
-            else {
-                GameUtilities.modifyCostForTurn(card, change, relative);
-            }
+            PermanentCostModifier.apply(card, amount);
         }
-
     }
 }

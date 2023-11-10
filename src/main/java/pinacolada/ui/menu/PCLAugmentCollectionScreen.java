@@ -11,8 +11,10 @@ import extendedui.patches.game.AbstractDungeonPatches;
 import extendedui.ui.screens.EUIPoolScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.card.ChooseCardForAugmentEffect;
+import pinacolada.resources.PGR;
 import pinacolada.ui.cardView.PCLAugmentList;
 import pinacolada.utilities.GameUtilities;
 
@@ -27,12 +29,12 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;
-    protected FuncT0<ArrayList<PCLAugment.SaveData>> getEntries;
+    protected FuncT0<ArrayList<PCLAugment>> getEntries;
     protected ActionT1<PCLAugment> addItem;
     protected boolean canSelect;
 
     public PCLAugmentCollectionScreen() {
-        panel = new PCLAugmentList(this::doAction).enableCancel(false);
+        panel = new PCLAugmentList(this::doAction, this::doRemove).enableCancel(false);
     }
 
     // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
@@ -68,11 +70,21 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         }
     }
 
-    public void openScreen(FuncT0<ArrayList<PCLAugment.SaveData>> getEntries, int rows, boolean canSelect) {
+    public void doRemove(PCLAugment augment) {
+        if (canSelect && augment != null && augment.card instanceof PCLCard) {
+               PCLAugment retrieved = ((PCLCard) augment.card).removeAugment(augment);
+               if (retrieved != null) {
+                   PGR.dungeon.addAugment(retrieved.save);
+               }
+               refreshAugments();
+        }
+    }
+
+    public void openScreen(FuncT0<ArrayList<PCLAugment>> getEntries, int rows, boolean canSelect) {
         super.reopen();
         this.getEntries = getEntries;
         this.canSelect = canSelect;
-        panel = new PCLAugmentList(this::doAction, rows).enableCancel(false);
+        panel = new PCLAugmentList(this::doAction, this::doRemove, rows).enableCancel(false);
         addItem = canSelect ? (a) -> panel.addPanelItem(a) : panel::addListItem;
         refreshAugments();
     }
@@ -84,9 +96,9 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 
     public void refreshAugments() {
         panel.clear();
-        ArrayList<PCLAugment.SaveData> entries = getEntries != null ? getEntries.invoke() : new ArrayList<>();
-        for (PCLAugment.SaveData save : entries) {
-            addItem.invoke(save.create());
+        ArrayList<PCLAugment> entries = getEntries != null ? getEntries.invoke() : new ArrayList<>();
+        for (PCLAugment aug : entries) {
+            addItem.invoke(aug);
         }
         EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
     }

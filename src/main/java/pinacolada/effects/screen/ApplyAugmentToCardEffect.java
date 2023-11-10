@@ -11,7 +11,7 @@ public class ApplyAugmentToCardEffect extends PCLEffectWithCallback<PCLAugment> 
     protected PCLAugmentList panel;
 
     public ApplyAugmentToCardEffect(PCLCard card) {
-        panel = new PCLAugmentList(this::complete);
+        panel = new PCLAugmentList(this::complete, __ -> {});
         for (PCLAugment.SaveData save : PGR.dungeon.augmentList) {
             PCLAugment augment = save.create();
             if (augment != null) {

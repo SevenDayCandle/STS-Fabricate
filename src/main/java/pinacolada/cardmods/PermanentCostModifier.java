@@ -14,38 +14,32 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.utilities.GameUtilities;
 
 // Used by temporary cost modification effects on a specific card
-public class TemporaryCostModifier extends AbstractCardModifier implements OnCardResetSubscriber {
+public class PermanentCostModifier extends AbstractCardModifier implements OnCardResetSubscriber {
     protected transient AbstractCard card;
     protected transient int previousChange;
-    protected transient boolean temporary;
-    protected transient boolean untilPlayed;
     protected int change;
     protected int baseDiff;
 
-    public TemporaryCostModifier(int change, boolean temporary, boolean untilPlayed) {
+    public PermanentCostModifier(int change) {
         this.change = change;
-        this.temporary = temporary;
-        this.untilPlayed = untilPlayed;
     }
 
-    public static TemporaryCostModifier apply(AbstractCard c, int change, boolean temporary, boolean untilPlayed) {
-        TemporaryCostModifier mod = get(c);
+    public static PermanentCostModifier apply(AbstractCard c, int change) {
+        PermanentCostModifier mod = get(c);
         if (mod == null) {
-            mod = new TemporaryCostModifier(change, temporary, untilPlayed);
+            mod = new PermanentCostModifier(change);
             CardModifierManager.addModifier(c, mod);
         }
         else {
             mod.change += change;
-            mod.temporary = mod.temporary & temporary;
-            mod.untilPlayed = mod.untilPlayed & untilPlayed;
         }
         return mod;
     }
 
-    public static TemporaryCostModifier get(AbstractCard c) {
+    public static PermanentCostModifier get(AbstractCard c) {
         for (AbstractCardModifier mod : CardModifierManager.modifiers(c)) {
-            if (mod instanceof TemporaryCostModifier) {
-                return (TemporaryCostModifier) mod;
+            if (mod instanceof PermanentCostModifier) {
+                return (PermanentCostModifier) mod;
             }
         }
         return null;
@@ -55,7 +49,7 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
      * Base is the baseline card cost to compare with, and var is any additional precalculations that should be added on to the result */
     public static void tryRefresh(AbstractCard c, AbstractCreature owner, int base, int var) {
         if (c.cost > -1) {
-            TemporaryCostModifier mod = get(c);
+            PermanentCostModifier mod = get(c);
             int baseDiff = 0;
             if (mod != null) {
                 baseDiff = mod.baseDiff;
@@ -80,7 +74,7 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
             int diff = res - base;
             if (diff != baseDiff) {
                 if (mod == null) {
-                    mod = new TemporaryCostModifier(0, false, false);
+                    mod = new PermanentCostModifier(0);
                     mod.baseDiff = diff;
                     CardModifierManager.addModifier(c, mod);
                 }
@@ -115,7 +109,7 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
 
     @Override
     public AbstractCardModifier makeCopy() {
-        TemporaryCostModifier c = new TemporaryCostModifier(change, temporary, untilPlayed);
+        PermanentCostModifier c = new PermanentCostModifier(change);
         c.baseDiff = this.baseDiff;
         return c;
     }
@@ -141,14 +135,6 @@ public class TemporaryCostModifier extends AbstractCardModifier implements OnCar
         unsubscribeFromAll();
         this.card = null;
         unapply(card);
-    }
-
-    public boolean removeAtEndOfTurn(AbstractCard card) {
-        return temporary;
-    }
-
-    public boolean removeOnCardPlayed(AbstractCard card) {
-        return untilPlayed;
     }
 
     public void unapply(AbstractCard card) {

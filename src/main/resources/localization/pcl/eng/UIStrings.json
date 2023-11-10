@@ -727,7 +727,7 @@
 												"If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged. You can view the expected damage your #ySummon will take by enabling the #yShow #yEstimated #yDamage option in #yFabricate.",
 												"Some cards have triangular symbols on their left-hand border. These symbols denote #yAugment #ySlots, which can be socketed with #yAugments to alter that card's effects.",
 												"Click on the #yAugment icon on the top bar to see a list of #yAugments that you have collected.",
-												"Hover over an #yAugment to view its description. Click on it to slot it into a card with a free #yAugment slot.",
+												"Hover over an #yAugment to view its description. #oLeft-Click it to slot it into a card with a free #yAugment slot. #oRight-Click it to remove it from the card it was socketed into.",
 												"Augments can only be slotted into cards with the types mentioned in that Augment's description. Additionally, a card cannot have more than one copy of any variation of that Augment.",
 												"You may view a card's #yAugments by clicking on the #yView #yAugments button in its pop-up view screen.",
 												"Click on an empty #yAugment #ySlot to place an eligible #yAugment into it. Click on a filled #yAugment #ySlot to retrieve its #yAugment. | You may insert and remove #yAugments as many times as you wish at any time, but changes will not be applied to cards in the current battle.",

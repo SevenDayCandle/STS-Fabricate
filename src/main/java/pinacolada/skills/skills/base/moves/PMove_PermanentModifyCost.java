@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyCost;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentCostModifier;
 import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -82,7 +83,7 @@ public class PMove_PermanentModifyCost extends PMove_Modify<PField_CardModify> i
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            TemporaryCostModifier.apply(c, !fields.not ? amount : amount - c.costForTurn, false, false);
+            PermanentCostModifier.apply(c, !fields.not ? amount : amount - c.costForTurn);
         }));
     }
 }

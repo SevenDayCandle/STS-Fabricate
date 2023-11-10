@@ -2,6 +2,9 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.PermanentBlockModifier;
+import pinacolada.cardmods.TemporaryBlockModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyBlock extends ModifyCard {
@@ -27,7 +30,7 @@ public class ModifyBlock extends ModifyCard {
 
     @Override
     protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseBlock + change : change;
+        return relative ? change : change - card.block;
     }
 
     @Override
@@ -38,6 +41,22 @@ public class ModifyBlock extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        GameUtilities.modifyBlock(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+        modifyBlock(card, getActualChange(card), !permanent, untilPlayed);
+    }
+
+    public static void modifyBlock(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryBlockModifier.apply(card, amount, temporary, untilPlayed);
+        }
+        else {
+            PermanentBlockModifier.apply(card, amount);
+        }
+
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).updateBlockVars();
+        }
+        else {
+            card.isBlockModified = false;
+        }
     }
 }

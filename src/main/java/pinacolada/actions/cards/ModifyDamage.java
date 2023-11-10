@@ -2,6 +2,10 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.cardmods.PermanentBlockModifier;
+import pinacolada.cardmods.PermanentDamageModifier;
+import pinacolada.cardmods.TemporaryDamageModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyDamage extends ModifyCard {
@@ -27,7 +31,7 @@ public class ModifyDamage extends ModifyCard {
 
     @Override
     protected int getActualChange(AbstractCard card) {
-        return relative ? card.baseDamage + change : change;
+        return relative ? change : change - card.damage;
     }
 
     @Override
@@ -38,6 +42,22 @@ public class ModifyDamage extends ModifyCard {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        GameUtilities.modifyDamage(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+        modifyDamage(card, permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
+    }
+
+    public static void modifyDamage(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
+        if (temporary || untilPlayed) {
+            TemporaryDamageModifier.apply(card, amount, temporary, untilPlayed);
+        }
+        else {
+            PermanentDamageModifier.apply(card, amount);
+        }
+
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).updateDamageVars();
+        }
+        else {
+            card.isDamageModified = false;
+        }
     }
 }

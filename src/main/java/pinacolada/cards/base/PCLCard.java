@@ -1809,6 +1809,26 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return null;
     }
 
+    public PCLAugment removeAugment(PCLAugment augment) {
+        return removeAugment(augment, true);
+    }
+
+    public PCLAugment removeAugment(PCLAugment augment, boolean save) {
+        if (augment != null && augment.canRemove()) {
+            int index = augments.indexOf(augment);
+            if (index >= 0 && index < augments.size()) {
+                augments.set(index, null);
+                if (save) {
+                    auxiliaryData.removeAugmentAt(index);
+                }
+                augment.onRemoveFromCard(this);
+                refresh(null);
+                return augment;
+            }
+        }
+        return null;
+    }
+
     @Override
     public final void render(SpriteBatch sb) {
         render(sb, hovered, false, false);

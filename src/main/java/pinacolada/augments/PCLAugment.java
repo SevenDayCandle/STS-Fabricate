@@ -59,7 +59,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
 
     // TODO allow applying to non-PCLCard
     public boolean canApply(AbstractCard c) {
-        return data.canApply(c);
+        return c != card && data.canApply(c);
     }
 
     /* An augment can only be applied if
@@ -68,7 +68,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
      *   3. Card doesn't already have an augment of its lineage
      */
     protected boolean canApplyImpl(PCLCard c) {
-        return data.canApplyImpl(c);
+        return c != card && data.canApplyImpl(c);
     }
 
     public boolean canRemove() {

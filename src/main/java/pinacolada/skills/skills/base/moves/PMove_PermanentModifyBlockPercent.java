@@ -6,6 +6,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyBlockPercent;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentBlockPercentModifier;
 import pinacolada.cardmods.TemporaryBlockPercentModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -87,7 +88,7 @@ public class PMove_PermanentModifyBlockPercent extends PMove_Modify<PField_CardM
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            TemporaryBlockPercentModifier.apply(c, amount, false, false);
+            PermanentBlockPercentModifier.apply(c, amount);
         }));
     }
 }

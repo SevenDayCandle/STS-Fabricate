@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentDamageModifier;
 import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -76,7 +77,7 @@ public class PMove_PermanentModifyDamage extends PMove_Modify<PField_CardModify>
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            TemporaryDamageModifier.apply(c, !fields.not ? c.baseDamage + amount : amount, false, false);
+            PermanentDamageModifier.apply(c, !fields.not ? c.baseDamage + amount : amount);
         }));
     }
 }

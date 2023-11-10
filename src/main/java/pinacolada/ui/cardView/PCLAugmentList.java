@@ -27,16 +27,18 @@ public class PCLAugmentList extends EUICanvasGrid {
     protected EUIButton cancel;
     protected AugmentSortButton sortButton;
     protected ActionT1<PCLAugment> onComplete;
+    protected ActionT1<PCLAugment> onRightClick;
     public ArrayList<PCLAugmentListItem> augments = new ArrayList<>();
 
-    public PCLAugmentList(ActionT1<PCLAugment> onComplete) {
-        this(onComplete, DEFAULT);
+    public PCLAugmentList(ActionT1<PCLAugment> onComplete, ActionT1<PCLAugment> onRightClick) {
+        this(onComplete, onRightClick, DEFAULT);
     }
 
-    public PCLAugmentList(ActionT1<PCLAugment> onComplete, int rowSize) {
+    public PCLAugmentList(ActionT1<PCLAugment> onComplete, ActionT1<PCLAugment> onRightClick, int rowSize) {
         super(rowSize, Y_PAD);
 
         this.onComplete = onComplete;
+        this.onRightClick = onRightClick;
         cancel = createHexagonalButton(screenW(0.015f), screenH(0.07f), screenW(0.12f), screenH(0.068f))
                 .setText(CharacterSelectScreen.TEXT[5])
                 .setOnClick(() -> this.onComplete.invoke(null))
@@ -45,11 +47,11 @@ public class PCLAugmentList extends EUICanvasGrid {
     }
 
     public void addListItem(PCLAugment augment) {
-        this.augments.add(new PCLAugmentListItem(onComplete, augment));
+        this.augments.add(new PCLAugmentListItem(onComplete, onRightClick, augment));
     }
 
     public void addPanelItem(PCLAugment augment) {
-        this.augments.add(new PCLAugmentButtonListItem(onComplete, augment));
+        this.augments.add(new PCLAugmentButtonListItem(onComplete, onRightClick, augment));
     }
 
     public void clear() {

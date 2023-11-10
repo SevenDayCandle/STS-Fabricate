@@ -58,10 +58,7 @@ import pinacolada.blights.PCLBlightData;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.blights.pcl.UpgradedHand;
-import pinacolada.cardmods.AffinityDisplayModifier;
-import pinacolada.cardmods.TagDisplayModifier;
-import pinacolada.cardmods.TemporaryBlockModifier;
-import pinacolada.cardmods.TemporaryDamageModifier;
+import pinacolada.cardmods.*;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -172,10 +169,10 @@ public class GameUtilities {
         return EUIUtils.safeCast(c, AbstractMonster.class);
     }
 
-    public static CountingPanelStats<PCLAugmentCategory, PCLAugment.SaveData, PCLAugment.SaveData> augmentStats(ArrayList<PCLAugment.SaveData> augments) {
-        return new CountingPanelStats<PCLAugmentCategory, PCLAugment.SaveData, PCLAugment.SaveData>(
+    public static CountingPanelStats<PCLAugmentCategory, PCLAugment, PCLAugment> augmentStats(ArrayList<PCLAugment> augments) {
+        return new CountingPanelStats<PCLAugmentCategory, PCLAugment, PCLAugment>(
                 Collections::singleton,
-                entry -> entry.getData().category,
+                entry -> entry.data.category,
                 entry -> 1,
                 (entries, entry) -> 1,
                 augments);
@@ -1916,22 +1913,6 @@ public class GameUtilities {
         }
     }
 
-    public static void modifyBlock(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
-        if (temporary || untilPlayed) {
-            TemporaryBlockModifier.apply(card, amount, temporary, untilPlayed);
-        }
-        else {
-            card.baseBlock = card.block = Math.max(0, amount);
-        }
-
-        if (card instanceof PCLCard) {
-            ((PCLCard) card).updateBlockVars();
-        }
-        else {
-            card.isBlockModified = false;
-        }
-    }
-
     public static int modifyCardDrawPerTurn(int amount, int minimumCardDraw) {
         final int newAmount = player.gameHandSize + amount;
         if (newAmount < minimumCardDraw) {
@@ -1961,22 +1942,6 @@ public class GameUtilities {
     public static void modifyCostForTurn(AbstractCard card, int amount, boolean relative) {
         card.costForTurn = relative ? Math.max(0, card.costForTurn + amount) : amount;
         card.isCostModifiedForTurn = (card.cost != card.costForTurn);
-    }
-
-    public static void modifyDamage(AbstractCard card, int amount, boolean temporary, boolean untilPlayed) {
-        if (temporary || untilPlayed) {
-            TemporaryDamageModifier.apply(card, amount, temporary, untilPlayed);
-        }
-        else {
-            card.baseDamage = card.damage = Math.max(0, amount);
-        }
-
-        if (card instanceof PCLCard) {
-            ((PCLCard) card).updateDamageVars();
-        }
-        else {
-            card.isDamageModified = false;
-        }
     }
 
     public static int modifyEnergyGainPerTurn(int amount, int minimumEnergy) {
