@@ -63,6 +63,11 @@ public class PMove_PermanentUpgrade extends PMove_DoCard<PField_CardCategory> im
     }
 
     @Override
+    public boolean shouldHideGroupNames() {
+        return false;
+    }
+
+    @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         PCLEffects.Queue.add(new ChooseCardsToUpgradeEffect(amount, fields.getFullCardFilter()));

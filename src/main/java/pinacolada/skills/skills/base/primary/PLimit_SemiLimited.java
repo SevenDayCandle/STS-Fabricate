@@ -13,6 +13,7 @@ import pinacolada.skills.skills.PLimit;
 public class PLimit_SemiLimited extends PLimit {
 
     public static final PSkillData<PField_Empty> DATA = register(PLimit_SemiLimited.class, PField_Empty.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card)
             .noTarget();
 
     public PLimit_SemiLimited() {

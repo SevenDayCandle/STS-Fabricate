@@ -17,6 +17,7 @@ import pinacolada.ui.editor.augment.PCLCustomAugmentEditScreen;
 import pinacolada.ui.editor.blight.PCLCustomBlightEditScreen;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
+import pinacolada.ui.editor.potion.PCLCustomPotionEditScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 
@@ -156,7 +157,9 @@ public class PSkillData<T extends PField> {
                 case Card:
                     return editor.screen instanceof PCLCustomCardEditScreen;
                 case Collectible:
-                    return !(editor.screen instanceof PCLCustomCardEditScreen);
+                    return editor.screen instanceof PCLCustomRelicEditScreen
+                            || editor.screen instanceof PCLCustomPotionEditScreen
+                            || editor.screen instanceof PCLCustomBlightEditScreen;
                 case Power:
                     return editor instanceof PCLCustomPowerEffectPage
                             || editor.screen instanceof PCLCustomRelicEditScreen

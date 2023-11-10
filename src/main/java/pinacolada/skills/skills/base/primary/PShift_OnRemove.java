@@ -14,6 +14,7 @@ import java.util.Collections;
 @VisibleSkill
 public class PShift_OnRemove extends PShift {
     public static final PSkillData<PField_Empty> DATA = register(PShift_OnRemove.class, PField_Empty.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Collectible)
             .noTarget();
 
     public PShift_OnRemove() {
