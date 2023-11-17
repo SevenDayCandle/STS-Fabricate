@@ -29,6 +29,7 @@ import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Calipers;
+import com.megacrit.cardcrawl.relics.ChemicalX;
 import com.megacrit.cardcrawl.relics.PenNib;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
@@ -795,6 +796,14 @@ public class CombatManager extends EUIBase {
 
     public static float onModifySkillBonus(float amount, AbstractCard card) {
         return subscriberInout(OnModifySkillBonusSubscriber.class, amount, (s, d) -> s.onModifySkillBonus(d, card));
+    }
+
+    public static int onModifyXCost(int original, AbstractCard card) {
+        // Hardcoded stuff
+        if (GameUtilities.hasRelicEffect(ChemicalX.ID)) {
+            original += 2;
+        }
+        return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onModifyXCost(d, card));
     }
 
     public static void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {

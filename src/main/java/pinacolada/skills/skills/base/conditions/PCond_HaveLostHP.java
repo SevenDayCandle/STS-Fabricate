@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -45,7 +46,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title), perspective);
+            return getWheneverString(TEXT.act_lose(amount > 1 ? EUIRM.strings.numNoun(getAmountRawString() + "+", PGR.core.tooltips.hp.title) : PGR.core.tooltips.hp.title), perspective);
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
@@ -53,7 +54,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
 
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
-        if (amount > 0) {
+        if (amount >= this.amount) {
             useFromTrigger(generateInfo(getOwnerCreature(), info.owner).setData(amount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
         return amount;

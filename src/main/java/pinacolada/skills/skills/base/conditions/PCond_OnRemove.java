@@ -19,7 +19,6 @@ import java.util.Collections;
 @VisibleSkill
 public class PCond_OnRemove extends PDelegateCond<PField_Power> implements OnRemovePowerSubscriber {
     public static final PSkillData<PField_Power> DATA = register(PCond_OnRemove.class, PField_Power.class, 1, 1)
-            .setSourceTypes(PSkillData.SourceType.Collectible, PSkillData.SourceType.Power)
             .noTarget();
 
     public PCond_OnRemove() {

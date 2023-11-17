@@ -18,7 +18,8 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMove_Upgrade extends PMove_DoCard<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Upgrade.class, PField_CardCategory.class)
             .noTarget()
-            .setExtra(0, DEFAULT_MAX);
+            .setExtra(0, DEFAULT_MAX)
+            .setExtra2(0, DEFAULT_MAX);
 
     public PMove_Upgrade() {
         this(1);

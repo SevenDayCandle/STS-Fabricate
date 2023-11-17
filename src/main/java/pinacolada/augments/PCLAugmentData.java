@@ -15,6 +15,7 @@ import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
@@ -254,24 +255,37 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         return this;
     }
 
-    public PCLAugmentData setTier(int heal) {
-        this.tier[0] = heal;
+    public PCLAugmentData setTier(int tier) {
+        this.tier[0] = tier;
         return this;
     }
 
-    public PCLAugmentData setTier(int heal, int healUpgrade) {
-        this.tier[0] = heal;
-        this.tierUpgrade[0] = healUpgrade;
+    public PCLAugmentData setTier(int tier, int tierUpgrade) {
+        this.tier[0] = tier;
+        this.tierUpgrade[0] = tierUpgrade;
         return this;
     }
 
-    public PCLAugmentData setTier(int thp, Integer[] thpUpgrade) {
-        return setTier(array(thp), thpUpgrade);
+    public PCLAugmentData setTier(int tier, Integer[] tierUpgrade) {
+        return setTier(array(tier), tierUpgrade);
     }
 
-    public PCLAugmentData setTier(Integer[] heal, Integer[] healUpgrade) {
-        this.tier = heal;
-        this.tierUpgrade = healUpgrade;
+    public PCLAugmentData setTier(Integer[] tier, Integer[] tierUpgrade) {
+        this.tier = tier;
+        this.tierUpgrade = tierUpgrade;
+        return this;
+    }
+
+    public PCLAugmentData setTierForForm(int form, int targetSize, int val, int upgrade) {
+        if (form >= this.tier.length) {
+            this.tier = expandArray(this.tier, targetSize);
+        }
+        if (form >= this.tierUpgrade.length) {
+            this.tierUpgrade = expandArray(this.tierUpgrade, targetSize);
+        }
+        this.tier[form] = val;
+        this.tierUpgrade[form] = upgrade;
+        this.maxForms = EUIUtils.max(this.maxForms, this.tier.length, this.tierUpgrade.length);
         return this;
     }
 

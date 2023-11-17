@@ -134,7 +134,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
 
     // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
     public static boolean canFullyCopy(PointerProvider card) {
-        return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
+        return EUIUtils.all((card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
     }
 
     public static void viewDesktopFolder() {

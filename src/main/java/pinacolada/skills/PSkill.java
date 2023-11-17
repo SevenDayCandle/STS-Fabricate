@@ -425,6 +425,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.deserialize(source, TStringToken.getType());
     }
 
+    public static String xToRangeString(int start, int input) {
+        return start + "-" + input;
+    }
+
     public static String zeroToRangeString(int input) {
         return "0-" + input;
     }

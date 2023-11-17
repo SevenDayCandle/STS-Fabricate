@@ -316,6 +316,17 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         refresh(null);
     }
 
+    public void addAugment(PCLAugment augment, int slot, boolean save) {
+        if (slot >= 0) {
+            augments.set(slot, augment);
+        }
+        if (save) {
+            auxiliaryData.addAugment(augment.save);
+        }
+        augment.onAddToCard(this);
+        refresh(null);
+    }
+
     protected PCardPrimary_GainBlock addBlockMove() {
         return addBlockMove(new PCardPrimary_GainBlock(this));
     }
@@ -1456,9 +1467,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             this.auxiliaryData = new PCLCardSaveData(data);
             if (data.augments != null) {
                 for (PCLAugment.SaveData dat : data.augments) {
-                    PCLAugmentData augment = PCLAugmentData.getStaticDataOrCustom(dat.ID);
-                    if (augment != null) {
-                        addAugment(augment.create(dat.form, dat.timesUpgraded), false);
+                    if (dat != null) {
+                        PCLAugmentData augment = PCLAugmentData.getStaticDataOrCustom(dat.ID);
+                        if (augment != null) {
+                            addAugment(augment.create(dat.form, dat.timesUpgraded), false);
+                        }
                     }
                 }
             }

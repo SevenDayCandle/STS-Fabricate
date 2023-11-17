@@ -3,11 +3,28 @@ package pinacolada.ui.editor.orb;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.augments.PCLCustomAugmentSlot;
+import pinacolada.effects.screen.PCLGenericSelectRenderableEffect;
 import pinacolada.orbs.PCLCustomOrbSlot;
+import pinacolada.orbs.PCLDynamicOrbData;
+import pinacolada.potions.PCLDynamicPotionData;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PMod;
+import pinacolada.skills.PMove;
+import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.base.conditions.PCond_OnRemove;
+import pinacolada.skills.skills.base.modifiers.PMod_PerOrbEvoke;
+import pinacolada.skills.skills.base.modifiers.PMod_PerOrbPassive;
+import pinacolada.skills.skills.base.moves.PMove_IncreaseOrbEvoke;
+import pinacolada.skills.skills.special.primary.PRoot;
+import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.PCLOrbRenderable;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
+import pinacolada.ui.editor.augment.PCLCustomAugmentEditScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 import pinacolada.ui.menu.PCLOrbKeywordFilters;
 import pinacolada.ui.menu.PCLPowerKeywordFilters;
@@ -55,6 +72,31 @@ public class PCLCustomOrbSelectorScreen extends PCLCustomSelectorScreen<PCLOrbRe
     @Override
     protected Iterable<PCLCustomOrbSlot> getSlots(AbstractCard.CardColor co) {
         return EUIUtils.filter(PCLCustomOrbSlot.getAll().values(), c -> !c.getIsInternal());
+    }
+
+    @Override
+    public void loadFromExisting() {
+        if (currentDialog == null) {
+            PCLDynamicOrbData sample = new PCLDynamicOrbData(EUIUtils.EMPTY_STRING);
+            sample.setBasePassive(6)
+                    .setBaseEvoke(6)
+                    .setApplyFocusToEvoke(false);
+            sample.setText(PGR.core.tooltips.dark.title)
+                    .addPSkill(new PRoot().setChain(new PMod_PerOrbPassive(1), new PMove_IncreaseOrbEvoke(1).edit(f -> f.setNot(true))))
+                    .addPSkill(new PRoot().setChain(new PCond_OnRemove(), new PMod_PerOrbEvoke(1), PMove.dealDamageToRandom(1)));
+            sample.setTooltip(new EUIKeywordTooltip(PGR.core.tooltips.dark.title, sample.getEffectTextForTip()));
+
+            currentDialog = new PCLGenericSelectRenderableEffect<PCLOrbRenderable>(Collections.singleton(sample.makeRenderable()), PCLAugmentRenderable.BASE_SCALE, PCLAugmentRenderable.BASE_SCALE * 1.5f).addCallback(aug -> {
+                if (aug != null && aug.item instanceof PCLDynamicOrbData) {
+                    PCLCustomOrbSlot slot = new PCLCustomOrbSlot((PCLDynamicOrbData) aug.item);
+                    currentDialog = new PCLCustomOrbEditScreen(slot)
+                            .setOnSave(() -> {
+                                PCLCustomOrbSlot.addSlot(slot);
+                                putInList(slot);
+                            });
+                }
+            });
+        }
     }
 
     @Override

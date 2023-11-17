@@ -118,22 +118,6 @@ public class PCLCustomOrbAttributesPage extends PCLCustomGenericPage {
         refresh();
     }
 
-    public static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color) {
-        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? Arrays.asList(PCLAffinity.basic()) : PCLAffinity.getAvailableAffinitiesAsList(color, false));
-        if (availableAffinities.size() > 0) {
-            availableAffinities.add(PCLAffinity.Star);
-        }
-        return availableAffinities;
-    }
-
-    // Colorless/Curse should not be able to see Summon in the card editor
-    public static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color) {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
-            return PCLCardTarget.getAll();
-        }
-        return EUIUtils.filterInPlace(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
-    }
-
     @Override
     public TextureCache getTextureCache() {
         return EUIRM.images.tag;

@@ -82,37 +82,11 @@ public abstract class PCLPointerOrb extends PCLOrb implements PointerProvider, T
     }
 
     @Override
-    public void onEndOfTurn() {
-        if (timing == DelayTiming.EndOfTurnFirst) {
-            passive();
-        }
-        for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnEndOfTurn(true);
-        }
-        if (timing == DelayTiming.EndOfTurnLast) {
-            passive();
-        }
-    }
-
-    @Override
     public void onEvoke() {
         super.onEvoke();
         for (PSkill<?> effect : getEffects()) {
             effect.unsubscribeChildren();
             effect.triggerOnRemove(this);
-        }
-    }
-
-    @Override
-    public void onStartOfTurn() {
-        if (timing == DelayTiming.StartOfTurnFirst) {
-            passive();
-        }
-        for (PSkill<?> effect : getEffects()) {
-            effect.triggerOnStartOfTurn();
-        }
-        if (timing == DelayTiming.StartOfTurnLast) {
-            passive();
         }
     }
 

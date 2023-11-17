@@ -54,14 +54,15 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         builders.add(builder);
     }
 
-    public PCLCustomOrbSlot(PCLDynamicOrb card) {
+    public PCLCustomOrbSlot(PCLDynamicOrbData card) {
         ID = makeNewID();
         filePath = makeFilePath();
         imagePath = makeImagePath();
-        builders.add((PCLDynamicOrbData) new PCLDynamicOrbData(card.data)
+        builders.add((PCLDynamicOrbData) new PCLDynamicOrbData(card)
                 .setID(ID)
                 .setImagePath(imagePath)
-                .setPSkill(card.getEffects(), true, true)
+                .setPSkill(card.moves, true, true)
+                .setPPower(card.powers, true, true)
         );
         recordBuilder();
     }

@@ -5,5 +5,10 @@ import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
 public interface OnTryUseXCostSubscriber extends PCLCombatSubscriber {
-    int onTryUseXCost(int original, AbstractCard card);
+    default int onModifyXCost(int original, AbstractCard card) {
+        return original;
+    }
+    default int onTryUseXCost(int original, AbstractCard card) {
+        return original;
+    }
 }

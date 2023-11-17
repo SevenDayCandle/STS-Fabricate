@@ -35,7 +35,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
+        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard) + this.amount;
     }
 
     @Override

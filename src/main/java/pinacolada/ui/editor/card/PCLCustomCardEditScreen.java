@@ -14,6 +14,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
+import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomGenericPage;
@@ -22,6 +23,10 @@ import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
 public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard> {
+    public static NewPageOption Damage = new NewPageOption(PGR.core.strings.cedit_damage, s -> s.initializeEffectPage(
+            s instanceof PCLCustomCardEditScreen ? ((PCLCustomCardEditScreen)s).makeNewDamageEffect() : s.makeEffectPage(null))
+    );
+    public static NewPageOption Block = new NewPageOption(PGR.core.strings.cedit_block, s -> s.initializeEffectPage(s.makeEffectPage(new PCardPrimary_GainBlock())));
     protected PCLDynamicCard previewCard;
     protected Texture loadedImage;
 
@@ -98,9 +103,9 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
             }
         }
         return hasDamage && hasBlock ? super.getNewPageOptions() :
-                hasDamage ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Block) :
-                hasBlock ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Damage) :
-                EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, NewPageOption.Damage, NewPageOption.Block);
+                hasDamage ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, Block) :
+                hasBlock ? EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, Damage) :
+                EUIUtils.array(NewPageOption.Generic, NewPageOption.Power, Damage, Block);
     }
 
     @Override
@@ -108,12 +113,6 @@ public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustom
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }
 
-    @Override
-    protected PCLCustomEffectPage makeNewBlockEffect() {
-        return makeEffectPage(new PCardPrimary_GainBlock());
-    }
-
-    @Override
     protected PCLCustomEffectPage makeNewDamageEffect() {
         return makeEffectPage(new PCardPrimary_DealDamage().setTarget(getBuilder().cardTarget));
     }

@@ -233,6 +233,14 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_HaveTakenDamage(target, amount);
     }
 
+    public static PCond_HP hp(int amount) {
+        return new PCond_HP(PCLCardTarget.Self, amount);
+    }
+
+    public static PCond_HP hp(PCLCardTarget target, int amount) {
+        return new PCond_HP(target, amount);
+    }
+
     public static PCond_HPPercent hpPercent(int amount) {
         return new PCond_HPPercent(PCLCardTarget.Self, amount);
     }

@@ -233,11 +233,17 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
 
     @Override
     protected void renderText(SpriteBatch sb) {
-        if (data.applyFocusToPassive || data.applyFocusToEvoke || basePassiveAmount != baseEvokeAmount) {
+        if (data.applyFocusToEvoke != data.applyFocusToPassive) {
+            float bY = this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET;
+            FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, bY - 4.0F * Settings.scale, EUIColors.orange(this.c.a), this.fontScale);
+            FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.passiveAmount), this.cX + NUM_X_OFFSET, bY + 20.0F * Settings.scale, this.c, this.fontScale);
+        }
+        else if (data.applyFocusToPassive || basePassiveAmount != baseEvokeAmount) {
+            float bY = this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET;
             if (this.showEvokeValue) {
-                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET, EUIColors.green(this.c.a), this.fontScale);
+                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.evokeAmount), this.cX + NUM_X_OFFSET, bY, EUIColors.green(this.c.a), this.fontScale);
             } else {
-                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.passiveAmount), this.cX + NUM_X_OFFSET, this.cY + this.bobEffect.y / 2.0F + NUM_Y_OFFSET, this.c, this.fontScale);
+                FontHelper.renderFontCentered(sb, FontHelper.cardEnergyFont_L, Integer.toString(this.passiveAmount), this.cX + NUM_X_OFFSET, bY, this.c, this.fontScale);
             }
         }
     }

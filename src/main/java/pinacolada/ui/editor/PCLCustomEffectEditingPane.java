@@ -513,6 +513,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         })
                 .setLimits(1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_scope, PGR.core.strings.cetut_scope);
+        startX += MENU_WIDTH * 0.55f;
         upgradeEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, startX, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {

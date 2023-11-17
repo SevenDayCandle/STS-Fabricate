@@ -8,15 +8,16 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class PRetain extends PCLAugment {
-    public static final PCLAugmentData DATA = register(PRetain.class, PCLAugmentCategory.Played)
-            .setMaxUpgrades(1);
+public class PLoyal extends PCLAugment {
+    public static final PCLAugmentData DATA = register(PLoyal.class, PCLAugmentCategory.Played)
+            .setMaxUpgrades(1)
+            .setTier(2, 1);
 
-    public PRetain(SaveData save) {
+    public PLoyal(SaveData save) {
         super(DATA, save);
     }
 
     public void setup() {
-        addUseMove(PTrait.tagsExact(1, PCLCardTag.Retain).setUpgrade(-2));
+        addUseMove(PTrait.tags(1, PCLCardTag.Loyal).setUpgrade(3), PTrait.tags(0, PCLCardTag.Ethereal).setUpgrade(1));
     }
 }

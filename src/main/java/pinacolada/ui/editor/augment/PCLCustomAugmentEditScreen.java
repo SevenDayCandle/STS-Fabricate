@@ -36,6 +36,7 @@ public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCus
         if (!fromInGame) {
             primaryPages.add(new PCLCustomAugmentPrimaryInfoPage(this));
         }
+        primaryPages.add(new PCLCustomAugmentAttributesPage(this));
         super.addSkillPages();
     }
 

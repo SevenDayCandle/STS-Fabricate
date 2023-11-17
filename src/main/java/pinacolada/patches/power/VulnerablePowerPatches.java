@@ -17,7 +17,7 @@ public class VulnerablePowerPatches {
     public static int BASE_POWER = 50;
 
     public static float estimateDamage(AbstractPower power) {
-        if (GameUtilities.inGame()) {
+        if (GameUtilities.inGame() && power != null) {
             float estimate = power.atDamageReceive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
             return estimate - PCLPower.DUMMY_MULT;
         }

@@ -1582,13 +1582,9 @@ public class GameUtilities {
     }
 
     public static int getXCostEnergy(AbstractCard card) {
-        return getXCostEnergy(card, false);
-    }
+        int amount = card != null && card.energyOnUse != -1 ? card.energyOnUse : EnergyPanel.getCurrentEnergy();
 
-    public static int getXCostEnergy(AbstractCard card, boolean forceCountAll) {
-        int amount = !forceCountAll && card != null && card.energyOnUse != -1 ? card.energyOnUse : EnergyPanel.getCurrentEnergy();
-
-        return CombatManager.onTryUseXCost(amount, card);
+        return CombatManager.onModifyXCost(amount, card);
     }
 
     public static boolean hasAffinity(AbstractCard card, PCLAffinity affinity) {
@@ -1966,7 +1962,6 @@ public class GameUtilities {
         if (canModifyNonFocusOrb || (canOrbApplyFocus(orb) && canOrbApplyFocusToEvoke(orb))) {
             modifyOrbField(orb, "baseEvokeAmount", amount, isRelative);
         }
-
     }
 
     public static void modifyOrbBaseFocus(AbstractOrb orb, int amount, boolean isRelative, boolean canModifyNonFocusOrb) {
@@ -2346,7 +2341,8 @@ public class GameUtilities {
     }
 
     public static int useXCostEnergy(AbstractCard card) {
-        int amount = getXCostEnergy(card, true);
+        int amount = card.energyOnUse != -1 ? card.energyOnUse : EnergyPanel.getCurrentEnergy();
+        amount = CombatManager.onTryUseXCost(amount, card);
 
         if (!card.freeToPlayOnce) {
             AbstractDungeon.player.energy.use(card.energyOnUse);

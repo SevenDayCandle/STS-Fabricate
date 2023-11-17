@@ -50,14 +50,15 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         builders.add(builder);
     }
 
-    public PCLCustomPowerSlot(PCLDynamicPower card) {
+    public PCLCustomPowerSlot(PCLDynamicPowerData card) {
         ID = makeNewID();
         filePath = makeFilePath();
         imagePath = makeImagePath();
-        builders.add((PCLDynamicPowerData) new PCLDynamicPowerData(card.data)
+        builders.add((PCLDynamicPowerData) new PCLDynamicPowerData(card)
                 .setID(ID)
                 .setImagePath(imagePath)
-                .setPSkill(card.getEffects(), true, true)
+                .setPSkill(card.moves, true, true)
+                .setPPower(card.powers, true, true)
         );
         recordBuilder();
     }

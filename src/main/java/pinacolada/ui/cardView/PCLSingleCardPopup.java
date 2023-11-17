@@ -106,9 +106,9 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setColor(Color.FIREBRICK);
     }
 
-    private void applyAugment(PCLAugment augment) {
+    private void applyAugment(PCLAugment augment, int ind) {
         PGR.dungeon.removeAugment(augment.save);
-        currentItem.addAugment(augment);
+        currentItem.addAugment(augment, ind, true);
         this.displayCard = currentItem.makePopupCopy();
         this.upgradedCard = getUpgradeCard();
         refreshAugments();
@@ -237,7 +237,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                                     this.effect = (ApplyAugmentToCardEffect) new ApplyAugmentToCardEffect(currentItem)
                                             .addCallback((augment -> {
                                                 if (augment != null) {
-                                                    applyAugment(augment);
+                                                    applyAugment(augment, finalI);
                                                 }
                                             }));
                                 }

@@ -43,7 +43,6 @@ public class AugmentReward extends PCLReward {
         if (tex != null) {
             EUIRenderHelpers.drawCentered(sb, Color.WHITE, tex, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
         }
-        EUIRenderHelpers.drawCentered(sb, Color.WHITE, this.icon, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0);
     }
 
     @Override

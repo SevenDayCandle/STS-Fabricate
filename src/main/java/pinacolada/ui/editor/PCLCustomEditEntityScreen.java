@@ -315,35 +315,23 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         );
     }
 
-    protected void initializeEffectPage(PCLCustomEffectPage page) {
+    public void initializeEffectPage(PCLCustomEffectPage page) {
         updateEffects();
         openPage(page);
     }
 
-    protected void initializePowerPage(PCLCustomEffectPage page) {
+    public void initializePowerPage(PCLCustomEffectPage page) {
         updateAllEffects();
         openPage(page);
     }
 
-    protected PCLCustomEffectPage makeEffectPage(PSkill<?> skill) {
+    public PCLCustomEffectPage makeEffectPage(PSkill<?> skill) {
         PCLCustomEffectPage page = createPageForEffect(skill);
         effectPages.add(page);
         page.refresh();
         effectPageButtons.add(createEffectPageButton(page));
         updateAddEffectButton();
         return page;
-    }
-
-    protected PCLCustomEffectPage makeNewBlockEffect() {
-        return null;
-    }
-
-    protected PCLCustomEffectPage makeNewDamageEffect() {
-        return null;
-    }
-
-    protected PCLCustomEffectPage makeNewGenericEffect() {
-        return makeEffectPage(null);
     }
 
     protected PCLCustomPowerEffectPage makeNewPowerEffect() {
@@ -456,7 +444,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                     }
                 })
                 .setCanAutosizeButton(true)
-                .setItems(NewPageOption.values());
+                .setItems(getNewPageOptions());
     }
 
     protected void refreshButtons() {
@@ -688,6 +676,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     abstract protected void rebuildItem();
 
+    public static class NewPageOption {
+        public static NewPageOption Generic = new NewPageOption(PGR.core.strings.cedit_generic, s -> s.initializeEffectPage(s.makeEffectPage(null)));
+        public static NewPageOption Power = new NewPageOption(PGR.core.strings.cedit_customPower, s -> s.initializePowerPage(s.makeNewPowerEffect()));
+
+        public final String name;
+        public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
+
+        public NewPageOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
+            this.name = name;
+            this.onSelect = onSelect;
+        }
+    }
+
     public enum ExistingPageOption {
         MoveLeft(PGR.core.strings.cedit_moveLeft, (ls, i, sc) -> sc.swapEffectPages(ls, i - 1, i)),
         MoveRight(PGR.core.strings.cedit_moveRight, (ls, i, sc) -> sc.swapEffectPages(ls, i, i + 1)),
@@ -697,21 +698,6 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         public final ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
 
         ExistingPageOption(String name, ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
-            this.name = name;
-            this.onSelect = onSelect;
-        }
-    }
-
-    public enum NewPageOption {
-        Generic(PGR.core.strings.cedit_generic, s -> s.initializeEffectPage(s.makeNewGenericEffect())),
-        Power(PGR.core.strings.cedit_customPower, s -> s.initializePowerPage(s.makeNewPowerEffect())),
-        Damage(PGR.core.strings.cedit_damage, s -> s.initializeEffectPage(s.makeNewDamageEffect())),
-        Block(PGR.core.strings.cedit_block, s -> s.initializeEffectPage(s.makeNewBlockEffect()));
-
-        public final String name;
-        public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
-
-        NewPageOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }

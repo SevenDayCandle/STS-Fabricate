@@ -5,9 +5,11 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -50,7 +52,7 @@ public class PMod_PerOrbPassive extends PMod_Per<PField_Orb> {
         if (useParent) {
             return TEXT.subjects_onTarget(subjectString, getInheritedThemString());
         }
-        return TEXT.subjects_onTarget(subjectString, !fields.random && source instanceof AbstractOrb ? TEXT.subjects_this : fields.getOrbAndString());
+        return TEXT.subjects_onTarget(subjectString, !fields.random && (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) ? TEXT.subjects_this : fields.getOrbAndString());
     }
 
     @Override
@@ -58,7 +60,7 @@ public class PMod_PerOrbPassive extends PMod_Per<PField_Orb> {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         if (editor.editor.screen instanceof PCLCustomOrbEditScreen) {
-            fields.registerRBoolean(editor, PGR.core.strings.subjects_allX(PGR.core.tooltips.orb.title), null);
+            fields.registerRBoolean(editor, StringUtils.capitalize(PGR.core.strings.subjects_allX(PGR.core.tooltips.orb.title)), null);
         }
     }
 }

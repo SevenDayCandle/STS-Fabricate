@@ -101,7 +101,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
             }
 
             case EXHAUST_PILE: {
-                generateCard(c -> PCLEffects.List.add(new ExhaustCardEffect(c)));
+                generateCard(c -> PCLEffects.Queue.add(new ExhaustCardEffect(c)));
                 break;
             }
         }

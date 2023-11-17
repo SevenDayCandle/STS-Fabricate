@@ -197,7 +197,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         ascensionEditor.header.setAlignment(0.4f, 0.25f);
 
         augmentChanceEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), PGR.core.strings.options_augmentChance, this::setAugmentChance)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, PGR.core.strings.options_augmentChance)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.85f, Settings.GOLD_COLOR, PGR.core.strings.options_augmentChance)
                 .setLimits(0, 100)
                 .setTooltip(PGR.core.strings.options_augmentChance, PGR.core.strings.optionDesc_augmentChance);
         augmentChanceEditor.header.setAlignment(0.4f, 0.25f);
@@ -430,7 +430,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(allowLoadoutToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
-        augmentChanceEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, augmentChanceEditor.hb.y - ascensionEditor.hb.height * 2f);
+        augmentChanceEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, ascensionEditor.hb.y - ascensionEditor.hb.height * 2f);
         seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, modifierDropdown.hb.y + scale(20));
 
         yPos = positionElement(editCardPoolButton, yPos, scale(66));
