@@ -3,19 +3,18 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLDynamicCard;
-import pinacolada.cards.base.PCLDynamicCardData;
+import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.HeartShapedBox;
@@ -181,11 +180,6 @@ public abstract class PCLLoadout {
 
     public PCLCard buildCard(boolean selected, boolean inPool) {
         final PCLCardData data = getSymbolicCard();
-        if (data == null) {
-            EUIUtils.logWarning(this, getName() + " has no symbolic card.");
-            return null;
-        }
-
         PCLDynamicCardData cd = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
                 .setColor(color)
                 .showTypeText(false)
@@ -277,12 +271,12 @@ public abstract class PCLLoadout {
         for (PCLCardData card : defends) {
             values.add(card.ID);
         }
-        for (PCLCardData card : cardDatas) {
+        for (PCLCardData card : getCards()) {
             if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
             }
         }
-        for (PCLCardData card : coreLoadout.cardDatas) {
+        for (PCLCardData card : coreLoadout.getCards()) {
             if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
             }
@@ -304,7 +298,16 @@ public abstract class PCLLoadout {
     }
 
     public ArrayList<String> getAvailableRelicIDs() {
-        return EUIUtils.arrayList(GenericDice.DATA.ID, Macroscope.DATA.ID, HeartShapedBox.DATA.ID);
+        ArrayList<String> base = EUIUtils.arrayList(GenericDice.DATA.ID, Macroscope.DATA.ID, HeartShapedBox.DATA.ID);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
+        if (data != null && data.canUseCustom()) {
+            for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
+                if ((ID.equals(slot.loadout) || (slot.loadout == null)) && slot.getFirstBuilder().tier == AbstractRelic.RelicTier.STARTER) {
+                    base.add(slot.ID);
+                }
+            }
+        }
+        return base;
     }
 
     public int getBaseDraw() {
@@ -325,6 +328,23 @@ public abstract class PCLLoadout {
 
     public int getBaseOrbs() {
         return getBaseOrbs(color);
+    }
+
+    public ArrayList<PCLCardData> getCards() {
+        ArrayList<PCLCardData> base = new ArrayList<>(cardDatas);
+        PCLPlayerData<?, ?, ?> data = PGR.getPlayerData(color);
+        if (data != null && data.canUseCustom()) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
+                if (ID.equals(slot.loadout) || (isCore() && slot.loadout == null)) {
+                    base.add(slot.getFirstBuilder());
+                }
+            }
+        }
+        return base;
+    }
+
+    public ArrayList<PCLCardData> getColorlessCards() {
+        return colorlessData;
     }
 
     public String getDeckPreviewString() {
@@ -466,6 +486,13 @@ public abstract class PCLLoadout {
         if (cardDatas.size() > 0) {
             return cardDatas.get(0);
         }
+        PCLPlayerData<?, ?, ?> playerData = getPlayerData();
+        if (playerData != null && playerData.canUseCustom()) {
+            ArrayList<PCLCustomCardSlot> slots = EUIUtils.filter(PCLCustomCardSlot.getCards(color), c -> ID.equals(c.loadout));
+            if (!slots.isEmpty()) {
+                return slots.get(0).getFirstBuilder();
+            }
+        }
         return QuestionMark.DATA;
     }
 
@@ -586,14 +613,14 @@ public abstract class PCLLoadout {
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
             super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {
-            }, 0, cardDatas.size());
+            }, 0, getCards().size());
         }
     }
 
     protected class FakeSkill2 extends PSpecialSkill {
         public FakeSkill2() {
             super("", PGR.core.strings.sui_selected, (a, b, c) -> {
-            }, 0, cardDatas.size());
+            }, 0, getCards().size());
         }
     }
 }

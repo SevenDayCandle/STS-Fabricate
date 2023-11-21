@@ -6,11 +6,8 @@ import basemod.abstracts.CustomUnlockBundle;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.random.Random;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
@@ -54,17 +51,15 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public final int baseOrbs;
     public final int minimumCards;
     public final int minimumColorless;
-    public final boolean useSummons;
-    public final boolean useAugments;
     protected boolean hasTutorials;
     public final String characterID;
     public PCLLoadout selectedLoadout;
 
     public PCLPlayerData(T resources) {
-        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, MINIMUM_CARDS, MINIMUM_COLORLESS, true, true);
+        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, MINIMUM_CARDS, MINIMUM_COLORLESS);
     }
 
-    public PCLPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, int minCards, int minColorless, boolean useSummons, boolean useAugments) {
+    public PCLPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, int minCards, int minColorless) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
@@ -75,8 +70,6 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         this.baseOrbs = orbs;
         this.minimumCards = minCards;
         this.minimumColorless = minColorless;
-        this.useSummons = useSummons;
-        this.useAugments = useAugments;
         this.characterID = resources.createID(getCharacterClass().getSimpleName());
     }
 
@@ -104,11 +97,31 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         hasTutorials = true;
     }
 
+    public boolean canChangeSkin() {
+        return false;
+    }
+
     public boolean canEditCore() {
         return false;
     }
 
     public boolean canEditPool() {
+        return true;
+    }
+
+    public boolean canUseAugments() {
+        return true;
+    }
+
+    public boolean canUseCustom() {
+        return false;
+    }
+
+    public boolean canUseCustomColorless() {
+        return false;
+    }
+
+    public boolean canUseSummons() {
         return true;
     }
 
@@ -170,10 +183,6 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         return null;
     }
 
-    public String[] getAdditionalCardIDs(boolean customEnabled) {
-        return null;
-    }
-
     public String[] getAdditionalPotionIDs(boolean customEnabled) {
         return null;
     }
@@ -195,7 +204,13 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     }
 
     public List<PCLLoadout> getEveryLoadout() {
-        return new ArrayList<>(loadouts.values());
+        ArrayList<PCLLoadout> base = new ArrayList<>(loadouts.values());
+        if (canUseCustom()) {
+            for (PCLCustomLoadoutInfo lo : PCLCustomLoadoutInfo.getLoadouts(resources.cardColor)) {
+                base.add(lo.loadout);
+            }
+        }
+        return base;
     }
 
     public PCLLoadout getLoadout(String id) {
@@ -212,6 +227,14 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
 
     public PCLLoadoutStats getStats(String id) {
         return stats.get(id);
+    }
+
+    public boolean hasLoadouts() {
+        int baseCount = loadouts.size();
+        if (canUseCustom()) {
+            baseCount += PCLCustomLoadoutInfo.getLoadouts(resources.cardColor).size();
+        }
+        return baseCount > 1;
     }
 
     public boolean hasTutorials() {

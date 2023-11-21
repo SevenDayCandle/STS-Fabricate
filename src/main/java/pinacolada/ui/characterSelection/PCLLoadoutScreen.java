@@ -229,7 +229,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         toggleViewUpgrades(false);
         canvas.initialize(getCurrentPreset());
 
-        seriesButton.setActive(data != null && data.loadouts.size() > 1);
+        seriesButton.setActive(data != null && data.hasLoadouts());
         presetDropdown.setActive(data != null);
         addPresetButton.setActive(data != null);
 

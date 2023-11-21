@@ -11,6 +11,7 @@ import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -84,6 +85,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         safeLoadValue(() -> setBranchFactor(data.branchUpgradeFactor));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
+        if (data.loadout != null) {
+            setLoadout(PCLLoadout.get(data.loadout));
+        }
         safeLoadValue(() -> setLoadoutValue(data.loadoutValue));
         safeLoadValue(() -> {
             if (data.replacementIDs != null) {

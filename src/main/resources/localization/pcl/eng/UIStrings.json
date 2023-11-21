@@ -321,7 +321,9 @@
 												"View an archive of this character's mechanics",
 												"Modifiers:",
 												"Abilities",
-												"{#r:Unlocks at Ascension {0}}"
+												"{#r:Unlocks at Ascension {0}}",
+												"Edit Skin",
+												"Skins"
 								]
 				},
 				"pcl:Combat": {

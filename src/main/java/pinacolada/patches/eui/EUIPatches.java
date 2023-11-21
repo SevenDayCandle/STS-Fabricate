@@ -84,7 +84,7 @@ public class EUIPatches {
     public static class ExtendedUIPatches_GetCompendiums {
         @SpirePostfixPatch
         public static ArrayList<EUIMainMenuPanelButton> postfix(ArrayList<EUIMainMenuPanelButton> retVal) {
-            if (EUIUtils.any(PGR.getRegisteredResources(), r -> r.data != null && r.data.useAugments)) {
+            if (EUIUtils.any(PGR.getRegisteredResources(), r -> r.data != null && r.data.canUseAugments())) {
                 retVal.add(new EUIMainMenuPanelButton(new Color(0.45f, 0.62f, 0.71f, 1f), ImageMaster.MENU_PANEL_BG_BEIGE, PCLCoreImages.Menu.menuAugmentLibrary.texture(), PGR.core.strings.menu_augmentLibrary, PGR.core.strings.menu_augmentLibraryDesc, () -> PGR.augmentLibrary.open()));
             }
             return retVal;

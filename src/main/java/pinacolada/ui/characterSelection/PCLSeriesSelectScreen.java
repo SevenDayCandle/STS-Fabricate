@@ -32,6 +32,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
@@ -186,7 +187,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             boolean isSelected = (loadout.isCore() || selectedLoadouts.contains(entry.getValue().ID) || currentSeriesCard == entry.getKey());
             int allowedAmount = 0;
             int unlockedAmount = 0;
-            for (PCLCardData data : loadout.cardDatas) {
+            for (PCLCardData data : loadout.getCards()) {
                 if (!data.isLocked()) {
                     unlockedAmount += 1;
                 }
@@ -222,18 +223,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
         }
 
-        // Add additional cards
-        String[] additional = data.getAdditionalCardIDs(false);
-        if (additional != null) {
-            for (String s : additional) {
-                AbstractCard c = CardLibrary.getCard(s);
-                if (c != null) {
-                    if (GameUtilities.isColorlessCardColor(c.color)) {
-                        shownColorlessCards.add(c);
-                    }
-                    else {
-                        shownCards.add(c);
-                    }
+        // Custom colorless
+        if (data.canUseCustomColorless()) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                if (!bannedColorless.contains(slot.ID) && isRarityAllowed(slot.getFirstBuilder().cardRarity, slot.getFirstBuilder().cardType)) {
+                    shownColorlessCards.add(slot.make());
                 }
             }
         }
@@ -255,7 +249,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         data.selectedLoadout = find(currentSeriesCard);
         HashSet<String> banned = new HashSet<>(bannedCards);
         banned.addAll(bannedColorless);
-        // TODO add list config class that lets you set the items of a config without replacing its list
         data.config.bannedCards.set(banned);
         data.config.selectedLoadouts.set(new HashSet<>(selectedLoadouts));
         data.saveSelectedLoadout();
@@ -296,7 +289,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
 
             // Add this series cards to the total list of available cards
-            for (PCLCardData cData : series.cardDatas) {
+            for (PCLCardData cData : series.getCards()) {
                 AbstractCard card = cData.makeCardFromLibrary(0);
                 card.isSeen = !cData.isLocked();
                 allCards.put(cData.ID, card);
@@ -309,7 +302,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
 
             // Colorless bans
-            for (PCLCardData cData : series.colorlessData) {
+            for (PCLCardData cData : series.getColorlessCards()) {
                 AbstractCard card = cData.makeCardFromLibrary(0);
                 allColorlessCards.put(cData.ID, card);
                 if (card instanceof PCLCard) {
@@ -406,7 +399,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public ArrayList<AbstractCard> getCardPool(PCLLoadout loadout) {
         final ArrayList<AbstractCard> cards = new ArrayList<>();
         if (loadout != null) {
-            for (PCLCardData data : loadout.cardDatas) {
+            for (PCLCardData data : loadout.getCards()) {
                 cards.add(allCards.get(data.ID));
             }
         }
@@ -430,6 +423,15 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 if (isRarityAllowed(c.rarity, c.type) &&
                         data.resources.containsColorless(c)) {
                     cards.add(c.makeCopy());
+                }
+            }
+
+            // Custom colorless
+            if (data.canUseCustomColorless()) {
+                for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                    if (isRarityAllowed(slot.getFirstBuilder().cardRarity, slot.getFirstBuilder().cardType)) {
+                        cards.add(slot.make());
+                    }
                 }
             }
         }
@@ -667,7 +669,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public void unbanCards(PCLLoadout loadout, boolean value) {
-        Collection<String> cardIds = EUIUtils.map(loadout.cardDatas, l -> l.ID);
+        Collection<String> cardIds = EUIUtils.map(loadout.getCards(), l -> l.ID);
         if (value) {
             cardIds.forEach(bannedCards::remove);
         }

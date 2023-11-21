@@ -33,6 +33,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.screen.PCLSkinConfirmationEffect;
 import pinacolada.effects.screen.PCLYesNoConfirmationEffect;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
@@ -46,6 +47,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesProvider {
@@ -54,7 +56,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     private static final float POS_Y = Settings.HEIGHT * 0.47f;
     private static final float ROW_OFFSET = 60 * Settings.scale;
 
-    private final ArrayList<PCLLoadout> loadouts;
     private final ArrayList<PCLGlyphEditor> glyphEditors;
     private final ArrayList<EUIButton> activeButtons;
     private ArrayList<AbstractBlight> cachedBlights;
@@ -71,6 +72,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     public EUIButton loadoutEditorButton;
     public EUIButton infoButton;
     public EUIButton resetButton;
+    public EUIButton skinButton;
     public EUILabel startingCardsLabel;
     public EUILabel ascensionGlyphsLabel;
     public EUITextBox startingCardsListLabel;
@@ -79,7 +81,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     public PCLCharacterSelectOverlay() {
         final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f) + scale(10);
 
-        loadouts = new ArrayList<>();
         glyphEditors = new ArrayList<>();
         activeButtons = new ArrayList<>();
 
@@ -141,6 +142,12 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::previewRelics);
 
+        skinButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
+                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_skinEditor)
+                .setTooltip(PGR.core.strings.csel_skinEditor, PGR.core.strings.csel_skinEditorDesc)
+                .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
+                .setOnClick(this::openSkinDialog);
+
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
         for (AbstractGlyph glyph : PCLPlayerData.GLYPHS) {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, ROW_OFFSET, ROW_OFFSET)));
@@ -151,20 +158,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     @Override
     public int ascensionLevel() {
         return charScreen != null ? charScreen.ascensionLevel : 0;
-    }
-
-    private void changeLoadout(int index) {
-        int actualIndex = index % loadouts.size();
-        if (actualIndex < 0) {
-            actualIndex = loadouts.size() - 1;
-        }
-        data.selectedLoadout = loadouts.get(actualIndex);
-        refresh(characterOption);
-    }
-
-    private void changeLoadout(PCLLoadout loadout) {
-        data.selectedLoadout = loadout;
-        refresh(characterOption);
     }
 
     @Override
@@ -180,7 +173,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         // Add loadout cards
         for (PCLLoadout series : data.getEveryLoadout()) {
             if (!series.isLocked() && (!series.isCore() || data.canEditCore())) {
-                for (PCLCardData cardData : series.cardDatas) {
+                for (PCLCardData cardData : series.getCards()) {
                     group.add(cardData.makeCardFromLibrary(0));
                 }
             }
@@ -194,14 +187,6 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             }
             if (PCLSeriesSelectScreen.isRarityAllowed(c.rarity, c.type) && data.resources.containsColorless(c)) {
                 group.add(c);
-            }
-        }
-
-        // Get additional cards that this character can use
-        String[] additional = data.getAdditionalCardIDs(false);
-        if (additional != null) {
-            for (String id : additional) {
-                group.add(CardLibrary.getCard(id));
             }
         }
 
@@ -278,6 +263,13 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         }
     }
 
+    private void openSkinDialog() {
+        currentDialog = new PCLSkinConfirmationEffect(PGR.core.strings.csel_skinEditor)
+                .addCallback((val) -> {
+                    data.config.lastSkin.set(val);
+                });
+    }
+
     private void positionButton(EUIButton button) {
         button.setPosition(startingCardsListLabel.hb.cX, startingCardsListLabel.hb.y + (GAP_Y * (activeButtons.size() + 2)));
         activeButtons.add(button);
@@ -319,19 +311,25 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             if (data.hasTutorials()) {
                 positionButton(resetButton);
             }
+
             PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
             if (meter != null && meter.getInfoPages() != null && meter.getInfoPages().length > 0) {
                 positionButton(infoButton);
             }
+
             positionButton(loadoutEditorButton);
             if (data.canEditPool()) {
-                if (data.loadouts.size() > 1) {
+                if (data.hasLoadouts()) {
                     positionButton(seriesButton);
                 }
                 else {
                     positionButton(editCardsButton);
                     positionButton(editRelicsButton);
                 }
+            }
+
+            if (data.canChangeSkin()) {
+                positionButton(skinButton);
             }
 
             // Only show the glyphs if any glyphs are unlocked
@@ -403,35 +401,19 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
     protected void refreshPlayerData() {
         this.data = PGR.getPlayerData(characterOption.c.chosenClass);
-        this.loadouts.clear();
 
         if (data != null) {
             final int unlockLevel = data.resources.getUnlockLevel();
-            this.loadouts.addAll(data.loadouts.values());
-
-            this.loadouts.sort((a, b) ->
-            {
-                if (a.isCore()) {
-                    return 1;
-                }
-                else if (b.isCore()) {
-                    return -1;
-                }
-                final int diff = StringUtils.compare(a.ID, b.ID);
-                final int level = data.resources.getUnlockLevel();
-                final int levelA = a.unlockLevel - level;
-                final int levelB = b.unlockLevel - level;
-
-                if (levelA > 0 || levelB > 0) {
-                    return diff + Integer.compare(levelA, levelB) * 1313;
-                }
-
-                return diff;
-            });
 
             this.loadout = data.selectedLoadout;
-            if (this.loadout == null || this.loadout.getStartingDeck().isEmpty() || !loadouts.contains(this.loadout)) {
-                this.loadout = data.selectedLoadout = loadouts.get(0);
+            if (this.loadout == null) {
+                List<PCLLoadout> loadouts = data.getAvailableLoadouts();
+                if (loadouts.size() > 0) {
+                    this.loadout = data.selectedLoadout = loadouts.get(0);
+                }
+                else {
+                    this.loadout = data.selectedLoadout = data.getCoreLoadout();
+                }
             }
         }
         else {

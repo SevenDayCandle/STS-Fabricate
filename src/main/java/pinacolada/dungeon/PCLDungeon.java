@@ -23,7 +23,6 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.interfaces.delegates.FuncT3;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
@@ -484,7 +483,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         else {
             eventLog = new HashMap<>();
             allowCustomAugments = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowAugments;
-            allowAugments = allowCustomAugments || (data != null && data.useAugments);
+            allowAugments = allowCustomAugments || (data != null && data.canUseAugments());
             augmentChance = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).augmentChance : PGR.config.augmentChance.get();
             allowCustomBlights = PGR.config.enableCustomBlights.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomBlights);
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
@@ -547,26 +546,35 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 });
             }
 
-            String[] additional = data.getAdditionalCardIDs(allowCustomCards);
-            if (additional != null) {
-                for (String s : additional) {
-                    if (!bannedCards.contains(s)) {
-                        AbstractCard c = CardLibrary.getCard(s);
-                        if (c != null) {
-                            if (GameUtilities.isColorlessCardColor(c.color)) {
-                                AbstractDungeon.srcColorlessCardPool.addToBottom(c);
-                                AbstractDungeon.colorlessCardPool.addToBottom(c);
-                            }
-                            else {
-                                CardGroup pool = GameUtilities.getCardPool(c.rarity);
-                                if (pool != null) {
-                                    pool.addToBottom(c);
-                                }
-                                CardGroup spool = GameUtilities.getCardPoolSource(c.rarity);
-                                if (spool != null) {
-                                    spool.addToBottom(c);
-                                }
-                            }
+            if (data.canUseCustom() || allowCustomCards) {
+                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
+                    if (!bannedCards.contains(c.ID) && (c.loadout == null || EUIUtils.any(loadouts, l -> l.isCardFromLoadout(c.ID)))) {
+                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                        CardGroup pool = GameUtilities.getCardPool(rarity);
+                        if (pool != null) {
+                            pool.addToBottom(c.make());
+                        }
+                        CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+                        if (spool != null) {
+                            spool.addToBottom(c.make());
+                        }
+                    }
+                }
+            }
+            if (data.canUseCustomColorless() || allowCustomCards) {
+                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                    if (!bannedCards.contains(c.ID)) {
+                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                        switch (rarity) {
+                            case COMMON:
+                            case UNCOMMON:
+                            case RARE:
+                                AbstractDungeon.srcColorlessCardPool.addToBottom(c.getFirstBuilder().create());
+                                AbstractDungeon.colorlessCardPool.addToBottom(c.getFirstBuilder().create());
+                                break;
+                            case CURSE:
+                                AbstractDungeon.srcCurseCardPool.addToBottom(c.getFirstBuilder().create());
+                                AbstractDungeon.curseCardPool.addToBottom(c.getFirstBuilder().create());
                         }
                     }
                 }
@@ -576,39 +584,35 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             for (CardGroup group : groups) {
                 group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
             }
-        }
-
-        if (allowCustomCards) {
-            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
-                if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
-                    CardGroup pool = GameUtilities.getCardPool(rarity);
-                    if (pool != null) {
-                        pool.addToBottom(c.make());
-                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
-                    }
-                    CardGroup spool = GameUtilities.getCardPoolSource(rarity);
-                    if (spool != null) {
-                        spool.addToBottom(c.make());
-                        EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
+            if (allowCustomCards) {
+                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
+                    if (!bannedCards.contains(c.ID)) {
+                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                        CardGroup pool = GameUtilities.getCardPool(rarity);
+                        if (pool != null) {
+                            pool.addToBottom(c.make());
+                        }
+                        CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+                        if (spool != null) {
+                            spool.addToBottom(c.make());
+                        }
                     }
                 }
-            }
-            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
-                if (!bannedCards.contains(c.ID)) {
-                    AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
-                    switch (rarity) {
-                        case COMMON:
-                        case UNCOMMON:
-                        case RARE:
-                            AbstractDungeon.srcColorlessCardPool.addToBottom(c.getFirstBuilder().create());
-                            AbstractDungeon.colorlessCardPool.addToBottom(c.getFirstBuilder().create());
-                            break;
-                        case CURSE:
-                            AbstractDungeon.srcCurseCardPool.addToBottom(c.getFirstBuilder().create());
-                            AbstractDungeon.curseCardPool.addToBottom(c.getFirstBuilder().create());
+                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                    if (!bannedCards.contains(c.ID)) {
+                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                        switch (rarity) {
+                            case COMMON:
+                            case UNCOMMON:
+                            case RARE:
+                                AbstractDungeon.srcColorlessCardPool.addToBottom(c.getFirstBuilder().create());
+                                AbstractDungeon.colorlessCardPool.addToBottom(c.getFirstBuilder().create());
+                                break;
+                            case CURSE:
+                                AbstractDungeon.srcCurseCardPool.addToBottom(c.getFirstBuilder().create());
+                                AbstractDungeon.curseCardPool.addToBottom(c.getFirstBuilder().create());
+                        }
                     }
-                    EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
                 }
             }
         }
@@ -660,6 +664,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             // Glyph settings
             for (AbstractGlyph glyph : PCLPlayerData.GLYPHS) {
                 ascensionGlyphCounters.add(glyph.configOption.get());
+            }
+
+            // Skin settings
+            String currentForm = data.config.lastSkin.get();
+            if (currentForm != null && !currentForm.isEmpty()) {
+                GameUtilities.setCreatureAnimation(AbstractDungeon.player, currentForm);
             }
         }
 
@@ -995,7 +1005,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         }
 
         if (allowAugments == null) {
-            allowAugments = allowCustomAugments || (data != null && data.useAugments);
+            allowAugments = allowCustomAugments || (data != null && data.canUseAugments());
         }
 
         if (allowCustomBlights == null) {

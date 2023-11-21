@@ -43,6 +43,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public String tier;
     public String sfx;
     public String color;
+    public String loadout;
     public String languageStrings;
     public String[] replacementIDs;
     public String[] forms;
@@ -263,6 +264,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             counterUpgrade = first.counterUpgrade.clone();
             maxUpgradeLevel = first.maxUpgradeLevel;
             branchUpgradeFactor = first.branchFactor;
+            loadout = first.loadout != null ? first.loadout.ID : null;
             loadoutValue = first.getLoadoutValue();
             replacementIDs = first.replacementIDs != null ? first.replacementIDs.clone() : EUIUtils.array();
         }

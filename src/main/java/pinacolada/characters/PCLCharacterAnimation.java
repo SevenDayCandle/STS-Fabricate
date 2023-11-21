@@ -10,6 +10,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class PCLCharacterAnimation extends AbstractAnimation {
@@ -25,6 +26,10 @@ public class PCLCharacterAnimation extends AbstractAnimation {
         this.atlasUrl = atlasUrl;
         this.skeletonUrl = skeletonUrl;
         this.scale = scale;
+    }
+
+    public static Collection<String> getAll() {
+        return creatureAnimations.keySet();
     }
 
     public static AbstractAnimation getAnimation(AbstractCreature c) {

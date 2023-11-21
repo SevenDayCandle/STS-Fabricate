@@ -1,17 +1,22 @@
 package pinacolada.cards.base;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.CostFilter;
+import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
@@ -23,6 +28,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -31,6 +37,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.CardPreviewList;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
@@ -438,6 +445,23 @@ public abstract class PCLMultiCard extends PCLCard {
                     card.calculateCardDamage(GameUtilities.asMonster(info.source));
                 }
             }
+        }
+
+        @Override
+        public float renderIntentIcon(SpriteBatch sb, PCLCardAlly ally, float startY, boolean isPreview) {
+            for (AbstractCard card : multicard.getCards()) {
+                if (card instanceof PCLCard) {
+                    for (PSkill<?> skill : ((PCLCard) card).getEffects()) {
+                        PSkill<?> cur = skill;
+                        while (cur != null) {
+                            startY = cur.renderIntentIcon(sb, ally, startY, isPreview);
+                            cur = cur.getChild();
+                        }
+                    }
+                }
+            }
+
+            return startY;
         }
 
         @Override
