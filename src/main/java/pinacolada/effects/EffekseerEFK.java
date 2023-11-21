@@ -1,19 +1,26 @@
 package pinacolada.effects;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import extendedui.EUIUtils;
 import extendedui.STSEffekseerManager;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.effects.vfx.EffekseerEffect;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 // TODO add audio paths, define hit delays
+@JsonAdapter(EffekseerEFK.EffekseerEFKAdapter.class)
 public class EffekseerEFK {
     private static final Map<String, EffekseerEFK> ALL = new HashMap<>();
 
@@ -163,5 +170,28 @@ public class EffekseerEFK {
 
     public static Collection<EffekseerEFK> sortedValues() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        String[] split = EUIUtils.splitString("/", path);
+        if (split.length > 0) {
+            String base = split[split.length - 1];
+            String[] split2 = EUIUtils.splitString(".", base);
+            return split2.length > 0 ? split2[0] : base;
+        }
+        return EUIUtils.EMPTY_STRING;
+    }
+
+    public static class EffekseerEFKAdapter extends TypeAdapter<EffekseerEFK> {
+        @Override
+        public EffekseerEFK read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
+
+        @Override
+        public void write(JsonWriter writer, EffekseerEFK value) throws IOException {
+            writer.value(value.ID);
+        }
     }
 }

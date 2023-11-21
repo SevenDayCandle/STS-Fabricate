@@ -164,7 +164,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     }
 
     protected void deserializeSelectedLoadout() {
-        selectedLoadout = getLoadout(config.lastLoadout.get());
+        selectedLoadout = PCLLoadout.get(config.lastLoadout.get());
         if (selectedLoadout == null) {
             selectedLoadout = prepareLoadout();
         }
@@ -211,10 +211,6 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
             }
         }
         return base;
-    }
-
-    public PCLLoadout getLoadout(String id) {
-        return loadouts.get(id);
     }
 
     public String getLoadoutPath(String id, int slot) {

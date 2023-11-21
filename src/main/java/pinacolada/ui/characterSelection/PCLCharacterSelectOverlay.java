@@ -264,10 +264,17 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
     }
 
     private void openSkinDialog() {
-        currentDialog = new PCLSkinConfirmationEffect(PGR.core.strings.csel_skinEditor)
-                .addCallback((val) -> {
-                    data.config.lastSkin.set(val);
+        PCLSkinConfirmationEffect ef = new PCLSkinConfirmationEffect(PGR.core.strings.csel_skinEditor);
+        ef.addCallback((val) -> {
+                    if (val != null) {
+                        data.config.lastSkin.set(val);
+                    }
                 });
+        String val = data.config.lastSkin.get();
+        if (!StringUtils.isEmpty(val)) {
+            ef.setPage(val);
+        }
+        currentDialog = ef;
     }
 
     private void positionButton(EUIButton button) {

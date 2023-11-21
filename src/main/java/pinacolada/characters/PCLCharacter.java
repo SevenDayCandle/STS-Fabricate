@@ -33,6 +33,7 @@ import com.megacrit.cardcrawl.ui.panels.energyorb.EnergyOrbInterface;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.effects.PCLSFX;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLResources;
@@ -390,6 +391,9 @@ public abstract class PCLCharacter extends CustomPlayer {
                     this.atlas.dispose();
                 }
                 this.atlas = null;
+            }
+            else if (this.img == null) {
+                this.img = ImageMaster.loadImage(QuestionMark.DATA.imagePath);
             }
         }
 

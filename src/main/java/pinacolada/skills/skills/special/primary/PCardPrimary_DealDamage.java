@@ -276,6 +276,14 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     @Override
     public void useImpl(PCLUseInfo info, PCLActions order) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        if (fields.effekseer != null && damageEffect == null) {
+            if (fields.vfxColor != null) {
+                setDamageEffect(fields.effekseer, fields.vfxColor);
+            }
+            else {
+                setDamageEffect(fields.effekseer);
+            }
+        }
         if (pCard != null) {
             if (target.targetsMulti()) {
                 setDamageOptions(order.dealCardDamageToAll(pCard, info.source, fields.attackEffect), info);

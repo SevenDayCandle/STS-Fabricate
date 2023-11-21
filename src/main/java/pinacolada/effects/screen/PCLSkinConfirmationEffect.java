@@ -27,6 +27,10 @@ public class PCLSkinConfirmationEffect extends PCLEffectWithCallback<String> {
         dialog.tryRender(sb);
     }
 
+    public void setPage(String page) {
+        dialog.setPage(page);
+    }
+
     @Override
     protected void updateInternal(float deltaTime) {
         dialog.tryUpdate();

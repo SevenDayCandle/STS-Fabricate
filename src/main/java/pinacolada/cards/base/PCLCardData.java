@@ -574,8 +574,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setDefend() {
-        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
-        this.loadout.defends.add(this);
         this.flags = Collections.singletonList(CardFlag.Defend);
         return this;
     }
@@ -861,8 +859,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public PCLCardData setStrike() {
-        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
-        this.loadout.strikes.add(this);
         this.flags = Collections.singletonList(CardFlag.Strike);
         return this;
     }

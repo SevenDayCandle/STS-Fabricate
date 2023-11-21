@@ -29,6 +29,8 @@ import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.augments.PCLDynamicAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.characters.PCLCharacter;
+import pinacolada.characters.PCLCharacterAnimation;
 import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
@@ -668,8 +670,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
             // Skin settings
             String currentForm = data.config.lastSkin.get();
-            if (currentForm != null && !currentForm.isEmpty()) {
-                GameUtilities.setCreatureAnimation(AbstractDungeon.player, currentForm);
+            if (AbstractDungeon.player instanceof PCLCharacter && currentForm != null && !currentForm.isEmpty() && !currentForm.equals(PCLCharacterAnimation.getIdentifierString(AbstractDungeon.player))) {
+                ((PCLCharacter) AbstractDungeon.player).setCreature(currentForm);
             }
         }
 

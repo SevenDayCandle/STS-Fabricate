@@ -176,7 +176,8 @@
 												"Rotation Speed",
 												"Flash Color {0}",
 												"Allow Focus to Scale Evoke",
-												"Allow Focus to Scale Trigger"
+												"Allow Focus to Scale Trigger",
+												"Effekseer"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -270,7 +271,8 @@
 												"How quickly this item's image rotates. Positive values produce counter-clockwise rotations, and negative values produce clockwise rotations.",
 												"Determines the color of the flash that appears when this #yOrb is #yChanneled or #yEvoked.",
 												"Determines whether this #yOrb's #yTrigger amount is affected by #yOrb modifiers.",
-												"Determines whether this #yOrb's #yEvoke amount is affected by #yOrb modifiers."
+												"Determines whether this #yOrb's #yEvoke amount is affected by #yOrb modifiers.",
+												"A visual effect rendered with the Effekseer engine. | {#b:This effect will not play if Effekseer is disabled in EUI's settings or if Effekseer failed to load.}"
 								]
 				},
 				"pcl:CardPile": {
@@ -323,7 +325,7 @@
 												"Abilities",
 												"{#r:Unlocks at Ascension {0}}",
 												"Edit Skin",
-												"Skins"
+												"Select the appearance of this character in-game."
 								]
 				},
 				"pcl:Combat": {

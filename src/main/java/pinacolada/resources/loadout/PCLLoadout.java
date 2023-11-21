@@ -43,8 +43,6 @@ public abstract class PCLLoadout {
     public int minTotalCards;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
-    public ArrayList<PCLCardData> defends = new ArrayList<>();
-    public ArrayList<PCLCardData> strikes = new ArrayList<>();
     public ArrayList<PCLRelicData> relics = new ArrayList<>();
     public HashMap<String, PCLLoadoutData> presets = new HashMap<>();
 
@@ -265,27 +263,15 @@ public abstract class PCLLoadout {
     public ArrayList<String> getAvailableCardIDs() {
         ArrayList<String> values = new ArrayList<>();
         PCLLoadout coreLoadout = getPlayerData().getCoreLoadout();
-        for (PCLCardData card : strikes) {
-            values.add(card.ID);
-        }
-        for (PCLCardData card : defends) {
-            values.add(card.ID);
-        }
         for (PCLCardData card : getCards()) {
-            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
             }
         }
         for (PCLCardData card : coreLoadout.getCards()) {
-            if (card.cardRarity == AbstractCard.CardRarity.COMMON) {
+            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
             }
-        }
-        for (PCLCardData card : coreLoadout.strikes) {
-            values.add(card.ID);
-        }
-        for (PCLCardData card : coreLoadout.defends) {
-            values.add(card.ID);
         }
 
         // Dynamically add non-special curses
@@ -601,8 +587,6 @@ public abstract class PCLLoadout {
     }
 
     public void sortItems() {
-        strikes.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
-        defends.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
         cardDatas.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
