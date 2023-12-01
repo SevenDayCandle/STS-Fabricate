@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
+import extendedui.utilities.CostFilter;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -14,6 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PFacetCond;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -78,7 +80,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
             conditions.add(PField.getTagOrString(fields.tags));
         }
         if (!fields.costs.isEmpty()) {
-            conditions.add(PCLCoreStrings.joinWithOr(c -> c.name, fields.costs));
+            conditions.add(PCLCoreStrings.joinWithOr(CostFilter.getCostRangeStrings(fields.costs)));
         }
         if (!fields.loadouts.isEmpty()) {
             conditions.add(PCLCoreStrings.joinWithOr(PField_CardCategory::getLoadoutName, fields.loadouts));
@@ -94,6 +96,9 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
         }
         if (!fields.types.isEmpty()) {
             conditions.add(PCLCoreStrings.joinWithOr(EUIGameUtils::textForType, fields.types));
+        }
+        if (!fields.cardIDs.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(c -> GameUtilities.getCardNameForID(c, extra2, 0), fields.cardIDs));
         }
 
         return TEXT.cond_ifTargetIs(useParent ? getTheyString() : TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
