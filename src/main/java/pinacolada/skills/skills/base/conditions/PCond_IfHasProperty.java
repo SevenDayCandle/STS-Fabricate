@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIGameUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -79,7 +80,22 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
         if (!fields.costs.isEmpty()) {
             conditions.add(PCLCoreStrings.joinWithOr(c -> c.name, fields.costs));
         }
+        if (!fields.loadouts.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(PField_CardCategory::getLoadoutName, fields.loadouts));
+        }
+        if (!fields.flags.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(PField_CardCategory::getFlagName, fields.flags));
+        }
+        if (!fields.colors.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(EUIGameUtils::getColorName, fields.colors));
+        }
+        if (!fields.rarities.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(EUIGameUtils::textForRarity, fields.rarities));
+        }
+        if (!fields.types.isEmpty()) {
+            conditions.add(PCLCoreStrings.joinWithOr(EUIGameUtils::textForType, fields.types));
+        }
 
-        return TEXT.cond_ifTargetHas(useParent ? getTheyString() : TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
+        return TEXT.cond_ifTargetIs(useParent ? getTheyString() : TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
     }
 }

@@ -2425,7 +2425,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     // Determines whether the card frame used will be the base game's or the PCL frame
     public boolean shouldUsePCLFrame() {
-        return PGR.getResources(this.color).usePCLFrame;
+        return PGR.getResources(cardData.cardColor).usePCLFrame;
     }
 
     public void stopFlash() {

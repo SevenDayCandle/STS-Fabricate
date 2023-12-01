@@ -10,6 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PCardPrimary;
@@ -97,7 +98,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                         return ImageMaster.CARD_POWER_BG_BLUE;
                     case PURPLE:
                         return ImageMaster.CARD_POWER_BG_PURPLE;
-                    case COLORLESS:
                     case CURSE:
                         return ImageMaster.CARD_POWER_BG_GRAY;
                     default:
@@ -130,8 +130,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                     case PURPLE:
                         return ImageMaster.CARD_SKILL_BG_PURPLE;
                     case COLORLESS:
-                    case CURSE:
                         return ImageMaster.CARD_SKILL_BG_GRAY;
+                    case CURSE:
+                        return ImageMaster.CARD_SKILL_BG_BLACK;
                     default:
                         return null;
                 }
@@ -183,8 +184,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                     case PURPLE:
                         return ImageMaster.CARD_SKILL_BG_PURPLE_L;
                     case COLORLESS:
-                    case CURSE:
                         return ImageMaster.CARD_SKILL_BG_GRAY_L;
+                    case CURSE:
+                        return ImageMaster.CARD_SKILL_BG_BLACK_L;
                     default:
                         return null;
                 }
@@ -353,9 +355,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     protected void initializeTextures() {
-        if (!GameUtilities.isPCLOnlyCardColor(builder.cardColor)) {
-            this.vanillaEnergyOrb = getVanillaEnergyOrb(builder.cardColor);
-            this.vanillaEnergyOrbLarge = getVanillaEnergyPopupOrb(builder.cardColor);
+        if (!GameUtilities.isPCLOnlyCardColor(builder.cardColor) || (GameUtilities.isColorlessCardColor(this.color) && !PGR.getResources(builder.cardColor).usePCLFrame)) {
+            this.vanillaEnergyOrb = getVanillaEnergyOrb(this.color);
+            this.vanillaEnergyOrbLarge = getVanillaEnergyPopupOrb(this.color);
             if (vanillaEnergyOrb == null) {
                 this.customEnergyOrb = getCustomEnergyOrb();
                 this.customEnergyOrbLarge = getCustomEnergyPopupOrb();

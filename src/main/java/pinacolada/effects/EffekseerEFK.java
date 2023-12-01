@@ -191,7 +191,7 @@ public class EffekseerEFK {
 
         @Override
         public void write(JsonWriter writer, EffekseerEFK value) throws IOException {
-            writer.value(value.ID);
+            writer.value(value != null ? value.ID : EUIUtils.EMPTY_STRING);
         }
     }
 }

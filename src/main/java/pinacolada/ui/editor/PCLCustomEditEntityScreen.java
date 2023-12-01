@@ -538,7 +538,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         setupPages();
         formEditor.refresh();
 
-        PCLCustomGenericPage firstPage = pageList.get(ind);
+        PCLCustomGenericPage firstPage = pageList.get(Math.min(ind, pageList.size() - 1));
         if (firstPage != null) {
             openPage(firstPage);
         }
