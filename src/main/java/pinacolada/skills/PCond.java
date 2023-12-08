@@ -13,6 +13,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -26,7 +27,6 @@ import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -460,7 +460,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public Color getConditionColor() {
-        return GameUtilities.inBattle() && conditionMetCache ? Settings.GREEN_TEXT_COLOR : null;
+        return CombatManager.inBattle() && conditionMetCache ? Settings.GREEN_TEXT_COLOR : null;
     }
 
     @Override

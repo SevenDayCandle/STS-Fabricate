@@ -1401,7 +1401,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public String getXString() {
         // Do not show the x value for when powers
-        if (GameUtilities.inBattle() && sourceCard != null && !hasParentType(PTrigger_When.class)) {
+        if (CombatManager.inBattle() && sourceCard != null && !hasParentType(PTrigger_When.class)) {
             return " (" + getXValue() + ")";
         }
         return EUIUtils.EMPTY_STRING;

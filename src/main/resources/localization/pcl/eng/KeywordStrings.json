@@ -60,6 +60,10 @@
 		"PRESENT": "autoplays",
 		"PROGRESSIVE": "autoplaying"
 	},
+	"Barricade":	{
+		"DESCRIPTION": "[Block] is not removed at the end of your turn.",
+		"NAME": "Barricade"
+	},
 	"Blinded":	{
 		"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
 		"NAME": "Blinded"

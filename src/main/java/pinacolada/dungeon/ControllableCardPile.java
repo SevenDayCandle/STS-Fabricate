@@ -17,7 +17,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -84,7 +83,7 @@ public class ControllableCardPile {
     }
 
     protected void onButtonRightClick() {
-        if (GameUtilities.inBattle() && !AbstractDungeon.isScreenUp) {
+        if (CombatManager.inBattle() && !AbstractDungeon.isScreenUp) {
             CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             for (CardController c : subscribers) {
                 if (c.canUse()) {
@@ -195,7 +194,7 @@ public class ControllableCardPile {
     }
 
     public void update() {
-        isHidden = !GameUtilities.inBattle() || subscribers.size() == 0;
+        isHidden = !CombatManager.inBattle() || subscribers.size() == 0;
         if (!AbstractDungeon.isScreenUp) {
             hb.update();
         }

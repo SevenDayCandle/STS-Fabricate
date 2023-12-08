@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import extendedui.EUIRM;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
@@ -58,7 +59,8 @@ public class PField_CardModifyAffinity extends PField_CardModify {
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerPile(groupTypes);
-        editor.registerAffinity(addAffinities);
+        setupEditorBase(editor);
+        editor.registerAffinity(addAffinities, StringUtils.capitalize(TEXT.act_applyX(PGR.core.tooltips.affinityGeneral.title)));
+        setupEditorFilters(editor);
     }
 }

@@ -63,6 +63,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip artifact = tryLoadTip("Artifact");
     public EUIKeywordTooltip augment = tryLoadTip("Augment");
     public EUIKeywordTooltip autoplay = tryLoadTip("Autoplay");
+    public EUIKeywordTooltip barricade = tryLoadTip("Barricade");
     public EUIKeywordTooltip blinded = tryLoadTip("Blinded");
     public EUIKeywordTooltip blur = tryLoadTip("Blur");
     public EUIKeywordTooltip bounce = tryLoadTip("Bounce");

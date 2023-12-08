@@ -48,7 +48,8 @@ public class PMod_BonusOnHasPlayed extends PMod_BonusOnHas {
     public List<AbstractCard> getCardPile(PCLUseInfo info, boolean isUsing) {
         List<AbstractCard> pile = fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
         // This check should not count this card if it has just been played
-        if (isUsing && CombatManager.lastCardPlayed == info.card && pile.size() > 0 && pile.get(pile.size() - 1) == CombatManager.lastCardPlayed) {
+        AbstractCard lastCard = CombatManager.getLastCardPlayed();
+        if (isUsing && lastCard == info.card && pile.size() > 0 && pile.get(pile.size() - 1) == lastCard) {
             return pile.subList(0, pile.size() - 1);
         }
         return pile;

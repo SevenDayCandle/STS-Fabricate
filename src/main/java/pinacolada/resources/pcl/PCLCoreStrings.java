@@ -449,14 +449,16 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String power_singleTurn = power.TEXT[7];
     public final String power_singleTurnNext = power.TEXT[8];
     public final String power_plated = power.TEXT[9];
-    public final String power_custom = power.TEXT[10];
-    public final String power_permanentDesc = power.TEXT[11];
-    public final String power_turnBasedDesc = power.TEXT[12];
-    public final String power_turnBasedNextDesc = power.TEXT[13];
-    public final String power_singleTurnDesc = power.TEXT[14];
-    public final String power_singleTurnNextDesc = power.TEXT[15];
-    public final String power_platedDesc = power.TEXT[16];
-    public final String power_lastsForX = power.TEXT[17];
+    public final String power_instant = power.TEXT[10];
+    public final String power_custom = power.TEXT[11];
+    public final String power_permanentDesc = power.TEXT[12];
+    public final String power_turnBasedDesc = power.TEXT[13];
+    public final String power_turnBasedNextDesc = power.TEXT[14];
+    public final String power_singleTurnDesc = power.TEXT[15];
+    public final String power_singleTurnNextDesc = power.TEXT[16];
+    public final String power_platedDesc = power.TEXT[17];
+    public final String power_instantDesc = power.TEXT[18];
+    public final String power_lastsForX = power.TEXT[19];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];
@@ -1042,7 +1044,7 @@ public class PCLCoreStrings extends AbstractStrings {
         return actFmt(51, object, ordinal, amount, bonus);
     }
     public final String act_zTakes(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(51, object, ordinal, amount, bonus);
+        return actFmt(52, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
         return actFmt(53, action, object, target);

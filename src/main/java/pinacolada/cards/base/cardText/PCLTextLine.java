@@ -2,9 +2,8 @@ package pinacolada.cards.base.cardText;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.dungeon.CombatManager;
 
 import java.util.LinkedList;
 
@@ -90,7 +89,7 @@ public class PCLTextLine {
         final PCLCard card = context.card;
 
         // Additional width is only shown in battle
-        context.startX = card.current_x - ((width + (GameUtilities.inBattle() ? additionalWidth : 0)) * card.drawScale * 0.5f);
+        context.startX = card.current_x - ((width + (CombatManager.inBattle() ? additionalWidth : 0)) * card.drawScale * 0.5f);
         context.startY = context.startY - (calculateHeight(context.font) * 1.45f);
 
         for (PCLTextToken token : tokens) {

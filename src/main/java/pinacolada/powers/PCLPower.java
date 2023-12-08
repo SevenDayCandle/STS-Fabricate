@@ -345,6 +345,15 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         super.onInitialApplication();
 
         onAmountChanged(0, amount);
+
+        if (data.endTurnBehavior == PCLPowerData.Behavior.Instant) {
+            onInstantRemoval();
+            removePower();
+        }
+    }
+
+    protected void onInstantRemoval() {
+
     }
 
     @Override

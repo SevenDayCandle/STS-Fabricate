@@ -126,6 +126,10 @@ public abstract class PField implements Serializable {
         return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTipForPowerID, powers) : getPowerAndString(powers);
     }
 
+    public static String getPowerTitleAndString(ArrayList<String> powers) {
+        return PCLCoreStrings.joinWithAnd(PField::safeInvokeTipTitleForPowerID, powers);
+    }
+
     public static String getRelicIDAndString(ArrayList<String> relicIDs) {
         return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getRelicNameForID(g) + "}", relicIDs);
     }
@@ -172,6 +176,11 @@ public abstract class PField implements Serializable {
 
     protected static String safeInvokeTipTitle(TooltipProvider provider) {
         return provider != null ? String.valueOf(provider.getTooltip().title) : null;
+    }
+
+    protected static String safeInvokeTipTitleForPowerID(String id) {
+        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(id);
+        return data != null ? "{" + safeInvokeTipTitle(data) + "}" : id;
     }
 
     public boolean equals(PField other) {

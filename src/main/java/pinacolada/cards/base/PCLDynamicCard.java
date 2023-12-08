@@ -98,6 +98,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                         return ImageMaster.CARD_POWER_BG_BLUE;
                     case PURPLE:
                         return ImageMaster.CARD_POWER_BG_PURPLE;
+                    case COLORLESS:
                     case CURSE:
                         return ImageMaster.CARD_POWER_BG_GRAY;
                     default:

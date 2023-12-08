@@ -22,7 +22,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameUtilities;
 
 public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
     public PSkillContainer skills;
@@ -390,7 +389,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
                 triggerCondition.refresh(false, hb.justHovered);
             }
 
-            if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
+            if (CombatManager.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
                 triggerCondition.targetToUse(1);
                 flash();
             }

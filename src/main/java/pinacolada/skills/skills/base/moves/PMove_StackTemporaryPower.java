@@ -115,7 +115,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                 PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
                 if (power != null) {
                     for (AbstractCreature target : getTargetList(info)) {
-                        order.applyPower(info.source, target, power, amount, true);
+                        order.applyPower(info.source, target, power, amount, true).setInfo(info);
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                 for (String powerID : fields.powers) {
                     PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
                     for (AbstractCreature target : getTargetList(info)) {
-                        order.applyPower(info.source, target, power, amount, true);
+                        order.applyPower(info.source, target, power, amount, true).setInfo(info);
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
         else {
             for (int i = 0; i < amount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount, true);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount, true).setInfo(info);
                 }
             }
         }

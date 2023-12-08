@@ -3,6 +3,8 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnCardPlayedSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -10,6 +12,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+
+import java.util.Collections;
 
 @VisibleSkill
 public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCardPlayedSubscriber {
@@ -42,7 +46,15 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
 
     @Override
     public void onCardPlayed(AbstractCard card) {
-        triggerOnCard(card);
+        if (fields.getFullCardFilter().invoke(card)) {
+            // Copy targets from last info to allow for chaining effects with Use Parent targeting to target the creatures the played card targeted
+            PCLUseInfo info = generateInfo(null);
+            PCLUseInfo prevInfo = CombatManager.getLastInfo();
+            if (prevInfo != null && prevInfo.card == card) {
+                info.setTempTargets(prevInfo.tempTargets);
+            }
+            useFromTrigger(info.setData(Collections.singletonList(card)));
+        }
     }
 
     @Override

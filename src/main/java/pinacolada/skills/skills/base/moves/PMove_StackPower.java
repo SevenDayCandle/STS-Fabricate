@@ -14,6 +14,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -61,6 +62,17 @@ public class PMove_StackPower extends PMove<PField_Power> {
                     return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
             }
         }
+        if (!fields.powers.isEmpty() && EUIUtils.all(fields.powers, PCLPowerData::isInstant)) {
+            String titleString = amount > 0 ? EUIRM.strings.generic2(PField.getPowerTitleAndString(fields.powers), getAmountRawString()) : PField.getPowerTitleAndString(fields.powers);
+            switch (target) {
+                case Self:
+                case None:
+                    return titleString;
+                default:
+                    return TEXT.subjects_onTarget(titleString, getTargetStringPerspective(perspective));
+            }
+        }
+
         joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
         switch (target) {
             case Self:
@@ -113,30 +125,31 @@ public class PMove_StackPower extends PMove<PField_Power> {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
                 String powerID = GameUtilities.getRandomElement(fields.powers);
-                PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-                if (power != null) {
-                    for (AbstractCreature target : getTargetList(info)) {
-                        order.applyPower(info.source, target, power, amount);
-                    }
-                }
+                useApplyPower(powerID, info, order);
             }
             else {
                 for (String powerID : fields.powers) {
-                    PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-                    for (AbstractCreature target : getTargetList(info)) {
-                        order.applyPower(info.source, target, power, amount);
-                    }
+                    useApplyPower(powerID, info, order);
                 }
             }
         }
         else {
             for (int i = 0; i < amount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount).setInfo(info);
                 }
             }
         }
         super.use(info, order);
+    }
+
+    private void useApplyPower(String powerID, PCLUseInfo info, PCLActions order) {
+        PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
+        if (power != null) {
+            for (AbstractCreature target : getTargetList(info)) {
+                order.applyPower(info.source, target, power, amount).setInfo(info);
+            }
+        }
     }
 
     @Override

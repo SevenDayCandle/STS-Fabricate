@@ -5,13 +5,13 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.primary.PLimit_Limited;
 import pinacolada.skills.skills.base.primary.PLimit_SemiLimited;
-import pinacolada.utilities.GameUtilities;
 
 public abstract class PLimit extends PPrimary<PField_Empty> {
     protected boolean limitCache = false;
@@ -34,7 +34,7 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
 
     @Override
     public Color getConditionColor() {
-        return GameUtilities.inBattle() && !limitCache ? EUIColors.gold(0.6f) : Settings.GOLD_COLOR;
+        return CombatManager.inBattle() && !limitCache ? EUIColors.gold(0.6f) : Settings.GOLD_COLOR;
     }
 
     @Override

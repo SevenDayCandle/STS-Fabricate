@@ -13,6 +13,8 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLDynamicPowerData;
+import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;
@@ -45,12 +47,12 @@ public class PRoot extends PPrimary<PField_Empty> {
         if (source instanceof AbstractRelic || source instanceof AbstractBlight) {
             return TEXT.cond_atStartOfCombat();
         }
-        if (source instanceof AbstractPower || requestor instanceof PCLDynamicPowerData) {
+        if ((source instanceof AbstractPower && (!(source instanceof PCLPower) || !((PCLPower) source).data.isInstant())) || (requestor instanceof PCLDynamicPowerData && !((PCLDynamicPowerData) requestor).isInstant())) {
             return TEXT.cond_when(PGR.core.tooltips.create.past());
         }
         if (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) {
             if (!(childEffect instanceof PDelegateCond || childEffect instanceof PMultiCond && EUIUtils.all(((PMultiCond) childEffect).getSubEffects(), c -> c instanceof PDelegateCond))) {
-                String timingString = requestor != null ? ((PCLDynamicOrbData)requestor).timing.getTitle() : source instanceof PCLOrb ? ((PCLOrb) source).timing.getTitle() : null;
+                String timingString = requestor instanceof PCLDynamicOrbData ? ((PCLDynamicOrbData)requestor).timing.getTitle() : source instanceof PCLOrb ? ((PCLOrb) source).timing.getTitle() : null;
                 return PCLCoreStrings.colorString("y", timingString != null ? PGR.core.tooltips.trigger.title + COMMA_SEPARATOR + timingString : PGR.core.tooltips.trigger.title);
             }
         }

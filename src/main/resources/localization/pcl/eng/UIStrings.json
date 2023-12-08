@@ -563,6 +563,7 @@
 						"Fixed-Turns",
 						"Fixed-Turns Next",
 						"Plated",
+						"Instant",
 						"Custom Behavior",
 						"Does not change in amount or disappear unless acted upon by another effect.",
 						"Reduced by 1 at turn end.",
@@ -570,6 +571,7 @@
 						"Removed at turn end after a set number of turns, regardless of stacks.",
 						"Removed at turn start after a set number of turns, regardless of stacks.",
 						"Reduced by 1 when attacked.",
+						"This power will behave like a keyword. Attempting to apply it on a creature activates its effect instantly instead, although debuffs can still be blocked by #yArtifact.",
 						"Lasts for #b{0} turn(s)."
 					]
 				},

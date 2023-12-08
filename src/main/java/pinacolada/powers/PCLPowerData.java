@@ -38,6 +38,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final int DEFAULT_POWER_MAX = 9999;
     public static final String ICON_AFTER_IMAGE = "afterImage";
     public static final String ICON_ARTIFACT = "artifact";
+    public static final String ICON_BARRICADE = "barricade";
     public static final String ICON_BLUR = "blur";
     public static final String ICON_BUFFER = "buffer";
     public static final String ICON_CHOKED = "choke";
@@ -85,7 +86,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final String ICON_VULNERABLE = "vulnerable";
 
     public static final PCLPowerData Choked = registerBaseBuff(ChokePower.class, ChokePower.POWER_ID, PGR.core.tooltips.choked).setImageRegion(ICON_CHOKED).setEndTurnBehavior(Behavior.Permanent);
-    public static final PCLPowerData Confused = registerBaseDebuff(ConfusionPower.class, ConfusionPower.POWER_ID, PGR.core.tooltips.confused).setImageRegion(ICON_CONFUSION).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Confused = registerBaseDebuff(ConfusionPower.class, ConfusionPower.POWER_ID, PGR.core.tooltips.confused).setImageRegion(ICON_CONFUSION).setEndTurnBehavior(Behavior.Permanent).setLimits(-1, -1);
     public static final PCLPowerData Constricted = registerBaseDebuffCommon(ConstrictedPower.class, ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted).setImageRegion(ICON_CONSTRICTED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData CorpseExplosion = registerBaseDebuff(CorpseExplosionPower.class, CorpseExplosionPower.POWER_ID, PGR.core.tooltips.corpseExplosion).setImageRegion(ICON_CORPSE_EXPLOSION).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Entangled = registerBaseDebuff(EntanglePower.class, EntanglePower.POWER_ID, PGR.core.tooltips.entangled).setImageRegion(ICON_ENTANGLE).setEndTurnBehavior(Behavior.SingleTurn);
@@ -100,6 +101,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
 
     public static final PCLPowerData AfterImage = registerBaseBuff(AfterImagePower.class, AfterImagePower.POWER_ID, PGR.core.tooltips.afterImage).setImageRegion(ICON_AFTER_IMAGE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Artifact = registerBaseBuffCommon(ArtifactPower.class, ArtifactPower.POWER_ID, PGR.core.tooltips.artifact).setImageRegion(ICON_ARTIFACT).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Barricade = registerBaseBuff(BarricadePower.class, BarricadePower.POWER_ID, PGR.core.tooltips.barricade).setImageRegion(ICON_BARRICADE).setEndTurnBehavior(Behavior.Permanent).setLimits(-1, -1);
     public static final PCLPowerData Blur = registerBaseBuffCommon(BlurPower.class, BlurPower.POWER_ID, PGR.core.tooltips.blur).setImageRegion(ICON_BLUR).setEndTurnBehavior(Behavior.TurnBased);
     public static final PCLPowerData Buffer = registerBaseBuff(BufferPower.class, BufferPower.POWER_ID, PGR.core.tooltips.buffer).setImageRegion(ICON_BUFFER).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData CurlUp = registerBaseBuff(PCLCurlUpPower.class, PCLCurlUpPower.POWER_ID, PGR.core.tooltips.curlUp).setImageRegion(ICON_CURLUP).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
@@ -250,6 +252,11 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return data != null && data.isDebuff();
     }
 
+    public static boolean isInstant(String key) {
+        PCLPowerData data = getStaticDataOrCustom(key);
+        return data != null && data.isInstant();
+    }
+
     public static boolean isMetascaling(String key) {
         PCLPowerData data = getStaticDataOrCustom(key);
         return data != null && data.isMetascaling;
@@ -391,6 +398,14 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         return type == AbstractPower.PowerType.DEBUFF;
     }
 
+    public boolean isInstant() {
+        return endTurnBehavior == Behavior.Instant;
+    }
+
+    public boolean isNonStacking() {
+        return maxAmount <= 0;
+    }
+
     public void loadImageIntoTooltip() {
         if (tooltip != null && tooltip.icon == null) {
             if (useRegionImage) {
@@ -501,6 +516,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
         SingleTurn,
         SingleTurnNext,
         Plated,
+        Instant,
         Special;
 
         private EUITooltip tip;
@@ -510,6 +526,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                 case SingleTurn:
                 case SingleTurnNext:
                     return EUIUtils.format(PGR.core.strings.power_lastsForX, turns);
+                case Instant:
                 case Permanent:
                 case Special:
                     return null;
@@ -531,6 +548,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurnNextDesc;
                 case Plated:
                     return PGR.core.strings.power_platedDesc;
+                case Instant:
+                    return PGR.core.strings.power_instantDesc;
             }
             return EUIUtils.EMPTY_STRING;
         }
@@ -549,6 +568,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
                     return PGR.core.strings.power_singleTurnNext;
                 case Plated:
                     return PGR.core.strings.power_plated;
+                case Instant:
+                    return PGR.core.strings.power_instant;
             }
             return PGR.core.strings.power_custom;
         }

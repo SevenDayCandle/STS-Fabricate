@@ -17,7 +17,6 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
@@ -29,6 +28,7 @@ import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.patches.dungeon.RewardItemPatches;
@@ -348,7 +348,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public void onEquip() {
         super.onEquip();
 
-        if (GameUtilities.inBattleForceRefresh()) {
+        if (CombatManager.inBattleForceRefresh()) {
             activateBattleEffect();
         }
 
@@ -378,7 +378,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     public void onUnequip() {
         super.onUnequip();
 
-        if (GameUtilities.inBattleForceRefresh()) {
+        if (CombatManager.inBattleForceRefresh()) {
             deactivateBattleEffect();
         }
     }

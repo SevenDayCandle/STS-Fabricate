@@ -1653,15 +1653,6 @@ public class GameUtilities {
         }
     }
 
-    public static boolean inBattle() {
-        return CombatManager.battleID != null;
-    }
-
-    public static boolean inBattleForceRefresh() {
-        CombatManager.refresh();
-        return CombatManager.battleID != null;
-    }
-
     public static boolean inBossRoom() {
         return getCurrentRoom() instanceof MonsterRoomBoss;
     }
@@ -2082,15 +2073,6 @@ public class GameUtilities {
             }
         }
         return returned;
-    }
-
-    public static void playManually(AbstractCard card, AbstractMonster m) {
-        card.applyPowers();
-        card.calculateCardDamage(m);
-        CombatManager.lastCardPlayed = card;
-        card.use(player, m);
-        actionManager.cardsPlayedThisTurn.add(card);
-        actionManager.cardsPlayedThisCombat.add(card);
     }
 
     public static void refreshOrbs() {

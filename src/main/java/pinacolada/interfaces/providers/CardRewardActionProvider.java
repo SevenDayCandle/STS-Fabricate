@@ -3,6 +3,7 @@ package pinacolada.interfaces.providers;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.HideCardEffect;
@@ -11,7 +12,7 @@ import pinacolada.utilities.GameUtilities;
 
 public interface CardRewardActionProvider {
     default boolean canActivate(RewardItem rewardItem) {
-        return canAct() && !GameUtilities.inBattle() && rewardItem != null && (rewardItem.type == RewardItem.RewardType.CARD);
+        return canAct() && !CombatManager.inBattle() && rewardItem != null && (rewardItem.type == RewardItem.RewardType.CARD);
     }
 
     default String getDescription() {

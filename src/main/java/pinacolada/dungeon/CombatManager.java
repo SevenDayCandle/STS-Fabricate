@@ -110,9 +110,8 @@ public class CombatManager extends EUIBase {
     private static boolean shouldRefreshHand;
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
-    public static AbstractCard lastCardPlayed = null; // Needed for has played checks
-    public static AbstractRoom room;
-    public static UUID battleID;
+    private static PCLUseInfo lastInfo = null; // Needed for has played checks
+    private static UUID battleID;
     public static boolean isPlayerTurn;
     public static int blockRetained;
     public static int dodgeChance;
@@ -130,7 +129,7 @@ public class CombatManager extends EUIBase {
         HashMap<String, Float> bonusMap = forPlayer ? PLAYER_EFFECT_BONUSES : EFFECT_BONUSES;
         bonusMap.merge(powerID, multiplier, Float::sum);
 
-        if (GameUtilities.inBattle()) {
+        if (inBattle()) {
 
             for (AbstractCreature cr : GameUtilities.getAllCharacters(true)) {
                 if (cr.powers != null) {
@@ -172,7 +171,7 @@ public class CombatManager extends EUIBase {
         orbsEvokedThisTurn.clear();
         turnCount += 1;
         scriesThisTurn = 0;
-        lastCardPlayed = null;
+        lastInfo = null;
     }
 
     public static void atEndOfTurnPreEndTurnCards(boolean isPlayer) {
@@ -309,7 +308,7 @@ public class CombatManager extends EUIBase {
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
-        lastCardPlayed = null;
+        lastInfo = null;
         summons.initialize();
         maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
         blockRetained = 0;
@@ -359,6 +358,10 @@ public class CombatManager extends EUIBase {
         return PLAYER_EFFECT_BONUSES.entrySet();
     }
 
+    public static UUID getBattleID() {
+        return battleID;
+    }
+
     public static float getBonus(String powerID, boolean forPlayer) {
         return forPlayer ? getPlayerEffectBonus(powerID) : getEffectBonus(powerID);
     }
@@ -384,6 +387,14 @@ public class CombatManager extends EUIBase {
 
     private static List<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber) {
         return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
+    }
+
+    public static AbstractCard getLastCardPlayed() {
+        return lastInfo != null ? lastInfo.card : null;
+    }
+
+    public static PCLUseInfo getLastInfo() {
+        return lastInfo;
     }
 
     public static float getPlayerEffectBonus(String powerID) {
@@ -443,6 +454,15 @@ public class CombatManager extends EUIBase {
 
     public static List<AbstractCard> hasteInfinitesThisTurn() {
         return hasteInfinitesThisTurn;
+    }
+
+    public static boolean inBattle() {
+        return battleID != null;
+    }
+
+    public static boolean inBattleForceRefresh() {
+        refresh();
+        return battleID != null;
     }
 
     public static void initializeEvents() {
@@ -956,14 +976,13 @@ public class CombatManager extends EUIBase {
             subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, finalTarget));
             pclCard.unfadeOut();
             pclCard.lighten(true);
-            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, finalTarget);
-            lastCardPlayed = card; // Set last card played after the info generates
+            lastInfo = playerSystem.generateInfo(pclCard, p, finalTarget);
             pclCard.calculateCardDamage(finalTarget, true);
             if (pclCard.type == PCLEnum.CardType.SUMMON) {
-                summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
+                summons.summon(pclCard, EUIUtils.safeCast(lastInfo.target, PCLCardAlly.class));
             }
             else {
-                pclCard.onUse(info);
+                pclCard.onUse(lastInfo);
             }
 
             // Hardcoded surrounded checks
@@ -971,12 +990,12 @@ public class CombatManager extends EUIBase {
                 p.flipHorizontal = finalTarget.drawX < p.drawX;
             }
 
-            playerSystem.onCardPlayed(pclCard, info, false);
+            playerSystem.onCardPlayed(pclCard, lastInfo, false);
             return true;
         }
         else {
             subscriberDo(OnCardUsingSubscriber.class, s -> s.onUse(card, p, m));
-            lastCardPlayed = card;
+            lastInfo = playerSystem.generateInfo(card, p, m);
             return false;
         }
     }
@@ -999,7 +1018,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static void refresh() {
-        room = GameUtilities.getCurrentRoom();
+        AbstractRoom room = GameUtilities.getCurrentRoom();
 
         if (room == null || AbstractDungeon.player == null) {
             battleID = null;

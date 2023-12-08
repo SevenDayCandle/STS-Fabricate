@@ -38,7 +38,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FlightPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
 import com.megacrit.cardcrawl.powers.LockOnPower;
-import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
 import extendedui.interfaces.delegates.ActionT3;
@@ -1083,7 +1082,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         // Only show these tooltips outside of combat
-        if (!GameUtilities.inBattle() || isPopup || (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(this))) {
+        if (!CombatManager.inBattle() || isPopup || (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(this))) {
             if (isSoulbound()) {
                 dynamicTooltips.add(PGR.core.tooltips.soulbound);
             }
@@ -2068,7 +2067,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         final TextureAtlas.AtlasRegion img = getBorderTexture();
 
-        if (GameUtilities.inBattle()) {
+        if (CombatManager.inBattle()) {
             sb.setColor(this.glowColor);
         }
         else {

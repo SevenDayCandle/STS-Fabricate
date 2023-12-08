@@ -9,7 +9,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -23,7 +22,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameUtilities;
 
 public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
     public PSkillContainer skills;
@@ -332,7 +330,7 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
             triggerCondition.refresh(false, hb.justHovered);
         }
 
-        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
+        if (CombatManager.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
             triggerCondition.targetToUse(1);
             flash();
         }

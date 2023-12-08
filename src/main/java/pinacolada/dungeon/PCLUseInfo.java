@@ -21,7 +21,6 @@ public class PCLUseInfo {
     public AbstractCreature source;
     public AbstractCreature target;
     public AbstractCard card;
-    public AbstractCard previousCard;
     public boolean canActivateSemiLimited;
     public boolean canActivateLimited;
     public boolean isStarter;
@@ -113,15 +112,10 @@ public class PCLUseInfo {
         return null;
     }
 
-    public String getPreviousCardID() {
-        return previousCard != null ? previousCard.cardID : "";
-    }
-
     public PCLUseInfo set(AbstractCard card, AbstractCreature source, AbstractCreature target) {
         this.card = card;
         this.source = source;
         this.target = target;
-        this.previousCard = CombatManager.lastCardPlayed;
         fillWithTargets();
         if (card != null) {
             this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);

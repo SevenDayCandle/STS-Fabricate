@@ -17,6 +17,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.resources.PGR;
@@ -115,7 +116,7 @@ public class PCLCardRewardScreen extends EUIBase {
     }
 
     public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
-        if (GameUtilities.inBattleForceRefresh() || cards == null || rItem == null) {
+        if (CombatManager.inBattleForceRefresh() || cards == null || rItem == null) {
             close(true);
             return;
         }

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.PermanentUpgradeEffect;
@@ -57,7 +58,7 @@ public interface CardRewardBonusProvider {
     }
 
     default boolean canActivate(RewardItem rewardItem) {
-        return !GameUtilities.inBattle() && rewardItem != null && (rewardItem.type == RewardItem.RewardType.CARD);
+        return !CombatManager.inBattle() && rewardItem != null && (rewardItem.type == RewardItem.RewardType.CARD);
     }
 
     PCLCardRewardBundle getBundle(AbstractCard card);

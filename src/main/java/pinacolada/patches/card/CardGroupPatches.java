@@ -12,7 +12,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.patches.dungeon.AbstractDungeonPatches;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -233,7 +232,7 @@ public class CardGroupPatches {
     public static class CardGroupPatches_ApplyPowers {
         @SpirePostfixPatch
         public static void postfix(CardGroup __instance) {
-            if (GameUtilities.inBattle()) {
+            if (CombatManager.inBattle()) {
                 CombatManager.summons.applyPowers();
             }
         }

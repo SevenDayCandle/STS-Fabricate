@@ -140,7 +140,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         else {
             // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
             for (AbstractCreature c : getTargetList(info)) {
-                order.applyPower(new PTriggerPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
+                order.applyPower(new PTriggerPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf).setInfo(info);
             }
         }
 

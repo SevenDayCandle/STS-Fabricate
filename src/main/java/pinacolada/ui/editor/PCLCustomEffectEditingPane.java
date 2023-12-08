@@ -676,7 +676,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerAffinity(List<PCLAffinity> items) {
-        registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), PGR.core.tooltips.affinityGeneral.title), items);
+        registerAffinity(items, PGR.core.tooltips.affinityGeneral.title);
+    }
+
+    public void registerAffinity(List<PCLAffinity> items, String title) {
+        registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), title), items);
     }
 
     public void registerBlight(List<String> blightIDs) {
@@ -977,8 +981,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerTag(List<PCLCardTag> items) {
-        registerDropdown(initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags), items)
-                .setTooltip(PGR.core.strings.cedit_tags, PGR.core.strings.cetut_attrTags1);
+        registerTag(items, PGR.core.strings.cedit_tags);
+    }
+
+    public void registerTag(List<PCLCardTag> items, String title) {
+        registerDropdown(initializeSmartSearchable(PCLCardTag.getAll(), title), items)
+                .setTooltip(title, PGR.core.strings.cetut_attrTags1);
     }
 
     public void registerType(List<AbstractCard.CardType> items) {

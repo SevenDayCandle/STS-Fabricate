@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.TriggerConnection;
@@ -52,7 +53,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveLast(info, damage, type);
         }
-        return super.atDamageFinalReceive(damage, type);
+        return damage;
     }
 
     @Override
@@ -62,7 +63,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveLast(info, damage, type);
         }
-        return super.atDamageFinalReceive(damage, type, card);
+        return damage;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveFirst(info, damage, type);
         }
-        return super.atDamageReceive(damage, type);
+        return damage;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamageReceiveFirst(info, damage, type);
         }
-        return super.atDamageReceive(damage, type, card);
+        return damage;
     }
 
     @Override
@@ -262,11 +263,20 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
 
     public void onInitialApplication() {
         super.onInitialApplication();
+        if (data.endTurnBehavior != PCLPowerData.Behavior.Instant) {
+            for (PSkill<?> effect : getEffects()) {
+                effect.subscribeChildren();
+                effect.triggerOnStartOfBattleForRelic();
+            }
+        }
         for (PSkill<?> effect : getEffects()) {
-            effect.subscribeChildren();
-            effect.triggerOnStartOfBattleForRelic();
             effect.triggerOnCreateGeneric(this);
         }
+    }
+
+    protected void onInstantRemoval() {
+        PCLUseInfo last = CombatManager.getLastInfo();
+        useOnInstantRemoval(last != null ? last : CombatManager.playerSystem.generateInfo(null, owner, null), PCLActions.bottom);
     }
 
     public void onRemove() {
@@ -291,5 +301,11 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
     @Override
     public int timesUpgraded() {
         return amount;
+    }
+
+    public void useOnInstantRemoval(PCLUseInfo info, PCLActions order) {
+        for (PSkill<?> effect : getEffects()) {
+            effect.use(info, order);
+        }
     }
 }
