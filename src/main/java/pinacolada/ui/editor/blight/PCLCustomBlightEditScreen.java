@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -17,7 +18,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight> {
+public class PCLCustomBlightEditScreen extends PCLCustomEditEntityScreen<PCLCustomBlightSlot, PCLDynamicBlightData, PCLDynamicBlight, BlightStrings> {
     protected PCLDynamicBlight previewBlight;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;

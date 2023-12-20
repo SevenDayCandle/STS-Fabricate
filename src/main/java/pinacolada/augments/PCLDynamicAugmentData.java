@@ -1,38 +1,27 @@
 package pinacolada.augments;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.EUIRM;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.blights.PCLDynamicBlightData;
-import pinacolada.cards.base.fields.PCLCardDataAffinityGroup;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
-import pinacolada.orbs.PCLCustomOrbSlot;
-import pinacolada.orbs.PCLDynamicOrb;
-import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.PCLAugmentRenderable;
-import pinacolada.ui.PCLOrbRenderable;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker<PCLDynamicAugment> {
+public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker<PCLDynamicAugment, AugmentStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, AugmentStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, AugmentStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, AugmentStrings> languageMap = new HashMap<>();
@@ -93,7 +82,7 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         safeLoadValue(() -> setPermanent(data.permanent));
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setReqs(EUIUtils.deserialize(data.reqs, PCLAugmentReqs.class)));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(form.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(form.powerEffects, PSkill::get), true, true));
     }
@@ -148,6 +137,11 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         return PGR.core.cardColor;
     }
 
+    @Override
+    public AugmentStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
     public String getEffectTextForPreview(int level) {
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
@@ -176,6 +170,16 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
     @Override
     public List<PSkill<?>> getPowers() {
         return powers;
+    }
+
+    @Override
+    public AugmentStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, AugmentStrings> getLanguageMap() {
+        return languageMap;
     }
 
     public AugmentStrings getStringsForLanguage(Settings.GameLanguage language) {
@@ -216,16 +220,6 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         return this;
     }
 
-    public PCLDynamicAugmentData setLanguageMap(HashMap<Settings.GameLanguage, AugmentStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicAugmentData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicAugmentData setName(String name) {
         this.strings.NAME = name;
 
@@ -247,11 +241,20 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         return setText(name, new String[0]);
     }
 
-    public PCLDynamicAugmentData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public AugmentStrings copyStrings(AugmentStrings initial) {
+        return copyStrings(initial, new AugmentStrings());
     }
 
-    public PCLDynamicAugmentData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public AugmentStrings copyStrings(AugmentStrings initial, AugmentStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTION != null) {
+            dest.DESCRIPTION = initial.DESCRIPTION.clone();
+        }
+        else {
+            dest.DESCRIPTION = null;
+        }
+        return dest;
     }
 }

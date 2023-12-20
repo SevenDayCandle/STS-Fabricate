@@ -178,9 +178,8 @@ public class GameUtilities {
                 augments);
     }
 
-    public static boolean canAcceptInput(boolean canHoverCard) {
+    public static boolean canAcceptInput() {
         return isPlayerTurn(true) && actionManager.phase == GameActionManager.Phase.WAITING_ON_USER
-                && !player.isDraggingCard && !player.inSingleTargetMode && (canHoverCard || player.hoveredCard == null)
                 && AbstractDungeon.actionManager.cardQueue.isEmpty() && AbstractDungeon.actionManager.actions.isEmpty()
                 && !DevConsole.visible && !AbstractDungeon.isScreenUp && !CardCrawlGame.isPopupOpen;
     }

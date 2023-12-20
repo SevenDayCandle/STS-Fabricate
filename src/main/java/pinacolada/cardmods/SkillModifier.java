@@ -10,7 +10,9 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 
 @AbstractCardModifier.SaveIgnore
 public class SkillModifier extends AbstractCardModifier {
+    private transient String descCache = EUIUtils.EMPTY_STRING;
     protected String serialized;
     protected transient PSkill<?> skill;
     protected transient PCLUseInfo info;
@@ -90,7 +93,15 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
-        return rawDescription + EUIUtils.SPLIT_LINE + skill.getText(PCLCardTarget.Self, null, true);
+        if (StringUtils.isEmpty(descCache)) {
+            if (card instanceof PCLCard) {
+                descCache = rawDescription + EUIUtils.SPLIT_LINE + skill.getText(PCLCardTarget.Self, null, true);
+            }
+            else {
+                descCache = rawDescription + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + skill.getLegacyText();
+            }
+        }
+        return descCache;
     }
 
     @Override

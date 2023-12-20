@@ -152,13 +152,13 @@ public interface PointerProvider {
 
     default String getEffectPowerTextStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getPowerText(null)) : null,
+                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getPowerTextForDisplay(null)) : null,
                 getFullEffects());
     }
 
     default String getEffectStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getText()) : null,
+                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getTextForDisplay()) : null,
                 getFullEffects());
     }
 
@@ -236,7 +236,7 @@ public interface PointerProvider {
                     if (EUIRenderHelpers.isCharAt(baseString, i + 3, PointerToken.TOKEN)) {
                         PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
                         if (move != null) {
-                            String s = move.getExportString(baseString.charAt(i + 1));
+                            String s = move.getExportValueUpgradeString(baseString.charAt(i + 1));
                             if (!s.isEmpty()) {
                                 sb.append(s);
                             }

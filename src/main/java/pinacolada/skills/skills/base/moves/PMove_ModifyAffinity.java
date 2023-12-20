@@ -16,6 +16,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardModifyAffinity;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public void cardAction(List<AbstractCard> cards, PCLActions order) {
         if (fields.addAffinities.size() == 0) {
             if (fields.or) {
-                chooseEffect(PCLAffinity.getAvailableAffinitiesAsList(), order);
+                chooseEffect(PCLAffinity.getAvailableAffinities(), order);
             }
             else {
                 PCLAffinity random = PCLAffinity.getRandomAvailableAffinity();
@@ -69,7 +70,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         }
     }
 
-    public void chooseEffect(List<PCLAffinity> choices, PCLActions order) {
+    public void chooseEffect(Collection<PCLAffinity> choices, PCLActions order) {
         order.tryChooseAffinitySkill(getName(), Math.max(1, extra2), getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, extra, a)));
     }
 

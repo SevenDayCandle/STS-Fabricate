@@ -78,14 +78,14 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     @Override
     public String getEffectPowerTextStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null ? StringUtils.capitalize(ef.getPowerText(null)) : null,
+                ef -> ef != null ? StringUtils.capitalize(ef.getPowerTextForDisplay(null)) : null,
                 getFullEffects());
     }
 
     @Override
     public String getEffectStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null ? StringUtils.capitalize(ef.getText(null)) : null,
+                ef -> ef != null ? StringUtils.capitalize(ef.getTextForDisplay()) : null,
                 getFullEffects());
     }
 

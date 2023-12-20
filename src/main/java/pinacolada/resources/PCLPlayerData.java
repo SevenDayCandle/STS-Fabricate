@@ -240,6 +240,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public void initialize() {
         initializeLoadouts();
         reload();
+        config.initializeOptions();
     }
 
     protected final void initializeLoadouts() {

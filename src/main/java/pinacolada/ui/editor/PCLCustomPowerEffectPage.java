@@ -23,7 +23,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected EUIButton quickAddButton;
     protected EUIContextMenu<Integer> quickAddMenu;
 
-    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, PSkill<?> skill, String title) {
+    public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?, ?, ?> screen, EUIHitbox hb, PSkill<?> skill, String title) {
         super(screen, hb, skill, title);
         quickAddMenu = new EUIContextMenu<>(new EUIHitbox(0, 0, 0, 0), this::getNameForEffect)
                 .setOnChange(options -> {
@@ -32,7 +32,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                     }
                 })
                 .setCanAutosizeButton(true);
-        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.8f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
+        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 5.6f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)
@@ -65,6 +65,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         return EUIUtils.array(
                 new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
                         .setFlash(buttonsPane),
+                descButton.makeTour(true),
                 quickAddButton.makeTour(true)
         );
     }

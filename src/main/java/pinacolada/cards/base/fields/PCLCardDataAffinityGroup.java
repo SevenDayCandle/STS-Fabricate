@@ -44,7 +44,7 @@ public class PCLCardDataAffinityGroup implements Serializable {
     }
 
     public ArrayList<PCLAffinity> getAffinities(boolean convertStar, boolean availableOnly) {
-        HashSet<PCLAffinity> available = new HashSet<>(Arrays.asList(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic()));
+        HashSet<PCLAffinity> available = new HashSet<>(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic());
         final ArrayList<PCLAffinity> list = new ArrayList<>();
         if (convertStar && hasStar()) {
             list.addAll(available);

@@ -25,14 +25,16 @@ import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     public final String ID;
+    public final PCLResources<?, ?, ?, ?> resources;
     protected EUIButton infoIcon;
     protected PCLUseInfo info;
     protected int currentScore;
     protected int highestScore;
 
-    public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
+    public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, PCLResources<?, ?, ?, ?> resources, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.ID = id;
+        this.resources = resources;
         infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(25), scale(-40f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> EUI.ftueScreen.openScreen(new EUITutorial(getInfoPages())))

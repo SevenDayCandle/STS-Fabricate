@@ -159,6 +159,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_orbFocusEvoke = cedit.TEXT[94];
     public final String cedit_orbFocusPassive = cedit.TEXT[95];
     public final String cedit_effekseer = cedit.TEXT[96];
+    public final String cedit_editDesc = cedit.TEXT[97];
     // Card Editor Tutorial
     public final String cetut_selectorGeneric = cetut.TEXT[0];
     public final String cetut_selectorCard = cetut.TEXT[1];
@@ -251,6 +252,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_orbFocusPassive = cetut.TEXT[88];
     public final String cetut_orbFocusEvoke = cetut.TEXT[89];
     public final String cetut_effekseer = cetut.TEXT[90];
+    public final String cetut_editDesc = cetut.TEXT[91];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

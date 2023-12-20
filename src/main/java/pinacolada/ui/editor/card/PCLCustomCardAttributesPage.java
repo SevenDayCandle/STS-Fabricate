@@ -175,7 +175,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     }
 
     public static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color) {
-        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? Arrays.asList(PCLAffinity.basic()) : PCLAffinity.getAvailableAffinitiesAsList(color, false));
+        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? PCLAffinity.basic() : PCLAffinity.getAvailableAffinities(color, false));
         if (availableAffinities.size() > 0) {
             availableAffinities.add(PCLAffinity.Star);
         }

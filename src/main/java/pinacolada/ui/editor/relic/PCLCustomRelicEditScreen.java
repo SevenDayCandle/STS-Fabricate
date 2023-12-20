@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.RelicStrings;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -17,7 +18,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData, PCLDynamicRelic> {
+public class PCLCustomRelicEditScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData, PCLDynamicRelic, RelicStrings> {
     protected PCLDynamicRelic previewRelic;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;

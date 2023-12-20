@@ -10,6 +10,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
+import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -78,6 +79,25 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
+    }
+
+    @Override
+    public TupleT2<PSkill<?>, Integer> getEffectAtIndex(int ind) {
+        if (ind == 0) {
+            return new TupleT2<>(this, ind);
+        }
+        for (PSkill<?> effect : effects) {
+            ind -= 1;
+            TupleT2<PSkill<?>, Integer> res = effect.getEffectAtIndex(ind);
+            if (res.v1 != null) {
+                return res;
+            }
+            ind = res.v2;
+        }
+        if (childEffect == null) {
+            return null;
+        }
+        return childEffect.getEffectAtIndex(ind - 1);
     }
 
     private String getEffectTexts(PCLCardTarget perspective, Object requestor, boolean addPeriod) {

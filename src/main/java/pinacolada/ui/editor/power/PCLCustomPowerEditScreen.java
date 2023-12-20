@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.PowerStrings;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -19,7 +20,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-public class PCLCustomPowerEditScreen extends PCLCustomEditEntityScreen<PCLCustomPowerSlot, PCLDynamicPowerData, PCLDynamicPower> {
+public class PCLCustomPowerEditScreen extends PCLCustomEditEntityScreen<PCLCustomPowerSlot, PCLDynamicPowerData, PCLDynamicPower, PowerStrings> {
     protected PCLPowerRenderable preview;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;

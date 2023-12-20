@@ -61,7 +61,7 @@ public class PCLGlyphEditor extends EUIHoverable {
     }
 
     public void refresh(int ascensionLevel) {
-        enabled = EUIUtils.any(PGR.getRegisteredResources(), r -> r.getUnlockLevel() >= blight.ascensionRequirement);
+        enabled = EUIUtils.any(PGR.getRegisteredPlayerResources(), r -> r.getUnlockLevel() >= blight.ascensionRequirement);
         if (counter < 0) {
             counter = 0;
             blight.configOption.set(counter);

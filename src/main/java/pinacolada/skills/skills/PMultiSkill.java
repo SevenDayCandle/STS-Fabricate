@@ -8,6 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
+import extendedui.utilities.TupleT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -108,6 +109,25 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
+    public TupleT2<PSkill<?>, Integer> getEffectAtIndex(int ind) {
+        if (ind == 0) {
+            return new TupleT2<>(this, ind);
+        }
+        for (PSkill<?> effect : effects) {
+            ind -= 1;
+            TupleT2<PSkill<?>, Integer> res = effect.getEffectAtIndex(ind);
+            if (res.v1 != null) {
+                return res;
+            }
+            ind = res.v2;
+        }
+        if (childEffect == null) {
+            return null;
+        }
+        return childEffect.getEffectAtIndex(ind - 1);
+    }
+
+    @Override
     public Color getGlowColor() {
         Color c = super.getGlowColor();
         for (PSkill<?> effect : effects) {
@@ -198,6 +218,11 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public boolean isDetrimental() {
         return EUIUtils.any(effects, PSkill::isDetrimental);
+    }
+
+    @Override
+    public boolean isMetascaling() {
+        return EUIUtils.any(effects, PSkill::isMetascaling);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITextBox;
@@ -27,7 +28,7 @@ import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.card.PCLCustomAttackEffectPage;
 import pinacolada.ui.editor.card.PCLCustomBlockEffectPage;
 
-public class PCLCustomOrbEditScreen extends PCLCustomEditEntityScreen<PCLCustomOrbSlot, PCLDynamicOrbData, PCLDynamicOrb> {
+public class PCLCustomOrbEditScreen extends PCLCustomEditEntityScreen<PCLCustomOrbSlot, PCLDynamicOrbData, PCLDynamicOrb, OrbStrings> {
     public static NewPageOption Evoke = new NewPageOption(PGR.core.tooltips.evoke.title, s -> s.initializeEffectPage(s.makeEffectPage(new PRoot().setChild(new PCond_OnRemove()))));
     protected PCLOrbRenderable preview;
     protected EUITextBox previewDescription;

@@ -8,8 +8,6 @@ import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import pinacolada.blights.PCLDynamicBlight;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.PGR;
@@ -18,7 +16,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U>, U extends FabricateItem> extends PCLCustomLoadable {
+public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U, ?>, U extends FabricateItem> extends PCLCustomLoadable {
     protected static final TypeToken<EffectItemForm> TTOKENFORM = new TypeToken<EffectItemForm>() {
     };
     protected transient String imagePath;

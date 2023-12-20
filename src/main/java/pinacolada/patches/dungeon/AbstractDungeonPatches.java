@@ -98,48 +98,6 @@ public class AbstractDungeonPatches {
         return card;
     }
 
-    // Have to do these patches manually to avoid having the card pool get initialized twice on game start
-    @SpirePatch(
-            clz = AbstractDungeon.class,
-            method = SpirePatch.CONSTRUCTOR,
-            paramtypez = {
-                    String.class,
-                    String.class,
-                    AbstractPlayer.class,
-                    ArrayList.class
-            }
-    )
-    public static class AbstractDungeonPatches_StartGame {
-
-        public static void Postfix(AbstractDungeon __instance,
-                                   String name, String levelId, AbstractPlayer p, ArrayList<String> newSpecialOneTimeEventList) {
-            if (levelId.equals(Exordium.ID) && AbstractDungeon.floorNum == 0) {
-                PGR.dungeon.initializeData();
-            }
-            PGR.dungeon.initializeCardPool();
-        }
-
-    }
-
-    @SpirePatch(
-            clz = AbstractDungeon.class,
-            method = SpirePatch.CONSTRUCTOR,
-            paramtypez = {
-                    String.class,
-                    AbstractPlayer.class,
-                    SaveFile.class
-            }
-    )
-    public static class AbstractDungeonPatches_ContinueGame {
-
-        public static void Postfix(Object __obj_instance,
-                                   String name, AbstractPlayer p, SaveFile saveFile) {
-            PGR.dungeon.initializeData();
-            PGR.dungeon.initializeCardPool();
-        }
-
-    }
-
     @SpirePatch(clz = AbstractDungeon.class, method = "getMonsterForRoomCreation")
     public static class AbstractDungeonPatches_GetMonsterForRoomCreation {
         @SpirePostfixPatch

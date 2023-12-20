@@ -60,7 +60,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
         }
 
         // Callback must be executed after the sequential to avoid incorrect calculations in triggers
-        if (toRelease.size() > 0) {
+        if (!toRelease.isEmpty()) {
             PCLActions.last.callback(() -> {
                 for (PCLCardAlly ally : toRelease) {
                     releaseCard(ally);

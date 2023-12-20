@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.localization.CardStrings;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.EditorMaker;
@@ -405,6 +407,18 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         }
     }
 
+    protected void putCustomDesc(PSkill<?> skill, int index) {
+        if (skill != null) {
+            CardStrings s = builder.getStringsForLanguage(Settings.language);
+            if (s != null && s.EXTENDED_DESCRIPTION != null && s.EXTENDED_DESCRIPTION.length > index) {
+                String res = s.EXTENDED_DESCRIPTION[index];
+                if (!StringUtils.isEmpty(res)) {
+                    skill.overrideDesc = res;
+                }
+            }
+        }
+    }
+
     @Override
     protected void renderCardBg(SpriteBatch sb, float x, float y) {
         if (vanillaBg == null && customBg == null) {
@@ -482,12 +496,15 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         onAttackEffect = null;
         onBlockEffect = null;
         final PCLCard source = builder.source != null ? builder.source : this;
+        int exDescInd = -1;
         for (PSkill<?> effect : builder.moves) {
+            exDescInd += 1;
             if (PSkill.isSkillBlank(effect)) {
                 continue;
             }
             // Add damage/block effects and set their source to this card
             PSkill<?> eff = effect.makeCopy();
+            putCustomDesc(eff, exDescInd);
             if (eff instanceof PCardPrimary_DealDamage) {
                 addDamageMove((PCardPrimary_DealDamage) eff);
             }
@@ -500,6 +517,8 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         }
 
         for (PSkill<?> pe : builder.powers) {
+            exDescInd += 1;
+            putCustomDesc(pe, exDescInd);
             if (PSkill.isSkillBlank(pe)) {
                 continue;
             }

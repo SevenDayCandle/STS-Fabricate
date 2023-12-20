@@ -17,6 +17,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT3;
@@ -28,6 +29,7 @@ import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.RotatingList;
+import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.TryChooseChoice;
@@ -77,6 +79,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
     public static final String COLON_SEPARATOR = ": ";
     public static final String COMMA_SEPARATOR = ", ";
+    public static final char CASCADE_CHAR = '‡';
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';
@@ -98,6 +101,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public PSkill<?> parent;
     public PointerProvider source;
     public String effectID;
+    public String overrideDesc;
     public T fields;
     public boolean useParent;
     public boolean displayUpgrades;
@@ -233,7 +237,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public static List<String> getEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean capitalize) {
         List<String> efTexts = getEffectTexts(effects, perspective, requestor, false);
-        if (capitalize && efTexts.size() > 0) {
+        if (capitalize && !efTexts.isEmpty()) {
             efTexts.set(0, capital(efTexts.get(0), true));
         }
         return efTexts;
@@ -708,6 +712,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
     }
 
+    public TupleT2<PSkill<?>, Integer> getEffectAtIndex(int ind) {
+        if (ind == 0) {
+            return new TupleT2<>(this, ind);
+        }
+        if (childEffect == null) {
+            return new TupleT2<>(null, ind);
+        }
+        return childEffect.getEffectAtIndex(ind - 1);
+    }
+
     public final List<PCLCardSelection> getEligibleDestinations() {
         return data != null && data.destinations != null ? data.destinations : Arrays.asList(PCLCardSelection.values());
     }
@@ -724,7 +738,44 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return data != null && data.targets != null ? data.targets : PCLCardTarget.getAll();
     }
 
-    public String getExportString(char attributeID) {
+    public String getExportText() {
+        String baseString = getText();
+        if (source != null) {
+            return source.makeExportString(baseString);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < baseString.length(); i++) {
+            char c = baseString.charAt(i);
+            switch (c) {
+                case '$':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < baseString.length()) {
+                        i += 1;
+                        c = baseString.charAt(i);
+                        sub.append(c);
+                        if (c == '$') {
+                            break;
+                        }
+                    }
+                    sb.append(EUITextHelper.parseLogicString(sub.toString()));
+                    break;
+                case '{':
+                case '}':
+                case '[':
+                case ']':
+                case '|':
+                    break;
+                default:
+                    sb.append(c);
+                    break;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String getExportValueUpgradeString(char attributeID) {
         int upgrade;
         int base;
         switch (attributeID) {
@@ -746,35 +797,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
         int upSum = base + upgrade;
         return upgrade != 0 ? base + " (" + upSum + ")" : String.valueOf(base);
-    }
-
-    public String getExportText() {
-        String baseString = getText();
-        if (source != null) {
-            return source.makeExportString(baseString);
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < baseString.length(); i++) {
-            char c = baseString.charAt(i);
-            if (c == '$') {
-                StringBuilder sub = new StringBuilder();
-                while (i + 1 < baseString.length()) {
-                    i += 1;
-                    c = baseString.charAt(i);
-                    sub.append(c);
-                    if (c == '$') {
-                        break;
-                    }
-                }
-                sb.append(EUITextHelper.parseLogicString(sub.toString()));
-            }
-            else if (!(c == '{' || c == '}' || c == '[' || c == ']')) {
-                sb.append(c);
-            }
-        }
-
-        return sb.toString();
     }
 
     public final int getExtra2BaseFromCard() {
@@ -946,6 +968,44 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return childEffect != null ? childEffect.getIntent() : AbstractMonster.Intent.NONE;
     }
 
+    public String getLegacyText() {
+        return getLegacyText(getText());
+    }
+
+    public String getLegacyText(String baseString) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < baseString.length(); i++) {
+            char c = baseString.charAt(i);
+            switch (c) {
+                case '$':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < baseString.length()) {
+                        i += 1;
+                        c = baseString.charAt(i);
+                        sub.append(c);
+                        if (c == '$') {
+                            break;
+                        }
+                    }
+                    sb.append(EUITextHelper.parseLogicString(sub.toString()));
+                    break;
+                case '|':
+                    sb.append(EUITextHelper.NEWLINE);
+                    break;
+                case '{':
+                case '}':
+                case '[':
+                case ']':
+                    break;
+                default:
+                    sb.append(c);
+                    break;
+            }
+        }
+
+        return sb.toString();
+    }
+
     public final PSkill<?> getLowestChild() {
         if (this.childEffect != null) {
             return this.childEffect.getLowestChild();
@@ -983,7 +1043,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return getText(requestor);
     }
 
-    public String getPowerTextForTooltip(Object requestor) {
+    public final String getPowerTextForDisplay(Object requestor) {
+        if (overrideDesc != null) {
+            return getUncascadedOverride();
+        }
+        if (source != null) {
+            return source.makePowerString(getText(requestor), true);
+        }
+        return getText(requestor);
+    }
+
+    public final String getPowerTextForTooltip(Object requestor) {
         if (source != null) {
             return source.makePowerString(getText(requestor), true);
         }
@@ -1010,6 +1080,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return getXRawString();
             case EXTRA_CHAR:
                 return getExtraRawString();
+            case EXTRA2_CHAR:
+                return getExtra2RawString();
+            case SCOPE_CHAR:
+                return getScopeRawString();
             default:
                 return SINGLE_FORMAT;
         }
@@ -1341,6 +1415,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return getText(PCLCardTarget.Self, source, true);
     }
 
+    public final String getTextForDisplay() {
+        return overrideDesc != null ? getUncascadedOverride() : getText();
+    }
     public String getThemString() {
         return EUITextHelper.parseLogicString(TEXT.subjects_them(amount));
     }
@@ -1356,6 +1433,30 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final UUID getUUID() {
         return uuid;
+    }
+
+    public String getUncascadedOverride() {
+        if (overrideDesc == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < overrideDesc.length(); i++) {
+            char c = overrideDesc.charAt(i);
+            if (c == CASCADE_CHAR) {
+                if (EUIRenderHelpers.isCharAt(overrideDesc, i + 3, CASCADE_CHAR)) {
+                    PSkill<?> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
+                    if (move != null) {
+                        sb.append(move.getRawString(overrideDesc.charAt(i + 1)));
+                    }
+                    i += 3;
+                }
+            }
+            else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
     }
 
     public final int getUpgrade() {
@@ -1493,7 +1594,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     /* Determines whether this effect should render cards unobtainable through card generation effects */
     public boolean isMetascaling() {
-        return false;
+        return childEffect != null && childEffect.isMetascaling();
     }
 
     /* Effects that consist only of passive elements (i.e. no conds, modifiers) should be hidden in text, except on augments */
@@ -1560,6 +1661,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             copy.source = source;
             copy.sourceCard = sourceCard;
             copy.uuid = uuid;
+            copy.overrideDesc = overrideDesc;
 
             // Copy children
             if (this.childEffect != null) {

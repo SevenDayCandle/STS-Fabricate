@@ -405,7 +405,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
 
     protected abstract V getSavedFilters();
 
-    protected abstract PCLCustomEditEntityScreen<U, ?, ?> getScreen(U slot);
+    protected abstract PCLCustomEditEntityScreen<U, ?, ?, ?> getScreen(U slot);
 
     protected abstract Iterable<U> getSlots(AbstractCard.CardColor co);
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
@@ -19,7 +20,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCLDynamicRelic> {
+public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCLDynamicRelic, RelicStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, RelicStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, RelicStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, RelicStrings> languageMap = new HashMap<>();
@@ -78,7 +79,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setSfx(AbstractRelic.LandingSound.valueOf(data.sfx)));
         safeLoadValue(() -> setTier(AbstractRelic.RelicTier.valueOf(data.tier)));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -132,6 +133,11 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     }
 
     @Override
+    public RelicStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
+    @Override
     public Texture getImage() {
         return portraitImage;
     }
@@ -146,10 +152,14 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         return powers;
     }
 
-    public RelicStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    @Override
+    public RelicStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, RelicStrings> getLanguageMap() {
+        return languageMap;
     }
 
     @Override
@@ -184,16 +194,6 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         return this;
     }
 
-    public PCLDynamicRelicData setLanguageMap(HashMap<Settings.GameLanguage, RelicStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicRelicData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicRelicData setName(String name) {
         this.strings.NAME = name;
 
@@ -220,11 +220,21 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         return setText(name, new String[0], EUIUtils.EMPTY_STRING);
     }
 
-    public PCLDynamicRelicData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public RelicStrings copyStrings(RelicStrings initial) {
+        return copyStrings(initial, new RelicStrings());
     }
 
-    public PCLDynamicRelicData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public RelicStrings copyStrings(RelicStrings initial, RelicStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTIONS != null) {
+            dest.DESCRIPTIONS = initial.DESCRIPTIONS.clone();
+        }
+        else {
+            dest.DESCRIPTIONS = null;
+        }
+        dest.FLAVOR = initial.FLAVOR;
+        return dest;
     }
 }

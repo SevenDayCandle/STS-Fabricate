@@ -40,9 +40,7 @@ public class SaveSlotScreenPatches {
     private static void reload(int slot) {
         PGR.config.load(slot);
         for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
-            if (resources.data != null) {
-                resources.data.reload();
-            }
+            resources.reload();
         }
         PCLLoadoutDataInfo.reloadLoadouts();
     }

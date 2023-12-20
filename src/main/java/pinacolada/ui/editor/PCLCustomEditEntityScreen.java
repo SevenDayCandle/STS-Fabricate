@@ -50,7 +50,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V>, V extends FabricateItem>
+public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V, W>, V extends FabricateItem, W>
         extends PCLEffectWithCallback<Object> {
     public static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
     public static final float BUTTON_START_X = Settings.WIDTH * (0.35f);
@@ -268,7 +268,20 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     protected void deletePage(ArrayList<? extends PCLCustomEffectPage> list, int index) {
-        PCLCustomEffectPage ef = list.remove(index);
+        PCLCustomEffectPage ef = list.get(index);
+        int descIndex = getPageIndex(ef);
+        U builder = getBuilder();
+        String[] arr = builder.getDescString(builder.getLanguageMap().get(Settings.language));
+        if (arr != null && arr.length > descIndex) {
+            String[] truncated = new String[arr.length - 1];
+            System.arraycopy(arr, 0, truncated, 0, descIndex);
+            if (truncated.length > descIndex) {
+                System.arraycopy(arr, descIndex + 1, truncated, descIndex, arr.length - descIndex - 1);
+            }
+            builder.setDescString(builder.getLanguageMap().get(Settings.language), truncated);
+        }
+
+        ef = list.remove(index);
         setupPageButtons();
         if (ef == currentPage) {
             PCLCustomGenericPage firstPage = primaryPages.get(0);
@@ -292,6 +305,18 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     protected NewPageOption[] getNewPageOptions() {
         return EUIUtils.array(NewPageOption.Generic, NewPageOption.Power);
+    }
+
+    public int getPageIndex(PCLCustomEffectPage page) {
+        int res = effectPages.indexOf(page);
+        if (res > -1) {
+            return res;
+        }
+        res = powerPages.indexOf(page);
+        if (res > -1) {
+            return effectPages.size() + res;
+        }
+        return -1;
     }
 
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
@@ -548,7 +573,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
-    public PCLCustomEditEntityScreen<T, U, V> setOnSave(ActionT0 onSave) {
+    public PCLCustomEditEntityScreen<T, U, V, W> setOnSave(ActionT0 onSave) {
         this.onSave = onSave;
 
         return this;
@@ -681,9 +706,9 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         public static NewPageOption Power = new NewPageOption(PGR.core.strings.cedit_customPower, s -> s.initializePowerPage(s.makeNewPowerEffect()));
 
         public final String name;
-        public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
+        public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect;
 
-        public NewPageOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
+        public NewPageOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }
@@ -695,9 +720,9 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         Delete(PGR.core.strings.cedit_delete, (ls, i, sc) -> sc.deletePage(ls, i));
 
         public final String name;
-        public final ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?>> onSelect;
+        public final ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect;
 
-        ExistingPageOption(String name, ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?>> onSelect) {
+        ExistingPageOption(String name, ActionT3<ArrayList<? extends PCLCustomEffectPage>, Integer, PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }

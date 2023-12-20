@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredTexture;
@@ -16,14 +17,12 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
-import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDynamicCard> {
+public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDynamicCard, CardStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
@@ -125,7 +124,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         safeLoadValue(() -> rightCountUpgrade = data.rightCountUpgrade.clone());
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setTags(EUIUtils.mapAsNonnull(data.tags, PCLDynamicCardData::getSafeTag)));
         safeLoadValue(() -> setFlags(EUIUtils.mapAsNonnull(data.flags, CardFlag::get)));
         if (data.loadout != null) {
@@ -162,7 +161,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         }
     }
 
-    protected static CardStrings getInitialStrings() {
+    public static CardStrings getInitialStrings() {
         CardStrings retVal = new CardStrings();
         retVal.NAME = EUIUtils.EMPTY_STRING;
         retVal.DESCRIPTION = EUIUtils.EMPTY_STRING;
@@ -184,7 +183,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings) {
@@ -215,6 +214,11 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     }
 
     @Override
+    public CardStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
+    @Override
     public Texture getImage() {
         return portraitImage != null ? portraitImage.texture : null;
     }
@@ -229,10 +233,20 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return powers;
     }
 
+    @Override
+    public CardStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, CardStrings> getLanguageMap() {
+        return languageMap;
+    }
+
     public CardStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     @Override
@@ -312,16 +326,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return this;
     }
 
-    public PCLDynamicCardData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicCardData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     // Do not actually add this card to the available loadout cards
     @Override
     public PCLDynamicCardData setLoadout(PCLLoadout loadout, boolean colorless) {
@@ -353,6 +357,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return this;
     }
 
+    @Override
     public PCLDynamicCardData setText(CardStrings cardStrings) {
         return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
     }
@@ -361,12 +366,23 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return setText(name, "", "", new String[0]);
     }
 
-    public PCLDynamicCardData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public CardStrings copyStrings(CardStrings initial) {
+        return copyStrings(initial, new CardStrings());
     }
 
-    public PCLDynamicCardData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public CardStrings copyStrings(CardStrings initial, CardStrings dest) {
+        dest.NAME = initial.NAME;
+        dest.DESCRIPTION = initial.DESCRIPTION;
+        dest.UPGRADE_DESCRIPTION = initial.UPGRADE_DESCRIPTION;
+        if (initial.EXTENDED_DESCRIPTION != null) {
+            dest.EXTENDED_DESCRIPTION = initial.EXTENDED_DESCRIPTION.clone();
+        }
+        else {
+            dest.EXTENDED_DESCRIPTION = null;
+        }
+        return dest;
     }
 
     public PCLDynamicCardData setType(AbstractCard.CardType type) {

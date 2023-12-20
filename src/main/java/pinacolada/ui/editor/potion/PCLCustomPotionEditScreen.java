@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -17,7 +18,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion> {
+public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCustomPotionSlot, PCLDynamicPotionData, PCLDynamicPotion, PotionStrings> {
     protected PCLDynamicPotion preview;
     protected PCLCustomImageEffect imageEditor;
     protected EUITextBox previewDescription;

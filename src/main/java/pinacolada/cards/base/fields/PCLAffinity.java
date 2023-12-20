@@ -1,5 +1,6 @@
 package pinacolada.cards.base.fields;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +15,8 @@ import extendedui.interfaces.markers.CountingPanelItem;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -21,17 +24,13 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @JsonAdapter(PCLAffinity.PCLAffinityAdapter.class)
 public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, CountingPanelItem {
-    private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, Set<PCLAffinity>> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
     private static final HashMap<String, PCLAffinity> BY_SYMBOL = new HashMap<>();
-    private static final PCLAffinity[] NONE = new PCLAffinity[]{};
     public static final int ID_UNKNOWN = -3;
     public static final int ID_GENERAL = -2;
     public static final int ID_STAR = -1;
@@ -52,11 +51,11 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     public static final String SYM_STAR = "A";
     public static final String SYM_GENERAL = "W";
     public static final String SYM_UNKNOWN = "U";
+    private static PCLAffinity[] AFFINITIES = new PCLAffinity[]{};
     // Affinities with special purposes, these are deliberately not registered
     public static final PCLAffinity Unknown = new PCLAffinity(ID_UNKNOWN, SYM_UNKNOWN);
     public static final PCLAffinity General = new PCLAffinity(ID_GENERAL, SYM_GENERAL);
     public static final PCLAffinity Star = new PCLAffinity(ID_STAR, SYM_STAR);
-    private static PCLAffinity[] AFFINITIES = new PCLAffinity[]{};
     public static final PCLAffinity Red = registerAffinityAt(ID_RED, SYM_RED).setColor(new Color(0.8f, 0.5f, 0.5f, 1f));
     public static final PCLAffinity Blue = registerAffinityAt(ID_BLUE, SYM_BLUE).setColor(new Color(0.45f, 0.55f, 0.7f, 1f));
     public static final PCLAffinity Green = registerAffinityAt(ID_GREEN, SYM_GREEN).setColor(new Color(0.45f, 0.7f, 0.55f, 1f));
@@ -86,8 +85,8 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     }
 
     // TODO find way to make array iterator without making new copy and preserving privacy
-    public static PCLAffinity[] basic() {
-        return Arrays.copyOf(AFFINITIES, AFFINITIES.length);
+    public static List<PCLAffinity> basic() {
+        return Arrays.asList(AFFINITIES);
     }
 
     public static PCLAffinity get(int id) {
@@ -110,33 +109,24 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
         return EUIUtils.format("A-{0}", symbol);
     }
 
-    public static PCLAffinity[] getAvailableAffinities() {
+    public static Collection<PCLAffinity> getAvailableAffinities() {
+        if (GameUtilities.inGame()) {
+            return CombatManager.showAffinities();
+        }
         return getAvailableAffinities(GameUtilities.getActingColor());
     }
 
-    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc) {
+    public static Collection<PCLAffinity> getAvailableAffinities(AbstractCard.CardColor pc) {
         return getAvailableAffinities(pc, true);
     }
 
-    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc, boolean allowColorless) {
+    public static Collection<PCLAffinity> getAvailableAffinities(AbstractCard.CardColor pc, boolean allowColorless) {
         if (GameUtilities.isColorlessCardColor(pc)) {
-            return allowColorless ? basic() : NONE;
+            return allowColorless ? basic() : Collections.emptySet();
         }
         else {
-            return REGISTERED_TYPES.getOrDefault(pc, NONE);
+            return REGISTERED_TYPES.getOrDefault(pc, Collections.emptySet());
         }
-    }
-
-    public static List<PCLAffinity> getAvailableAffinitiesAsList() {
-        return Arrays.asList(getAvailableAffinities());
-    }
-
-    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc) {
-        return Arrays.asList(getAvailableAffinities(pc));
-    }
-
-    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc, boolean allowColorless) {
-        return Arrays.asList(getAvailableAffinities(pc, allowColorless));
     }
 
     public static int getCount() {
@@ -144,7 +134,7 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     }
 
     public static PCLAffinity getRandomAvailableAffinity() {
-        PCLAffinity affinity = GameUtilities.getRandomElement(getAvailableAffinities());
+        PCLAffinity affinity = GameUtilities.getRandomElement(new ArrayList<>(getAvailableAffinities()));
         return affinity != null ? affinity : General;
     }
 
@@ -177,7 +167,7 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     }
 
     public static void registerAvailableAffinities(AbstractCard.CardColor pc, PCLAffinity... affinities) {
-        REGISTERED_TYPES.putIfAbsent(pc, affinities);
+        REGISTERED_TYPES.putIfAbsent(pc, new TreeSet<PCLAffinity>(Arrays.asList(affinities)));
     }
 
     @Override

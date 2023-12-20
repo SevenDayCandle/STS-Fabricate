@@ -350,7 +350,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
                 geditor.setActive(showGlyphs);
             }
 
-            if (activeButtons.size() > 0) {
+            if (!activeButtons.isEmpty()) {
                 EUITourTooltip.queueFirstView(PGR.config.tourCharSelect,
                         EUIUtils.map(activeButtons, b -> b.makeTour(true)));
             }

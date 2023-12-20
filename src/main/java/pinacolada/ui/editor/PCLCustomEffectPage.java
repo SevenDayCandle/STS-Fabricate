@@ -6,12 +6,15 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
+import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.effects.screen.PCLCustomDescriptionEditEffect;
+import pinacolada.effects.screen.PCLCustomFlagEditEffect;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PPrimary;
@@ -29,17 +32,18 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public static final float OFFSET_AMOUNT = scale(10);
     public static final float START_Y = Settings.HEIGHT * (0.8f);
 
-    public final PCLCustomEditEntityScreen<?, ?, ?> screen;
+    public final PCLCustomEditEntityScreen<?, ?, ?, ?> screen;
     protected EUIHitbox hb;
     protected EUILabel header;
     protected EUITextBox info;
     protected PCLCustomEffectEditingPane currentEditingSkill;
     protected PCLCustomEffectSelectorPane buttonsPane;
+    protected EUIButton descButton;
     protected String baseText;
     public PPrimary<?> rootEffect;
     public PCLCustomEffectNode root;
 
-    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?> screen, EUIHitbox hb, PSkill<?> sourceEffect, String title) {
+    public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?, ?, ?> screen, EUIHitbox hb, PSkill<?> sourceEffect, String title) {
         this.screen = screen;
         this.hb = hb;
         this.baseText = title;
@@ -55,6 +59,12 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
                 .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 0.85f);
+        descButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.6f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
+                .setColor(Color.GRAY)
+                .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_editDesc)
+                .setTooltip(PGR.core.strings.cedit_editDesc, PGR.core.strings.cetut_editDesc)
+                .setOnClick(this::openDescDialog);
         this.canDragScreen = false;
 
         initializeEffects(sourceEffect);
@@ -89,7 +99,8 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public EUITourTooltip[] getTour() {
         return EUIUtils.array(
                 new EUITourTooltip(buttonsPane.hb, getTitle(), PGR.core.strings.cetut_topBarTutorial)
-                        .setFlash(buttonsPane)
+                        .setFlash(buttonsPane),
+                descButton.makeTour(true)
         );
     }
 
@@ -105,6 +116,15 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         EUITourTooltip.queueFirstView(PGR.config.tourEditorEffect,
                 getTour()
         );
+    }
+
+    protected void openDescDialog() {
+        screen.currentDialog = new PCLCustomDescriptionEditEffect(PGR.core.strings.cedit_editDesc, screen.getBuilder(), screen.getPageIndex(this))
+                .addCallback(dialog -> {
+                    if (dialog != null) {
+                        screen.modifyAllBuilders((e, i) -> e.updateTextFromMap(dialog.currentLanguageMap));
+                    }
+                });
     }
 
     @Override
@@ -127,6 +147,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         this.header.tryRender(sb);
         this.buttonsPane.tryRender(sb);
         this.info.tryRender(sb);
+        this.descButton.tryRender(sb);
 
         if (this.currentEditingSkill != null) {
             this.currentEditingSkill.render(sb);
@@ -169,6 +190,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
         this.header.tryUpdate();
         this.info.tryUpdate();
+        this.descButton.tryUpdate();
     }
 
     public void updateRootEffect() {

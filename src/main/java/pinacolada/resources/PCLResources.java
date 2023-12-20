@@ -245,6 +245,12 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
         this.isLoaded = true;
     }
 
+    public void reload() {
+        if (data != null) {
+            data.reload();
+        }
+    }
+
     public void setupTooltips() {
         tooltips = getTooltips();
         strings = getStrings();

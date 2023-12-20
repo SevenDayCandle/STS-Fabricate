@@ -1903,7 +1903,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @SpireOverride
     protected void renderBannerImage(SpriteBatch sb, float drawX, float drawY) {
-        if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this))) {
+        if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this) || (GameUtilities.inGame() && !CombatManager.showAffinities().isEmpty()))) {
             affinities.renderOnCard(sb, this, AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this));
         }
         float sc = isPopup ? 0.5f : 1f;

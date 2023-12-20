@@ -177,7 +177,8 @@
 												"Flash Color {0}",
 												"Allow Focus to Scale Evoke",
 												"Allow Focus to Scale Trigger",
-												"Effekseer"
+												"Effekseer",
+												"Edit Description"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -272,7 +273,8 @@
 												"Determines the color of the flash that appears when this #yOrb is #yChanneled or #yEvoked.",
 												"Determines whether this #yOrb's #yTrigger amount is affected by #yOrb modifiers.",
 												"Determines whether this #yOrb's #yEvoke amount is affected by #yOrb modifiers.",
-												"A visual effect rendered with the Effekseer engine. | {#b:This effect will not play if Effekseer is disabled in EUI's settings or if Effekseer failed to load.}"
+												"A visual effect rendered with the Effekseer engine. | {#b:This effect will not play if Effekseer is disabled in EUI's settings or if Effekseer failed to load.}",
+												"Customize the description for this effect. | {#r:WARNING: Using a custom description may prevent certain values on effects from displaying or updating properly.}"
 								]
 				},
 				"pcl:CardPile": {

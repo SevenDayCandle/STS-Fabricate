@@ -5,15 +5,11 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.BlightStrings;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.BlightTier;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.blights.PCLCustomBlightSlot;
-import pinacolada.blights.PCLDynamicBlight;
-import pinacolada.blights.PCLBlightData;
-import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -23,7 +19,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<PCLDynamicBlight> {
+public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<PCLDynamicBlight, BlightStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, BlightStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, BlightStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, BlightStrings> languageMap = new HashMap<>();
@@ -74,7 +70,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setTier(BlightTier.valueOf(data.tier)));
         safeLoadValue(() -> setUnique(data.unique));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -118,6 +114,11 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
     }
 
     @Override
+    public BlightStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
+    @Override
     public Texture getImage() {
         return portraitImage;
     }
@@ -132,10 +133,14 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
         return powers;
     }
 
-    public BlightStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    @Override
+    public BlightStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, BlightStrings> getLanguageMap() {
+        return languageMap;
     }
 
     @Override
@@ -170,16 +175,6 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
         return this;
     }
 
-    public PCLDynamicBlightData setLanguageMap(HashMap<Settings.GameLanguage, BlightStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicBlightData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicBlightData setName(String name) {
         this.strings.NAME = name;
 
@@ -201,11 +196,20 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
         return setText(name, new String[0]);
     }
 
-    public PCLDynamicBlightData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public BlightStrings copyStrings(BlightStrings initial) {
+        return copyStrings(initial, new BlightStrings());
     }
 
-    public PCLDynamicBlightData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public BlightStrings copyStrings(BlightStrings initial, BlightStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTION != null) {
+            dest.DESCRIPTION = initial.DESCRIPTION.clone();
+        }
+        else {
+            dest.DESCRIPTION = null;
+        }
+        return dest;
     }
 }

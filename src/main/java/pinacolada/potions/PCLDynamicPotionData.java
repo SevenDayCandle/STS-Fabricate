@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIUtils;
@@ -19,7 +20,7 @@ import pinacolada.skills.skills.PTrigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<PCLDynamicPotion> {
+public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<PCLDynamicPotion, PotionStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, PotionStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PotionStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, PotionStrings> languageMap = new HashMap<>();
@@ -76,7 +77,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         safeLoadValue(() -> setEffect(AbstractPotion.PotionEffect.valueOf(data.effect)));
         safeLoadValue(() -> setSize(AbstractPotion.PotionSize.valueOf(data.size)));
         safeLoadValue(() -> setBottleColor(Color.valueOf(data.liquidColor), Color.valueOf(data.hybridColor), Color.valueOf(data.spotsColor)));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -99,7 +100,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
     public static PotionStrings getStringsForLanguage(HashMap<Settings.GameLanguage, PotionStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     public static HashMap<Settings.GameLanguage, PotionStrings> parseLanguageStrings(String languageStrings) {
@@ -121,6 +122,11 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
     }
 
     @Override
+    public PotionStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
+    @Override
     public Texture getImage() {
         return portraitImage;
     }
@@ -135,10 +141,14 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         return powers;
     }
 
-    public PotionStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    @Override
+    public PotionStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, PotionStrings> getLanguageMap() {
+        return languageMap;
     }
 
     @Override
@@ -173,16 +183,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         return this;
     }
 
-    public PCLDynamicPotionData setLanguageMap(HashMap<Settings.GameLanguage, PotionStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicPotionData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicPotionData setName(String name) {
         this.strings.NAME = name;
 
@@ -204,11 +204,20 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         return setText(name, new String[0]);
     }
 
-    public PCLDynamicPotionData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public PotionStrings copyStrings(PotionStrings initial) {
+        return copyStrings(initial, new PotionStrings());
     }
 
-    public PCLDynamicPotionData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public PotionStrings copyStrings(PotionStrings initial, PotionStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTIONS != null) {
+            dest.DESCRIPTIONS = initial.DESCRIPTIONS.clone();
+        }
+        else {
+            dest.DESCRIPTIONS = null;
+        }
+        return dest;
     }
 }

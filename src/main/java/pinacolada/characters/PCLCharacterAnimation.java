@@ -1,11 +1,16 @@
 package pinacolada.characters;
 
+import basemod.BaseMod;
 import basemod.ReflectionHacks;
 import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;
+import basemod.animations.SpriterAnimation;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
+import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -13,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import static pinacolada.utilities.GameUtilities.JSON_FILTER;
+
 public class PCLCharacterAnimation extends AbstractAnimation {
+    private static final String ANIMATION_PATH = PCLCustomLoadable.FOLDER + "/animations";
     private static final HashMap<String, AbstractAnimation> creatureAnimations = new HashMap<>();
     private static final HashMap<String, String> creatureImages = new HashMap<>();
     private static final ArrayList<String> playerIDs = new ArrayList<>();
@@ -75,6 +83,23 @@ public class PCLCharacterAnimation extends AbstractAnimation {
         return playerIDs.contains(id);
     }
 
+    // TODO load all enemies
+    // TODO load custom animations folder
+    public static void postInitialize() {
+        FileHandle folder = Gdx.files.local(ANIMATION_PATH);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        for (FileHandle f : folder.list(JSON_FILTER)) {
+            switch (f.extension()) {
+                case "json":
+                    break;
+                case "scml":
+                    break;
+            }
+        }
+    }
+
     public static void registerCreatureAnimation(AbstractCreature creature, AbstractAnimation animation) {
         String id = getIdentifierString(creature);
         if (id != null && !creatureAnimations.containsKey(id)) {
@@ -103,6 +128,24 @@ public class PCLCharacterAnimation extends AbstractAnimation {
         AbstractAnimation animation = ReflectionHacks.getPrivate(creature, CustomMonster.class, "animation");
         if (animation != null) {
             creatureAnimations.putIfAbsent(getIdentifierString(creature), animation);
+        }
+    }
+
+    public static void registerCustomAnimation(String id, String atlasUrl, String skeletonUrl, float scale, boolean isPlayer) {
+        if (id != null && !creatureAnimations.containsKey(id)) {
+            if (isPlayer) {
+                playerIDs.add(id);
+            }
+            creatureAnimations.put(id, new PCLCharacterAnimation(atlasUrl, skeletonUrl, scale));
+        }
+    }
+
+    public static void registerCustomSpriter(String id, String scml, boolean isPlayer) {
+        if (id != null && !creatureAnimations.containsKey(id)) {
+            if (isPlayer) {
+                playerIDs.add(id);
+            }
+            creatureAnimations.put(id, new SpriterAnimation(scml));
         }
     }
 

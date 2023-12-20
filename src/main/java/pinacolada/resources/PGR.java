@@ -77,6 +77,7 @@ import pinacolada.ui.menu.*;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,6 +87,7 @@ import static pinacolada.utilities.GameUtilities.screenW;
 
 // Copied and modified from STS-AnimatorMod
 public class PGR {
+    private static final ArrayList<PCLResources<?,?,?,?>> resourceList = new ArrayList<>();
     private static final HashMap<AbstractCard.CardColor, PCLResources<?, ?, ?, ?>> colorResourceMap = new HashMap<>();
     private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?, ?, ?, ?>> playerResourceMap = new HashMap<>();
     private static final String IMAGES_FOLDER = "images/";
@@ -246,8 +248,12 @@ public class PGR {
         return getLanguagePack().getPowerStrings(powerID);
     }
 
+    public static Collection<PCLResources<?, ?, ?, ?>> getRegisteredPlayerResources() {
+        return playerResourceMap.values();
+    }
+
     public static Collection<PCLResources<?, ?, ?, ?>> getRegisteredResources() {
-        return colorResourceMap.values();
+        return resourceList;
     }
 
     public static String getRelicImage(String id) {
@@ -501,11 +507,20 @@ public class PGR {
     }
 
     public static void registerResource(PCLResources<?, ?, ?, ?> resources) {
+        registerResource(resources, true, true);
+    }
+
+    public static void registerResource(PCLResources<?, ?, ?, ?> resources, boolean registerColor, boolean registerPlayerClass) {
         if (core == null) {
             throw new RuntimeException("No core present");
         }
-        colorResourceMap.put(resources.cardColor, resources);
-        playerResourceMap.put(resources.playerClass, resources);
+        resourceList.add(resources);
+        if (resources.cardColor != null && registerColor) {
+            colorResourceMap.putIfAbsent(resources.cardColor, resources);
+        }
+        if (resources.playerClass != null && registerPlayerClass) {
+            playerResourceMap.putIfAbsent(resources.playerClass, resources);
+        }
         resources.initializeColor();
     }
 

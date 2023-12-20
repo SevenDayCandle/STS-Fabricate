@@ -3,6 +3,7 @@ package pinacolada.orbs;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.localization.OrbStrings;
@@ -16,6 +17,7 @@ import pinacolada.blights.PCLBlightData;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLSFX;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.delay.DelayTiming;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 
 import static extendedui.EUIUtils.array;
 
+@JsonAdapter(PCLOrbData.PCLOrbDataAdapter.class)
 public class PCLOrbData extends PCLGenericData<AbstractOrb> implements KeywordProvider {
     private static final Map<String, PCLOrbData> STATIC_DATA = new HashMap<>();
 

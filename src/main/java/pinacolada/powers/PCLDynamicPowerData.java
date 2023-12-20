@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
@@ -24,7 +25,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 import java.util.*;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
-public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower> {
+public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower, PowerStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, PowerStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PowerStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, PowerStrings> languageMap = new HashMap<>();
@@ -84,7 +85,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         safeLoadValue(() -> setLimits(data.minValue, data.maxValue));
         safeLoadValue(() -> setPriority(data.priority));
         safeLoadValue(() -> setTurns(data.turns));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(powers, PSkill::get), true, true));
     }
@@ -128,6 +129,11 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         return PGR.core.cardColor;
     }
 
+    @Override
+    public PowerStrings getDefaultStrings() {
+        return getInitialStrings();
+    }
+
     public String getEffectTextForPreview(int level) {
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
@@ -164,10 +170,14 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         return powers;
     }
 
-    public PowerStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    @Override
+    public PowerStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, PowerStrings> getLanguageMap() {
+        return languageMap;
     }
 
     @Override
@@ -205,16 +215,6 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         return this;
     }
 
-    public PCLDynamicPowerData setLanguageMap(HashMap<Settings.GameLanguage, PowerStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicPowerData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicPowerData setName(String name) {
         this.strings.NAME = name;
 
@@ -242,6 +242,23 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
 
     public PCLDynamicPowerData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
+    }
+
+    @Override
+    public PowerStrings copyStrings(PowerStrings initial) {
+        return copyStrings(initial, new PowerStrings());
+    }
+
+    @Override
+    public PowerStrings copyStrings(PowerStrings initial, PowerStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTIONS != null) {
+            dest.DESCRIPTIONS = initial.DESCRIPTIONS.clone();
+        }
+        else {
+            dest.DESCRIPTIONS = null;
+        }
+        return dest;
     }
 
     public PCLDynamicPowerData updateTooltip() {

@@ -134,7 +134,7 @@ public class PCLCustomFlagDialog extends EUIDialog<PCLCustomFlagDialog> {
     protected String getStringsForLanguage(Settings.GameLanguage language) {
         return currentLanguageMap.getOrDefault(language,
                 currentLanguageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        currentLanguageMap.size() > 0 ? currentLanguageMap.entrySet().iterator().next().getValue() : EUIUtils.EMPTY_STRING));
+                        !currentLanguageMap.isEmpty() ? currentLanguageMap.entrySet().iterator().next().getValue() : EUIUtils.EMPTY_STRING));
     }
 
     public void open(PCLCustomFlagInfo info) {

@@ -2,6 +2,7 @@ package pinacolada.ui.editor.card;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -22,7 +23,7 @@ import pinacolada.ui.editor.PCLCustomGenericPage;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard> {
+public class PCLCustomCardEditScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData, PCLDynamicCard, CardStrings> {
     public static NewPageOption Damage = new NewPageOption(PGR.core.strings.cedit_damage, s -> s.initializeEffectPage(
             s instanceof PCLCustomCardEditScreen ? ((PCLCustomCardEditScreen)s).makeNewDamageEffect() : s.makeEffectPage(null))
     );

@@ -108,6 +108,7 @@ public class CombatManager extends EUIBase {
     private static GameActionManager.Phase currentPhase;
     private static HashMap<AbstractCreature, Integer> estimatedDamages;
     private static boolean shouldRefreshHand;
+    private static final TreeSet<PCLAffinity> showAffinities = new TreeSet<>();
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
     private static PCLUseInfo lastInfo = null; // Needed for has played checks
@@ -308,6 +309,11 @@ public class CombatManager extends EUIBase {
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
+        showAffinities.clear();
+        showAffinities.addAll(PCLAffinity.getAvailableAffinities(GameUtilities.getActingColor()));
+        for (PCLPlayerMeter meter : CombatManager.playerSystem.getActiveMeters()) {
+            showAffinities.addAll(PCLAffinity.getAvailableAffinities(meter.resources.cardColor));
+        }
         lastInfo = null;
         summons.initialize();
         maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
@@ -1096,6 +1102,10 @@ public class CombatManager extends EUIBase {
 
     public static boolean shouldFlipPlayer(AbstractPlayer p) {
         return p.hasPower(SurroundedPower.POWER_ID);
+    }
+
+    public static TreeSet<PCLAffinity> showAffinities() {
+        return showAffinities;
     }
 
     public static void subscribe(PCLCombatSubscriber subscriber) {

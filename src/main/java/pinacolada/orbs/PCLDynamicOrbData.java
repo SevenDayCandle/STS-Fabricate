@@ -11,7 +11,6 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
-import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDynamicOrb> {
+public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDynamicOrb, OrbStrings> {
     private static final TypeToken<HashMap<Settings.GameLanguage, OrbStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, OrbStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, OrbStrings> languageMap = new HashMap<>();
@@ -91,7 +90,7 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         safeLoadValue(() -> setRotationSpeed(data.rotationSpeed));
         safeLoadValue(() -> setSfx(data.sfx));
         safeLoadValue(() -> setTiming(DelayTiming.valueOf(form.timing)));
-        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(form.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(form.powerEffects, PSkill::get), true, true));
     }
@@ -110,7 +109,7 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
     public static OrbStrings getStringsForLanguage(HashMap<Settings.GameLanguage, OrbStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     public static HashMap<Settings.GameLanguage, OrbStrings> parseLanguageStrings(String languageStrings) {
@@ -129,6 +128,11 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
     @Override
     public AbstractCard.CardColor getCardColor() {
         return PGR.core.cardColor;
+    }
+
+    @Override
+    public OrbStrings getDefaultStrings() {
+        return getInitialStrings();
     }
 
     public String getEffectTextForPreview(int level) {
@@ -165,10 +169,14 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         return powers;
     }
 
-    public OrbStrings getStringsForLanguage(Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    @Override
+    public OrbStrings getStrings() {
+        return strings;
+    }
+
+    @Override
+    public HashMap<Settings.GameLanguage, OrbStrings> getLanguageMap() {
+        return languageMap;
     }
 
     @Override
@@ -206,16 +214,6 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         return this;
     }
 
-    public PCLDynamicOrbData setLanguageMap(HashMap<Settings.GameLanguage, OrbStrings> languageMap) {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicOrbData setLanguageMapEntry(Settings.GameLanguage language) {
-        this.languageMap.put(language, this.strings);
-        return this;
-    }
-
     public PCLDynamicOrbData setName(String name) {
         this.strings.NAME = name;
 
@@ -237,12 +235,21 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         return setText(name, new String[0]);
     }
 
-    public PCLDynamicOrbData setTextForLanguage() {
-        return setTextForLanguage(Settings.language);
+    @Override
+    public OrbStrings copyStrings(OrbStrings initial) {
+        return copyStrings(initial, new OrbStrings());
     }
 
-    public PCLDynamicOrbData setTextForLanguage(Settings.GameLanguage language) {
-        return setText(getStringsForLanguage(language));
+    @Override
+    public OrbStrings copyStrings(OrbStrings initial, OrbStrings dest) {
+        dest.NAME = initial.NAME;
+        if (initial.DESCRIPTION != null) {
+            dest.DESCRIPTION = initial.DESCRIPTION.clone();
+        }
+        else {
+            dest.DESCRIPTION = null;
+        }
+        return dest;
     }
 
     public PCLDynamicOrbData updateTooltip() {

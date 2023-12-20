@@ -7,11 +7,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 
 import static pinacolada.cards.base.fields.PCLAffinity.General;
@@ -179,7 +181,7 @@ public class PCLCardAffinities {
     }
 
     public ArrayList<PCLAffinity> getAffinities(boolean convertStar, boolean availableOnly) {
-        HashSet<PCLAffinity> available = new HashSet<>(Arrays.asList(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic()));
+        HashSet<PCLAffinity> available = new HashSet<>(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic());
         final ArrayList<PCLAffinity> list = new ArrayList<>();
         if (convertStar && hasStar()) {
             list.addAll(available);
@@ -197,7 +199,10 @@ public class PCLCardAffinities {
         return list;
     }
 
-    protected PCLAffinity[] getAvailableAffinities() {
+    protected Collection<PCLAffinity> getAvailableAffinities() {
+        if (GameUtilities.inGame()) {
+            return CombatManager.showAffinities();
+        }
         return PCLAffinity.getAvailableAffinities(GameUtilities.getActingColor(), !(card instanceof PCLDynamicCard));
     }
 
@@ -435,7 +440,7 @@ public class PCLCardAffinities {
             }
         }
 
-        if (sorted.isEmpty() && (PGR.config.showIrrelevantProperties.get() || getAvailableAffinities().length > 0)) {
+        if (sorted.isEmpty() && (PGR.config.showIrrelevantProperties.get() || getAvailableAffinities().size() > 0)) {
             sorted.add(new PCLCardAffinity(General, 1));
         }
 

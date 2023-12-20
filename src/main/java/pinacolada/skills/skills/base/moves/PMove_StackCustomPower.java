@@ -60,7 +60,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        List<PSkill<?>> powerEffects = source != null ? source.getPowerEffects() : requestor instanceof EditorMaker ? ((EditorMaker<?>) requestor).getPowers() : null;
+        List<PSkill<?>> powerEffects = source != null ? source.getPowerEffects() : requestor instanceof EditorMaker ? ((EditorMaker<?, ?>) requestor).getPowers() : null;
         if (powerEffects != null) {
             for (Integer i : fields.indexes) {
                 if (i >= 0 && powerEffects.size() > i) {

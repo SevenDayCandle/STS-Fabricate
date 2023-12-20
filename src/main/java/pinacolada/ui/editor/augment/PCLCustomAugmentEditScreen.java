@@ -14,12 +14,13 @@ import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.augments.PCLDynamicAugment;
 import pinacolada.augments.PCLDynamicAugmentData;
 import pinacolada.effects.screen.PCLCustomImageEffect;
+import pinacolada.misc.AugmentStrings;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
-public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCustomAugmentSlot, PCLDynamicAugmentData, PCLDynamicAugment> {
+public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCustomAugmentSlot, PCLDynamicAugmentData, PCLDynamicAugment, AugmentStrings> {
     protected PCLAugmentRenderable preview;
     protected EUITextBox previewDescription;
     protected Texture loadedImage;
