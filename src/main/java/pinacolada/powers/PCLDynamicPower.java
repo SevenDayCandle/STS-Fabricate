@@ -3,6 +3,7 @@ package pinacolada.powers;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.utilities.ColoredString;
+import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -56,11 +57,15 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
         return this;
     }
 
-    public void setupMoves(PCLDynamicPowerData data) {
+    @Override
+    public void setupMoves(EditorMaker<?,?> data) {
         clearSkills();
-        for (PSkill<?> skill : data.moves) {
+        int exDescInd = -1;
+        for (PSkill<?> skill : data.getMoves()) {
+            exDescInd += 1;
             if (!PSkill.isSkillBlank(skill)) {
                 PSkill<?> effect = skill.makeCopy();
+                putCustomDesc(effect, exDescInd);
                 addUseMove(effect);
                 if (effect instanceof PTrigger) {
                     ((PTrigger) effect).controller = this;
@@ -72,6 +77,15 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
                     triggerCondition = use;
                 }
             }
+        }
+        for (PSkill<?> pe : data.getPowers()) {
+            exDescInd += 1;
+            if (PSkill.isSkillBlank(pe)) {
+                continue;
+            }
+            PSkill<?> pec = pe.makeCopy();
+            putCustomDesc(pec, exDescInd);
+            addPowerMove(pec);
         }
         updateDescription();
     }

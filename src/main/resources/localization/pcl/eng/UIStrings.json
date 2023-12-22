@@ -30,6 +30,9 @@
 												"lose {0} {1}",
 												"move {0} to {1}",
 												"move {0} in {1} to {2}",
+												"multiply {0} by {1}",
+												"multiply {0} of {1} by {2}",
+												"multiply {0} of {1} from {2} by {3}",
 												"reduce {0} by {1}",
 												"reduce {0} of {1} by {2}",
 												"reduce {0} of {1} from {2} by {3}",
@@ -178,7 +181,8 @@
 												"Allow Focus to Scale Evoke",
 												"Allow Focus to Scale Trigger",
 												"Effekseer",
-												"Edit Description"
+												"Edit Description",
+												"Preview"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -274,7 +278,17 @@
 												"Determines whether this #yOrb's #yTrigger amount is affected by #yOrb modifiers.",
 												"Determines whether this #yOrb's #yEvoke amount is affected by #yOrb modifiers.",
 												"A visual effect rendered with the Effekseer engine. | {#b:This effect will not play if Effekseer is disabled in EUI's settings or if Effekseer failed to load.}",
-												"Customize the description for this effect. | {#r:WARNING: Using a custom description may prevent certain values on effects from displaying or updating properly.}"
+												"Customize the description for this effect. | {#r:Custom descriptions may not work correctly with certain Fabricate settings.}",
+												"Available syntax",
+												"| : Line break",
+												"{#FF0000:text} : Colored text",
+												"!D! : Damage (cards only)",
+												"!B! : Block (cards only)",
+												"[X] : Icon for keyword X",
+												"~E0~ : Amount for skill at position 0",
+												"~G0~ : Extra for skill at position 0",
+												"~H0~ : Extra 2 for skill at position 0",
+												"~I0~ : Scope for skill at position 0"
 								]
 				},
 				"pcl:CardPile": {

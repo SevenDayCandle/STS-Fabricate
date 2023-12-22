@@ -192,7 +192,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     }
 
     public List<PCLLoadout> getAvailableLoadouts() {
-        return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && l.cardDatas.size() > 0 && l.unlockLevel >= 0);
+        return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && !l.cardDatas.isEmpty() && l.unlockLevel >= 0);
     }
 
     public CharacterStrings getCharacterStrings() {

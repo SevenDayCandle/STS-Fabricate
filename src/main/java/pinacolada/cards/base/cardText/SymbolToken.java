@@ -50,7 +50,7 @@ public class SymbolToken extends PCLTextToken {
                             tokenCache.put(key, token);
                         }
                         else {
-                            EUIUtils.logError(parser.card, "Unknown symbol type: [" + key + "], Raw text is: " + parser.text);
+                            EUIUtils.logInfoIfDebug(parser.card, "Unknown symbol type: [" + key + "], Raw text is: " + parser.text);
                             return i + 1;
                         }
                     }

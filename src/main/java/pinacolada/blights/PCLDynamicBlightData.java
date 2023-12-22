@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.OrbStrings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.BlightTier;
 import pinacolada.interfaces.markers.EditorMaker;
@@ -111,6 +112,11 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
     @Override
     public AbstractCard.CardColor getCardColor() {
         return cardColor;
+    }
+
+    @Override
+    public String[] getDescString(BlightStrings item) {
+        return item.DESCRIPTION;
     }
 
     @Override

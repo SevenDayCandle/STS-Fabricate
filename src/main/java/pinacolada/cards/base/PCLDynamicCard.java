@@ -306,7 +306,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     @Override
-    public EditorMaker getDynamicData() {
+    public PCLDynamicCardData getDynamicData() {
         return builder;
     }
 
@@ -407,7 +407,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         }
     }
 
-    protected void putCustomDesc(PSkill<?> skill, int index) {
+    public void putCustomDesc(PSkill<?> skill, int index) {
         if (skill != null) {
             CardStrings s = builder.getStringsForLanguage(Settings.language);
             if (s != null && s.EXTENDED_DESCRIPTION != null && s.EXTENDED_DESCRIPTION.length > index) {
@@ -518,11 +518,12 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
 
         for (PSkill<?> pe : builder.powers) {
             exDescInd += 1;
-            putCustomDesc(pe, exDescInd);
             if (PSkill.isSkillBlank(pe)) {
                 continue;
             }
-            addPowerMove(pe.makeCopy());
+            PSkill<?> pec = pe.makeCopy();
+            putCustomDesc(pec, exDescInd);
+            addPowerMove(pec);
         }
 
         initializeDescription();

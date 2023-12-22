@@ -59,6 +59,10 @@ public interface EditorMaker<T, U> {
         return map;
     }
 
+    default String[] getDescString() {
+        return getDescString(getStringsForLanguage(Settings.language));
+    }
+
     default String[] getDescString(U item) {
         try {
             for (Field f : item.getClass().getFields()) {
@@ -77,6 +81,19 @@ public interface EditorMaker<T, U> {
             EUIUtils.logError(this, "Object doesn't have a description array???");
         }
         return new String[] {};
+    }
+
+    default PSkill<?> getEffectAtIndex(int i) {
+        List<PSkill<?>> moves = getMoves();
+        if (moves.size() > i) {
+            return moves.get(i);
+        }
+        i -= moves.size();
+        List<PSkill<?>> powers = getPowers();
+        if (powers.size() > i) {
+            return powers.get(i);
+        }
+        return null;
     }
 
     default U getStringsForLanguage(Settings.GameLanguage language) {

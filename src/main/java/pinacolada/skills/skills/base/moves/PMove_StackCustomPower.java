@@ -81,7 +81,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         }
 
         // Perpsective of self depends on the target this is applied to
-        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, requestor, true);
+        String base = joinEffectDisplayTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, requestor, true);
         if (baseAmount > 0) {
             return (TEXT.cond_forTurns(getAmountRawString()) + ", " + StringUtils.uncapitalize(base));
         }

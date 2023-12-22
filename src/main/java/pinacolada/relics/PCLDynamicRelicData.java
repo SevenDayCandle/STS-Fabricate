@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.BlightStrings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
@@ -112,7 +113,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     public static RelicStrings getStringsForLanguage(HashMap<Settings.GameLanguage, RelicStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     public static HashMap<Settings.GameLanguage, RelicStrings> parseLanguageStrings(String languageStrings) {
@@ -130,6 +131,11 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     @Override
     public AbstractCard.CardColor getCardColor() {
         return cardColor;
+    }
+
+    @Override
+    public String[] getDescString(RelicStrings item) {
+        return item.DESCRIPTIONS;
     }
 
     @Override

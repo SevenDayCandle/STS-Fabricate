@@ -58,14 +58,4 @@ public class PCLDynamicAugment extends PCLAugment implements FabricateItem {
             ef.setAmountFromCard().onUpgrade();
         }
     }
-
-    public void setupMoves(PCLDynamicAugmentData data) {
-        clearSkills();
-        for (PSkill<?> skill : data.moves) {
-            if (!PSkill.isSkillBlank(skill)) {
-                PSkill<?> effect = skill.makeCopy();
-                addUseMove(effect);
-            }
-        }
-    }
 }

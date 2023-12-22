@@ -105,22 +105,4 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem, C
     public void setupImages(String path) {
         // No-op, handle images in setupBuilder
     }
-
-    public void setupMoves(PCLDynamicRelicData builder) {
-        clearSkills();
-        for (PSkill<?> effect : builder.moves) {
-            if (PSkill.isSkillBlank(effect)) {
-                continue;
-            }
-            addUseMove(effect.makeCopy());
-        }
-
-        for (PSkill<?> pe : builder.powers) {
-            if (PSkill.isSkillBlank(pe)) {
-                continue;
-            }
-            addPowerMove(pe.makeCopy());
-        }
-
-    }
 }

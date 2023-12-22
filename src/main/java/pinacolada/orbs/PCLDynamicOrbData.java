@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.localization.BlightStrings;
 import com.megacrit.cardcrawl.localization.OrbStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -131,16 +133,23 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
     }
 
     @Override
+    public String[] getDescString(OrbStrings item) {
+        return item.DESCRIPTION;
+    }
+
+    @Override
     public OrbStrings getDefaultStrings() {
         return getInitialStrings();
     }
 
     public String getEffectTextForPreview(int level) {
+        String[] desc = strings.DESCRIPTION;
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
-        for (PSkill<?> move : moves) {
+        for (int i = 0; i < moves.size(); i++) {
+            PSkill<?> move = moves.get(i);
             if (!PSkill.isSkillBlank(move)) {
                 move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
-                String pText = move.getPowerText(this);
+                String pText = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? move.getUncascadedPowerOverride(desc[i]) : move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
@@ -151,7 +160,18 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
     }
 
     public String getEffectTextForTip() {
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, move -> !PSkill.isSkillBlank(move) ? StringUtils.capitalize(move.getPowerTextForTooltip(this)) : null, moves));
+        String[] desc = strings.DESCRIPTION;
+        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+        for (int i = 0; i < moves.size(); i++) {
+            PSkill<?> skill = moves.get(i);
+            if (!PSkill.isSkillBlank(skill)) {
+                String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i]) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
+                if (s != null) {
+                    sj.add(s);
+                }
+            }
+        }
+        return StringUtils.capitalize(sj.toString());
     }
 
     @Override
@@ -227,12 +247,23 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         return this;
     }
 
+    @Override
     public PCLDynamicOrbData setText(OrbStrings str) {
         return setText(str.NAME, str.DESCRIPTION);
     }
 
     public PCLDynamicOrbData setText(String name) {
         return setText(name, new String[0]);
+    }
+
+    @Override
+    public PCLDynamicOrbData setTextForLanguage() {
+        return setTextForLanguage(Settings.language);
+    }
+
+    @Override
+    public PCLDynamicOrbData setTextForLanguage(Settings.GameLanguage language) {
+        return setText(getStringsForLanguage(language));
     }
 
     @Override
@@ -253,17 +284,13 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
     }
 
     public PCLDynamicOrbData updateTooltip() {
+        setTextForLanguage();
         tooltip = EUIKeywordTooltip.findByIDTemp(ID);
         if (tooltip == null) {
             tooltip = new EUIKeywordTooltip(strings.NAME);
         }
         tooltip.title = strings.NAME;
-        if (this.strings.DESCRIPTION.length > 0) {
-            tooltip.setDescription(this.strings.DESCRIPTION[0]);
-        }
-        else {
-            tooltip.setDescription(getEffectTextForTip());
-        }
+        tooltip.setDescription(getEffectTextForTip());
         Texture tex = EUIRM.getTexture(imagePath);
         if (tex != null) {
             tooltip.setIcon(PCLRenderHelpers.generateIcon(tex));

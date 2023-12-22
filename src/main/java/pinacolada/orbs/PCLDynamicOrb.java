@@ -48,11 +48,14 @@ public class PCLDynamicOrb extends PCLPointerOrb implements FabricateItem {
         return this;
     }
 
-    public void setupMoves(PCLDynamicOrbData data) {
+    public void setupMoves(EditorMaker<?,?> data) {
         clearSkills();
-        for (PSkill<?> skill : data.moves) {
+        int exDescInd = -1;
+        for (PSkill<?> skill : data.getMoves()) {
+            exDescInd += 1;
             if (!PSkill.isSkillBlank(skill)) {
                 PSkill<?> effect = skill.makeCopy();
+                putCustomDesc(effect, exDescInd);
                 addUseMove(effect);
                 if (effect instanceof PTrigger) {
                     ((PTrigger) effect).controller = this;
@@ -64,6 +67,15 @@ public class PCLDynamicOrb extends PCLPointerOrb implements FabricateItem {
                     triggerCondition = use;
                 }
             }
+        }
+        for (PSkill<?> pe : data.getPowers()) {
+            exDescInd += 1;
+            if (PSkill.isSkillBlank(pe)) {
+                continue;
+            }
+            PSkill<?> pec = pe.makeCopy();
+            putCustomDesc(pec, exDescInd);
+            addPowerMove(pec);
         }
         updateDescription();
     }

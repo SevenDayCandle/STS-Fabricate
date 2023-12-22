@@ -51,7 +51,7 @@ public class VariableToken extends PCLTextToken {
                         parser.addToken(token);
                     }
                     else {
-                        EUIUtils.logError(parser.card, "Unknown variable type: !" + key + "!, Raw text is: " + parser.text);
+                        EUIUtils.logInfoIfDebug(parser.card, "Unknown variable type: !" + key + "!, Raw text is: " + parser.text);
                     }
 
                     return i + 1;

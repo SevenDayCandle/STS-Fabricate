@@ -122,6 +122,11 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
     }
 
     @Override
+    public String[] getDescString(PotionStrings item) {
+        return item.DESCRIPTIONS;
+    }
+
+    @Override
     public PotionStrings getDefaultStrings() {
         return getInitialStrings();
     }

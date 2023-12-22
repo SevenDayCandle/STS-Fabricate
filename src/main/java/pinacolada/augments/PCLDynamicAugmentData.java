@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.OrbStrings;
+import com.megacrit.cardcrawl.localization.PowerStrings;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
@@ -138,6 +139,11 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
     }
 
     @Override
+    public String[] getDescString(AugmentStrings item) {
+        return item.DESCRIPTION;
+    }
+
+    @Override
     public AugmentStrings getDefaultStrings() {
         return getInitialStrings();
     }
@@ -147,7 +153,7 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         for (PSkill<?> move : moves) {
             if (!PSkill.isSkillBlank(move)) {
                 move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
-                String pText = move.getPowerText(this);
+                String pText = move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }

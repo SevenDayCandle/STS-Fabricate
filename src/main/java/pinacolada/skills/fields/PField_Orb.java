@@ -59,7 +59,7 @@ public class PField_Orb extends PField_Random {
             orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), TEXT.subjects_randomX(orbStr));
         }
         else {
-            if (skill.extra > 0) {
+            if (skill.extra > 1) {
                 orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), orbStr);
             }
             orbStr = skill.extra <= 0 ? TEXT.subjects_allX(orbStr) : TEXT.subjects_yourFirst(orbStr);

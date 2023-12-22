@@ -219,6 +219,11 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     }
 
     @Override
+    public String[] getDescString(CardStrings item) {
+        return item.EXTENDED_DESCRIPTION;
+    }
+
+    @Override
     public Texture getImage() {
         return portraitImage != null ? portraitImage.texture : null;
     }

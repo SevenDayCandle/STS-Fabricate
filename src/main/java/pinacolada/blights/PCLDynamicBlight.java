@@ -100,22 +100,4 @@ public class PCLDynamicBlight extends PCLPointerBlight implements FabricateItem,
     public void setupImages() {
         // No-op, handle images in setupBuilder
     }
-
-    public void setupMoves(PCLDynamicBlightData builder) {
-        clearSkills();
-        for (PSkill<?> effect : builder.moves) {
-            if (PSkill.isSkillBlank(effect)) {
-                continue;
-            }
-            addUseMove(effect.makeCopy());
-        }
-
-        for (PSkill<?> pe : builder.powers) {
-            if (PSkill.isSkillBlank(pe)) {
-                continue;
-            }
-            addPowerMove(pe.makeCopy());
-        }
-
-    }
 }

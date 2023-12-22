@@ -1,5 +1,7 @@
 package pinacolada.potions;
 
+import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
@@ -25,7 +27,7 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
     }
 
     @Override
-    public EditorMaker getDynamicData() {
+    public PCLDynamicPotionData getDynamicData() {
         return builder;
     }
 
@@ -54,21 +56,9 @@ public class PCLDynamicPotion extends PCLPotion implements FabricateItem {
         initializeTips();
     }
 
-    public void setupMoves(PCLDynamicPotionData builder) {
-        for (PSkill<?> effect : builder.moves) {
-            if (PSkill.isSkillBlank(effect)) {
-                continue;
-            }
-            addUseMove(effect.makeCopy());
-        }
-
-        for (PSkill<?> pe : builder.powers) {
-            if (PSkill.isSkillBlank(pe)) {
-                continue;
-            }
-            addPowerMove(pe.makeCopy());
-        }
-
+    @Override
+    public void setupMoves(EditorMaker<?,?> builder) {
+        FabricateItem.super.setupMoves(builder);
         initializeTargetRequired();
     }
 }

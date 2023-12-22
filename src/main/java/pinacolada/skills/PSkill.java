@@ -79,7 +79,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
     public static final String COLON_SEPARATOR = ": ";
     public static final String COMMA_SEPARATOR = ", ";
-    public static final char CASCADE_CHAR = '‡';
+    public static final char CASCADE_CHAR = '~';
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';
@@ -231,6 +231,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EFFECT_MAP.get(id);
     }
 
+    public static List<String> getEffectDisplayTexts(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return EUIUtils.mapAsNonnull(effects, e -> e.getTextForDisplay(perspective, requestor, addPeriod));
+    }
+
     public static List<String> getEffectTexts(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         return EUIUtils.mapAsNonnull(effects, e -> e.getText(perspective, requestor, addPeriod));
     }
@@ -373,6 +377,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
      */
     public static <T> String joinDataAsJson(Collection<T> items, FuncT1<String, T> stringFunction) {
         return items.size() > 0 ? EUIUtils.serialize(EUIUtils.mapAsNonnull(items, stringFunction), TStringToken.getType()) : null;
+    }
+
+    public static String joinEffectDisplayTexts(Collection<? extends PSkill<?>> effects, String delimiter, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return EUIUtils.joinStrings(delimiter, getEffectDisplayTexts(effects, perspective, requestor, addPeriod));
     }
 
     /**
@@ -1045,10 +1053,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getPowerTextForDisplay(Object requestor) {
         if (overrideDesc != null) {
-            return getUncascadedOverride();
+            return getUncascadedPowerOverride();
         }
         if (source != null) {
-            return source.makePowerString(getText(requestor), true);
+            return source.makePowerString(getText(requestor));
         }
         return getText(requestor);
     }
@@ -1418,6 +1426,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public final String getTextForDisplay() {
         return overrideDesc != null ? getUncascadedOverride() : getText();
     }
+
+    public final String getTextForDisplay(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
+        return overrideDesc != null ? getUncascadedOverride() : getText(perspective, requestor, addPeriod);
+    }
+
     public String getThemString() {
         return EUITextHelper.parseLogicString(TEXT.subjects_them(amount));
     }
@@ -1447,6 +1460,34 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     PSkill<?> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
                     if (move != null) {
                         sb.append(move.getRawString(overrideDesc.charAt(i + 1)));
+                    }
+                    i += 3;
+                }
+            }
+            else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String getUncascadedPowerOverride() {
+        return getUncascadedPowerOverride(overrideDesc);
+    }
+
+    public String getUncascadedPowerOverride(String overrideDesc) {
+        if (overrideDesc == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < overrideDesc.length(); i++) {
+            char c = overrideDesc.charAt(i);
+            if (c == CASCADE_CHAR) {
+                if (EUIRenderHelpers.isCharAt(overrideDesc, i + 3, CASCADE_CHAR)) {
+                    PSkill<?> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
+                    if (move != null) {
+                        sb.append(move.getAttributeString(overrideDesc.charAt(i + 1)));
                     }
                     i += 3;
                 }
