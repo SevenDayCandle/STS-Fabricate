@@ -32,7 +32,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                     }
                 })
                 .setCanAutosizeButton(true);
-        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 5.6f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
+        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 4.6f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)

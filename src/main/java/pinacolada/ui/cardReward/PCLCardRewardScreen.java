@@ -65,7 +65,7 @@ public class PCLCardRewardScreen extends EUIBase {
 
     public void close(boolean clearBundles) {
         EUI.countingPanel.close();
-        upgradeToggle.toggle(false);
+        upgradeToggle.toggleForce(false);
         buttons.clear();
         if (clearBundles) {
             bundles.clear();
@@ -124,7 +124,7 @@ public class PCLCardRewardScreen extends EUIBase {
         EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group, AbstractDungeon.player.getCardColor(), EUIGameUtils.canReceiveAnyColorCard(), false);
         openForBundle(rItem, cards);
         openForReroll(rItem);
-        upgradeToggle.toggle(false);
+        upgradeToggle.toggleForce(false);
         upgradeToggle.setActive(GameUtilities.isPCLPlayerClass() || PGR.config.showUpgradeOnCardRewards.get());
         upgrades.clear();
     }

@@ -61,7 +61,7 @@ public abstract class PCLPointerOrb extends PCLOrb implements PointerProvider, T
         if (skills == null) {
             return EUIUtils.EMPTY_STRING;
         }
-        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, skill -> skill.getPowerText(null), getEffects()));
+        return StringUtils.capitalize(EUIUtils.joinStringsMapNonnull(EUIUtils.SPLIT_LINE, skill -> skill.getPowerTextForDisplay(null), getEffects()));
     }
 
     @Override
