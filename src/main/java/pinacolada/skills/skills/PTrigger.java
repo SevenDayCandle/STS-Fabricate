@@ -121,7 +121,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = null;
-        if (sourceCard instanceof PointerProvider && ((PointerProvider) sourceCard).getEffects().contains(this)) {
+        if (source instanceof PointerProvider && ((PointerProvider) source).getEffects().contains(this)) {
             String gString = fields.getGroupString();
             base = TEXT.cond_whileIn(gString.isEmpty() ? TEXT.subjects_anyPile() : gString);
         }

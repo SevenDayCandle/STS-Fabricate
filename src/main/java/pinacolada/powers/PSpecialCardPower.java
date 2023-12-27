@@ -49,8 +49,8 @@ public abstract class PSpecialCardPower extends PCLClickablePower implements PCL
     }
 
     protected void setupImageRegion() {
-        if (move != null && move.sourceCard instanceof EditorCard) {
-            Texture portraitTexture = ((EditorCard) move.sourceCard).getPortraitImageTexture();
+        if (move != null && move.source instanceof EditorCard) {
+            Texture portraitTexture = ((EditorCard) move.source).getPortraitImageTexture();
             this.region128 = this.region48 = PCLRenderHelpers.generateIcon(portraitTexture);
         }
     }

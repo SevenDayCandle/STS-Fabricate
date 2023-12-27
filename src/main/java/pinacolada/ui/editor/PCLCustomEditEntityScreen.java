@@ -36,6 +36,7 @@ import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
@@ -120,17 +121,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public static ArrayList<AbstractBlight> getAvailableBlights(AbstractCard.CardColor cardColor) {
         if (PCLCustomEditEntityScreen.availableBlights == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
-                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
-            }
-            else {
-                PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
-                PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(cardColor), PCLCustomBlightSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(AbstractCard.CardColor.COLORLESS), PCLCustomBlightSlot::make));
-                }
-            }
+            PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
+            PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
             PCLCustomEditEntityScreen.availableBlights.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return PCLCustomEditEntityScreen.availableBlights;
@@ -138,21 +130,13 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public static ArrayList<AbstractCard> getAvailableCards(AbstractCard.CardColor cardColor) {
         if (PCLCustomEditEntityScreen.availableCards == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                boolean isPCLColor = GameUtilities.isPCLOnlyCardColor(cardColor);
-                // Filter template replacements
-                PCLCustomEditEntityScreen.availableCards = EUIUtils.filter(CardLibrary.cards.values(), c -> !PGR.core.filterColorless(c));
-                PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), PCLCustomCardSlot::make));
-            }
-            else {
-                PCLCustomEditEntityScreen.availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
-                        EUIUtils.filterInPlace(CardLibrary.getAllCards(),
-                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-                PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
-                }
-            }
+            // Apply or remove template replacements where necessary
+            PCLResources<?,?,?,?> resources = PGR.getResources(cardColor);
+            PCLCustomEditEntityScreen.availableCards = EUIUtils.mapAsNonnull(CardLibrary.cards.values(), c -> {
+                String replacement = resources.getReplacement(c.cardID);
+                return replacement != null ? CardLibrary.getCard(replacement) : c;
+            });
+            PCLCustomEditEntityScreen.availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(), PCLCustomCardSlot::make));
             PCLCustomEditEntityScreen.availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return PCLCustomEditEntityScreen.availableCards;
@@ -186,18 +170,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     public static ArrayList<AbstractRelic> getAvailableRelics(AbstractCard.CardColor cardColor) {
         if (PCLCustomEditEntityScreen.availableRelics == null) {
-            if (PGR.config.showIrrelevantProperties.get()) {
-                PCLCustomEditEntityScreen.availableRelics = EUIGameUtils.getAllRelics();
-                PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
-            }
-            else {
-                PCLCustomEditEntityScreen.availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
-                PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
-                if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                    PCLCustomEditEntityScreen.availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
-                    PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
-                }
-            }
+            PCLCustomEditEntityScreen.availableRelics = EUIGameUtils.getAllRelics();
+            PCLCustomEditEntityScreen.availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(), PCLCustomRelicSlot::make));
             PCLCustomEditEntityScreen.availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return PCLCustomEditEntityScreen.availableRelics;

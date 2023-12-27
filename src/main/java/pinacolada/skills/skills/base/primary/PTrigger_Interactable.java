@@ -7,6 +7,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.ClickableProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -48,7 +49,7 @@ public class PTrigger_Interactable extends PTrigger {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String main = (source != null && source.getEffects().contains(this) && !(source instanceof AbstractPower)) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
+        String main = (source instanceof PointerProvider && ((PointerProvider) source).getEffects().contains(this) && !(source instanceof AbstractPower)) ? PCLCoreStrings.colorString("o", PGR.core.strings.misc_rightClick) : PGR.core.tooltips.interactable.title;
         if (amount < 0) {
             return EUIRM.strings.adjNoun(TEXT.subjects_infinite, main);
         }

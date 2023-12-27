@@ -57,9 +57,9 @@ public class PMove_StackPower extends PMove<PField_Power> {
                             : TEXT.act_gainAmount(getAmountRawString(), joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
                 default:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
             }
         }
         if (!fields.powers.isEmpty() && EUIUtils.all(fields.powers, PCLPowerData::isInstant)) {
@@ -85,11 +85,11 @@ public class PMove_StackPower extends PMove<PField_Power> {
             case Single:
             case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
-                        fields.powers.size() > 0 && !useParent ?
+                        !fields.powers.isEmpty() && !useParent ?
                                 TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
             default:
                 return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective))
-                        : fields.powers.size() > 0 && !useParent
+                        : !fields.powers.isEmpty() && !useParent
                         ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
         }
     }
@@ -136,7 +136,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         else {
             for (int i = 0; i < amount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount).setInfo(info);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount);
                 }
             }
         }
@@ -147,7 +147,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
         if (power != null) {
             for (AbstractCreature target : getTargetList(info)) {
-                order.applyPower(info.source, target, power, amount).setInfo(info);
+                order.applyPower(info.source, target, power, amount);
             }
         }
     }

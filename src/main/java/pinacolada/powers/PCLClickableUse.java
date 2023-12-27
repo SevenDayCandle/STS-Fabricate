@@ -1,12 +1,14 @@
 package pinacolada.powers;
 
 import com.megacrit.cardcrawl.actions.GameActionManager;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
@@ -174,7 +176,7 @@ public class PCLClickableUse {
         if (owner == null) {
             owner = source.getSource();
         }
-        PCLUseInfo info = CombatManager.playerSystem.generateInfo(move.sourceCard, owner, m);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(move.source, AbstractCard.class), owner, m);
         info.setData(amount);
         move.use(info, PCLActions.bottom, CombatManager.onClickableUsed(this, m, amount));
         pool.use(amount);

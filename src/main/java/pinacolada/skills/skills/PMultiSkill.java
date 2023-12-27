@@ -14,7 +14,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -422,7 +421,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PMultiSkill setSource(PointerProvider card) {
+    public PMultiSkill setSource(Object card) {
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);

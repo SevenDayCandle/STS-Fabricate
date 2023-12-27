@@ -67,7 +67,7 @@ public class PMove_Transform extends PMove_DoCard<PField_CardTransform> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_transform(
-                useParent ? getInheritedThemString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard(), fields.getCardIDString()
+                useParent ? getInheritedThemString() : !fields.groupTypes.isEmpty() ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard(), fields.getCardIDString()
         );
     }
 
@@ -85,8 +85,8 @@ public class PMove_Transform extends PMove_DoCard<PField_CardTransform> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (!fields.hasGroups() && !useParent && sourceCard != null) {
-            transformImpl(sourceCard);
+        if (!fields.hasGroups() && !useParent && source instanceof AbstractCard) {
+            transformImpl((AbstractCard) source);
         }
         else {
             // Extra is used for other purposes

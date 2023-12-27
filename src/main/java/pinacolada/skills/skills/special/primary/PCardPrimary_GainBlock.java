@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.primary;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -48,9 +49,9 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     @Override
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
         return new ColoredString(displayAmount,
-                (sourceCard != null ?
-                        sourceCard.upgradedBlock ? Settings.GREEN_TEXT_COLOR :
-                                sourceCard.isBlockModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                (source instanceof AbstractCard ?
+                        ((AbstractCard) source).upgradedBlock ? Settings.GREEN_TEXT_COLOR :
+                                ((AbstractCard) source).isBlockModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
                                         : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
     }
 

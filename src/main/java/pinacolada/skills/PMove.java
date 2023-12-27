@@ -16,7 +16,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.skills.fields.PField;
@@ -605,7 +604,7 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public PMove<T> setSource(PointerProvider card) {
+    public PMove<T> setSource(Object card) {
         super.setSource(card);
         return this;
     }

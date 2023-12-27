@@ -1,22 +1,17 @@
 package pinacolada.cards.base;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.CostFilter;
-import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
@@ -28,7 +23,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -37,7 +31,6 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.CardPreviewList;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
@@ -540,7 +533,7 @@ public abstract class PCLMultiCard extends PCLCard {
             AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
             ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
             // Allow Starter effects on inherited cards to take effect
-            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
+            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == source))) {
                 AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
             }
             for (AbstractCard card : multicard.getCards()) {
@@ -551,8 +544,8 @@ public abstract class PCLMultiCard extends PCLCard {
                     card.use(AbstractDungeon.player, m);
                 }
             }
-            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
+            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != source && source instanceof AbstractCard) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.add((AbstractCard) source);
             }
         }
     }

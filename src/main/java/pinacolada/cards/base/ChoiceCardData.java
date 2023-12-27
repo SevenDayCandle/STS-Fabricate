@@ -23,27 +23,28 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
     public ChoiceCardData(PCLCard card, T object) {
         super(card, false);
         this.object = object;
-        this.showTypeText = false;
         this.fromCustom = card instanceof PCLDynamicCard;
     }
 
     public ChoiceCardData(PCLCardData card, T object) {
         super(card, false);
         this.object = object;
-        this.showTypeText = false;
         this.fromCustom = card instanceof PCLDynamicCardData;
     }
 
-    protected ChoiceCardData(String id, T object) {
+    public ChoiceCardData(String id, T object) {
         super(id);
         this.object = object;
-        this.showTypeText = false;
         this.fromCustom = false;
     }
 
     public static ChoiceCardData<PCLAffinity> affinity(PCLAffinity affinity) {
+        return affinity(affinity, affinity);
+    }
+
+    public static <T> ChoiceCardData<T> affinity(PCLAffinity affinity, T payload) {
         String symbol = affinity.getAffinitySymbol();
-        ChoiceCardData<PCLAffinity> builder = new ChoiceCardData<PCLAffinity>(symbol, affinity);
+        ChoiceCardData<T> builder = new ChoiceCardData<T>(symbol, payload);
         Texture img = EUIRM.getTexture(PGR.getCardImage(PGR.getResources(GameUtilities.getActingColor()).createID(symbol)), true);
         if (img == null) {
             img = EUIRM.getTexture(PGR.getCardImage(PGR.core.createID(symbol)), true);
@@ -56,6 +57,7 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
         }
         builder.portraitImage = new ColoredTexture(EUIRM.getTexture(IMAGE, true), affinity.getAlternateColor(0.55f));
         builder.imagePath = IMAGE;
+        builder.setName(affinity.tooltip.title);
         return builder;
     }
 

@@ -17,7 +17,6 @@ import pinacolada.utilities.GameUtilities;
 public class DealDamage extends PCLAction<AbstractCreature> {
     protected final DamageInfo info;
     protected FuncT2<Float, AbstractCreature, AbstractCreature> onDamageEffect;
-    protected AbstractOrb orb;
     protected boolean applyPowers;
     protected boolean bypassBlock;
     protected boolean bypassThorns;
@@ -106,11 +105,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public DealDamage setOrb(AbstractOrb orb) {
-        this.orb = orb;
-        return this;
-    }
-
     public DealDamage setPiercing(boolean bypassThorns, boolean bypassBlock) {
         this.bypassBlock = bypassBlock;
         this.bypassThorns = bypassThorns;
@@ -176,9 +170,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
             }
             else {
                 this.info.applyPowers(this.info.owner, target);
-                if (orb != null) {
-                    this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
-                }
             }
             applyPowers = false;
         }

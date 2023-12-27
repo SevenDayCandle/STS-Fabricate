@@ -1,6 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
-import pinacolada.actions.PCLActions;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -34,12 +34,12 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return !isUnderWhen(callingSkill, parentSkill) && sourceCard != null ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
+        return !isUnderWhen(callingSkill, parentSkill) && source instanceof AbstractCard ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return !isWhenClause() && sourceCard != null ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
+        return !isWhenClause() && source instanceof AbstractCard ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();
     }
 
     @Override

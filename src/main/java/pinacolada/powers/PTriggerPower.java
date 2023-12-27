@@ -15,6 +15,7 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -48,15 +49,15 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
 
             if (this.powerStrings.NAME == null) {
                 this.ID = createPowerID(effect);
-                if (effectCopy.sourceCard instanceof EditorCard) {
+                if (effectCopy.source instanceof EditorCard) {
                     // Vanilla rendering will require a smaller icon with a fixed size
-                    Texture portraitTexture = ((EditorCard) effectCopy.sourceCard).getPortraitImageTexture();
+                    Texture portraitTexture = ((EditorCard) effectCopy.source).getPortraitImageTexture();
                     this.region128 = this.region48 = PCLRenderHelpers.generateIcon(portraitTexture);
-                    this.powerStrings.NAME = effectCopy.sourceCard.name;
+                    this.powerStrings.NAME = ((EditorCard) effectCopy.source).getName();
                 }
                 else {
                     this.img = PCLCoreImages.CardAffinity.unknown.texture();
-                    this.powerStrings.NAME = effectCopy.source != null ? effectCopy.source.getName() : effectCopy.effectID != null ? effectCopy.effectID : this.getClass().getSimpleName();
+                    this.powerStrings.NAME = effectCopy.source instanceof PointerProvider ? ((PointerProvider) effectCopy.source).getName() : effectCopy.effectID != null ? effectCopy.effectID : this.getClass().getSimpleName();
                 }
             }
 
@@ -71,7 +72,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     }
 
     public static String createPowerID(PSkill<?> effect) {
-        return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
+        return effect != null ? deriveID(effect.source instanceof PointerProvider ? ((PointerProvider) effect.source).getID() + ((PointerProvider) effect.source).getPowerEffects().indexOf(effect) : effect.effectID) : null;
     }
 
     @Override

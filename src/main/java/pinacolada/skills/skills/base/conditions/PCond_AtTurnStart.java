@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -34,12 +33,12 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return !isUnderWhen(callingSkill, parentSkill) && sourceCard != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
+        return !isUnderWhen(callingSkill, parentSkill) && source != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return !isWhenClause() && sourceCard != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
+        return !isWhenClause() && source != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();
     }
 
     @Override

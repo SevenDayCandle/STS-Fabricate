@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -112,11 +111,11 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
             }
         }
         // For these actions, also treat the "not" parameter as a self-target to allow users to create effects that create copies of the calling card in a specific pile
-        else if (fields.not && sourceCard != null) {
+        else if (fields.not && source instanceof AbstractCard) {
             ArrayList<AbstractCard> created = new ArrayList<>();
-            if (canMakeCopy(sourceCard)) {
+            if (canMakeCopy((AbstractCard) source)) {
                 for (int i = 0; i < limit; i++) {
-                    created.add(sourceCard.makeStatEquivalentCopy());
+                    created.add(((AbstractCard) source).makeStatEquivalentCopy());
                 }
             }
             return created;
@@ -184,7 +183,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
-                : (fields.not && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
+                : (fields.not && source != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
                 : isOutOf() ? fields.getFullCardOrString(getExtraRawString()) :
                 fields.random ? fields.getFullCardOrString(getAmountRawString()) :

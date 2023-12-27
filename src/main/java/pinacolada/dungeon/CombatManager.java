@@ -107,6 +107,7 @@ public class CombatManager extends EUIBase {
     public static final SummonPool summons = new SummonPool();
     private static GameActionManager.Phase currentPhase;
     private static HashMap<AbstractCreature, Integer> estimatedDamages;
+    private static boolean draggingCard;
     private static boolean shouldRefreshHand;
     private static final TreeSet<PCLAffinity> showAffinities = new TreeSet<>();
     private static int cardsDrawnThisTurn = 0;
@@ -493,6 +494,10 @@ public class CombatManager extends EUIBase {
                 );
     }
 
+    public static boolean isDraggingCard() {
+        return draggingCard;
+    }
+
     public static void onAfterCardPlayed(AbstractCard card) {
         subscriberDo(OnCardPlayedSubscriber.class, s -> s.onCardPlayed(card));
 
@@ -778,10 +783,6 @@ public class CombatManager extends EUIBase {
         }
 
         return damage;
-    }
-
-    public static void onIncreaseAffinityLevel(PCLAffinity affinity) {
-        subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
     }
 
     public static float onModifyBlockFirst(float amount, AbstractCard card) {
@@ -1246,7 +1247,7 @@ public class CombatManager extends EUIBase {
             return;
         }
 
-        boolean draggingCard = false;
+        draggingCard = false;
         AbstractCreature target = null;
         PCLCard hoveredCard = null;
         if (player.hoveredCard != null) {

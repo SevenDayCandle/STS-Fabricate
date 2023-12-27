@@ -17,7 +17,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -296,7 +295,7 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public PMultiCond setSource(PointerProvider card) {
+    public PMultiCond setSource(Object card) {
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);

@@ -6,6 +6,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -40,7 +41,7 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        if (fields.groupTypes.isEmpty() && sourceCard != null) {
+        if (fields.groupTypes.isEmpty() && source != null) {
             String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
                     TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
             return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;
@@ -51,8 +52,8 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
 
     @Override
     public boolean meetsCondition(PCLUseInfo info, boolean isUsing) {
-        int count = fields.groupTypes.isEmpty() && sourceCard != null
-                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == sourceCard.uuid)
+        int count = fields.groupTypes.isEmpty() && source instanceof AbstractCard
+                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == ((AbstractCard) source).uuid)
                 : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
         return extra == 0 ? count == 0 : fields.not ^ count >= extra;
     }

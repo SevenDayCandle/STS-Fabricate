@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -30,7 +31,7 @@ public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         int total = 0;
-        PCardPrimary_DealDamage damageEff = source != null ? source.getCardDamage() : null;
+        PCardPrimary_DealDamage damageEff = source instanceof PointerProvider ? ((PointerProvider) source).getCardDamage() : null;
         if (damageEff != null && damageEff.target != null && damageEff.extra > 0) {
             int expected = damageEff.amount * damageEff.extra;
             for (AbstractCreature t : damageEff.getTargetList(info)) {

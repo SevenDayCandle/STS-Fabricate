@@ -16,7 +16,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
@@ -686,7 +685,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public PCond<T> setSource(PointerProvider card) {
+    public PCond<T> setSource(Object card) {
         super.setSource(card);
         return this;
     }

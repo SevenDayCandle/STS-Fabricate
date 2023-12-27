@@ -133,7 +133,7 @@ public class SkillModifier extends AbstractCardModifier {
             skill.setSource((PointerProvider) card).onAddToCard(card);
         }
         else {
-            skill.sourceCard = card;
+            skill.source = card;
         }
     }
 

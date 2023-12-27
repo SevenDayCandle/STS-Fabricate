@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
@@ -17,14 +16,12 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -354,7 +351,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public PBranchCond setSource(PointerProvider card) {
+    public PBranchCond setSource(Object card) {
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);

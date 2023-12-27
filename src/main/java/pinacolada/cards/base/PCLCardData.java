@@ -85,7 +85,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
         super(cardID, invokeClass, resources);
         this.cardColor = resources.cardColor;
-        this.strings = strings != null ? strings : new CardStrings();
+        this.strings = strings != null ? strings : getInitialStrings();
         initializeImage();
     }
 
@@ -114,12 +114,12 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     // Use our own mock strings because brackets will cause the card not to load
-    private static CardStrings getMockCardString() {
+    public static CardStrings getInitialStrings() {
         CardStrings retVal = new CardStrings();
-        retVal.NAME = "NAN";
+        retVal.NAME = EUIUtils.EMPTY_STRING;
         retVal.DESCRIPTION = EUIUtils.EMPTY_STRING;
         retVal.UPGRADE_DESCRIPTION = EUIUtils.EMPTY_STRING;
-        retVal.EXTENDED_DESCRIPTION = new String[]{EUIUtils.EMPTY_STRING};
+        retVal.EXTENDED_DESCRIPTION = new String[]{};
         return retVal;
     }
 
@@ -253,8 +253,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     }
 
     public String getLoadoutName() {
-        String loadoutName = loadout != null ? loadout.getName() : null;
-        return loadoutName != null ? loadoutName : strings.DESCRIPTION;
+        return loadout != null ? loadout.getName() : null;
     }
 
     public int getLoadoutValue() {

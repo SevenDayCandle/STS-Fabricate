@@ -37,7 +37,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
-        if (fields.groupTypes.isEmpty() && sourceCard != null) {
+        if (fields.groupTypes.isEmpty() && source != null) {
             return fields.forced ? TEXT.cond_perThisCombat(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()))
                     : TEXT.cond_perThisTurn(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()));
         }
@@ -52,8 +52,8 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return fields.groupTypes.isEmpty() && sourceCard != null
-                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == sourceCard.uuid)
+        return fields.groupTypes.isEmpty() && source instanceof AbstractCard
+                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == ((AbstractCard) source).uuid)
                 : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
     }
 

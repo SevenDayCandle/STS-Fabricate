@@ -35,7 +35,7 @@ import java.util.List;
 import static pinacolada.skills.PSkill.CAPITAL_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
-public interface PointerProvider {
+public interface PointerProvider extends ValueProvider {
     static <T extends PointerProvider & KeywordProvider> void fillPreviewsForKeywordProvider(T provider, RotatingList<EUIPreview> list) {
         for (PSkill<?> effect : provider.getEffects()) {
             if (effect == null) {
@@ -203,14 +203,6 @@ public interface PointerProvider {
 
     default List<PSkill<?>> getPowerEffects() {
         return getSkills().powerEffects;
-    }
-
-    default AbstractCreature getSourceCreature() {
-        return AbstractDungeon.player;
-    }
-
-    default int getXValue() {
-        return 1;
     }
 
     default String makeExportString(String baseString) {
@@ -404,10 +396,6 @@ public interface PointerProvider {
     }
 
     default int maxUpgrades() {
-        return 0;
-    }
-
-    default int timesUpgraded() {
         return 0;
     }
 

@@ -36,8 +36,8 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count = fields.groupTypes.isEmpty() && sourceCard != null
-                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == sourceCard.uuid)
+        int count = fields.groupTypes.isEmpty() && source instanceof AbstractCard
+                ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == ((AbstractCard) source).uuid)
                 : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
@@ -49,7 +49,7 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        if (fields.groupTypes.isEmpty() && sourceCard != null) {
+        if (fields.groupTypes.isEmpty() && source instanceof AbstractCard) {
             String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
                     TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
             return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;

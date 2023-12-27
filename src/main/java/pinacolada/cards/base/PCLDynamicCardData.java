@@ -31,7 +31,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     public ColoredTexture portraitForeground;
     public ColoredTexture portraitImage;
     public PCLCard source;
-    public boolean showTypeText = true;
 
     public PCLDynamicCardData(String id) {
         super(PCLDynamicCard.class, PGR.core, id, null);
@@ -159,15 +158,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         if (data.augmentSlots != null) {
             setSlots(data.augmentSlots);
         }
-    }
-
-    public static CardStrings getInitialStrings() {
-        CardStrings retVal = new CardStrings();
-        retVal.NAME = EUIUtils.EMPTY_STRING;
-        retVal.DESCRIPTION = EUIUtils.EMPTY_STRING;
-        retVal.UPGRADE_DESCRIPTION = EUIUtils.EMPTY_STRING;
-        retVal.EXTENDED_DESCRIPTION = new String[]{};
-        return retVal;
     }
 
     // Prevent a tag info with an invalid tag from being loaded
@@ -392,12 +382,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
 
     public PCLDynamicCardData setType(AbstractCard.CardType type) {
         this.cardType = type;
-        return this;
-    }
-
-    public PCLDynamicCardData showTypeText(boolean showTypeText) {
-        this.showTypeText = showTypeText;
-
         return this;
     }
 }

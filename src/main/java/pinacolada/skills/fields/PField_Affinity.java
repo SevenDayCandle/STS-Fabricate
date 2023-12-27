@@ -48,7 +48,7 @@ public class PField_Affinity extends PField_Random {
     }
 
     public AbstractCard.CardColor getColor() {
-        return skill != null && skill.sourceCard != null ? skill.sourceCard.color : GameUtilities.getActingColor();
+        return skill != null && skill.source instanceof AbstractCard ? ((AbstractCard) skill.source).color : GameUtilities.getActingColor();
     }
 
     public int getQualifierRange() {

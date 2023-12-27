@@ -98,7 +98,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
             case AllAllyEnemy:
                 return info.tempTargets.size() == prevSize;
         }
-        return info.tempTargets.size() > 0;
+        return !info.tempTargets.isEmpty();
     }
 
     public final void fillTargetsForEvaluation(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
@@ -175,12 +175,12 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
 
     public final AbstractCreature getTarget(PCLUseInfo info, int autoAmount) {
         List<? extends AbstractCreature> mons = getTargets(info, autoAmount);
-        return mons.size() > 0 ? mons.get(0) : null;
+        return !mons.isEmpty() ? mons.get(0) : null;
     }
 
     public final AbstractCreature getTarget(AbstractCreature p, AbstractCreature m) {
         List<? extends AbstractCreature> mons = getTargets(p, m);
-        return mons.size() > 0 ? mons.get(0) : null;
+        return !mons.isEmpty() ? mons.get(0) : null;
     }
 
     public TargetFilter getTargetFilter() {

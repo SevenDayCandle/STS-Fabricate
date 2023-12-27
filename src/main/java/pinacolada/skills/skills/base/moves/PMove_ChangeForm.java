@@ -10,6 +10,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLDynamicPower;
 import pinacolada.relics.PCLRelic;
@@ -47,7 +48,7 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
 
     protected void doEffect() {
         // TODO choose form randomly or through choice
-        if (fields.indexes.size() > 0) {
+        if (!fields.indexes.isEmpty()) {
             int index = fields.indexes.get(0);
             if (source instanceof PCLCard) {
                 ((PCLCard) source).changeForm(index, ((PCLCard) source).timesUpgraded);
@@ -73,9 +74,9 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
     }
 
     protected String getSourceName(int index) {
-        if (source != null) {
+        if (source instanceof PointerProvider) {
             // Intentially omit upgrade level
-            return GameUtilities.getMultiformName(source.getName(), index, 1, 2, 1, source.branchFactor());
+            return GameUtilities.getMultiformName(((PointerProvider) source).getName(), index, 1, 2, 1, ((PointerProvider) source).branchFactor());
         }
         return EUIUtils.EMPTY_STRING;
     }

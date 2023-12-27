@@ -48,6 +48,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.interfaces.providers.ValueProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLClickableUse;
@@ -96,10 +97,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     protected List<EUIKeywordTooltip> tips;
     protected PSkill<?> childEffect;
     protected UUID uuid = UUID.randomUUID();
-    public AbstractCard sourceCard;
+    public Object source;
     public PCLCardTarget target = PCLCardTarget.None;
     public PSkill<?> parent;
-    public PointerProvider source;
     public String effectID;
     public String overrideDesc;
     public T fields;
@@ -464,11 +464,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public TryChooseChoice<PSkill<?>> chooseEffect(AbstractCreature sc, AbstractCreature tc, PCLActions order, List<? extends PSkill<?>> effects) {
-        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        PCLCard choiceCard = EUIUtils.safeCast(source, PCLCard.class);
         PCLCardData cardData;
         if (choiceCard == null) {
-            cardData = new PCLDynamicCardData(QuestionMark.DATA, false)
-                    .showTypeText(false);
+            cardData = new PCLDynamicCardData(QuestionMark.DATA, false);
 
             if (source instanceof AbstractRelic) {
                 cardData.strings.NAME = ((AbstractRelic) source).name;
@@ -512,27 +511,27 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo generateInfo(AbstractCreature source, AbstractCreature target) {
-        return CombatManager.playerSystem.generateInfo(sourceCard, source, target);
+        return CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(source, AbstractCard.class), source, target);
     }
 
     public final int getAmountBaseFromCard() {
         PCLCardValueSource amountSource = getAmountSource();
-        if (this.sourceCard != null && amountSource != null) {
+        if (this.source instanceof AbstractCard && amountSource != null) {
             switch (amountSource) {
                 case Block:
-                    return sourceCard.baseBlock;
+                    return ((AbstractCard) source).baseBlock;
                 case Damage:
-                    return sourceCard.baseDamage;
+                    return ((AbstractCard) source).baseDamage;
                 case HitCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).hitCountBase() : 1;
                 case MagicNumber:
-                    return sourceCard.baseMagicNumber;
+                    return ((AbstractCard) source).baseMagicNumber;
                 case SecondaryNumber:
-                    return sourceCard.baseHeal;
+                    return ((AbstractCard) source).baseHeal;
                 case RightCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                    return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
         return amount;
@@ -540,33 +539,33 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getAmountFromCard() {
         PCLCardValueSource amountSource = getAmountSource();
-        if (this.sourceCard != null) {
+        if (this.source instanceof AbstractCard) {
             if (amountSource != null) {
                 switch (amountSource) {
                     case Block:
-                        return sourceCard.block;
+                        return ((AbstractCard) source).block;
                     case Damage:
-                        return sourceCard.damage;
+                        return ((AbstractCard) source).damage;
                     case HitCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).hitCount() : 1;
                     case MagicNumber:
-                        return sourceCard.magicNumber;
+                        return ((AbstractCard) source).magicNumber;
                     case SecondaryNumber:
-                        return sourceCard.heal;
+                        return ((AbstractCard) source).heal;
                     case RightCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                        return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
                 }
             }
 
-            return rootAmount + sourceCard.timesUpgraded * getUpgrade();
+            return rootAmount + ((AbstractCard) source).timesUpgraded * getUpgrade();
         }
-        if (source != null) {
+        if (source instanceof ValueProvider) {
             if (amountSource == PCLCardValueSource.XValue) {
-                return source.getXValue();
+                return ((ValueProvider) source).getXValue();
             }
-            return rootAmount + source.timesUpgraded() * getUpgrade();
+            return rootAmount + ((ValueProvider) source).timesUpgraded() * getUpgrade();
         }
         return rootAmount;
     }
@@ -579,7 +578,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getAmountRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) : wrapAmountChild(this, amount);
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) : wrapAmountChild(this, amount);
     }
 
     public PCLCardValueSource getAmountSource() {
@@ -587,7 +586,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public EUIKeywordTooltip getAttackTooltip() {
-        return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
+        return source instanceof PCLCard ? ((PCLCard) source).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
     }
 
     public final int getAttribute(char attributeID) {
@@ -629,8 +628,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final char getCardPointer() {
-        if (source != null) {
-            return (char) (source.getPointers().addAndGetIndex(this) + CHAR_OFFSET);
+        if (source instanceof PointerProvider) {
+            return (char) (((PointerProvider) source).getPointers().addAndGetIndex(this) + CHAR_OFFSET);
         }
         return CHAR_OFFSET;
     }
@@ -717,7 +716,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getConditionRawString(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return source != null ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
+        return source instanceof PointerProvider ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
     }
 
     public TupleT2<PSkill<?>, Integer> getEffectAtIndex(int ind) {
@@ -748,8 +747,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public String getExportText() {
         String baseString = getText();
-        if (source != null) {
-            return source.makeExportString(baseString);
+        if (source instanceof PointerProvider) {
+            return ((PointerProvider) source).makeExportString(baseString);
         }
 
         StringBuilder sb = new StringBuilder();
@@ -809,22 +808,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getExtra2BaseFromCard() {
         PCLCardValueSource extraSource = getExtra2Source();
-        if (this.sourceCard != null && extraSource != null) {
+        if (this.source instanceof AbstractCard && extraSource != null) {
             switch (extraSource) {
                 case Block:
-                    return sourceCard.baseBlock;
+                    return ((AbstractCard) source).baseBlock;
                 case Damage:
-                    return sourceCard.baseDamage;
+                    return ((AbstractCard) source).baseDamage;
                 case HitCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).hitCountBase() : 1;
                 case MagicNumber:
-                    return sourceCard.baseMagicNumber;
+                    return ((AbstractCard) source).baseMagicNumber;
                 case SecondaryNumber:
-                    return sourceCard.baseHeal;
+                    return ((AbstractCard) source).baseHeal;
                 case RightCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                    return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
         return extra2;
@@ -832,36 +831,39 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getExtra2FromCard() {
         PCLCardValueSource extraSource = getExtra2Source();
-        if (this.sourceCard != null) {
+        if (this.source instanceof AbstractCard) {
             if (extraSource != null) {
                 switch (extraSource) {
                     case Block:
-                        return sourceCard.block;
+                        return ((AbstractCard) source).block;
                     case Damage:
-                        return sourceCard.damage;
+                        return ((AbstractCard) source).damage;
                     case HitCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).hitCount() : 1;
                     case MagicNumber:
-                        return sourceCard.magicNumber;
+                        return ((AbstractCard) source).magicNumber;
                     case SecondaryNumber:
-                        return sourceCard.heal;
+                        return ((AbstractCard) source).heal;
                     case RightCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                        return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
                 }
             }
 
-            return rootExtra2 + sourceCard.timesUpgraded * getUpgradeExtra2();
+            return rootExtra2 + ((AbstractCard) source).timesUpgraded * getUpgradeExtra2();
         }
-        if (source != null && extraSource == PCLCardValueSource.XValue) {
-            return source.getXValue();
+        if (source instanceof ValueProvider) {
+            if (extraSource == PCLCardValueSource.XValue) {
+                return ((ValueProvider) source).getXValue();
+            }
+            return rootExtra + ((ValueProvider) source).timesUpgraded() * getUpgradeExtra2();
         }
         return rootExtra2;
     }
 
     public final String getExtra2RawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, EXTRA2_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra2);
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA2_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra2);
     }
 
     public PCLCardValueSource getExtra2Source() {
@@ -870,22 +872,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getExtraBaseFromCard() {
         PCLCardValueSource extraSource = getExtraSource();
-        if (this.sourceCard != null && extraSource != null) {
+        if (this.source instanceof AbstractCard && extraSource != null) {
             switch (extraSource) {
                 case Block:
-                    return sourceCard.baseBlock;
+                    return ((AbstractCard) source).baseBlock;
                 case Damage:
-                    return sourceCard.baseDamage;
+                    return ((AbstractCard) source).baseDamage;
                 case HitCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).hitCountBase() : 1;
                 case MagicNumber:
-                    return sourceCard.baseMagicNumber;
+                    return ((AbstractCard) source).baseMagicNumber;
                 case SecondaryNumber:
-                    return sourceCard.baseHeal;
+                    return ((AbstractCard) source).baseHeal;
                 case RightCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                    return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
         return extra;
@@ -893,36 +895,39 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getExtraFromCard() {
         PCLCardValueSource extraSource = getExtraSource();
-        if (this.sourceCard != null) {
+        if (this.source instanceof AbstractCard) {
             if (extraSource != null) {
                 switch (extraSource) {
                     case Block:
-                        return sourceCard.block;
+                        return ((AbstractCard) source).block;
                     case Damage:
-                        return sourceCard.damage;
+                        return ((AbstractCard) source).damage;
                     case HitCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).hitCount() : 1;
                     case MagicNumber:
-                        return sourceCard.magicNumber;
+                        return ((AbstractCard) source).magicNumber;
                     case SecondaryNumber:
-                        return sourceCard.heal;
+                        return ((AbstractCard) source).heal;
                     case RightCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                        return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
                 }
             }
 
-            return rootExtra + sourceCard.timesUpgraded * getUpgradeExtra();
+            return rootExtra + ((AbstractCard) source).timesUpgraded * getUpgradeExtra();
         }
-        if (source != null && extraSource == PCLCardValueSource.XValue) {
-            return source.getXValue();
+        if (source instanceof ValueProvider) {
+            if (extraSource == PCLCardValueSource.XValue) {
+                return ((ValueProvider) source).getXValue();
+            }
+            return rootExtra + ((ValueProvider) source).timesUpgraded() * getUpgradeExtra();
         }
         return rootExtra;
     }
 
     public final String getExtraRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra);
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) : wrapExtra(extra);
     }
 
     public PCLCardValueSource getExtraSource() {
@@ -961,7 +966,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PCLUseInfo getInfo(AbstractCreature source, AbstractCreature target) {
-        return CombatManager.playerSystem.getInfo(sourceCard, source, target);
+        return CombatManager.playerSystem.getInfo(EUIUtils.safeCast(this.source, AbstractCard.class), source, target);
     }
 
     public final String getInheritedThemString() {
@@ -1030,7 +1035,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getName() {
-        return source != null ? source.getName() : "";
+        return source instanceof PointerProvider ? ((PointerProvider) source).getName() : "";
     }
 
     /**
@@ -1045,8 +1050,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getPowerText(Object requestor) {
-        if (source != null) {
-            return source.makePowerString(getText(requestor));
+        if (source instanceof PointerProvider) {
+            return ((PointerProvider) source).makePowerString(getText(requestor));
         }
         return getText(requestor);
     }
@@ -1055,15 +1060,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         if (overrideDesc != null) {
             return getUncascadedPowerOverride();
         }
-        if (source != null) {
-            return source.makePowerString(getText(requestor));
+        if (source instanceof PointerProvider) {
+            return ((PointerProvider) source).makePowerString(getText(requestor));
         }
         return getText(requestor);
     }
 
     public final String getPowerTextForTooltip(Object requestor) {
-        if (source != null) {
-            return source.makePowerString(getText(requestor), true);
+        if (source instanceof PointerProvider) {
+            return ((PointerProvider) source).makePowerString(getText(requestor), true);
         }
         return getText(requestor);
     }
@@ -1103,22 +1108,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getScopeBaseFromCard() {
         PCLCardValueSource scopeSource = getScopeSource();
-        if (this.sourceCard != null && scopeSource != null) {
+        if (this.source instanceof AbstractCard && scopeSource != null) {
             switch (scopeSource) {
                 case Block:
-                    return sourceCard.baseBlock;
+                    return ((AbstractCard) source).baseBlock;
                 case Damage:
-                    return sourceCard.baseDamage;
+                    return ((AbstractCard) source).baseDamage;
                 case HitCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).hitCountBase() : 1;
                 case MagicNumber:
-                    return sourceCard.baseMagicNumber;
+                    return ((AbstractCard) source).baseMagicNumber;
                 case SecondaryNumber:
-                    return sourceCard.baseHeal;
+                    return ((AbstractCard) source).baseHeal;
                 case RightCount:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                    return source instanceof EditorCard ? ((EditorCard) source).rightCountBase() : 1;
                 case XValue:
-                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                    return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
         return scope;
@@ -1126,36 +1131,39 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final int getScopeFromCard() {
         PCLCardValueSource scopeSource = getScopeSource();
-        if (this.sourceCard != null) {
+        if (this.source instanceof AbstractCard) {
             if (scopeSource != null) {
                 switch (scopeSource) {
                     case Block:
-                        return sourceCard.block;
+                        return ((AbstractCard) source).block;
                     case Damage:
-                        return sourceCard.damage;
+                        return ((AbstractCard) source).damage;
                     case HitCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).hitCount() : 1;
                     case MagicNumber:
-                        return sourceCard.magicNumber;
+                        return ((AbstractCard) source).magicNumber;
                     case SecondaryNumber:
-                        return sourceCard.heal;
+                        return ((AbstractCard) source).heal;
                     case RightCount:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
+                        return source instanceof EditorCard ? ((EditorCard) source).rightCount() : 1;
                     case XValue:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).getXValue() : 0;
+                        return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
                 }
             }
 
-            return rootScope + sourceCard.timesUpgraded * getUpgradeScope();
+            return rootScope + ((AbstractCard) source).timesUpgraded * getUpgradeScope();
         }
-        if (source != null && scopeSource == PCLCardValueSource.XValue) {
-            return source.getXValue();
+        if (source instanceof ValueProvider) {
+            if (scopeSource == PCLCardValueSource.XValue) {
+                return ((ValueProvider) source).getXValue();
+            }
+            return rootExtra + ((ValueProvider) source).timesUpgraded() * getUpgradeScope();
         }
         return rootScope;
     }
 
     public final String getScopeRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, SCOPE_CHAR + String.valueOf(getCardPointer())) : String.valueOf(scope);
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, SCOPE_CHAR + String.valueOf(getCardPointer())) : String.valueOf(scope);
     }
 
     public PCLCardValueSource getScopeSource() {
@@ -1166,7 +1174,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
      * Get the creature that owns this skill. Defaults to the player if no source was defined
      */
     public AbstractCreature getSourceCreature() {
-        return source != null ? source.getSourceCreature() : AbstractDungeon.player;
+        return source instanceof ValueProvider ? ((ValueProvider) source).getSourceCreature() : AbstractDungeon.player;
     }
 
     public String getSpecialData() {
@@ -1523,11 +1531,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
 
     public final int getUpgradeForm() {
-        return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).getForm() : 0;
+        return source instanceof PointerProvider ? ((PointerProvider) source).getForm() : 0;
     }
 
     public final int getUpgradeLevel() {
-        return sourceCard != null ? sourceCard.timesUpgraded : 0;
+        return source instanceof ValueProvider ? ((ValueProvider) source).timesUpgraded() : source instanceof AbstractCard ? ((AbstractCard) source).timesUpgraded : 0;
     }
 
     public final int getUpgradeScope() {
@@ -1538,12 +1546,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getXRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) : "";
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) : "";
     }
 
     public String getXString() {
         // Do not show the x value for when powers
-        if (CombatManager.inBattle() && sourceCard != null && !hasParentType(PTrigger_When.class)) {
+        if (CombatManager.inBattle() && source instanceof ValueProvider && !hasParentType(PTrigger_When.class)) {
             return " (" + getXValue() + ")";
         }
         return EUIUtils.EMPTY_STRING;
@@ -1581,9 +1589,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         this.rootAmount = this.baseAmount = this.amount = saveData.amount;
         this.rootExtra = this.baseExtra = this.extra = saveData.extra;
         this.rootExtra2 = this.baseExtra2 = this.extra2 = saveData.extra2;
+        this.rootScope = this.baseScope = this.scope = saveData.scope;
         this.upgrade = saveData.upgrade;
         this.upgradeExtra = saveData.upgradeExtra;
-        this.rootScope = this.baseScope = this.scope = saveData.scope;
+        this.upgradeExtra2 = saveData.upgradeExtra2;
         this.upgradeScope = saveData.upgradeScope;
         this.fields = EUIUtils.deserialize(saveData.effectData, this.data.fieldType);
         this.fields.skill = this;
@@ -1617,7 +1626,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final boolean isCardColor(AbstractCard.CardColor co) {
-        return sourceCard != null && GameUtilities.getActingCardColor(sourceCard) == co;
+        return source instanceof AbstractCard && GameUtilities.getActingCardColor((AbstractCard) source) == co;
     }
 
     public final boolean isCompatible(AbstractCard.CardColor co) {
@@ -1630,7 +1639,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final boolean isFromCreature() {
-        return (sourceCard != null && sourceCard.type == PCLEnum.CardType.SUMMON) || (getSourceCreature() instanceof AbstractMonster);
+        return (source instanceof AbstractCard && ((AbstractCard) source).type == PCLEnum.CardType.SUMMON) || (getSourceCreature() instanceof AbstractMonster);
     }
 
     /* Determines whether this effect should render cards unobtainable through card generation effects */
@@ -1700,7 +1709,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             copy.fields.skill = copy;
             copy.useParent = useParent;
             copy.source = source;
-            copy.sourceCard = sourceCard;
             copy.uuid = uuid;
             copy.overrideDesc = overrideDesc;
 
@@ -1960,9 +1968,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public PSkill<T> setSource(PointerProvider card) {
+    public PSkill<T> setSource(Object card) {
         this.source = card;
-        this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
         this.amount = getAmountFromCard();
         this.baseAmount = getAmountBaseFromCard();
         this.extra = getExtraFromCard();

@@ -20,7 +20,6 @@ import java.util.function.BiConsumer;
 // Copied and modified from STS-AnimatorMod
 public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     public final int[] damage;
-    protected AbstractOrb orb;
     protected ArrayList<AbstractCreature> targets;
     protected BiConsumer<AbstractCreature, Boolean> onDamageEffect;
     protected boolean applyPowers;
@@ -74,11 +73,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
     public DealDamageToAll setDamageEffect(BiConsumer<AbstractCreature, Boolean> onDamageEffect) {
         this.onDamageEffect = onDamageEffect;
 
-        return this;
-    }
-
-    public DealDamageToAll setOrb(AbstractOrb orb) {
-        this.orb = orb;
         return this;
     }
 
@@ -150,9 +144,6 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
                 final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
                 if (applyPowers) {
                     info.applyPowers(source, enemy);
-                    if (orb != null) {
-                        info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
-                    }
                 }
                 DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
                 DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);

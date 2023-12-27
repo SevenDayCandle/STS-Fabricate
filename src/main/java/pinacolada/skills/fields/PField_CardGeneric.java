@@ -103,9 +103,9 @@ public class PField_CardGeneric extends PField_Random {
             return new CardGroup[]{g};
         }
         else if (groupTypes.isEmpty()) {
-            if (skill.sourceCard != null && allowSelf) {
+            if (skill.source instanceof AbstractCard && allowSelf) {
                 CardGroup g = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-                g.addToBottom(skill.sourceCard);
+                g.addToBottom((AbstractCard) skill.source);
                 return new CardGroup[]{g};
             }
             else {
@@ -134,7 +134,7 @@ public class PField_CardGeneric extends PField_Random {
     }
 
     public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, PCLActions order, int subchoices) {
-        if (!skill.useParent && groupTypes.isEmpty() && skill.sourceCard != null) {
+        if (!skill.useParent && groupTypes.isEmpty() && skill.source instanceof AbstractCard) {
             return PCLActions.last.add(createFilteredAction(action, info, subchoices));
         }
         else {

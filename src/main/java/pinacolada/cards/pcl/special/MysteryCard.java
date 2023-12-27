@@ -80,8 +80,8 @@ public class MysteryCard extends PCLCard {
         }
 
         protected void useImpl(PCLUseInfo info, PCLActions order) {
-            if (sourceCard != null) {
-                order.replaceCard(sourceCard.uuid, createObscuredCard());
+            if (source instanceof AbstractCard) {
+                order.replaceCard(((AbstractCard) source).uuid, createObscuredCard());
             }
         }
     }

@@ -59,6 +59,6 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
 
     @Override
     public int getXValue() {
-        return GameUtilities.getCounter(sourceCard);
+        return GameUtilities.getCounter(source);
     }
 }

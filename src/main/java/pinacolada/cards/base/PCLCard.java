@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -45,6 +46,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
@@ -99,6 +101,13 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class PCLCard extends AbstractCard implements KeywordProvider, EditorCard, OnAddToDeckListener, CustomSavable<PCLCardSaveData> {
+    private final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
+    private final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
+    private final static float BANNER_OFFSET_X = -AbstractCard.RAW_W * 0.349f;
+    private final static float BANNER_OFFSET_X2 = AbstractCard.RAW_W * 0.345f;
+    private final static float BANNER_OFFSET_Y = -AbstractCard.RAW_H * 0.04f;
+    private final static float BANNER_OFFSET_Y2 = -AbstractCard.RAW_H * 0.06f;
+    private final static float FOOTER_SIZE = 52f;
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
     protected static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
@@ -107,6 +116,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
+    protected static final GlyphLayout layout = new GlyphLayout();
     public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
@@ -120,6 +130,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public final PCLCardData cardData;
     public final PCLCardText cardText;
     private ColoredTexture portraitImgBackup;
+    private float badgeAlphaTargetOffset = 1f;
+    private float badgeAlphaOffset = -0.2f;
     private transient int glowIndex = 0;
     protected transient ArrayList<PCLCardAffinity> previousAffinities;
     protected ColoredTexture portraitForeground;
@@ -137,7 +149,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public boolean isPopup = false;
     public boolean isPreview = false;
     public boolean isRightCountModified = false;
-    public boolean showTypeText = true;
     public boolean upgradedHeal = false;
     public boolean upgradedHitCount = false;
     public boolean upgradedRightCount = false;
@@ -865,6 +876,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return result;
     }
 
+    protected TextureCache getHPIcon() {
+        return isPopup ? PCLCoreImages.CardIcons.hpL : PCLCoreImages.CardIcons.hp;
+    }
+
     public String getHPString() {
         return String.valueOf(currentHealth);
     }
@@ -969,6 +984,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public Texture getPortraitImageTexture() {
         return portraitImg.texture;
+    }
+
+    protected TextureCache getPriorityIcon() {
+        return isPopup ?
+                (timing.movesBeforePlayer() ? PCLCoreImages.CardIcons.priorityPlusL : PCLCoreImages.CardIcons.priorityMinusL)
+                : (timing.movesBeforePlayer() ? PCLCoreImages.CardIcons.priorityPlus : PCLCoreImages.CardIcons.priorityMinus);
     }
 
     public Color getRarityColor() {
@@ -1633,8 +1654,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 }
             }
 
-            tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
-            tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this, this, enemy);
+            tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, info, parent != null ? parent : this, this);
+            tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, info, parent != null ? parent : this, this);
 
             oldBlock = tempBlock;
             oldDamage = tempDamage;
@@ -1886,6 +1907,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         CardModifierManager.onRender(this, sb);
     }
 
+    protected void renderAffinities(SpriteBatch sb) {
+        if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this) || (GameUtilities.inGame() && !CombatManager.showAffinities().isEmpty()))) {
+            affinities.renderOnCard(sb, this, AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this));
+        }
+    }
+
     protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY) {
         sb.setColor(color);
         sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale, this.drawScale * Settings.scale, this.angle);
@@ -1896,6 +1923,74 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale * scale, this.drawScale * Settings.scale * scale, this.angle);
     }
 
+    protected void renderAttributeBanner(SpriteBatch sb, TextureCache icon, float sign, float offsetIconX) {
+        final Texture panel = getCardAttributeBanner();
+        final Color rarityColor = getRarityColor();
+
+        if (panel != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, panel, sign * AbstractCard.RAW_W * 0.33f, BANNER_OFFSET_Y, 120f, 54f, rarityColor, rarityColor.a * transparency, 1, 0, sign < 0, false);
+            if (icon != null) {
+                final float icon_x = offsetIconX + (sign * (AbstractCard.RAW_W * 0.43f));
+                PCLRenderHelpers.drawOnCardAuto(sb, this, icon.texture(), icon_x, BANNER_OFFSET_Y, 48, 48);
+            }
+        }
+    }
+
+    protected void renderAttributeBannerWithText(SpriteBatch sb, TextureCache icon, String text, String suffix, Color textColor, float offsetX, float offsetY, float offsMult, float scaleMult, float sign, float offsetIconX) {
+        renderAttributeBanner(sb, icon, sign, offsetIconX);
+
+        final float suffix_scale = scaleMult * 0.7f;
+        BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
+        largeFont.getData().setScale(this.isPopup ? 0.5f : 1);
+        layout.setText(largeFont, text);
+
+        float text_width = offsMult * layout.width / Settings.scale;
+        float suffix_width = 0;
+
+        if (suffix != null) {
+            layout.setText(largeFont, suffix);
+            suffix_width = (layout.width / Settings.scale) * suffix_scale;
+        }
+
+        largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
+        float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetX);
+
+        PCLRenderHelpers.writeOnCard(sb, this, largeFont, text, offsetX + (text_width * 0.5f), offsetY, textColor, true);
+
+        if (suffix != null) {
+            largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
+            PCLRenderHelpers.writeOnCard(sb, this, largeFont, suffix, offsetX + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), offsetY, textColor, true);
+        }
+
+        PCLRenderHelpers.resetFont(largeFont);
+    }
+
+    protected void renderAttributes(SpriteBatch sb) {
+        if (this.type == PCLEnum.CardType.SUMMON) {
+            renderAttributeBannerWithText(sb, getHPIcon(), this.getHPString(), "/" + this.heal, this.getHPStringColor(), BANNER_OFFSET_X, BANNER_OFFSET_Y,0.85f,0.85f, -1, 0);
+            renderAttributeBannerWithText(sb, getPriorityIcon(), this.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y2,0,0.45f, 1, -25f);
+        }
+        else if (PGR.config.showCardTarget.get()) {
+            renderAttributeBannerWithText(sb, null, this.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y,0,0.45f, 1, 0);
+        }
+    }
+
+    private float renderAugment(SpriteBatch sb, PCLAugment augment, float y) {
+        PCLRenderHelpers.drawOnCardAuto(sb, this, PCLCoreImages.CardUI.augmentSlot.texture(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, this.transparency, 1);
+        if (augment != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, augment.getTextureBase(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, this.transparency, 1);
+            Texture tex = augment.getTexture();
+            if (tex != null) {
+                PCLRenderHelpers.drawOnCardAuto(sb, this, tex, AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, this.transparency, 1);
+            }
+        }
+        else {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, PCLCoreImages.CardUI.augmentSlot.texture(), AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y, 28, 28, Color.WHITE, this.transparency, 1);
+        }
+
+        return 30; // y offset
+    }
+
     @SpireOverride
     protected void renderBack(SpriteBatch sb, boolean hovered, boolean selected) {
         SpireSuper.call(sb, hovered, selected);
@@ -1903,9 +1998,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @SpireOverride
     protected void renderBannerImage(SpriteBatch sb, float drawX, float drawY) {
-        if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this) || (GameUtilities.inGame() && !CombatManager.showAffinities().isEmpty()))) {
-            affinities.renderOnCard(sb, this, AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this));
-        }
+        renderAffinities(sb);
         float sc = isPopup ? 0.5f : 1f;
         if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), sc)) {
             // Copying base game behavior
@@ -1956,7 +2049,26 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @SpireOverride
     public void renderDescription(SpriteBatch sb) {
         if (!Settings.hideCards && !isFlipped) {
-            this.cardText.renderDescription(sb);
+            if (isLocked || !isSeen) {
+                FontHelper.menuBannerFont.getData().setScale(drawScale * 1.25f);
+                FontHelper.renderRotatedText(sb, FontHelper.menuBannerFont, "? ? ?", current_x, current_y,
+                        0, -200 * Settings.scale * drawScale * 0.5f, angle, true, EUIColors.cream(transparency));
+                FontHelper.menuBannerFont.getData().setScale(1f);
+                return;
+            }
+
+            cardText.renderLines(sb);
+            renderAttributes(sb);
+
+            if (drawScale > 0.3f) {
+                renderIcons(sb);
+
+                if (bottomText != null) {
+                    BitmapFont font = PCLRenderHelpers.getSmallTextFont(this, bottomText.text);
+                    PCLRenderHelpers.writeOnCard(sb, this, font, bottomText.text, 0, -0.47f * AbstractCard.RAW_H, bottomText.color, true);
+                    PCLRenderHelpers.resetFont(font);
+                }
+            }
         }
     }
 
@@ -1992,6 +2104,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
+    private float renderFooter(SpriteBatch sb, Texture texture, float y) {
+        final float offset_y = y - AbstractCard.RAW_H * 0.46f;
+        final float alpha = transparency;
+
+        PCLRenderHelpers.drawOnCardAuto(sb, this, PCLCoreImages.Core.controllableCardPile.texture(), AUGMENT_OFFSET_X, offset_y, FOOTER_SIZE, FOOTER_SIZE, Color.BLACK, alpha * 0.6f, 0.8f);
+        PCLRenderHelpers.drawOnCardAuto(sb, this, texture, AUGMENT_OFFSET_X, offset_y, FOOTER_SIZE, FOOTER_SIZE, Color.WHITE, alpha, 0.8f);
+
+        return 38; // y offset
+    }
+
     @Override
     public final void renderForPreview(SpriteBatch sb) {
         render(sb, hovered, false, false);
@@ -2024,6 +2146,30 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         sb.setBlendFunction(EUIRenderHelpers.BlendingMode.Normal.srcFunc, EUIRenderHelpers.BlendingMode.Normal.dstFunc);
+    }
+
+    protected void renderIcons(SpriteBatch sb) {
+        final float alpha = updateBadgeAlpha();
+
+        float offset_y = PCLCardTag.renderTagsOnCard(sb, this, alpha);
+
+        // Render card footers
+        offset_y = 0;
+        if (isSoulbound()) {
+            offset_y += renderFooter(sb, isPopup ? PCLCoreImages.CardIcons.soulboundL.texture() : PCLCoreImages.CardIcons.soulbound.texture(), offset_y);
+        }
+        if (isUnique()) {
+            offset_y += renderFooter(sb, isPopup ? PCLCoreImages.CardIcons.uniqueL.texture() : PCLCoreImages.CardIcons.unique.texture(), offset_y);
+        }
+        if (cardData.canToggleFromPopup) {
+            offset_y += renderFooter(sb, isPopup ? PCLCoreImages.CardIcons.multiformL.texture() : PCLCoreImages.CardIcons.multiform.texture(), offset_y);
+        }
+
+        // Render augments
+        offset_y = 0;
+        for (PCLAugment augment : augments) {
+            offset_y += renderAugment(sb, augment, offset_y);
+        }
     }
 
     @SpireOverride
@@ -2192,23 +2338,21 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @SpireOverride
     protected void renderType(SpriteBatch sb) {
-        if (showTypeText) {
-            if (shouldUsePCLFrame()) {
-                Texture texture = getTypeIcon();
-                float height = texture.getHeight();
-                PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, -height * 0.2f, texture.getWidth(), height, Color.WHITE, transparency, Settings.scale * 0.24f);
+        if (shouldUsePCLFrame()) {
+            Texture texture = getTypeIcon();
+            float height = texture.getHeight();
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, -height * 0.2f, texture.getWidth(), height, Color.WHITE, transparency, Settings.scale * 0.24f);
+        }
+        else {
+            if (isPopup) {
+                FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
             }
             else {
-                if (isPopup) {
-                    FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
-                }
-                else {
-                    BitmapFont font = EUIFontHelper.cardTypeFont;
-                    font.getData().setScale(this.drawScale);
-                    Color typeColor = getTypeColor();
-                    typeColor.a = getRenderColor().a;
-                    FontHelper.renderRotatedText(sb, font, EUIGameUtils.textForType(type), this.current_x, this.current_y - 22.0F * this.drawScale * Settings.scale, 0.0F, -1.0F * this.drawScale * Settings.scale, this.angle, false, typeColor);
-                }
+                BitmapFont font = EUIFontHelper.cardTypeFont;
+                font.getData().setScale(this.drawScale);
+                Color typeColor = getTypeColor();
+                typeColor.a = getRenderColor().a;
+                FontHelper.renderRotatedText(sb, font, EUIGameUtils.textForType(type), this.current_x, this.current_y - 22.0F * this.drawScale * Settings.scale, 0.0F, -1.0F * this.drawScale * Settings.scale, this.angle, false, typeColor);
             }
         }
     }
@@ -2662,6 +2806,43 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID && AbstractDungeon.gridSelectScreen.forUpgrade && hb.hovered && InputHelper.justClickedLeft) {
             GridCardSelectScreenPatches.selectPCLCardUpgrade(this);
         }
+    }
+
+    protected float updateBadgeAlpha() {
+        if (isPreview) {
+            return transparency - badgeAlphaOffset;
+        }
+
+        if (cardsToPreview instanceof PCLCard) {
+            ((PCLCard) cardsToPreview).badgeAlphaOffset = badgeAlphaOffset;
+        }
+
+        if (canRenderTip() && !isPopup) {
+            if (badgeAlphaOffset < badgeAlphaTargetOffset) {
+                badgeAlphaOffset += EUI.delta(0.33f);
+                if (badgeAlphaOffset > badgeAlphaTargetOffset) {
+                    badgeAlphaOffset = badgeAlphaTargetOffset;
+                    badgeAlphaTargetOffset = -0.9f;
+                }
+            }
+            else {
+                badgeAlphaOffset -= EUI.delta(0.5f);
+                if (badgeAlphaOffset < badgeAlphaTargetOffset) {
+                    badgeAlphaOffset = badgeAlphaTargetOffset;
+                    badgeAlphaTargetOffset = 0.5f;
+                }
+            }
+
+            if (transparency >= 1 && badgeAlphaOffset > 0) {
+                return transparency - badgeAlphaOffset;
+            }
+        }
+        else {
+            badgeAlphaOffset = -0.2f;
+            badgeAlphaTargetOffset = 0.5f;
+        }
+
+        return transparency;
     }
 
     public void updateBlockVars() {

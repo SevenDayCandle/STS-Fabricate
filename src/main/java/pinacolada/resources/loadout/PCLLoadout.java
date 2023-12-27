@@ -176,18 +176,16 @@ public abstract class PCLLoadout {
         return false;
     }
 
-    public PCLCard buildCard(boolean selected, boolean inPool) {
+    public ChoiceCard<PCLLoadout> buildCard(boolean selected, boolean inPool) {
         final PCLCardData data = getSymbolicCard();
-        PCLDynamicCardData cd = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
-                .setColor(color)
-                .showTypeText(false)
-                .setMaxUpgrades(0));
+        ChoiceCardData<PCLLoadout> cd = new ChoiceCardData<>(String.valueOf(ID), this);
+        cd.setColor(color);
+        cd.setMaxUpgrades(0);
         if (!isLocked()) {
             cd.setImagePath(data.imagePath);
         }
 
-        PCLDynamicCard card = cd.createImplWithForms(0, 0, false);
-
+        ChoiceCard<PCLLoadout> card = cd.create();
         card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();
 
@@ -211,31 +209,6 @@ public abstract class PCLLoadout {
                 card.color = AbstractCard.CardColor.COLORLESS;
                 card.setCardRarityType(AbstractCard.CardRarity.COMMON, SELECTABLE_TYPE);
             }
-        }
-
-        if (!isCore() && card.isSeen) {
-            int i = 0;
-            int maxLevel = 2;
-            float maxPercentage = 0;
-            CountingPanelStats<PCLAffinity, PCLAffinity, PCLCardData> affinityStatistics = CountingPanelStats.basic(d -> d.affinities.getAffinities(), cardDatas);
-            for (Map.Entry<PCLAffinity, Integer> g : affinityStatistics) {
-                float percentage = affinityStatistics.getPercentage(g.getKey());
-                if (percentage == 0 || i > 2) {
-                    break;
-                }
-
-                if (percentage < maxPercentage || (maxLevel == 2 && percentage < 0.3f)) {
-                    maxLevel -= 1;
-                }
-                if (maxLevel > 0) {
-                    card.affinities.add(g.getKey(), maxLevel);
-                }
-
-                maxPercentage = percentage;
-                i += 1;
-            }
-            card.affinities.collapseDuplicates = true;
-            card.affinities.updateSortedList();
         }
 
         card.initializeDescription();

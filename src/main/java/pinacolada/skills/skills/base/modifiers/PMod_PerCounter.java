@@ -28,7 +28,7 @@ public class PMod_PerCounter extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return GameUtilities.getCounter(sourceCard);
+        return GameUtilities.getCounter(source);
     }
 
     @Override

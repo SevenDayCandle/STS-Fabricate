@@ -1,8 +1,10 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -35,7 +37,7 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
         }
 
         // Otherwise, estimate from the damage effect
-        PCardPrimary_DealDamage damageEff = source != null ? source.getCardDamage() : null;
+        PCardPrimary_DealDamage damageEff = source instanceof PointerProvider ? ((PointerProvider) source).getCardDamage() : null;
         if (damageEff != null && damageEff.target != null) {
             return sumTargets(info, t -> damageEff.extra * GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false)) / PGR.dungeon.getDivisor();
         }

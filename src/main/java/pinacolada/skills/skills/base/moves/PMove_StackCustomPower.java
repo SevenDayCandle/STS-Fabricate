@@ -10,6 +10,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.SummonOnlyMove;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PTriggerPower;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -60,7 +61,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        List<PSkill<?>> powerEffects = source != null ? source.getPowerEffects() : requestor instanceof EditorMaker ? ((EditorMaker<?, ?>) requestor).getPowers() : null;
+        List<PSkill<?>> powerEffects = source instanceof PointerProvider ? ((PointerProvider) source).getPowerEffects() : requestor instanceof EditorMaker ? ((EditorMaker<?, ?>) requestor).getPowers() : null;
         if (powerEffects != null) {
             for (Integer i : fields.indexes) {
                 if (i >= 0 && powerEffects.size() > i) {
@@ -106,12 +107,12 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (source == null) {
+        if (!(source instanceof PointerProvider)) {
             super.use(info, order);
             return;
         }
 
-        List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> EUIUtils.safeCast(source.getPowerEffect(i), PTrigger.class));
+        List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> EUIUtils.safeCast(((PointerProvider) source).getPowerEffect(i), PTrigger.class));
         if (triggers.isEmpty()) {
             super.use(info, order);
             return;
@@ -119,7 +120,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
 
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        List<PSkill<?>> powerEffects = source.getPowerEffects();
+        List<PSkill<?>> powerEffects = ((PointerProvider) source).getPowerEffects();
         for (Integer i : fields.indexes) {
             if (i >= 0 && powerEffects.size() > i) {
                 PSkill<?> poEff = powerEffects.get(i);
@@ -140,7 +141,7 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         else {
             // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
             for (AbstractCreature c : getTargetList(info)) {
-                order.applyPower(new PTriggerPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf).setInfo(info);
+                order.applyPower(new PTriggerPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
             }
         }
 

@@ -282,17 +282,6 @@ public class GameUtilities {
         return group;
     }
 
-    public static int[] createOrbDamageMatrix(int baseDamage, AbstractOrb orb) {
-        int[] retVal = new int[AbstractDungeon.getMonsters().monsters.size()];
-
-        for (int i = 0; i < retVal.length; ++i) {
-            DamageInfo info = new DamageInfo(AbstractDungeon.player, baseDamage, DamageInfo.DamageType.THORNS);
-            retVal[i] = CombatManager.playerSystem.modifyOrbOutput(info.output, AbstractDungeon.getMonsters().monsters.get(i), orb);
-        }
-
-        return retVal;
-    }
-
     public static void fillWithAllCharacters(boolean aliveOnly, ArrayList<AbstractCreature> characters) {
         final AbstractRoom room = getCurrentRoom();
         if (room != null && room.monsters != null) {
@@ -716,8 +705,8 @@ public class GameUtilities {
     }
 
     // Do not return magic number for non-PCLCard cards
-    public static int getCounter(AbstractCard card) {
-        return card instanceof PCLCard ? card.magicNumber : 0;
+    public static int getCounter(Object card) {
+        return card instanceof PCLCard ? ((PCLCard) card).magicNumber : 0;
     }
 
     public static AbstractRoom getCurrentRoom() {
@@ -1867,14 +1856,6 @@ public class GameUtilities {
             }
         }
         return choice;
-    }
-
-    public static CardStrings mockCardStrings() {
-        CardStrings s = new CardStrings();
-        s.NAME = EUIUtils.EMPTY_STRING;
-        s.DESCRIPTION = EUIUtils.EMPTY_STRING;
-        s.EXTENDED_DESCRIPTION = new String[]{};
-        return s;
     }
 
     public static void modifyAffinityLevel(AbstractCard card, PCLAffinity affinity, int level, boolean relative) {

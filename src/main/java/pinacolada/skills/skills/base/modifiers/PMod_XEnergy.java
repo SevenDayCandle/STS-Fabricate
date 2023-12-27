@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -35,7 +36,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard) + this.amount;
+        return be.baseAmount * GameUtilities.getXCostEnergy(EUIUtils.safeCast(source, AbstractCard.class)) + this.amount;
     }
 
     @Override
@@ -68,7 +69,9 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
         order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info, true);
-                GameUtilities.useXCostEnergy(sourceCard);
+                if (source instanceof AbstractCard) {
+                    GameUtilities.useXCostEnergy((AbstractCard) source);
+                }
                 this.childEffect.use(info, order, shouldPay);
             }
         });
@@ -79,7 +82,9 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
         order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info, true);
-                GameUtilities.useXCostEnergy(sourceCard);
+                if (source instanceof AbstractCard) {
+                    GameUtilities.useXCostEnergy((AbstractCard) source);
+                }
                 this.childEffect.use(info, order);
             }
         });

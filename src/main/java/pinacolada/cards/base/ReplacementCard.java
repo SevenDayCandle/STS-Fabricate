@@ -167,13 +167,13 @@ public class ReplacementCard extends PCLDynamicCard {
             AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
             ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
             // Allow Starter effects on inherited cards to take effect
-            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == sourceCard))) {
+            if (played != null && (played.isEmpty() || (played.size() == 1 && played.get(0) == source))) {
                 AbstractDungeon.actionManager.cardsPlayedThisTurn.clear();
             }
             card.updateOriginal();
             card.original.use(AbstractDungeon.player, m);
-            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != sourceCard) {
-                AbstractDungeon.actionManager.cardsPlayedThisTurn.add(sourceCard);
+            if (played != null && !played.isEmpty() && played.get(played.size() - 1) != source && source instanceof AbstractCard) {
+                AbstractDungeon.actionManager.cardsPlayedThisTurn.add((AbstractCard) source);
             }
         }
     }

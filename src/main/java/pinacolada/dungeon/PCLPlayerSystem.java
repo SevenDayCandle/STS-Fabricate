@@ -29,20 +29,6 @@ public class PCLPlayerSystem extends EUIBase {
     public PCLPlayerSystem() {
     }
 
-    public void flash(int target) {
-        PCLPlayerMeter active = getActiveMeter();
-        if (active != null) {
-            active.flash(target);
-        }
-    }
-
-    public void flashAffinity(PCLAffinity target) {
-        PCLPlayerMeter active = getActiveMeter();
-        if (active != null) {
-            active.flashAffinity(target);
-        }
-    }
-
     /* Creates a NEW info object. To be used when executing infos in effects to ensure that data is not interfered with during the action execution process */
     public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target) {
         PCLUseInfo newInfo = new PCLUseInfo(card, source, target);
@@ -61,11 +47,6 @@ public class PCLPlayerSystem extends EUIBase {
 
     public Collection<PCLPlayerMeter> getActiveMeters() {
         return activePlayerMeters;
-    }
-
-    public PCLAffinity getAffinity(int index) {
-        PCLPlayerMeter active = getActiveMeter();
-        return active != null ? active.get(index) : PCLAffinity.General;
     }
 
     public Color getGlowColor(AbstractCard c) {
@@ -117,37 +98,37 @@ public class PCLPlayerSystem extends EUIBase {
         EUIUtils.logInfoIfDebug(this, "Initialized PCL Affinity System.");
     }
 
-    public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
+    public float modifyBlock(float block, PCLUseInfo info, PCLCard source, PCLCard card) {
         for (PCLAffinity p : PCLAffinity.basic()) {
             card.addDefendDisplay(p, block, block);
         }
 
         for (PCLPlayerMeter meter : getActiveMeters()) {
-            block = meter.modifyBlock(block, source, card, target);
+            block = meter.modifyBlock(block, info, source, card);
         }
 
         return block;
     }
 
-    public float modifyDamage(float damage, PCLCard source, PCLCard card, AbstractCreature target) {
+    public float modifyDamage(float damage, PCLUseInfo info, PCLCard source, PCLCard card) {
         for (PCLAffinity p : PCLAffinity.basic()) {
             card.addAttackDisplay(p, damage, damage);
         }
 
         for (PCLPlayerMeter meter : getActiveMeters()) {
-            damage = meter.modifyDamage(damage, source, card, target);
+            damage = meter.modifyDamage(damage, info, source, card);
         }
 
         return damage;
     }
 
-    public int modifyOrbOutput(float initial, AbstractCreature target, AbstractOrb orb) {
-        if (GameUtilities.getPowerAmount(target, com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID) > 0) {
-            initial *= PCLLockOnPower.getOrbMultiplier(target.isPlayer);
+    public int modifyOrbOutput(float initial, PCLUseInfo info, AbstractOrb orb) {
+        if (info.target != null && GameUtilities.getPowerAmount(info.target, com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID) > 0) {
+            initial *= PCLLockOnPower.getOrbMultiplier(info.target.isPlayer);
         }
 
         for (PCLPlayerMeter meter : getActiveMeters()) {
-            initial = meter.modifyOrbOutput(initial, target, orb);
+            initial = meter.modifyOrbOutput(initial, info, orb);
         }
 
         return (int) initial;

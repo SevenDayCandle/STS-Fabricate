@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -74,9 +75,9 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     @Override
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
         return new ColoredString(displayAmount,
-                (sourceCard != null ?
-                        sourceCard.upgradedDamage ? Settings.GREEN_TEXT_COLOR :
-                                sourceCard.isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                (source instanceof AbstractCard ?
+                        ((AbstractCard) source).upgradedDamage ? Settings.GREEN_TEXT_COLOR :
+                                ((AbstractCard) source).isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
                                         : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
     }
 
@@ -275,7 +276,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
     @Override
     public void useImpl(PCLUseInfo info, PCLActions order) {
-        PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        PCLCard pCard = EUIUtils.safeCast(source, PCLCard.class);
         if (fields.effekseer != null && damageEffect == null) {
             if (fields.vfxColor != null) {
                 setDamageEffect(fields.effekseer, fields.vfxColor);

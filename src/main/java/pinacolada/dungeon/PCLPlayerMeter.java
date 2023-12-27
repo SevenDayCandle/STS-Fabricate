@@ -61,19 +61,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
         return false;
     }
 
-    public void disableAffinity(PCLAffinity affinity) {
-    }
-
-    public void flash(int target) {
-    }
-
-    public void flashAffinity(PCLAffinity affinity) {
-    }
-
-    public PCLAffinity get(int target) {
-        return PCLAffinity.General;
-    }
-
     public int getCurrentScore() {
         return currentScore;
     }
@@ -97,15 +84,15 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
         return super.isHovered() || infoIcon.hb.hovered;
     }
 
-    public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
+    public float modifyBlock(float block, PCLUseInfo info, PCLCard source, PCLCard card) {
         return block;
     }
 
-    public float modifyDamage(float damage, PCLCard source, PCLCard card, AbstractCreature target) {
+    public float modifyDamage(float damage, PCLUseInfo info, PCLCard source, PCLCard card) {
         return damage;
     }
 
-    public float modifyOrbOutput(float initial, AbstractCreature target, AbstractOrb orb) {
+    public float modifyOrbOutput(float initial, PCLUseInfo info, AbstractOrb orb) {
         return initial;
     }
 
@@ -130,10 +117,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         infoIcon.renderImpl(sb);
-    }
-
-    public PCLAffinity set(PCLAffinity affinity, int target) {
-        return get(0);
     }
 
     public int size() {
