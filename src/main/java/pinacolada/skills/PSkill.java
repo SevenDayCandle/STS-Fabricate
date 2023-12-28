@@ -86,6 +86,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final char EXTRA_CHAR = 'G';
     public static final char EXTRA2_CHAR = 'H';
     public static final char SCOPE_CHAR = 'I';
+    public static final char UPGRADE_CHAR = 'U';
     public static final char CAPITAL_CHAR = 'C';
     public static final char LOWER_CHAR = 'c';
     public static final int CHAR_OFFSET = 48;
@@ -1058,7 +1059,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getPowerTextForDisplay(Object requestor) {
         if (overrideDesc != null) {
-            return getUncascadedPowerOverride();
+            return getUncascadedPowerOverride(requestor);
         }
         if (source instanceof PointerProvider) {
             return ((PointerProvider) source).makePowerString(getText(requestor));
@@ -1432,11 +1433,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getTextForDisplay() {
-        return overrideDesc != null ? getUncascadedOverride() : getText();
+        return overrideDesc != null ? getUncascadedOverride(null) : getText();
+    }
+
+    public final String getTextForDisplay(Object requestor) {
+        return overrideDesc != null ? getUncascadedOverride(requestor) : getText(requestor);
     }
 
     public final String getTextForDisplay(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return overrideDesc != null ? getUncascadedOverride() : getText(perspective, requestor, addPeriod);
+        return overrideDesc != null ? getUncascadedOverride(requestor) : getText(perspective, requestor, addPeriod);
     }
 
     public String getThemString() {
@@ -1456,7 +1461,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return uuid;
     }
 
-    public String getUncascadedOverride() {
+    public String getUncascadedOverride(Object requestor) {
+        return getUncascadedOverride(overrideDesc, requestor);
+    }
+
+    public String getUncascadedOverride(String overrideDesc, Object requestor) {
         if (overrideDesc == null) {
             return null;
         }
@@ -1471,6 +1480,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     }
                     i += 3;
                 }
+                else if (EUIRenderHelpers.isCharAt(overrideDesc, i + 2, CASCADE_CHAR)) {
+                    sb.append(String.valueOf(getUncascadedOverrideValue(overrideDesc.charAt(i + 1), requestor)));
+                    i += 2;
+                }
             }
             else {
                 sb.append(c);
@@ -1480,11 +1493,22 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return sb.toString();
     }
 
-    public String getUncascadedPowerOverride() {
-        return getUncascadedPowerOverride(overrideDesc);
+    // TODO more override options
+    private int getUncascadedOverrideValue(char key, Object requestor) {
+        if (source != null) {
+            return getUpgradeLevel();
+        }
+        if (requestor instanceof Integer) {
+            return (Integer) requestor;
+        }
+        return 0;
     }
 
-    public String getUncascadedPowerOverride(String overrideDesc) {
+    public String getUncascadedPowerOverride(Object requestor) {
+        return getUncascadedPowerOverride(overrideDesc, requestor);
+    }
+
+    public String getUncascadedPowerOverride(String overrideDesc, Object requestor) {
         if (overrideDesc == null) {
             return null;
         }
@@ -1498,6 +1522,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                         sb.append(move.getAttributeString(overrideDesc.charAt(i + 1)));
                     }
                     i += 3;
+                }
+                else if (EUIRenderHelpers.isCharAt(overrideDesc, i + 2, CASCADE_CHAR)) {
+                    sb.append(String.valueOf(getUncascadedOverrideValue(overrideDesc.charAt(i + 1), requestor)));
+                    i += 2;
                 }
             }
             else {

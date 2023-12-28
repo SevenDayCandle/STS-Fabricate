@@ -17,6 +17,7 @@ public class PSkillSaveData implements Serializable {
     public int scope;
     public int[] upgrade;
     public int[] upgradeExtra;
+    public int[] upgradeExtra2;
     public int[] upgradeScope;
     public boolean useParent;
 
@@ -29,6 +30,7 @@ public class PSkillSaveData implements Serializable {
         this.scope = effect.scope;
         this.upgrade = effect.upgrade;
         this.upgradeExtra = effect.upgradeExtra;
+        this.upgradeExtra2 = effect.upgradeExtra2;
         this.upgradeScope = effect.upgradeScope;
         this.useParent = effect.useParent;
         this.effectData = EUIUtils.serialize(effect.fields);

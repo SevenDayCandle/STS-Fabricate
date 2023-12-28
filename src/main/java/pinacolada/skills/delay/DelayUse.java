@@ -47,7 +47,7 @@ public abstract class DelayUse implements PCLCombatSubscriber, Comparable<DelayU
     }
 
     public static int minTurns() {
-        return DELAYS.size() > 0 ? DELAYS.peek().turns : 0;
+        return !DELAYS.isEmpty() ? DELAYS.peek().turns : 0;
     }
 
     public static DelayUse turnEnd(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action, String title, String description) {

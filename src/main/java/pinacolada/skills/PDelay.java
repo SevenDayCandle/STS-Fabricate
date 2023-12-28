@@ -93,6 +93,14 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
+    public PDelay setTemporaryExtra2(int amount) {
+        if (this.childEffect != null) {
+            this.childEffect.setTemporaryExtra2(amount);
+        }
+        return this;
+    }
+
+    @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
             getDelayUse(info, (i) -> useChildEffect(i, order), this.childEffect.getName(), this.childEffect.getPowerText(null)).start();

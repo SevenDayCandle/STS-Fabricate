@@ -264,6 +264,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_legendExtra = cetut.TEXT[99];
     public final String cetut_legendExtra2 = cetut.TEXT[100];
     public final String cetut_legendScope = cetut.TEXT[101];
+    public final String cetut_legendUpgrade = cetut.TEXT[102];
+    public final String cetut_legendDynamic = cetut.TEXT[103];
+    public final String cetut_legendDynamic2 = cetut.TEXT[104];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

@@ -149,7 +149,7 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
             PSkill<?> move = moves.get(i);
             if (!PSkill.isSkillBlank(move)) {
                 move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
-                String pText = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? move.getUncascadedPowerOverride(desc[i]) : move.getPowerTextForDisplay(this);
+                String pText = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? move.getUncascadedPowerOverride(desc[i], level) : move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
@@ -165,7 +165,7 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         for (int i = 0; i < moves.size(); i++) {
             PSkill<?> skill = moves.get(i);
             if (!PSkill.isSkillBlank(skill)) {
-                String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i]) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
+                String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i], null) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
                 if (s != null) {
                     sj.add(s);
                 }

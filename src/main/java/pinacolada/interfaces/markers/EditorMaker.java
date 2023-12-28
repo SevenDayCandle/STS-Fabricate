@@ -54,7 +54,8 @@ public interface EditorMaker<T, U> {
     default HashMap<Settings.GameLanguage, String[]> createDescMap() {
         HashMap<Settings.GameLanguage, String[]> map = new HashMap<>();
         for (Map.Entry<Settings.GameLanguage, U> entry : getLanguageMap().entrySet()) {
-            map.put(entry.getKey(), getDescString(entry.getValue()));
+            String[] descs = getDescString(entry.getValue());
+            map.put(entry.getKey(), descs != null ? descs.clone() : new String[]{});
         }
         return map;
     }

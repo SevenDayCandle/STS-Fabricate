@@ -15,7 +15,6 @@ import pinacolada.powers.PCLPointerPower;
 import pinacolada.powers.PCLPowerData;
 
 public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
-    private PCLUseInfo info;
     public AbstractPower power;
     public boolean ignoreArtifact;
     public boolean showEffect = true;
@@ -81,13 +80,6 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
             return;
         }
 
-        // Instant powers that are not debuffs should not actually be applied. Debuff instant powers should be allowed through so that Artifact can affect them
-        if (power instanceof PCLPointerPower && ((PCLPointerPower) power).data.isInstant() && !((PCLPointerPower) power).data.isDebuff()) {
-            ((PCLPointerPower) power).useOnInstantRemoval(info != null ? info : CombatManager.getLastInfo() != null ? CombatManager.getLastInfo() : CombatManager.playerSystem.generateInfo(null, source, target), PCLActions.bottom);
-            complete(power);
-            return;
-        }
-
         // Powers that can go negative (like Strength) and powers that don't use amounts (like Confusion) should always use Apply so that characters without it can gain negative amounts of it
         if (amount >= 0 || power.canGoNegative || allowNegative) {
             action = new ApplyPowerAction(target, source, power, amount, Settings.FAST_MODE, attackEffect);
@@ -115,12 +107,6 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
 
     public ApplyOrReducePowerAction skipIfZero(boolean skipIfZero) {
         this.skipIfZero = skipIfZero;
-
-        return this;
-    }
-
-    public ApplyOrReducePowerAction setInfo(PCLUseInfo info) {
-        this.info = info;
 
         return this;
     }

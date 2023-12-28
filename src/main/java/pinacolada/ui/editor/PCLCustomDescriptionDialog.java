@@ -41,6 +41,7 @@ import static pinacolada.skills.PSkill.CASCADE_CHAR;
 import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDialog> {
+    protected EUIButton clearButton;
     protected EUITextBoxInput textInput;
     protected EUITextBox preview;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
@@ -59,10 +60,14 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
     }
 
     public PCLCustomDescriptionDialog(String headerText, String descriptionText, float w, float h) {
-        this(new EUIHitbox(Settings.WIDTH / 2.0F - w / 2f, Settings.HEIGHT / 2.0F - h / 2f, w, h), ImageMaster.OPTION_CONFIRM, headerText, descriptionText);
+        this(new EUIHitbox(Settings.WIDTH / 2.0F - w / 2f, Settings.HEIGHT / 2.0F - h / 2f, w, h), headerText, descriptionText);
     }
 
-    public PCLCustomDescriptionDialog(EUIHitbox hb, Texture backgroundTexture, String headerText, String descriptionText) {
+    public PCLCustomDescriptionDialog(EUIHitbox hb, String headerText, String descriptionText) {
+        this(hb, new EUIBorderedImage(EUIRM.images.greySquare.texture(), hb), headerText, descriptionText);
+    }
+
+    public PCLCustomDescriptionDialog(EUIHitbox hb, EUIImage backgroundTexture, String headerText, String descriptionText) {
         super(hb, backgroundTexture, headerText, descriptionText);
         textInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.darkSquare.texture(),
                 new EUIHitbox(hb.x + hb.width * 0.23f, hb.y + hb.height * 0.29f, hb.width * 0.54f, scale(250)))
@@ -87,6 +92,13 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
         textInput.label.setWrap(true);
+
+        clearButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y, scale(95), scale(32)))
+                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, EUIRM.strings.misc_clear)
+                .setColor(new Color(0.7f, 0.4f, 0.4f, 1))
+                .setOnClick(() -> {
+                    textInput.setTextAndCommit(EUIUtils.EMPTY_STRING);
+                });
     }
 
     protected EUIButton getCancelButton() {
@@ -165,10 +177,11 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.preview.renderImpl(sb);
         this.textInput.tryRender(sb);
         this.languageDropdown.tryRender(sb);
+        this.clearButton.tryRender(sb);
         // Must render this text manually without smart text in order to properly display these symbols
         float x = Settings.WIDTH * 0.665f;
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendDesc, x, Settings.HEIGHT * 0.8f, Settings.GOLD_COLOR);
-        EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cedit_effects, x, Settings.HEIGHT * 0.48f, Settings.GOLD_COLOR);
+        EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cedit_effects, x, Settings.HEIGHT * 0.45f, Settings.GOLD_COLOR);
         EUIFontHelper.cardDescriptionFontNormal.getData().setScale(0.75f);
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendLineBreak, x, Settings.HEIGHT * 0.75f, Color.WHITE);
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendColored, x, Settings.HEIGHT * 0.73f, Color.WHITE);
@@ -179,7 +192,13 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendExtra, x, Settings.HEIGHT * 0.63f, Color.WHITE);
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendExtra2, x, Settings.HEIGHT * 0.61f, Color.WHITE);
         EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendScope, x, Settings.HEIGHT * 0.59f, Color.WHITE);
-        EUITextHelper.renderSmart(sb, EUIFontHelper.cardDescriptionFontNormal, textList, x, Settings.HEIGHT * 0.43f, Settings.WIDTH * 0.25f, Color.WHITE);
+        EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendUpgrade, x, Settings.HEIGHT * 0.57f, Color.WHITE);
+        EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendDynamic, x, Settings.HEIGHT * 0.55f, Color.WHITE);
+
+        EUITextHelper.renderSmart(sb, EUIFontHelper.cardDescriptionFontNormal, textList, x, Settings.HEIGHT * 0.40f, Settings.WIDTH * 0.25f, Color.WHITE);
+
+        EUIFontHelper.cardDescriptionFontNormal.getData().setScale(0.65f);
+        EUITextHelper.renderFont(sb, EUIFontHelper.cardDescriptionFontNormal, PGR.core.strings.cetut_legendDynamic2, x, Settings.HEIGHT * 0.53f, Color.LIGHT_GRAY);
         EUIRenderHelpers.resetFont(EUIFontHelper.cardDescriptionFontNormal);
     }
 
@@ -189,6 +208,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.preview.updateImpl();
         this.textInput.tryUpdate();
         this.languageDropdown.tryUpdate();
+        this.clearButton.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {
@@ -210,24 +230,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < overrideDesc.length(); i++) {
-            char c = overrideDesc.charAt(i);
-            if (c == CASCADE_CHAR) {
-                if (EUIRenderHelpers.isCharAt(overrideDesc, i + 3, CASCADE_CHAR)) {
-                    PSkill<?> move = skillAt.getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
-                    if (move != null) {
-                        sb.append(move.getRawString(overrideDesc.charAt(i + 1)));
-                    }
-                    i += 3;
-                }
-            }
-            else {
-                sb.append(c);
-            }
-        }
-
-        preview.setLabel(sb.toString());
+        preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
     }
 
     private void updateText(String name) {

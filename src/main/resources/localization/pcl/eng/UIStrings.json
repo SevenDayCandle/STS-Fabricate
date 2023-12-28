@@ -284,11 +284,14 @@
 												"{#FF0000:text} : Colored text",
 												"!D! : Damage (cards only)",
 												"!B! : Block (cards only)",
-												"[X] : Icon for keyword X",
+												"[text] : Highlight text as keyword",
 												"~E0~ : Amount for skill at position 0",
 												"~G0~ : Extra for skill at position 0",
 												"~H0~ : Extra 2 for skill at position 0",
-												"~I0~ : Scope for skill at position 0"
+												"~I0~ : Scope for skill at position 0",
+												"~U~ : Upgraded count",
+												"$var@cnd$ : Evaluate var with dynamic text block",
+												"https://github.com/SevenDayCandle/STS-EUI/wiki/Smart-Text-Rendering"
 								]
 				},
 				"pcl:CardPile": {

@@ -101,7 +101,7 @@ public class LogicToken extends PCLTextToken {
                             PCLTextToken token = null;
                             internalParser.initialize(parser.card, EUIUtils.popBuilder(builder));
                             List<PCLTextToken> tokens = internalParser.getTokens();
-                            if (tokens.size() > 0) {
+                            if (!tokens.isEmpty()) {
                                 token = tokens.get(0);
                             }
 
@@ -132,6 +132,7 @@ public class LogicToken extends PCLTextToken {
                             else if (token != null && StringUtils.isNumeric(token.rawText)) {
                                 staticValue = Integer.parseInt(token.rawText);
                             }
+                            builder.setLength(0);
                             break;
                         default:
                             builder.append(next);
