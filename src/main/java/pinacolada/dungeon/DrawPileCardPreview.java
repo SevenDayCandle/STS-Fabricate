@@ -9,6 +9,7 @@ import extendedui.configuration.EUIHotkeys;
 import extendedui.ui.EUIBase;
 import extendedui.utilities.RotatingList;
 import pinacolada.interfaces.providers.DrawPileCardPreviewProvider;
+import pinacolada.utilities.GameUtilities;
 
 public class DrawPileCardPreview {
     private static final float DRAW_X = 75 * Settings.scale;
@@ -110,7 +111,7 @@ public class DrawPileCardPreview {
             if (foundCard.hb.hovered) {
                 highlighted = true;
                 foundCard.renderCardTip(sb);
-                if (EUIInputManager.leftClick.isJustPressed()) {
+                if (EUIInputManager.leftClick.isJustPressed() && GameUtilities.canAcceptInput()) {
                     provider.onClick(foundCard);
                 }
             }
