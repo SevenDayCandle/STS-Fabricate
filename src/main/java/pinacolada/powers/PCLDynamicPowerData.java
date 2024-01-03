@@ -16,6 +16,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -23,6 +24,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
@@ -76,7 +78,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicPowerData(PCLCustomPowerSlot data, String[] effects, String[] powers) {
+    public PCLDynamicPowerData(PCLCustomPowerSlot data, PCLCustomEditorLoadable.EffectItemForm f) {
         this(data.ID);
         safeLoadValue(() -> setEndTurnBehavior(Behavior.valueOf(data.endTurnBehavior)));
         safeLoadValue(() -> setType(AbstractPower.PowerType.valueOf(data.type)));
@@ -86,9 +88,9 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         safeLoadValue(() -> setLimits(data.minValue, data.maxValue));
         safeLoadValue(() -> setPriority(data.priority));
         safeLoadValue(() -> setTurns(data.turns));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
-        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(effects, PSkill::get), true, true));
-        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(powers, PSkill::get), true, true));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, f));
+        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
+        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, PSkill::get), true, true));
     }
 
     protected static PowerStrings getInitialStrings() {
@@ -105,11 +107,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
     public static PowerStrings getStringsForLanguage(HashMap<Settings.GameLanguage, PowerStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, PowerStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     @Override
@@ -197,6 +195,11 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
     @Override
     public HashMap<Settings.GameLanguage, PowerStrings> getLanguageMap() {
         return languageMap;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 
     @Override

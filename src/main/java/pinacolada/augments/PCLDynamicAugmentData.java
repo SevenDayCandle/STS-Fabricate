@@ -17,6 +17,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLAugmentRenderable;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,7 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         safeLoadValue(() -> setPermanent(data.permanent));
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setReqs(EUIUtils.deserialize(data.reqs, PCLAugmentReqs.class)));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, form));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(form.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(form.powerEffects, PSkill::get), true, true));
     }
@@ -103,10 +104,6 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, AugmentStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
     @Override
@@ -262,5 +259,10 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
             dest.DESCRIPTION = null;
         }
         return dest;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

@@ -6,11 +6,9 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.dungeons.Exordium;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.random.Random;
-import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -20,7 +18,6 @@ import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.PCLResources;
@@ -128,7 +125,7 @@ public class AbstractDungeonPatches {
                     final ArrayList<AbstractCard> cards = AbstractDungeon.player.masterDeck.group;
                     for (int i = 0; i < cards.size(); i++) {
                         if (cards.get(i).cardID.equals(AscendersBane.ID)) {
-                            cards.set(i, bane.makeCardFromLibrary(0));
+                            cards.set(i, bane.makeUpgradedCardCopy(0));
                             UnlockTracker.markCardAsSeen(bane.ID);
                         }
                     }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
@@ -256,7 +257,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         PCLDynamicRelicData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
-            languageStrings = EUIUtils.serialize(first.languageMap);
+            languageStrings = EUIUtils.serialize(EUIUtils.hashMap(first.languageMap, s -> s.NAME));
             tier = first.tier.name();
             sfx = first.sfx.name();
             color = first.cardColor.name();
@@ -273,6 +274,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             EffectItemForm f = new EffectItemForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.textMap = EUIUtils.serialize(EUIUtils.hashMap(builder.languageMap, s -> s.DESCRIPTIONS));
 
             tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }

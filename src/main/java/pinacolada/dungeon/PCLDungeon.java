@@ -644,7 +644,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             panelAdded = true;
             BaseMod.addTopPanelItem(PGR.augmentPanel);
         }
-        else if (panelAdded) {
+        else if (!allowAugments && panelAdded) {
             panelAdded = false;
             BaseMod.removeTopPanelItem(PGR.augmentPanel);
         }
@@ -924,6 +924,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         loadoutIDs.clear();
         valueDivisor = 1;
         anyColorCards = null;
+        allowAugments = null;
 
         validate();
     }

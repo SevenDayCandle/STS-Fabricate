@@ -284,7 +284,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
             // Add this series cards to the total list of available cards
             for (PCLCardData cData : series.getCards()) {
-                AbstractCard card = cData.makeCardFromLibrary(0);
+                AbstractCard card = cData.getCard();
                 card.isSeen = !cData.isLocked();
                 allCards.put(cData.ID, card);
                 if (card instanceof PCLCard) {
@@ -297,7 +297,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
             // Colorless bans
             for (PCLCardData cData : series.getColorlessCards()) {
-                AbstractCard card = cData.makeCardFromLibrary(0);
+                AbstractCard card = cData.getCard();
                 allColorlessCards.put(cData.ID, card);
                 if (card instanceof PCLCard) {
                     ((PCLCard) card).affinities.updateSortedList();

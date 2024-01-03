@@ -18,6 +18,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,7 +81,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setSfx(AbstractRelic.LandingSound.valueOf(data.sfx)));
         safeLoadValue(() -> setTier(AbstractRelic.RelicTier.valueOf(data.tier)));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, f));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -114,10 +115,6 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, RelicStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
     public PCLDynamicRelic create() {
@@ -242,5 +239,10 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
         }
         dest.FLAVOR = initial.FLAVOR;
         return dest;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

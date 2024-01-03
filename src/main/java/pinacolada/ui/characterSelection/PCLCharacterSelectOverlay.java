@@ -174,7 +174,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         for (PCLLoadout series : data.getEveryLoadout()) {
             if (!series.isLocked() && (!series.isCore() || data.canEditCore())) {
                 for (PCLCardData cardData : series.getCards()) {
-                    group.add(cardData.makeCardFromLibrary(0));
+                    group.add(cardData.getCard());
                 }
             }
         }

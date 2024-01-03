@@ -1,19 +1,16 @@
 package pinacolada.cards.base;
 
 import basemod.BaseMod;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.interfaces.providers.CustomFileProvider;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.resources.PGR;
@@ -28,7 +25,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardData, PCLDynamicCard> {
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
     };
-    private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
+    private static final TypeToken<CardForm> TCARDFORM = new TypeToken<CardForm>() {
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
     private static final HashMap<String, PCLCustomCardSlot> CUSTOM_MAPPING = new HashMap<>();
@@ -74,7 +71,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         imagePath = makeImagePath();
         slotColor = color;
         PCLDynamicCardData builder = (PCLDynamicCardData) new PCLDynamicCardData(ID)
-                .setText("", "", "")
                 .setColor(color)
                 .setRarity(AbstractCard.CardRarity.COMMON)
                 .setCosts(0);
@@ -281,7 +277,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         PCLDynamicCardData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
-            languageStrings = EUIUtils.serialize(first.languageMap);
+            languageStrings = EUIUtils.serialize(EUIUtils.hashMap(first.languageMap, s -> s.NAME));
             loadout = first.loadout != null ? first.loadout.ID : null;
             type = first.cardType.name();
             rarity = first.cardRarity.name();
@@ -321,8 +317,9 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.damageEffect = null;
             f.blockEffect = null;
+            f.textMap = EUIUtils.serialize(EUIUtils.hashMap(builder.languageMap, s -> s.EXTENDED_DESCRIPTION));
 
-            tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
+            tempForms.add(EUIUtils.serialize(f, TCARDFORM.getType()));
         }
 
         forms = tempForms.toArray(new String[]{});
@@ -335,7 +332,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         this.isInternal = isInternal;
 
         for (String fo : forms) {
-            CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            CardForm f = EUIUtils.deserialize(fo, TCARDFORM.getType());
             PCLDynamicCardData builder = new PCLDynamicCardData(this, f);
             builders.add(builder);
         }
@@ -349,7 +346,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Card: " + filePath);
     }
 
-    public static class CardForm implements Serializable {
+    public static class CardForm extends EffectItemForm implements Serializable {
         static final long serialVersionUID = 1L;
         public String attackType;
         @Deprecated
@@ -358,7 +355,5 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         public String blockEffect;
         public String target;
         public String timing;
-        public String[] effects;
-        public String[] powerEffects;
     }
 }

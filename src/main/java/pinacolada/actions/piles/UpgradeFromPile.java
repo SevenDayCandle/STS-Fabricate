@@ -69,7 +69,7 @@ public class UpgradeFromPile extends SelectFromPile {
             if (pCard != null && pCard.isBranchingUpgrade()) {
                 PCLEffects.Queue.add(new ChooseCardsForMultiformUpgradeEffect(pCard).addCallback(
                         result -> {
-                            if (result.cards.size() > 0) {
+                            if (!result.cards.isEmpty()) {
                                 upgradeOtherCopies(card, c -> {
                                     if (c instanceof PCLCard) {
                                         ((PCLCard) c).changeForm(pCard.getForm(), pCard.timesUpgraded);

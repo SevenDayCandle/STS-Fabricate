@@ -98,7 +98,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
                 }
             }
 
-            if (add && CardLibrary.getCard(cardID) != null) {
+            if (add) {
                 cards.add(cardID);
             }
         }
@@ -109,7 +109,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
     }
 
     protected boolean isCardAllowed(String id) {
-        return !canvas.screen.loadout.isCardBanned(id) && !GameUtilities.isCardLocked(id);
+        return !canvas.screen.loadout.isCardBanned(id) && !GameUtilities.isCardLocked(id) && CardLibrary.getCard(id) != null;
     }
 
     private void onSelect() {

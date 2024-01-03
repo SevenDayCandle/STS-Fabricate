@@ -21,6 +21,7 @@ import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.PCLOrbRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +93,7 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         safeLoadValue(() -> setRotationSpeed(data.rotationSpeed));
         safeLoadValue(() -> setSfx(data.sfx));
         safeLoadValue(() -> setTiming(DelayTiming.valueOf(form.timing)));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, form));
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(form.effects, PSkill::get), true, true));
         safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(form.powerEffects, PSkill::get), true, true));
     }
@@ -112,10 +113,6 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, OrbStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
     @Override
@@ -300,5 +297,10 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         }
         EUIKeywordTooltip.registerIDTemp(ID, tooltip);
         return this;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

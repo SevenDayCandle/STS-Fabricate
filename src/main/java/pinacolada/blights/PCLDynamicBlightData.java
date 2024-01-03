@@ -17,6 +17,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -71,7 +72,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setTier(BlightTier.valueOf(data.tier)));
         safeLoadValue(() -> setUnique(data.unique));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, f));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -94,11 +95,7 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
     public static BlightStrings getStringsForLanguage(HashMap<Settings.GameLanguage, BlightStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, BlightStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     public PCLDynamicBlight create() {
@@ -217,5 +214,10 @@ public class PCLDynamicBlightData extends PCLBlightData implements EditorMaker<P
             dest.DESCRIPTION = null;
         }
         return dest;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

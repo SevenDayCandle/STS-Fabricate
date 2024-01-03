@@ -1152,13 +1152,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 }
             }
 
-            return rootScope + ((AbstractCard) source).timesUpgraded * getUpgradeScope();
+            return MathUtils.clamp(rootScope + ((AbstractCard) source).timesUpgraded * getUpgradeScope(), 1, DEFAULT_MAX);
         }
         if (source instanceof ValueProvider) {
             if (scopeSource == PCLCardValueSource.XValue) {
                 return ((ValueProvider) source).getXValue();
             }
-            return rootExtra + ((ValueProvider) source).timesUpgraded() * getUpgradeScope();
+            return MathUtils.clamp(rootScope + ((ValueProvider) source).timesUpgraded() * getUpgradeScope(), 1, DEFAULT_MAX);
         }
         return rootScope;
     }

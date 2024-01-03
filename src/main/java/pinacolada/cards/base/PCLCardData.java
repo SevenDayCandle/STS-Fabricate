@@ -209,7 +209,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     @Override
     public AbstractCard getCard() {
-        return makeCardFromLibrary(0);
+        return !invokeClass.isAnnotationPresent(VisibleCard.class) ? create() : CardLibrary.getCopy(ID);
     }
 
     public TextureAtlas.AtlasRegion getCardIcon() {
@@ -325,7 +325,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return GameUtilities.isCardLocked(ID);
     }
 
-    public AbstractCard makeCardFromLibrary(int upgrade) {
+    public AbstractCard makeUpgradedCardCopy(int upgrade) {
         return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
     }
 

@@ -18,6 +18,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PTrigger;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +124,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         safeLoadValue(() -> rightCountUpgrade = data.rightCountUpgrade.clone());
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, f));
         safeLoadValue(() -> setTags(EUIUtils.mapAsNonnull(data.tags, PCLDynamicCardData::getSafeTag)));
         safeLoadValue(() -> setFlags(EUIUtils.mapAsNonnull(data.flags, CardFlag::get)));
         if (data.loadout != null) {
@@ -174,10 +175,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
     public PCLDynamicCard create() {
@@ -249,13 +246,13 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     }
 
     @Override
-    public AbstractCard makeCardFromLibrary(int upgrade) {
-        return create(upgrade);
+    public PCLDynamicCardData makeCopy() {
+        return new PCLDynamicCardData(this);
     }
 
     @Override
-    public PCLDynamicCardData makeCopy() {
-        return new PCLDynamicCardData(this);
+    public AbstractCard makeUpgradedCardCopy(int upgrade) {
+        return create(upgrade);
     }
 
     public PCLDynamicCardData removePMove(PSkill<?> effect) {
@@ -354,7 +351,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
 
     @Override
     public PCLDynamicCardData setText(CardStrings cardStrings) {
-        return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
+        return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION, cardStrings.EXTENDED_DESCRIPTION);
     }
 
     public PCLDynamicCardData setText(String name) {
@@ -383,5 +380,10 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     public PCLDynamicCardData setType(AbstractCard.CardType type) {
         this.cardType = type;
         return this;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

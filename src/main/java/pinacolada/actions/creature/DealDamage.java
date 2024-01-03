@@ -84,7 +84,10 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         }
 
         if (onDamageEffect != null) {
-            addDuration(onDamageEffect.invoke(source, target));
+            AbstractCreature effectTarget = target != null ? target : shouldRandomize || canRedirect ? GameUtilities.getRandomEnemy(true) : null;
+            if (effectTarget != null) {
+                addDuration(onDamageEffect.invoke(source, effectTarget));
+            }
         }
     }
 
@@ -140,7 +143,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
 
     private boolean updateAttack() {
         if (shouldRandomize) {
-            if (GameUtilities.getEnemies(true).size() > 0) {
+            if (!GameUtilities.getEnemies(true).isEmpty()) {
                 target = GameUtilities.getRandomEnemy(true);
                 applyPowers = applyPowers || card != null;
             }
@@ -149,7 +152,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
             }
         }
         else if (target == null || GameUtilities.isDeadOrEscaped(target)) {
-            if (canRedirect && GameUtilities.getEnemies(true).size() > 0) {
+            if (canRedirect && !GameUtilities.getEnemies(true).isEmpty()) {
                 target = GameUtilities.getRandomEnemy(true);
                 applyPowers = applyPowers || card != null;
             }

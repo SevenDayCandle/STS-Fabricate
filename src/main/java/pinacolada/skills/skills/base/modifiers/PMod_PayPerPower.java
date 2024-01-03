@@ -15,6 +15,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -62,7 +63,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String pay = extra > 0 ? zeroToRangeString(extra) : TEXT.subjects_all;
-        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + super.getText(perspective, requestor, addPeriod);
+        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
+                getSubText(perspective, requestor) + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {

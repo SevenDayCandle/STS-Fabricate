@@ -239,15 +239,6 @@ public class GameUtilities {
         }
     }
 
-    public static void changeCardName(AbstractCard card, String newName) {
-        final String previousName = card.name;
-        card.name = card.name.replace(card.originalName, newName);
-        card.originalName = newName;
-        if (card.name.equals(previousName)) {
-            card.name = newName;
-        }
-    }
-
     public static void changeRelicForm(AbstractRelic relic, int amount) {
         if (relic instanceof PCLRelic) {
             ((PCLRelic) relic).setForm(amount);
@@ -514,10 +505,9 @@ public class GameUtilities {
             // Try to load data from slots. Do not actually create relics here to avoid infinite loops
             PCLCustomBlightSlot slot = PCLCustomBlightSlot.get(relicID);
             if (slot != null) {
-                HashMap<Settings.GameLanguage, BlightStrings> languageMap = PCLDynamicBlightData.parseLanguageStrings(slot.languageStrings);
-                BlightStrings language = languageMap != null ? PCLDynamicBlightData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
+                PCLDynamicBlightData data = slot.getFirstBuilder();
+                if (data != null) {
+                    return data.strings.NAME;
                 }
             }
         }
@@ -553,10 +543,9 @@ public class GameUtilities {
             // Try to load data from slots. Do not actually create cards here to avoid infinite loops
             PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
             if (slot != null) {
-                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicCardData.parseLanguageStrings(slot.languageStrings);
-                CardStrings language = languageMap != null ? PCLDynamicCardData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return GameUtilities.getMultiformName(language.NAME, form, upgrade, slot.forms != null ? slot.forms.length : 1, slot.maxUpgradeLevel, slot.branchUpgradeFactor);
+                data = slot.getFirstBuilder();
+                if (data != null) {
+                    return data.strings.NAME;
                 }
             }
 
@@ -1190,10 +1179,9 @@ public class GameUtilities {
             // Try to load data from slots. Do not actually create potions here to avoid infinite loops
             PCLCustomPotionSlot slot = PCLCustomPotionSlot.get(potionID);
             if (slot != null) {
-                HashMap<Settings.GameLanguage, PotionStrings> languageMap = PCLDynamicPotionData.parseLanguageStrings(slot.languageStrings);
-                PotionStrings language = languageMap != null ? PCLDynamicPotionData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
+                data = slot.getFirstBuilder();
+                if (data != null) {
+                    return data.strings.NAME;
                 }
             }
         }
@@ -1383,10 +1371,9 @@ public class GameUtilities {
             // Try to load data from slots. Do not actually create relics here to avoid infinite loops
             PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(relicID);
             if (slot != null) {
-                HashMap<Settings.GameLanguage, RelicStrings> languageMap = PCLDynamicRelicData.parseLanguageStrings(slot.languageStrings);
-                RelicStrings language = languageMap != null ? PCLDynamicRelicData.getStringsForLanguage(languageMap) : null;
-                if (language != null) {
-                    return language.NAME;
+                data = slot.getFirstBuilder();
+                if (data != null) {
+                    return data.strings.NAME;
                 }
             }
         }

@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
@@ -246,7 +247,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         PCLDynamicAugmentData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
-            languageStrings = EUIUtils.serialize(first.languageMap);
+            languageStrings = EUIUtils.serialize(EUIUtils.hashMap(first.languageMap, s -> s.NAME));
             color = first.cardColor.name();
             unique = first.unique;
             permanent = first.permanent;
@@ -262,6 +263,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
             EffectItemForm f = new EffectItemForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.textMap = EUIUtils.serialize(EUIUtils.hashMap(builder.languageMap, s -> s.DESCRIPTION));
 
             tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }

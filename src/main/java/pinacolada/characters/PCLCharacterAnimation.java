@@ -91,10 +91,16 @@ public class PCLCharacterAnimation extends AbstractAnimation {
             folder.mkdirs();
         }
         for (FileHandle f : folder.list(JSON_FILTER)) {
+            String base = ANIMATION_PATH + "/" + f.name();
             switch (f.extension()) {
                 case "json":
+                    String atlasUrl = base + ".atlas";
+                    if (Gdx.files.local(atlasUrl).exists()) {
+                        registerCustomAnimation(f.name(), atlasUrl, f.path(), 1f, true);
+                    }
                     break;
                 case "scml":
+                    registerCustomSpriter(f.name(), f.path(), true);
                     break;
             }
         }

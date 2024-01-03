@@ -5,6 +5,7 @@ import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
@@ -208,7 +209,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         PCLDynamicPowerData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
-            languageStrings = EUIUtils.serialize(first.languageMap);
+            languageStrings = EUIUtils.serialize(EUIUtils.hashMap(first.languageMap, s -> s.NAME));
             isCommon = first.isCommon;
             isMetascaling = first.isMetascaling;
             isPostActionPower = first.isPostActionPower;
@@ -224,6 +225,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             EffectItemForm f = new EffectItemForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.textMap = EUIUtils.serialize(EUIUtils.hashMap(builder.languageMap, s -> s.DESCRIPTIONS));
 
             tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }
@@ -244,20 +246,23 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         this.workshopFolder = workshopPath;
         this.isInternal = isInternal;
 
-        if (effects != null) {
-            for (String[] f : effects) {
-                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f, null);
-                builders.add(builder);
-            }
-        }
-        else {
+        if (forms != null) {
             for (String fo : forms) {
                 EffectItemForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
-                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f.effects, f.powerEffects);
+                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, f);
                 builders.add(builder);
             }
         }
-
+        else if (effects != null) {
+            for (String[] f : effects) {
+                EffectItemForm fo = new EffectItemForm();
+                fo.effects = f;
+                fo.powerEffects = new String[] {};
+                fo.textMap = EUIUtils.EMPTY_STRING;
+                PCLDynamicPowerData builder = new PCLDynamicPowerData(this, fo);
+                builders.add(builder);
+            }
+        }
 
         imagePath = makeImagePath();
         for (PCLDynamicPowerData builder : builders) {

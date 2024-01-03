@@ -5,16 +5,14 @@ import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
-import pinacolada.powers.PCLDynamicPower;
-import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLOrbRenderable;
-import pinacolada.ui.PCLPowerRenderable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData, PCLDynamicOrb> {
     private static final TypeToken<PCLCustomOrbSlot> TTOKEN = new TypeToken<PCLCustomOrbSlot>() {
     };
-    private static final TypeToken<OrbForm> TTOKENFORM = new TypeToken<OrbForm>() {
+    private static final TypeToken<OrbForm> TORBFORM = new TypeToken<OrbForm>() {
     };
     private static final HashMap<String, PCLCustomOrbSlot> CUSTOM_ORBS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
@@ -212,7 +210,7 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         PCLDynamicOrbData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
-            languageStrings = EUIUtils.serialize(first.languageMap);
+            languageStrings = EUIUtils.serialize(EUIUtils.hashMap(first.languageMap, s -> s.NAME));
             baseEvokeValue = first.baseEvokeValue.clone();
             baseEvokeValueUpgrade = first.baseEvokeValueUpgrade.clone();
             basePassiveValue = first.basePassiveValue.clone();
@@ -232,8 +230,9 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
             f.timing = builder.timing.name();
             f.applyFocusToEvoke = builder.applyFocusToEvoke;
             f.applyFocusToPassive = builder.applyFocusToPassive;
+            f.textMap = EUIUtils.serialize(EUIUtils.hashMap(builder.languageMap, s -> s.DESCRIPTION));
 
-            tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
+            tempForms.add(EUIUtils.serialize(f, TORBFORM.getType()));
         }
 
         forms = tempForms.toArray(new String[]{});
@@ -252,7 +251,7 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         this.isInternal = isInternal;
 
         for (String fo : forms) {
-            OrbForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            OrbForm f = EUIUtils.deserialize(fo, TORBFORM.getType());
             PCLDynamicOrbData builder = new PCLDynamicOrbData(this, f);
             builders.add(builder);
         }
@@ -266,12 +265,10 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         EUIUtils.logInfo(PCLCustomOrbSlot.class, "Loaded Custom Power: " + filePath);
     }
 
-    public static class OrbForm implements Serializable {
+    public static class OrbForm extends EffectItemForm implements Serializable {
         static final long serialVersionUID = 1L;
         public boolean applyFocusToEvoke;
         public boolean applyFocusToPassive;
         public String timing;
-        public String[] effects;
-        public String[] powerEffects;
     }
 }

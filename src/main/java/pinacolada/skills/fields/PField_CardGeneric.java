@@ -217,8 +217,8 @@ public class PField_CardGeneric extends PField_Random {
     }
 
     protected void setupEditorBase(PCLCustomEffectEditingPane editor) {
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
-        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
+        editor.registerOrigin(origin, origins -> setOrigin(!origins.isEmpty() ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerDestination(destination, destinations -> setDestination(!destinations.isEmpty() ? destinations.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
     }
 

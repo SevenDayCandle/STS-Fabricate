@@ -17,6 +17,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -77,7 +78,7 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         safeLoadValue(() -> setEffect(AbstractPotion.PotionEffect.valueOf(data.effect)));
         safeLoadValue(() -> setSize(AbstractPotion.PotionSize.valueOf(data.size)));
         safeLoadValue(() -> setBottleColor(Color.valueOf(data.liquidColor), Color.valueOf(data.hybridColor), Color.valueOf(data.spotsColor)));
-        safeLoadValue(() -> languageMap.putAll(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> parseLanguageStrings(data.languageStrings, f));
         safeLoadValue(() -> counter = data.counter.clone());
         safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -101,10 +102,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    public static HashMap<Settings.GameLanguage, PotionStrings> parseLanguageStrings(String languageStrings) {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
     }
 
     @Override
@@ -224,5 +221,10 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
             dest.DESCRIPTIONS = null;
         }
         return dest;
+    }
+
+    @Override
+    public Type typeToken() {
+        return TStrings.getType();
     }
 }

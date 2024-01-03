@@ -110,7 +110,7 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
 
     public ChoiceCard<T> create() {
         if (strings == null) {
-            setText("", "", "");
+            strings = getInitialStrings();
         }
 
         if (imagePath == null) {

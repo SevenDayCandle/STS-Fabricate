@@ -112,6 +112,7 @@ public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U, ?>, U ext
 
     public static class EffectItemForm implements Serializable {
         static final long serialVersionUID = 1L;
+        public String textMap;
         public String[] effects;
         public String[] powerEffects;
     }

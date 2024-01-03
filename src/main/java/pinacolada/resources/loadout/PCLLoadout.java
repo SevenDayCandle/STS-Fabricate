@@ -186,7 +186,7 @@ public abstract class PCLLoadout {
         }
 
         ChoiceCard<PCLLoadout> card = cd.create();
-        card.name = isCore() ? PGR.core.strings.sui_core : getName();
+        card.name = card.originalName = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();
 
         if (isLocked()) {
@@ -544,7 +544,7 @@ public abstract class PCLLoadout {
 
     protected void setDefaultCardsForData(PCLLoadoutData data) {
         ArrayList<String> cards = getAvailableCardIDs();
-        if (cards.size() > 0) {
+        if (!cards.isEmpty()) {
             data.addCardSlot(cards.get(0), 4);
         }
         if (cards.size() > 1) {
@@ -554,7 +554,7 @@ public abstract class PCLLoadout {
 
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
         ArrayList<String> relics = getAvailableRelicIDs();
-        if (relics.size() > 0) {
+        if (!relics.isEmpty()) {
             data.addRelicSlot(relics.get(0));
         }
     }

@@ -66,7 +66,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
                 .setCanAutosize(false, true);
         this.skins.setOnChange(selectedSeries -> {
                     this.skins.forceClose();
-                    if (selectedSeries.size() > 0) {
+                    if (!selectedSeries.isEmpty()) {
                         setPage(selectedSeries.get(0));
                     }
                 }

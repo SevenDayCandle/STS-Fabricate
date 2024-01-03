@@ -1155,7 +1155,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
     protected String getUpgradeName() {
         // In case cardData is somehow null, return a generic name
-        String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : originalName;
+        String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : this.name != null ? this.name : EUIUtils.EMPTY_STRING;
         if (upgraded) {
             if (cardData != null) {
                 name = GameUtilities.getMultiformName(name, auxiliaryData.form, timesUpgraded, maxForms(), maxUpgrades(), cardData.branchFactor);
@@ -1165,7 +1165,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
         }
 
-        return CardModifierManager.onRenderTitle(this, name);
+        return name;
     }
 
     @Override
@@ -1215,8 +1215,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         initializeDescription();
     }
 
+    // Just use originalName to cache the card modded title
     public void initializeName() {
         name = getUpgradeName();
+        originalName = CardModifierManager.onRenderTitle(this, name);
         initializeTitle();
     }
 
@@ -1313,7 +1315,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
-        copy.name = this.name;
         copy.target = this.target;
         copy.upgradeLevelIncrease = this.upgradeLevelIncrease;
         copy.upgraded = this.upgraded;
@@ -1356,8 +1357,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         copy.tags.clear();
         copy.tags.addAll(tags);
-        copy.originalName = originalName;
-        copy.name = name;
+        copy.originalName = this.originalName;
+        copy.name = this.name;
 
         copy.initializeDescription();
         return copy;
@@ -2323,7 +2324,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
         else {
             color = upgraded ? Settings.GREEN_TEXT_COLOR : Color.WHITE;
-            text = name;
+            text = originalName; // Use originalName since PCLCard uses this to store the modified name
         }
 
         // Base game text is SLIGHTLY off

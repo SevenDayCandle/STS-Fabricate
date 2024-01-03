@@ -256,7 +256,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             editor.registerDropdown(Arrays.asList(PCLAttackType.values())
                     , EUIUtils.arrayList(sc.getBuilder().attackType)
                     , item -> {
-                        if (item.size() > 0) {
+                        if (!item.isEmpty()) {
                             sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
                         }
                     }

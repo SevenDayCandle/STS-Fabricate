@@ -92,7 +92,7 @@ public class CardLibraryPatches {
         if (replacementID != null) {
             PCLCardData data = PCLCardData.getStaticData(replacementID);
             if (data != null) {
-                replacement = data.makeCardFromLibrary(upgradeTimes);
+                replacement = data.makeUpgradedCardCopy(upgradeTimes);
             }
             else if (!PGR.config.replaceCardsPCL.get()) {
                 replacement = getDirectCard(replacementID);
