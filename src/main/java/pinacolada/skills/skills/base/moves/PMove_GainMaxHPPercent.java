@@ -70,8 +70,8 @@ public class PMove_GainMaxHPPercent extends PMove_Gain implements OutOfCombatMov
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         int am = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
         if (amount < 0) {
             AbstractDungeon.player.decreaseMaxHealth(-am);

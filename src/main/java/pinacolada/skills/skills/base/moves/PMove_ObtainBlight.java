@@ -17,7 +17,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.patches.library.BlightHelperPatches;
-import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -139,8 +138,8 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.callback(() -> createBlight(b -> GameUtilities.obtainBlight(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, b)));
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        PCLEffects.Queue.callback(() -> createBlight(b -> GameUtilities.obtainBlight(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, b)))
+                .addCallback(() -> super.useOutsideOfBattle(info));
     }
 }

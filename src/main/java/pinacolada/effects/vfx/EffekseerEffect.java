@@ -14,7 +14,7 @@ public class EffekseerEffect extends PCLEffect {
     private String sfxKey;
     private Vector2 position;
     private Vector3 rotation;
-    private Vector3 scale;
+    private Vector3 scale = new Vector3(0.7f, 0.7f, 0.7f);
     private boolean hasPlayed;
     private float pitchMax = 1f;
     private float pitchMin = 1f;

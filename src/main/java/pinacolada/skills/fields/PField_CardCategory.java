@@ -124,8 +124,9 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     /* Filter cards without upgrade filtering; use if you need to use the upgrade filter for something else (e.g. generating cards with upgrades) */
     public FuncT1<Boolean, AbstractCard> getBaseCardFilter() {
-        return !cardIDs.isEmpty() ? c -> invert ^ EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> invert ^ ((affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+        return (c -> invert ^ (
+                        (cardIDs.isEmpty() || EUIUtils.any(cardIDs, id -> id.equals(c.cardID)))
+                        && (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
                         && (colors.isEmpty() || colors.contains(c.color))
                         && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
                         && (loadouts.isEmpty() || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c)))
@@ -193,6 +194,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         if (!flags.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.mapAsNonnull(flags, PField_CardCategory::getFlagName)));
         }
+        // Will only be reached when invert is active, which always warrants or
+        if (!cardIDs.isEmpty()) {
+            stringsToJoin.add(getCardOrString());
+        }
         return stringsToJoin;
     }
 
@@ -209,7 +214,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardAndString(Object value) {
-        String sub = !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+        String sub = targetsSpecificCards() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
@@ -226,7 +231,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardOrString(Object value) {
-        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
+        String sub = targetsSpecificCards() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
@@ -239,12 +244,12 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardStringSingular() {
-        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
+        String sub = targetsSpecificCards() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
     public String getFullSummonStringSingular() {
-        String sub = !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
+        String sub = targetsSpecificCards() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (__) -> PGR.core.tooltips.summon.title);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
@@ -277,6 +282,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
         if (types.size() > i) {
             stringsToJoin.add(EUIGameUtils.textForType(types.get(i)));
+        }
+        if (cardIDs.size() > i) {
+            stringsToJoin.add(GameUtilities.getCardNameForID(cardIDs.get(i)));
         }
 
         return stringsToJoin.isEmpty() ? TEXT.subjects_other : EUIUtils.joinStrings(" ", stringsToJoin);
@@ -349,7 +357,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public String makeFullString(EUITooltip tooltip) {
         String tooltipTitle = tooltip.title;
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
-                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs, skill.extra2, 0) : getFullCardString(), getGroupString())
+                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), targetsSpecificCards() ? getCardIDOrString(cardIDs, skill.extra2, 0) : getFullCardString(), getGroupString())
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard());
     }
 
@@ -499,8 +507,8 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     protected void setupEditorBase(PCLCustomEffectEditingPane editor) {
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
-        editor.registerDestination(destination, destinations -> setDestination(destinations.size() > 0 ? destinations.get(0) : PCLCardSelection.Manual));
+        editor.registerOrigin(origin, origins -> setOrigin(!origins.isEmpty() ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerDestination(destination, destinations -> setDestination(!destinations.isEmpty() ? destinations.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
     }
 
@@ -515,5 +523,9 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerFlag(flags);
         editor.registerCard(cardIDs);
         editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
+    }
+
+    public boolean targetsSpecificCards() {
+        return !cardIDs.isEmpty() && !invert;
     }
 }

@@ -4,12 +4,15 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.cards.ModifyBlock;
 import pinacolada.actions.cards.ModifyBlockPercent;
+import pinacolada.actions.cards.ModifyCard;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentBlockModifier;
 import pinacolada.cardmods.PermanentBlockPercentModifier;
-import pinacolada.cardmods.TemporaryBlockPercentModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -20,8 +23,10 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.List;
+
 @VisibleSkill
-public class PMove_PermanentModifyBlockPercent extends PMove_Modify<PField_CardModify> implements OutOfCombatMove {
+public class PMove_PermanentModifyBlockPercent extends PMove_PermanentModify {
     public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_PermanentModifyBlockPercent.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
@@ -41,20 +46,21 @@ public class PMove_PermanentModifyBlockPercent extends PMove_Modify<PField_CardM
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> {
-            order.add(new ModifyBlockPercent(c, amount, fields.forced, !fields.not, fields.or));
-            AbstractCard deckCopy = GameUtilities.getMasterDeckInstance(c.uuid);
-            if (deckCopy != null && deckCopy != c) {
-                order.add(new ModifyBlockPercent(deckCopy, amount, fields.forced, !fields.not, fields.or));
-            }
-        };
+    protected void applyModifierOutsideOfCombat(AbstractCard c, int amount) {
+        PermanentBlockPercentModifier.apply(c, amount);
     }
 
+    @Override
+    protected ModifyCard modifyCard(AbstractCard c, int amount, boolean forced, boolean relative, boolean untilPlayed) {
+        return new ModifyBlockPercent(c, amount, forced, relative, untilPlayed);
+    }
+
+    @Override
     public String getNumericalObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString() + "%", getObjectText());
     }
 
+    @Override
     public String getObjectSampleText() {
         return getObjectText() + "%";
     }
@@ -62,33 +68,5 @@ public class PMove_PermanentModifyBlockPercent extends PMove_Modify<PField_CardM
     @Override
     public String getObjectText() {
         return PGR.core.tooltips.block.title;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.subjects_permanentlyX(super.getSampleText(callingSkill, parentSkill));
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
-    }
-
-    @Override
-    public boolean isDetrimental() {
-        return amount < 0;
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            PermanentBlockPercentModifier.apply(c, amount);
-        }));
     }
 }

@@ -73,7 +73,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         // Copy list in case info list changes from other effects
         ArrayList<? extends AbstractCreature> targs = new ArrayList<>(fields.random ? info.fillWithTargets() : getTargetList(info));
         return PCLActions.last.callback(targs, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, !fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+            if (!targets.isEmpty() && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, !fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);
             }
             else {

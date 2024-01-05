@@ -76,8 +76,7 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
             order.callback(() -> {
-                int newAmount = extra > 0 ? Math.max(extra, this.childEffect.amount + amount) : this.childEffect.amount + amount;
-                this.childEffect.setAmountForCombat(newAmount);
+                this.childEffect.addAmountForCombat(amount, extra > 0 ? extra : Integer.MAX_VALUE);
             });
         }
     }

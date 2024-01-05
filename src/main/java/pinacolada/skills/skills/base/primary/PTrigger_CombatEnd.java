@@ -1,9 +1,13 @@
 package pinacolada.skills.skills.base.primary;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnBattleEndSubscriber;
@@ -61,7 +65,8 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     @Override
     public void onBattleEnd() {
         if (this.childEffect != null) {
-            this.childEffect.useOutsideOfBattle();
+            PCLUseInfo info = CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(source, AbstractCard.class), getSourceCreature(), null);
+            this.childEffect.useOutsideOfBattle(info);
         }
     }
 

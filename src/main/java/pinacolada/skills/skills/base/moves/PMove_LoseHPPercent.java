@@ -68,8 +68,8 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
         AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
     }

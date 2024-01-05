@@ -100,13 +100,17 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(this::doEffect);
-        super.use(info, order);
+        order.callback(this::doEffect).addCallback(() -> {
+            super.use(info, order);
+        });
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.callback(this::doEffect); // Use callback to avoid concurrent modification if called from relic
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        // Use callback to avoid concurrent modification if called from relic
+        PCLEffects.Queue.callback(this::doEffect)
+                .addCallback(() -> {
+                    super.useOutsideOfBattle(info);
+                });
     }
 }

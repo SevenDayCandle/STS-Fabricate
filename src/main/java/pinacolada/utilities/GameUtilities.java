@@ -478,10 +478,6 @@ public class GameUtilities {
         return c instanceof PCLCard ? ((PCLCard) c).getAugments() : null;
     }
 
-    public static ArrayList<AbstractCard> getAvailableCardsForAllColors(FuncT1<Boolean, AbstractCard> filter) {
-        return EUIUtils.filter(CardLibrary.cards.values(), c -> EUIGameUtils.canSeeCard(c) && filter.invoke(c));
-    }
-
     public static AbstractCard.CardColor getBlightColor(String relicID) {
         PCLBlightData data = PCLBlightData.getStaticData(relicID);
         if (data != null) {
@@ -601,7 +597,7 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractCard> getCardsFromAllColorCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
-        return pickCardsFromList(new RandomizedList<>(getAvailableCardsForAllColors(filter)), count);
+        return pickCardsFromList(new RandomizedList<>(PGR.dungeon.getAvailableCardsForAllColors(filter)), count);
     }
 
     public static RandomizedList<AbstractCard> getCardsFromCombatPool(AbstractCard.CardRarity rarity) {
@@ -1301,14 +1297,6 @@ public class GameUtilities {
         }
 
         return result;
-    }
-
-    public static AbstractCard getRandomAnyColorCombatCard() {
-        return getRandomElement(getAvailableCardsForAllColors(null), AbstractDungeon.cardRandomRng);
-    }
-
-    public static AbstractCard getRandomAnyColorCombatCard(FuncT1<Boolean, AbstractCard> filter) {
-        return getRandomElement(getAvailableCardsForAllColors(filter), AbstractDungeon.cardRandomRng);
     }
 
     public static AbstractCreature getRandomCharacter(boolean aliveOnly) {

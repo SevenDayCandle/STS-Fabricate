@@ -103,8 +103,8 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
 
         doEffect();
     }

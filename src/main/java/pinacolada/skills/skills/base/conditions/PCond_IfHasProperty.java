@@ -15,6 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PFacetCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -102,5 +103,11 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
         }
 
         return TEXT.cond_ifTargetIs(useParent ? getTheyString() : TEXT.subjects_thisCard(), 1, PCLCoreStrings.joinWithOr(conditions));
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
     }
 }

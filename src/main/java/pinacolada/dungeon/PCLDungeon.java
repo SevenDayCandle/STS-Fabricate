@@ -255,6 +255,19 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         return augmentList.size();
     }
 
+    public ArrayList<AbstractCard> getAvailableCardsForAllColors(FuncT1<Boolean, AbstractCard> filter) {
+        ArrayList<AbstractCard> base = EUIUtils.filter(CardLibrary.cards.values(), c -> EUIGameUtils.canSeeCard(c) && filter.invoke(c));
+        if (allowCustomCards || (data != null && data.canUseCustom())) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards()) {
+                AbstractCard c = slot.make();
+                if (filter.invoke(c)) {
+                    base.add(c);
+                }
+            }
+        }
+        return base;
+    }
+
     public int getCurrentHealth(AbstractPlayer player) {
         return player.currentHealth / valueDivisor;
     }

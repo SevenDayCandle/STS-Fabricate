@@ -68,8 +68,8 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         int heal = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
         AbstractDungeon.player.heal(heal);
     }

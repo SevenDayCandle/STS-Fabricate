@@ -48,7 +48,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
-        SelectFromPile action = fields.createAction(getAction(), info, extra, true).setAnyNumber(true);
+        SelectFromPile action = fields.createAction(getAction(), info, extra, true);
         if (isForced()) {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
         }

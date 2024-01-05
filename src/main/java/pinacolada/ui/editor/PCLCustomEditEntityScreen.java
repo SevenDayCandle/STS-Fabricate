@@ -245,14 +245,15 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         PCLCustomEffectPage ef = list.get(index);
         int descIndex = getPageIndex(ef);
         U builder = getBuilder();
-        String[] arr = builder.getDescString(builder.getLanguageMap().get(Settings.language));
+        W item = builder.getLanguageMap().get(Settings.language);
+        String[] arr = item != null ? builder.getDescString(item) : null;
         if (arr != null && arr.length > descIndex) {
             String[] truncated = new String[arr.length - 1];
             System.arraycopy(arr, 0, truncated, 0, descIndex);
             if (truncated.length > descIndex) {
                 System.arraycopy(arr, descIndex + 1, truncated, descIndex, arr.length - descIndex - 1);
             }
-            builder.setDescString(builder.getLanguageMap().get(Settings.language), truncated);
+            builder.setDescString(item, truncated);
         }
 
         ef = list.remove(index);

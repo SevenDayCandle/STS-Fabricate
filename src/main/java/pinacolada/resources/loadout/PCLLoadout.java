@@ -98,10 +98,8 @@ public abstract class PCLLoadout {
             return data.baseDraw;
         }
         CharSelectInfo info = getCharSelectInfo(color);
-        {
-            if (info != null) {
-                return info.cardDraw;
-            }
+        if (info != null) {
+            return info.cardDraw;
         }
         return PCLPlayerData.DEFAULT_DRAW;
     }
@@ -120,10 +118,8 @@ public abstract class PCLLoadout {
             return data.baseGold;
         }
         CharSelectInfo info = getCharSelectInfo(color);
-        {
-            if (info != null) {
-                return info.gold;
-            }
+        if (info != null) {
+            return info.gold;
         }
         return PCLPlayerData.DEFAULT_GOLD;
     }
@@ -134,10 +130,8 @@ public abstract class PCLLoadout {
             return data.baseHP;
         }
         CharSelectInfo info = getCharSelectInfo(color);
-        {
-            if (info != null) {
-                return info.maxHp;
-            }
+        if (info != null) {
+            return info.maxHp;
         }
         return PCLPlayerData.DEFAULT_HP;
     }
@@ -148,10 +142,8 @@ public abstract class PCLLoadout {
             return data.baseOrbs;
         }
         CharSelectInfo info = getCharSelectInfo(color);
-        {
-            if (info != null) {
-                return info.maxOrbs;
-            }
+        if (info != null) {
+            return info.maxOrbs;
         }
         // Assume no orbs if player has no data
         return 0;

@@ -10,6 +10,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PFacetCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -60,5 +61,11 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     @Override
     public int getXValue() {
         return GameUtilities.getCounter(source);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
     }
 }

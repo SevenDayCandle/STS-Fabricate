@@ -70,8 +70,8 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, amount));
     }
 }

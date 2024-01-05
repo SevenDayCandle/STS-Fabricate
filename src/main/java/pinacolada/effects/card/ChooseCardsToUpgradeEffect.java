@@ -9,8 +9,10 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
+    private List<? extends AbstractCard> passedCards;
 
     public ChooseCardsToUpgradeEffect(int remove) {
         this(remove, null);
@@ -20,12 +22,7 @@ public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
         super(remove, filter);
     }
 
-    @Override
-    protected ArrayList<AbstractCard> getGroup() {
-        return AbstractDungeon.player.masterDeck.getUpgradableCards().group;
-    }
-
-    public void onCardSelected(AbstractCard c) {
+    public static void permanentUpgrade(AbstractCard c) {
         if (c instanceof PCLCard && ((PCLCard) c).isBranchingUpgrade()) {
             PCLEffects.Queue.add(new ChooseCardsForMultiformUpgradeEffect((PCLCard) c));
         }
@@ -34,6 +31,21 @@ public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
             PCLEffects.Queue.add(new UpgradeShineEffect((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f));
             PCLEffects.Queue.showCardBriefly(c.makeStatEquivalentCopy());
         }
+    }
+
+    @Override
+    protected List<? extends AbstractCard> getGroup() {
+        return passedCards != null ? passedCards : AbstractDungeon.player.masterDeck.getUpgradableCards().group;
+    }
+
+    @Override
+    public void onCardSelected(AbstractCard c) {
+        permanentUpgrade(c);
+    }
+
+    public ChooseCardsToUpgradeEffect setPassedCards(List<? extends AbstractCard> passedCards) {
+        this.passedCards = passedCards;
+        return this;
     }
 
 }

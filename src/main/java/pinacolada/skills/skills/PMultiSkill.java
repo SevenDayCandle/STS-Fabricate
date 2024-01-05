@@ -72,9 +72,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill<PField_Empty> setAmountForCombat(int amount) {
+    public PSkill<PField_Empty> addAmountForCombat(int amount, int limit) {
         for (PSkill<?> effect : effects) {
-            effect.setAmountForCombat(amount);
+            effect.addAmountForCombat(amount, limit);
         }
         return this;
     }
@@ -86,9 +86,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill<PField_Empty> setExtraForCombat(int extra) {
+    public PSkill<PField_Empty> multiplyAmountForCombat(int extra, int limit) {
         for (PSkill<?> effect : effects) {
-            effect.setExtraForCombat(extra);
+            effect.multiplyAmountForCombat(extra, limit);
         }
         return this;
     }
@@ -501,10 +501,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         for (PSkill<?> effect : effects) {
-            effect.useOutsideOfBattle();
+            effect.useOutsideOfBattle(info);
         }
     }
 

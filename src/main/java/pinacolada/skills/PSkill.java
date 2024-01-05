@@ -446,13 +446,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return "0-" + input;
     }
 
-    public PSkill<T> setAmountForCombat(int amount) {
-        this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
+    public PSkill<T> addAmountForCombat(int amount, int limit) {
+        this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, Math.min(limit, data != null ? data.maxAmount : DEFAULT_MAX));
         return this;
     }
 
-    public PSkill<T> setExtraForCombat(int amount) {
-        this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
+    public PSkill<T> multiplyAmountForCombat(int amount, int limit) {
+        this.baseAmount = this.amount = MathUtils.clamp((int) (this.amount * amount / 100f), data != null ? data.minAmount : 0, Math.min(limit, data != null ? data.maxAmount : DEFAULT_MAX));
         return this;
     }
 
@@ -858,7 +858,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             if (extraSource == PCLCardValueSource.XValue) {
                 return ((ValueProvider) source).getXValue();
             }
-            return rootExtra + ((ValueProvider) source).timesUpgraded() * getUpgradeExtra2();
+            return rootExtra2 + ((ValueProvider) source).timesUpgraded() * getUpgradeExtra2();
         }
         return rootExtra2;
     }
@@ -2295,9 +2295,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         use(info, order);
     }
 
-    public void useOutsideOfBattle() {
+    public void useOutsideOfBattle(PCLUseInfo info) {
         if (this.childEffect != null) {
-            this.childEffect.useOutsideOfBattle();
+            this.childEffect.useOutsideOfBattle(info);
         }
     }
 

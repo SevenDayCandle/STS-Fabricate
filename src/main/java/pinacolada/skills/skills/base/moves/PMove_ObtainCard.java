@@ -22,6 +22,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
+
 @VisibleSkill
 public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
@@ -68,28 +70,36 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        ArrayList<AbstractCard> cards = getBaseCards(info);
         AbstractRoom curRoom = GameUtilities.getCurrentRoom();
         // If the action is not an "choose x of y" option, add the cards directly into the player's deck
         if (isOutOf()) {
-            if (curRoom instanceof MonsterRoom && curRoom.rewardAllowed) {
+            if (curRoom instanceof MonsterRoom && curRoom.rewardAllowed && curRoom.isBattleOver) {
                 RewardItem r = new RewardItem();
                 String name = getName();
                 if (!StringUtils.isEmpty(name)) {
                     r.text = name;
                 }
-                r.cards = getBaseCards(null);
+                r.cards = cards;
                 curRoom.addCardReward(r);
+                info.setData(cards);
+                super.useOutsideOfBattle(info);
             }
             else {
-                PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
+                PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, cards, null))
+                        .addCallback(effect -> {
+                            info.setData(effect.cards);
+                            super.useOutsideOfBattle(info);
+                        });
             }
         }
         else {
-            for (AbstractCard c : getBaseCards(null)) {
+            for (AbstractCard c : cards) {
                 PCLEffects.Queue.showAndObtain(c);
             }
+            info.setData(cards);
+            super.useOutsideOfBattle(info);
         }
     }
 }

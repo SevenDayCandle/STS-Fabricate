@@ -1,8 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -67,9 +65,7 @@ public class PMod_MultiplyOnUse extends PActiveMod<PField_Empty> {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
             order.callback(() -> {
-                int calc = (int) (this.childEffect.amount * amount / 100f);
-                int newAmount = extra > 0 ? Math.max(extra, calc) : calc;
-                this.childEffect.setAmountForCombat(newAmount);
+                this.childEffect.multiplyAmountForCombat(amount, extra > 0 ? extra : Integer.MAX_VALUE);
             });
         }
     }

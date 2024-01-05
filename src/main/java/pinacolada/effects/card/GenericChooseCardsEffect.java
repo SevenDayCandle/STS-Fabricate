@@ -15,6 +15,7 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<GenericChooseCardsEffect> {
     protected final Color screenColor;
@@ -135,7 +136,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
         }
     }
 
-    protected abstract ArrayList<AbstractCard> getGroup();
+    protected abstract List<? extends AbstractCard> getGroup();
 
     public GenericChooseCardsEffect setOnCancel(ActionT1<GenericChooseCardsEffect> onCompletion) {
         onCancel = onCompletion;

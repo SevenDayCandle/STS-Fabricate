@@ -107,8 +107,8 @@ public class PMove_ChangeForm extends PMove<PField_Numeric> implements OutOfComb
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
 
         doEffect();
     }

@@ -732,9 +732,9 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
-    public void useOutsideOfBattle() {
+    public void useOutsideOfBattle(PCLUseInfo info) {
         if (checkConditionOutsideOfBattle() && this.childEffect != null) {
-            this.childEffect.useOutsideOfBattle();
+            this.childEffect.useOutsideOfBattle(info);
         }
     }
 

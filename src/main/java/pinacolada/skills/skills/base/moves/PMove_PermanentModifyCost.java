@@ -3,12 +3,15 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.cards.ModifyBlockPercent;
+import pinacolada.actions.cards.ModifyCard;
 import pinacolada.actions.cards.ModifyCost;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentBlockPercentModifier;
 import pinacolada.cardmods.PermanentCostModifier;
-import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -18,8 +21,10 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.List;
+
 @VisibleSkill
-public class PMove_PermanentModifyCost extends PMove_Modify<PField_CardModify> implements OutOfCombatMove {
+public class PMove_PermanentModifyCost extends PMove_PermanentModify implements OutOfCombatMove {
     public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_PermanentModifyCost.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
@@ -44,30 +49,10 @@ public class PMove_PermanentModifyCost extends PMove_Modify<PField_CardModify> i
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> {
-            order.modifyCost(c, amount, fields.forced, !fields.not, fields.or);
-            AbstractCard deckCopy = GameUtilities.getMasterDeckInstance(c.uuid);
-            if (deckCopy != null && deckCopy != c) {
-                order.modifyCost(deckCopy, amount, fields.forced, !fields.not, fields.or);
-            }
-        };
-    }
-
-    @Override
     public String getObjectText() {
         return TEXT.subjects_cost;
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.subjects_permanentlyX(super.getSampleText(callingSkill, parentSkill));
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
-    }
 
     @Override
     public boolean isDetrimental() {
@@ -75,15 +60,12 @@ public class PMove_PermanentModifyCost extends PMove_Modify<PField_CardModify> i
     }
 
     @Override
-    public boolean isMetascaling() {
-        return true;
+    protected void applyModifierOutsideOfCombat(AbstractCard c, int amount) {
+        PermanentCostModifier.apply(c, amount);
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            PermanentCostModifier.apply(c, !fields.not ? amount : amount - c.costForTurn);
-        }));
+    protected ModifyCard modifyCard(AbstractCard c, int amount, boolean forced, boolean relative, boolean untilPlayed) {
+        return new ModifyCost(c, amount, forced, relative, untilPlayed);
     }
 }

@@ -115,7 +115,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public void changeExtra2ForSkill(PSkill<?> skill, int val, int upVal) {
         PCLCustomCardEditScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditScreen.class);
         if (sc != null) {
-            switch (skill.getExtraSource()) {
+            switch (skill.getExtra2Source()) {
                 case Damage:
                     sc.modifyAllBuilders((e, i) -> e.setDamageForForm(sc.currentBuilder, sc.currentBuilder + 1, val, upVal));
                     return;
@@ -516,11 +516,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         startX += MENU_WIDTH * 0.55f;
         upgradeEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f, MENU_HEIGHT, startX, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
-            if (node.skill != null) {
-                changeExtra2ForSkill(node.skill, val, upVal);
-                editor.updateRootEffect();
-            }
-        })
+                    if (node.skill != null) {
+                        changeExtra2ForSkill(node.skill, val, upVal);
+                        editor.updateRootEffect();
+                    }
+                })
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_upgrades, cetutString);
 
@@ -649,7 +649,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             origins.setItems(PSkill.getEligibleOrigins(node.skill))
                     .setActive(origins.getAllItems().size() > 1);
             piles.setItems(PSkill.getEligiblePiles(node.skill))
-                    .setActive(piles.getAllItems().size() >= 1);
+                    .setActive(!piles.getAllItems().isEmpty());
             node.skill.setupEditor(this);
 
             float xOff = 0;

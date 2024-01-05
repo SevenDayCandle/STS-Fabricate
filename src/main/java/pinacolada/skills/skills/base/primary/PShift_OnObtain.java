@@ -1,8 +1,12 @@
 package pinacolada.skills.skills.base.primary;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -40,6 +44,7 @@ public class PShift_OnObtain extends PShift {
 
     @Override
     public void triggerOnObtain() {
-        useOutsideOfBattle();
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(source, AbstractCard.class), getSourceCreature(), null);
+        useOutsideOfBattle(info);
     }
 }

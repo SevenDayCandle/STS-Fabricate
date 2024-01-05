@@ -80,10 +80,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return true;
     }
 
-    protected boolean generateSpecificCards() {
-        return !fields.cardIDs.isEmpty();
-    }
-
     protected String getActionTitle() {
         return getActionTooltip().title;
     }
@@ -123,7 +119,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         // Otherwise, we prioritize making card ID copies first if they exist, then color-specific cards if colors exist, then any cards
         else {
             ArrayList<AbstractCard> created;
-            if (generateSpecificCards()) {
+            if (fields.targetsSpecificCards()) {
                 created = new ArrayList<>();
                 // When creating specific cards in an X of Y effect, only create up to Y cards.
                 if (isOutOf()) {
@@ -257,7 +253,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return (fields.random) && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
+        return (fields.random) && fields.targetsSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 
     protected boolean isOutOf() {

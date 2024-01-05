@@ -3,11 +3,16 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.cards.ModifyBlockPercent;
+import pinacolada.actions.cards.ModifyCard;
+import pinacolada.actions.cards.ModifyDamage;
+import pinacolada.actions.cards.ModifyDamagePercent;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentBlockPercentModifier;
 import pinacolada.cardmods.PermanentDamageModifier;
-import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -18,7 +23,7 @@ import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMove_PermanentModifyDamage extends PMove_Modify<PField_CardModify> implements OutOfCombatMove {
+public class PMove_PermanentModifyDamage extends PMove_PermanentModify implements OutOfCombatMove {
     public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_PermanentModifyDamage.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
@@ -38,46 +43,17 @@ public class PMove_PermanentModifyDamage extends PMove_Modify<PField_CardModify>
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> {
-            order.modifyDamage(c, amount, fields.forced, !fields.not, fields.or);
-            AbstractCard deckCopy = GameUtilities.getMasterDeckInstance(c.uuid);
-            if (deckCopy != null && deckCopy != c) {
-                order.modifyDamage(deckCopy, amount, fields.forced, !fields.not, fields.or);
-            }
-        };
+    protected void applyModifierOutsideOfCombat(AbstractCard c, int amount) {
+        PermanentDamageModifier.apply(c, amount);
+    }
+
+    @Override
+    protected ModifyCard modifyCard(AbstractCard c, int amount, boolean forced, boolean relative, boolean untilPlayed) {
+        return new ModifyDamage(c, amount, forced, relative, untilPlayed);
     }
 
     @Override
     public String getObjectText() {
         return TEXT.subjects_damage;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.subjects_permanentlyX(super.getSampleText(callingSkill, parentSkill));
-    }
-
-    @Override
-    public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
-    }
-
-    @Override
-    public boolean isDetrimental() {
-        return amount < 0;
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            PermanentDamageModifier.apply(c, !fields.not ? c.baseDamage + amount : amount);
-        }));
     }
 }

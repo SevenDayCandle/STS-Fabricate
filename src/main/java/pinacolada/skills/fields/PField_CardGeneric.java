@@ -61,10 +61,12 @@ public class PField_CardGeneric extends PField_Random {
         else if (subchoices > 0 && subchoices <= choiceSize) {
             return action.invoke(skill.getName(), skill.target.getTarget(info, skill.scope), subchoices, PCLCardSelection.Manual, g)
                     .setMaxChoices(choiceSize, origin == PCLCardSelection.Manual ? PCLCardSelection.Random : origin) // "Manual" will cause the max choices selection to do nothing
+                    .setAnyNumber(!forced)
                     .setDestination(destination);
         }
 
         return action.invoke(skill.getName(), skill.target.getTarget(info, skill.scope), choiceSize, origin, g)
+                .setAnyNumber(!forced)
                 .setDestination(destination)
                 .showEffect(origin != PCLCardSelection.Manual, false);
     }

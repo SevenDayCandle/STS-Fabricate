@@ -4,12 +4,15 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.cards.ModifyCard;
+import pinacolada.actions.cards.ModifyDamage;
 import pinacolada.actions.cards.ModifyDamagePercent;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.PermanentDamageModifier;
 import pinacolada.cardmods.PermanentDamagePercentModifier;
-import pinacolada.cardmods.TemporaryDamagePercentModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -20,7 +23,7 @@ import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMove_PermanentModifyDamagePercent extends PMove_Modify<PField_CardModify> implements OutOfCombatMove {
+public class PMove_PermanentModifyDamagePercent extends PMove_PermanentModify implements OutOfCombatMove {
     public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_PermanentModifyDamagePercent.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
@@ -40,20 +43,11 @@ public class PMove_PermanentModifyDamagePercent extends PMove_Modify<PField_Card
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> {
-            order.add(new ModifyDamagePercent(c, amount, fields.forced, !fields.not, fields.or));
-            AbstractCard deckCopy = GameUtilities.getMasterDeckInstance(c.uuid);
-            if (deckCopy != null && deckCopy != c) {
-                order.add(new ModifyDamagePercent(deckCopy, amount, fields.forced, !fields.not, fields.or));
-            }
-        };
-    }
-
     public String getNumericalObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString() + "%", getObjectText());
     }
 
+    @Override
     public String getObjectSampleText() {
         return getObjectText() + "%";
     }
@@ -64,30 +58,12 @@ public class PMove_PermanentModifyDamagePercent extends PMove_Modify<PField_Card
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.subjects_permanentlyX(super.getSampleText(callingSkill, parentSkill));
+    protected void applyModifierOutsideOfCombat(AbstractCard c, int amount) {
+        PermanentDamagePercentModifier.apply(c, amount);
     }
 
     @Override
-    public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.subjects_permanentlyX(super.getSubText(perspective, requestor));
-    }
-
-    @Override
-    public boolean isDetrimental() {
-        return amount < 0;
-    }
-
-    @Override
-    public boolean isMetascaling() {
-        return true;
-    }
-
-    @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsForModifierEffect(this, c -> {
-            PermanentDamagePercentModifier.apply(c, amount);
-        }));
+    protected ModifyCard modifyCard(AbstractCard c, int amount, boolean forced, boolean relative, boolean untilPlayed) {
+        return new ModifyDamagePercent(c, amount, forced, relative, untilPlayed);
     }
 }

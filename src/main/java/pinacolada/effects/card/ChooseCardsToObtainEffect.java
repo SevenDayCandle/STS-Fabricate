@@ -26,9 +26,9 @@ public class ChooseCardsToObtainEffect extends GenericChooseCardsEffect {
         return choices;
     }
 
+    @Override
     public void onCardSelected(AbstractCard c) {
-        PCLEffects.Queue.showAndObtain(c.makeCopy(), (float) Settings.WIDTH / 3f + displayCount, (float) Settings.HEIGHT / 2f, false);
+        PCLEffects.Queue.showAndObtain(c, (float) Settings.WIDTH / 3f + displayCount, (float) Settings.HEIGHT / 2f, false);
         displayCount += Settings.WIDTH / 6f;
     }
-
 }

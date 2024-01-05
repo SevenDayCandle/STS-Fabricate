@@ -53,8 +53,8 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public void useOutsideOfBattle() {
-        super.useOutsideOfBattle();
+    public void useOutsideOfBattle(PCLUseInfo info) {
+        super.useOutsideOfBattle(info);
         PCLSFX.play(PCLSFX.GOLD_GAIN);
         if (amount > 0) {
             AbstractDungeon.player.gainGold(amount);
