@@ -316,6 +316,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_OnExhaust();
     }
 
+    public static PCond_OnFetch onFetch() {
+        return new PCond_OnFetch();
+    }
+
     public static PCond_OnOtherCardPlayed onOtherCardPlayed() {
         return new PCond_OnOtherCardPlayed();
     }

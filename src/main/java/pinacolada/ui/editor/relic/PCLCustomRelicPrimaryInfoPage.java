@@ -191,7 +191,9 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     @Override
     public void onOpen() {
         EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary, getTour());
-        replacementDropdown.setItems(PCLCustomEditEntityScreen.getAvailableRelics(effect.getBuilder().cardColor));
+        if (replacementDropdown.size() == 0) {
+            replacementDropdown.setItems(PCLCustomEditEntityScreen.getAvailableRelics(effect.getBuilder().cardColor));
+        }
     }
 
     @Override
@@ -205,6 +207,10 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
         maxUpgrades.setValue(builder.maxUpgradeLevel, false);
         branchUpgrades.setValue(builder.branchFactor, false);
         loadoutValue.setValue(builder.getLoadoutValue(), false);
+
+        if (replacementDropdown.size() == 0) {
+            replacementDropdown.setItems(PCLCustomEditEntityScreen.getAvailableRelics(effect.getBuilder().cardColor));
+        }
 
         String[] replacements = builder.replacementIDs;
         if (replacements != null) {

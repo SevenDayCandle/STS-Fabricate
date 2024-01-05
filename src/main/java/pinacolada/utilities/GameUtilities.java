@@ -691,7 +691,8 @@ public class GameUtilities {
 
     // Do not return magic number for non-PCLCard cards
     public static int getCounter(Object card) {
-        return card instanceof PCLCard ? ((PCLCard) card).magicNumber : 0;
+        return card instanceof PCLCard ? ((PCLCard) card).magicNumber :
+                card instanceof AbstractRelic ? ((AbstractRelic) card).counter : 0;
     }
 
     public static AbstractRoom getCurrentRoom() {
@@ -1702,7 +1703,11 @@ public class GameUtilities {
     public static boolean isFatal(AbstractCreature enemy, boolean includeMinions) {
         return (enemy.isDead || enemy.isDying || enemy.currentHealth <= 0)
                 && !enemy.hasPower(RegrowPower.POWER_ID)
-                && (includeMinions || (!enemy.hasPower(MinionPower.POWER_ID) && !(enemy instanceof PCLCardAlly)));
+                && (includeMinions || !isMinion(enemy));
+    }
+
+    public static boolean isMinion(AbstractCreature enemy) {
+        return enemy.hasPower(MinionPower.POWER_ID) || enemy instanceof PCLCardAlly;
     }
 
     public static boolean isMonster(AbstractCreature c) {
@@ -1943,6 +1948,16 @@ public class GameUtilities {
             orb.passiveAmount = isRelative ? orb.passiveAmount + amount : amount;
             if (canModifyNonFocusOrb || canOrbApplyFocusToEvoke(orb)) {
                 orb.evokeAmount = isRelative ? orb.evokeAmount + amount : amount;
+            }
+        }
+    }
+
+    public static void modifyRelicCounter(AbstractRelic relic, int amount) {
+        if (relic.counter >= 0) {
+            relic.setCounter(amount);
+            relic.flash();
+            if (relic instanceof PCLRelic) {
+                ((PCLRelic )relic).onCounterManualChange();
             }
         }
     }

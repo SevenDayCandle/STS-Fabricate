@@ -166,6 +166,12 @@ public class AugmentModifier extends AbstractCardModifier {
         }
     }
 
+    public void onFetched(AbstractCard card, CardGroup sourcePile) {
+        for (PSkill<?> be : augment.getFullEffects()) {
+            be.triggerOnFetch(card, sourcePile);
+        }
+    }
+
     @Override
     public void onInitialApplication(AbstractCard card) {
         for (PSkill<?> be : augment.getFullEffects()) {

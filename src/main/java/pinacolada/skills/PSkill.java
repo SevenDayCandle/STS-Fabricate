@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
@@ -77,6 +78,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     private static final String BOUND_FORMAT = "¦{0}¦";
     private static final String CONDITION_FORMAT = "║{0}║";
     private static final String SINGLE_FORMAT = "1";
+    protected final static String[] PTEXT = CardCrawlGame.languagePack.getUIString("RunHistoryPathNodes").TEXT;
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
     public static final String COLON_SEPARATOR = ": ";
     public static final String COMMA_SEPARATOR = ", ";
@@ -2180,6 +2182,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
         else if (this.childEffect != null) {
             this.childEffect.triggerOnExhaust(c);
+        }
+    }
+
+    public void triggerOnFetch(AbstractCard c, CardGroup sourcePile) {
+        if (this instanceof OnCardFetchedSubscriber) {
+            ((OnCardFetchedSubscriber) this).onCardFetched(c, sourcePile);
+        }
+        else if (this.childEffect != null) {
+            this.childEffect.triggerOnFetch(c, sourcePile);
         }
     }
 

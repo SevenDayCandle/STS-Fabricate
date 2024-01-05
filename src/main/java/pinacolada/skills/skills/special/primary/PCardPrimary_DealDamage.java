@@ -48,7 +48,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             .setExtra(0, DEFAULT_MAX);
 
     // Damage effects are only customizable in code and cannot be saved in fields
-    protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
+    private FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
 
     // Needed for effect editor initialization. PLEASE do not call this anywhere else without setting a card first
     public PCardPrimary_DealDamage() {

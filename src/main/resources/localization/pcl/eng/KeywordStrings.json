@@ -250,7 +250,7 @@
 		"NAME": "HP"
 	},
 	"Haste":	{
-		"DESCRIPTION": "When drawn, draw 1 card.",
+		"DESCRIPTION": "When added to your hand, draw 1 card.",
 		"NAME": "Haste"
 	},
 	"Heal":	{

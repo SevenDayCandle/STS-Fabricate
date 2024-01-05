@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.special.traits;
+package pinacolada.skills.skills.base.traits;
 
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;

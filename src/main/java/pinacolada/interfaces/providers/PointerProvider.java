@@ -1,7 +1,5 @@
 package pinacolada.interfaces.providers;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
@@ -397,6 +395,10 @@ public interface PointerProvider extends ValueProvider {
 
     default int maxUpgrades() {
         return 0;
+    }
+
+    default void onUpdateUsesPerTurn(int counter) {
+
     }
 
     default PSkill<?> tryRemove(int index) {

@@ -615,6 +615,22 @@ public class CombatManager extends EUIBase {
         }
     }
 
+    public static void onCardFetched(AbstractCard card, CardGroup sourcePile) {
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).triggerOnFetch(sourcePile);
+        }
+
+        for (SkillModifier wrapper : SkillModifier.getAll(card)) {
+            wrapper.onFetched(card, sourcePile);
+        }
+
+        subscriberDo(OnCardFetchedSubscriber.class, s -> s.onCardFetched(card, sourcePile));
+
+        if (PCLCardTag.Haste.has(card)) {
+            PCLActions.top.add(new HasteAction(card));
+        }
+    }
+
     public static void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination) {
         PCLActions.last.callback(() -> {
             controlPile.refreshCards();
@@ -635,9 +651,7 @@ public class CombatManager extends EUIBase {
             wrapper.onPurged(card);
         }
 
-        for (OnCardPurgedSubscriber s : getSubscriberGroup(OnCardPurgedSubscriber.class)) {
-            s.onPurge(card);
-        }
+        subscriberDo(OnCardPurgedSubscriber.class, s -> s.onPurge(card));
     }
 
     public static void onCardReset(AbstractCard card) {

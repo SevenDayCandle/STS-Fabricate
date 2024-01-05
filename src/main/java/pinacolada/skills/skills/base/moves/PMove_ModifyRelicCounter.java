@@ -24,34 +24,34 @@ import java.util.Collection;
 import java.util.List;
 
 @VisibleSkill
-public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfCombatMove {
-    public static final PSkillData<PField_Relic> DATA = register(PMove_UpgradeRelic.class, PField_Relic.class)
-            .setExtra(1, Integer.MAX_VALUE)
+public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements OutOfCombatMove {
+    public static final PSkillData<PField_Relic> DATA = register(PMove_ModifyRelicCounter.class, PField_Relic.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .noTarget();
 
-    public PMove_UpgradeRelic() {
+    public PMove_ModifyRelicCounter() {
         super(DATA);
     }
 
-    public PMove_UpgradeRelic(Collection<String> relics) {
+    public PMove_ModifyRelicCounter(Collection<String> relics) {
         super(DATA);
         fields.relicIDs.addAll(relics);
     }
 
-    public PMove_UpgradeRelic(String... relics) {
+    public PMove_ModifyRelicCounter(String... relics) {
         super(DATA);
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
     protected void doEffect() {
         if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
-            GameUtilities.upgradeRelic((AbstractRelic) source, amount);
+            doModify((AbstractRelic) source);
         }
         else {
             int limit = fields.relicIDs.isEmpty() ? extra : AbstractDungeon.player.relics.size();
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (fields.getFullRelicFilter().invoke(r)) {
-                    GameUtilities.upgradeRelic(r, amount);
+                    doModify(r);
                     limit -= 1;
                 }
                 if (limit <= 0) {
@@ -61,9 +61,13 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
         }
     }
 
+    protected void doModify(AbstractRelic relic) {
+        GameUtilities.modifyRelicCounter(relic, fields.not ? amount : relic.counter + amount);
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_upgrade(TEXT.subjects_relic);
+        return TEXT.act_giveTarget(TEXT.subjects_relic, PGR.core.tooltips.counter.title);
     }
 
     @Override
@@ -71,7 +75,13 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
         String base = fields.relicIDs.isEmpty() ?
                 fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString())
                 : fields.getFullRelicString();
-        return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString()) : TEXT.act_upgrade(base);
+        if (fields.not) {
+            return TEXT.act_setOf(PGR.core.tooltips.counter.title, base, getAmountRawString());
+        }
+        else if (amount > 0) {
+            return TEXT.act_increasePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString());
+        }
+        return TEXT.act_reducePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString());
     }
 
     @Override
@@ -80,7 +90,7 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
-    public PMove_UpgradeRelic onAddToCard(AbstractCard card) {
+    public PMove_ModifyRelicCounter onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         if (card instanceof KeywordProvider) {
             fields.addRelicTips((KeywordProvider) card);

@@ -22,6 +22,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.skills.skills.PTrigger;
 
 public abstract class PCLPointerRelic extends PCLRelic implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
     public PSkillContainer skills;
@@ -149,6 +150,9 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         super.atPreBattle();
         if (!usedUp) {
             subscribe();
+        }
+        for (PSkill<?> effect : getEffects()) {
+            effect.resetUses();
         }
     }
 
@@ -288,6 +292,15 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
     }
 
     @Override
+    public void onCounterManualChange() {
+        for (PSkill<?> ef : getEffects()) {
+            if (ef instanceof PTrigger) {
+                ((PTrigger) ef).setAmount(counter);
+            }
+        }
+    }
+
+    @Override
     public void onEquip() {
         super.onEquip();
         for (PSkill<?> effect : getEffects()) {
@@ -295,6 +308,9 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
         }
         if (!usedUp) {
             subscribe();
+        }
+        for (PSkill<?> effect : getEffects()) {
+            effect.resetUses();
         }
     }
 
@@ -305,6 +321,11 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
             effect.triggerOnRemoveFromInventory();
             effect.unsubscribeChildren();
         }
+    }
+
+    @Override
+    public void onUpdateUsesPerTurn(int val) {
+        counter = val;
     }
 
     @Override

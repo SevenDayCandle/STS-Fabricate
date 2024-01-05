@@ -198,33 +198,49 @@ public class CardGroupPatches {
 
     @SpirePatch(clz = CardGroup.class, method = "triggerOnOtherCardPlayed")
     public static class CardGroupPatches_OnAfterPlayCard {
-        @SpirePrefixPatch
-        public static void prefix(CardGroup __instance, AbstractCard usedCard) {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard usedCard) {
             CombatManager.onAfterCardPlayed(usedCard);
         }
     }
 
     @SpirePatch(clz = CardGroup.class, method = "moveToBottomOfDeck")
     public static class CardGroupPatches_MoveToBottomOfDeck {
-        @SpirePrefixPatch
-        public static void prefix(CardGroup __instance, AbstractCard card) {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard card) {
             CombatManager.onCardReshuffled(card, __instance);
         }
     }
 
     @SpirePatch(clz = CardGroup.class, method = "moveToDeck")
     public static class CardGroupPatches_MoveToDrawPile {
-        @SpirePrefixPatch
-        public static void prefix(CardGroup __instance, AbstractCard card, boolean randomSpot) {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard card, boolean randomSpot) {
             CombatManager.onCardReshuffled(card, __instance);
         }
     }
 
     @SpirePatch(clz = CardGroup.class, method = "moveToExhaustPile")
     public static class CardGroupPatches_MoveToExhaustPile {
-        @SpirePrefixPatch
-        public static void prefix(CardGroup __instance, AbstractCard card) {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard card) {
             CombatManager.onExhaust(card);
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "moveToHand", paramtypez = {AbstractCard.class})
+    public static class CardGroupPatches_MoveToHand {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard card) {
+            CombatManager.onCardFetched(card, __instance);
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "moveToHand", paramtypez = {AbstractCard.class, CardGroup.class})
+    public static class CardGroupPatches_MoveToHand2 {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance, AbstractCard card, CardGroup group) {
+            CombatManager.onCardFetched(card, group);
         }
     }
 

@@ -344,6 +344,9 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         }
     }
 
+    public void onCounterManualChange() {
+    }
+
     @Override
     public void onEquip() {
         super.onEquip();

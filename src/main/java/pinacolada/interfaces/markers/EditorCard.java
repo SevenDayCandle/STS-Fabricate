@@ -32,6 +32,10 @@ public interface EditorCard extends PointerProvider, CacheableCard {
     default void setup(Object input) {
     }
 
+    default void triggerOnFetch(CardGroup sourcePile) {
+        doEffects(be -> be.triggerOnFetch((AbstractCard) this, sourcePile));
+    }
+
     default void triggerOnPurge() {
         doEffects(be -> be.triggerOnPurge((AbstractCard) this));
     }

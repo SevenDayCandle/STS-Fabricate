@@ -126,6 +126,10 @@ public class SkillModifier extends AbstractCardModifier {
         skill.triggerOnExhaust(card);
     }
 
+    public void onFetched(AbstractCard card, CardGroup sourcePile) {
+        skill.triggerOnFetch(card, sourcePile);
+    }
+
     @Override
     public void onInitialApplication(AbstractCard card) {
         PSkill<?> skill = getSkill();

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -46,7 +47,7 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
         if (isWhenClause() || isPassiveClause()) {
             return EUIRM.strings.adjNoun(fields.getThresholdRawString(plural(PGR.core.tooltips.counter)), TEXT.subjects_card);
         }
-        return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard(), 1, fields.getThresholdRawString(plural(PGR.core.tooltips.counter))) + getXRawString();
+        return TEXT.cond_ifTargetHas(TEXT.subjects_this, 1, fields.getThresholdRawString(plural(PGR.core.tooltips.counter))) + getXRawString();
     }
 
     @Override

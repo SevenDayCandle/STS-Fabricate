@@ -105,7 +105,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
 
     public void forceResetUses() {
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
     }
 
     @Override
@@ -150,7 +150,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public PTrigger makeCopy() {
         PTrigger copy = (PTrigger) super.makeCopy();
         copy.usesThisTurn = this.usesThisTurn;
-        copy.updateCounter();
+        copy.onUpdateUsesPerTurn();
         return copy;
     }
 
@@ -158,19 +158,22 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         if (!fields.not) {
             forceResetUses();
         }
+        else {
+            onUpdateUsesPerTurn();
+        }
     }
 
     public PTrigger setAmount(int amount, int upgrade) {
         super.setAmount(amount, upgrade);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
     public PTrigger setAmount(int amount) {
         super.setAmount(amount);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
@@ -178,7 +181,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public PTrigger setAmountFromCard() {
         super.setAmountFromCard();
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
@@ -195,35 +198,35 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     public PTrigger setExtra(int amount, int upgrade) {
         super.setExtra(amount, upgrade);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
     public PTrigger setExtra(int amount) {
         super.setExtra(amount);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
     public PTrigger setTemporaryAmount(int amount) {
         super.setTemporaryAmount(amount);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
     public PTrigger setUpgrade(int upgrade) {
         super.setUpgrade(upgrade);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
     public PTrigger setUpgradeExtra(int upgrade) {
         super.setUpgradeExtra(upgrade);
         updateUsesAmount();
-        updateCounter();
+        onUpdateUsesPerTurn();
         return this;
     }
 
@@ -275,12 +278,12 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
                 usesThisTurn += 1;
                 if (usesThisTurn >= amount) {
                     usesThisTurn = 0;
-                    updateCounter();
+                    onUpdateUsesPerTurn();
                     flash();
                     return true;
                 }
                 else {
-                    updateCounter();
+                    onUpdateUsesPerTurn();
                 }
             }
             return false;
@@ -291,7 +294,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             if (result) {
                 if (usesThisTurn > 0) {
                     usesThisTurn -= 1;
-                    updateCounter();
+                    onUpdateUsesPerTurn();
                 }
                 flash();
             }
@@ -301,9 +304,9 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return false;
     }
 
-    protected void updateCounter() {
-        if (source instanceof AbstractRelic) {
-            ((AbstractRelic) source).counter = this.usesThisTurn;
+    protected void onUpdateUsesPerTurn() {
+        if (source instanceof PointerProvider) {
+            ((PointerProvider) source).onUpdateUsesPerTurn(this.usesThisTurn);
         }
     }
 
@@ -326,18 +329,18 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             usesThisTurn += 1;
             if (usesThisTurn >= amount) {
                 usesThisTurn = 0;
-                updateCounter();
+                onUpdateUsesPerTurn();
                 this.childEffect.use(info, order, shouldPay);
                 flash();
             }
             else {
-                updateCounter();
+                onUpdateUsesPerTurn();
             }
         }
         else if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
-                updateCounter();
+                onUpdateUsesPerTurn();
             }
             flash();
             this.childEffect.use(info, order, shouldPay);

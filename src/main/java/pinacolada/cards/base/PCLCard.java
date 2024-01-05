@@ -2611,6 +2611,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnExhaust(this));
     }
 
+    public void triggerOnFetch(CardGroup sourcePile) {
+        doEffects(be -> be.triggerOnFetch(this, sourcePile));
+    }
+
     @Override
     public void triggerOnGlowCheck() {
         this.glowColor = CombatManager.playerSystem.getGlowColor(this);

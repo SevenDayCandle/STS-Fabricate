@@ -204,7 +204,6 @@ public class MoveCard extends PCLAction<AbstractCard> {
             card.triggerWhenDrawn();
             PCLSFX.play(PCLSFX.CARD_OBTAIN);
             sourcePile.moveToHand(card, sourcePile);
-            CombatManager.onAfterDraw(card);
         }
     }
 

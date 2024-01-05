@@ -405,6 +405,12 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    public void triggerOnFetch(AbstractCard c, CardGroup sourcePile) {
+        for (PSkill<?> effect : effects) {
+            effect.triggerOnFetch(c, sourcePile);
+        }
+    }
+
     public void triggerOnOtherCardPlayed(AbstractCard c) {
         for (PSkill<?> effect : effects) {
             effect.triggerOnOtherCardPlayed(c);

@@ -6,6 +6,8 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUIRelicPreview;
 import extendedui.utilities.RotatingList;
@@ -16,6 +18,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class PField_Relic extends PField_Random {
     public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();
@@ -27,6 +30,18 @@ public class PField_Relic extends PField_Random {
             return RelicLibrary.getRelic(id);
         }
         return null;
+    }
+
+    public void addRelicTips(KeywordProvider card) {
+        List<EUIKeywordTooltip> tips = card.getTips();
+        if (tips != null) {
+            for (String r : relicIDs) {
+                AbstractRelic relic = RelicLibrary.getRelic(r);
+                if (relic != null) {
+                    tips.add(new EUIKeywordTooltip(relic.name, relic.description));
+                }
+            }
+        }
     }
 
     @Override

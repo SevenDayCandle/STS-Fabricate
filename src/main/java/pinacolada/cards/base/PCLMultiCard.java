@@ -505,6 +505,11 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
+        public void triggerOnFetch(AbstractCard c, CardGroup sourcePile) {
+            doPCL(card -> card.triggerOnFetch(sourcePile));
+        }
+
+        @Override
         public void triggerOnOtherCardPlayed(AbstractCard c) {
             doCard(card -> card.triggerOnOtherCardPlayed(c));
         }
