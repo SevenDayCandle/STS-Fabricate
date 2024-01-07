@@ -160,7 +160,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
             effect.resetUses();
         }
         if (isTurnBased) {
-            reducePower(1);
+            reducePowerAction(1);
         }
     }
 

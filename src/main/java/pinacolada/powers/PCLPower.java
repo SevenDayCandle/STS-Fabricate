@@ -174,7 +174,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                     justApplied = false;
                 }
                 else {
-                    reducePower(1);
+                    reducePowerAction(1);
                 }
                 break;
         }
@@ -186,7 +186,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 addTurns(-1);
                 break;
             case TurnBasedNext:
-                reducePower(1);
+                reducePowerAction(1);
                 break;
         }
     }
@@ -384,6 +384,14 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         onAmountChanged(previous, -Math.max(0, reduceAmount));
     }
 
+    public ReducePowerAction reducePowerAction(int reduceAmount) {
+        return reducePowerAction(PCLActions.bottom, reduceAmount);
+    }
+
+    public ReducePowerAction reducePowerAction(PCLActions order, int reduceAmount) {
+        return order.add(new ReducePowerAction(owner, owner, this, reduceAmount));
+    }
+
     public RemoveSpecificPowerAction removePower() {
         return removePower(PCLActions.bottom);
     }
@@ -562,7 +570,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public void wasHPLost(DamageInfo info, int damageAmount) {
         super.wasHPLost(info, damageAmount);
         if (data.endTurnBehavior == PCLPowerData.Behavior.Plated && info.owner != null && info.owner != this.owner && info.type == DamageInfo.DamageType.NORMAL && damageAmount > 0) {
-            reducePower(1);
+            reducePowerAction(1);
         }
     }
 }

@@ -13,7 +13,6 @@ public class PCLLoadoutValidation {
     public final TupleT2<Integer, Boolean> cardsCount = new TupleT2<>();
     public final TupleT2<Integer, Boolean> totalValue = new TupleT2<>();
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
-    public int hindranceLevel;
     public boolean allCardsSeen;
     public boolean isValid;
 
@@ -81,16 +80,8 @@ public class PCLLoadoutValidation {
             totalValue.v1 += slot.getEstimatedValue();
         }
 
-        // Hindrance level is determined by the proportion of your deck that is negative
-        if (cardsCount.v1 > 0) {
-            hindranceLevel = HINDRANCE_MULTIPLIER * hindrances / cardsCount.v1;
-        }
-        else {
-            hindranceLevel = 0;
-        }
-
         values.putAll(data.values);
-        totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
+        totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf);
         totalValue.v2 = data.loadout.maxValue < 0 || totalValue.v1 <= data.loadout.maxValue;
         cardsCount.v2 = cardsCount.v1 >= data.loadout.minTotalCards;
         isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;

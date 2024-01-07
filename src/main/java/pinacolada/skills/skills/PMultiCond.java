@@ -275,6 +275,14 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
+    public void resetAmount() {
+        super.resetAmount();
+        for (PSkill<?> effect : effects) {
+            effect.resetAmount();
+        }
+    }
+
+    @Override
     public PMultiCond setAmountFromCard() {
         super.setAmountFromCard();
         for (PSkill<?> effect : effects) {

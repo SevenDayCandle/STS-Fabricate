@@ -43,6 +43,7 @@ public abstract class PCLLoadout {
     public int minTotalCards;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
+    public ArrayList<PCLCardData> miscData = new ArrayList<>();
     public ArrayList<PCLRelicData> relics = new ArrayList<>();
     public HashMap<String, PCLLoadoutData> presets = new HashMap<>();
 
@@ -233,7 +234,17 @@ public abstract class PCLLoadout {
                 values.add(card.ID);
             }
         }
+        for (PCLCardData card : getCardMiscs()) {
+            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                values.add(card.ID);
+            }
+        }
         for (PCLCardData card : coreLoadout.getCards()) {
+            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                values.add(card.ID);
+            }
+        }
+        for (PCLCardData card : coreLoadout.getCardMiscs()) {
             if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
             }
@@ -292,6 +303,10 @@ public abstract class PCLLoadout {
             }
         }
         return base;
+    }
+
+    public ArrayList<PCLCardData> getCardMiscs() {
+        return miscData;
     }
 
     public ArrayList<PCLCardData> getColorlessCards() {
@@ -434,7 +449,7 @@ public abstract class PCLLoadout {
     }
 
     public PCLCardData getSymbolicCard() {
-        if (cardDatas.size() > 0) {
+        if (!cardDatas.isEmpty()) {
             return cardDatas.get(0);
         }
         PCLPlayerData<?, ?, ?> playerData = getPlayerData();
@@ -529,7 +544,7 @@ public abstract class PCLLoadout {
 
     protected void setDefaultBlightsForData(PCLLoadoutData data) {
         ArrayList<String> relics = getAvailableBlightIDs();
-        if (relics.size() > 0) {
+        if (!relics.isEmpty()) {
             data.addBlightSlot(relics.get(0));
         }
     }

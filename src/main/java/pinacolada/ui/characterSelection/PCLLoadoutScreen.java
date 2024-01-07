@@ -55,7 +55,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected EUIToggle upgradeToggle;
     protected EUITextBox cardscountText;
     protected EUITextBox cardsvalueText;
-    protected EUITextBox hindrancevalueText;
     protected PCLLoadoutCanvas canvas;
     private PCLLoadoutData current;
     public PCLBaseStatEditor activeEditor;
@@ -84,7 +83,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         presetDropdown = new EUIDropdown<PCLLoadoutData>(new EUIHitbox(screenW(0.8f), screenH(0.92f), scale(200), scale(40)), l -> l.name)
                 .setOnChange(l -> {
-                    if (l.size() > 0) {
+                    if (!l.isEmpty()) {
                         this.changePreset(l.get(0));
                     }
                 })
@@ -132,13 +131,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardsvalueText.hb.y + labelHeight * 1.4f)
                 .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1);
-
-        hindrancevalueText = (EUITextBox) new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
-                .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
-                .setAlignment(0.5f, 0.5f)
-                .setPosition(saveButton.hb.cX, cardscountText.hb.y + labelHeight * 1.4f)
-                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1)
-                .setTooltip(new EUIHeaderlessTooltip(EUIUtils.format(PGR.core.strings.loadout_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
         final PCLBaseStatEditor.StatType[] statTypes = PCLBaseStatEditor.StatType.values();
         for (int i = 0; i < statTypes.length; i++) {
@@ -233,7 +225,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         presetDropdown.setActive(data != null);
         addPresetButton.setActive(data != null);
 
-        if (canvas.cardEditors.size() > 0 && canvas.relicsEditors.size() > 0) {
+        if (!canvas.cardEditors.isEmpty() && !canvas.relicsEditors.isEmpty()) {
             EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
                     new EUITourTooltip(canvas.deckText.hb, canvas.deckText.text, PGR.core.strings.loadout_tutorialCard)
                             .setFlash(canvas.cardEditors.get(0).nameText.image),
@@ -334,7 +326,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             clearButton.renderImpl(sb);
             saveButton.renderImpl(sb);
             upgradeToggle.renderImpl(sb);
-            hindrancevalueText.tryRender(sb);
             cardscountText.tryRender(sb);
             cardsvalueText.tryRender(sb);
             canvas.tryRender(sb);
@@ -423,7 +414,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             clearButton.updateImpl();
             saveButton.updateImpl();
             canvas.updateImpl();
-            hindrancevalueText.tryUpdate();
             cardscountText.tryUpdate();
             cardsvalueText.tryUpdate();
             saveButton.tryUpdate();
@@ -436,14 +426,11 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         cardscountText.setLabel(PGR.core.strings.loadout_cardsCount(val.cardsCount.v1, getCurrentPreset().loadout.minTotalCards))
                 .setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         if (loadout.maxValue < 0) {
-            hindrancevalueText.setActive(false);
             cardsvalueText.setActive(false);
         }
         else {
-            hindrancevalueText.setLabel(PGR.core.strings.loadout_hindranceValue(val.hindranceLevel)).setActive(true);
-            hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
             cardsvalueText
-                    .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue < 0 ? PGR.core.strings.subjects_infinite : loadout.maxValue))
+                    .setLabel(PGR.core.strings.loadout_totalValue(val.totalValue.v1, loadout.maxValue))
                     .setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
                     .setActive(true);
         }

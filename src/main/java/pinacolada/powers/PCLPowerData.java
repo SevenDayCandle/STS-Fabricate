@@ -269,7 +269,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public static PCLPowerData registerBaseBuff(Class<? extends AbstractPower> powerClass, String id, EUIKeywordTooltip tip) {
-        return registerData(new PCLPowerData(powerClass, PGR.core, id, tip));
+        return registerData(new PCLPowerData(powerClass, PGR.core, id, tip)).setType(AbstractPower.PowerType.BUFF);
     }
 
     public static PCLPowerData registerBaseBuffCommon(Class<? extends AbstractPower> powerClass, String id, EUIKeywordTooltip tip) {

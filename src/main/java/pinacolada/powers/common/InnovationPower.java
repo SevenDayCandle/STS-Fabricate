@@ -22,7 +22,7 @@ public class InnovationPower extends PCLSubscribingPower implements OnClickableU
 
     @Override
     public boolean onClickablePowerUsed(PCLClickableUse power, AbstractMonster target, int uses) {
-        reducePower(1);
+        reducePowerAction(1);
         this.flashWithoutSound();
         return false;
     }

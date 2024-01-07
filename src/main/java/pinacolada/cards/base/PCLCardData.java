@@ -660,7 +660,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
                 this.loadout.cardDatas.add(this);
             }
             else {
-                this.loadout.colorlessData.add(this);
+                this.loadout.miscData.add(this);
             }
         }
 

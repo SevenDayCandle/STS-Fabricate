@@ -1892,6 +1892,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return target == PCLCardTarget.Single || (this.childEffect != null && this.childEffect.requiresTarget());
     }
 
+    public void resetAmount() {
+        this.amount = baseAmount;
+        if (childEffect != null) {
+            childEffect.resetAmount();
+        }
+    }
+
     public void resetUses() {
 
     }

@@ -164,7 +164,7 @@ public class PCLCardAlly extends PCLCardCreature {
             PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
             card.useEffectsWithoutPowers(info);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
-            CombatManager.playerSystem.onCardPlayed(card, info, manual);
+            CombatManager.playerSystem.onCardPlayed(card, info, true);
             applyTurnPowers();
             CombatManager.onAllyTrigger(this.card, this.target, this);
         }

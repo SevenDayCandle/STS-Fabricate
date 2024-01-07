@@ -174,6 +174,14 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_IncreaseOnUse(amount);
     }
 
+    public static PMod_PayPerPower payPerPower(PCLPowerData... powers) {
+        return payPerPower(1, powers);
+    }
+
+    public static PMod_PayPerPower payPerPower(int amount, PCLPowerData... powers) {
+        return new PMod_PayPerPower(amount, powers);
+    }
+
     public static PMod_PerCard perCard(PCLCardGroupHelper... groups) {
         return perCard(1, groups);
     }

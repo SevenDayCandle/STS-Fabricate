@@ -331,6 +331,14 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public void resetAmount() {
+        super.resetAmount();
+        for (PSkill<?> effect : effects) {
+            effect.resetAmount();
+        }
+    }
+
+    @Override
     public PBranchCond setAmountFromCard() {
         super.setAmountFromCard();
         for (PSkill<?> effect : effects) {

@@ -63,7 +63,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String pay = extra > 0 ? zeroToRangeString(extra) : TEXT.subjects_all;
-        return TEXT.act_pay(pay, fields.getPowerString()) + EFFECT_SEPARATOR + TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
+        String payString = target == PCLCardTarget.None || (target == PCLCardTarget.Single && !isFromCreature()) ? TEXT.act_pay(pay, fields.getPowerString()) : TEXT.act_removeFrom(EUIRM.strings.numNoun(pay, fields.getPowerString()), getTargetStringPerspective(perspective));
+        return payString + EFFECT_SEPARATOR + TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
                 getSubText(perspective, requestor) + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
