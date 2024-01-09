@@ -2,25 +2,26 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
-import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.providers.ValueProvider;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.modifiers.*;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMod<T extends PField> extends PSkill<T> {
     public static final int MODIFIER_PRIORITY = 3;
-    public int cachedValue;
 
     public PMod(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
@@ -394,7 +395,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    public ColoredString getColoredValueString() {
+    public ColoredString getColoredAmount() {
         if (baseAmount != amount) {
             return new ColoredString(amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
@@ -406,8 +407,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return " (" + TEXT.subjects_max(extra) + ")";
     }
 
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return 0;
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return baseAmount;
     }
 
     @Override
@@ -418,8 +419,12 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public int getXValue() {
-        return cachedValue;
+    public String getXString() {
+        // Do not show the x value for when powers
+        if (CombatManager.inBattle() && source instanceof ValueProvider && !hasParentType(PTrigger_When.class)) {
+            return " (" + getXValue() + ")";
+        }
+        return EUIUtils.EMPTY_STRING;
     }
 
     @Override
@@ -427,33 +432,13 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return childEffect == null;
     }
 
-    protected boolean isSkillAffected(PSkill<?> move) {
-        if (!move.isAffectedByMods()) {
-            return false;
-        }
-        if (move == childEffect) {
-            return true;
-        }
-        else if (childEffect instanceof PMultiBase<?>) {
-            return ((PMultiBase<?>) childEffect).getSubEffects().contains(move);
-        }
-        else {
-            return childEffect instanceof PDelay && childEffect.childEffect == move;
-        }
-    }
-
     protected int limitPer(int val) {
         return extra > 0 ? Math.min(extra, val) : val;
     }
 
     @Override
-    public void onDrag(AbstractMonster m) {
-        updateChildAmount(getInfo(m), false);
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
-        updateChildAmount(info, isUsing);
+    public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
+        return limitPer(getModifiedAmount(info, amount, isUsing));
     }
 
     @Override
@@ -478,60 +463,5 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     public PMod<T> setUpgradeExtra(int... upgrade) {
         super.setUpgradeExtra(upgrade);
         return this;
-    }
-
-    public int updateAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        cachedValue = getModifiedAmount(be, info, isUsing);
-        if (extra > 0) {
-            cachedValue = Math.min(extra, cachedValue);
-        }
-        return cachedValue;
-    }
-
-    public void updateChildAmount(PCLUseInfo info, boolean isUsing) {
-        if (this.childEffect != null) {
-            if (this.childEffect instanceof PMultiBase) {
-                for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects()) {
-                    if (ce.isAffectedByMods()) {
-                        ce.setTemporaryAmount(updateAmount(ce, info, isUsing));
-                    }
-                }
-            }
-            // PDelays should be ignored. PMods will directly affect their children instead
-            else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null && this.childEffect.childEffect.isAffectedByMods()) {
-                this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info, isUsing));
-            }
-            else if (this.childEffect.isAffectedByMods()) {
-                this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info, isUsing));
-            }
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(() -> {
-            if (this.childEffect != null) {
-                updateChildAmount(info, true);
-                this.childEffect.use(info, order);
-            }
-        });
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-        order.callback(() -> {
-            if (this.childEffect != null) {
-                updateChildAmount(info, true);
-                this.childEffect.use(info, order, shouldPay);
-            }
-        });
-    }
-
-    @Override
-    public void useOutsideOfBattle(PCLUseInfo info) {
-        if (this.childEffect != null) {
-            updateChildAmount(generateInfo(null), true);
-            this.childEffect.useOutsideOfBattle(info);
-        }
     }
 }

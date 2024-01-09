@@ -149,12 +149,10 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
             if (!PSkill.isSkillBlank(move)) {
-                move.recurse(m -> m.setTemporaryAmount(m.baseAmount + level * m.getUpgrade()));
                 String pText = move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
-                move.recurse(m -> m.setTemporaryAmount(m.baseAmount));
             }
         }
         return sj.toString();
@@ -188,7 +186,7 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
     public AugmentStrings getStringsForLanguage(Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+                        !languageMap.isEmpty() ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
     @Override

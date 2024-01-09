@@ -32,7 +32,7 @@ public abstract class PBlockTrait<T extends PField_Not> extends PTrait<T> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

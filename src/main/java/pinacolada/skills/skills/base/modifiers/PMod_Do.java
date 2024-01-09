@@ -75,9 +75,9 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
         List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
-        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
+        return cards == null ? 0 : baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
         )));
     }
@@ -136,15 +136,14 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 .addCallback(cards -> {
                     if (this.childEffect != null) {
                         info.setData(cards);
-                        updateChildAmount(info, true);
                         this.childEffect.use(info, order);
                     }
                 });
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return extra > 0 || isForced() ? String.valueOf(input) : zeroToRangeString(input);
+    public String wrapTextAmount(int input) {
+        return extra > 0 || isForced() ? String.valueOf(input) : TEXT.subjects_upToX(input);
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();

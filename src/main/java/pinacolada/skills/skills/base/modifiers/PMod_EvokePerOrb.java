@@ -1,6 +1,8 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -16,6 +18,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.List;
 
 @VisibleSkill
 public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
@@ -36,8 +40,12 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        if (isUsing) {
+            List<? extends AbstractOrb> orbs = info.getDataAsList(AbstractOrb.class);
+            return orbs == null ? 0 : baseAmount * (fields.orbs.isEmpty() ? orbs.size() : EUIUtils.count(orbs, c -> fields.getOrbFilter().invoke(c))) / Math.max(1, this.amount);
+        }
+        return AbstractDungeon.player == null ? 0 : baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     @Override
@@ -55,6 +63,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
         return TEXT.act_evoke(TEXT.subjects_allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(perspective, requestor, addPeriod));
     }
 
+    @Override
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (shouldPay && childEffect != null) {
             useImpl(info, order, () -> childEffect.use(info, order));
@@ -69,7 +78,6 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
-        updateChildAmount(info, true);
         order.evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
                 .addCallback((orbs) -> {
                     info.setData(orbs);

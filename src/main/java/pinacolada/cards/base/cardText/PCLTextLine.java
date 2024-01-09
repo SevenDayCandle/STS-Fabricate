@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 
 import java.util.LinkedList;
 
@@ -83,6 +84,12 @@ public class PCLTextLine {
         tokens.push(token);
         width += token.getWidth(context);
         additionalWidth += token.getAdditionalWidth(context);
+    }
+
+    public void refresh(PCLUseInfo info) {
+        for (PCLTextToken token : tokens) {
+            token.refresh(info);
+        }
     }
 
     public void render(SpriteBatch sb) {

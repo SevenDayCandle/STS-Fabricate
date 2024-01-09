@@ -33,11 +33,6 @@ public class PMod_MultiplyOnUse extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return amount;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_multiplyBy(TEXT.subjects_x, TEXT.subjects_x + "%");
     }
@@ -65,7 +60,7 @@ public class PMod_MultiplyOnUse extends PActiveMod<PField_Empty> {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
             order.callback(() -> {
-                this.childEffect.multiplyAmountForCombat(amount, extra > 0 ? extra : Integer.MAX_VALUE);
+                this.childEffect.multiplyAmountForCombat(refreshAmount(info), extra > 0 ? extra : Integer.MAX_VALUE);
             });
         }
     }

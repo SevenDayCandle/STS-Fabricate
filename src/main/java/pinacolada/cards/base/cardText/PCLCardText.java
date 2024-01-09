@@ -2,30 +2,20 @@ package pinacolada.cards.base.cardText;
 
 import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import extendedui.EUI;
 import extendedui.EUIUtils;
-import extendedui.ui.TextureCache;
 import extendedui.utilities.ColoredString;
-import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.resources.PCLEnum;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
@@ -81,7 +71,7 @@ public class PCLCardText {
         }
     }
 
-    public void forceRefresh() {
+    public void forceReinitialize() {
         card.rawDescription = overrideDescription;
         initialize(card.rawDescription);
     }
@@ -176,6 +166,12 @@ public class PCLCardText {
 
     public void overrideDescription(String description) {
         overrideDescription = description;
+    }
+
+    public void refresh(PCLUseInfo info) {
+        for (PCLTextLine line : lines) {
+            line.refresh(info);
+        }
     }
 
     public void renderLines(SpriteBatch sb) {

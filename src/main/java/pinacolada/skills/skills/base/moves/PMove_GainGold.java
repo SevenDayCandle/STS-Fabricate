@@ -48,7 +48,8 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         PCLSFX.play(PCLSFX.GOLD_GAIN);
-        order.gainGold(amount);
+        int actualAmount = refreshAmount(info);
+        order.gainGold(actualAmount);
         super.use(info, order);
     }
 
@@ -56,11 +57,12 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
         PCLSFX.play(PCLSFX.GOLD_GAIN);
-        if (amount > 0) {
-            AbstractDungeon.player.gainGold(amount);
+        int actualAmount = refreshAmount(info);
+        if (actualAmount > 0) {
+            AbstractDungeon.player.gainGold(actualAmount);
         }
         else {
-            AbstractDungeon.player.loseGold(-amount);
+            AbstractDungeon.player.loseGold(-actualAmount);
         }
     }
 }

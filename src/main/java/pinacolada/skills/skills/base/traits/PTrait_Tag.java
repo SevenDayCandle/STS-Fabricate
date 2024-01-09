@@ -98,7 +98,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

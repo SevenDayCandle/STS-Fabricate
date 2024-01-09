@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -24,6 +25,7 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @VisibleSkill
 public class PMod_PayPerPower extends PActiveMod<PField_Power> {
@@ -44,8 +46,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.powers.isEmpty() ?
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return AbstractDungeon.player == null ? 0 : baseAmount * (fields.powers.isEmpty() ?
                 sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? limitPer(po.amount) : 0) : 0) :
                 sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> limitPer(GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
     }
@@ -62,7 +64,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        String pay = extra > 0 ? zeroToRangeString(extra) : TEXT.subjects_all;
+        String pay = extra > 0 ? TEXT.subjects_upToX(extra) : TEXT.subjects_all;
         String payString = target == PCLCardTarget.None || (target == PCLCardTarget.Single && !isFromCreature()) ? TEXT.act_pay(pay, fields.getPowerString()) : TEXT.act_removeFrom(EUIRM.strings.numNoun(pay, fields.getPowerString()), getTargetStringPerspective(perspective));
         return payString + EFFECT_SEPARATOR + TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
                 getSubText(perspective, requestor) + getXRawString()) + PCLCoreStrings.period(addPeriod);
@@ -82,7 +84,6 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
-        updateChildAmount(info, true);
         AbstractCreature sourceCreature = getSourceCreature();
         if (extra > 0) {
             ArrayList<ApplyOrReducePowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->

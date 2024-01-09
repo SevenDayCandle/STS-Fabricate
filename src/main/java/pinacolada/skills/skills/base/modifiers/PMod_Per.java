@@ -41,7 +41,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public ColoredString getColoredValueString() {
+    public ColoredString getColoredAmount() {
         String amString = fields.not && amount >= 0 ? "+" + amount : String.valueOf(amount);
         if (baseAmount != amount) {
             return new ColoredString(amString, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
@@ -59,8 +59,8 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return fields.not ? (be.baseAmount + (getMultiplier(info, isUsing) * amount)) : be.baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return fields.not ? (baseAmount + (getMultiplier(info, isUsing) * amount)) : baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
     }
 
     @Override
@@ -86,7 +86,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return input >= 0 && fields.not ? "+" + input : String.valueOf(input);
     }
 

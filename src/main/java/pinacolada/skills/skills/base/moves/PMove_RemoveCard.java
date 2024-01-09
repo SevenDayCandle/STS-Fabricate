@@ -104,7 +104,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : zeroToRangeString(input);
+    public String wrapTextAmount(int input) {
+        return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : TEXT.subjects_upToX(input);
     }
 }

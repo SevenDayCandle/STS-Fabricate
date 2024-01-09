@@ -110,8 +110,8 @@ public abstract class PMove_DoCard<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
-    public String wrapAmount(int input) {
-        return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : zeroToRangeString(input);
+    public String wrapTextAmount(int input) {
+        return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : TEXT.subjects_upToX(input);
     }
 
     public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> getAction();

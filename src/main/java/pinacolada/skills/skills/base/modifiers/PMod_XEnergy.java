@@ -35,8 +35,8 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount * GameUtilities.getXCostEnergy(EUIUtils.safeCast(source, AbstractCard.class)) + this.amount;
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return baseAmount * GameUtilities.getXCostEnergy(EUIUtils.safeCast(source, AbstractCard.class)) + this.amount;
     }
 
     @Override
@@ -68,11 +68,10 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info, true);
+                this.childEffect.use(info, order, shouldPay);
                 if (source instanceof AbstractCard) {
                     GameUtilities.useXCostEnergy((AbstractCard) source);
                 }
-                this.childEffect.use(info, order, shouldPay);
             }
         });
     }
@@ -81,26 +80,22 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                updateChildAmount(info, true);
+                this.childEffect.use(info, order);
                 if (source instanceof AbstractCard) {
                     GameUtilities.useXCostEnergy((AbstractCard) source);
                 }
-                this.childEffect.use(info, order);
             }
         });
     }
 
     @Override
-    public String wrapAmountChild(PSkill<?> source, String input) {
-        // Only apply X modifier text if the source is the skill that is actually being modified by this modifier
-        if (isSkillAffected(source)) {
-            // If the value is not parseable, don't remove the numbers
-            int value = EUIUtils.parseInt(input, 2);
-            if (value == 1) {
-                input = EUIUtils.EMPTY_STRING;
-            }
-            input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
+    public String wrapTextAmountChild(String input) {
+        // If the value is not parseable, don't remove the numbers
+        int value = EUIUtils.parseInt(input, 2);
+        if (value == 1) {
+            input = EUIUtils.EMPTY_STRING;
         }
-        return parent != null ? parent.wrapAmountChild(source, input) : (input);
+        input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
+        return parent != null ? parent.wrapTextAmountChild(input) : super.wrapTextAmountChild(input);
     }
 }

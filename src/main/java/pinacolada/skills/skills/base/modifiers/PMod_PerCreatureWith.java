@@ -8,7 +8,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
@@ -39,8 +38,8 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount * getMultiplier(info, isUsing);
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return baseAmount * getMultiplier(info, isUsing);
     }
 
     @Override

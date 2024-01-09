@@ -21,11 +21,6 @@ public abstract class PPrimary<T extends PField> extends PSkill<T> {
         super(data, target, amount, extra);
     }
 
-    @Override
-    public boolean isAffectedByMods() {
-        return false;
-    }
-
     public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
         return true;
     }

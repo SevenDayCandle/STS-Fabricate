@@ -2,15 +2,19 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.ValueProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PFacetCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -57,6 +61,15 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
             return base + getXRawString();
         }
         return base;
+    }
+
+    @Override
+    public String getXString() {
+        // Do not show the x value for when powers
+        if (CombatManager.inBattle() && source instanceof ValueProvider && !hasParentType(PTrigger_When.class)) {
+            return " (" + getXValue() + ")";
+        }
+        return EUIUtils.EMPTY_STRING;
     }
 
     @Override

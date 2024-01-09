@@ -2,10 +2,12 @@ package pinacolada.cards.base.cardText;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
 
 public class PointerToken extends PCLTextToken {
@@ -13,16 +15,15 @@ public class PointerToken extends PCLTextToken {
     public static final String DUMMY = "_.";
     protected final char variableID;
     protected final PSkill<?> move;
-    private ColoredString coloredString;
-    private int cachedValue;
+    private final ColoredString coloredString;
+    private int cachedValue = PSkill.DEFAULT_MAX;
 
     private PointerToken(char variableID, PSkill<?> move) {
         super(PCLTextTokenType.Variable, null);
 
         this.variableID = variableID;
         this.move = move;
-        this.coloredString = move.getColoredAttributeString(variableID);
-        this.cachedValue = getMoveAmount();
+        this.coloredString = new ColoredString(EUIUtils.EMPTY_STRING, Settings.CREAM_COLOR);
     }
 
     public static int tryAdd(PCLTextParser parser) {
@@ -55,23 +56,23 @@ public class PointerToken extends PCLTextToken {
         return super.getAdditionalWidth(context);
     }
 
-    private int getMoveAmount() {
-        return move.getAttribute(variableID);
-    }
-
     @Override
     protected float getWidth(BitmapFont font, String text) {
         return super.getWidth(font, coloredString.text);
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLCardText context) {
-        int mAmount = getMoveAmount();
-        if (cachedValue != mAmount) {
-            cachedValue = mAmount;
-            coloredString = move.getColoredAttributeString(variableID);
+    public void refresh(PCLUseInfo info) {
+        int newAmount = move.refreshAmount(info, move.amount, false);
+        if (cachedValue != newAmount) {
+            cachedValue = newAmount;
+            coloredString.setText(move.getAttributeString(variableID, cachedValue))
+                    .setColor(move.getAttributeColor(variableID, cachedValue));
         }
+    }
 
+    @Override
+    public void render(SpriteBatch sb, PCLCardText context) {
         super.render(sb, context, coloredString);
     }
 }

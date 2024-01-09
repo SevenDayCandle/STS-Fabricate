@@ -592,20 +592,21 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_this = subjects.TEXT[56];
     public final String subjects_turnCount = subjects.TEXT[57];
     public final String subjects_unblockedX = subjects.TEXT[58];
-    public final String subjects_x = subjects.TEXT[59];
-    public final String subjects_you = subjects.TEXT[60];
-    public final String subjects_yourFirstX = subjects.TEXT[61];
-    public final String subjects_yourX = subjects.TEXT[62];
-    public final String subjects_xOfY = subjects.TEXT[63];
-    public final String subjects_xOnY = subjects.TEXT[64];
-    public final String subjects_xOnYInZ = subjects.TEXT[65];
-    public final String subjects_xOrLessY = subjects.TEXT[66];
-    public final String subjects_xThisCombat = subjects.TEXT[67];
-    public final String subjects_xThisTurn = subjects.TEXT[68];
-    public final String subjects_xTimes = subjects.TEXT[69];
-    public final String subjects_xUntilY = subjects.TEXT[70];
-    public final String subjects_xWithY = subjects.TEXT[71];
-    public final String subjects_xCost = subjects.TEXT[72];
+    public final String subjects_upToX = subjects.TEXT[59];
+    public final String subjects_x = subjects.TEXT[60];
+    public final String subjects_you = subjects.TEXT[61];
+    public final String subjects_yourFirstX = subjects.TEXT[62];
+    public final String subjects_yourX = subjects.TEXT[63];
+    public final String subjects_xOfY = subjects.TEXT[64];
+    public final String subjects_xOnY = subjects.TEXT[65];
+    public final String subjects_xOnYInZ = subjects.TEXT[66];
+    public final String subjects_xOrLessY = subjects.TEXT[67];
+    public final String subjects_xThisCombat = subjects.TEXT[68];
+    public final String subjects_xThisTurn = subjects.TEXT[69];
+    public final String subjects_xTimes = subjects.TEXT[70];
+    public final String subjects_xUntilY = subjects.TEXT[71];
+    public final String subjects_xWithY = subjects.TEXT[72];
+    public final String subjects_xCost = subjects.TEXT[73];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -1446,6 +1447,9 @@ public class PCLCoreStrings extends AbstractStrings {
     }
     public final String subjects_untilX(Object obj, Object t) {
         return EUIUtils.format(subjects_xUntilY, obj, t);
+    }
+    public final String subjects_upToX(Object amount) {
+        return EUIUtils.format(subjects_upToX, amount);
     }
     public final String subjects_withX(Object obj, Object t) {
         return EUIUtils.format(subjects_xWithY, obj, t);

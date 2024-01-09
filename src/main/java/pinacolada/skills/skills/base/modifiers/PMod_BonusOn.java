@@ -30,7 +30,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     }
 
     @Override
-    public final ColoredString getColoredValueString() {
+    public final ColoredString getColoredAmount() {
         if (baseAmount != amount) {
             return new ColoredString(amount >= 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
@@ -43,8 +43,8 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return be.baseAmount + (meetsCondition(info, isUsing) ? amount : 0);
+    public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
+        return baseAmount + (meetsCondition(info, isUsing) ? amount : 0);
     }
 
     @Override

@@ -113,7 +113,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

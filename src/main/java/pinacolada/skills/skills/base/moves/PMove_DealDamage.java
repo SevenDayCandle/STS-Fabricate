@@ -48,9 +48,11 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
         this(target, amount, attackEffect.key);
     }
 
-    protected int[] getDamageMatrix(ArrayList<AbstractCreature> targets) {
+    protected int[] getDamageMatrix(PCLUseInfo info, ArrayList<AbstractCreature> targets) {
         int[] damage = new int[targets.size()];
-        Arrays.fill(damage, amount);
+        for (int i = 0; i < damage.length; i++) {
+            damage[i] =  PGR.dungeon.getRNG().random(refreshAmount(info), extra);
+        }
         return damage;
     }
 
@@ -61,13 +63,14 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
+        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
         if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && perspective == PCLCardTarget.Self)) {
-            return TEXT.act_takeDamage(getAmountRawString());
+            return TEXT.act_takeDamage(amountString);
         }
         if (target == PCLCardTarget.Single) {
-            return TEXT.act_deal(getAmountRawString(), PGR.core.strings.subjects_damage);
+            return TEXT.act_deal(amountString, PGR.core.strings.subjects_damage);
         }
-        return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetStringPerspective(perspective));
+        return TEXT.act_dealTo(amountString, PGR.core.strings.subjects_damage, getTargetStringPerspective(perspective));
     }
 
     @Override
@@ -79,11 +82,12 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     public void use(PCLUseInfo info, PCLActions order) {
         if (target.targetsMulti()) {
             ArrayList<AbstractCreature> targets = new ArrayList<>(target.getTargets(info, scope)); // Because the info list could get modified later
-            int[] damage = getDamageMatrix(targets);
+            int[] damage = getDamageMatrix(info, targets);
             order.dealDamageToAll(getSourceCreature(), targets, damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else {
-            order.dealDamage(getSourceCreature(), target.getTarget(info, scope), amount, DamageInfo.DamageType.THORNS, fields.attackEffect)
+            int actualAmount = refreshAmount(info);
+            order.dealDamage(getSourceCreature(), target.getTarget(info, scope), actualAmount, DamageInfo.DamageType.THORNS, fields.attackEffect)
                     .canRedirect(!target.targetsSingle())
                     .isCancellable(target != PCLCardTarget.Self && target != PCLCardTarget.None);
         }

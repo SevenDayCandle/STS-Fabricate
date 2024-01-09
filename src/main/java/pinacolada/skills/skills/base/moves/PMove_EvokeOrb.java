@@ -57,7 +57,7 @@ public class PMove_EvokeOrb extends PMove<PField_Orb> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.evokeOrb(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
+        order.evokeOrb(refreshAmount(info), extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
         super.use(info, order);
     }
 }

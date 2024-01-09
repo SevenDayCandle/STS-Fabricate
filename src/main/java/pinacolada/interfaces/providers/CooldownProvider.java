@@ -13,21 +13,21 @@ public interface CooldownProvider {
         return getCooldown() <= 0;
     }
 
-    default ColoredString getCooldownString() {
+    default Color getCooldownColor() {
         int amount = getCooldown();
         if (isDisplayingUpgrade()) {
-            return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
+            return Settings.GREEN_TEXT_COLOR;
         }
         if (amount < getBaseCooldown()) {
             if (amount > 0) {
-                return new ColoredString(amount, COOLDOWN_INCOMPLETE_COLOR);
+                return COOLDOWN_INCOMPLETE_COLOR;
             }
             else {
-                return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
+                return Settings.GREEN_TEXT_COLOR;
             }
         }
         else {
-            return new ColoredString(amount, Settings.CREAM_COLOR);
+            return Settings.CREAM_COLOR;
         }
     }
 

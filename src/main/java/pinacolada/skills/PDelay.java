@@ -71,49 +71,23 @@ public abstract class PDelay extends PSkill<PField_Empty> {
         return childEffect == null;
     }
 
+    // Modifiers pass through
     @Override
-    public boolean isAffectedByMods() {
-        return false;
-    }
-
-    @Override
-    public PDelay setTemporaryAmount(int amount) {
-        if (this.childEffect != null) {
-            this.childEffect.setTemporaryAmount(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public PDelay setTemporaryExtra(int amount) {
-        if (this.childEffect != null) {
-            this.childEffect.setTemporaryExtra(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public PDelay setTemporaryExtra2(int amount) {
-        if (this.childEffect != null) {
-            this.childEffect.setTemporaryExtra2(amount);
-        }
-        return this;
+    public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
+        return parent != null ? parent.refreshChildAmount(info, amount, isUsing) : amount;
     }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            getDelayUse(info, (i) -> useChildEffect(i, order), this.childEffect.getName(), this.childEffect.getPowerText(null)).start();
+            getDelayUse(info, (i) -> this.childEffect.use(info, order), this.childEffect.getName(), this.childEffect.getPowerText(null)).start();
         }
     }
 
-    // TODO make an entirely new copy of the effect with the value pre-updated
-    // PMods skip over PDelay, so if this effect's parent is a PDelay, then that PMod would need to be re-applied to this delay's child
-    protected void useChildEffect(PCLUseInfo info, PCLActions order) {
-        if (parent instanceof PMod && this.childEffect.isAffectedByMods()) {
-            this.childEffect.setTemporaryAmount(((PMod<?>) parent).updateAmount(this.childEffect, info, true));
-        }
-        this.childEffect.use(info, order);
+    // Modifiers pass through
+    @Override
+    public String wrapTextAmountChild(String input) {
+        return parent != null ? parent.wrapTextAmountChild(input) : super.wrapTextAmountChild(input);
     }
 
     public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction, String title, String description);

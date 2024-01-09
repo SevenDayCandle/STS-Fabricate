@@ -36,7 +36,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 public class PCond_Cooldown extends PActiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .noTarget();
-    protected float flashTimer;
+    private float flashTimer;
+    private int cooldown;
 
     public PCond_Cooldown(PSkillSaveData content) {
         super(DATA, content);
@@ -58,17 +59,12 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
 
     @Override
     public int getBaseCooldown() {
-        return baseAmount;
-    }
-
-    @Override
-    public final ColoredString getColoredValueString() {
-        return getCooldownString();
+        return amount;
     }
 
     @Override
     public int getCooldown() {
-        return amount;
+        return cooldown;
     }
 
     @Override
@@ -81,13 +77,23 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
         }
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getXRawString());
     }
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String condString = isWhenClause() ? getCapitalSubText(perspective, requestor, addPeriod) : getConditionRawString(perspective, requestor, addPeriod);
         return condString + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(perspective, requestor, addPeriod)) : "");
+    }
+
+    @Override
+    public Color getXColor() {
+        return getCooldownColor();
+    }
+
+    @Override
+    public int getXValue() {
+        return cooldown;
     }
 
     @Override
@@ -138,12 +144,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
 
     @Override
     public void setCooldown(int value) {
-        this.amount = value;
-    }
-
-    // No-op to avoid refreshing effects changing amount
-    public PCond_Cooldown setTemporaryAmount(int amount) {
-        return this;
+        this.cooldown = value;
     }
 
     @Override

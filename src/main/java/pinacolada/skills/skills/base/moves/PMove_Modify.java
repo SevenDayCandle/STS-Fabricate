@@ -106,8 +106,8 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
-    public boolean isAffectedByMods() {
-        return super.isAffectedByMods() && !fields.not;
+    public int refreshAmount(PCLUseInfo info, int amount, boolean isUsing) {
+        return fields.not ? amount : super.refreshAmount(info, amount, isUsing);
     }
 
     @Override
@@ -140,12 +140,8 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
-    }
-
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
     }
 
     public abstract ActionT1<AbstractCard> getAction(PCLActions order);

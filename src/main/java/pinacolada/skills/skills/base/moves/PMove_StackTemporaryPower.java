@@ -42,42 +42,43 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
+        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerOrString());
             switch (target) {
                 case Self:
                     if (isFromCreature() || perspective != PCLCardTarget.Self) {
-                        return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                        return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
                     }
                 case None:
-                    return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
-                            : TEXT.act_gainAmount(getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
+                            : TEXT.act_gainAmount(amountString, joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
                 default:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
             }
         }
         joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString());
         switch (target) {
             case Self:
                 if (isFromCreature() || perspective != PCLCardTarget.Self) {
-                    return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
+                    return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(amountString, joinedString), getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);
                 }
             case None:
-                return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
-                        : TEXT.act_gainAmount(getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
+                        : TEXT.act_gainAmount(amountString, joinedString);
             case Single:
             case SingleAlly:
-                return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
+                return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(amountString, joinedString)) :
                         fields.powers.size() > 0 && !useParent ?
-                                TEXT.act_applyAmountX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
+                                TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);
             default:
-                return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetStringPerspective(perspective))
+                return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(amountString, joinedString), getTargetStringPerspective(perspective))
                         : fields.powers.size() > 0 && !useParent
-                        ? TEXT.act_applyAmountXToTarget(getAmountRawString(), joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), getAmountRawString(), joinedString);
+                        ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);
         }
     }
 

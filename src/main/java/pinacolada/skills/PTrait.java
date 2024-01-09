@@ -222,21 +222,11 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public PTrait<T> setTemporaryAmount(int amount) {
-        if (conditionMetCache && appliedCard != null) {
-            applyToCard(appliedCard, false);
-            conditionMetCache = false;
-        }
-        super.setTemporaryAmount(amount);
-        return this;
-    }
-
-    @Override
     public void use(PCLUseInfo info, PCLActions order) {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return input >= 0 ? "+" + input : String.valueOf(input);
     }
 

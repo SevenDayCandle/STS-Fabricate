@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.utilities.ColoredString;
+import pinacolada.dungeon.PCLUseInfo;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLTextToken {
@@ -37,6 +38,9 @@ public abstract class PCLTextToken {
     protected float getWidth(BitmapFont font, String text) {
         layout.setText(font, text);
         return layout.width;
+    }
+
+    public void refresh(PCLUseInfo info) {
     }
 
     public void render(SpriteBatch sb, PCLCardText context) {

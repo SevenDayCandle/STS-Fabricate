@@ -82,7 +82,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

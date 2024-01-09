@@ -1204,7 +1204,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public void initializeDescription() {
         if (cardText != null) {
-            this.cardText.forceRefresh();
+            this.cardText.forceReinitialize();
         }
     }
 
@@ -1550,9 +1550,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public void refreshImpl(PCLUseInfo info, boolean isUsing) {
         AbstractCreature owner = info.source;
         AbstractCreature enemy = info.target;
-        // We use magicNumber for the counter mechanic; effects have their amounts determined separately
-        // Thus, we instead funnel onModifyBaseMagic into a separate addition to apply to our effects
-        float effectBonus = CardModifierManager.onModifyBaseMagic(CombatManager.onModifySkillBonus(0, this), this);
         doEffects(be -> be.refresh(info, true, isUsing));
         AbstractMonster asEnemy = GameUtilities.asMonster(enemy);
 
@@ -1587,7 +1584,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
                     if (r instanceof PCLRelic) {
-                        effectBonus = ((PCLRelic) r).atSkillBonusModify(info, effectBonus);
                         tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount);
                         tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount);
                     }
@@ -1611,7 +1607,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
             for (AbstractPower p : owner.powers) {
                 if (p instanceof PCLPower) {
-                    effectBonus = ((PCLPower) p).modifySkillBonus(info, effectBonus, this);
                     tempHitCount = ((PCLPower) p).modifyHitCount(info, tempHitCount, this);
                     tempRightCount = ((PCLPower) p).modifyRightCount(info, tempRightCount, this);
                 }
@@ -1787,17 +1782,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.isDamageModified = (baseDamage != damage);
         this.isHitCountModified = (baseHitCount != hitCount);
         this.isRightCountModified = (baseRightCount != rightCount);
-
-        // Apply effect multipliers to non Attack/Block effects
-        if (effectBonus > 0) {
-            int finalEffectBonus = (int) effectBonus;
-            doEffects(
-                    be -> be.recurse(child -> {
-                        if (child.isAffectedByMods()) {
-                            child.setTemporaryAmount(finalEffectBonus + child.baseAmount);
-                        }
-                    }));
-        }
 
         // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
         if (onAttackEffect != null) {

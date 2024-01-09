@@ -55,9 +55,4 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     public boolean isDetrimental() {
         return extra < 0;
     }
-
-    @Override
-    public String wrapExtra(int input) {
-        return String.valueOf(input);
-    }
 }

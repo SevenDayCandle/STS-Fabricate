@@ -184,13 +184,8 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public boolean isAffectedByMods() {
-        return false;
-    }
-
-    @Override
     public boolean isBlank() {
-        return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
+        return effects.isEmpty() && !(childEffect != null && !childEffect.isBlank());
     }
 
     @Override
@@ -325,17 +320,15 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    // Modifiers pass through
     @Override
-    public boolean requiresTarget() {
-        return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
+    public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
+        return parent != null ? parent.refreshChildAmount(info, amount, isUsing) : amount;
     }
 
     @Override
-    public void resetAmount() {
-        super.resetAmount();
-        for (PSkill<?> effect : effects) {
-            effect.resetAmount();
-        }
+    public boolean requiresTarget() {
+        return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
     }
 
     @Override
@@ -363,22 +356,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setTemporaryAmount(int amount) {
-        if (childEffect != null) {
-            childEffect.setTemporaryAmount(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public PBranchCond setTemporaryExtra(int extra) {
-        if (childEffect != null) {
-            childEffect.setTemporaryExtra(extra);
         }
         return this;
     }
@@ -434,7 +411,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     private <T> T useModify(T input, List<Integer> qualifiers, FuncT2<T, PSkill<?>, T> onDo) {
-        if (this.effects.size() > 0) {
+        if (!this.effects.isEmpty()) {
             int qr = this.childEffect.getQualifierRange();
             boolean canGoOver = qr < this.effects.size();
             for (int i : qualifiers) {
@@ -448,7 +425,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     private void useSubEffect(List<Integer> qualifiers, ActionT1<PSkill<?>> onDo) {
-        if (this.effects.size() > 0) {
+        if (!this.effects.isEmpty()) {
             int qr = this.childEffect.getQualifierRange();
             boolean canGoOver = qr < this.effects.size();
             for (int i : qualifiers) {
@@ -458,5 +435,10 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
                 onDo.invoke(this.effects.get(qr));
             }
         }
+    }
+
+    @Override
+    public String wrapTextAmountChild(String input) {
+        return parent != null ? parent.wrapTextAmountChild(input) : super.wrapTextAmountChild(input);
     }
 }

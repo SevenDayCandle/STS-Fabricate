@@ -23,7 +23,7 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     }
 
     public String gainAmountText() {
-        return getAmountRawString();
+        return baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
     }
 
     @Override
@@ -47,7 +47,7 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return String.valueOf(Math.abs(input));
     }
 

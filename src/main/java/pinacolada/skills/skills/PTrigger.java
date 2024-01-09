@@ -209,13 +209,6 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return this;
     }
 
-    public PTrigger setTemporaryAmount(int amount) {
-        super.setTemporaryAmount(amount);
-        updateUsesAmount();
-        onUpdateUsesPerTurn();
-        return this;
-    }
-
     public PTrigger setUpgrade(int upgrade) {
         super.setUpgrade(upgrade);
         updateUsesAmount();
@@ -238,14 +231,17 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
 
     public PTrigger stack(PSkill<?> other) {
         // Do not update effects if use-based
-        if ((fields.forced || rootAmount == -1) && this.childEffect != null && other.getChild() != null) {
+        if ((fields.forced || baseAmount == -1) && this.childEffect != null && other.getChild() != null) {
             this.childEffect.stack(other.getChild());
         }
-        else if (rootAmount > 0 && other.rootAmount > 0) {
-            setAmount(rootAmount + other.rootAmount);
+        else if (baseAmount > 0 && other.baseAmount > 0) {
+            setAmount(baseAmount + other.baseAmount);
         }
-        if (rootExtra > 0 && other.rootExtra > 0) {
-            setExtra(rootExtra + other.rootExtra);
+        if (baseExtra > 0 && other.baseExtra > 0) {
+            setExtra(baseExtra + other.baseExtra);
+        }
+        if (baseExtra2 > 0 && other.baseExtra2 > 0) {
+            setExtra2(baseExtra2 + other.baseExtra2);
         }
         setAmountFromCard();
         forceResetUses();

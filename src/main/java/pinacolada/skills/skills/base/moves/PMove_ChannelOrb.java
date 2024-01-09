@@ -66,13 +66,14 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
+        int actualAmount = refreshAmount(info);
         if (!fields.orbs.isEmpty()) {
             if (fields.random) {
                 String orb = GameUtilities.getRandomElement(fields.orbs);
                 if (orb != null) {
                     PCLOrbData data = PCLOrbData.getStaticDataOrCustom(orb);
                     if (data != null) {
-                        order.channelOrbs(data, amount).addCallback(this::modifyFocus);
+                        order.channelOrbs(data, actualAmount).addCallback(this::modifyFocus);
                     }
                 }
             }
@@ -80,13 +81,13 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
                 for (String orb : fields.orbs) {
                     PCLOrbData data = PCLOrbData.getStaticDataOrCustom(orb);
                     if (data != null) {
-                        order.channelOrbs(data, amount).addCallback(this::modifyFocus);
+                        order.channelOrbs(data, actualAmount).addCallback(this::modifyFocus);
                     }
                 }
             }
         }
         else {
-            order.channelRandomOrbs(amount).addCallback(this::modifyFocus);
+            order.channelRandomOrbs(actualAmount).addCallback(this::modifyFocus);
         }
         super.use(info, order);
     }

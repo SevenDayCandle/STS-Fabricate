@@ -194,13 +194,8 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
-    public boolean isAffectedByMods() {
-        return false;
-    }
-
-    @Override
     public boolean isBlank() {
-        return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
+        return effects.isEmpty() && !(childEffect != null && !childEffect.isBlank());
     }
 
     @Override
@@ -269,17 +264,15 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         }
     }
 
+    // Modifiers pass through
     @Override
-    public boolean requiresTarget() {
-        return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
+    public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
+        return parent != null ? parent.refreshChildAmount(info, amount, isUsing) : amount;
     }
 
     @Override
-    public void resetAmount() {
-        super.resetAmount();
-        for (PSkill<?> effect : effects) {
-            effect.resetAmount();
-        }
+    public boolean requiresTarget() {
+        return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
     }
 
     @Override
@@ -307,22 +300,6 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         super.setSource(card);
         for (PSkill<?> effect : effects) {
             effect.setSource(card);
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiCond setTemporaryAmount(int amount) {
-        if (childEffect != null) {
-            childEffect.setTemporaryAmount(amount);
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiCond setTemporaryExtra(int extra) {
-        if (childEffect != null) {
-            childEffect.setTemporaryExtra(extra);
         }
         return this;
     }
@@ -546,5 +523,10 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
             effect.useParent(value);
         }
         return this;
+    }
+
+    @Override
+    public String wrapTextAmountChild(String input) {
+        return parent != null ? parent.wrapTextAmountChild(input) : super.wrapTextAmountChild(input);
     }
 }

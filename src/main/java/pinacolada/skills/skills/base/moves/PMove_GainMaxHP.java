@@ -41,14 +41,13 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
-            if (amount < 0) {
-                for (AbstractCreature t : getTargetList(info)) {
-                    t.decreaseMaxHealth(-amount);
+            for (AbstractCreature t : getTargetList(info)) {
+                int actualAmount = refreshAmount(info);
+                if (actualAmount < 0) {
+                    t.decreaseMaxHealth(-actualAmount);
                 }
-            }
-            else {
-                for (AbstractCreature t : getTargetList(info)) {
-                    t.increaseMaxHp(amount, true);
+                else {
+                    t.increaseMaxHp(actualAmount, true);
                 }
             }
         });
@@ -58,11 +57,12 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
-        if (amount < 0) {
-            AbstractDungeon.player.decreaseMaxHealth(-amount);
+        int actualAmount = refreshAmount(info);
+        if (actualAmount < 0) {
+            AbstractDungeon.player.decreaseMaxHealth(-actualAmount);
         }
         else {
-            AbstractDungeon.player.increaseMaxHp(amount, true);
+            AbstractDungeon.player.increaseMaxHp(actualAmount, true);
         }
     }
 }

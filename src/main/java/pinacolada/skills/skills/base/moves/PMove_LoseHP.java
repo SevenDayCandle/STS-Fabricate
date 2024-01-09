@@ -48,11 +48,12 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
+        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
         if (target == PCLCardTarget.Self && !isFromCreature() && perspective == PCLCardTarget.Self) {
-            return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
+            return TEXT.act_loseAmount(amountString, PGR.core.tooltips.hp.title);
         }
         PCLCardTarget proper = getTargetForPerspective(perspective);
-        return TEXT.act_zLoses(getTargetString(proper), getTargetOrdinal(proper), getAmountRawString(), PGR.core.tooltips.hp.title);
+        return TEXT.act_zLoses(getTargetString(proper), getTargetOrdinal(proper), amountString, PGR.core.tooltips.hp.title);
 
     }
 
@@ -63,8 +64,9 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
+        int actualAmount = refreshAmount(info);
         for (AbstractCreature t : getTargetList(info)) {
-            order.loseHP(info.source, t, amount, fields.attackEffect).isCancellable(false);
+            order.loseHP(info.source, t, actualAmount, fields.attackEffect).isCancellable(false);
         }
         super.use(info, order);
     }

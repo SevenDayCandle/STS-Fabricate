@@ -7,6 +7,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -59,7 +60,8 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
-            order.heal(info.source, t, amount);
+            int actualAmount = refreshAmount(info);
+            order.heal(info.source, t, actualAmount);
         }
         super.use(info, order);
     }
@@ -67,6 +69,7 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
-        AbstractDungeon.player.heal(amount);
+        int actualAmount = refreshAmount(info);
+        AbstractDungeon.player.heal(actualAmount);
     }
 }

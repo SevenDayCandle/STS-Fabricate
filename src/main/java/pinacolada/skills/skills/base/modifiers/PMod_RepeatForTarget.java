@@ -33,11 +33,6 @@ public class PMod_RepeatForTarget extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return amount;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(TEXT.cedit_repeat, TEXT.subjects_target);
     }
@@ -52,15 +47,7 @@ public class PMod_RepeatForTarget extends PActiveMod<PField_Empty> {
         return (childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) + EFFECT_SEPARATOR + capital(getSubText(perspective, requestor), true) : capital(getSubText(perspective, requestor), addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
-    // Does not update child amounts
     @Override
-    public void onDrag(AbstractMonster m) {
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
-    }
-
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (shouldPay && childEffect != null) {
             useImpl(info, order);

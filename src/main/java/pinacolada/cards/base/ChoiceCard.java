@@ -1,19 +1,7 @@
 package pinacolada.cards.base;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import extendedui.EUIGameUtils;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.PCLRenderHelpers;
 
 public class ChoiceCard<T> extends PCLDynamicCard {
     public final T value;
@@ -27,7 +15,7 @@ public class ChoiceCard<T> extends PCLDynamicCard {
     public void initializeDescription() {
         if (cardText != null) {
             this.cardText.overrideDescription(StringUtils.isEmpty(cardData.strings.DESCRIPTION) ? null : cardData.strings.DESCRIPTION);
-            this.cardText.forceRefresh();
+            this.cardText.forceReinitialize();
         }
     }
 

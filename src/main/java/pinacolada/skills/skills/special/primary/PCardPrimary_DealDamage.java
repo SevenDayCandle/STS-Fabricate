@@ -73,12 +73,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
-        return new ColoredString(displayAmount,
-                (source instanceof AbstractCard ?
+    public Color getColoredAmount(int displayAmount) {
+        return (source instanceof AbstractCard ?
                         ((AbstractCard) source).upgradedDamage ? Settings.GREEN_TEXT_COLOR :
                                 ((AbstractCard) source).isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
-                                        : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
+                                        : Settings.CREAM_COLOR : Settings.CREAM_COLOR);
     }
 
     public PCLCardValueSource getExtraSource() {

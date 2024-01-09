@@ -35,17 +35,12 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public final ColoredString getColoredValueString() {
+    public final ColoredString getColoredAmount() {
         if (baseAmount != amount) {
             return new ColoredString(amount > 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
 
         return new ColoredString(amount > 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info, boolean isUsing) {
-        return amount;
     }
 
     @Override
@@ -76,7 +71,7 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
             order.callback(() -> {
-                this.childEffect.addAmountForCombat(amount, extra > 0 ? extra : Integer.MAX_VALUE);
+                this.childEffect.addAmountForCombat(refreshAmount(info), extra > 0 ? extra : Integer.MAX_VALUE);
             });
         }
     }

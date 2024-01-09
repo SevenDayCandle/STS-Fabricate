@@ -164,6 +164,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return atDamageGive(block, type, c);
     }
 
+    @Override
     public void atEndOfRound() {
         switch (data.endTurnBehavior) {
             case SingleTurn:
@@ -180,7 +181,8 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
     }
 
-    public void atStartOfTurnPostDraw() {
+    @Override
+    public void atStartOfTurn() {
         switch (data.endTurnBehavior) {
             case SingleTurnNext:
                 addTurns(-1);

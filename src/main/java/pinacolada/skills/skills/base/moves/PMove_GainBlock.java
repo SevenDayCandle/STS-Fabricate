@@ -44,17 +44,15 @@ public class PMove_GainBlock extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (amount < 0) {
-            for (AbstractCreature c : getTargetList(info)) {
-                order.loseBlock(c, -amount);
+        for (AbstractCreature c : getTargetList(info)) {
+            int actualAmount = refreshAmount(info);
+            if (actualAmount < 0) {
+                order.loseBlock(c, -actualAmount);
+            }
+            else {
+                order.gainBlock(c, actualAmount);
             }
         }
-        else {
-            for (AbstractCreature c : getTargetList(info)) {
-                order.gainBlock(c, amount);
-            }
-        }
-
         super.use(info, order);
     }
 }

@@ -60,7 +60,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String wrapAmount(int input) {
+    public String wrapTextAmount(int input) {
         return String.valueOf(input);
     }
 }

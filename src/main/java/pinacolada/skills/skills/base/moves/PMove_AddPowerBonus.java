@@ -43,7 +43,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
     public void use(PCLUseInfo info, PCLActions order) {
         for (String powerID : fields.powers) {
             PCLPowerData power = PCLPowerData.getStaticData(powerID);
-            power.doFor(p -> order.addPowerEffectBonus(p, amount, !power.isDebuff()));
+            power.doFor(p -> order.addPowerEffectBonus(p, refreshAmount(info), !power.isDebuff()));
         }
         super.use(info, order);
     }

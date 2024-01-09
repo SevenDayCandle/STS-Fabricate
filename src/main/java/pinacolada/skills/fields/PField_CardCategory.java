@@ -196,7 +196,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
         // Will only be reached when invert is active, which always warrants or
         if (!cardIDs.isEmpty()) {
-            stringsToJoin.add(getCardOrString());
+            stringsToJoin.add(getCardIDOrString());
         }
         return stringsToJoin;
     }
