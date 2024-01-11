@@ -32,7 +32,7 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not> {
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         // Use the cache when played because this check will occur after you spent energy
         return isUsing ? conditionMetCache :
-                fields.doesValueMatchThreshold(EnergyPanel.getCurrentEnergy());
+                fields.doesValueMatchThreshold(info, EnergyPanel.getCurrentEnergy());
     }
 
     @Override

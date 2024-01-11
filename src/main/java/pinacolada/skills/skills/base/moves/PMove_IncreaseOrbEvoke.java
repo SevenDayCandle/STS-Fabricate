@@ -63,11 +63,12 @@ public class PMove_IncreaseOrbEvoke extends PMove<PField_Orb> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
+        int actualAmount = refreshAmount(info);
         if (fields.not && source instanceof AbstractOrb) {
-            order.add(new IncreaseOrbEvoke(amount, 1, fields.random, (AbstractOrb) source));
+            order.add(new IncreaseOrbEvoke(actualAmount, 1, fields.random, (AbstractOrb) source));
         }
         else {
-            order.add(new IncreaseOrbEvoke(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random, null))
+            order.add(new IncreaseOrbEvoke(actualAmount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random, null))
                     .setFilter(fields.getOrbFilter());
         }
 

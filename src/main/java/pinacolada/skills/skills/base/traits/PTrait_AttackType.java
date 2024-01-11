@@ -5,6 +5,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -32,7 +33,7 @@ public class PTrait_AttackType extends PTrait<PField_AttackType> {
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
+    public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
         if (c instanceof PCLCard && fields.attackTypes.size() > 0) {
             ((PCLCard) c).setAttackType(conditionMet ? fields.attackTypes.get(0) : ((PCLCard) c).cardData.attackType);
         }

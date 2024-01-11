@@ -129,7 +129,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return new PTrait_Unplayable();
     }
 
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
+    public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
     }
 
     protected String getDamageString(PCLCardTarget perspective) {
@@ -195,7 +195,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     @Override
     public PTrait<T> onRemoveFromCard(AbstractCard card) {
         if (conditionMetCache) {
-            applyToCard(card, false);
+            applyToCard(getInfo(null), card, false);
         }
         appliedCard = null;
         super.onRemoveFromCard(card);
@@ -207,14 +207,14 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         super.refresh(info, conditionMet, isUsing);
         if (info != null && conditionMet != conditionMetCache) {
             conditionMetCache = conditionMet;
-            applyToCard(info.card, conditionMet);
+            applyToCard(info, info.card, conditionMet);
         }
     }
 
     @Override
     public PTrait<T> setAmount(int amount) {
         if (conditionMetCache && appliedCard != null) {
-            applyToCard(appliedCard, false);
+            applyToCard(getInfo(null), appliedCard, false);
             conditionMetCache = false;
         }
         super.setAmount(amount);
@@ -226,7 +226,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input >= 0 ? "+" + input : String.valueOf(input);
     }
 

@@ -6,6 +6,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -36,8 +37,8 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyBlock(c, amount, fields.forced, !fields.not, fields.or);
+    public ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order) {
+        return (c) -> order.modifyBlock(c, refreshAmount(info), fields.forced, !fields.not, fields.or);
     }
 
     @Override

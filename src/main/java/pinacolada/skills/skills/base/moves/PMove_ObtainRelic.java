@@ -46,11 +46,11 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
-    protected void createRelic(ActionT1<AbstractRelic> onCreate) {
+    protected void createRelic(ActionT1<AbstractRelic> onCreate, PCLUseInfo info) {
         if (!fields.relicIDs.isEmpty()) {
             if (fields.not) {
                 RandomizedList<String> choices = new RandomizedList<>(fields.relicIDs);
-                for (int i = 0; i < amount; i++) {
+                for (int i = 0; i < refreshAmount(info); i++) {
                     AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(AbstractDungeon.relicRng, true));
                     if (relic != null) {
                         onCreate.invoke(relic.makeCopy());
@@ -90,7 +90,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                 }
             }
 
-            for (int i = 0; i < amount; i++) {
+            for (int i = 0; i < refreshAmount(info); i++) {
                 AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(AbstractDungeon.relicRng, true));
                 if (relic != null) {
                     onCreate.invoke(relic.makeCopy());
@@ -139,14 +139,14 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        createRelic(order::obtainRelic);
+        createRelic(order::obtainRelic, info);
         super.use(info, order);
     }
 
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         PCLEffects.Queue.callback(() -> {
-            createRelic(GameUtilities::obtainRelicFromEvent);
+            createRelic(GameUtilities::obtainRelicFromEvent, info);
         }).addCallback(() -> super.useOutsideOfBattle(info)); // Use callback to avoid concurrent modification if called from relic
     }
 }

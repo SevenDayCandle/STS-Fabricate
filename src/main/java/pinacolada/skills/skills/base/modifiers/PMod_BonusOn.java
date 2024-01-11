@@ -29,15 +29,6 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         super(data, PCLCardTarget.None, amount, extra);
     }
 
-    @Override
-    public final ColoredString getColoredAmount() {
-        if (baseAmount != amount) {
-            return new ColoredString(amount >= 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(amount >= 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
-    }
-
     public String getConditionText(PCLCardTarget perspective, Object requestor) {
         return TEXT.cond_bonusIf(getAmountRawString(), getSubText(perspective, requestor));
     }
@@ -55,6 +46,11 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "", getConditionText(perspective, requestor)) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public String wrapTextAmountSelf(int input) {
+        return input >= 0 ? "+" + input : String.valueOf(input);
     }
 
     public abstract boolean meetsCondition(PCLUseInfo info, boolean isUsing);

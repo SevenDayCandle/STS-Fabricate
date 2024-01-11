@@ -36,8 +36,8 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         return ((fields.powers.isEmpty() ?
-                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> po.type == targetType))) :
-                evaluateTargets(info, t -> fields.doesValueMatchThreshold(EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> checkPower(f, po.ID)))))));
+                evaluateTargets(info, t -> fields.doesValueMatchThreshold(info, EUIUtils.count(t.powers, po -> po.type == targetType))) :
+                evaluateTargets(info, t -> fields.doesValueMatchThreshold(info, EUIUtils.count(t.powers, po -> EUIUtils.any(fields.powers, f -> checkPower(f, po.ID)))))));
     }
 
     private boolean checkPower(String helper, String powerID) {

@@ -35,7 +35,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= amount;
+        return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= refreshAmount(info);
     }
 
     @Override
@@ -54,7 +54,8 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
 
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
-        if (amount >= this.amount) {
+        PCLUseInfo i = generateInfo(getOwnerCreature(), p);
+        if (amount >= refreshAmount(i)) {
             useFromTrigger(generateInfo(getOwnerCreature(), info.owner).setData(amount), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
         return amount;

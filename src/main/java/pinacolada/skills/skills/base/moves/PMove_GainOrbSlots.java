@@ -39,7 +39,7 @@ public class PMove_GainOrbSlots extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.gainOrbSlots(amount);
+        order.gainOrbSlots(refreshAmount(info));
         super.use(info, order);
     }
 }

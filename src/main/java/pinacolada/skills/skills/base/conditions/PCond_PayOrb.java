@@ -37,7 +37,7 @@ public class PCond_PayOrb extends PActiveCond<PField_Orb> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= amount) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o) < amount);
+        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= refreshAmount(info)) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o) < refreshAmount(info));
     }
 
     @Override
@@ -56,9 +56,10 @@ public class PCond_PayOrb extends PActiveCond<PField_Orb> {
         if (!conditionMetCache) {
             return order.callback(() -> onFail.invoke(info));
         }
-        return order.removeOrb(amount).setFilter(fields.getOrbFilter())
+        int am = refreshAmount(info);
+        return order.removeOrb(am).setFilter(fields.getOrbFilter())
                 .addCallback(orbs -> {
-                    if (orbs.size() >= amount) {
+                    if (orbs.size() >= am) {
                         info.setData(orbs);
                         onComplete.invoke(info);
                     }

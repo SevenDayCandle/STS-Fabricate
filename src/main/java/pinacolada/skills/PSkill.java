@@ -28,7 +28,6 @@ import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.ColoredString;
 import extendedui.utilities.RotatingList;
 import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +57,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -509,6 +507,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(source, AbstractCard.class), source, target);
     }
 
+    public String getAdditionalWidthString() {
+        return EUIUtils.EMPTY_STRING;
+    }
+
     public final int getAmountBaseFromCard() {
         PCLCardValueSource amountSource = getAmountSource();
         if (this.source instanceof AbstractCard && amountSource != null) {
@@ -601,6 +603,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public final Color getAttributeColor(char attributeID) {
+        return getAttributeColor(attributeID, amount);
+    }
+
     public Color getAttributeColor(char attributeID, int cachedValue) {
         switch (attributeID) {
             case EFFECT_CHAR:
@@ -653,11 +659,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public Color getColoredAmount(int displayAmount) {
-        if (hasParentType(PMod.class)) {
-            return (displayUpgrades && getUpgrade() != 0) ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR;
-        }
-
-        return (displayUpgrades && getUpgrade() != 0) || displayAmount > amount ? Settings.GREEN_TEXT_COLOR : displayAmount < amount ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR;
+        return (displayUpgrades && getUpgrade() != 0) || displayAmount > baseAmount ? Settings.GREEN_TEXT_COLOR : displayAmount < baseAmount ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR;
     }
 
     public Color getConditionColor() {
@@ -1823,7 +1825,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public int refreshAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        return parent != null ? parent.refreshChildAmount(info, amount, isUsing) : amount;
+        return parent != null ? MathUtils.clamp(parent.refreshChildAmount(info, amount, isUsing), data.minAmount, data.maxAmount) : amount;
     }
 
     public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
@@ -2257,11 +2259,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String wrapTextAmount(int input) {
-        return parent != null ? parent.wrapTextAmountChild(String.valueOf(input)) : String.valueOf(input);
+        return parent != null ? parent.wrapTextAmountChild(wrapTextAmountSelf(input)) : wrapTextAmountSelf(input);
     }
 
     public String wrapTextAmountChild(String input) {
         return input;
+    }
+
+    public String wrapTextAmountSelf(int input) {
+        return String.valueOf(input);
     }
 
     public abstract String getSubText(PCLCardTarget perspective, Object requestor);

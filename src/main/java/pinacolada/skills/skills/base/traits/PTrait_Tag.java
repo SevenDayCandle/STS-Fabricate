@@ -5,6 +5,7 @@ import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkillData;
@@ -39,11 +40,12 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
+    public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
+        int actualAmount = refreshAmount(info);
         if (fields.not) {
             if (conditionMet ^ fields.random) {
                 for (PCLCardTag tag : fields.tags) {
-                    tag.set(c, amount);
+                    tag.set(c, actualAmount);
                 }
             }
             else {
@@ -54,7 +56,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
         }
         else {
             for (PCLCardTag tag : fields.tags) {
-                tag.add(c, (fields.random ^ conditionMet ? 1 : -1) * amount);
+                tag.add(c, (fields.random ^ conditionMet ? 1 : -1) * actualAmount);
             }
         }
     }
@@ -98,7 +100,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

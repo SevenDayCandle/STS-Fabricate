@@ -49,32 +49,33 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
-    protected void spreadPower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerData power, PCLActions order) {
+    protected void spreadPower(PCLUseInfo info, PCLPowerData power, PCLActions order) {
+        List<? extends AbstractCreature> targets = getTargetList(info);
         // Spread amount 0 will spread the entire power
         if (power != null && (amount > 0 || baseAmount <= 0)) {
             for (AbstractCreature t : targets) {
-                power.doFor(id -> order.spreadPower(p, t, id, amount));
+                int actualAmount = refreshAmount(info);
+                power.doFor(id -> order.spreadPower(info.source, t, id, actualAmount));
             }
         }
     }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
             for (PCLPowerData power : PCLPowerData.getAllData(false, p -> p.isCommon)) {
-                spreadPower(info.source, targets, power, order);
+                spreadPower(info, power, order);
             }
         }
         else if (fields.random) {
             String powerID = GameUtilities.getRandomElement(fields.powers);
             PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-            spreadPower(info.source, targets, power, order);
+            spreadPower(info, power, order);
         }
         else {
             for (String powerID : fields.powers) {
                 PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-                spreadPower(info.source, targets, power, order);
+                spreadPower(info, power, order);
             }
         }
         super.use(info, order);

@@ -87,7 +87,7 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
                 super.useOutsideOfBattle(info);
             }
             else {
-                PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, cards, null))
+                PCLEffects.Queue.add(new ChooseCardsToObtainEffect(refreshAmount(info), cards, null))
                         .addCallback(effect -> {
                             info.setData(effect.cards);
                             super.useOutsideOfBattle(info);

@@ -49,6 +49,6 @@ public class PTrait_BlockMultiplier extends PBlockTrait<PField_Not> {
 
     @Override
     public float modifyBlockFirst(PCLUseInfo info, float amount) {
-        return amount * ((fields.not ? 0f : 1f) + (this.amount / 100f));
+        return amount * ((fields.not ? 0f : 1f) + (refreshAmount(info) / 100f));
     }
 }

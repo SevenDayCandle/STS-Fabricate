@@ -47,7 +47,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return evaluateTargets(info, t ->
-                fields.allOrAnyPower(t));
+                fields.allOrAnyPower(info, t));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
             ArrayList<ApplyOrReducePowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
                     EUIUtils.mapAsNonnull(fields.powers, id -> {
                         PCLPowerData power = PCLPowerData.getStaticDataOrCustom(id);
-                        return power != null ? new ApplyOrReducePowerAction(sourceCreature, t, power, -amount) : null;
+                        return power != null ? new ApplyOrReducePowerAction(sourceCreature, t, power, -refreshAmount(info)) : null;
                     })));
             return order.sequential(actions).addCallback(() -> {
                 info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));

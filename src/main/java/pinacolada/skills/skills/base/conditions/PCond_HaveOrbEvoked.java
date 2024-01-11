@@ -45,7 +45,7 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         int count = EUIUtils.count(fields.random ? CombatManager.orbsEvokedThisCombat() : CombatManager.orbsEvokedThisTurn(),
                 c -> fields.getOrbFilter().invoke(c));
-        return amount == 0 ? count == 0 : fields.not ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.not ^ count >= refreshAmount(info);
     }
 
     public EUIKeywordTooltip getActionTooltip() {

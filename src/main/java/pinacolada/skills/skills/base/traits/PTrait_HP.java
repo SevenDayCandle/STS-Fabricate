@@ -9,10 +9,11 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
-public class PTrait_HP extends PTrait<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PTrait_HP.class, PField_Empty.class)
+public class PTrait_HP extends PTrait<PField_Not> {
+    public static final PSkillData<PField_Not> DATA = register(PTrait_HP.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_HP() {
@@ -39,6 +40,7 @@ public class PTrait_HP extends PTrait<PField_Empty> {
 
     @Override
     public float modifyHeal(PCLUseInfo info, float amount) {
-        return amount + this.amount;
+        int actualAmount = refreshAmount(info);
+        return fields.not ? actualAmount : amount + actualAmount;
     }
 }

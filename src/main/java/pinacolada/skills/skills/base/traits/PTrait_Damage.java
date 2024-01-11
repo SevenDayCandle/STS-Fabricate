@@ -43,6 +43,7 @@ public class PTrait_Damage extends PDamageTrait<PField_Not> {
 
     @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
-        return fields.not ? this.amount : amount + this.amount;
+        int actualAmount = refreshAmount(info);
+        return fields.not ? actualAmount : amount + actualAmount;
     }
 }

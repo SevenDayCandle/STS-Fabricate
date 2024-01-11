@@ -38,7 +38,7 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= amount) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o) < amount);
+        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= refreshAmount(info)) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o) < refreshAmount(info));
     }
 
     @Override
@@ -62,9 +62,10 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return order.evokeOrb(1, amount).setFilter(fields.getOrbFilter())
+        int am = refreshAmount(info);
+        return order.evokeOrb(1, am).setFilter(fields.getOrbFilter())
                 .addCallback(orbs -> {
-                    if (orbs.size() >= amount) {
+                    if (orbs.size() >= am) {
                         info.setData(orbs);
                         onComplete.invoke(info);
                     }

@@ -28,6 +28,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
@@ -229,26 +230,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return (enabled) ? c : disabledColor;
     }
 
-    protected ColoredString getPrimaryAmount(Color c) {
-        if (amount != 0) {
-            if (isTurnBased) {
-                return new ColoredString(amount, Color.WHITE, c.a);
-            }
-            else if (this.amount >= 0) {
-                return new ColoredString(amount, Color.GREEN, c.a);
-            }
-            else if (this.canGoNegative) {
-                return new ColoredString(amount, Color.RED, c.a);
-            }
-        }
-
-        return null;
-    }
-
-    protected ColoredString getSecondaryAmount(Color c) {
-        return null;
-    }
-
     @Override
     public List<EUIKeywordTooltip> getTips() {
         return tooltips;
@@ -404,15 +385,27 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     @Override
     public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
-        ColoredString amount = getPrimaryAmount(c);
-        if (amount != null) {
-            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount.text, x, y, fontScale, amount.color);
-        }
+        renderPrimaryAmount(sb, x, y, c);
+        renderSecondaryAmount(sb, x, y, c);
+    }
 
-        ColoredString amount2 = getSecondaryAmount(c);
-        if (amount2 != null) {
-            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount2.text, x, y + 15f * Settings.scale, 1, amount2.color);
+    protected void renderPrimaryAmount(SpriteBatch sb, float x, float y, Color c) {
+        if (amount > 0 || this.canGoNegative) {
+            Color color;
+            if (isTurnBased) {
+                color = EUIColors.white(c.a);
+            }
+            else if (this.amount >= 0) {
+                color = EUIColors.green(c.a);
+            }
+            else {
+                color = EUIColors.red(c.a);
+            }
+            FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(amount), x, y, fontScale, color);
         }
+    }
+
+    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
     }
 
     @Override

@@ -33,7 +33,7 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.doesValueMatchThreshold((t.currentHealth + TempHPField.tempHp.get(t)) * 100 / t.maxHealth));
+        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(info, (t.currentHealth + TempHPField.tempHp.get(t)) * 100 / t.maxHealth));
     }
 
     @Override

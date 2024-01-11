@@ -63,10 +63,10 @@ public class PMove_TriggerOrb extends PMove<PField_Orb> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (fields.not && source instanceof AbstractOrb) {
-            order.triggerOrbPassive((AbstractOrb) source, amount);
+            order.triggerOrbPassive((AbstractOrb) source, refreshAmount(info));
         }
         else {
-            order.triggerOrbPassive(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random)
+            order.triggerOrbPassive(refreshAmount(info), extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random)
                     .setFilter(fields.getOrbFilter());
         }
 

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -29,8 +30,8 @@ public class PMove_ModifyCounter extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyMagicNumber(c, amount, true, true);
+    public ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order) {
+        return (c) -> order.modifyMagicNumber(c, refreshAmount(info), true, true);
     }
 
     @Override

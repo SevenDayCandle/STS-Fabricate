@@ -6,6 +6,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.cardText.PointerToken;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
@@ -22,6 +23,7 @@ import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMod<T extends PField> extends PSkill<T> {
     public static final int MODIFIER_PRIORITY = 3;
+    private int cachedValue;
 
     public PMod(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
@@ -395,12 +397,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    public ColoredString getColoredAmount() {
-        if (baseAmount != amount) {
-            return new ColoredString(amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(amount, Settings.CREAM_COLOR);
+    public String getAdditionalWidthString() {
+        return !hasParentType(PTrigger_When.class) ? PointerToken.DUMMY : EUIUtils.EMPTY_STRING;
     }
 
     protected String getMaxExtraString() {
@@ -414,7 +412,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String subText = extra > 0 ? getSubText(perspective, requestor) + getMaxExtraString() : getSubText(perspective, requestor);
-        return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
+        return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : EUIUtils.EMPTY_STRING,
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
@@ -428,6 +426,11 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public int getXValue() {
+        return cachedValue;
+    }
+
+    @Override
     public boolean hasChildWarning() {
         return childEffect == null;
     }
@@ -438,7 +441,8 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     @Override
     public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        return limitPer(getModifiedAmount(info, amount, isUsing));
+        cachedValue = limitPer(getModifiedAmount(info, amount, isUsing));
+        return cachedValue;
     }
 
     @Override

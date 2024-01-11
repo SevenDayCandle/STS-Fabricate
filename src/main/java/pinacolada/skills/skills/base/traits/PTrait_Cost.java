@@ -55,7 +55,8 @@ public class PTrait_Cost extends PTrait<PField_Not> {
 
     @Override
     public int modifyCost(PCLUseInfo info, int amount) {
-        return fields.not ? this.amount : amount + this.amount;
+        int actualAmount = refreshAmount(info);
+        return fields.not ? actualAmount : amount + actualAmount;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

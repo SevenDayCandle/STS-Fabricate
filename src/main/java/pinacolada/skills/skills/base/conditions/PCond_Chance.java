@@ -37,11 +37,11 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
         if (isUsing) {
             boolean val = conditionMetCache;
             if (conditionMetCache && triggerSource == null) {
-                conditionMetCache = GameUtilities.chance(amount);
+                conditionMetCache = GameUtilities.chance(refreshAmount(info));
             }
             return val;
         }
-        return GameUtilities.chance(amount);
+        return GameUtilities.chance(refreshAmount(info));
     }
 
     @Override

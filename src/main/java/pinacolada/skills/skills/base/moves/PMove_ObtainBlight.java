@@ -50,11 +50,11 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
         fields.blightIDs.addAll(Arrays.asList(blights));
     }
 
-    protected void createBlight(ActionT1<AbstractBlight> onCreate) {
+    protected void createBlight(ActionT1<AbstractBlight> onCreate, PCLUseInfo info) {
         if (!fields.blightIDs.isEmpty()) {
             if (fields.not) {
                 RandomizedList<String> choices = new RandomizedList<>(fields.blightIDs);
-                for (int i = 0; i < amount; i++) {
+                for (int i = 0; i < refreshAmount(info); i++) {
                     // BlightHelper blights are always copies
                     String choice = choices.retrieve(AbstractDungeon.relicRng, true);
                     if (choice != null) {
@@ -81,7 +81,7 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
                             (AbstractDungeon.player != null ? EUIUtils.set(AbstractDungeon.player.getCardColor(), AbstractCard.CardColor.COLORLESS) : Collections.singleton(AbstractCard.CardColor.COLORLESS))
                             : fields.colors,
                     PGR.dungeon.allowCustomBlights);
-            for (int i = 0; i < amount; i++) {
+            for (int i = 0; i < refreshAmount(info); i++) {
                 String choice = choices.retrieve(AbstractDungeon.relicRng, true);
                 if (choice != null) {
                     AbstractBlight blight = BlightHelper.getBlight(choice);
@@ -133,13 +133,13 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        createBlight(order::obtainBlight);
+        createBlight(order::obtainBlight, info);
         super.use(info, order);
     }
 
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
-        PCLEffects.Queue.callback(() -> createBlight(b -> GameUtilities.obtainBlight(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, b)))
+        PCLEffects.Queue.callback(() -> createBlight(b -> GameUtilities.obtainBlight(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, b), info))
                 .addCallback(() -> super.useOutsideOfBattle(info));
     }
 }

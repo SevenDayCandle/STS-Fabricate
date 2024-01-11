@@ -45,6 +45,7 @@ public class PTrait_Block extends PBlockTrait<PField_Not> {
 
     @Override
     public float modifyBlockFirst(PCLUseInfo info, float amount) {
-        return fields.not ? this.amount : amount + this.amount;
+        int actualAmount = refreshAmount(info);
+        return fields.not ? actualAmount : amount + actualAmount;
     }
 }

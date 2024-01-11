@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Move generic logic into other classes
 public class PCLCardText {
-    private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     private final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
 

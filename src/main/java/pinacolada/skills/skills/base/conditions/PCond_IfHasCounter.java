@@ -1,9 +1,9 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.cardText.PointerToken;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -38,7 +38,12 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return info != null &&
-                (fields.doesValueMatchThreshold(GameUtilities.getCounter(info.card)));
+                (fields.doesValueMatchThreshold(info, GameUtilities.getCounter(info.card)));
+    }
+
+    @Override
+    public String getAdditionalWidthString() {
+        return !hasParentType(PTrigger_When.class) ? PointerToken.DUMMY : EUIUtils.EMPTY_STRING;
     }
 
     @Override

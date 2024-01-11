@@ -1,13 +1,17 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -129,19 +133,6 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
     @Override
     public AbstractCreature getOwner() {
         return owner;
-    }
-
-    @Override
-    protected ColoredString getSecondaryAmount(Color c) {
-        for (PSkill<?> effect : getEffects()) {
-            if (effect instanceof PTrigger) {
-                int uses = ((PTrigger) effect).getUses();
-                if (!(effect instanceof PTrigger_Interactable) && uses >= 0) {
-                    return new ColoredString(uses, uses > 0 && (((PTrigger) effect).fields.forced || uses >= effect.amount) ? Color.GREEN : Color.GRAY, c.a);
-                }
-            }
-        }
-        return null;
     }
 
     @Override
@@ -290,6 +281,20 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
     public void refreshTriggers(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
             effect.refresh(info, true, false);
+        }
+    }
+
+    @Override
+    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
+        for (PSkill<?> effect : getEffects()) {
+            if (effect instanceof PTrigger) {
+                int uses = ((PTrigger) effect).getUses();
+                if (!(effect instanceof PTrigger_Interactable) && uses >= 0) {
+                    Color color = uses > 0 && (((PTrigger)effect).fields.forced || uses >= effect.amount) ? EUIColors.green(c.a) : EUIColors.gray(c.a);
+                    FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(amount), x, y + 15 * Settings.scale, fontScale, color);
+                    return;
+                }
+            }
         }
     }
 

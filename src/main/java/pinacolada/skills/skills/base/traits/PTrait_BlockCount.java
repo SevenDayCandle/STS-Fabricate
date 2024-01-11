@@ -45,6 +45,7 @@ public class PTrait_BlockCount extends PBlockTrait<PField_Not> {
 
     @Override
     public float modifyRightCount(PCLUseInfo info, float amount) {
-        return fields.not ? this.amount : amount + this.amount;
+        int actualAmount = refreshAmount(info);
+        return fields.not ? actualAmount : amount + actualAmount;
     }
 }

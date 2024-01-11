@@ -33,7 +33,7 @@ public class PCond_CheckBlight extends PPassiveCond<PField_Blight> {
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         int count = EUIUtils.count(AbstractDungeon.player.blights, c -> fields.getFullBlightFilter().invoke(c));
-        return amount == 0 ? count == 0 : fields.random ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.random ^ count >= refreshAmount(info);
     }
 
     @Override

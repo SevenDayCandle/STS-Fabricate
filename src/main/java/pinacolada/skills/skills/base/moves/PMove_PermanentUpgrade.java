@@ -86,7 +86,7 @@ public class PMove_PermanentUpgrade extends PMove_DoCard<PField_CardCategory> im
                     });
         }
         else {
-            PCLEffects.Queue.add(new ChooseCardsToUpgradeEffect(amount, fields.getFullCardFilter()))
+            PCLEffects.Queue.add(new ChooseCardsToUpgradeEffect(refreshAmount(info), fields.getFullCardFilter()))
                     .addCallback(effect -> {
                         info.setData(effect.cards);
                         super.useOutsideOfBattle(info);

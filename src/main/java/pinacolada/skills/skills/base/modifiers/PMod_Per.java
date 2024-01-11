@@ -40,16 +40,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         super(data, target, amount, extra);
     }
 
-    @Override
-    public ColoredString getColoredAmount() {
-        String amString = fields.not && amount >= 0 ? "+" + amount : String.valueOf(amount);
-        if (baseAmount != amount) {
-            return new ColoredString(amString, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(amString, Settings.CREAM_COLOR);
-    }
-
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective, requestor)));
@@ -86,7 +76,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input >= 0 && fields.not ? "+" + input : String.valueOf(input);
     }
 

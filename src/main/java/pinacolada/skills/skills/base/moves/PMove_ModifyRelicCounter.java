@@ -43,15 +43,15 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
-    protected void doEffect() {
+    protected void doEffect(PCLUseInfo info) {
         if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
-            doModify((AbstractRelic) source);
+            doModify((AbstractRelic) source, info);
         }
         else {
             int limit = fields.relicIDs.isEmpty() ? extra : AbstractDungeon.player.relics.size();
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (fields.getFullRelicFilter().invoke(r)) {
-                    doModify(r);
+                    doModify(r, info);
                     limit -= 1;
                 }
                 if (limit <= 0) {
@@ -61,8 +61,9 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
         }
     }
 
-    protected void doModify(AbstractRelic relic) {
-        GameUtilities.modifyRelicCounter(relic, fields.not ? amount : relic.counter + amount);
+    protected void doModify(AbstractRelic relic, PCLUseInfo info) {
+        int actualAmount = refreshAmount(info);
+        GameUtilities.modifyRelicCounter(relic, fields.not ? actualAmount : relic.counter + actualAmount);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(this::doEffect);
+        order.callback(() -> doEffect(info));
         super.use(info, order);
     }
 
@@ -108,6 +109,6 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
 
-        doEffect();
+        doEffect(info);
     }
 }

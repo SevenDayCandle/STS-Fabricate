@@ -32,7 +32,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && info.source.gold >= amount;
+        return info != null && info.source.gold >= refreshAmount(info);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
         if (!conditionMetCache) {
             return order.callback(() -> onFail.invoke(info));
         }
-        return order.gainGold(-amount).addCallback((res) -> {
+        return order.gainGold(-refreshAmount(info)).addCallback((res) -> {
             if (res != null) {
                 onComplete.invoke(info);
             }

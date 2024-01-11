@@ -53,18 +53,17 @@ public class PMove_GainMaxHPPercent extends PMove_Gain implements OutOfCombatMov
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
-            if (amount < 0) {
-                for (AbstractCreature t : getTargetList(info)) {
-                    int reduction = MathUtils.ceil(t.maxHealth * amount / 100f);
-                    t.decreaseMaxHealth(-reduction);
+            for (AbstractCreature t : getTargetList(info)) {
+                int actualAmount = refreshAmount(info);
+                int pc = MathUtils.ceil(t.maxHealth * amount / 100f);
+                if (actualAmount < 0) {
+                    t.decreaseMaxHealth(-pc);
+                }
+                else {
+                    t.increaseMaxHp(pc, true);
                 }
             }
-            else {
-                for (AbstractCreature t : getTargetList(info)) {
-                    int inc = MathUtils.ceil(t.maxHealth * amount / 100f);
-                    t.increaseMaxHp(inc, true);
-                }
-            }
+
         });
         super.use(info, order);
     }
@@ -72,8 +71,9 @@ public class PMove_GainMaxHPPercent extends PMove_Gain implements OutOfCombatMov
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
-        int am = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
-        if (amount < 0) {
+        int actualAmount = refreshAmount(info);
+        int am = MathUtils.ceil(AbstractDungeon.player.maxHealth * actualAmount / 100f);
+        if (actualAmount < 0) {
             AbstractDungeon.player.decreaseMaxHealth(-am);
         }
         else {

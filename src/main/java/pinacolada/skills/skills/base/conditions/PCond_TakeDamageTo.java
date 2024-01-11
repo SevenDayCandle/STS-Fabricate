@@ -33,7 +33,7 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && (fields.not ? info.source.currentHealth > amount : info.source.currentHealth + info.source.currentBlock > amount);
+        return info != null && (fields.not ? info.source.currentHealth > refreshAmount(info) : info.source.currentHealth + info.source.currentBlock > refreshAmount(info));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return fields.not ? order.loseHP(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info))
-                : order.takeDamage(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info));
+        return fields.not ? order.loseHP(refreshAmount(info), AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info))
+                : order.takeDamage(refreshAmount(info), AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info));
     }
 }

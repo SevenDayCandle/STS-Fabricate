@@ -23,7 +23,8 @@ public class PointerToken extends PCLTextToken {
 
         this.variableID = variableID;
         this.move = move;
-        this.coloredString = new ColoredString(EUIUtils.EMPTY_STRING, Settings.CREAM_COLOR);
+        this.cachedValue = move.amount;
+        this.coloredString = new ColoredString(move.getAttributeString(variableID), move.getAttributeColor(variableID));
     }
 
     public static int tryAdd(PCLTextParser parser) {
@@ -51,7 +52,7 @@ public class PointerToken extends PCLTextToken {
     @Override
     public float getAdditionalWidth(PCLCardText context) {
         if (variableID == PSkill.XVALUE_CHAR && StringUtils.isEmpty(coloredString.text)) {
-            return super.getWidth(context.font, DUMMY);
+            return super.getWidth(context.font, move.getAdditionalWidthString());
         }
         return super.getAdditionalWidth(context);
     }
@@ -63,11 +64,12 @@ public class PointerToken extends PCLTextToken {
 
     @Override
     public void refresh(PCLUseInfo info) {
-        int newAmount = move.refreshAmount(info, move.amount, false);
+        move.refreshAmount(info);
+        int newAmount = move.getAttribute(variableID);
         if (cachedValue != newAmount) {
             cachedValue = newAmount;
-            coloredString.setText(move.getAttributeString(variableID, cachedValue))
-                    .setColor(move.getAttributeColor(variableID, cachedValue));
+            coloredString.setText(move.getAttributeString(variableID))
+                    .setColor(move.getAttributeColor(variableID));
         }
     }
 

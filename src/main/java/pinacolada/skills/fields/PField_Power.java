@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -38,8 +39,8 @@ public class PField_Power extends PField_Random {
         return this;
     }
 
-    public boolean allOrAnyPower(AbstractCreature t) {
-        return allOrAnyPower(po -> doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po)));
+    public boolean allOrAnyPower(PCLUseInfo info, AbstractCreature t) {
+        return allOrAnyPower(po -> doesValueMatchThreshold(info, GameUtilities.getPowerAmount(t, po)));
     }
 
     public boolean allOrAnyPower(FuncT1<Boolean, String> valFunc) {

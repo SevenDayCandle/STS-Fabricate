@@ -33,7 +33,7 @@ public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return EnergyPanel.getCurrentEnergy() >= amount;
+        return EnergyPanel.getCurrentEnergy() >= refreshAmount(info);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
         if (!conditionMetCache) {
             return order.callback(() -> onFail.invoke(info));
         }
-        return order.spendEnergy(amount, false)
+        return order.spendEnergy(refreshAmount(info), false)
                 .addCallback(res -> {
                     if (res != null) {
                         onComplete.invoke(info);

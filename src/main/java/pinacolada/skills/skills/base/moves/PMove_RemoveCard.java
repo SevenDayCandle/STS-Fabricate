@@ -96,7 +96,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
 
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
-        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()))
+        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(refreshAmount(info), fields.getFullCardFilter()))
                 .addCallback(effect -> {
                     info.setData(effect.cards);
                     super.useOutsideOfBattle(info);
@@ -104,7 +104,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return extra > 0 || fields.forced || fields.origin != PCLCardSelection.Manual ? String.valueOf(input) : TEXT.subjects_upToX(input);
     }
 }

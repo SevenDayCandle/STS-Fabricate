@@ -46,7 +46,7 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
         List<? extends AbstractCreature> targetList = getTargetList(info);
         return fields.powers.isEmpty() ? EUIUtils.count(targetList, t -> t.powers != null && EUIUtils.any(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                EUIUtils.count(targetList, t -> fields.allOrAnyPower(t));
+                EUIUtils.count(targetList, t -> fields.allOrAnyPower(info, t));
     }
 
     @Override

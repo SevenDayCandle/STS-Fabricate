@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.traits;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -32,7 +33,7 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
+    public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
         if (c instanceof PCLCard) {
             ((PCLCard) c).setTarget(conditionMet ? newTarget : ((PCLCard) c).cardData.cardTarget);
         }

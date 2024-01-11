@@ -90,7 +90,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
-        final int limit = Math.max(extra, amount);
+        final int limit = Math.max(extra, refreshAmount(info));
         // When sourcing cards from the parent skill, make exact copies of the cards
         if (useParent && info != null) {
             List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
@@ -274,7 +274,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         choice.group = getBaseCards(info);
         // When not doing an X out of Y choice, amount may produce more than the advertised amount if we are generating multiple card IDs
-        int itemsToGet = isOutOf() ? amount : choice.group.size();
+        int itemsToGet = isOutOf() ? refreshAmount(info) : choice.group.size();
 
         order.selectFromPile(getName(), itemsToGet, choice)
                 .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin), !fields.forced)

@@ -40,7 +40,7 @@ public class PMove_GainSummonSlots extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.gainSummonSlots(amount);
+        order.gainSummonSlots(refreshAmount(info));
         super.use(info, order);
     }
 }

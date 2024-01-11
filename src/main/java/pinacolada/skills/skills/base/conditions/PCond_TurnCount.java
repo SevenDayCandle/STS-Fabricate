@@ -28,7 +28,7 @@ public class PCond_TurnCount extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.doesValueMatchThreshold(GameActionManager.turn);
+        return fields.doesValueMatchThreshold(info, GameActionManager.turn);
     }
 
     @Override

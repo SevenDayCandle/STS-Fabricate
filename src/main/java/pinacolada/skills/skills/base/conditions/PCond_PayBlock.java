@@ -33,7 +33,7 @@ public class PCond_PayBlock extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && info.source.currentBlock >= amount;
+        return info != null && info.source.currentBlock >= refreshAmount(info);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class PCond_PayBlock extends PActiveCond<PField_Empty> {
         if (!conditionMetCache) {
             return order.callback(() -> onFail.invoke(info));
         }
-        return order.callback(new LoseBlockAction(info.source, info.source, amount), () -> {
+        return order.callback(new LoseBlockAction(info.source, info.source, refreshAmount(info)), () -> {
             if (conditionMetCache) {
                 onComplete.invoke(info);
             }

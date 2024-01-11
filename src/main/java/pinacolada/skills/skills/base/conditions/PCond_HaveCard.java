@@ -39,7 +39,7 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
         int count = fields.groupTypes.isEmpty() && source instanceof AbstractCard
                 ? EUIUtils.count(getCardPile(info, isUsing), c -> c.uuid == ((AbstractCard) source).uuid)
                 : EUIUtils.count(getCardPile(info, isUsing), c -> fields.getFullCardFilter().invoke(c));
-        return amount == 0 ? count == 0 : fields.not ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.not ^ count >= refreshAmount(info);
     }
 
     @Override

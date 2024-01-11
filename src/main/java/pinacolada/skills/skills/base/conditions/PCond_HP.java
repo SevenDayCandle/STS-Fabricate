@@ -35,7 +35,7 @@ public class PCond_HP extends PPassiveCond<PField_Not> implements OnCreatureHeal
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(t.currentHealth + TempHPField.tempHp.get(t)));
+        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(info, t.currentHealth + TempHPField.tempHp.get(t)));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PCond_HP extends PPassiveCond<PField_Not> implements OnCreatureHeal
         AbstractCreature owner = getOwnerCreature();
         PCLUseInfo info = generateInfo(owner, creature);
         boolean eval = evaluateTargets(info, c -> c == creature);
-        if (eval && fields.doesValueMatchThreshold(heal, amount)) {
+        if (eval && fields.doesValueMatchThreshold(heal, refreshAmount(info))) {
             useFromTrigger(info.setData(heal));
         }
         return heal;

@@ -30,7 +30,7 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.doesValueMatchThreshold(CombatManager.scriesThisTurn);
+        return fields.doesValueMatchThreshold(info, CombatManager.scriesThisTurn);
     }
 
     @Override

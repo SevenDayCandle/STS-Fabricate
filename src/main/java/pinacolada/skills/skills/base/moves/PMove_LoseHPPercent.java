@@ -61,7 +61,8 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
-            int reduction = MathUtils.ceil(t.maxHealth * amount / 100f);
+            int actualAmount = refreshAmount(info);
+            int reduction = MathUtils.ceil(t.maxHealth * actualAmount / 100f);
             order.loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).ignorePowers(true).isCancellable(false);
         }
         super.use(info, order);
@@ -70,7 +71,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
-        int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
+        int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * refreshAmount(info) / 100f);
         AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
     }
 }

@@ -64,11 +64,12 @@ public class PMove_IncreaseOrbFocus extends PMove<PField_Orb> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
+        int actualAmount = refreshAmount(info);
         if (fields.not && source instanceof AbstractOrb) {
-            order.add(new IncreaseOrbFocus(amount, 1, fields.random, (AbstractOrb) source));
+            order.add(new IncreaseOrbFocus(actualAmount, 1, fields.random, (AbstractOrb) source));
         }
         else {
-            order.add(new IncreaseOrbFocus(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random, null))
+            order.add(new IncreaseOrbFocus(actualAmount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random, null))
                     .setFilter(fields.getOrbFilter());
         }
 

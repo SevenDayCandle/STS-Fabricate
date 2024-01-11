@@ -31,7 +31,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m.currentBlock, amount));
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m.currentBlock, refreshAmount(info)));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
         AbstractCreature owner = getOwnerCreature();
         PCLUseInfo info = generateInfo(owner, t);
         boolean eval = evaluateTargets(info, c -> c == t);
-        if (eval && fields.doesValueMatchThreshold(block, amount)) {
+        if (eval && fields.doesValueMatchThreshold(block, refreshAmount(info))) {
             useFromTrigger(info.setData(block));
         }
         return block;

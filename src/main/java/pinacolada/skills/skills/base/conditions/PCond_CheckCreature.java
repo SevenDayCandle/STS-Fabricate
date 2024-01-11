@@ -28,7 +28,7 @@ public class PCond_CheckCreature extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.doesValueMatchThreshold(getTargetList(info).size());
+        return fields.doesValueMatchThreshold(info, getTargetList(info).size());
     }
 
     @Override

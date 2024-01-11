@@ -2,14 +2,18 @@ package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
@@ -195,17 +199,6 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     }
 
     @Override
-    protected ColoredString getSecondaryAmount(Color c) {
-        for (PTrigger trigger : ptriggers) {
-            int uses = trigger.getUses();
-            if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
-                return new ColoredString(uses, uses > 0 && (trigger.fields.forced || uses >= trigger.amount) ? Color.GREEN : Color.GRAY, c.a);
-            }
-        }
-        return null;
-    }
-
-    @Override
     public String getUpdatedDescription() {
         this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, pTrigger -> pTrigger.getPowerText(null)).toArray(new String[]{});
         return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
@@ -341,6 +334,18 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     public void refreshTriggers(PCLUseInfo info) {
         for (PTrigger effect : ptriggers) {
             effect.refresh(info, true, false);
+        }
+    }
+
+    @Override
+    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
+        for (PTrigger trigger : ptriggers) {
+            int uses = trigger.getUses();
+            if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
+                Color color = uses > 0 && (trigger.fields.forced || uses >= trigger.amount) ? EUIColors.green(c.a) : EUIColors.gray(c.a);
+                FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(amount), x, y + 15 * Settings.scale, fontScale, color);
+                return;
+            }
         }
     }
 

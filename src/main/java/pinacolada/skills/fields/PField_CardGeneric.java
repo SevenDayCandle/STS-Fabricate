@@ -50,7 +50,7 @@ public class PField_CardGeneric extends PField_Random {
      */
     public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
         CardGroup[] g = getCardGroup(info, allowSelf);
-        int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
+        int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.refreshAmount(info);
 
 
         // Set automatic selection when self targeting, or if the action is forced and we must select every available card

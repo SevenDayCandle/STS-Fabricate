@@ -43,15 +43,16 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
-    protected void doEffect() {
+    protected void doEffect(PCLUseInfo info) {
+        int actualAmount = refreshAmount(info);
         if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
-            GameUtilities.upgradeRelic((AbstractRelic) source, amount);
+            GameUtilities.upgradeRelic((AbstractRelic) source, actualAmount);
         }
         else {
             int limit = fields.relicIDs.isEmpty() ? extra : AbstractDungeon.player.relics.size();
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (fields.getFullRelicFilter().invoke(r)) {
-                    GameUtilities.upgradeRelic(r, amount);
+                    GameUtilities.upgradeRelic(r, actualAmount);
                     limit -= 1;
                 }
                 if (limit <= 0) {
@@ -90,7 +91,7 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(this::doEffect);
+        order.callback(() -> this.doEffect(info));
         super.use(info, order);
     }
 
@@ -98,6 +99,6 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
 
-        doEffect();
+        doEffect(info);
     }
 }

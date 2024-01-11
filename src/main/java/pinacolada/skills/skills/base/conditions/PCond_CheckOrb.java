@@ -37,9 +37,9 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         if (fields.orbs.isEmpty()) {
-            return amount <= 0 ? GameUtilities.getOrbCount() == 0 : GameUtilities.getOrbCount() >= amount;
+            return amount <= 0 ? GameUtilities.getOrbCount() == 0 : GameUtilities.getOrbCount() >= refreshAmount(info);
         }
-        return fields.allOrAnyR(fields.orbs, o -> GameUtilities.getOrbCount(o) >= amount);
+        return fields.allOrAnyR(fields.orbs, o -> GameUtilities.getOrbCount(o) >= refreshAmount(info));
     }
 
     @Override

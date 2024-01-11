@@ -35,15 +35,6 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
     }
 
     @Override
-    public final ColoredString getColoredAmount() {
-        if (baseAmount != amount) {
-            return new ColoredString(amount > 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(amount > 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
     }

@@ -58,11 +58,11 @@ public class PCLTextLine {
     }
 
     public float getEndWidth() {
-        return tokens.size() > 0 ? tokens.getLast().getWidth(context) : 0;
+        return !tokens.isEmpty() ? tokens.getLast().getWidth(context) : 0;
     }
 
     public PCLTextToken getStart() {
-        return tokens.size() > 0 ? tokens.getFirst() : null;
+        return !tokens.isEmpty() ? tokens.getFirst() : null;
     }
 
     public PCLTextToken popEnd() {

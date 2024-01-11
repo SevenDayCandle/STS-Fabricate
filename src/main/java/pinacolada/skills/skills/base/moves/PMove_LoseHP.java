@@ -64,8 +64,8 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        int actualAmount = refreshAmount(info);
         for (AbstractCreature t : getTargetList(info)) {
+            int actualAmount = refreshAmount(info);
             order.loseHP(info.source, t, actualAmount, fields.attackEffect).isCancellable(false);
         }
         super.use(info, order);
@@ -74,6 +74,6 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         super.useOutsideOfBattle(info);
-        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, amount));
+        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, refreshAmount(info)));
     }
 }

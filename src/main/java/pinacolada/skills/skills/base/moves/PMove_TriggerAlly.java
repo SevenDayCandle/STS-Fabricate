@@ -49,7 +49,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             if (t instanceof PCLCardAlly) {
-                order.triggerAlly((PCLCardAlly) t, amount);
+                order.triggerAlly((PCLCardAlly) t, refreshAmount(info));
             }
         }
         super.use(info, order);

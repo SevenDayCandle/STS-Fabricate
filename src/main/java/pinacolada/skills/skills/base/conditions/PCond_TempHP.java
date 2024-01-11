@@ -33,7 +33,7 @@ public class PCond_TempHP extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(TempHPField.tempHp.get(t)));
+        return evaluateTargets(info, t -> fields.doesValueMatchThreshold(info, TempHPField.tempHp.get(t)));
     }
 
     @Override

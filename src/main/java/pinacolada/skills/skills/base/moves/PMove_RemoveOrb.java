@@ -47,7 +47,7 @@ public class PMove_RemoveOrb extends PMove<PField_Orb> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.removeOrb(amount <= 0 ? GameUtilities.getOrbCount() : amount, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
+        order.removeOrb(amount <= 0 ? GameUtilities.getOrbCount() : refreshAmount(info), fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
         super.use(info, order);
     }
 }

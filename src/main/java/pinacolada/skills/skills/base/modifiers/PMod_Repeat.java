@@ -12,6 +12,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveMod;
+import pinacolada.skills.skills.PMathMod;
 
 @VisibleSkill
 public class PMod_Repeat extends PActiveMod<PField_Empty> {

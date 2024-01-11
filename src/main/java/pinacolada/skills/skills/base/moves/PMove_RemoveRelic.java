@@ -43,12 +43,12 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
-    protected void doEffect() {
+    protected void doEffect(PCLUseInfo info) {
         if (fields.isFilterEmpty() && source instanceof AbstractRelic) {
             GameUtilities.removeRelics((AbstractRelic) source);
         }
         else {
-            int limit = fields.relicIDs.isEmpty() ? amount : AbstractDungeon.player.relics.size();
+            int limit = fields.relicIDs.isEmpty() ? refreshAmount(info) : AbstractDungeon.player.relics.size();
             ArrayList<AbstractRelic> toRemove = new ArrayList<>();
             for (AbstractRelic r : AbstractDungeon.player.relics) {
                 if (fields.getFullRelicFilter().invoke(r)) {
@@ -100,7 +100,7 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.callback(this::doEffect).addCallback(() -> {
+        order.callback(() -> this.doEffect(info)).addCallback(() -> {
             super.use(info, order);
         });
     }
@@ -108,7 +108,7 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
         // Use callback to avoid concurrent modification if called from relic
-        PCLEffects.Queue.callback(this::doEffect)
+        PCLEffects.Queue.callback(() -> this.doEffect(info))
                 .addCallback(() -> {
                     super.useOutsideOfBattle(info);
                 });

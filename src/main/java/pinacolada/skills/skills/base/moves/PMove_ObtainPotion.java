@@ -45,7 +45,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
         fields.potionIDs.addAll(Arrays.asList(potions));
     }
 
-    protected void createPotion(ActionT1<AbstractPotion> onCreate) {
+    protected void createPotion(ActionT1<AbstractPotion> onCreate, PCLUseInfo info) {
         if (!fields.potionIDs.isEmpty()) {
             for (String r : fields.potionIDs) {
                 AbstractPotion potion = PotionHelper.getPotion(r);
@@ -87,7 +87,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
             }
 
             choices.addAll(uniques);
-            for (int i = 0; i < amount; i++) {
+            for (int i = 0; i < refreshAmount(info); i++) {
                 AbstractPotion potion = choices.retrieve(AbstractDungeon.potionRng, true);
                 if (potion != null) {
                     onCreate.invoke(potion.makeCopy());
@@ -130,13 +130,13 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        createPotion(order::obtainPotion);
+        createPotion(order::obtainPotion, info);
         super.use(info, order);
     }
 
     @Override
     public void useOutsideOfBattle(PCLUseInfo info) {
-        PCLEffects.Queue.callback(() -> createPotion((p) -> AbstractDungeon.player.obtainPotion(p)))
+        PCLEffects.Queue.callback(() -> createPotion((p) -> AbstractDungeon.player.obtainPotion(p), info))
                 .addCallback(() -> super.useOutsideOfBattle(info));
     }
 }

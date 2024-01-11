@@ -44,7 +44,7 @@ public class PMove_Stun extends PMove<PField_Empty> {
         // This power cannot be applied to players
         for (AbstractCreature c : getTargetList(info)) {
             if (c instanceof AbstractMonster) {
-                order.add(new StunMonsterAction((AbstractMonster) c, info.source, amount));
+                order.add(new StunMonsterAction((AbstractMonster) c, info.source, refreshAmount(info)));
             }
         }
         super.use(info, order);

@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveMod;
+import pinacolada.skills.skills.PMathMod;
 
 // TODO split into a new type of node along with PMod_Repeat
 @VisibleSkill

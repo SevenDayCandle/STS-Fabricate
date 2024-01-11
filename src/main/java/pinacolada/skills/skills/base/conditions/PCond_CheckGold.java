@@ -29,7 +29,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m.gold));
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(info, m.gold));
     }
 
     @Override

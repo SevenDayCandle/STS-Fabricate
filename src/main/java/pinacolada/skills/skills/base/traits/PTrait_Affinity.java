@@ -5,6 +5,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
@@ -41,15 +42,16 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
+    public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
+        int actualAmount = refreshAmount(info);
         if (fields.not) {
             for (PCLAffinity af : fields.affinities) {
-                GameUtilities.modifyAffinityLevel(c, af, conditionMet ? amount : 0, false);
+                GameUtilities.modifyAffinityLevel(c, af, conditionMet ? actualAmount : 0, false);
             }
         }
         else {
             for (PCLAffinity af : fields.affinities) {
-                GameUtilities.modifyAffinityLevel(c, af, conditionMet ? amount : -amount, true);
+                GameUtilities.modifyAffinityLevel(c, af, conditionMet ? actualAmount : -actualAmount, true);
             }
         }
         if (c instanceof PCLCard) {
@@ -87,7 +89,7 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 }

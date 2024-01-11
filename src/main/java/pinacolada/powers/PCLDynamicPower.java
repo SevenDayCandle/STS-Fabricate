@@ -1,12 +1,17 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUIColors;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 
 import java.util.ArrayList;
 
@@ -35,13 +40,12 @@ public class PCLDynamicPower extends PCLPointerPower implements FabricateItem {
     }
 
     @Override
-    protected ColoredString getSecondaryAmount(Color c) {
+    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
         switch (data.endTurnBehavior) {
             case SingleTurn:
             case SingleTurnNext:
-                return new ColoredString(turns, Color.RED, c.a);
+                FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(turns), x, y + 15 * Settings.scale, fontScale, EUIColors.red(c.a));
         }
-        return null;
     }
 
     public PCLDynamicPower setForm(int form) {

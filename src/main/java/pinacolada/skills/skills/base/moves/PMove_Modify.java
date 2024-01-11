@@ -33,9 +33,9 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
         return fields.getFullCardFilter().invoke(c);
     }
 
-    public void cardAction(List<AbstractCard> cards, PCLActions order) {
+    public void cardAction(List<AbstractCard> cards, PCLUseInfo info, PCLActions order) {
         for (AbstractCard c : cards) {
-            getAction(order).invoke(c);
+            getAction(info, order).invoke(c);
         }
     }
 
@@ -106,11 +106,6 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
-    public int refreshAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        return fields.not ? amount : super.refreshAmount(info, amount, isUsing);
-    }
-
-    @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
@@ -126,7 +121,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
                 .addCallback(cards -> {
                     info.setData(cards);
                     callback.invoke(info);
-                    cardAction(cards, order);
+                    cardAction(cards, info, order);
                     if (this.childEffect != null) {
                         this.childEffect.use(info, order);
                     }
@@ -140,11 +135,11 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 
-    public abstract ActionT1<AbstractCard> getAction(PCLActions order);
+    public abstract ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order);
 
     public abstract String getObjectText();
 }

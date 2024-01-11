@@ -51,7 +51,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     protected int[] getDamageMatrix(PCLUseInfo info, ArrayList<AbstractCreature> targets) {
         int[] damage = new int[targets.size()];
         for (int i = 0; i < damage.length; i++) {
-            damage[i] =  PGR.dungeon.getRNG().random(refreshAmount(info), extra);
+            damage[i] = refreshAmount(info);
         }
         return damage;
     }

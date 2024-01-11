@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import extendedui.text.EUITextHelper;
 import extendedui.utilities.ColoredString;
 import pinacolada.dungeon.PCLUseInfo;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLTextToken {
-    protected static final GlyphLayout layout = new GlyphLayout();
     protected static final StringBuilder builder = new StringBuilder();
     protected static final StringBuilder tempBuilder = new StringBuilder();
     protected static final Color renderColor = Color.WHITE.cpy();
@@ -36,8 +36,7 @@ public abstract class PCLTextToken {
     }
 
     protected float getWidth(BitmapFont font, String text) {
-        layout.setText(font, text);
-        return layout.width;
+        return EUITextHelper.getTextWidth(font, text);
     }
 
     public void refresh(PCLUseInfo info) {

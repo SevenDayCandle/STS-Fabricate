@@ -619,7 +619,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         scopeEditor
                 .setLimits(1, PSkill.DEFAULT_MAX)
                 .setValue(getScopeForSkill(node.skill), getScopeUpgradeForSkill(node.skill), false)
-                .setActive(node.skill != null && node.skill.target.targetsRandom());
+                .setActive(node.skill != null && node.skill.target.targetsRandomOrAny());
         upgradeEditor
                 .setLimits(e2Min, e2Max)
                 .setValue(getExtra2ForSkill(node.skill), getExtra2UpgradeForSkill(node.skill), false)

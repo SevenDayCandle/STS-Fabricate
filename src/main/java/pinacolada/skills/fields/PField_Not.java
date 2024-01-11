@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import extendedui.EUIRM;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -16,8 +17,8 @@ public class PField_Not extends PField {
         setNot(other.not);
     }
 
-    public boolean doesValueMatchThreshold(int input) {
-        return doesValueMatchThreshold(input, skill.amount);
+    public boolean doesValueMatchThreshold(PCLUseInfo info, int input) {
+        return doesValueMatchThreshold(input, skill.refreshAmount(info));
     }
 
     public boolean doesValueMatchThreshold(int input, int threshold) {

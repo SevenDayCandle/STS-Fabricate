@@ -46,6 +46,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
@@ -116,12 +117,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
-    protected static final GlyphLayout layout = new GlyphLayout();
     public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
     public static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
+    private final transient Color energyColor = new Color();
     private final transient float[] fakeGlowList = new float[4];
     public final PSkillContainer skills = new PSkillContainer();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
@@ -136,7 +137,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected transient ArrayList<PCLCardAffinity> previousAffinities;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    public ColoredString bottomText;
+    protected String bottomText;
     public DelayTiming timing = DelayTiming.StartOfTurnLast;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardSaveData auxiliaryData = new PCLCardSaveData();
@@ -723,9 +724,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
     }
 
-    public ColoredString getBottomText() {
+    public String getBottomText() {
         String loadoutName = cardData.getLoadoutName();
-        return (loadoutName == null || loadoutName.isEmpty()) ? null : new ColoredString(loadoutName, Settings.CREAM_COLOR);
+        return (loadoutName == null || loadoutName.isEmpty()) ? null : loadoutName;
     }
 
     @Override
@@ -813,29 +814,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public PCardPrimary_DealDamage getCardDamage() {
         return onAttackEffect;
-    }
-
-    protected ColoredString getCostString() {
-        final ColoredString result = new ColoredString();
-
-        if (cost == -1) {
-            result.text = PGR.core.strings.subjects_x;
-        }
-        else {
-            result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
-        }
-
-        if (AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this) && (!CombatManager.canPlayCard(this, AbstractDungeon.player, null, hasEnoughEnergy()))) {
-            result.color = new Color(1f, 0.3f, 0.3f, transparency);
-        }
-        else if (isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
-            result.color = new Color(0.4f, 1f, 0.4f, transparency);
-        }
-        else {
-            result.color = new Color(1f, 1f, 1f, transparency);
-        }
-
-        return result;
     }
 
     protected boolean getDarken() {
@@ -1804,6 +1782,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         int baseCostChange = modifyCost(info, cost) - cost;
         TemporaryCostModifier.tryRefresh(this, owner, costForTurn, baseCostChange);
 
+        // Refresh card text
+        cardText.refresh(info);
+
         // Release damage display for rendering
         formulaDisplay = null;
     }
@@ -1927,14 +1908,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         final float suffix_scale = scaleMult * 0.7f;
         BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
         largeFont.getData().setScale(this.isPopup ? 0.5f : 1);
-        layout.setText(largeFont, text);
 
-        float text_width = offsMult * layout.width / Settings.scale;
+        float text_width = offsMult * EUITextHelper.getTextWidth(largeFont, text) / Settings.scale;
         float suffix_width = 0;
 
         if (suffix != null) {
-            layout.setText(largeFont, suffix);
-            suffix_width = (layout.width / Settings.scale) * suffix_scale;
+            suffix_width = (EUITextHelper.getTextWidth(largeFont, suffix) / Settings.scale) * suffix_scale;
         }
 
         largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
@@ -2049,8 +2028,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 renderIcons(sb);
 
                 if (bottomText != null) {
-                    BitmapFont font = PCLRenderHelpers.getSmallTextFont(this, bottomText.text);
-                    PCLRenderHelpers.writeOnCard(sb, this, font, bottomText.text, 0, -0.47f * AbstractCard.RAW_H, bottomText.color, true);
+                    BitmapFont font = PCLRenderHelpers.getSmallTextFont(this, bottomText);
+                    PCLRenderHelpers.writeOnCard(sb, this, font, bottomText, 0, -0.47f * AbstractCard.RAW_H, Settings.CREAM_COLOR, true);
                     PCLRenderHelpers.resetFont(font);
                 }
             }
@@ -2081,12 +2060,26 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset) {
-        ColoredString costString = getCostString();
-        if (costString != null) {
-            BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
-            PCLRenderHelpers.writeOnCard(sb, this, font, costString.text, xOffset, yOffset, costString.color);
-            PCLRenderHelpers.resetFont(font);
+        String text;
+        if (cost == -1) {
+            text = PGR.core.strings.subjects_x;
         }
+        else {
+            text = Integer.toString(Math.max(0, freeToPlay() ? 0 : this.costForTurn));
+        }
+
+        if (AbstractDungeon.player != null && AbstractDungeon.player.hand.contains(this) && (!CombatManager.canPlayCard(this, AbstractDungeon.player, null, hasEnoughEnergy()))) {
+            energyColor.set(1f, 0.3f, 0.3f, transparency);
+        }
+        else if (isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
+            energyColor.set(0.4f, 1f, 0.4f, transparency);
+        }
+        else {
+            energyColor.set(1, 1, 1, transparency);
+        }
+        BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
+        PCLRenderHelpers.writeOnCard(sb, this, font, text, xOffset, yOffset, energyColor);
+        PCLRenderHelpers.resetFont(font);
     }
 
     private float renderFooter(SpriteBatch sb, Texture texture, float y) {

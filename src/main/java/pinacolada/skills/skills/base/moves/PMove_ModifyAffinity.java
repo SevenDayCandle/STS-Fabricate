@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -50,33 +51,33 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public void cardAction(List<AbstractCard> cards, PCLActions order) {
-        if (fields.addAffinities.size() == 0) {
+    public void cardAction(List<AbstractCard> cards, PCLUseInfo info, PCLActions order) {
+        if (fields.addAffinities.isEmpty()) {
             if (fields.or) {
-                chooseEffect(PCLAffinity.getAvailableAffinities(), order);
+                chooseEffect(PCLAffinity.getAvailableAffinities(), order, refreshAmount(info));
             }
             else {
                 PCLAffinity random = PCLAffinity.getRandomAvailableAffinity();
                 for (AbstractCard c : cards) {
-                    order.modifyAffinityLevel(c, Collections.singletonList(random), amount, !fields.not, fields.forced);
+                    order.modifyAffinityLevel(c, Collections.singletonList(random), refreshAmount(info), !fields.not, fields.forced);
                 }
             }
         }
         else if (fields.or && fields.addAffinities.size() > 1) {
-            chooseEffect(fields.addAffinities, order);
+            chooseEffect(fields.addAffinities, order, refreshAmount(info));
         }
         else {
-            super.cardAction(cards, order);
+            super.cardAction(cards, info, order);
         }
     }
 
-    public void chooseEffect(Collection<PCLAffinity> choices, PCLActions order) {
+    public void chooseEffect(Collection<PCLAffinity> choices, PCLActions order, int amount) {
         order.tryChooseAffinitySkill(getName(), Math.max(1, extra2), getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, extra, a)));
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
-        return (c) -> order.modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
+    public ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order) {
+        return (c) -> order.modifyAffinityLevel(c, fields.addAffinities, refreshAmount(info), !fields.not, fields.forced);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

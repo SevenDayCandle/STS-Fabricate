@@ -132,9 +132,10 @@ public class PMove_StackPower extends PMove<PField_Power> {
             }
         }
         else {
-            for (int i = 0; i < amount; i++) {
+            int actualAmount = refreshAmount(info);
+            for (int i = 0; i < actualAmount; i++) {
                 for (AbstractCreature target : getTargetList(info)) {
-                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), amount);
+                    order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), actualAmount);
                 }
             }
         }
@@ -152,7 +153,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -37,20 +38,20 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public void cardAction(List<AbstractCard> cards, PCLActions order) {
+    public void cardAction(List<AbstractCard> cards, PCLUseInfo info, PCLActions order) {
         if (fields.or && fields.addTags.size() > 1) {
-            chooseEffect(getSourceCreature(), null, order, EUIUtils.map(fields.addTags, a -> PMove.modifyTag(amount, extra, a)));
+            chooseEffect(getSourceCreature(), null, order, EUIUtils.map(fields.addTags, a -> PMove.modifyTag(refreshAmount(info), extra, a)));
         }
         else {
-            super.cardAction(cards, order);
+            super.cardAction(cards, info, order);
         }
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction(PCLActions order) {
+    public ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order) {
         return (c) -> {
             for (PCLCardTag tag : fields.addTags) {
-                order.modifyTag(c, tag, amount, !fields.not);
+                order.modifyTag(c, tag, refreshAmount(info), !fields.not);
             }
         };
     }
@@ -82,7 +83,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String wrapTextAmount(int input) {
+    public String wrapTextAmountSelf(int input) {
         return String.valueOf(Math.abs(input));
     }
 }

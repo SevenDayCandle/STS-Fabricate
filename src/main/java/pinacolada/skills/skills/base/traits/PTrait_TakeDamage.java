@@ -57,6 +57,6 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
 
     @Override
     public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        return amount + this.amount;
+        return amount + refreshAmount(info);
     }
 }

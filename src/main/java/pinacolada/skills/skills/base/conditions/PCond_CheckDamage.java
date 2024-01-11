@@ -34,7 +34,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) m).getDamage(true) : 0));
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(info, m instanceof AbstractMonster ? PCLIntentInfo.get((AbstractMonster) m).getDamage(true) : 0));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
         AbstractCreature owner = getOwnerCreature();
         PCLUseInfo info = generateInfo(owner, receiver);
         boolean eval = evaluateTargets(info, c -> c == dInfo.owner);
-        if (dInfo.type == DamageInfo.DamageType.NORMAL && eval && dInfo.output >= amount) {
+        if (dInfo.type == DamageInfo.DamageType.NORMAL && eval && dInfo.output >= refreshAmount(info)) {
             useFromTrigger(info.setData(damageAmount));
         }
     }
