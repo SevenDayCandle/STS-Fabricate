@@ -69,6 +69,12 @@ public class PCLCardText {
         }
     }
 
+    public void forceRefresh() {
+        for (PCLTextLine line : lines) {
+            line.forceRefresh();
+        }
+    }
+
     public void forceReinitialize() {
         card.rawDescription = overrideDescription;
         initialize(card.rawDescription);

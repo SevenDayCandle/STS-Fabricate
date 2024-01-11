@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
+import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanelStats;
@@ -24,6 +25,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
@@ -486,6 +488,12 @@ public abstract class PCLLoadout {
 
     public boolean isCardFromLoadout(String cardID) {
         PCLCardData data = PCLCardData.getStaticData(cardID);
+        if (data == null) {
+            PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
+            if (slot != null) {
+                data = slot.getFirstBuilder();
+            }
+        }
         return data != null && data.loadout == this;
     }
 
@@ -497,6 +505,10 @@ public abstract class PCLLoadout {
     public boolean isCore() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources.data == null || resources.data.getCoreLoadout() == this;
+    }
+
+    public boolean isEditorAllowed(PCLBaseStatEditor beditor, CharacterOption option) {
+        return GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
     }
 
     public boolean isEnabled() {
@@ -574,6 +586,7 @@ public abstract class PCLLoadout {
     public abstract ArrayList<String> getBaseStartingRelics();
 
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
+    // TODO use custom choice items instead of cards
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
             super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {

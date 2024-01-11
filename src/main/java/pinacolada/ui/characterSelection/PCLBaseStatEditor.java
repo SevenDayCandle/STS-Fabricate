@@ -3,6 +3,7 @@ package pinacolada.ui.characterSelection;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -19,6 +20,8 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
+
+import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLBaseStatEditor extends EUIHoverable {
@@ -61,7 +64,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
                     editor.activeEditor = isOpen ? this : null;
                 })
                 .setOnChange(value -> {
-                    if (value.size() > 0) {
+                    if (!value.isEmpty()) {
                         set(value.get(0));
                     }
                 })
@@ -127,7 +130,9 @@ public class PCLBaseStatEditor extends EUIHoverable {
     public void setLoadout(PCLLoadout loadout, PCLLoadoutData data) {
         this.loadout = loadout;
         this.data = data;
-        valueDropdown.setSelection(data.values.getOrDefault(type, 0), true);
+        valueDropdown
+                .setItems(type.getAvailableValues(loadout))
+                .setSelection(data.values.getOrDefault(type, 0), true);
     }
 
     @Override
@@ -141,9 +146,9 @@ public class PCLBaseStatEditor extends EUIHoverable {
     }
 
     public enum StatType {
-        HP(Settings.RED_TEXT_COLOR, 2, 1, -7, 7, 0),
-        Gold(Settings.GOLD_COLOR, 14, 1, -7, 7, 0),
-        OrbSlot(Settings.CREAM_COLOR, 1, 6, 0, 5, 12),
+        HP(Settings.RED_TEXT_COLOR, 2, 1, -10, 10, 0),
+        Gold(Settings.GOLD_COLOR, 14, 1, -10, 10, 0),
+        OrbSlot(Settings.CREAM_COLOR, 1, 6, -18, 18, 12),
         PotionSlot(Settings.CREAM_COLOR, 1, 10, 12),
         CardDraw(Settings.CREAM_COLOR, 1, 28, 12),
         Energy(Settings.CREAM_COLOR, 1, 38, 12);
@@ -180,6 +185,16 @@ public class PCLBaseStatEditor extends EUIHoverable {
             return (amountPerStep * value) / valuePerStep;
         }
 
+        public Integer[] getAvailableValues(PCLLoadout loadout) {
+            int lowest = minValue;
+            int proj = getBase(loadout) + getAmountForValue(lowest);
+            while (proj < 0 && minValue <= maxValue) {
+                lowest += valuePerStep;
+                proj += amountPerStep;
+            }
+            return EUIUtils.range(lowest, maxValue, valuePerStep);
+        }
+
         public int getBase(PCLLoadout loadout) {
             switch (this) {
                 case Gold:
@@ -192,6 +207,8 @@ public class PCLBaseStatEditor extends EUIHoverable {
                     return loadout.getBaseEnergy();
                 case OrbSlot:
                     return loadout.getBaseOrbs();
+                case PotionSlot:
+                    return 3;
                 default:
                     return 0;
             }

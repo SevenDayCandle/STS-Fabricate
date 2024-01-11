@@ -53,6 +53,12 @@ public class PCLTextLine {
         }
     }
 
+    public void forceRefresh() {
+        for (PCLTextToken token : tokens) {
+            token.forceRefresh();
+        }
+    }
+
     public PCLTextToken getEnd() {
         return tokens.getLast();
     }

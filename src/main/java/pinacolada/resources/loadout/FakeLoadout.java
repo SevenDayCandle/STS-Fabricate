@@ -12,6 +12,7 @@ import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.resources.PGR;
+import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class FakeLoadout extends PCLLoadout {
                 }
             }
             for (PCLCustomCardSlot custom : PCLCustomCardSlot.getCards(color)) {
-                PCLDynamicCardData data = custom.getBuilder(0);
+                PCLDynamicCardData data = custom.getFirstBuilder();
                 switch (data.cardRarity) {
                     case BASIC:
                     case COMMON:
@@ -63,7 +64,7 @@ public class FakeLoadout extends PCLLoadout {
                 }
             }
             for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(color)) {
-                PCLDynamicRelicData data = custom.getBuilder(0);
+                PCLDynamicRelicData data = custom.getFirstBuilder();
                 if (GameUtilities.isRelicTierSpawnable(data.tier) || data.tier == AbstractRelic.RelicTier.STARTER) {
                     base.add(data.ID);
                 }
@@ -75,7 +76,7 @@ public class FakeLoadout extends PCLLoadout {
             }
         }
         for (PCLCustomRelicSlot custom : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
-            PCLDynamicRelicData data = custom.getBuilder(0);
+            PCLDynamicRelicData data = custom.getFirstBuilder();
             if (GameUtilities.isRelicTierSpawnable(data.tier) || data.tier == AbstractRelic.RelicTier.STARTER) {
                 base.add(data.ID);
             }
@@ -96,6 +97,12 @@ public class FakeLoadout extends PCLLoadout {
     @Override
     public PCLLoadoutStats getLoadoutStats() {
         return null;
+    }
+
+    // Ignore unlock level
+    @Override
+    public boolean isEditorAllowed(PCLBaseStatEditor beditor, CharacterOption option) {
+        return true;
     }
 
     public void onSelect(CharacterOption option) {

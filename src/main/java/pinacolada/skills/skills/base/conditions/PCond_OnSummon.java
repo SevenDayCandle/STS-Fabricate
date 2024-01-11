@@ -11,6 +11,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
+import java.util.Collections;
+
 @VisibleSkill
 public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnSummon.class, PField_CardCategory.class, 1, 1)
@@ -33,6 +35,9 @@ public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSub
 
     @Override
     public void onAllySummon(PCLCardAlly ally, PCLCard card, PCLCard returnedCard) {
-        triggerOnCard(card, ally);
+        // Ally is treated as the source
+        if (fields.getFullCardFilter().invoke(card)) {
+            useFromTrigger(generateInfo(ally, ally).setData(Collections.singletonList(card)));
+        }
     }
 }

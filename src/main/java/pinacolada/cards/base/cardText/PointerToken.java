@@ -48,6 +48,13 @@ public class PointerToken extends PCLTextToken {
         return move != null ? new PointerToken(c, move) : null;
     }
 
+    @Override
+    public void forceRefresh() {
+        cachedValue = move.getAttribute(variableID);
+        coloredString.setText(move.getAttributeString(variableID))
+                .setColor(move.getAttributeColor(variableID));
+    }
+
     // X value will not show text unless in combat, but we need to make sure that it doesn't go over the line
     @Override
     public float getAdditionalWidth(PCLCardText context) {

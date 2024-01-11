@@ -74,6 +74,12 @@ public class ConditionToken extends PCLTextToken {
     }
 
     @Override
+    public void forceRefresh() {
+        Color c = move.getConditionColor();
+        coloredString.setColor(c != null ? c : originalColor);
+    }
+
+    @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         if (EUI.elapsed25() && move != null) {
             Color c = move.getConditionColor();

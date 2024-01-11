@@ -195,7 +195,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         ArrayList<PCLLoadoutData> dataCopies = EUIUtils.map(loadout.presets.values(), PCLLoadoutData::makeCopy);
         for (PCLBaseStatEditor beditor : baseStatEditors) {
-            final boolean available = GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
+            final boolean available = loadout.isEditorAllowed(beditor, option);
             beditor.setActive(available);
             beditor.setInteractable(available);
             if (!available) {

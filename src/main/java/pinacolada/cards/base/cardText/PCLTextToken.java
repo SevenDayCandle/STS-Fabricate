@@ -23,6 +23,9 @@ public abstract class PCLTextToken {
         this.rawText = text;
     }
 
+    public void forceRefresh() {
+    }
+
     public float getAdditionalWidth(PCLCardText context) {
         return 0;
     }
