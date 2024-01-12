@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
@@ -15,7 +16,6 @@ import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.blights.PCLBlight;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutBlightSlot;
@@ -43,7 +43,7 @@ public class PCLAbilityEditor extends EUIHoverable {
         nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
+                .setFont(FontHelper.cardTitleFont, 1f);
 
 
         final float offY = BUTTON_SIZE / 4;

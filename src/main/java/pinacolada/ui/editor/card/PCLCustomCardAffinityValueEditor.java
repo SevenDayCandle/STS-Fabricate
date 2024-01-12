@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT3;
@@ -14,7 +15,6 @@ import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -63,7 +63,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
+                .setFont(FontHelper.topPanelAmountFont, 1f);
 
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(hb, hb.width, hb.height, w * 0.5f, -h * 0.35f))
@@ -71,7 +71,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
+                .setFont(FontHelper.topPanelAmountFont, 1f);
 
         this.affinityImage = new EUIImage(affinity.getIcon(), new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, ICON_SIZE, ICON_SIZE))
                 .setTooltip(affinity.getTooltip().title, PGR.core.strings.cetut_attrAffinity);

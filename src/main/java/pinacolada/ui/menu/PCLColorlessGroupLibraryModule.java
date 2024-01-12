@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -13,7 +14,6 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -30,7 +30,7 @@ public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCar
         this.screen = screen;
         groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.905f, scale(210), scale(80)))
                 .setColor(Color.DARK_GRAY)
-                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 1f, group.getTitle())
+                .setLabel(FontHelper.cardDescFont_N, 1f, group.getTitle())
                 .setOnRightClick(() -> groupMenu.positionToOpen());
         groupMenu = (EUIContextMenu<ColorlessGroup>) new EUIContextMenu<>(new EUIHitbox(0, 0, scale(240), scale(48)).setIsPopupCompatible(true), ColorlessGroup::getTitle)
                 .setPosition(screen.quickSearch.hb.cX + screen.quickSearch.hb.width * 0.5f, screen.quickSearch.hb.cY)

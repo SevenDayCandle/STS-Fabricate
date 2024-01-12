@@ -3,7 +3,6 @@ package pinacolada.blights;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.localization.BlightStrings;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.BlightTier;
 import org.apache.commons.lang3.StringUtils;

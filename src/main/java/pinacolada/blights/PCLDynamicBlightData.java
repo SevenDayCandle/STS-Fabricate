@@ -5,8 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.BlightStrings;
-import com.megacrit.cardcrawl.localization.OrbStrings;
-import com.megacrit.cardcrawl.localization.PotionStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.BlightTier;
 import pinacolada.interfaces.markers.EditorMaker;

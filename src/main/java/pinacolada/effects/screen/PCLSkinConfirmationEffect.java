@@ -1,8 +1,6 @@
 package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import extendedui.ui.controls.EUIDialogYesNo;
-import pinacolada.characters.PCLCharacter;
 import pinacolada.characters.PCLCharacterAnimation;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.ui.characterSelection.PCLSkinDialog;

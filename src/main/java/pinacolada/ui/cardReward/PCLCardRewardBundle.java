@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLCardRewardBundle {
@@ -44,7 +44,7 @@ public class PCLCardRewardBundle {
     }
 
     public void render(SpriteBatch sb) {
-        BitmapFont font = EUIFontHelper.buttonFont;
+        BitmapFont font = FontHelper.buttonLabelFont;
         font.getData().setScale(card.drawScale * 0.8f);
         PCLRenderHelpers.drawOnCardAuto(sb, card, icon, iconOffsetX, iconOffsetY, icon.getWidth(), icon.getHeight());
         PCLRenderHelpers.writeOnCard(sb, card, font, title, textOffsetX, textOffsetY, textColor);

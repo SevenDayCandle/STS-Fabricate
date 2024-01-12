@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
@@ -67,7 +68,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
                     }
                 }
         );
-        this.description = new EUILabel(EUIFontHelper.cardTooltipFont,
+        this.description = new EUILabel(EUIFontHelper.tooltipFont,
                 new RelativeHitbox(hb, hb.width * 0.8f, hb.height, hb.width * 0.1f, hb.height - scale(200)))
                 .setAlignment(0.5f, 0.5f, true)
                 .setSmartText(true, false);
@@ -101,7 +102,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
     protected EUIButton getCancelButton() {
         return new EUIButton(ImageMaster.OPTION_NO,
                 new RelativeHitbox(hb, scale(175), scale(80), hb.width * 0.85f, hb.height * 0.15f))
-                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[1])
+                .setLabel(FontHelper.cardTitleFont, 0.8f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getCancelValue());
@@ -117,7 +118,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(175), scale(80), hb.width * 0.15f, hb.height * 0.15f))
-                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[0])
+                .setLabel(FontHelper.cardTitleFont, 0.8f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getConfirmValue());
@@ -126,7 +127,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
     }
 
     protected EUILabel getHeader(String headerText) {
-        return new EUILabel(EUIFontHelper.buttonFont,
+        return new EUILabel(FontHelper.topPanelAmountFont,
                 new RelativeHitbox(hb, hb.width, hb.height, hb.width * 0.5f, hb.height * 0.9f))
                 .setAlignment(0.5f, 0.5f, false)
                 .setLabel(headerText);

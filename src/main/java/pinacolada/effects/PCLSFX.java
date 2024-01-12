@@ -7,7 +7,6 @@ import extendedui.EUIUtils;
 import extendedui.utilities.EUIClassUtils;
 
 import java.util.Collection;
-import java.util.Collections;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLSFX {

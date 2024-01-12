@@ -1,24 +1,17 @@
 package pinacolada.resources;
 
-import basemod.ModLabeledToggleButton;
 import basemod.ModPanel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.evacipated.cardcrawl.modthespire.lib.ConfigUtils;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
-import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
-import extendedui.text.EUITextHelper;
 import extendedui.ui.EUIHoverable;
-import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.settings.ModSettingsToggle;
-import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIFontHelper;
 
 import java.io.File;
 import java.io.IOException;

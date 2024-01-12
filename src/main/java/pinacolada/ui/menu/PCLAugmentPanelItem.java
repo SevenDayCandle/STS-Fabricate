@@ -14,7 +14,6 @@ import extendedui.ui.controls.EUITutorialImagePage;
 import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLHotkeys;
@@ -77,7 +76,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
-        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+        FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 
     public void update() {

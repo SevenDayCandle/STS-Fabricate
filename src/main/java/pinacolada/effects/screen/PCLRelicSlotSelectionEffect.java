@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -14,7 +15,6 @@ import extendedui.EUIRM;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -29,7 +29,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffectWithCallback<PCLRelicS
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
-            .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
+            .setFont(FontHelper.topPanelAmountFont, 1f);
     public final PCLRelicSlotEditor slot;
     private final EUIRelicGrid grid = new EUIRelicGrid();
     private AbstractRelic selectedRelic;

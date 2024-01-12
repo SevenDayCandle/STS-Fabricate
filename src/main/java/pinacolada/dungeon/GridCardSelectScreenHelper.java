@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import com.megacrit.cardcrawl.ui.buttons.PeekButton;
@@ -16,7 +17,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
-import extendedui.utilities.EUIFontHelper;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class GridCardSelectScreenHelper {
             new EUIHitbox(Settings.WIDTH / 4.0F, 96.0F * Settings.scale, Settings.WIDTH / 2.0F, 48.0F * Settings.scale))
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.7f, 0.15f, true, false)
-            .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f);
+            .setFont(FontHelper.cardDescFont_N, 1f);
     private static FuncT1<Boolean, ArrayList<AbstractCard>> condition;
     private static FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     private static ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;

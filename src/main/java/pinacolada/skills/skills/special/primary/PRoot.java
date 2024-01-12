@@ -14,7 +14,6 @@ import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPower;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.*;

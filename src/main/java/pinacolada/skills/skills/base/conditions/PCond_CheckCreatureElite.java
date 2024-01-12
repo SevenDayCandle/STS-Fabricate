@@ -1,14 +1,9 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.screens.runHistory.RunHistoryPath;
-import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.monsters.PCLCardAlly;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

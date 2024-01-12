@@ -1,14 +1,10 @@
 package pinacolada.patches.dungeon;
 
-import com.evacipated.cardcrawl.modthespire.lib.*;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.megacrit.cardcrawl.neow.NeowReward;
-import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import javassist.CannotCompileException;
-import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
-import pinacolada.dungeon.CombatManager;
 
 public class NeowPatches {
     @SpirePatch(

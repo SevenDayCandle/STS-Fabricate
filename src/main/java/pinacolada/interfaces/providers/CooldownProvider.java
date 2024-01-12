@@ -3,7 +3,6 @@ package pinacolada.interfaces.providers;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.utilities.ColoredString;
 import pinacolada.dungeon.CombatManager;
 
 public interface CooldownProvider {

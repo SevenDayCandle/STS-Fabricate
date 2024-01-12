@@ -2,7 +2,8 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cardmods.*;
+import pinacolada.cardmods.PermanentDamagePercentModifier;
+import pinacolada.cardmods.TemporaryDamagePercentModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 

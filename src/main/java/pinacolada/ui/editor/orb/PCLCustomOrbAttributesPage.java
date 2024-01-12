@@ -3,6 +3,7 @@ package pinacolada.ui.editor.orb;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
@@ -12,7 +13,6 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
@@ -39,10 +39,10 @@ public class PCLCustomOrbAttributesPage extends PCLCustomGenericPage {
     public PCLCustomOrbAttributesPage(PCLCustomOrbEditScreen screen) {
         this.screen = screen;
 
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        this.header = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(screenW(0.5f), PCLCustomEditEntityScreen.START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.cardTitleFont, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
         timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
@@ -53,17 +53,17 @@ public class PCLCustomOrbAttributesPage extends PCLCustomGenericPage {
                     }
                 })
                 .setLabelFunctionForOption(DelayTiming::getTitle, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
                 .setCanAutosizeButton(true)
                 .setItems(DelayTiming.values())
                 .setTooltip(PGR.core.tooltips.timing);
 
         // Number editors
         float curW = START_X;
-        upgradeLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        upgradeLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(curW, screenH(0.7f) - MENU_HEIGHT * 0.8f, MENU_WIDTH / 4, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.6f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.topPanelAmountFont, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_upgrades)
                 .setTooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
@@ -82,14 +82,14 @@ public class PCLCustomOrbAttributesPage extends PCLCustomGenericPage {
         // Toggle editors
 
         applyFocusToPassiveToggle = new EUIToggle(new EUIHitbox(START_X, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setFont(FontHelper.cardDescFont_N, 0.9f)
                 .setText(PGR.core.strings.cedit_orbFocusPassive)
                 .setOnToggle(val -> screen.modifyBuilder((e) -> {
                     e.setApplyFocusToPassive(val);
                 }))
                 .setTooltip(new EUITooltip(PGR.core.strings.cedit_orbFocusPassive, PGR.core.strings.cetut_orbFocusPassive));
         applyFocusToEvokeToggle = new EUIToggle(new EUIHitbox(START_X, screenH(0.57f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setFont(FontHelper.cardDescFont_N, 0.9f)
                 .setText(PGR.core.strings.cedit_orbFocusEvoke)
                 .setOnToggle(val -> screen.modifyBuilder((e) -> {
                     e.setApplyFocusToEvoke(val);

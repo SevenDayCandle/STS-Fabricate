@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -19,7 +20,6 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.*;
 import pinacolada.resources.PCLPlayerData;
@@ -64,7 +64,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         canvas = new PCLLoadoutCanvas(this);
 
-        attributesText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
+        attributesText = new EUILabel(FontHelper.cardTitleFont,
                 new EUIHitbox(screenW(0.57f), screenH(0.84f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.loadout_attributesHeader)
                 .setFontScale(0.8f)
@@ -73,7 +73,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(),
                 new EUIHitbox(screenW(0.01f), screenH(0.93f), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
-                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_seriesEditor)
+                .setLabel(FontHelper.cardDescFont_N, 0.9f, PGR.core.strings.csel_seriesEditor)
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::openSeriesSelect);
 
@@ -85,7 +85,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 })
                 .setRowFunction((a, b, c, d) -> new EditDeleteDropdownRow<PCLLoadoutData, PCLLoadoutData>(a, b, c, c, d, f -> this.openPresetEditName(PGR.core.strings.cedit_renameItem, f), this::openPresetDelete))
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + scale(250))
-                .setHeader(EUIFontHelper.cardTooltipTitleFontNormal, 0.8f, Settings.CREAM_COLOR, EUIUtils.EMPTY_STRING)
+                .setHeader(FontHelper.tipHeaderFont, 0.8f, Settings.CREAM_COLOR, EUIUtils.EMPTY_STRING)
                 .setTooltip(PGR.core.strings.loadout_changePreset, PGR.core.strings.loadout_tutorialPreset);
         addPresetButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(screenW(0.7f), screenH(0.87f), scale(30), scale(30)))
                 .setOnClick(() -> this.openPresetCreate(PGR.core.strings.loadout_newPreset))
@@ -120,13 +120,13 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, screenH(0.7f))
-                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1);
+                .setFont(FontHelper.tipHeaderFont, 1);
 
         cardscountText = new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardsvalueText.hb.y + labelHeight * 1.4f)
-                .setFont(EUIFontHelper.cardTooltipTitleFontNormal, 1);
+                .setFont(FontHelper.tipHeaderFont, 1);
 
         final PCLBaseStatEditor.StatType[] statTypes = PCLBaseStatEditor.StatType.values();
         for (int i = 0; i < statTypes.length; i++) {

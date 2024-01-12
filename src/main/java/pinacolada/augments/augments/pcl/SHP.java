@@ -4,7 +4,6 @@ import pinacolada.annotations.VisibleAugment;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment

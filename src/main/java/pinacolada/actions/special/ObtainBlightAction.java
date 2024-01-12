@@ -2,7 +2,6 @@ package pinacolada.actions.special;
 
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.actions.PCLAction;
 import pinacolada.utilities.GameUtilities;
 

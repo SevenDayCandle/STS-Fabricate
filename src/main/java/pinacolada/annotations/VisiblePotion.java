@@ -1,9 +1,6 @@
 package pinacolada.annotations;
 
-import com.brashmonkey.spriter.Player;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import pinacolada.resources.PCLEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

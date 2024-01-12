@@ -2,6 +2,7 @@ package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -11,7 +12,6 @@ import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 
 public class PCLCustomFormEditor extends EUIBase {
@@ -29,10 +29,10 @@ public class PCLCustomFormEditor extends EUIBase {
         this.hb = hb;
         this.screen = screen;
 
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        this.header = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, hb.width, hb.height))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
+                .setFont(FontHelper.topPanelAmountFont, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(PGR.core.strings.cedit_form)
                 .setTooltip(PGR.core.strings.cedit_form, PGR.core.strings.cetut_primaryForm);
 
@@ -42,7 +42,7 @@ public class PCLCustomFormEditor extends EUIBase {
                         setValue(types.get(0));
                     }
                 })
-                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 0.9f);
+                .setFontForButton(FontHelper.topPanelAmountFont, 0.9f);
         formValues.setLabelFunctionForButton((items, strFunc) -> {
                     return items.size() > 0 ? strFunc.invoke(items.get(0)) + "/" + (formValues.size() - 1) : String.valueOf(formValues.size());
                 }, false)

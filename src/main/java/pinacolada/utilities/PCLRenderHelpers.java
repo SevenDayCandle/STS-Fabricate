@@ -13,9 +13,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUIFontHelper;
 import org.imgscalr.Scalr;
 import pinacolada.cards.base.PCLCard;
 
@@ -89,103 +87,36 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
         }
     }
 
-    public static BitmapFont getDescriptionFont(PCLCard card, float scaleModifier) {
-        BitmapFont result;
-        if (card.isPopup) {
-            result = EUIFontHelper.cardDescriptionFontLarge;
-            result.getData().setScale(card.drawScale * scaleModifier * 0.5f);
-        }
-        else {
-            result = EUIFontHelper.cardDescriptionFontNormal;
-            result.getData().setScale(card.drawScale * scaleModifier);
-        }
-
-        return result;
-    }
-
     public static BitmapFont getEnergyFont(PCLCard card) {
         BitmapFont result;
         if (card.isPopup) {
-            result = EUIFontHelper.energyFontLarge;
+            result = FontHelper.SCP_cardEnergyFont;
             result.getData().setScale(card.drawScale * 0.5f);
         }
         else {
-            result = EUIFontHelper.energyFont;
+            result = FontHelper.cardEnergyFont_L;
             result.getData().setScale(card.drawScale);
         }
 
         return result;
     }
 
-    public static BitmapFont getLargeAttributeFont(PCLCard card, float scaleMult) {
+    public static BitmapFont getEnergyFont(PCLCard card, float scaleMult) {
         BitmapFont result;
         if (card.isPopup) {
-            result = EUIFontHelper.cardIconFontVeryLarge;
-            result.getData().setScale(card.drawScale * 0.5f * scaleMult);
-        }
-        else {
-            result = EUIFontHelper.cardIconFontLarge;
-            result.getData().setScale(card.drawScale * scaleMult);
-        }
-
-        return result;
-    }
-
-    public static BitmapFont getSmallAttributeFont(PCLCard card, float scaleMult) {
-        BitmapFont result;
-        if (card.isPopup) {
-            result = EUIFontHelper.cardIconFontLarge;
+            result = FontHelper.SCP_cardEnergyFont;
             result.getData().setScale(card.drawScale * 0.45f * scaleMult);
         }
         else {
-            result = EUIFontHelper.cardIconFontSmall;
-            result.getData().setScale(card.drawScale * 0.9f * scaleMult);
+            result = FontHelper.cardEnergyFont_L;
+            result.getData().setScale(card.drawScale * 0.75f * scaleMult);
         }
 
         return result;
     }
 
     public static BitmapFont getSmallTextFont(PCLCard card, String text) {
-        float scaleModifier = 0.8f;
-        int length = text.length();
-        if (length > 20) {
-            scaleModifier -= 0.02f * (length - 20);
-            if (scaleModifier < 0.5f) {
-                scaleModifier = 0.5f;
-            }
-        }
-
-        BitmapFont result;
-        if (card.isPopup) {
-            result = EUIFontHelper.cardTitleFontLarge;
-            result.getData().setScale(card.drawScale * scaleModifier * 0.5f);
-        }
-        else {
-            // NOTE: this was FontHelper.cardTitleFont_small
-            result = EUIFontHelper.cardTitleFontSmall;
-            result.getData().setScale(card.drawScale * scaleModifier);
-        }
-
-        return result;
-    }
-
-    public static BitmapFont getTitleFont(PCLCard card) {
-        BitmapFont result;
-        final float scale = 1 / (Math.max(14f, card.name.length()) / 14f);
-        if (card.isPopup) {
-            result = EUIFontHelper.cardTitleFontLarge;
-            result.getData().setScale(card.drawScale * 0.5f * scale);
-        }
-        else {
-            result = EUIFontHelper.cardTitleFontNormal;
-            result.getData().setScale(card.drawScale * scale);
-        }
-
-        return result;
-    }
-
-    public static BitmapFont getsmalltextfontLegacy(PCLCard card, String text) {
-        float scaleModifier = 0.8f;
+        float scaleModifier = 0.7f;
         int length = text.length();
         if (length > 20) {
             scaleModifier -= 0.02f * (length - 20);
@@ -200,9 +131,23 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
             result.getData().setScale(card.drawScale * scaleModifier * 0.5f);
         }
         else {
-            // NOTE: this was FontHelper.cardTitleFont_small
-            result = EUIFontHelper.cardTitleFontSmall;
+            result = FontHelper.cardTitleFont;
             result.getData().setScale(card.drawScale * scaleModifier);
+        }
+
+        return result;
+    }
+
+    public static BitmapFont getTitleFont(PCLCard card) {
+        BitmapFont result;
+        final float scale = 1 / (Math.max(14f, card.name.length()) / 14f);
+        if (card.isPopup) {
+            result = FontHelper.SCP_cardTitleFont_small;
+            result.getData().setScale(card.drawScale * 0.5f * scale);
+        }
+        else {
+            result = FontHelper.cardTitleFont;
+            result.getData().setScale(card.drawScale * scale);
         }
 
         return result;

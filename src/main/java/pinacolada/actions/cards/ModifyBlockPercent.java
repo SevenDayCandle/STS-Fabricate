@@ -2,9 +2,7 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cardmods.PermanentBlockModifier;
 import pinacolada.cardmods.PermanentBlockPercentModifier;
-import pinacolada.cardmods.TemporaryBlockModifier;
 import pinacolada.cardmods.TemporaryBlockPercentModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;

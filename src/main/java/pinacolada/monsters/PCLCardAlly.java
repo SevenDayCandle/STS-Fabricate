@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -21,7 +22,6 @@ import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
 import pinacolada.cards.base.PCLCard;
@@ -206,7 +206,7 @@ public class PCLCardAlly extends PCLCardCreature {
 
                 AbstractCard card = preview != null ? preview.getCard() : null;
                 if (card != null) {
-                    BitmapFont font = EUIFontHelper.cardDescriptionFontNormal;
+                    BitmapFont font = FontHelper.cardDescFont_N;
                     font.getData().setScale(card.drawScale * 0.9f);
                     EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.rectangularButton.texture(), 0, -AbstractCard.RAW_H * 0.65f,
                             AbstractCard.IMG_WIDTH * 0.6f, font.getLineHeight() * 1.8f, Color.DARK_GRAY, 0.75f, 1);

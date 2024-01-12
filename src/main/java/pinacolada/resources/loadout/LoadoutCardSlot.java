@@ -2,9 +2,9 @@ package pinacolada.resources.loadout;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
-import pinacolada.cards.base.*;
-import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.utilities.GameUtilities;
 

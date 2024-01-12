@@ -2,7 +2,6 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cardmods.PermanentBlockModifier;
 import pinacolada.cardmods.PermanentDamageModifier;
 import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCard;

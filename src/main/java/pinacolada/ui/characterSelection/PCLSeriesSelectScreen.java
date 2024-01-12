@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -99,19 +100,19 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         loadoutEditor = new EUIButton(EUIRM.images.rectangularButton.texture(),
                 new EUIHitbox(screenW(0.01f), screenH(0.93f), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
-                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_deckEditor)
+                .setLabel(FontHelper.cardDescFont_N, 0.9f, PGR.core.strings.csel_deckEditor)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnClick(this::openLoadoutEditor);
 
         colorlessButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(loadoutEditor.hb.x, loadoutEditor.hb.y - scale(65), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.sui_showColorless, PGR.core.strings.sui_showColorlessInfo)
-                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.sui_showColorless)
+                .setLabel(FontHelper.cardDescFont_N, 0.9f, PGR.core.strings.sui_showColorless)
                 .setColor(new Color(0.5f, 0.3f, 0.8f, 1))
                 .setOnClick(this::previewColorless);
 
         relicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(colorlessButton.hb.x, colorlessButton.hb.y - scale(65), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.sui_relicPool, PGR.core.strings.sui_relicPoolInfo)
-                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.sui_relicPool)
+                .setLabel(FontHelper.cardDescFont_N, 0.9f, PGR.core.strings.sui_relicPool)
                 .setColor(new Color(0.8f, 0.3f, 0.5f, 1))
                 .setOnClick(this::previewRelics);
 
@@ -120,29 +121,29 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
                 .setAlignment(0.85f, 0.1f, true)
                 .setColors(panelColor, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 1f);
+                .setFont(EUIFontHelper.tooltipFont, 1f);
         startingDeck = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(4.5f), buttonWidth, screenH(0.10f)))
                 .setColors(panelColor, Settings.CREAM_COLOR)
                 .setAlignment(0.82f, 0.1f, true)
-                .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
+                .setFont(FontHelper.tipHeaderFont, 1);
         typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(6f), buttonWidth, screenH(0.12f)))
                 .setColors(panelColor, Settings.GOLD_COLOR)
                 .setAlignment(0.82f, 0.1f, true)
-                .setFont(EUIFontHelper.cardTipTitleFontBase, 1);
+                .setFont(FontHelper.tipHeaderFont, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(8.3f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_showCardPool)
+                .setLabel(FontHelper.buttonLabelFont, 0.8f, PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
         resetPoolButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9.1f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetPool)
+                .setLabel(FontHelper.buttonLabelFont, 0.8f, PGR.core.strings.sui_resetPool)
                 .setTooltip(PGR.core.strings.sui_resetPool, PGR.core.strings.sui_resetPoolDesc)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.ROYAL);
 
         resetBanButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9.9f), buttonWidth, buttonHeight)
-                .setLabel(EUIFontHelper.buttonFont, 0.8f, PGR.core.strings.sui_resetBan)
+                .setLabel(FontHelper.buttonLabelFont, 0.8f, PGR.core.strings.sui_resetBan)
                 .setTooltip(PGR.core.strings.sui_resetBan, PGR.core.strings.sui_resetBanDesc)
                 .setOnClick(this::unbanAll)
                 .setColor(Color.FIREBRICK);

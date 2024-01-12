@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUI;
@@ -16,7 +17,6 @@ import extendedui.interfaces.markers.CacheableCard;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
@@ -45,7 +45,7 @@ public class PCLCardRewardScreen extends EUIBase {
         upgradeToggle = new EUIToggle(new EUIHitbox(scale(256), scale(48f)))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setPosition(screenW(0.9f), screenH(0.65f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
+                .setFont(FontHelper.cardDescFont_L, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
     }

@@ -1,6 +1,5 @@
 package pinacolada.characters;
 
-import basemod.BaseMod;
 import basemod.ReflectionHacks;
 import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;

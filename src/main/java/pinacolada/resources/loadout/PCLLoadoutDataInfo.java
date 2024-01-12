@@ -4,11 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomLoadable;
 
 import java.io.Serializable;

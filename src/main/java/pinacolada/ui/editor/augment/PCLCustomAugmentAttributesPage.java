@@ -2,13 +2,13 @@ package pinacolada.ui.editor.augment;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLDynamicAugmentData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -29,18 +29,18 @@ public class PCLCustomAugmentAttributesPage extends PCLCustomGenericPage {
     public PCLCustomAugmentAttributesPage(PCLCustomAugmentEditScreen screen) {
         this.screen = screen;
 
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        this.header = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(screenW(0.5f), PCLCustomEditEntityScreen.START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.cardTitleFont, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
         // Number editors
         float curW = START_X;
-        upgradeLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        upgradeLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(curW, screenH(0.8f) - MENU_HEIGHT * 0.8f, MENU_WIDTH / 4, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.6f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.topPanelAmountFont, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_upgrades)
                 .setTooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;

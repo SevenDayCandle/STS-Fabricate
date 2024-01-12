@@ -85,7 +85,7 @@ public class PCLCustomOrbEditScreen extends PCLCustomEditEntityScreen<PCLCustomO
         super.preInitialize(slot);
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 1f)
+                .setFont(EUIFontHelper.tooltipFont, 1f)
                 .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT * 2);
         previewDescription.label.setSmartText(true);
     }

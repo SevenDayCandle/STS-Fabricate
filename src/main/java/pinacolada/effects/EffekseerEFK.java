@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import extendedui.EUIUtils;
 import extendedui.STSEffekseerManager;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.effects.vfx.EffekseerEffect;
 
 import java.io.IOException;

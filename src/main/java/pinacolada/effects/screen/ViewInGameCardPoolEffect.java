@@ -3,11 +3,11 @@ package pinacolada.effects.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUI;
@@ -103,7 +103,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
         final float buttonWidth = scale(256);
         final float buttonHeight = scale(48);
 
-        selectedCount = new EUILabel(EUIFontHelper.cardTipTitleFontBase, new EUIHitbox(xPos, Settings.HEIGHT * 0.85f, buttonWidth, buttonHeight * 2f))
+        selectedCount = new EUILabel(FontHelper.tipHeaderFont, new EUIHitbox(xPos, Settings.HEIGHT * 0.85f, buttonWidth, buttonHeight * 2f))
                 .setColor(Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f, true);
 
@@ -111,7 +111,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
                 .setLabel(PGR.core.strings.sui_viewPoolInstructions)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 1f);
+                .setFont(EUIFontHelper.tooltipFont, 1f);
 
         deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.54f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
@@ -135,7 +135,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
 
         upgradeToggle = new EUIToggle(new EUIHitbox(xPos, importButton.hb.y - importButton.hb.height * 2.5f, buttonWidth, buttonHeight))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
+                .setFont(FontHelper.cardDescFont_L, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
 

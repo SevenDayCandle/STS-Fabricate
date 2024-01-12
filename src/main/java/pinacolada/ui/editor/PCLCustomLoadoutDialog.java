@@ -54,14 +54,14 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
         idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(hb.x + hb.width / 4, hb.y + hb.height / 1.8f, MENU_WIDTH, MENU_HEIGHT))
                 .setOnComplete(this::validifyCardID)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
                 .setHeaderSpacing(1.1f)
                 .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
                 .setFont(FontHelper.cardTitleFont, 0.7f)
                 .setTooltip(PGR.core.strings.cedit_idSuffix, PGR.core.strings.cetut_idSuffix);
-        idWarning = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        idWarning = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(hb.x + hb.width / 4 + MENU_WIDTH, screenH(0.82f), MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Settings.RED_TEXT_COLOR)
@@ -71,7 +71,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(hb.x + hb.width / 4, idInput.hb.y - idInput.hb.height * 2f, MENU_WIDTH, MENU_HEIGHT))
                 .setOnComplete(this::updateName)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setHeaderSpacing(1.1f)
                 .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
@@ -85,7 +85,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
                         this.updateLanguage(languages.get(0));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, OptionsPanel.TEXT[13].replace(":", ""))
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, OptionsPanel.TEXT[13].replace(":", ""))
                 .setItems(Settings.GameLanguage.values())
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
@@ -105,7 +105,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
     protected EUIButton getCancelButton() {
         return new EUIButton(ImageMaster.OPTION_NO,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.85f, hb.height * 0.15f))
-                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[1])
+                .setLabel(FontHelper.cardTitleFont, 0.8f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getCancelValue());
@@ -121,7 +121,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
-                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[0])
+                .setLabel(FontHelper.cardTitleFont, 0.8f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getConfirmValue());
@@ -176,7 +176,7 @@ public class PCLCustomLoadoutDialog extends EUIDialog<PCLCustomLoadoutDialog> {
 
     private void updateLanguage(Settings.GameLanguage language) {
         activeLanguage = language;
-        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardTitleFontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
+        nameInput.setFont(language == Settings.language ? FontHelper.cardTitleFont : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
                 .setLabel(getStringsForLanguage(activeLanguage).NAME);
     }
 

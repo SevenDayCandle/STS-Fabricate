@@ -5,11 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import extendedui.EUIRM;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
-import pinacolada.blights.*;
 import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 

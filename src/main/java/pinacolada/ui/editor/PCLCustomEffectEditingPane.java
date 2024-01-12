@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
@@ -23,7 +24,6 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.BlightTier;
 import extendedui.utilities.CostFilter;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.CardFlag;
@@ -446,7 +446,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(labelFunc, false)
                 .setIsMultiSelect(multiselect)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
     }
@@ -460,7 +460,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(labelFunc, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
     }
@@ -478,7 +478,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelColorFunctionForOption(this::getColorForEffect)
                 .setClearButtonOptions(false, false)
                 .setCanAutosizeButton(true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
         effects.sortByLabel();
         effects.setActive(effects.size() > 1);
@@ -528,7 +528,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 , PCLCardTarget::getTitle)
                 .setOnChange(this::modifyTargets)
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_effectTarget);
@@ -555,7 +555,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(labelFunc, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
         dropdown.setLabelFunctionForButton((list, __) -> dropdown.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
@@ -712,9 +712,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerBoolean(String title, String desc, ActionT1<Boolean> onChange, boolean initial) {
-        float predictLength = EUITextHelper.getSmartWidth(EUIFontHelper.cardDescriptionFontNormal, title, Settings.WIDTH, 0f);
+        float predictLength = EUITextHelper.getSmartWidth(FontHelper.cardDescFont_N, title, Settings.WIDTH, 0f);
         registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.2f + predictLength, MENU_HEIGHT, MENU_WIDTH, 0))
-                        .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                        .setFont(FontHelper.cardDescFont_N, 0.9f)
                         .setText(title)
                         .setTooltip(desc != null ? new EUITooltip(title, desc) : null)
                 , onChange, initial);
@@ -819,7 +819,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(textFunc, smartText)
                 .setIsMultiSelect(multiSelect)
                 .setShouldPositionClearAtTop(positionClearAtTop)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);
         return registerDropdown(dropdown, selectedItems);
@@ -835,7 +835,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(textFunc, smartText)
                 .setIsMultiSelect(multiSelect)
                 .setShouldPositionClearAtTop(positionClearAtTop)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);
         return registerDropdown(dropdown, onChangeImpl, selectedItems);

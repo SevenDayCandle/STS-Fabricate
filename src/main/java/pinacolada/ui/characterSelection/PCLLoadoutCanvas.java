@@ -3,13 +3,13 @@ package pinacolada.ui.characterSelection;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUICanvas;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutBlightSlot;
 import pinacolada.resources.loadout.LoadoutCardSlot;
@@ -39,21 +39,21 @@ public class PCLLoadoutCanvas extends EUICanvas {
         this.screen = screen;
 
         final float buttonHeight = screenH(0.07f);
-        deckText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
+        deckText = new EUILabel(FontHelper.cardTitleFont,
                 new EUIHitbox(screenW(0.1f), BASE_HEIGHT, buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.loadout_deckHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.01f)
                 .autosize(1f, null);
 
-        relicText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
+        relicText = new EUILabel(FontHelper.cardTitleFont,
                 new EUIHitbox(screenW(0.1f), screenH(0.4f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.loadout_relicHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.01f)
                 .autosize(1f, null);
 
-        abilityText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
+        abilityText = new EUILabel(FontHelper.cardTitleFont,
                 new EUIHitbox(screenW(0.1f), screenH(0.2f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.csel_ability)
                 .setFontScale(0.8f)

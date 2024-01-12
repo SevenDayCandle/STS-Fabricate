@@ -11,7 +11,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.GridCardSelectScreenHelper;
 import pinacolada.resources.PGR;
-import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.ArrayList;
 

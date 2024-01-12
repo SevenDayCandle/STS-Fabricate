@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
@@ -78,7 +79,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f);
+                .setFont(FontHelper.cardDescFont_L, 0.5f);
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.53f, buttonHeight)
                 .setColor(Color.FIREBRICK)
@@ -124,7 +125,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                 .setLabel(getInfoText())
                 .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
+                .setFont(EUIFontHelper.tooltipFont, 0.9f);
 
         colorButtons = new EUIButtonList(14, screenW(0.09f), screenH(0.95f), EUIButtonList.BUTTON_W, EUIButtonList.BUTTON_H);
 

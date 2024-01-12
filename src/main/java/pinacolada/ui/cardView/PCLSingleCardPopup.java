@@ -24,7 +24,6 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -79,24 +78,24 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
-                .setLabel(EUIFontHelper.buttonFont, 0.75f, showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments)
+                .setLabel(FontHelper.buttonLabelFont, 0.75f, showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments)
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments));
 
-        this.maxUpgradesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
+        this.maxUpgradesLabel = new EUILabel(FontHelper.tipHeaderFont,
                 new EUIHitbox(screenW(0.008f), screenH(0.88f), screenW(0.21f), EUIBase.scale(32)))
                 .setAlignment(0.9f, 0.1f, true);
         this.maxUpgradesLabel.setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades);
 
-        this.maxCopiesLabel = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal,
+        this.maxCopiesLabel = new EUILabel(FontHelper.tipHeaderFont,
                 new EUIHitbox(screenW(0.008f), screenH(0.855f), screenW(0.21f), EUIBase.scale(32)))
                 .setAlignment(0.9f, 0.1f, true);
         this.maxCopiesLabel.setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies);
 
         this.changeVariantEditor = new PCLValueEditor(
                 new EUIHitbox(screenW(0.1f), screenH(0.8f), ICON_SIZE, ICON_SIZE), PGR.core.strings.scp_variant, this::changePreviewForm);
-        this.changeVariantEditor.header.setFont(EUIFontHelper.cardTooltipTitleFontNormal)
+        this.changeVariantEditor.header.setFont(FontHelper.tipHeaderFont)
                 .setAlignment(0.9f, 0.1f, false)
                 .setColor(Color.WHITE)
                 .setHitbox(new EUIHitbox(screenW(0.008f), screenH(0.76f), screenW(0.21f), EUIBase.scale(32)));
@@ -107,6 +106,11 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
                 .setTooltip(PGR.core.strings.scp_changeVariant, PGR.core.strings.scp_changeVariantTooltipAlways)
                 .setOnClick(this::changeCardForm)
                 .setColor(Color.FIREBRICK);
+    }
+
+    protected void actualClose() {
+        super.actualClose();
+        FontHelper.ClearSCPFontTextures();
     }
 
     private void applyAugment(PCLAugment augment, int ind) {

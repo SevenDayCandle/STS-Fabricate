@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;

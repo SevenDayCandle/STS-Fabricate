@@ -13,7 +13,6 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.card.ChooseCardsForModifierEffect;
 import pinacolada.effects.card.ChooseCardsToUpgradeEffect;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;

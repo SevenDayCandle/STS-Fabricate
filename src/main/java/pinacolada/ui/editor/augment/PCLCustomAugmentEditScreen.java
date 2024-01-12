@@ -74,7 +74,7 @@ public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCus
 
         previewDescription = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 0.8f)
+                .setFont(EUIFontHelper.tooltipFont, 0.8f)
                 .setPosition(Settings.WIDTH * 0.105f, CARD_Y - LABEL_HEIGHT * 2);
         previewDescription.label.setSmartText(true);
 

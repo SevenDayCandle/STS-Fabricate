@@ -26,7 +26,6 @@ import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIClassUtils;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.CombatManager;
@@ -84,7 +83,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         glyphEditors = new ArrayList<>();
         activeButtons = new ArrayList<>();
 
-        startingCardsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        startingCardsLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(POS_X, POS_Y, leftTextWidth, 50f * Settings.scale))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f, false)
@@ -93,10 +92,10 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         startingCardsListLabel = new EUITextBox(EUIRM.images.panelRounded.texture(),
                 new EUIHitbox(POS_X + ROW_OFFSET * 4f, POS_Y, leftTextWidth, 50f * Settings.scale))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GREEN_TEXT_COLOR)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
+                .setFont(FontHelper.topPanelAmountFont, 0.8f)
                 .setAlignment(0.5f, 0.5f, false);
 
-        ascensionGlyphsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        ascensionGlyphsLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(POS_X, POS_Y - startingCardsLabel.hb.height * 1.5f, leftTextWidth, 50f * Settings.scale))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f, false)
@@ -107,43 +106,43 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
         final float textScale = 0.8f;
 
         resetButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_resetTutorial)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_resetTutorial)
                 .setTooltip(PGR.core.strings.csel_resetTutorial, PGR.core.strings.csel_resetTutorialInfo)
                 .setColor(new Color(0.8f, 0.3f, 0.5f, 1))
                 .setOnClick(this::openResetDialog);
 
         infoButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_charTutorial)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_charTutorial)
                 .setTooltip(PGR.core.strings.csel_charTutorial, PGR.core.strings.csel_charTutorialInfo)
                 .setColor(new Color(0.5f, 0.3f, 0.8f, 1))
                 .setOnClick(this::openInfo);
 
         loadoutEditorButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_deckEditor)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_deckEditor)
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnClick(this::openLoadoutEditor);
 
         seriesButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_seriesEditor)
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::openSeriesSelect);
 
         editCardsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_seriesEditor)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_seriesEditor)
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
                 .setOnClick(this::previewCards);
 
         editRelicsButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.sui_relicPool)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.sui_relicPool)
                 .setTooltip(PGR.core.strings.sui_relicPool, PGR.core.strings.sui_relicPoolInfo)
                 .setColor(new Color(0.3f, 0.8f, 0.5f, 1))
                 .setOnClick(this::previewRelics);
 
         skinButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, textScale, PGR.core.strings.csel_skinEditor)
+                .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_skinEditor)
                 .setTooltip(PGR.core.strings.csel_skinEditor, PGR.core.strings.csel_skinEditorDesc)
                 .setColor(new Color(0.5f, 0.8f, 0.3f, 1))
                 .setOnClick(this::openSkinDialog);
@@ -457,32 +456,32 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
         EUITextHelper.renderSmart(sb, FontHelper.bannerNameFont, characterOption.name, infoX - 35.0F * Settings.scale, infoY + 350.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.CardIcons.hp.texture(), infoX - 10.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
-        EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
+        EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, CharacterOption.TEXT[4] + hp, infoX + 18.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.RED_TEXT_COLOR);
         EUIRenderHelpers.drawCentered(sb, Color.WHITE, PCLCoreImages.Tooltips.gold.texture(), infoX + 260.0F * Settings.scale, infoY + 230.0F * Settings.scale, Settings.scale * 48, Settings.scale * 48, 0.7f, 0);
-        EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, CharacterOption.TEXT[5] + gold, infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
+        EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, CharacterOption.TEXT[5] + gold, infoX + 290.0F * Settings.scale, infoY + 243.0F * Settings.scale, 10000.0F, 10000.0F, Settings.GOLD_COLOR);
 
-        if (cachedBlights != null && cachedBlights.size() > 0) {
-            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+        if (cachedBlights != null && !cachedBlights.isEmpty()) {
+            EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, PGR.core.strings.csel_ability, infoX - 20.0F * Settings.scale, infoY + 80.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractBlight r : cachedBlights) {
                 r.render(sb, false, Color.WHITE);
             }
         }
         if (cachedRelics != null) {
-            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 10.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
+            EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, PGR.core.strings.loadout_relicHeader, infoX - 20.0F * Settings.scale, infoY + 10.0F * Settings.scale, 99999.0F, 38.0F * Settings.scale, Settings.GOLD_COLOR);
             for (AbstractRelic r : cachedRelics) {
                 r.renderWithoutAmount(sb, Color.WHITE);
             }
         }
 
-        EUIFontHelper.cardTitleFontSmall.getData().setScale(0.8f);
-        EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, flavor, infoX - 26.0F * Settings.scale, infoY + 160.0F * Settings.scale, 10000.0F, 30.0F * Settings.scale, Settings.CREAM_COLOR);
+        FontHelper.topPanelAmountFont.getData().setScale(0.8f);
+        EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, flavor, infoX - 26.0F * Settings.scale, infoY + 160.0F * Settings.scale, 10000.0F, 30.0F * Settings.scale, Settings.CREAM_COLOR);
         if (unlocksRemaining > 0) {
-            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, unlocksRemaining + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 80.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, unlocksRemaining + CharacterOption.TEXT[6], infoX - 26.0F * Settings.scale, infoY - 80.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
             int unlockProgress = UnlockTracker.getCurrentProgress(characterOption.c.chosenClass);
             int unlockCost = UnlockTracker.getCurrentScoreCost(characterOption.c.chosenClass);
-            EUITextHelper.renderSmart(sb, EUIFontHelper.cardTitleFontSmall, unlockProgress + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
+            EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, unlockProgress + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
         }
-        EUIRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
+        EUIRenderHelpers.resetFont(FontHelper.topPanelAmountFont);
     }
 
     // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly

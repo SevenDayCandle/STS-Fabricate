@@ -8,7 +8,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {

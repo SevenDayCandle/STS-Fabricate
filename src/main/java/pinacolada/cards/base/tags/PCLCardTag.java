@@ -9,13 +9,13 @@ import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
@@ -379,12 +379,12 @@ public enum PCLCardTag implements TooltipProvider {
         }
         else if (tagCount > 1) {
             String text = String.valueOf(tagCount);
-            EUIFontHelper.cardTitleFontSmall.getData().setScale(card.drawScale * 0.6f);
+            FontHelper.topPanelAmountFont.getData().setScale(card.drawScale * 0.6f);
             float offX = AbstractCard.RAW_W * 0.5f;
             offY = AbstractCard.RAW_H * 0.42f + offset_y;
             PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), offX, offY, 96, 64, Color.WHITE, alpha, 0.35f);
-            PCLRenderHelpers.writeOnCard(sb, card, EUIFontHelper.cardTitleFontSmall, text, offX, offY, Settings.CREAM_COLOR, false);
-            PCLRenderHelpers.resetFont(EUIFontHelper.cardTitleFontSmall);
+            PCLRenderHelpers.writeOnCard(sb, card, FontHelper.topPanelAmountFont, text, offX, offY, Settings.CREAM_COLOR, false);
+            PCLRenderHelpers.resetFont(FontHelper.topPanelAmountFont);
         }
 
         return HEIGHT;

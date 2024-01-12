@@ -1,10 +1,6 @@
 package pinacolada.skills;
 
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -16,7 +12,6 @@ import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.augment.PCLCustomAugmentEditScreen;
 import pinacolada.ui.editor.blight.PCLCustomBlightEditScreen;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
-import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.ui.editor.potion.PCLCustomPotionEditScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;

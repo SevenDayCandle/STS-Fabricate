@@ -35,7 +35,7 @@ public class PCLAugmentViewer extends EUIHoverable {
                 .setFontScale(0.85f)
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
-        augmentDescription = new EUILabel(EUIFontHelper.cardTooltipFont, new RelativeHitbox(hb, hb.width, hb.height, augmentButton.hb.width * 2.8f, -augmentTitle.hb.height))
+        augmentDescription = new EUILabel(EUIFontHelper.tooltipFont, new RelativeHitbox(hb, hb.width, hb.height, augmentButton.hb.width * 2.8f, -augmentTitle.hb.height))
                 .setAlignment(0.5f, 0.01f)
                 .setSmartText(true);
         this.card = card;

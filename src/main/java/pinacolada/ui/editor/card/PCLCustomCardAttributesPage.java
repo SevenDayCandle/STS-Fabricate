@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -13,7 +14,6 @@ import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -59,17 +59,17 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         this.screen = screen;
         availableAffinities = getEligibleAffinities(screen.currentSlot.slotColor);
 
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        this.header = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(screenW(0.5f), PCLCustomEditEntityScreen.START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.cardTitleFont, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
 
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
                 .setOnChange(this::modifyTags)
                 .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIconForced() + " " + item.tag.getTooltip().title, true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
                 .setCanAutosize(true, true);
         tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
@@ -82,7 +82,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(this::modifyTargets)
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTargets(screen.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
@@ -94,17 +94,17 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                     }
                 })
                 .setLabelFunctionForOption(DelayTiming::getTitle, false)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
                 .setCanAutosizeButton(true)
                 .setItems(DelayTiming.values())
                 .setTooltip(PGR.core.tooltips.timing);
 
         // Number editors
         float curW = START_X;
-        upgradeLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        upgradeLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(curW, screenH(0.65f) - MENU_HEIGHT * 0.8f, MENU_WIDTH / 4, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.6f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.topPanelAmountFont, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_upgrades)
                 .setTooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount);
         curW += SPACING_WIDTH;
@@ -155,10 +155,10 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         // Affinity editors
 
         curW = START_X;
-        upgradeLabel2 = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        upgradeLabel2 = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(curW, screenH(0.52f) - MENU_HEIGHT * 0.8f, MENU_WIDTH / 4, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.6f).setColor(Color.LIGHT_GRAY)
+                .setFont(FontHelper.topPanelAmountFont, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_upgrades)
                 .setTooltip(upgradeLabel.tooltip);
         boolean canShowLabels = availableAffinities.size() > 0;

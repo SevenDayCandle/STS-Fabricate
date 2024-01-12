@@ -3,6 +3,7 @@ package pinacolada.ui.editor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
@@ -48,7 +49,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         this.baseText = title;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge, hb)
+        this.header = new EUILabel(FontHelper.cardTitleFont, hb)
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.75f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
@@ -57,11 +58,11 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cetut_nodeTutorial)
                 .setAlignment(0.75f, 0.05f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(EUIFontHelper.cardTipBodyFont, 0.85f);
+                .setFont(EUIFontHelper.tooltipFont, 0.85f);
         descButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.6f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_editDesc)
+                .setLabel(FontHelper.buttonLabelFont, 0.8f, PGR.core.strings.cedit_editDesc)
                 .setTooltip(PGR.core.strings.cedit_editDesc, PGR.core.strings.cetut_editDesc)
                 .setOnClick(this::openDescDialog);
         this.canDragScreen = false;

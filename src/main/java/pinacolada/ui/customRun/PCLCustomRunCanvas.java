@@ -89,22 +89,22 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setColor(Settings.GOLD_COLOR)
                 .setLabel(MenuButton.TEXT[12]);
 
-        trophiesLabel = new EUILabel(FontHelper.tipBodyFont, new EUIHitbox(screenW(0.3f), screenH(0.05f)))
+        trophiesLabel = new EUILabel(EUIFontHelper.tooltipFont, new EUIHitbox(screenW(0.3f), screenH(0.05f)))
                 .setColor(Settings.RED_TEXT_COLOR)
                 .setLabel(CustomModeScreen.TEXT[1]);
-        selectedCharacterLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall, new EUIHitbox(screenW(0.18f), screenH(0.05f)))
+        selectedCharacterLabel = new EUILabel(FontHelper.topPanelAmountFont, new EUIHitbox(screenW(0.18f), screenH(0.05f)))
                 .setColor(Settings.BLUE_TEXT_COLOR);
 
         editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewCardPool)
+                .setLabel(FontHelper.buttonLabelFont, 1f, EUIRM.strings.uipool_viewCardPool)
                 .setOnClick(this::openCardPool);
 
         editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewRelicPool)
+                .setLabel(FontHelper.buttonLabelFont, 1f, EUIRM.strings.uipool_viewRelicPool)
                 .setOnClick(this::openRelicPool);
 
         editLoadoutButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, PGR.core.strings.csel_deckEditor)
+                .setLabel(FontHelper.buttonLabelFont, 1f, PGR.core.strings.csel_deckEditor)
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setColor(Color.FOREST)
                 .setOnClick(this::openLoadoutEditor);
@@ -113,7 +113,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         RunModStrings endingActStrings = PGR.getRunModStrings(MOD_THE_ENDING);
 
         endlessToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(endlessStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isEndless = v;
@@ -121,7 +121,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endlessStrings.NAME, endlessStrings.DESCRIPTION);
 
         endingActToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(endingActStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isFinalActAvailable = v;
@@ -129,7 +129,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endingActStrings.NAME, endingActStrings.DESCRIPTION);
 
         customCardToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customCards)
                 .setOnToggle(v -> {
                     screen.allowCustomCards = v;
@@ -138,7 +138,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customCards, PGR.core.strings.misc_customCardsDesc);
 
         customRelicToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customRelics)
                 .setOnToggle(v -> {
                     screen.allowCustomRelics = v;
@@ -147,7 +147,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customRelics, PGR.core.strings.misc_customRelicsDesc);
 
         customPotionToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customPotions)
                 .setOnToggle(v -> {
                     screen.allowCustomPotions = v;
@@ -156,7 +156,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customPotions, PGR.core.strings.misc_customPotionsDesc);
 
         customBlightToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customBlights)
                 .setOnToggle(v -> {
                     screen.allowCustomBlights = v;
@@ -165,7 +165,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customBlights, PGR.core.strings.misc_customBlightsDesc);
 
         customAugmentToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customAugment)
                 .setOnToggle(v -> {
                     screen.allowAugments = v;
@@ -174,7 +174,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customAugment, PGR.core.strings.misc_customAugmentDesc);
 
         allowLoadoutToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 0.475f)
                 .setText(PGR.core.strings.misc_customLoadout)
                 .setOnToggle(v -> {
                     screen.allowLoadout = v;
@@ -184,20 +184,20 @@ public class PCLCustomRunCanvas extends EUICanvas {
         seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.greySquare.texture(),
                 new EUIHitbox(scale(280), scale(48)))
                 .setOnComplete(screen::setSeed)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[7])
+                .setHeader(FontHelper.topPanelAmountFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[7])
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.9f);
+                .setFont(FontHelper.topPanelAmountFont, 0.9f);
         seedInput.header.setAlignment(1f, 0);
 
         ascensionEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], this::setAscension)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
+                .setHeader(FontHelper.topPanelAmountFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");
         ascensionEditor.header.setAlignment(0.4f, 0.25f);
 
         augmentChanceEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), PGR.core.strings.options_augmentChance, this::setAugmentChance)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.85f, Settings.GOLD_COLOR, PGR.core.strings.options_augmentChance)
+                .setHeader(FontHelper.topPanelAmountFont, 0.85f, Settings.GOLD_COLOR, PGR.core.strings.options_augmentChance)
                 .setLimits(0, 100)
                 .setTooltip(PGR.core.strings.options_augmentChance, PGR.core.strings.optionDesc_augmentChance);
         augmentChanceEditor.header.setAlignment(0.4f, 0.25f);
@@ -206,7 +206,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setRowFunction(PCLCustomModDropdownRow::new)
                 .setOnChange(this::onUpdateModifiers)
                 .setIsMultiSelect(true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
+                .setHeader(FontHelper.topPanelAmountFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
 
 

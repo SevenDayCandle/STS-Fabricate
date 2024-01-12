@@ -1,16 +1,11 @@
 package pinacolada.actions.player;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.GainPennyEffect;
 import pinacolada.actions.PCLAction;
-import pinacolada.actions.cards.MoveCards;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.patches.actions.ApplyPowerActionPatches;
 
 // Copied and modified from STS-AnimatorMod
 public class GainOrLoseGoldAction extends PCLAction<Integer> {

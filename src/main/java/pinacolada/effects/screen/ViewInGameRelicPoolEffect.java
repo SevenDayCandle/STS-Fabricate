@@ -22,7 +22,6 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.utilities.EUIFontHelper;
 import extendedui.utilities.RelicInfo;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
@@ -132,7 +131,7 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
 
         upgradeToggle = new EUIToggle(new EUIHitbox(xPos, importButton.hb.y - importButton.hb.height * 2.5f, buttonWidth, buttonHeight))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
-                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
+                .setFont(FontHelper.cardDescFont_L, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
 

@@ -6,12 +6,8 @@ import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.NestedAction;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.patches.actions.ApplyPowerActionPatches;
-import pinacolada.powers.PCLPointerPower;
 import pinacolada.powers.PCLPowerData;
 
 public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {

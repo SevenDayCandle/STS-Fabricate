@@ -15,9 +15,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PFacetCond;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.traits.*;
-import pinacolada.skills.skills.base.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
-import pinacolada.skills.skills.base.traits.PTrait_HP;
 
 public abstract class PTrait<T extends PField> extends PSkill<T> {
     protected boolean conditionMetCache;

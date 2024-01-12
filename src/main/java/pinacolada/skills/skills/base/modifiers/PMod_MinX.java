@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;

@@ -3,6 +3,7 @@ package pinacolada.ui.menu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CustomCardFilterModule;
 import extendedui.ui.EUIBase;
@@ -10,7 +11,6 @@ import extendedui.ui.cardFilter.CardKeywordFilters;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinity;
@@ -37,9 +37,9 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     public PCLAffinityPoolModule(CardKeywordFilters filters) {
         this.filters = filters;
 
-        affinitiesSectionLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        affinitiesSectionLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(0, 0, scale(48), scale(48)))
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
+                .setFont(FontHelper.topPanelAmountFont, 0.8f)
                 .setLabel(PGR.core.tooltips.affinityGeneral.title)
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.0f, false);

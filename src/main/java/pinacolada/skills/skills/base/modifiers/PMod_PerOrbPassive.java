@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
@@ -13,11 +12,9 @@ import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.ui.editor.orb.PCLCustomOrbEditScreen;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMod_PerOrbPassive extends PMod_Per<PField_Orb> {

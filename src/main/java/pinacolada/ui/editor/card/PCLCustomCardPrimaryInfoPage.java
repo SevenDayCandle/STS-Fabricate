@@ -71,7 +71,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditScreen effect) {
         this.effect = effect;
 
-        this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,
+        this.header = new EUILabel(FontHelper.cardTitleFont,
                 new EUIHitbox(screenW(0.5f), PCLCustomEditEntityScreen.START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
@@ -80,14 +80,14 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(this::validifyCardID)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
                 .setHeaderSpacing(1.1f)
                 .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
                 .setFont(FontHelper.cardTitleFont, 0.7f)
                 .setTooltip(PGR.core.strings.cedit_idSuffix, PGR.core.strings.cetut_idSuffix);
-        idWarning = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        idWarning = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(START_X + MENU_WIDTH * 2.5f, screenH(0.82f), MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Settings.RED_TEXT_COLOR)
@@ -99,7 +99,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnComplete(s -> {
                     effect.modifyAllBuilders((e, i) -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setHeaderSpacing(1.1f)
                 .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
@@ -113,7 +113,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                         this.updateLanguage(languages.get(0));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, OptionsPanel.TEXT[13].replace(":", ""))
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, OptionsPanel.TEXT[13].replace(":", ""))
                 .setItems(Settings.GameLanguage.values())
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
@@ -124,7 +124,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                         effect.modifyAllBuilders((e, i) -> e.setRarity(rarities.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setItems(getEligibleRarities())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
@@ -136,7 +136,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                         effect.refreshPages();
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTypes(effect.getBuilder().cardColor))
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
@@ -145,7 +145,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders((e, i) -> e.setFlags(selectedSeries));
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
                 .setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor))
@@ -163,7 +163,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setOnChange(selectedSeries -> {
                     setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null);
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
                 .setTooltip(PGR.core.strings.sui_seriesUI, "");
@@ -208,14 +208,14 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 })
                 .setTooltip(PGR.core.strings.loadout_reset, "");
         uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.24f), screenH(0.35f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setFont(FontHelper.cardDescFont_N, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
         soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.34f), screenH(0.35f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
+                .setFont(FontHelper.cardDescFont_N, 0.9f)
                 .setText(PGR.core.tooltips.soulbound.title)
                 .setOnToggle(val -> effect.modifyAllBuilders((e, i) -> {
                     e.setRemovableFromDeck(!val);
@@ -453,7 +453,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     private void updateLanguage(Settings.GameLanguage language) {
         activeLanguage = language;
-        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardTitleFontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
+        nameInput.setFont(language == Settings.language ? FontHelper.cardTitleFont : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
                 .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
     }
 

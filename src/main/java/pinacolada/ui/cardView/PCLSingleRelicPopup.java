@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -17,7 +19,6 @@ import extendedui.text.EUITextHelper;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIClassUtils;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
 
 import java.util.ArrayList;
@@ -41,6 +42,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
 
     public PCLSingleRelicPopup() {
         super(new EUIHitbox(550.0F * Settings.scale, 680.0F * Settings.scale));
+    }
+
+    protected void actualClose() {
+        super.actualClose();
+        FontHelper.ClearSRVFontTextures();
     }
 
     @Override
@@ -166,11 +172,11 @@ public class PCLSingleRelicPopup extends PCLSingleItemPopup<AbstractRelic, Abstr
 
         this.renderRelicImage(sb);
 
-        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontLarge, relicName, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F + 270.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
-        FontHelper.renderWrappedText(sb, EUIFontHelper.cardDescriptionFontNormal, relicRarity, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F + 235.0F * Settings.scale, 9999.0F, relicRarityColor, 1.0F);
+        FontHelper.renderWrappedText(sb, FontHelper.cardDescFont_L, relicName, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F + 270.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
+        FontHelper.renderWrappedText(sb, FontHelper.cardDescFont_N, relicRarity, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F + 235.0F * Settings.scale, 9999.0F, relicRarityColor, 1.0F);
 
-        float height = EUITextHelper.getSmartHeight(EUIFontHelper.cardDescriptionFontNormal, relicDescription, DESC_LINE_WIDTH, DESC_LINE_SPACING) / 2.0F;
-        EUITextHelper.renderSmart(sb, EUIFontHelper.cardDescriptionFontNormal, relicDescription, (float) Settings.WIDTH / 2.0F - 200.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 140.0F * Settings.scale - height, DESC_LINE_WIDTH, DESC_LINE_SPACING, Settings.CREAM_COLOR);
+        float height = EUITextHelper.getSmartHeight(FontHelper.cardDescFont_N, relicDescription, DESC_LINE_WIDTH, DESC_LINE_SPACING) / 2.0F;
+        EUITextHelper.renderSmart(sb, FontHelper.cardDescFont_N, relicDescription, (float) Settings.WIDTH / 2.0F - 200.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 140.0F * Settings.scale - height, DESC_LINE_WIDTH, DESC_LINE_SPACING, Settings.CREAM_COLOR);
 
         FontHelper.renderWrappedText(sb, FontHelper.SRV_quoteFont, relicFlavor, (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F - 310.0F * Settings.scale, DESC_LINE_WIDTH, Settings.CREAM_COLOR, 1.0F);
 

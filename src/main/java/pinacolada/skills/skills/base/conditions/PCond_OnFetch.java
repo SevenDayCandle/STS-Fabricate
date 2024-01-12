@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.interfaces.subscribers.OnCardFetchedSubscriber;
-import pinacolada.interfaces.subscribers.OnCardPurgedSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

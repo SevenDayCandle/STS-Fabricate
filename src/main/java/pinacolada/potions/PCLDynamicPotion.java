@@ -1,11 +1,7 @@
 package pinacolada.potions;
 
-import com.megacrit.cardcrawl.localization.CardStrings;
-import com.megacrit.cardcrawl.localization.PotionStrings;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 

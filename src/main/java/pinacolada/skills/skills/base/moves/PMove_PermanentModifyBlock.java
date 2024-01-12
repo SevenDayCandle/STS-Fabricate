@@ -1,24 +1,15 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyBlock;
 import pinacolada.actions.cards.ModifyCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cardmods.PermanentBlockModifier;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.effects.PCLEffects;
-import pinacolada.effects.card.ChooseCardsForModifierEffect;
-import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModify;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMove_PermanentModifyBlock extends PMove_PermanentModify {

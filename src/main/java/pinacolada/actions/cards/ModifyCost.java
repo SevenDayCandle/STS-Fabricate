@@ -2,11 +2,7 @@ package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cardmods.PermanentCostModifier;
-import pinacolada.cardmods.PermanentDamagePercentModifier;
 import pinacolada.cardmods.TemporaryCostModifier;
-import pinacolada.cardmods.TemporaryDamagePercentModifier;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.utilities.GameUtilities;
 
 public class ModifyCost extends ModifyCard {
 

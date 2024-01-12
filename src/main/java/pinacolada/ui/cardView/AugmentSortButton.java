@@ -1,6 +1,7 @@
 package pinacolada.ui.cardView;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT2;
@@ -9,7 +10,6 @@ import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 
 public class AugmentSortButton extends EUIButton {
@@ -22,7 +22,7 @@ public class AugmentSortButton extends EUIButton {
     public AugmentSortButton(EUIHitbox hitbox, ActionT2<Type, Boolean> onSort) {
         super(EUIRM.images.rectangularButton.texture(), hitbox);
         this.onSort = onSort;
-        setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.7f, sortType.getText());
+        setLabel(FontHelper.cardDescFont_N, 0.7f, sortType.getText());
         setOnClick(this::changeSorting);
 
         sortDirectionToggle = new EUIToggle(new RelativeHitbox(hitbox, scale(48), scale(48), hitbox.width + scale(48), hitbox.height * 0.5f))

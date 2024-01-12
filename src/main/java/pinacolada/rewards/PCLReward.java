@@ -4,22 +4,13 @@ import basemod.abstracts.CustomReward;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.daily.mods.Binary;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.helpers.ModHelper;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLReward extends CustomReward {

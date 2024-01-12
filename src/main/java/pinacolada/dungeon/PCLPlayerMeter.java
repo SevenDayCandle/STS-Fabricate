@@ -17,7 +17,6 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

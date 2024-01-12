@@ -72,15 +72,19 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
                 .setIsPopupCompatible(true))
                 .setOnScroll(this::onScroll);
 
-        this.artAuthorLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
+        this.artAuthorLabel = new EUILabel(EUIFontHelper.tooltipFont,
                 new EUIHitbox(screenW(0.008f), screenH(0.91f), screenW(0.21f), screenH(0.07f)))
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_artAuthor);
 
-        this.whatModLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
+        this.whatModLabel = new EUILabel(EUIFontHelper.tooltipFont,
                 new EUIHitbox(screenW(0.008f), screenH(0.89f), screenW(0.21f), screenH(0.07f)))
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_artAuthor);
+    }
+
+    protected void actualClose() {
+        close();
     }
 
     public void close() {
@@ -213,14 +217,14 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
             if (!this.popupHb.hovered &&
                     !this.prevButton.hb.hovered && !this.nextButton.hb.hovered &&
                     !this.scrollBar.hb.hovered && !isHovered()) {
-                close();
+                actualClose();
                 InputHelper.justClickedLeft = false;
             }
         }
         else if (InputHelper.pressedEscape || CInputActionSet.cancel.isJustPressed()) {
             CInputActionSet.cancel.unpress();
             InputHelper.pressedEscape = false;
-            close();
+            actualClose();
         }
 
         if (this.prevItem != null && InputActionSet.left.isJustPressed()) {

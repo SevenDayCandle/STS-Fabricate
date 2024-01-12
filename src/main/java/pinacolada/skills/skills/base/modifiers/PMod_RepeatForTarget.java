@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -13,7 +12,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveMod;
-import pinacolada.skills.skills.PMathMod;
 
 // TODO split into a new type of node along with PMod_Repeat
 @VisibleSkill

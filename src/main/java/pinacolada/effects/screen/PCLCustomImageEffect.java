@@ -13,11 +13,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import com.megacrit.cardcrawl.screens.CombatRewardScreen;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
-import extendedui.EUIInputManager;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -25,7 +24,6 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
@@ -92,41 +90,41 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         targetHeight = imageHeight;
         renderer = new ShapeRenderer();
 
-        instructionsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
+        instructionsLabel = new EUILabel(FontHelper.topPanelAmountFont,
                 new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.1f, buttonWidth * 2f, buttonHeight))
                 .setAlignment(0.5f, 0f, true)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
+                .setFont(FontHelper.topPanelAmountFont, 0.8f)
                 .setLabel(EUIUtils.format(PGR.core.strings.cetut_imageSelect, targetWidth, targetHeight));
 
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.6f, button_cY)
                 .setColor(Color.FIREBRICK)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick((ActionT0) this::complete);
 
         saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[0])
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, GridCardSelectScreen.TEXT[0])
                 .setInteractable(false)
                 .setOnClick(this::commit);
 
         pasteButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_paste)
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_paste)
                 .setOnClick(this::getImageFromClipboard);
 
         selectExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, pasteButton.hb.y + pasteButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFromCard)
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_loadFromCard)
                 .setOnClick(this::selectExistingCards);
 
         loadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFile)
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_loadFile)
                 .setOnClick(this::getImageFromFileDialog);
 
         colorPicker = new EUIDialogColorPicker(new EUIHitbox(Settings.WIDTH * 0.7f, (Settings.HEIGHT - EUIBase.scale(800)) / 2f, EUIBase.scale(460), EUIBase.scale(800)), EUIUtils.EMPTY_STRING, EUIUtils.EMPTY_STRING);
@@ -160,7 +158,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         target2Editor.setActive(false);
 
         tintToggle = (EUIToggle) new EUIToggle(new EUIHitbox(cancelButton.hb.x + cancelButton.hb.width * 0.2f, anchor1Editor.hb.y + anchor1Editor.hb.height + labelHeight * 2f, buttonWidth, buttonHeight))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f)
+                .setFont(FontHelper.cardDescFont_N, 1f)
                 .setText(PGR.core.strings.cedit_enableTint)
                 .setOnToggle(this::setEnableTint)
                 .setTooltip(PGR.core.strings.cedit_enableTint, PGR.core.strings.cedit_tintDesc);

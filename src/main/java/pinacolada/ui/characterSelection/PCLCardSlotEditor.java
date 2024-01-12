@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
 import extendedui.ui.EUIHoverable;
@@ -12,7 +13,6 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.LoadoutCardSlot;
@@ -49,17 +49,17 @@ public class PCLCardSlotEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
+                .setFont(FontHelper.topPanelAmountFont, 1f);
 
         cardamountText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new OriginRelativeHitbox(hb, AbstractCard.IMG_HEIGHT * 0.15f, ITEM_HEIGHT, hb.width, 0))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
+                .setFont(FontHelper.cardTitleFont, 1f);
 
         nameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new OriginRelativeHitbox(cardamountText.hb, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT, cardamountText.hb.width, 0))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
+                .setFont(FontHelper.cardTitleFont, 1f);
 
         decrementButton = new EUIButton(EUIRM.images.minus.texture(), new OriginRelativeHitbox(nameText.hb, BUTTON_SIZE, BUTTON_SIZE, nameText.hb.width, BUTTON_SIZE / 4))
                 .setOnClick(() -> {

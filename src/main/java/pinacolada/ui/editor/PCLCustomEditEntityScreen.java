@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -23,7 +24,6 @@ import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
-import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -236,7 +236,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         EUIButton b = new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, PAGE_SIZE * 2, PAGE_SIZE * 0.7f))
                 .setPosition(BUTTON_START_X + ((i + 0.288f) * 2 * PAGE_SIZE), (PAGE_SIZE * 2.6f))
                 .setOnClick(pg, this::openPage)
-                .setLabel(EUIFontHelper.buttonFont, 0.6f, tip.title)
+                .setLabel(FontHelper.buttonLabelFont, 0.6f, tip.title)
                 .setTooltip(tip);
         pg.setButton(b);
         return b;
@@ -392,25 +392,25 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         cancelButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(BUTTON_WIDTH * 0.6f, BUTTON_HEIGHT)
                 .setColor(Color.FIREBRICK)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::end);
 
         saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH * 1.16f, BUTTON_HEIGHT * 1.31f)
                 .setPosition(Settings.WIDTH - BUTTON_WIDTH * 0.85f, BUTTON_HEIGHT)
                 .setColor(Color.FOREST)
-                .setLabel(EUIFontHelper.buttonFont, 1f, GridCardSelectScreen.TEXT[0])
+                .setLabel(FontHelper.buttonLabelFont, 1f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::save);
 
         undoButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + LABEL_HEIGHT * 1.8f)
                 .setColor(Color.WHITE)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_undo)
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_undo)
                 .setTooltip(PGR.core.strings.cedit_undo, PGR.core.strings.cetut_undo)
                 .setOnClick(this::undo);
 
         addPageButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, PAGE_SIZE * 1.8f, PAGE_SIZE * 0.7f))
                 .setColor(Color.FOREST)
-                .setLabel(EUIFontHelper.buttonFont, 0.6f, PGR.core.strings.cedit_newEffect)
+                .setLabel(FontHelper.buttonLabelFont, 0.6f, PGR.core.strings.cedit_newEffect)
                 .setOnClick(this::openContextMenuForNewEffect)
                 .setTooltip(new EUITooltip(PGR.core.strings.cedit_newEffect));
 
@@ -418,7 +418,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setPosition(undoButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
                 .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
-                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
+                .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_loadImage)
                 .setOnClick(this::editImage);
 
         formEditor = new PCLCustomFormEditor(

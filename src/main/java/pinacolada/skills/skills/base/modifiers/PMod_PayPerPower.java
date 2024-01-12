@@ -3,7 +3,6 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -25,7 +24,6 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @VisibleSkill
 public class PMod_PayPerPower extends PActiveMod<PField_Power> {

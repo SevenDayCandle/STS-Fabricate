@@ -1,10 +1,7 @@
 package pinacolada.interfaces.markers;
 
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.skills.PSkill;
 
 // Custom cards do not have inherent cardStrings so checks on those (e.g. FlavorText) should be skipped

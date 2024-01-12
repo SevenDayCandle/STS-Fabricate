@@ -858,7 +858,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public String getHPString() {
-        return String.valueOf(currentHealth);
+        return String.valueOf(currentHealth) + "/" + heal;
     }
 
     public Color getHPStringColor() {
@@ -1901,40 +1901,25 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    protected void renderAttributeBannerWithText(SpriteBatch sb, TextureCache icon, String text, String suffix, Color textColor, float offsetX, float offsetY, float offsMult, float scaleMult, float sign, float offsetIconX) {
+    protected void renderAttributeBannerWithText(SpriteBatch sb, TextureCache icon, String text, Color textColor, float offsetX, float offsetY, float offsMult, float scaleMult, float sign, float offsetIconX) {
         renderAttributeBanner(sb, icon, sign, offsetIconX);
 
-        final float suffix_scale = scaleMult * 0.7f;
-        BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
-        largeFont.getData().setScale(this.isPopup ? 0.5f : 1);
-
-        float text_width = offsMult * EUITextHelper.getTextWidth(largeFont, text) / Settings.scale;
+        BitmapFont largeFont = PCLRenderHelpers.getEnergyFont(this, scaleMult);
+        float text_width = offsMult * (isPopup ? 0.25f : 0.52f) * EUITextHelper.getTextWidth(largeFont, text) / Settings.scale;
         float suffix_width = 0;
-
-        if (suffix != null) {
-            suffix_width = (EUITextHelper.getTextWidth(largeFont, suffix) / Settings.scale) * suffix_scale;
-        }
-
-        largeFont = PCLRenderHelpers.getLargeAttributeFont(this, scaleMult);
         float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetX);
-
-        PCLRenderHelpers.writeOnCard(sb, this, largeFont, text, offsetX + (text_width * 0.5f), offsetY, textColor, true);
-
-        if (suffix != null) {
-            largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
-            PCLRenderHelpers.writeOnCard(sb, this, largeFont, suffix, offsetX + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), offsetY, textColor, true);
-        }
+        PCLRenderHelpers.writeOnCard(sb, this, largeFont, text, offsetX + (text_width), offsetY, textColor, true);
 
         PCLRenderHelpers.resetFont(largeFont);
     }
 
     protected void renderAttributes(SpriteBatch sb) {
         if (this.type == PCLEnum.CardType.SUMMON) {
-            renderAttributeBannerWithText(sb, getHPIcon(), this.getHPString(), "/" + this.heal, this.getHPStringColor(), BANNER_OFFSET_X, BANNER_OFFSET_Y,0.85f,0.85f, -1, 0);
-            renderAttributeBannerWithText(sb, getPriorityIcon(), this.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y2,0,0.45f, 1, -25f);
+            renderAttributeBannerWithText(sb, getHPIcon(), this.getHPString(), this.getHPStringColor(), BANNER_OFFSET_X, BANNER_OFFSET_Y,0.85f,0.85f, -1, 0);
+            renderAttributeBannerWithText(sb, getPriorityIcon(), this.pclTarget.getShortStringForTag(), Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y2,0,0.45f, 1, -25f);
         }
         else if (PGR.config.showCardTarget.get()) {
-            renderAttributeBannerWithText(sb, null, this.pclTarget.getShortStringForTag(), null, Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y,0,0.45f, 1, 0);
+            renderAttributeBannerWithText(sb, null, this.pclTarget.getShortStringForTag(), Settings.CREAM_COLOR, BANNER_OFFSET_X2, BANNER_OFFSET_Y,0,0.45f, 1, 0);
         }
     }
 
@@ -2325,7 +2310,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
             }
             else {
-                BitmapFont font = EUIFontHelper.cardTypeFont;
+                BitmapFont font = FontHelper.cardTypeFont;
                 font.getData().setScale(this.drawScale);
                 Color typeColor = getTypeColor();
                 typeColor.a = getRenderColor().a;

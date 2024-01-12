@@ -15,7 +15,6 @@ import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
 import pinacolada.blights.PCLBlight;
 import pinacolada.cardmods.TemporaryCostModifier;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;

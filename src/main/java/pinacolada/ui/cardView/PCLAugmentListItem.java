@@ -2,6 +2,7 @@ package pinacolada.ui.cardView;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT1;
@@ -10,7 +11,6 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -32,13 +32,13 @@ public class PCLAugmentListItem extends EUIHoverable {
         this.augment = new PCLAugmentRenderable(augment, augment.getTooltip(), hb);
         this.onClick = onClick;
         this.onRightClick = onRightClick;
-        title = new EUILabel(EUIFontHelper.cardTitleFontLarge, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.75f))
+        title = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.75f))
                 .setFontScale(0.6f)
                 .setLabel(augment.getName())
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         ownerText = new
-                EUILabel(EUIFontHelper.cardTitleFontSmall, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.4f))
+                EUILabel(FontHelper.topPanelAmountFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.4f))
                 .setAlignment(0.5f, 0.01f)
                 .setFontScale(0.65f)
                 .setColor(Settings.RED_TEXT_COLOR);

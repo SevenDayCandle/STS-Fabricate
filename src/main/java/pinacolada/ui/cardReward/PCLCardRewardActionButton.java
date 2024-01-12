@@ -3,9 +3,9 @@ package pinacolada.ui.cardReward;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIFontHelper;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardActionButton extends EUIButton {
@@ -26,7 +26,7 @@ public class PCLCardRewardActionButton extends EUIButton {
 
         setOnClick(() -> this.container.action(this));
         setPosition(card.current_x, card.current_y + offsetY);
-        setLabel(EUIFontHelper.buttonFont, 0.85f, title);
+        setLabel(FontHelper.buttonLabelFont, 0.85f, title);
         setTooltip(new EUITooltip(title, description));
     }
 

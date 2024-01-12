@@ -6,7 +6,6 @@ import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;

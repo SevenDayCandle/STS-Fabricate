@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
@@ -109,7 +110,7 @@ public class PCLCardText {
 
         // Set the predicted scale from the text, excluding newline but including expanded conditionals
         // Use different scaling for Ideographic languages (i.e. Chinese, Japanese)
-        this.font = EUIFontHelper.cardDescriptionFontNormal;
+        this.font = FontHelper.cardDescFont_N;
         int predictedLength = EUIUtils.sumInt(internalParser.getTokens(), PCLTextToken::getCharCount);
         final float max = isIdeographicLanguage() ? 32f : 75f;
         if (predictedLength > max) {
@@ -178,7 +179,7 @@ public class PCLCardText {
     }
 
     public void renderLines(SpriteBatch sb) {
-        font = PCLRenderHelpers.getDescriptionFont(card, scaleModifier);
+        font = EUIRenderHelpers.getDescriptionFont(card, scaleModifier);
 
         float height = 0;
         for (PCLTextLine line : lines) {

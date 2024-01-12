@@ -2,7 +2,6 @@ package pinacolada.actions.orbs;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
-import pinacolada.utilities.GameUtilities;
 
 public class TriggerOrbPassiveAbility extends GenericOrbAction {
     public TriggerOrbPassiveAbility(int times) {

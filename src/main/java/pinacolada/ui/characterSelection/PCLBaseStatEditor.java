@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import extendedui.EUIUtils;
@@ -15,7 +16,6 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
@@ -44,7 +44,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
         final float h = hb.height;
 
         image = new EUIImage(type.getTexture(), new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f)).setTooltip(this.tooltip);
-        label = new EUILabel(EUIFontHelper.cardTooltipTitleFontNormal, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
+        label = new EUILabel(FontHelper.tipHeaderFont, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
                 .setAlignment(0.5f, 0f, false)
                 .setColor(type.labelColor)
                 .setTooltip(this.tooltip);
@@ -56,7 +56,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
                 .setOnClick(this::increase);
 
         valueDropdown = new EUIDropdown<Integer>(RelativeHitbox.fromPercentages(hb, 0.85f, 0.75f, 0.5f, -0.2f))
-                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 1f)
+                .setFontForButton(FontHelper.topPanelAmountFont, 1f)
                 .setOnOpenOrClose(isOpen -> {
                     editor.activeEditor = isOpen ? this : null;
                 })

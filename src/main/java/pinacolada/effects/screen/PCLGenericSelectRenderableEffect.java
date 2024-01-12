@@ -2,12 +2,10 @@ package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIInputManager;
-import extendedui.ui.controls.EUIBlightGrid;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.PCLGenericItemRenderable;

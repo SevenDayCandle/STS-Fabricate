@@ -19,7 +19,9 @@ import pinacolada.dungeon.modifiers.Glyph1;
 import pinacolada.effects.PCLEffect;
 import pinacolada.monsters.PCLCreatureData;
 import pinacolada.monsters.PCLTutorialMonster;
-import pinacolada.resources.loadout.*;
+import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
+import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadoutStats;
 
 import java.util.ArrayList;
 import java.util.HashMap;
