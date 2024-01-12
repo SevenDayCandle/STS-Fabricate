@@ -7,8 +7,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.BlightStrings;
-import com.megacrit.cardcrawl.localization.OrbStrings;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
@@ -25,7 +23,10 @@ import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringJoiner;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
 public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower, PowerStrings> {

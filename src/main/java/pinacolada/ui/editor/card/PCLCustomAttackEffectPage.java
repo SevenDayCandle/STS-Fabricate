@@ -1,11 +1,9 @@
 package pinacolada.ui.editor.card;
 
-import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.TextureCache;
 import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 

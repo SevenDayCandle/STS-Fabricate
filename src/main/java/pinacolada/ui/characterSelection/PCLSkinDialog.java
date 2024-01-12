@@ -10,26 +10,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
-import extendedui.ui.controls.*;
+import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIDialog;
+import extendedui.ui.controls.EUILabel;
+import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.characters.PCLCharacterAnimation;
-import pinacolada.characters.PCLCharacterSpineAnimation;
-import pinacolada.monsters.animations.PCLAnimation;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 public class PCLSkinDialog extends EUIDialog<String> {
     private static final float ICON_SIZE = 60f * Settings.scale;

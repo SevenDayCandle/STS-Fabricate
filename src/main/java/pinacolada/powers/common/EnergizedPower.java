@@ -6,7 +6,6 @@ import pinacolada.annotations.VisiblePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import static pinacolada.powers.PCLPowerData.DEFAULT_POWER_MAX;
 

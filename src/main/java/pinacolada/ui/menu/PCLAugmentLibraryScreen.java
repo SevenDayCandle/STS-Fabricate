@@ -8,19 +8,14 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.compendium.CardLibraryScreen;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import extendedui.EUI;
-import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
-import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
-import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.ui.PCLGenericItemGrid;
-import pinacolada.ui.PCLPowerRenderable;
-import pinacolada.utilities.WeightedList;
 
 import java.util.ArrayList;
 

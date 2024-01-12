@@ -7,8 +7,6 @@ import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 

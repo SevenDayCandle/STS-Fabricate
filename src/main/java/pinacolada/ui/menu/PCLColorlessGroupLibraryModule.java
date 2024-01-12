@@ -14,14 +14,11 @@ import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PCLColorlessGroupLibraryModule extends EUIBase implements CustomCardPoolModule {
     public static ColorlessGroup group = ColorlessGroup.Default;

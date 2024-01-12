@@ -25,8 +25,8 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.powers.EUIExporterPCLPowerRow;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

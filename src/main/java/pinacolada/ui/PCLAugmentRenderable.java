@@ -8,9 +8,7 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLDynamicAugment;
 import pinacolada.augments.PCLDynamicAugmentData;
-import pinacolada.powers.PCLDynamicPowerData;
 
 public class PCLAugmentRenderable extends PCLGenericItemRenderable<PCLAugment> {
     public static final float BASE_SCALE = Settings.scale * 0.45f;

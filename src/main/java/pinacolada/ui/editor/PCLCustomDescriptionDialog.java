@@ -1,13 +1,9 @@
 package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -22,23 +18,14 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.EditorMaker;
-import pinacolada.misc.LoadoutStrings;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLCustomLoadout;
-import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
 import pinacolada.skills.PSkill;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringJoiner;
-
-import static pinacolada.skills.PSkill.CASCADE_CHAR;
-import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDialog> {
     protected EUIButton clearButton;

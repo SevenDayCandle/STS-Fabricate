@@ -27,7 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static extendedui.EUIUtils.*;
+import static extendedui.EUIUtils.array;
+import static extendedui.EUIUtils.safeIndex;
 
 // TODO create a non-dynamic-only subclass
 public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {

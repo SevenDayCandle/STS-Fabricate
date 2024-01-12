@@ -2,7 +2,6 @@ package pinacolada.cards.base.cardText;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;

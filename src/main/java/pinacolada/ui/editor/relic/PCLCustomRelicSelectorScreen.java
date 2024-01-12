@@ -10,14 +10,12 @@ import extendedui.ui.cardFilter.RelicKeywordFilters;
 import extendedui.ui.controls.EUIItemGrid;
 import extendedui.ui.controls.EUIRelicGrid;
 import extendedui.utilities.RelicInfo;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLGenericSelectRelicEffect;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
-import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
 
 import java.util.ArrayList;

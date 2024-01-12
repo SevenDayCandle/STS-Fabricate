@@ -13,8 +13,6 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
-import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUITextHelper;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;

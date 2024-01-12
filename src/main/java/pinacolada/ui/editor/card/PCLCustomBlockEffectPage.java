@@ -1,6 +1,5 @@
 package pinacolada.ui.editor.card;
 
-import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.TextureCache;
 import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.resources.pcl.PCLCoreImages;

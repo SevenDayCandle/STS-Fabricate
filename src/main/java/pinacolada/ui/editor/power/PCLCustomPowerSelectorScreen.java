@@ -1,29 +1,21 @@
 package pinacolada.ui.editor.power;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
-import extendedui.ui.controls.EUIItemGrid;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.effects.screen.PCLGenericSelectRenderableEffect;
-import pinacolada.orbs.PCLCustomOrbSlot;
-import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.conditions.PCond_OnRemove;
 import pinacolada.ui.PCLAugmentRenderable;
-import pinacolada.ui.PCLOrbRenderable;
-import pinacolada.ui.PCLPowerRenderable;
-import pinacolada.resources.PGR;
 import pinacolada.ui.PCLGenericItemGrid;
+import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
-import pinacolada.ui.editor.orb.PCLCustomOrbEditScreen;
 import pinacolada.ui.menu.PCLPowerKeywordFilters;
 
 import java.util.Collections;

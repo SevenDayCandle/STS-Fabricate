@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIUtils;
-import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;

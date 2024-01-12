@@ -2,14 +2,11 @@ package pinacolada.ui.editor.orb;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -17,29 +14,13 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLDynamicCardData;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTagInfo;
-import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.orbs.PCLDynamicOrbData;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.delay.DelayTiming;
-import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
-import pinacolada.ui.editor.card.PCLCustomCardAffinityValueEditor;
-import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
-import pinacolada.ui.editor.card.PCLCustomCardTagEditorHeaderRow;
-import pinacolada.ui.editor.card.PCLCustomCardTagEditorRow;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PCLCustomOrbAttributesPage extends PCLCustomGenericPage {
     protected static final float START_X = screenW(0.25f);

@@ -25,7 +25,6 @@ import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;

@@ -14,7 +14,6 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomDescriptionEditEffect;
-import pinacolada.effects.screen.PCLCustomFlagEditEffect;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PPrimary;

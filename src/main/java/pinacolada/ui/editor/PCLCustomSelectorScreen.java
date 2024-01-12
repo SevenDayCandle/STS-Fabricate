@@ -16,7 +16,6 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.markers.CustomCardPoolModule;
 import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.GenericFilters;

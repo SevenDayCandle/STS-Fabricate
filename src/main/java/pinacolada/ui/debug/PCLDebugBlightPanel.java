@@ -1,17 +1,16 @@
 package pinacolada.ui.debug;
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.debug.*;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.blights.PCLDynamicBlight;
-import pinacolada.blights.PCLBlight;
-import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

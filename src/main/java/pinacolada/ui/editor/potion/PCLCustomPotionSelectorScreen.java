@@ -1,6 +1,5 @@
 package pinacolada.ui.editor.potion;
 
-import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUI;
@@ -11,21 +10,14 @@ import extendedui.ui.controls.EUIItemGrid;
 import extendedui.ui.controls.EUIPotionGrid;
 import extendedui.utilities.PotionInfo;
 import pinacolada.effects.screen.PCLGenericSelectPotionEffect;
-import pinacolada.effects.screen.PCLGenericSelectRelicEffect;
 import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.potions.PCLDynamicPotion;
 import pinacolada.potions.PCLDynamicPotionData;
 import pinacolada.potions.PCLPotion;
-import pinacolada.powers.PCLCustomPowerSlot;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 
 import java.util.Collections;
 

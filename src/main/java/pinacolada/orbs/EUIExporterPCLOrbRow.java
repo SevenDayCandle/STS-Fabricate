@@ -5,9 +5,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.exporter.EUIExporter;
 import extendedui.exporter.EUIExporterRow;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.ui.PCLOrbRenderable;
-import pinacolada.ui.PCLPowerRenderable;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,31 +1,22 @@
 package pinacolada.ui.editor.blight;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUI;
 import extendedui.EUIUtils;
-import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.cardFilter.BlightKeywordFilters;
-import extendedui.ui.controls.EUIItemGrid;
+import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUIBlightGrid;
+import extendedui.ui.controls.EUIItemGrid;
 import extendedui.utilities.BlightTier;
-import pinacolada.blights.PCLBlight;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.blights.PCLDynamicBlightData;
 import pinacolada.blights.PCLPointerBlight;
-import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
-import pinacolada.misc.PCLCustomLoadable;
-import pinacolada.potions.PCLCustomPotionSlot;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
-import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
 
 import java.util.Collections;

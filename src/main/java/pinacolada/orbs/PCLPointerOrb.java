@@ -1,6 +1,5 @@
 package pinacolada.orbs;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
@@ -14,7 +13,6 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
-import pinacolada.skills.delay.DelayTiming;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 

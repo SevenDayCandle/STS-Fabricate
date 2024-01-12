@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.powers.PCLClickableUse;
-import pinacolada.powers.PCLDynamicPower;
-import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.PCLRenderHelpers;

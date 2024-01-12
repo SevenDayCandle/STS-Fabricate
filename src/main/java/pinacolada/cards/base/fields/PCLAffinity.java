@@ -1,6 +1,5 @@
 package pinacolada.cards.base.fields;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +15,6 @@ import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

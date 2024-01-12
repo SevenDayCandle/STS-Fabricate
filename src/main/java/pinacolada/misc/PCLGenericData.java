@@ -1,6 +1,5 @@
 package pinacolada.misc;
 
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLResources;
 
 import java.lang.reflect.Constructor;

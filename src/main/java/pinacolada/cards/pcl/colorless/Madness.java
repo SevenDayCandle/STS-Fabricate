@@ -9,7 +9,6 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
-import pinacolada.skills.fields.PField_CardGeneric;
 
 @VisibleCard(add = false)
 public class Madness extends PCLCard {

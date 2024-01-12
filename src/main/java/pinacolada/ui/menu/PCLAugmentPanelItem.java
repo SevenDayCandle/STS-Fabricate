@@ -16,8 +16,6 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
-import pinacolada.cardmods.AugmentModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;

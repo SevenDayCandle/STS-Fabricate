@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
-import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;

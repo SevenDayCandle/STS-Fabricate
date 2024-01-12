@@ -3,26 +3,19 @@ package pinacolada.ui.editor.card;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
-import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
-import extendedui.ui.controls.*;
+import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIDialog;
+import extendedui.ui.controls.EUITextBoxInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLLoadoutData;
-
-import java.util.HashMap;
 
 public class PCLCustomPresetNameDialog extends EUIDialog<String> {
     protected float MENU_WIDTH = scale(190);

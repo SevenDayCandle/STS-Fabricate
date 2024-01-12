@@ -2,7 +2,6 @@ package pinacolada.skills.fields;
 
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;

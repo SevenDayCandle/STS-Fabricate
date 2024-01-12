@@ -22,7 +22,6 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.orbs.EUIExporterPCLOrbRow;
-import pinacolada.powers.EUIExporterPCLPowerRow;
 import pinacolada.resources.PGR;
 import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.PCLOrbRenderable;

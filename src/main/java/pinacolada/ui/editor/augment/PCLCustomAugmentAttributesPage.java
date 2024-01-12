@@ -2,34 +2,19 @@ package pinacolada.ui.editor.augment;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLDynamicAugmentData;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PCLCustomAugmentAttributesPage extends PCLCustomGenericPage {
     protected static final float START_X = screenW(0.25f);

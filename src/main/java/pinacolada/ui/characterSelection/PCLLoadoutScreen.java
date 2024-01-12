@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -18,7 +17,6 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
@@ -30,9 +28,7 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 import pinacolada.resources.loadout.PCLLoadoutDataInfo;
 import pinacolada.resources.loadout.PCLLoadoutValidation;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.editor.card.EditDeleteDropdownRow;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 

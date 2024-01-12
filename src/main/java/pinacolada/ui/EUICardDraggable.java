@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIImage;

@@ -5,13 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 
 import java.util.ArrayList;
 

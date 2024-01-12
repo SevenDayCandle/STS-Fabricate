@@ -17,16 +17,11 @@ import pinacolada.orbs.PCLCustomOrbSlot;
 import pinacolada.orbs.PCLDynamicOrb;
 import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.conditions.PCond_OnRemove;
-import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.ui.PCLOrbRenderable;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
-import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-import pinacolada.ui.editor.card.PCLCustomAttackEffectPage;
-import pinacolada.ui.editor.card.PCLCustomBlockEffectPage;
 
 public class PCLCustomOrbEditScreen extends PCLCustomEditEntityScreen<PCLCustomOrbSlot, PCLDynamicOrbData, PCLDynamicOrb, OrbStrings> {
     public static NewPageOption Evoke = new NewPageOption(PGR.core.tooltips.evoke.title, s -> s.initializeEffectPage(s.makeEffectPage(new PRoot().setChild(new PCond_OnRemove()))));

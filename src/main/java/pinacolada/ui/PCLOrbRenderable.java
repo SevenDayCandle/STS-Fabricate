@@ -3,17 +3,13 @@ package pinacolada.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.orbs.PCLOrbData;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 public class PCLOrbRenderable extends PCLGenericItemRenderable<PCLOrbData> {

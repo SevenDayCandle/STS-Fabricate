@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.ui.panels.energyorb.EnergyOrbInterface;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLEnergyOrb implements EnergyOrbInterface {

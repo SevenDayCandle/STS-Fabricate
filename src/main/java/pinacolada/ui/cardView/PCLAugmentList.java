@@ -10,7 +10,6 @@ import extendedui.ui.controls.EUICanvasGrid;
 import extendedui.ui.hitboxes.EUIHitbox;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
 
 import java.util.ArrayList;
 

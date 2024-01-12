@@ -22,8 +22,8 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentCategory;
-import pinacolada.ui.PCLAugmentRenderable;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLAugmentRenderable;
 
 import java.util.ArrayList;
 import java.util.HashSet;

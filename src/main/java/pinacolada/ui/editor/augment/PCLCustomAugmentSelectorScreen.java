@@ -3,36 +3,18 @@ package pinacolada.ui.editor.augment;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.GenericFilters;
-import extendedui.utilities.BlightTier;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
-import pinacolada.blights.PCLCustomBlightSlot;
-import pinacolada.blights.PCLDynamicBlightData;
-import pinacolada.blights.PCLPointerBlight;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.TemplateCardData;
-import pinacolada.effects.screen.PCLGenericSelectBlightEffect;
-import pinacolada.effects.screen.PCLGenericSelectCardEffect;
 import pinacolada.effects.screen.PCLGenericSelectRenderableEffect;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
-import pinacolada.skills.PMove;
-import pinacolada.skills.skills.PTrigger;
-import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.PCLAugmentRenderable;
-import pinacolada.ui.PCLOrbRenderable;
+import pinacolada.ui.PCLGenericItemGrid;
 import pinacolada.ui.editor.PCLCustomSelectorScreen;
-import pinacolada.ui.editor.blight.PCLCustomBlightEditScreen;
-import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.menu.PCLAugmentKeywordFilters;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class PCLCustomAugmentSelectorScreen extends PCLCustomSelectorScreen<PCLAugmentRenderable, PCLCustomAugmentSlot, PCLAugmentKeywordFilters.AugmentFilters> {
 

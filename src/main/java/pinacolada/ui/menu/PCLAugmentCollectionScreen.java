@@ -5,12 +5,10 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.patches.game.AbstractDungeonPatches;
 import extendedui.ui.screens.EUIPoolScreen;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.card.ChooseCardForAugmentEffect;
@@ -19,8 +17,6 @@ import pinacolada.ui.cardView.PCLAugmentList;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PCLAugmentCollectionScreen extends EUIPoolScreen {
 

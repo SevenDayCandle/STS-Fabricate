@@ -8,8 +8,6 @@ import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import pinacolada.cards.base.fields.CardFlag;
-import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 
