@@ -41,7 +41,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+        String amountString = getAmountRawString();
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = fields.getPowerOrString();

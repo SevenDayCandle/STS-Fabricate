@@ -3,6 +3,7 @@ package pinacolada.ui.editor.card;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUI;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.CustomCardPoolModule;
 import extendedui.ui.cardFilter.CardKeywordFilters;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.controls.EUICardGrid;
@@ -34,6 +35,11 @@ public class PCLCustomCardSelectorScreen extends PCLCustomSelectorScreen<Abstrac
                 });
         cards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         return cards;
+    }
+
+    @Override
+    protected CustomCardPoolModule getCustomModule(AbstractCard.CardColor color) {
+        return EUI.getCustomCardLibraryModule(color);
     }
 
     @Override

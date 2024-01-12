@@ -37,7 +37,7 @@ public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory>
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String subjectString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getCardPropertyString()) : getCardPropertyString();
+        String subjectString = getCardPropertyString();
         if (useParent) {
             return TEXT.subjects_onTarget(subjectString, getInheritedThemString());
         }

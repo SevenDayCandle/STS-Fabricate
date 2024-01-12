@@ -16,6 +16,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.CooldownProgressAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
@@ -88,7 +89,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
 
     @Override
     public Color getXColor() {
-        return getCooldownColor();
+        return CombatManager.inBattle() ? getCooldownColor() : Settings.CREAM_COLOR;
     }
 
     @Override

@@ -16,6 +16,8 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.markers.CustomCardPoolModule;
+import extendedui.interfaces.markers.CustomPoolModule;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.GenericFilters;
 import extendedui.ui.cardFilter.GenericFiltersObject;
@@ -24,7 +26,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
@@ -52,6 +53,7 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
     protected final EUIToggle toggle;
     private T clicked;
     private ArrayList<T> current;
+    protected CustomPoolModule<T> customModule;
     protected EUIButton addButton;
     protected EUIButton cancelButton;
     protected EUIButton loadExistingButton;
@@ -229,6 +231,10 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
                 : ContextOption.values();
     }
 
+    protected CustomPoolModule<T> getCustomModule(AbstractCard.CardColor color) {
+        return null;
+    }
+
     protected EUITourTooltip[] getTour() {
         return EUIUtils.array(
                 addButton.makeTour(true),
@@ -278,9 +284,16 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         }
         current = grid.group.group;
         getFilters().initializeForSort(grid.group, __ -> {
+            if (customModule != null) {
+                customModule.open(grid.group.group, currentColor, false, null);
+            }
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, currentColor);
+        customModule = getCustomModule(cardColor);
+        if (customModule != null) {
+            customModule.open(grid.group.group, cardColor, false, null);
+        }
         getFilters().cloneFrom(savedFilters);
     }
 
@@ -290,6 +303,9 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         grid.group.group = current;
         grid.add(item);
         getFilters().initializeForSort(grid.group, __ -> {
+            if (customModule != null) {
+                customModule.open(grid.group.group, currentColor, false, null);
+            }
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, currentColor);
@@ -315,6 +331,9 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
         currentSlots.remove(clicked);
         onRemove(v);
         getFilters().initializeForSort(grid.group, __ -> {
+            if (customModule != null) {
+                customModule.open(grid.group.group, currentColor, false, null);
+            }
             grid.moveToTop();
             grid.forceUpdatePositions();
         }, currentColor);

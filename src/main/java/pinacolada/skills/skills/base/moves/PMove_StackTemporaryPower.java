@@ -42,7 +42,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+        String amountString = getAmountRawString();
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerOrString());

@@ -472,11 +472,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         // Should not contain the tooltip associated with this power
         if (data.tooltip != null) {
             tooltips.add(data.tooltip);
-            EUITooltip.scanForTips(desc, tooltips);
+            EUITooltip.scanForTips(desc, tooltips, tooltips, false);
             tooltips.remove(data.tooltip);
         }
         else {
-            EUITooltip.scanForTips(desc, tooltips);
+            EUITooltip.scanForTips(desc, tooltips, tooltips, false);
         }
         // Base game descriptions don't support special characters
         this.description = sanitizePowerDescription(desc);

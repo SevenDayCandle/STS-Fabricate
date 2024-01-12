@@ -48,7 +48,7 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String amountString = baseExtra > baseAmount ? xToRangeString(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+        String amountString = getAmountRawString();
         if (target == PCLCardTarget.Self && !isFromCreature() && perspective == PCLCardTarget.Self) {
             return TEXT.act_loseAmount(amountString, PGR.core.tooltips.hp.title);
         }
