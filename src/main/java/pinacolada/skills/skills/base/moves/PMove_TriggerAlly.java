@@ -47,7 +47,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature t : getTargetList(info)) {
+        for (AbstractCreature t : getTargetListAsNew(info)) {
             if (t instanceof PCLCardAlly) {
                 order.triggerAlly((PCLCardAlly) t, refreshAmount(info));
             }

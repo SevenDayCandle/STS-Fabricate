@@ -60,7 +60,7 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature t : getTargetList(info)) {
+        for (AbstractCreature t : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
             order.heal(info.source, t, heal);

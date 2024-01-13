@@ -33,6 +33,7 @@ import java.util.List;
 public abstract class PCLLoadout {
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
+    public static final int BASE_POTION = 3;
     public static final int MAX_LIMIT = 6;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;

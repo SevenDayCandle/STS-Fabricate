@@ -136,7 +136,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         else {
             int actualAmount = refreshAmount(info);
             for (int i = 0; i < actualAmount; i++) {
-                for (AbstractCreature target : getTargetList(info)) {
+                for (AbstractCreature target : getTargetListAsNew(info)) {
                     order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), actualAmount);
                 }
             }
@@ -147,7 +147,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
     private void useApplyPower(String powerID, PCLUseInfo info, PCLActions order) {
         PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
         if (power != null) {
-            for (AbstractCreature target : getTargetList(info)) {
+            for (AbstractCreature target : getTargetListAsNew(info)) {
                 int actualAmount = refreshAmount(info);
                 order.applyPower(info.source, target, power, actualAmount);
             }

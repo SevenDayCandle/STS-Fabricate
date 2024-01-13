@@ -288,7 +288,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
                 setDamageOptions(order.dealCardDamageToAll(pCard, info.source, fields.attackEffect), info);
             }
             else if (target.targetsRandom() && scope > 1) {
-                for (AbstractCreature cr : getTargetList(info)) {
+                for (AbstractCreature cr : getTargetListAsNew(info)) {
                     setDamageOptions(order.dealCardDamage(pCard, info.source, cr, fields.attackEffect), info);
                 }
             }

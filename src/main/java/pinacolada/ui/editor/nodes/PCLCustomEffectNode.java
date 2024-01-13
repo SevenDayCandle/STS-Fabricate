@@ -60,7 +60,7 @@ public class PCLCustomEffectNode extends EUIButton {
         this.dropZone = new OriginRelativeHitbox(hb, hb.width * 1.1f, hb.height * 5.5f, -hb.width * 0.05f, hb.height * -5f);
         this.setColor(type.getColor());
         this.setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
-        this.label = new EUILabel(FontHelper.topPanelAmountFont, hb, 0.45f, 0.68f, 0.4f, true);
+        this.label = new EUILabel(FontHelper.topPanelAmountFont, hb, 0.75f, 0.68f, 0.4f, true);
         this.label.setSmartText(true, true);
         this.editor = editor;
         this.type = type;

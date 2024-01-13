@@ -64,7 +64,7 @@ public class PMove_LoseHP extends PMove<PField_Attack> implements OutOfCombatMov
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature t : getTargetList(info)) {
+        for (AbstractCreature t : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             order.loseHP(info.source, t, actualAmount, fields.attackEffect).isCancellable(false);
         }

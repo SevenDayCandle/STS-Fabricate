@@ -40,7 +40,7 @@ public class PMove_Kill extends PMove<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature target : getTargetList(info)) {
+        for (AbstractCreature target : getTargetListAsNew(info)) {
             order.add(new DieAction(target));
         }
         super.use(info, order);

@@ -43,7 +43,7 @@ public class PMove_GainTempHP extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature c : getTargetList(info)) {
+        for (AbstractCreature c : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             order.gainTemporaryHP(c, c, actualAmount);
         }

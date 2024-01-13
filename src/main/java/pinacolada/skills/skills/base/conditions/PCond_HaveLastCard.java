@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.text.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -61,7 +62,7 @@ public abstract class PCond_HaveLastCard extends PPassiveCond<PField_CardCategor
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_ifLast(TEXT.subjects_x, PCLCoreStrings.past(getActionTooltip()), 1, TEXT.subjects_x);
+        return EUITextHelper.replaceLogic(TEXT.cond_ifLast(TEXT.subjects_x, PCLCoreStrings.past(getActionTooltip()), 1, TEXT.subjects_x));
     }
 
     @Override

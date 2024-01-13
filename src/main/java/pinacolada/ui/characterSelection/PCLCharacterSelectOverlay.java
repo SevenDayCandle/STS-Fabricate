@@ -103,7 +103,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
 
         final float buttonWidth = Settings.WIDTH * (0.11f);
         final float buttonheight = scale(46);
-        final float textScale = 0.8f;
+        final float textScale = 0.7f;
 
         resetButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(0, 0, buttonWidth, buttonheight))
                 .setLabel(FontHelper.buttonLabelFont, textScale, PGR.core.strings.csel_resetTutorial)

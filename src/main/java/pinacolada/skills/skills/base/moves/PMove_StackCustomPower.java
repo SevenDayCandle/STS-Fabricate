@@ -134,13 +134,13 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         // If this skill is actually part of the power you are applying, we should be able to remove the power if it is an infinite power
         if (referencesSelf && baseAmount <= 0) {
             String id = PTriggerPower.createPowerID(triggers.get(triggers.size() - 1));
-            for (AbstractCreature c : getTargetList(info)) {
+            for (AbstractCreature c : getTargetListAsNew(info)) {
                 order.removePower(c, c, id);
             }
         }
         else {
             // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
-            for (AbstractCreature c : getTargetList(info)) {
+            for (AbstractCreature c : getTargetListAsNew(info)) {
                 order.applyPower(new PTriggerPower(c, refreshAmount(info), triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
             }
         }

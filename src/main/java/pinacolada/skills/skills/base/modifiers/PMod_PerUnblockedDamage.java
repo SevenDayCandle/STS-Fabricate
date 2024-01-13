@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -21,7 +22,7 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
     }
 
     public PMod_PerUnblockedDamage(int amount) {
-        super(DATA, amount);
+        super(DATA, PCLCardTarget.Single, amount);
     }
 
     public PMod_PerUnblockedDamage(PSkillSaveData content) {
@@ -50,5 +51,13 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetOnStringPerspective(perspective, TEXT.subjects_unblocked(TEXT.subjects_damage));
+    }
+
+    // Must be called through a callback to ensure lastDamageTaken is properly recorded by attacks
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.callback(__ -> {
+            super.use(info, order);
+        });
     }
 }

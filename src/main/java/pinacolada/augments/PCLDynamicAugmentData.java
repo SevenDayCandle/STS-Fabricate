@@ -147,10 +147,12 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (PSkill<?> move : moves) {
             if (!PSkill.isSkillBlank(move)) {
+                move.recurse(m -> m.amount = m.baseAmount + level * m.getUpgrade());
                 String pText = move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
+                move.recurse(m -> m.amount = m.baseAmount);
             }
         }
         return sj.toString();

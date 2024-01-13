@@ -223,19 +223,19 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return TargetFilter.None;
     }
 
-    public final ArrayList<AbstractCreature> getTargets(PCLUseInfo info, int autoAmount) {
+    public final RandomizedList<AbstractCreature> getTargets(PCLUseInfo info, int autoAmount) {
         return getTargets(info.source, info.target, info.tempTargets, autoAmount);
     }
 
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
+    public final RandomizedList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
         return getTargets(source, target, new RandomizedList<>(), 1);
     }
 
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
+    public final RandomizedList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList) {
         return getTargets(source, target, sourceList, 1);
     }
 
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList, int autoAmount) {
+    public final RandomizedList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, RandomizedList<AbstractCreature> sourceList, int autoAmount) {
         if (this == UseParent) {
             return sourceList;
         }

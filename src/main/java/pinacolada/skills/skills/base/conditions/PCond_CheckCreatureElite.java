@@ -35,7 +35,7 @@ public class PCond_CheckCreatureElite extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.numNoun(TEXT.subjects_x, PTEXT[4]);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, PTEXT[2]);
     }
 
     @Override

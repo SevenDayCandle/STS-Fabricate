@@ -58,7 +58,7 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature t : getTargetList(info)) {
+        for (AbstractCreature t : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             order.heal(info.source, t, actualAmount);
         }

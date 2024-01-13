@@ -61,7 +61,7 @@ public class PMod_RepeatForTarget extends PActiveMod<PField_Empty> {
     }
 
     protected void useImpl(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature c : getTargetList(info)) {
+        for (AbstractCreature c : getTargetListAsNew(info)) {
             PCLUseInfo cInfo = generateInfo(c);
             childEffect.use(cInfo, order);
         }

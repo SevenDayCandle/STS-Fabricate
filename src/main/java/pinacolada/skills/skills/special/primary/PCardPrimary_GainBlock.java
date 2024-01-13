@@ -158,7 +158,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
     @Override
     public void useImpl(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature c : getTargetList(info)) {
+        for (AbstractCreature c : getTargetListAsNew(info)) {
             // Extra has the value of right count
             for (int i = 0; i < extra; i++) {
                 order.gainBlock(c, amount);

@@ -60,7 +60,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCom
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature t : getTargetList(info)) {
+        for (AbstractCreature t : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             int reduction = MathUtils.ceil(t.maxHealth * actualAmount / 100f);
             order.loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).ignorePowers(true).isCancellable(false);

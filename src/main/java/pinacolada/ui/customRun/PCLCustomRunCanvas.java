@@ -113,7 +113,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         RunModStrings endingActStrings = PGR.getRunModStrings(MOD_THE_ENDING);
 
         endlessToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(endlessStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isEndless = v;
@@ -121,7 +121,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endlessStrings.NAME, endlessStrings.DESCRIPTION);
 
         endingActToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(endingActStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isFinalActAvailable = v;
@@ -129,7 +129,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endingActStrings.NAME, endingActStrings.DESCRIPTION);
 
         customCardToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customCards)
                 .setOnToggle(v -> {
                     screen.allowCustomCards = v;
@@ -138,7 +138,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customCards, PGR.core.strings.misc_customCardsDesc);
 
         customRelicToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customRelics)
                 .setOnToggle(v -> {
                     screen.allowCustomRelics = v;
@@ -147,7 +147,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customRelics, PGR.core.strings.misc_customRelicsDesc);
 
         customPotionToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customPotions)
                 .setOnToggle(v -> {
                     screen.allowCustomPotions = v;
@@ -156,7 +156,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customPotions, PGR.core.strings.misc_customPotionsDesc);
 
         customBlightToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customBlights)
                 .setOnToggle(v -> {
                     screen.allowCustomBlights = v;
@@ -165,7 +165,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customBlights, PGR.core.strings.misc_customBlightsDesc);
 
         customAugmentToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customAugment)
                 .setOnToggle(v -> {
                     screen.allowAugments = v;
@@ -174,7 +174,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(PGR.core.strings.misc_customAugment, PGR.core.strings.misc_customAugmentDesc);
 
         allowLoadoutToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
-                .setFont(FontHelper.cardDescFont_L, 0.475f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(PGR.core.strings.misc_customLoadout)
                 .setOnToggle(v -> {
                     screen.allowLoadout = v;

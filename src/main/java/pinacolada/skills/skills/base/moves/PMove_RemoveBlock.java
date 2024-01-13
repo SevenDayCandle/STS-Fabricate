@@ -46,7 +46,7 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature c : getTargetList(info)) {
+        for (AbstractCreature c : getTargetListAsNew(info)) {
             order.add(new RemoveAllBlockAction(c, info.source));
         }
         super.use(info, order);

@@ -20,6 +20,8 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 
+import static pinacolada.resources.loadout.PCLLoadout.BASE_POTION;
+
 // Copied and modified from STS-AnimatorMod
 public class PCLBaseStatEditor extends EUIHoverable {
     public static final float ICON_SIZE = 64f * Settings.scale;
@@ -205,7 +207,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
                 case OrbSlot:
                     return loadout.getBaseOrbs();
                 case PotionSlot:
-                    return 3;
+                    return BASE_POTION;
                 default:
                     return 0;
             }

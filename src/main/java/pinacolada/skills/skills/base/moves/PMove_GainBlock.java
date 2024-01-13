@@ -11,6 +11,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
+import java.util.ArrayList;
+
 @VisibleSkill
 public class PMove_GainBlock extends PMove_Gain {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainBlock.class, PField_Empty.class)
@@ -44,7 +46,7 @@ public class PMove_GainBlock extends PMove_Gain {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        for (AbstractCreature c : getTargetList(info)) {
+        for (AbstractCreature c : getTargetListAsNew(info)) {
             int actualAmount = refreshAmount(info);
             if (actualAmount < 0) {
                 order.loseBlock(c, -actualAmount);

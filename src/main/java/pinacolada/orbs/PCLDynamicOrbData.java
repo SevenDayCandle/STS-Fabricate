@@ -143,10 +143,12 @@ public class PCLDynamicOrbData extends PCLOrbData implements EditorMaker<PCLDyna
         for (int i = 0; i < moves.size(); i++) {
             PSkill<?> move = moves.get(i);
             if (!PSkill.isSkillBlank(move)) {
+                move.recurse(m -> m.amount = m.baseAmount + level * m.getUpgrade());
                 String pText = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? move.getUncascadedPowerOverride(desc[i], level) : move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
+                move.recurse(m -> m.amount = m.baseAmount);
             }
         }
         return sj.toString();

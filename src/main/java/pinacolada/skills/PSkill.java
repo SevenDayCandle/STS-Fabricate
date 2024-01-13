@@ -59,6 +59,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.RandomizedList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -781,7 +782,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
-        return extra2;
+        return baseExtra2;
     }
 
     public final int getExtra2FromCard() {
@@ -845,7 +846,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
-        return extra;
+        return baseExtra;
     }
 
     public final int getExtraFromCard() {
@@ -1081,7 +1082,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                     return source instanceof EditorCard ? ((EditorCard) source).getXValue() : 0;
             }
         }
-        return scope;
+        return baseScope;
     }
 
     public final int getScopeFromCard() {
@@ -1144,8 +1145,19 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return TEXT.cond_ifX(TEXT.cond_xIsY(getTargetSubjectString(target), getTargetOrdinal(target), subject));
     }
 
-    public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
-        return info != null ? target.getTargets(info, scope) : new ArrayList<>();
+    public final RandomizedList<AbstractCreature> getTargetList(PCLUseInfo info) {
+        return info != null ? target.getTargets(info, scope) : new RandomizedList<>();
+    }
+
+    /* Variant of above function to be used in skills that loop effects on targets, to avoid comodification*/
+    public final RandomizedList<AbstractCreature> getTargetListAsNew(PCLUseInfo info) {
+        if (info != null) {
+            RandomizedList<AbstractCreature> list = new RandomizedList<>(info.tempTargets);
+            return target.getTargets(info.source, info.target, list, scope);
+        }
+        else {
+            return new RandomizedList<>();
+        }
     }
 
     public final String getTargetOnString(PCLCardTarget target, String baseString) {
@@ -1879,14 +1891,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public PSkill<T> setAmountFromCard() {
-        this.amount = getAmountFromCard();
         this.baseAmount = getAmountBaseFromCard();
-        this.extra = getExtraFromCard();
+        this.amount = getAmountFromCard();
         this.baseExtra = getExtraBaseFromCard();
-        this.extra2 = getExtra2FromCard();
+        this.extra = getExtraFromCard();
         this.baseExtra2 = getExtra2BaseFromCard();
-        this.scope = getScopeFromCard();
+        this.extra2 = getExtra2FromCard();
         this.baseScope = getScopeBaseFromCard();
+        this.scope = getScopeFromCard();
         if (this.childEffect != null) {
             childEffect.setAmountFromCard();
         }
@@ -1956,14 +1968,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public PSkill<T> setSource(Object card) {
         this.source = card;
-        this.amount = getAmountFromCard();
         this.baseAmount = getAmountBaseFromCard();
-        this.extra = getExtraFromCard();
+        this.amount = getAmountFromCard();
         this.baseExtra = getExtraBaseFromCard();
-        this.extra2 = getExtra2FromCard();
+        this.extra = getExtraFromCard();
         this.baseExtra2 = getExtra2BaseFromCard();
-        this.scope = getScopeFromCard();
+        this.extra2 = getExtra2FromCard();
         this.baseScope = getScopeBaseFromCard();
+        this.scope = getScopeFromCard();
         if (this.childEffect != null) {
             this.childEffect.setSource(card);
         }

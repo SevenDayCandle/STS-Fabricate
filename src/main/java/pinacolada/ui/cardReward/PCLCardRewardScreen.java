@@ -45,7 +45,7 @@ public class PCLCardRewardScreen extends EUIBase {
         upgradeToggle = new EUIToggle(new EUIHitbox(scale(256), scale(48f)))
                 .setBackground(EUIRM.images.greySquare.texture(), Color.DARK_GRAY)
                 .setPosition(screenW(0.9f), screenH(0.65f))
-                .setFont(FontHelper.cardDescFont_L, 0.5f)
+                .setFont(FontHelper.cardDescFont_L, 1f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
     }

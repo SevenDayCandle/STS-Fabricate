@@ -53,7 +53,7 @@ public class PMove_GainMaxHPPercent extends PMove_Gain implements OutOfCombatMov
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
-            for (AbstractCreature t : getTargetList(info)) {
+            for (AbstractCreature t : getTargetListAsNew(info)) {
                 int actualAmount = refreshAmount(info);
                 int pc = MathUtils.ceil(t.maxHealth * amount / 100f);
                 if (actualAmount < 0) {

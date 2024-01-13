@@ -41,7 +41,7 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
-            for (AbstractCreature t : getTargetList(info)) {
+            for (AbstractCreature t : getTargetListAsNew(info)) {
                 int actualAmount = refreshAmount(info);
                 if (actualAmount < 0) {
                     t.decreaseMaxHealth(-actualAmount);

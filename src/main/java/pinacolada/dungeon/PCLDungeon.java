@@ -52,6 +52,7 @@ import pinacolada.utilities.WeightedList;
 import java.util.*;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
+import static pinacolada.resources.loadout.PCLLoadout.BASE_POTION;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitializeSubscriber {
@@ -697,7 +698,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     // Modify starting potion slots and energy
     private void initializePotions() {
         if (loadout != null) {
-            player.potionSlots += loadout.getPotionSlots();
+            player.potionSlots += loadout.getPotionSlots() - BASE_POTION;
             while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot) {
                 player.potions.remove(player.potions.size() - 1);
             }
