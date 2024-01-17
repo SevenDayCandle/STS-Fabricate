@@ -34,6 +34,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FlightPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
@@ -72,6 +73,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCardCreature;
+import pinacolada.orbs.PCLOrb;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
@@ -1566,7 +1568,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                     }
                 }
 
-                // Vanilla blights don't affect calculations
+                // Vanilla blights and orbs don't affect calculations
                 for (AbstractBlight r : ((AbstractPlayer) owner).blights) {
                     if (r instanceof PCLBlight) {
                         oldBlock = tempBlock;
@@ -1575,6 +1577,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                         tempBlock = ((PCLBlight) r).atBlockModify(info, tempBlock);
                         addAttackDisplay(r.img, oldDamage, tempDamage);
                         addDefendDisplay(r.img, oldBlock, tempBlock);
+                    }
+                }
+                for (AbstractOrb r : ((AbstractPlayer) owner).orbs) {
+                    if (r instanceof PCLOrb) {
+                        oldBlock = tempBlock;
+                        oldDamage = tempDamage;
+                        tempDamage = ((PCLOrb) r).atDamageModify(info, tempDamage);
+                        tempBlock = ((PCLOrb) r).atBlockModify(info, tempBlock);
+                        addAttackDisplay(oldDamage, tempDamage);
+                        addDefendDisplay(oldBlock, tempBlock);
                     }
                 }
             }
@@ -1649,7 +1661,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                     }
                 }
 
-                // Vanilla blights don't affect calculations
+                // Vanilla blights and orbs don't affect calculations
                 for (AbstractBlight r : ((AbstractPlayer) owner).blights) {
                     if (r instanceof PCLBlight) {
                         oldBlock = tempBlock;
@@ -1658,6 +1670,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                         tempBlock = ((PCLBlight) r).atBlockLastModify(info, tempBlock);
                         addAttackDisplay(r.img, oldDamage, tempDamage);
                         addDefendDisplay(r.img, oldBlock, tempBlock);
+                    }
+                }
+                for (AbstractOrb r : ((AbstractPlayer) owner).orbs) {
+                    if (r instanceof PCLOrb) {
+                        oldBlock = tempBlock;
+                        oldDamage = tempDamage;
+                        tempDamage = ((PCLOrb) r).atDamageLastModify(info, tempDamage);
+                        tempBlock = ((PCLOrb) r).atBlockLastModify(info, tempBlock);
+                        addAttackDisplay(oldDamage, tempDamage);
+                        addDefendDisplay(oldBlock, tempBlock);
                     }
                 }
             }

@@ -22,7 +22,7 @@ import pinacolada.utilities.GameUtilities;
 public class PTrait_Affinity extends PTrait<PField_Affinity> {
 
     public static final PSkillData<PField_Affinity> DATA = register(PTrait_Affinity.class, PField_Affinity.class)
-            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Augment);
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_Affinity() {
         this(1);

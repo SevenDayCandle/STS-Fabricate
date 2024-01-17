@@ -38,7 +38,7 @@ public class PlayFromPile extends SelectFromPile {
     protected void complete(ArrayList<AbstractCard> result) {
         for (AbstractCard card : result) {
             PCLActions.top.playCard(card, target)
-                    .setSourcePile(GameUtilities.findCardGroup(card, false));
+                    .setSourcePile(GameUtilities.findCardGroup(card));
         }
 
         super.complete(result);

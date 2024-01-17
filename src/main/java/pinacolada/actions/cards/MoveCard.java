@@ -60,7 +60,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
     @Override
     protected void firstUpdate() {
         if (sourcePile == null) {
-            sourcePile = GameUtilities.findCardGroup(card, false);
+            sourcePile = GameUtilities.findCardGroup(card);
 
             if (sourcePile == null) {
                 EUIUtils.logWarning(this, "Could not find card source pile.");

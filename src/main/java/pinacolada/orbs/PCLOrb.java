@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -23,6 +24,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
@@ -94,6 +96,62 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
             this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
         }
         CombatManager.onOrbApplyFocus(this);
+    }
+
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        return atBlockLastModify(block, info.card);
+    }
+
+    public float atBlockLastModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atBlockModify(PCLUseInfo info, float block) {
+        return atBlockModify(block, info.card);
+    }
+
+    public float atBlockModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public int atCostModify(PCLUseInfo info, int block) {
+        return atCostModify(block, info.card);
+    }
+
+    public int atCostModify(int cost, AbstractCard c) {
+        return cost;
+    }
+
+    public float atDamageLastModify(PCLUseInfo info, float block) {
+        return atDamageLastModify(block, info.card);
+    }
+
+    public float atDamageLastModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atDamageModify(PCLUseInfo info, float block) {
+        return atDamageModify(block, info.card);
+    }
+
+    public float atDamageModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atHealModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atHitCountModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atRightCountModify(PCLUseInfo info, float block) {
+        return block;
+    }
+
+    public float atSkillBonusModify(PCLUseInfo info, float block) {
+        return block;
     }
 
     public boolean canUpgrade() {

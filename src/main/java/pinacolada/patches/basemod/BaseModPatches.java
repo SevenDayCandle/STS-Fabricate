@@ -22,6 +22,7 @@ import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import javassist.CtBehavior;
 import pinacolada.blights.PCLBlight;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.orbs.PCLOrb;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
@@ -67,6 +68,17 @@ public class BaseModPatches {
                 for (AbstractBlight blight : player.blights) {
                     if (blight instanceof PCLBlight) {
                         retVal = ((PCLBlight) blight).atDamageLastModify(retVal, c);
+                    }
+                }
+
+                for (AbstractOrb r : AbstractDungeon.player.orbs) {
+                    if (r instanceof PCLOrb) {
+                        retVal = ((PCLOrb) r).atDamageModify(retVal, c);
+                    }
+                }
+                for (AbstractOrb r : AbstractDungeon.player.orbs) {
+                    if (r instanceof PCLOrb) {
+                        retVal = ((PCLOrb) r).atDamageLastModify(retVal, c);
                     }
                 }
             }

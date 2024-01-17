@@ -15,7 +15,7 @@ import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 // Only used for augments
 public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     public static final PSkillData<PField_CardTarget> DATA = register(PTrait_CardTarget.class, PField_CardTarget.class)
-            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Augment);
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     protected PCLCardTarget newTarget = PCLCardTarget.Single;
 

@@ -12,6 +12,7 @@ import pinacolada.ui.editor.PCLCustomPowerEffectPage;
 import pinacolada.ui.editor.augment.PCLCustomAugmentEditScreen;
 import pinacolada.ui.editor.blight.PCLCustomBlightEditScreen;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
+import pinacolada.ui.editor.orb.PCLCustomOrbEditScreen;
 import pinacolada.ui.editor.potion.PCLCustomPotionEditScreen;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
@@ -144,13 +145,13 @@ public class PSkillData<T extends PField> {
     public enum SourceType {
         Card,
         Collectible,
-        Power,
-        Augment;
+        Power;
 
         public boolean isSourceAllowed(PCLCustomEffectPage editor) {
             switch (this) {
                 case Card:
-                    return editor.screen instanceof PCLCustomCardEditScreen;
+                    return editor.screen instanceof PCLCustomCardEditScreen
+                            || editor.screen instanceof PCLCustomAugmentEditScreen;
                 case Collectible:
                     return editor.screen instanceof PCLCustomRelicEditScreen
                             || editor.screen instanceof PCLCustomPotionEditScreen
@@ -160,9 +161,8 @@ public class PSkillData<T extends PField> {
                             || editor.screen instanceof PCLCustomRelicEditScreen
                             || editor.screen instanceof PCLCustomBlightEditScreen
                             || editor.screen instanceof PCLCustomPowerEditScreen
+                            || editor.screen instanceof PCLCustomOrbEditScreen
                             || editor.screen instanceof PCLCustomAugmentEditScreen;
-                case Augment:
-                    return editor.screen instanceof PCLCustomAugmentEditScreen;
             }
             return true;
         }

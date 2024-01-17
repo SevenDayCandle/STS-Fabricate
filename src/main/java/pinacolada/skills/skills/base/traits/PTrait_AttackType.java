@@ -17,7 +17,7 @@ import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 @VisibleSkill
 public class PTrait_AttackType extends PTrait<PField_AttackType> {
     public static final PSkillData<PField_AttackType> DATA = register(PTrait_AttackType.class, PField_AttackType.class)
-            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Augment);
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_AttackType() {
         this(PCLAttackType.Normal);

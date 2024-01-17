@@ -267,6 +267,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         fields.registerRequired(editor);
         fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard()), null);
         fields.registerRBoolean(editor, StringUtils.capitalize(TEXT.cedit_or), null);
+        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.cedit_or), null);
     }
 
     @Override

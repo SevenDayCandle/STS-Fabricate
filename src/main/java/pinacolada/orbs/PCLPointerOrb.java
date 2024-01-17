@@ -1,5 +1,6 @@
 package pinacolada.orbs;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
@@ -22,6 +23,113 @@ public abstract class PCLPointerOrb extends PCLOrb implements PointerProvider, T
 
     public PCLPointerOrb(PCLOrbData data) {
         super(data);
+    }
+
+    @Override
+    public float atBlockLastModify(PCLUseInfo info, float block) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            block = effect.modifyBlockLast(info, block);
+        }
+        return block;
+    }
+
+    @Override
+    public float atBlockLastModify(float block, AbstractCard c) {
+        return atBlockLastModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
+    }
+
+    @Override
+    public float atBlockModify(PCLUseInfo info, float block) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            block = effect.modifyBlockFirst(info, block);
+        }
+        return block;
+    }
+
+    @Override
+    public float atBlockModify(float block, AbstractCard c) {
+        return atBlockModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
+    }
+
+    @Override
+    public int atCostModify(PCLUseInfo info, int block) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            block = effect.modifyCost(info, block);
+        }
+        return block;
+    }
+
+    @Override
+    public int atCostModify(int block, AbstractCard c) {
+        return atCostModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
+    }
+
+
+    @Override
+    public float atDamageLastModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyDamageGiveLast(info, damage);
+        }
+        return damage;
+    }
+
+    @Override
+    public float atDamageLastModify(float block, AbstractCard c) {
+        return atDamageLastModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
+    }
+
+    @Override
+    public float atDamageModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyDamageGiveFirst(info, damage);
+        }
+        return damage;
+    }
+
+    @Override
+    public float atDamageModify(float block, AbstractCard c) {
+        return atDamageModify(CombatManager.playerSystem.getInfo(c, AbstractDungeon.player, AbstractDungeon.player), block);
+    }
+
+    @Override
+    public float atHealModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyHeal(info, damage);
+        }
+        return damage;
+    }
+
+    @Override
+    public float atHitCountModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyHitCount(info, damage);
+        }
+        return damage;
+    }
+
+    @Override
+    public float atRightCountModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyRightCount(info, damage);
+        }
+        return damage;
+    }
+
+    @Override
+    public float atSkillBonusModify(PCLUseInfo info, float damage) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifySkillBonus(info, damage);
+        }
+        return damage;
     }
 
     @Override
@@ -95,6 +203,13 @@ public abstract class PCLPointerOrb extends PCLOrb implements PointerProvider, T
             ef.use(info, PCLActions.bottom);
         }
         super.passive();
+    }
+
+    // TODO single endpoint for calling refresh
+    public void refresh(PCLUseInfo info) {
+        for (PSkill<?> effect : getEffects()) {
+            effect.refresh(info, true, false);
+        }
     }
 
     @Override

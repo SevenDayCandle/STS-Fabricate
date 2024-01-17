@@ -343,8 +343,7 @@ public class GameUtilities {
         }
     }
 
-
-    public static CardGroup findCardGroup(AbstractCard card, boolean includeLimbo) {
+    public static CardGroup findCardGroup(AbstractCard card) {
         if (player.hand.contains(card)) {
             return player.hand;
         }
@@ -357,7 +356,7 @@ public class GameUtilities {
         else if (player.exhaustPile.contains(card)) {
             return player.exhaustPile;
         }
-        else if (includeLimbo && player.limbo.contains(card)) {
+        else if (player.limbo.contains(card)) {
             return player.limbo;
         }
         else if (CombatManager.PURGED_CARDS.contains(card)) {

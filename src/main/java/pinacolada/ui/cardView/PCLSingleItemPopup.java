@@ -181,7 +181,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
             y -= tip.render(sb, TIP_RENDER_X, y, i) + BOX_RENDER_OFFSET;
         }
 
-        EUITooltip.renderPreviews(sb, Settings.WIDTH * 0.3f, Settings.HEIGHT * 0.25f, EUIGameUtils.canShowUpgrades(false), true);
+        EUITooltip.renderPreviews(sb, Settings.WIDTH * 0.1f, Settings.HEIGHT * 0.25f, 0.85f, EUIGameUtils.canShowUpgrades(false), true);
         scrollBar.render(sb);
     }
 

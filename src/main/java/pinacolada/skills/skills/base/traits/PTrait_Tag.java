@@ -20,7 +20,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 @VisibleSkill
 public class PTrait_Tag extends PTrait<PField_Tag> {
     public static final PSkillData<PField_Tag> DATA = register(PTrait_Tag.class, PField_Tag.class)
-            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Augment);
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
     public PTrait_Tag() {
         this(1);

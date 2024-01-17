@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
@@ -18,6 +19,7 @@ import pinacolada.cardmods.TemporaryCostModifier;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.orbs.PCLOrb;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -51,6 +53,17 @@ public class AbstractCardPatches {
             for (AbstractBlight r : AbstractDungeon.player.blights) {
                 if (r instanceof PCLBlight) {
                     tmp[0] = ((PCLBlight) r).atBlockLastModify(tmp[0], __instance);
+                }
+            }
+
+            for (AbstractOrb r : AbstractDungeon.player.orbs) {
+                if (r instanceof PCLOrb) {
+                    tmp[0] = ((PCLOrb) r).atBlockModify(tmp[0], __instance);
+                }
+            }
+            for (AbstractOrb r : AbstractDungeon.player.orbs) {
+                if (r instanceof PCLOrb) {
+                    tmp[0] = ((PCLOrb) r).atBlockLastModify(tmp[0], __instance);
                 }
             }
         }

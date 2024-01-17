@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
+import extendedui.EUIUtils;
 import extendedui.utilities.CostFilter;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -19,10 +20,12 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @VisibleSkill
 public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasProperty.class, PField_CardCategory.class, 1, 1)
+            .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power)
             .noTarget();
 
     public PCond_IfHasProperty(PSkillSaveData content) {
@@ -55,8 +58,17 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (info != null && info.card != null) {
-            return fields.getFullCardFilter().invoke(info.card);
+        if (info != null) {
+            if (useParent) {
+                List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
+                if (cards != null) {
+                    return fields.allOrAnyR(cards, card -> fields.getFullCardFilter().invoke(card));
+                }
+                return false;
+            }
+            else if (info.card != null) {
+                return fields.getFullCardFilter().invoke(info.card);
+            }
         }
         return false;
     }
@@ -109,5 +121,6 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
+        // TODO any/or toggle
     }
 }

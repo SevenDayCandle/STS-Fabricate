@@ -13,8 +13,7 @@ import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PCond_CheckCreatureElite extends PPassiveCond<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PCond_CheckCreatureElite.class, PField_Not.class, 1, 1)
-            .pclOnly();
+    public static final PSkillData<PField_Not> DATA = register(PCond_CheckCreatureElite.class, PField_Not.class, 1, 1);
 
     public PCond_CheckCreatureElite(PSkillSaveData content) {
         super(DATA, content);

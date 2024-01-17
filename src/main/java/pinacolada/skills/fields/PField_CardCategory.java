@@ -43,6 +43,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public ArrayList<String> loadouts = new ArrayList<>();
     public ArrayList<String> flags = new ArrayList<>();
     public boolean invert;
+    public boolean partial;
 
     public PField_CardCategory() {
         super();
@@ -60,6 +61,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         setLoadout(other.loadouts);
         setFlag(other.flags);
         setInvert(other.invert);
+        setPartial(other.partial);
     }
 
     public static boolean checkForFlag(String loadout, AbstractCard card) {
@@ -119,7 +121,8 @@ public class PField_CardCategory extends PField_CardGeneric {
                 && costs.equals(((PField_CardCategory) other).costs)
                 && loadouts.equals(((PField_CardCategory) other).loadouts)
                 && flags.equals(((PField_CardCategory) other).flags)
-                && invert == ((PField_CardCategory) other).invert;
+                && invert == ((PField_CardCategory) other).invert
+                && partial == ((PField_CardCategory) other).partial;
     }
 
     /* Filter cards without upgrade filtering; use if you need to use the upgrade filter for something else (e.g. generating cards with upgrades) */
@@ -134,6 +137,20 @@ public class PField_CardCategory extends PField_CardGeneric {
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
                         && (types.isEmpty() || types.contains(c.type))));
+    }
+
+    public FuncT1<Boolean, AbstractCard> getBasePartialCardFilter() {
+        return (c -> invert ^ (
+                EUIUtils.any(cardIDs, id -> id.equals(c.cardID))
+                || GameUtilities.hasAnyAffinity(c, affinities)
+                || colors.contains(c.color)
+                || EUIUtils.any(costs, cost -> cost.check(c))
+                || EUIUtils.any(loadouts, loadout -> checkForLoadout(loadout, c))
+                || EUIUtils.any(flags, loadout -> checkForFlag(loadout, c))
+                || rarities.contains(c.rarity)
+                || EUIUtils.any(tags, t -> t.has(c))
+                || types.contains(c.type))
+        );
     }
 
     public String getCardAndString() {
@@ -164,8 +181,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         ArrayList<String> stringsToJoin = getCardXPrefixes(affinityFunc, joinFunc);
         if (!types.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, EUIGameUtils::textForType)));
+            return partial ? PCLCoreStrings.joinWithOr(stringsToJoin) : EUIUtils.joinStrings(" ", stringsToJoin);
         }
-        return stringsToJoin.isEmpty() ? PSkill.TEXT.subjects_any : EUIUtils.joinStrings(" ", stringsToJoin);
+        return stringsToJoin.isEmpty() ? PSkill.TEXT.subjects_any :
+                partial ? PCLCoreStrings.joinWithOr(stringsToJoin) : EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
     protected final ArrayList<String> getCardXPrefixes(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc) {
@@ -205,12 +224,15 @@ public class PField_CardCategory extends PField_CardGeneric {
         ArrayList<String> stringsToJoin = getCardXPrefixes(affinityFunc, joinFunc);
         if (!types.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, type -> pluralFunc.invoke(GameUtilities.tooltipForType(type).plural()))));
+            return partial ? PCLCoreStrings.joinWithOr(stringsToJoin) : EUIUtils.joinStrings(" ", stringsToJoin);
         }
         else {
+            if (partial) {
+                return PCLCoreStrings.joinWithOr(stringsToJoin) + " " + pluralFunc.invoke(PSkill.TEXT.subjects_cardN);
+            }
             stringsToJoin.add(pluralFunc.invoke(PSkill.TEXT.subjects_cardN));
+            return EUIUtils.joinStrings(" ", stringsToJoin);
         }
-
-        return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
     public String getFullCardAndString(Object value) {
@@ -224,6 +246,12 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public FuncT1<Boolean, AbstractCard> getFullCardFilter(int upgrades) {
+        if (partial) {
+            if (upgrades > 0) {
+                return c -> getBasePartialCardFilter().invoke(c) || (invert ^ c.timesUpgraded >= upgrades);
+            }
+            return getBasePartialCardFilter();
+        }
         if (upgrades > 0) {
             return c -> getBaseCardFilter().invoke(c) && (invert ^ c.timesUpgraded >= upgrades);
         }
@@ -459,6 +487,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setLoadout(EUIUtils.map(nt, l -> l.ID));
     }
 
+    public PField_CardCategory setPartial(boolean val) {
+        this.partial = val;
+        return this;
+    }
+
     public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> nt) {
         this.rarities.clear();
         for (AbstractCard.CardRarity t : nt) {
@@ -523,6 +556,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerFlag(flags);
         editor.registerCard(cardIDs);
         editor.registerBoolean(PSkill.TEXT.cedit_invert, v -> invert = v, invert);
+        editor.registerBoolean(PSkill.TEXT.cedit_partial, v -> partial = v, partial);
     }
 
     public boolean targetsSpecificCards() {
