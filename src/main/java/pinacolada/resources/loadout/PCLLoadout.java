@@ -8,6 +8,8 @@ import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
@@ -172,10 +174,12 @@ public abstract class PCLLoadout {
         return false;
     }
 
-    public ChoiceCard<PCLLoadout> buildCard(boolean selected, boolean inPool) {
+    public ChoiceCard<PCLLoadout> buildCard(boolean selected, boolean inPool, boolean isBeta) {
         final PCLCardData data = getSymbolicCard();
         ChoiceCardData<PCLLoadout> cd = new ChoiceCardData<>(String.valueOf(ID), this);
-        cd.setColor(color);
+        if (!isBeta) {
+            cd.setColor(color);
+        }
         cd.setMaxUpgrades(0);
         if (!isLocked()) {
             cd.setImagePath(data.imagePath);
@@ -191,8 +195,14 @@ public abstract class PCLLoadout {
             card.setCardRarityType(AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
         }
         else {
-            card.addUseMove(new FakeSkill());
-            card.addUseMove(new FakeSkill2());
+            if (isBeta) {
+                card.addSpecialMove(PGR.core.strings.sui_selected + EUIUtils.SPLIT_LINE + PGR.core.strings.csel_betaSet, (a, b, c) -> {}, 0, getCards().size());
+                card.tooltips.add(new EUIKeywordTooltip(PGR.core.strings.csel_betaSet, PGR.core.strings.csel_betaSetDesc));
+            }
+            else {
+                card.addSpecialMove(PGR.core.strings.sui_selected, (a, b, c) -> {}, 0, getCards().size());
+                card.addSpecialMove(PGR.core.strings.sui_unlocked, (a, b, c) -> {}, 0, getCards().size());
+            }
             if (selected) {
                 card.color = data.cardColor;
                 card.setCardRarityType(AbstractCard.CardRarity.SPECIAL, SELECTABLE_TYPE);
@@ -218,6 +228,10 @@ public abstract class PCLLoadout {
 
     public PCLLoadoutValidation createValidation() {
         return getPreset().validate();
+    }
+
+    public int getAscensionLevelForBaseStat(PCLBaseStatEditor.StatType type) {
+        return 0;
     }
 
     public String getAuthor() {
@@ -509,7 +523,7 @@ public abstract class PCLLoadout {
     }
 
     public boolean isEditorAllowed(PCLBaseStatEditor beditor, CharacterOption option) {
-        return GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
+        return GameUtilities.getMaxAscensionLevel(option.c) >= getAscensionLevelForBaseStat(beditor.type);
     }
 
     public boolean isEnabled() {
@@ -585,20 +599,4 @@ public abstract class PCLLoadout {
     }
 
     public abstract ArrayList<String> getBaseStartingRelics();
-
-    // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
-    // TODO use custom choice items instead of cards
-    protected class FakeSkill extends PSpecialSkill {
-        public FakeSkill() {
-            super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {
-            }, 0, getCards().size());
-        }
-    }
-
-    protected class FakeSkill2 extends PSpecialSkill {
-        public FakeSkill2() {
-            super("", PGR.core.strings.sui_selected, (a, b, c) -> {
-            }, 0, getCards().size());
-        }
-    }
 }

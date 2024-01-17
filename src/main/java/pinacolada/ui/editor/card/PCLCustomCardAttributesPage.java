@@ -161,7 +161,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setFont(FontHelper.topPanelAmountFont, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_upgrades)
                 .setTooltip(upgradeLabel.tooltip);
-        boolean canShowLabels = availableAffinities.size() > 0;
+        boolean canShowLabels = !availableAffinities.isEmpty();
         upgradeLabel2.setActive(canShowLabels);
 
         curW += SPACING_WIDTH;
@@ -176,7 +176,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
     public static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color) {
         ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? PCLAffinity.basic() : PCLAffinity.getAvailableAffinities(color, false));
-        if (availableAffinities.size() > 0) {
+        if (!availableAffinities.isEmpty()) {
             availableAffinities.add(PCLAffinity.Star);
         }
         return availableAffinities;
@@ -184,10 +184,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
     // Colorless/Curse should not be able to see Summon in the card editor
     public static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color) {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
-            return PCLCardTarget.getAll();
-        }
-        return EUIUtils.filterInPlace(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
+        return PCLCardTarget.getAll();
     }
 
     @Override

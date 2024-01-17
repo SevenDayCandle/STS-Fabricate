@@ -68,6 +68,7 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
 import pinacolada.monsters.PCLCardAlly;
@@ -75,12 +76,14 @@ import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbData;
+import pinacolada.orbs.PCLPointerOrb;
 import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotionData;
+import pinacolada.powers.PCLPointerPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PTriggerPower;
@@ -108,8 +111,12 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 public class GameUtilities {
     private static final String PORTRAIT_PATH = "images/1024Portraits/";
     private static final String BETA_PATH = "images/1024PortraitsBeta/";
-    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
+    public static final String JSON_EXT = ".json";
+    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(JSON_EXT);
     public static final int CHAR_OFFSET = 97;
+    private static Field darkgladeGensokyoAlly;
+    private static Field darkgladePokemonAlly;
+    private static Field darkgladeRuinaAlly;
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -288,6 +295,21 @@ public class GameUtilities {
 
         if (!aliveOnly || !isDeadOrEscaped(player)) {
             characters.add(player);
+        }
+    }
+
+    public static void fillWithAlliedCharactersImpl(boolean aliveOnly, ArrayList<AbstractCreature> characters) {
+        try {
+            // Darkglade allies have halfDead set to prevent targeting, so cannot use target.isDeadOrEscaped
+            if (darkgladePokemonAlly != null) {
+                AbstractCreature c = (AbstractCreature) darkgladeGensokyoAlly.get(player);
+                if (c != null && (!aliveOnly || (!c.isDead && c.currentHealth > 0))) {
+                    characters.add(c);
+                }
+            }
+        }
+        catch (Exception ignored) {
+
         }
     }
 
@@ -743,8 +765,8 @@ public class GameUtilities {
 
     public static int getEndOfTurnBlock(AbstractCreature creature) {
         int amount = 0;
-        if (creature != null) {
-            // Check end of turn powers (base game powers plus custom Fabricate powers)
+        if (creature != null && isPlayerTurn(true)) {
+            // Check end of turn powers (base game powers plus custom Fabricate powers) only during player turn
             if (creature.powers != null) {
                 for (AbstractPower p : creature.powers) {
                     if (isPowerBlockGranting(p)) {
@@ -753,11 +775,14 @@ public class GameUtilities {
                     else if (p instanceof PTriggerPower) {
                         amount += getEndOfTurnBlockFromTriggers(((PTriggerPower) p).ptriggers);
                     }
+                    else if (p instanceof PointerProvider) {
+                        amount += getEndOfTurnBlockFromTriggers(((PointerProvider) p).getEffects());
+                    }
                 }
             }
 
 
-            if (creature instanceof AbstractPlayer && isPlayerTurn(true)) {
+            if (creature instanceof AbstractPlayer) {
                 // Check end of turn relics only during player turn
                 for (AbstractRelic r : ((AbstractPlayer) creature).relics) {
                     if (Orichalcum.ID.equals(r.relicId) && creature.currentBlock == 0) {
@@ -771,11 +796,13 @@ public class GameUtilities {
                     }
                 }
 
-                // TODO check for custom pointer orbs
                 // Check end of turn orbs
                 for (AbstractOrb o : ((AbstractPlayer) creature).orbs) {
                     if (o != null && isOrbBlockGranting(o)) {
                         amount += o.passiveAmount;
+                    }
+                    else if (o instanceof PCLPointerOrb) {
+                        amount += getEndOfTurnBlockFromTriggers(((PCLPointerOrb) o).getEffects());
                     }
                 }
             }
@@ -785,7 +812,7 @@ public class GameUtilities {
     }
 
     // TODO less naive approach that accounts for custom conds and out-of-order move hierarchies
-    protected static int getEndOfTurnBlockFromTriggers(Iterable<? extends PSkill> triggers) {
+    protected static int getEndOfTurnBlockFromTriggers(Iterable<? extends PSkill<?>> triggers) {
         int amount = 0;
         for (PSkill<?> trigger : triggers) {
             if (trigger instanceof PTrigger_When

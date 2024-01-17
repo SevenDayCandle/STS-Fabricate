@@ -53,7 +53,6 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
     protected T prevItem;
     protected T nextItem;
     protected Color fadeColor = Color.BLACK.cpy();
-    protected EUIPreview preview;
     protected float fadeTimer = 0.0F;
 
     public PCLSingleItemPopup(EUIHitbox popupHb) {
@@ -120,10 +119,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
             }
         }
         EUITooltip.scanListForAdditionalTips(tooltips);
-
-        if (currentItem instanceof TooltipProvider) {
-            preview = ((TooltipProvider) currentItem).getPreview();
-        }
+        EUITooltip.fillProviderPreview(currentItem);
 
         scrollBar.scroll(0, true);
     }
@@ -185,10 +181,7 @@ public abstract class PCLSingleItemPopup<T, U extends T> extends EUIBase {
             y -= tip.render(sb, TIP_RENDER_X, y, i) + BOX_RENDER_OFFSET;
         }
 
-        if (preview != null) {
-            preview.render(sb, Settings.WIDTH * 0.2f - 10f * Settings.scale, Settings.HEIGHT * 0.25f, 1f, EUIGameUtils.canShowUpgrades(false), true);
-        }
-
+        EUITooltip.renderPreviews(sb, Settings.WIDTH * 0.3f, Settings.HEIGHT * 0.25f, EUIGameUtils.canShowUpgrades(false), true);
         scrollBar.render(sb);
     }
 

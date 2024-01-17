@@ -43,6 +43,7 @@ import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 import pinacolada.resources.loadout.LoadoutRelicSlot;
+import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.trials.PCLCustomTrial;
@@ -562,6 +563,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 });
             }
 
+            boolean added = false;
             if (data.canUseCustom() || allowCustomCards) {
                 for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
                     if (!bannedCards.contains(c.ID) && (c.loadout == null || EUIUtils.any(loadouts, l -> l.isCardFromLoadout(c.ID)))) {
@@ -569,6 +571,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                         CardGroup pool = GameUtilities.getCardPool(rarity);
                         if (pool != null) {
                             pool.addToBottom(c.make());
+                            added = true;
                         }
                         CardGroup spool = GameUtilities.getCardPoolSource(rarity);
                         if (spool != null) {
@@ -592,8 +595,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                                 AbstractDungeon.srcCurseCardPool.addToBottom(c.getFirstBuilder().create());
                                 AbstractDungeon.curseCardPool.addToBottom(c.getFirstBuilder().create());
                         }
+                        added = true;
                     }
                 }
+            }
+            // Disable progression if custom cards are restricted
+            if (added && !allowCustomCards && data.customDisablesProgression()) {
+                Settings.seedSet = true;
             }
         }
         else {
@@ -674,6 +682,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 // Series must be unlocked and enabled to be present in-game
                 if (l == loadout || l.isEnabled()) {
                     loadouts.add(l);
+                    // Disable progression if custom loadouts are used on restricted characters
+                    if (l instanceof PCLCustomLoadout && data.customDisablesProgression()) {
+                        Settings.seedSet = true;
+                    }
                 }
             }
 

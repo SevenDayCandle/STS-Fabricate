@@ -415,11 +415,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    protected PMove_StackCustomPower addGainPower(PTrigger... effect) {
+    public PMove_StackCustomPower addGainPower(PTrigger... effect) {
         return addApplyPower(PCLCardTarget.Self, -1, effect);
     }
 
-    protected PMove_StackCustomPower addGainPower(int amount, PTrigger... effect) {
+    public PMove_StackCustomPower addGainPower(int amount, PTrigger... effect) {
         return addApplyPower(PCLCardTarget.Self, amount, effect);
     }
 
@@ -429,61 +429,61 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return added;
     }
 
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse) {
+    public PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse) {
         return addSpecialCond(descIndex, onUse, 1, 0);
     }
 
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
+    public PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
         PSpecialCond move = (PSpecialCond) getSpecialCond(descIndex, onUse, amount, extra).setSource(this).onAddToCard(this);
         getEffects().add(move);
         return move;
     }
 
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
+    public PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
         return addSpecialCond(descIndex, onUse, amount, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
+    public PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+    public PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra).setSource(this).onAddToCard(this);
         getEffects().add(move);
         return move;
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
+    public PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
+    public PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
     }
 
-    protected PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
+    public PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return addSpecialMove(description, onUse, amount, 0);
     }
 
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
         PSpecialPowerSkill move = (PSpecialPowerSkill) getSpecialPower(description, onUse, amount, extra).setSource(this).onAddToCard(this);
         getEffects().add(move);
         return move;
     }
 
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
     }
 
-    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
         return addSpecialPower(description, onUse, amount, 0);
     }
 
@@ -723,7 +723,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
     }
 
-    public String getBottomText() {
+    protected String getBottomText() {
         String loadoutName = cardData.getLoadoutName();
         return (loadoutName == null || loadoutName.isEmpty()) ? null : loadoutName;
     }
@@ -739,7 +739,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return upgrade;
     }
 
-    public Texture getCardAttributeBanner() {
+    protected Texture getCardAttributeBanner() {
         if (shouldUsePCLFrame()) {
             if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
                 return (isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture();
@@ -861,7 +861,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return String.valueOf(currentHealth) + "/" + heal;
     }
 
-    public Color getHPStringColor() {
+    protected Color getHPStringColor() {
         return currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR;
     }
 

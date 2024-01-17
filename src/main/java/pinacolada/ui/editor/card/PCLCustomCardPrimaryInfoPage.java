@@ -125,7 +125,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                     }
                 })
                 .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(getEligibleRarities())
+                .setItems(AbstractCard.CardRarity.values())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
@@ -138,7 +138,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 })
                 .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosizeButton(true)
-                .setItems(getEligibleTypes(effect.getBuilder().cardColor))
+                .setItems(AbstractCard.CardType.values())
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
 
         flagsDropdown = new EUISearchableDropdown<CardFlag>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTooltip().title)
@@ -148,7 +148,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
-                .setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor))
+                .setItems(CardFlag.getAll())
                 .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags)
                 .setRowFunction((a, b, c, d) -> new EditDeleteDropdownRow<CardFlag, PCLCustomFlagInfo>(a, b, c, PCLCustomFlagInfo.get(c.ID), d, f -> this.openFlagCreator(PGR.core.strings.cedit_renameItem, f), this::openFlagDelete))
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 5);
@@ -227,18 +227,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         refreshFlagItems();
         refreshLoadoutItems();
         refresh();
-    }
-
-    public static List<AbstractCard.CardRarity> getEligibleRarities() {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardCardRarities();
-    }
-
-    // Colorless/Curse should not be able to see Summon in the card editor
-    public static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color) {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
-            return Arrays.asList(AbstractCard.CardType.values());
-        }
-        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
     }
 
     @Override
@@ -342,7 +330,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     }
 
     protected void refreshFlagItems() {
-        flagsDropdown.setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor));
+        flagsDropdown.setItems(CardFlag.getAll());
         flagsDropdown.sortByLabel();
         flagsDropdown
                 .setActive(flagsDropdown.size() > 0);

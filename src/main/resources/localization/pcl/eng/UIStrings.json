@@ -344,7 +344,10 @@
 												"Abilities",
 												"{#r:Unlocks at Ascension {0}}",
 												"Edit Skin",
-												"Select the appearance of this character in-game."
+												"Select the appearance of this character in-game.",
+												"Custom Set",
+												"Enabling this set disables progression.",
+												"Progression disabled due to custom cards."
 								]
 				},
 				"pcl:Combat": {

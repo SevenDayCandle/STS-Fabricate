@@ -34,16 +34,14 @@ import extendedui.ui.screens.CustomCardLibraryScreen;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.ChoiceCard;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.*;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -80,6 +78,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected CharacterOption characterOption;
     protected ChoiceCard<PCLLoadout> selectedCard;
     protected PCLEffect currentEffect;
+    protected boolean isCustom;
     protected int totalCardsCache = 0;
     protected int totalColorlessCache = 0;
     public ChoiceCard<PCLLoadout> currentSeriesCard;
@@ -183,6 +182,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void calculateCardCounts() {
         shownCards.clear();
         shownColorlessCards.clear();
+        isCustom = false;
 
         for (ChoiceCard<PCLLoadout> entry : loadouts) {
             if (entry.value.isLocked()) {
@@ -200,6 +200,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                         AbstractCard c = allCards.get(data.ID);
                         if (c != null) {
                             shownCards.add(c);
+                            if (c instanceof PCLDynamicCard) {
+                                isCustom = true;
+                            }
                         }
                     }
                     allowedAmount += 1;
@@ -238,6 +241,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
                 if (!bannedColorless.contains(slot.ID) && isRarityAllowed(slot.getFirstBuilder().cardRarity, slot.getFirstBuilder().cardType)) {
                     shownColorlessCards.add(slot.make());
+                    isCustom = true;
                 }
             }
         }
@@ -277,7 +281,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         for (PCLLoadout series : data.getEveryLoadout()) {
             boolean isSelected = Objects.equals(series.ID, data.selectedLoadout.ID);
             // Add series representation to the grid selection
-            final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID));
+            final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID), data.customDisablesProgression() && series instanceof PCLCustomLoadout);
             if (gridCard != null) {
                 loadouts.add(gridCard);
                 gridCard.targetTransparency = 1f;

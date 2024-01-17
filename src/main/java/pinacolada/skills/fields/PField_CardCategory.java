@@ -284,7 +284,7 @@ public class PField_CardCategory extends PField_CardGeneric {
             stringsToJoin.add(EUIGameUtils.textForType(types.get(i)));
         }
         if (cardIDs.size() > i) {
-            stringsToJoin.add(GameUtilities.getCardNameForID(cardIDs.get(i)));
+            stringsToJoin.add(GameUtilities.getCardNameForID(cardIDs.get(i), skill.extra2, 0));
         }
 
         return stringsToJoin.isEmpty() ? TEXT.subjects_other : EUIUtils.joinStrings(" ", stringsToJoin);

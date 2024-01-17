@@ -85,7 +85,6 @@ public class PCLMainConfig extends AbstractConfig {
     public static void updateAllDescriptions() {
         PCLCustomPowerSlot.refreshTooltips();
         PCLCardData.invalidateTempCards();
-        EUIPreview.invalidate();
         for (AbstractCard c : CardLibrary.getAllCards()) {
             c.initializeDescription();
         }

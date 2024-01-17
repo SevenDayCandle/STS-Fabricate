@@ -145,31 +145,29 @@ public class PCLBaseStatEditor extends EUIHoverable {
     }
 
     public enum StatType {
-        HP(Settings.RED_TEXT_COLOR, 2, 1, -10, 10, 0),
-        Gold(Settings.GOLD_COLOR, 14, 1, -10, 10, 0),
-        OrbSlot(Settings.CREAM_COLOR, 1, 6, -18, 18, 12),
-        PotionSlot(Settings.CREAM_COLOR, 1, 10, 12),
-        CardDraw(Settings.CREAM_COLOR, 1, 28, 12),
-        Energy(Settings.CREAM_COLOR, 1, 38, 12);
+        HP(Settings.RED_TEXT_COLOR, 2, 1, -10, 10),
+        Gold(Settings.GOLD_COLOR, 14, 1, -10, 10),
+        OrbSlot(Settings.CREAM_COLOR, 1, 6, -18, 18),
+        PotionSlot(Settings.CREAM_COLOR, 1, 10),
+        CardDraw(Settings.CREAM_COLOR, 1, 28),
+        Energy(Settings.CREAM_COLOR, 1, 38);
 
         public final Color labelColor;
         public final int amountPerStep;
         public final int valuePerStep;
         public final int minValue;
         public final int maxValue;
-        public final int unlockLevel;
 
-        StatType(Color labelColor, int amountPerStep, int valuePerStep, int unlockLevel) {
-            this(labelColor, amountPerStep, valuePerStep, -valuePerStep, valuePerStep, unlockLevel);
+        StatType(Color labelColor, int amountPerStep, int valuePerStep) {
+            this(labelColor, amountPerStep, valuePerStep, -valuePerStep, valuePerStep);
         }
 
-        StatType(Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel) {
+        StatType(Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue) {
             this.labelColor = labelColor;
             this.amountPerStep = amountPerStep;
             this.valuePerStep = valuePerStep;
             this.minValue = minValue;
             this.maxValue = maxValue;
-            this.unlockLevel = unlockLevel;
         }
 
         public int getAmount(PCLLoadout loadout, PCLLoadoutData data) {

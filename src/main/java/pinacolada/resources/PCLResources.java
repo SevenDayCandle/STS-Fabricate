@@ -27,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static pinacolada.utilities.GameUtilities.JSON_EXT;
+
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends AbstractImages, V extends AbstractTooltips, W extends AbstractStrings> {
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
@@ -35,10 +37,11 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }.getType();
     private static final Type LOADOUT_TYPE = new TypeToken<Map<String, Map<String, LoadoutStrings>>>() {
     }.getType();
-    private static final String JSON_AUGMENTS = "AugmentStrings.json";
-    private static final String JSON_CARDS = "CardStrings.json";
-    private static final String JSON_KEYWORDS = "KeywordStrings.json";
-    private static final String JSON_LOADOUTS = "LoadoutStrings.json";
+    private static final String LOCALIZATION_ROOT = "localization/";
+    private static final String PREF_AUGMENTS = "AugmentStrings";
+    private static final String PREF_CARDS = "CardStrings";
+    private static final String PREF_KEYWORDS = "KeywordStrings";
+    private static final String PREF_LOADOUTS = "LoadoutStrings";
     public final String ID;
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
@@ -114,7 +117,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public FileHandle getFallbackFile(String fileName) {
-        return Gdx.files.internal("localization/" + ID.toLowerCase() + "/eng/" + fileName);
+        return Gdx.files.internal(LOCALIZATION_ROOT + ID.toLowerCase() + "/eng/" + fileName);
     }
 
     public <Z> Z getFallbackStrings(String fileName, Type typeOfT) {
@@ -129,7 +132,7 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     public FileHandle getFile(Settings.GameLanguage language, String fileName) {
-        return Gdx.files.internal("localization/" + ID.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
+        return Gdx.files.internal(LOCALIZATION_ROOT + ID.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
     }
 
     // Intercepts CardLibrary's getCopy to return a different card. By default, this prevents example templates from showing up for regular characters
@@ -166,14 +169,22 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     protected void loadAugmentStrings() {
-        loadCustomNonBaseStrings(JSON_AUGMENTS, PGR::addAugmentStrings);
+        loadCustomNonBaseStrings(PREF_AUGMENTS + JSON_EXT, PGR::addAugmentStrings);
+    }
+
+    public void loadAugmentStrings(String name) {
+        loadCustomNonBaseStrings(PREF_AUGMENTS + name + JSON_EXT, PGR::addAugmentStrings);
     }
 
     protected void loadCustomCardStrings() {
-        loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
+        loadCustomNonBaseStrings(PREF_CARDS + JSON_EXT, PCLResources::loadGroupedCardStrings);
     }
 
-    protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc) {
+    public void loadCustomCardStrings(String name) {
+        loadCustomNonBaseStrings(PREF_CARDS + name + JSON_EXT, PCLResources::loadGroupedCardStrings);
+    }
+
+    public void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc) {
         FileHandle fallback = getFallbackFile(path);
         if (fallback != null) {
             String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
@@ -188,8 +199,13 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     protected void loadCustomStrings(Class<?> type) {
-        loadCustomStrings(type, getFallbackFile(type.getSimpleName() + ".json"));
-        loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + ".json"));
+        loadCustomStrings(type, getFallbackFile(type.getSimpleName() + JSON_EXT));
+        loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + JSON_EXT));
+    }
+
+    public void loadCustomStrings(Class<?> type, String name) {
+        loadCustomStrings(type, getFallbackFile(type.getSimpleName() + name + JSON_EXT));
+        loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + name + JSON_EXT));
     }
 
     protected void loadCustomStrings(Class<?> type, FileHandle file) {
@@ -202,12 +218,17 @@ public abstract class PCLResources<T extends PCLPlayerData<?, ?, ?>, U extends A
     }
 
     protected void loadKeywords() {
-        EUI.registerKeywords(getFallbackFile(JSON_KEYWORDS));
-        EUI.registerKeywords(getFile(Settings.language, JSON_KEYWORDS));
+        String kw = PREF_KEYWORDS + JSON_EXT;
+        EUI.registerKeywords(getFallbackFile(kw));
+        EUI.registerKeywords(getFile(Settings.language, kw));
     }
 
     protected void loadLoadoutStrings() {
-        loadCustomNonBaseStrings(JSON_LOADOUTS, PGR::addLoadoutStrings);
+        loadCustomNonBaseStrings(PREF_LOADOUTS + JSON_EXT, PGR::addLoadoutStrings);
+    }
+
+    public void loadLoadoutStrings(String id) {
+        loadCustomNonBaseStrings(PREF_LOADOUTS + id + JSON_EXT, PGR::addLoadoutStrings);
     }
 
     protected void postInitialize() {

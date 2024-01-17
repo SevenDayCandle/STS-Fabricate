@@ -7,7 +7,7 @@ import extendedui.utilities.RotatingList;
 
 import java.util.ArrayList;
 
-public class CardPreviewList extends RotatingList<EUICardPreview> {
+public class CardPreviewList extends ArrayList<EUICardPreview> {
 
     public CardPreviewList() {
         super();

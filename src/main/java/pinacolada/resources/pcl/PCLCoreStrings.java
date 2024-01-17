@@ -309,6 +309,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String csel_unlocksAt = charselect.TEXT[12];
     public final String csel_skinEditor = charselect.TEXT[13];
     public final String csel_skinEditorDesc = charselect.TEXT[14];
+    public final String csel_betaSet = charselect.TEXT[15];
+    public final String csel_betaSetDesc = charselect.TEXT[16];
+    public final String csel_betaCardSet = charselect.TEXT[17];
     // Card type
     public final String ctype_allAlly = cardtype.TEXT[0];
     public final String ctype_allAllyEnemy = cardtype.TEXT[1];

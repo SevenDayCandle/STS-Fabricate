@@ -947,7 +947,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {
-        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]), items)
+        registerDropdown(initializeSearchable(AbstractCard.CardRarity.values(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]), items)
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
     }
 
@@ -990,7 +990,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerType(List<AbstractCard.CardType> items) {
-        registerDropdown(initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(getColor()), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]), items)
+        registerDropdown(initializeSearchable(AbstractCard.CardType.values(), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]), items)
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
     }
 

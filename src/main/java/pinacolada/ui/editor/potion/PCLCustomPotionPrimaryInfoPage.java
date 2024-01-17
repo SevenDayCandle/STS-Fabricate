@@ -109,7 +109,7 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                     }
                 })
                 .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(getEligibleRarities())
+                .setItems(AbstractPotion.PotionRarity.values())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_potionRarity);
         sizeDropdown = new EUIDropdown<AbstractPotion.PotionSize>(new EUIHitbox(rarityDropdown.hb.x + rarityDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
@@ -169,10 +169,6 @@ public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHasInfinite(true, true);
 
         refresh();
-    }
-
-    public static List<AbstractPotion.PotionRarity> getEligibleRarities() {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractPotion.PotionRarity.values()) : GameUtilities.getStandardPotionTiers();
     }
 
     @Override

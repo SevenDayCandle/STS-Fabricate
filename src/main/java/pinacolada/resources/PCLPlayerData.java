@@ -127,12 +127,16 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         return true;
     }
 
+    public boolean customDisablesProgression() {
+        return false;
+    }
+
     protected void addUnlockBundle(PCLLoadout loadout) {
         if (loadout.unlockLevel > 0) {
             final String cardID = loadout.cardDatas.get(0).ID;
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
-            unlock.card = loadout.buildCard(false, true);
+            unlock.card = loadout.buildCard(false, true, false);
             unlock.card.isSeen = true;
             unlock.card.isLocked = false;
             unlock.key = unlock.card.cardID = PGR.core.createID(loadout.getName());

@@ -11,7 +11,9 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.CostFilter;
+import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
@@ -134,7 +136,7 @@ public abstract class PCLMultiCard extends PCLCard {
     @Override
     public ArrayList<PSkill<?>> getFullEffects() {
         ArrayList<PSkill<?>> original = getEffects();
-        return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
+        return !original.isEmpty() && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
     }
 
     public PCLMultiCardMove getMultiCardMove() {
@@ -146,19 +148,8 @@ public abstract class PCLMultiCard extends PCLCard {
     }
 
     @Override
-    public EUICardPreview getPreview() {
-        EUICardPreview currentPreview;
-        if (EUIHotkeys.cycle.isJustPressed()) {
-            currentPreview = inheritedCards.next(true);
-        }
-        else {
-            currentPreview = inheritedCards.current();
-        }
-
-        if (currentPreview != null) {
-            currentPreview.isMultiPreview = true;
-        }
-        return currentPreview;
+    public void fillPreviews(RotatingList<EUIPreview> previews) {
+        previews.addAll(inheritedCards);
     }
 
     @Override

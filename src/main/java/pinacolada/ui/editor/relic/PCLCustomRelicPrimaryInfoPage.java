@@ -27,11 +27,9 @@ import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLCustomRelicEditScreen effect;
@@ -106,7 +104,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                     }
                 })
                 .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(getEligibleRarities())
+                .setItems(AbstractRelic.RelicTier.values())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
         sfxDropdown = new EUIDropdown<AbstractRelic.LandingSound>(new EUIHitbox(tierDropdown.hb.x + tierDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
@@ -150,10 +148,6 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setTooltip(PGR.core.strings.loadout_reset, "");
 
         refresh();
-    }
-
-    public static List<AbstractRelic.RelicTier> getEligibleRarities() {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractRelic.RelicTier.values()) : GameUtilities.getStandardRelicTiers();
     }
 
     @Override
