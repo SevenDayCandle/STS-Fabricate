@@ -64,6 +64,7 @@ import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
@@ -468,7 +469,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean inBattleForceRefresh() {
-        refresh();
+        refreshBattleInfo();
         return battleID != null;
     }
 
@@ -949,7 +950,7 @@ public class CombatManager extends EUIBase {
 
     public static void onStartup() {
         clearStats();
-        refresh();
+        refreshBattleInfo();
         PGR.dungeon.atBattleStart();
         for (AbstractBlight blight : player.blights) {
             if (blight instanceof PCLBlight) {
@@ -1038,7 +1039,7 @@ public class CombatManager extends EUIBase {
         shouldRefreshHand = true;
     }
 
-    public static void refresh() {
+    public static void refreshBattleInfo() {
         AbstractRoom room = GameUtilities.getCurrentRoom();
 
         if (room == null || AbstractDungeon.player == null) {
@@ -1054,6 +1055,11 @@ public class CombatManager extends EUIBase {
         }
 
         renderInstance.setActive(CombatManager.battleID != null);
+    }
+
+    public static void refreshObjects() {
+        controlPile.refreshCards();
+        summons.applyPowers();
     }
 
     public static void refreshHandLayout() {
@@ -1306,8 +1312,7 @@ public class CombatManager extends EUIBase {
         if (currentPhase != AbstractDungeon.actionManager.phase) {
             currentPhase = AbstractDungeon.actionManager.phase;
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
-            controlPile.refreshCards();
-            summons.applyPowers();
+            refreshObjects();
             if (PGR.config.showEstimatedDamage.get()) {
                 updateEstimatedDamage();
             }

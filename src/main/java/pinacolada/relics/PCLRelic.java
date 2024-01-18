@@ -36,6 +36,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -400,6 +401,9 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
 
     protected void preSetup(PCLRelicData data) {
 
+    }
+
+    public void refresh(PCLUseInfo info) {
     }
 
     @Override
