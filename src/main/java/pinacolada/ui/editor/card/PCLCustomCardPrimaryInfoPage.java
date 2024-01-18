@@ -456,5 +456,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
             effect.modifyAllBuilders((e, i) -> e.setID(fullID));
             effect.saveButton.setInteractable(true);
         }
+        // TODO show full ID in tooltip description
     }
 }

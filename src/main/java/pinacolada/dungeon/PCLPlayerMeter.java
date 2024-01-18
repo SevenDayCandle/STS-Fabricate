@@ -12,6 +12,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITutorial;
+import extendedui.ui.controls.EUITutorialImagePage;
 import extendedui.ui.controls.EUITutorialPage;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
@@ -20,6 +21,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
@@ -42,6 +44,30 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> {
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPlayerMeter> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    public static EUITutorialPage[] getAugmentTutorialPages() {
+        return EUIUtils.array(
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 1), PGR.core.strings.tutorial_augmentTutorial1, PCLCoreImages.Tutorial.augTut01.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 2), PGR.core.strings.tutorial_augmentTutorial2, PCLCoreImages.Tutorial.augTut02.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 3), PGR.core.strings.tutorial_augmentTutorial3, PCLCoreImages.Tutorial.augTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 4), PGR.core.strings.tutorial_augmentTutorial4, PCLCoreImages.Tutorial.augTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 5), PGR.core.strings.tutorial_augmentTutorial5, PCLCoreImages.Tutorial.augTut04.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 6), PGR.core.strings.tutorial_augmentTutorial6, PCLCoreImages.Tutorial.augTut05.texture())
+        );
+    }
+
+    public static EUITutorialPage[] getSummonTutorialPages() {
+        return EUIUtils.array(
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 1), PGR.core.strings.tutorial_summonTutorial1, PCLCoreImages.Tutorial.sumTut01.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 2), PGR.core.strings.tutorial_summonTutorial2, PCLCoreImages.Tutorial.sumTut02.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 3), PGR.core.strings.tutorial_summonTutorial3, PCLCoreImages.Tutorial.sumTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 4), PGR.core.strings.tutorial_summonTutorial4, PCLCoreImages.Tutorial.sumTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 5), PGR.core.strings.tutorial_summonTutorial5, PCLCoreImages.Tutorial.sumTut03.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 6), PGR.core.strings.tutorial_summonTutorial6, PCLCoreImages.Tutorial.sumTut04.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 7), PGR.core.strings.tutorial_summonTutorial7, PCLCoreImages.Tutorial.sumTut05.texture()),
+                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 8), PGR.core.strings.tutorial_summonTutorial8, PCLCoreImages.Tutorial.sumTut06.texture())
+        );
     }
 
     public static boolean isSwapIntended(PCLCard incoming, PCLCard other) {

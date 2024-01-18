@@ -249,10 +249,17 @@ public class PCLCoreImages extends AbstractImages {
     }
 
     public static class Tutorial {
+        public static final TextureCache affTut01 = new TextureCache("images/pcl/ui/tutorial/afftut01.png", true);
         public static final TextureCache augTut01 = new TextureCache("images/pcl/ui/tutorial/augtut01.png", true);
         public static final TextureCache augTut02 = new TextureCache("images/pcl/ui/tutorial/augtut02.png", true);
         public static final TextureCache augTut03 = new TextureCache("images/pcl/ui/tutorial/augtut03.png", true);
         public static final TextureCache augTut04 = new TextureCache("images/pcl/ui/tutorial/augtut04.png", true);
         public static final TextureCache augTut05 = new TextureCache("images/pcl/ui/tutorial/augtut05.png", true);
+        public static final TextureCache sumTut01 = new TextureCache("images/pcl/ui/tutorial/sumtut01.png", true);
+        public static final TextureCache sumTut02 = new TextureCache("images/pcl/ui/tutorial/sumtut02.png", true);
+        public static final TextureCache sumTut03 = new TextureCache("images/pcl/ui/tutorial/sumtut03.png", true);
+        public static final TextureCache sumTut04 = new TextureCache("images/pcl/ui/tutorial/sumtut04.png", true);
+        public static final TextureCache sumTut05 = new TextureCache("images/pcl/ui/tutorial/sumtut05.png", true);
+        public static final TextureCache sumTut06 = new TextureCache("images/pcl/ui/tutorial/sumtut06.png", true);
     }
 }

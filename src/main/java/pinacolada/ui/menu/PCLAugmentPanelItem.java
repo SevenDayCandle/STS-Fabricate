@@ -16,6 +16,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -62,14 +63,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     protected void onRightClick() {
         super.onRightClick();
         this.getHitbox().unhover();
-        EUITutorial tutorial = new EUITutorial(
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 1), PGR.core.strings.tutorial_augmentTutorial1, PCLCoreImages.Tutorial.augTut01.texture()),
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 2), PGR.core.strings.tutorial_augmentTutorial2, PCLCoreImages.Tutorial.augTut02.texture()),
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 3), PGR.core.strings.tutorial_augmentTutorial3, PCLCoreImages.Tutorial.augTut03.texture()),
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 4), PGR.core.strings.tutorial_augmentTutorial4, PCLCoreImages.Tutorial.augTut03.texture()),
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 5), PGR.core.strings.tutorial_augmentTutorial5, PCLCoreImages.Tutorial.augTut04.texture()),
-                new EUITutorialImagePage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.misc_viewAugments, 6), PGR.core.strings.tutorial_augmentTutorial6, PCLCoreImages.Tutorial.augTut05.texture())
-        );
+        EUITutorial tutorial = new EUITutorial(PCLPlayerMeter.getAugmentTutorialPages());
         EUI.ftueScreen.openScreen(tutorial);
     }
 

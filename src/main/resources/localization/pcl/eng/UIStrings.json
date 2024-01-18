@@ -183,7 +183,11 @@
 												"Effekseer",
 												"Edit Description",
 												"Preview",
-												"Partial"
+												"Partial",
+												"Show Page Tour",
+												"View Summon Tutorial",
+												"View Augment Tutorial",
+												"Quick Add Keyword"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -767,8 +771,8 @@
 												"You have completed this tutorial! If you ever need to see it again, click on the #yReset #yTutorial button on this character's character select page. End your turn to leave this tutorial.",
 												"Step Complete!",
 												"Tutorial Complete!",
-												"View Tour",
-												"Highlights various important UI elements on the screen with explanations"
+												"Help",
+												"View explanations on how to use this screen"
 								]
 				}
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -64,6 +65,7 @@ public class PCLCustomAugmentEditScreen extends PCLCustomEditEntityScreen<PCLCus
                 );
     }
 
+    @Override
     protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
         return new EUITooltip(page.getTitle(), page instanceof PCLCustomAugmentPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
     }

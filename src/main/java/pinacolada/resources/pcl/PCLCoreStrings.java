@@ -162,6 +162,10 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_editDesc = cedit.TEXT[97];
     public final String cedit_preview = cedit.TEXT[98];
     public final String cedit_partial = cedit.TEXT[99];
+    public final String cedit_startTour = cedit.TEXT[100];
+    public final String cedit_viewSummonTutorial = cedit.TEXT[101];
+    public final String cedit_viewAugmentTutorial = cedit.TEXT[102];
+    public final String cedit_quickAdd = cedit.TEXT[103];
     // Card Editor Tutorial
     public final String cetut_selectorGeneric = cetut.TEXT[0];
     public final String cetut_selectorCard = cetut.TEXT[1];

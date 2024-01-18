@@ -15,6 +15,7 @@ import extendedui.text.EUITextHelper;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -29,13 +30,14 @@ import java.util.HashMap;
 import java.util.StringJoiner;
 
 public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDialog> {
-    protected EUIButton clearButton;
-    protected EUITextBoxInput textInput;
-    protected EUITextBox preview;
-    protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected Settings.GameLanguage activeLanguage = Settings.language;
-    protected PSkill<?> skillAt;
-    protected String textList = EUIUtils.EMPTY_STRING;
+    private final EUIButton clearButton;
+    private final EUITextBoxInput textInput;
+    private final EUITextBox preview;
+    private final EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
+    private final EUISearchableDropdown<EUIKeywordTooltip> keywordReference;
+    private Settings.GameLanguage activeLanguage = Settings.language;
+    private PSkill<?> skillAt;
+    private String textList = EUIUtils.EMPTY_STRING;
     protected int index;
     public HashMap<Settings.GameLanguage, String[]> currentLanguageMap;
 
@@ -63,7 +65,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.9f, 0.1f, false)
                 .setFont(FontHelper.cardTitleFont, 0.7f);
-        preview = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(Settings.WIDTH * 0.08f, textInput.hb.y, Settings.scale * 256f, Settings.scale * 256f))
+        preview = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(Settings.WIDTH * 0.08f, Settings.HEIGHT * 0.55f, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.tooltipFont, 1f);
         preview.label.setSmartText(true);
@@ -87,6 +89,19 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setOnClick(() -> {
                     textInput.setTextAndCommit(EUIUtils.EMPTY_STRING);
                 });
+
+        keywordReference = (EUISearchableDropdown<EUIKeywordTooltip>) new EUISearchableDropdown<EUIKeywordTooltip>(new EUIHitbox(preview.hb.x, preview.hb.y - scale(130), scale(95), scale(32)))
+                .setLabelFunctionForOption(item -> item.icon != null ? item.getTitleOrIconForced() + " " + item.ID : item.ID, true)
+                .setLabelFunctionForButton((a, b) -> EUIUtils.EMPTY_STRING, true)
+                .setOnChange(languages -> {
+                    for (EUIKeywordTooltip tip : languages) {
+                        updateTextAppend(tip.getTitleOrIcon());
+                    }
+                })
+                .setHeader(FontHelper.topPanelAmountFont, 0.8f, Settings.BLUE_TEXT_COLOR, PGR.core.strings.cedit_quickAdd)
+                .setItems(EUIKeywordTooltip.getTips())
+                .setCanAutosizeButton(true);
+        keywordReference.sortByLabel();
     }
 
     protected EUIButton getCancelButton() {
@@ -165,6 +180,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.preview.renderImpl(sb);
         this.textInput.tryRender(sb);
         this.languageDropdown.tryRender(sb);
+        this.keywordReference.tryRender(sb);
         this.clearButton.tryRender(sb);
         // Must render this text manually without smart text in order to properly display these symbols
         float x = Settings.WIDTH * 0.665f;
@@ -196,6 +212,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.preview.updateImpl();
         this.textInput.tryUpdate();
         this.languageDropdown.tryUpdate();
+        this.keywordReference.tryUpdate();
         this.clearButton.tryUpdate();
     }
 
@@ -229,5 +246,10 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         strings[index] = name;
         currentLanguageMap.put(activeLanguage, strings);
         updatePreview(name);
+    }
+
+    private void updateTextAppend(String append) {
+        String[] strings = getStringsForLanguage(activeLanguage);
+        textInput.setTextAndCommit((strings.length > index && strings[index] != null ? strings[index] : EUIUtils.EMPTY_STRING) + append);
     }
 }

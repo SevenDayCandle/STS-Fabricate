@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -19,8 +20,7 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.ActionT3;
-import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUIContextMenu;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
@@ -28,7 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLPlayerMeter;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.screen.TutorialEffect;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.misc.PCLCustomEditorLoadable;
@@ -39,6 +41,7 @@ import pinacolada.powers.PCLPowerData;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
@@ -48,9 +51,11 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static extendedui.EUIUtils.array;
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
+import static pinacolada.utilities.GameUtilities.scale;
 
 public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, V>, U extends EditorMaker<V, W>, V extends FabricateItem, W>
         extends PCLEffectWithCallback<Object> {
@@ -79,6 +84,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     protected ActionT0 onSave;
     protected EUIContextMenu<ExistingPageOption> existingPageOptions;
     protected EUIContextMenu<NewPageOption> newPageOptions;
+    protected EUIContextMenu<TutorialOption> tutorialOptions;
     protected PCLCustomGenericPage currentPage;
     public ArrayList<EUIButton> effectPageButtons = new ArrayList<>();
     public ArrayList<EUIButton> powerPageButtons = new ArrayList<>();
@@ -279,6 +285,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         return tempBuilders.get(currentBuilder);
     }
 
+    protected TutorialOption[] getHelpButtonOptions() {
+        return EUIUtils.array(TutorialOption.Tour, TutorialOption.Summon, TutorialOption.Augment);
+    }
+
     protected NewPageOption[] getNewPageOptions() {
         return EUIUtils.array(NewPageOption.Generic, NewPageOption.Power);
     }
@@ -363,6 +373,12 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         rebuildItem();
     }
 
+    protected void openContextMenuForHelp() {
+        this.tutorialOptions.setItems(getHelpButtonOptions());
+        this.tutorialOptions.setPosition(InputHelper.mX - this.tutorialOptions.calculateRowWidth() - scale(10), InputHelper.mY);
+        this.tutorialOptions.openOrCloseMenu();
+    }
+
     protected void openContextMenuForNewEffect() {
         this.newPageOptions.setItems(getNewPageOptions());
         this.newPageOptions.positionToOpen();
@@ -378,13 +394,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         currentPage = page;
         currentPage.onOpen();
         refreshButtons();
-        PGR.helpMeButton.setOnClick(() -> {
-                    if (EUITourTooltip.isQueueEmpty()) {
-                        EUITourTooltip.queueTutorial(currentPage.getTour());
-                        EUITourTooltip.queueTutorial(getTour());
-                    }
-                }
-        );
+        PGR.helpMeButton.setOnClick(this::openContextMenuForHelp);
+    }
+
+    public void openTutorialForAugment() {
+        openTutorial(new EUITutorial(PCLPlayerMeter.getAugmentTutorialPages()));
+    }
+
+    public void openTutorialForSummon() {
+        openTutorial(new EUITutorial(PCLPlayerMeter.getSummonTutorialPages()));
+    }
+
+    public void openTutorial(EUITutorial tutorial) {
+        this.currentDialog = new TutorialEffect(tutorial);
     }
 
     public void preInitialize(T currentSlot) {
@@ -446,6 +468,22 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 })
                 .setCanAutosizeButton(true)
                 .setItems(getNewPageOptions());
+
+        tutorialOptions = (EUIContextMenu<TutorialOption>) new EUIContextMenu<TutorialOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
+                .setOnChange(options -> {
+                    for (TutorialOption o : options) {
+                        o.onSelect.invoke(this);
+                    }
+                })
+                .setCanAutosizeButton(true)
+                .setItems(getHelpButtonOptions());
+    }
+
+    protected void queueTutorials() {
+        if (EUITourTooltip.isQueueEmpty()) {
+            EUITourTooltip.queueTutorial(currentPage.getTour());
+            EUITourTooltip.queueTutorial(getTour());
+        }
     }
 
     protected void refreshButtons() {
@@ -489,6 +527,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
         else {
             renderInnerElements(sb);
+            tutorialOptions.tryRender(sb);
             newPageOptions.tryRender(sb);
             existingPageOptions.tryRender(sb);
         }
@@ -654,9 +693,10 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 currentDialog = null;
             }
         }
-        else if (!newPageOptions.isOpen() && !existingPageOptions.isOpen()) {
+        else if (!newPageOptions.isOpen() && !existingPageOptions.isOpen() && !tutorialOptions.isOpen()) {
             updateInnerElements();
         }
+        tutorialOptions.tryUpdate();
         newPageOptions.tryUpdate();
         existingPageOptions.tryUpdate();
     }
@@ -685,6 +725,20 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect;
 
         public NewPageOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect) {
+            this.name = name;
+            this.onSelect = onSelect;
+        }
+    }
+
+    public static class TutorialOption {
+        public static TutorialOption Tour = new TutorialOption(PGR.core.strings.cedit_startTour, PCLCustomEditEntityScreen::queueTutorials);
+        public static TutorialOption Summon = new TutorialOption(PGR.core.strings.cedit_viewSummonTutorial, PCLCustomEditEntityScreen::openTutorialForSummon);
+        public static TutorialOption Augment = new TutorialOption(PGR.core.strings.cedit_viewAugmentTutorial, PCLCustomEditEntityScreen::openTutorialForAugment);
+
+        public final String name;
+        public final ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect;
+
+        public TutorialOption(String name, ActionT1<PCLCustomEditEntityScreen<?, ?, ?, ?>> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }
