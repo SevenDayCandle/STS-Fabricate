@@ -24,9 +24,9 @@ import java.util.ArrayList;
 @AbstractCardModifier.SaveIgnore
 public class SkillModifier extends AbstractCardModifier {
     private transient String descCache = EUIUtils.EMPTY_STRING;
-    protected String serialized;
-    protected transient PSkill<?> skill;
-    protected transient PCLUseInfo info;
+    private String serialized;
+    private transient PSkill<?> skill;
+    private transient PCLUseInfo info;
 
     public SkillModifier(String serialized) {
         this.serialized = serialized;

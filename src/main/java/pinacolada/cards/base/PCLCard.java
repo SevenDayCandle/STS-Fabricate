@@ -1195,10 +1195,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     // Just use originalName to cache the card modded title
+    // Reset name back to original after initializeTitle to get the correct width
     public void initializeName() {
-        name = getUpgradeName();
-        originalName = CardModifierManager.onRenderTitle(this, name);
+        String temp = getUpgradeName();
+        name = originalName = CardModifierManager.onRenderTitle(this, name);
         initializeTitle();
+        name = temp;
     }
 
     public boolean isAoE() {
@@ -1884,11 +1886,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         updateGlow();
         renderGlow(sb);
         renderImage(sb, hovered, selected);
-        renderTitle(sb);
         renderType(sb);
         renderDescription(sb);
         renderTint(sb);
         renderEnergy(sb);
+        renderTitle(sb);
         hb.render(sb);
 
         CardModifierManager.onRender(this, sb);

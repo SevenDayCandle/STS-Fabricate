@@ -110,11 +110,12 @@ public class PCLCardText {
 
         // Set the predicted scale from the text, excluding newline but including expanded conditionals
         // Use different scaling for Ideographic languages (i.e. Chinese, Japanese)
+        // Cap size to avoid text becoming illegible
         this.font = FontHelper.cardDescFont_N;
         int predictedLength = EUIUtils.sumInt(internalParser.getTokens(), PCLTextToken::getCharCount);
         final float max = isIdeographicLanguage() ? 32f : 75f;
         if (predictedLength > max) {
-            scaleModifier -= (0.1f * (predictedLength / max));
+            scaleModifier = Math.max(0.79f, (0.1f * (predictedLength / max)));
         }
         this.font.getData().setScale(scaleModifier);
 

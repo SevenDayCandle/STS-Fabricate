@@ -42,7 +42,8 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public static final int MINIMUM_CARDS = 70;
     public static final int MINIMUM_COLORLESS = 30;
     public static final ArrayList<AbstractGlyph> GLYPHS = new ArrayList<>();
-    public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
+    public final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
+    public final ArrayList<PCLLoadout> extraLoadouts = new ArrayList<>();
     public final HashMap<String, PCLLoadoutStats> stats = new HashMap<>();
     public final T resources;
     public final U config;
@@ -197,6 +198,10 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
         return null;
     }
 
+    public List<PCLLoadout> getAvailableExtraLoadouts() {
+        return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && l.cardDatas.isEmpty() && !l.colorlessData.isEmpty());
+    }
+
     public List<PCLLoadout> getAvailableLoadouts() {
         return EUIUtils.filter(PCLLoadout.getAll(resources.cardColor), l -> !l.isCore() && !l.cardDatas.isEmpty() && l.unlockLevel >= 0);
     }
@@ -210,8 +215,9 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     }
 
     public List<PCLLoadout> getEveryLoadout() {
-        ArrayList<PCLLoadout> base = new ArrayList<>(loadouts.values());
+        ArrayList<PCLLoadout> base = new ArrayList<>(loadouts);
         if (canUseCustom()) {
+            base.addAll(extraLoadouts);
             for (PCLCustomLoadoutInfo lo : PCLCustomLoadoutInfo.getLoadouts(resources.cardColor)) {
                 base.add(lo.loadout);
             }
@@ -234,7 +240,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public boolean hasLoadouts() {
         int baseCount = loadouts.size();
         if (canUseCustom()) {
-            baseCount += PCLCustomLoadoutInfo.getLoadouts(resources.cardColor).size();
+            baseCount += extraLoadouts.size() + PCLCustomLoadoutInfo.getLoadouts(resources.cardColor).size();
         }
         return baseCount > 1;
     }
@@ -252,12 +258,12 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     protected final void initializeLoadouts() {
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
-        loadouts.put(core.ID, core);
-        for (PCLLoadout loadout : getAvailableLoadouts()) {
-            loadouts.put(loadout.ID, loadout);
-        }
+        loadouts.add(core);
+        loadouts.addAll(getAvailableLoadouts());
+        extraLoadouts.clear();
+        extraLoadouts.addAll(getAvailableExtraLoadouts());
 
-        for (PCLLoadout loadout : loadouts.values()) {
+        for (PCLLoadout loadout : loadouts) {
             addUnlockBundle(loadout);
             loadout.sortItems();
         }
@@ -266,7 +272,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public PCLLoadout prepareLoadout() {
         int unlockLevel = resources.getUnlockLevel();
         if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel || selectedLoadout.isCore()) {
-            for (PCLLoadout loadout : loadouts.values()) {
+            for (PCLLoadout loadout : loadouts) {
                 if (unlockLevel >= loadout.unlockLevel && !loadout.isCore()) {
                     selectedLoadout = loadout;
                     break;

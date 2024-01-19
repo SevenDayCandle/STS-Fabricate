@@ -1,7 +1,10 @@
 package pinacolada.patches;
 
+import basemod.helpers.CardModifierManager;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePatch2;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIUtils;
@@ -14,7 +17,7 @@ public class CompatibilityPatches {
         return proper != null ? proper.name : EUIUtils.EMPTY_STRING;
     }
 
-    @SpirePatch(cls = "infinitespire.quests.PickUpCardQuest", method = "getTitle", optional = true)
+    @SpirePatch(cls = "infinitespire.quests.PickUpCardQuest", method = "getTitle", requiredModId = "infinitespire", optional = true)
     public static class InfiniteSpire_PickUpCardQuest {
         // Because this explodes if the card doesn't exist in the base game library
         @SpireInstrumentPatch

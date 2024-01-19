@@ -1,10 +1,15 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
+
+import java.util.List;
 
 // Mods where the actual calculated amount is calculated in the use function
 public abstract class PActiveMod<T extends PField> extends PMod<T> {

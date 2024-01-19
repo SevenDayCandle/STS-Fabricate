@@ -64,7 +64,6 @@ import pinacolada.potions.PCLPotion;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
-import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
@@ -345,7 +344,7 @@ public class CombatManager extends EUIBase {
         PURGED_CARDS.clear();
     }
 
-    public static void executeRemainingActions(ArrayList<AbstractGameAction> actions) {
+    public static void queueRemainingActions(ArrayList<AbstractGameAction> actions) {
         ConcurrentLinkedQueue<OnPhaseChangedSubscriber> subscribers = getSubscriberGroup(OnPhaseChangedSubscriber.class);
         for (OnPhaseChangedSubscriber phase : subscribers) {
             if (phase instanceof PCLActions.ExecuteLast) {
@@ -485,14 +484,18 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean isActionCancellable(AbstractGameAction action) {
-        return (action instanceof PCLAction && ((PCLAction<?>) action).canCancel) ||
+        return !isActionPCLNonCancel(action) &&
                 !(
-                        (action instanceof HealAction) ||
+                                (action instanceof HealAction) ||
                                 (action instanceof GainGoldAction) ||
                                 (action instanceof GainBlockAction) ||
                                 (action instanceof UseCardAction) ||
-                                action.actionType != AbstractGameAction.ActionType.DAMAGE
+                                action.actionType == AbstractGameAction.ActionType.DAMAGE
                 );
+    }
+
+    public static boolean isActionPCLNonCancel(AbstractGameAction action) {
+        return action instanceof PCLAction && !((PCLAction<?>) action).canCancel;
     }
 
     public static boolean isDraggingCard() {

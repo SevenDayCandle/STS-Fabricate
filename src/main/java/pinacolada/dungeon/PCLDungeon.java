@@ -736,7 +736,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                     if (bannedRelics.contains(relic)) {
                         return true;
                     }
-                    for (PCLLoadout loadout : data.loadouts.values()) {
+                    for (PCLLoadout loadout : data.loadouts) {
                         if (loadout.isRelicFromLoadout(relic) && (!loadout.isEnabled())) {
                             return true;
                         }
@@ -855,7 +855,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 cards.remove(c);
             }
 
-            if (first != null && toRemove.size() > 0 && PCLEffects.TopLevelQueue.count() < 5) {
+            if (first != null && !toRemove.isEmpty() && PCLEffects.TopLevelQueue.count() < 5) {
                 PCLEffects.TopLevelQueue.add(new UpgradeShineEffect((float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f));
                 PCLEffects.TopLevelQueue.showCardBriefly(first.makeStatEquivalentCopy(), (float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f);
             }

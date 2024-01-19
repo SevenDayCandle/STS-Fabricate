@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -24,6 +25,7 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @VisibleSkill
 public class PMod_PayPerPower extends PActiveMod<PField_Power> {
@@ -45,7 +47,11 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     @Override
     public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
-        return AbstractDungeon.player == null ? 0 : baseAmount * (fields.powers.isEmpty() ?
+        List<? extends AbstractPower> powers = info.getDataAsList(AbstractPower.class);
+        if (powers != null) {
+            return EUIUtils.sumInt(powers, po -> po.amount) / Math.max(1, this.amount);
+        }
+        return baseAmount * (fields.powers.isEmpty() ?
                 sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? limitPer(po.amount) : 0) : 0) :
                 sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> limitPer(GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
     }

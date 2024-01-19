@@ -20,7 +20,7 @@ import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMod<T extends PField> extends PSkill<T> {
     public static final int MODIFIER_PRIORITY = 3;
-    private int cachedValue;
+    protected int cachedValue;
 
     public PMod(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);

@@ -476,6 +476,9 @@ public abstract class PCLLoadout {
                 return slots.get(0).getFirstBuilder();
             }
         }
+        if (!colorlessData.isEmpty()) {
+            return colorlessData.get(0);
+        }
         return QuestionMark.DATA;
     }
 
@@ -520,6 +523,10 @@ public abstract class PCLLoadout {
     public boolean isCore() {
         PCLResources<?, ?, ?, ?> resources = getResources();
         return resources.data == null || resources.data.getCoreLoadout() == this;
+    }
+
+    public boolean isOnlyCustom() {
+        return cardDatas.isEmpty() || this instanceof PCLCustomLoadout;
     }
 
     public boolean isEditorAllowed(PCLBaseStatEditor beditor, CharacterOption option) {

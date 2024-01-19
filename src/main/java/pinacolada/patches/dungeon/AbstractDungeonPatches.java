@@ -1,17 +1,21 @@
 package pinacolada.patches.dungeon;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.patches.CardCrawlGamePatches;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -25,6 +29,7 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
@@ -107,9 +112,16 @@ public class AbstractDungeonPatches {
 
     @SpirePatch(clz = AbstractDungeon.class, method = "initializeRelicList")
     public static class AbstractDungeonPatches_InitializeRelicList {
-        @SpirePostfixPatch
-        public static void postfix(AbstractDungeon __instance) {
+        @SpireInsertPatch(locator = Locator.class)
+        public static void insert(AbstractDungeon __instance) {
             PGR.dungeon.initializeRelicPool(AbstractDungeon.player);
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(Collections.class, "shuffle");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
         }
     }
 

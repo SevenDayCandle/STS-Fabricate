@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.PowerExpireTextEffect;
+import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -56,6 +57,7 @@ public class RemoveSpecificPowerPatches {
         @SpireInsertPatch(locator = Locator.class, localvars = {"removeMe"})
         public static void insert(RemoveSpecificPowerAction __instance, AbstractPower removeMe) {
             CombatManager.onRemovePower(__instance.source, __instance.target, removeMe);
+            EUIClassUtils.setField(__instance, "powerInstance", removeMe); // Force set the powerInstance field so we can grab it through callbacks
         }
 
         private static class Locator extends SpireInsertLocator {

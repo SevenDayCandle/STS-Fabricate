@@ -61,8 +61,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUIButton confirm;
     public final EUIButton loadoutEditor;
     public final EUIButton relicsButton;
-    public final EUITextBox typesAmount;
-    public final EUITextBox startingDeck;
+    public final EUITextBox statsPanel;
     public final EUITextBox previewCardsInfo;
     public final EUIContextMenu<ContextOption> contextMenu;
     public final ArrayList<AbstractCard> shownCards = new ArrayList<>();
@@ -116,18 +115,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setOnClick(this::previewRelics);
 
         Color panelColor = new Color(0.08f, 0.08f, 0.08f, 1);
-        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, screenH(0.15f)))
+        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(1.9f), buttonWidth, screenH(0.13f)))
                 .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
                 .setAlignment(0.85f, 0.1f, true)
                 .setColors(panelColor, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.tooltipFont, 1f);
-        startingDeck = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(4.5f), buttonWidth, screenH(0.10f)))
+        statsPanel = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(6f), buttonWidth, screenH(0.28f)))
                 .setColors(panelColor, Settings.CREAM_COLOR)
-                .setAlignment(0.82f, 0.1f, true)
-                .setFont(FontHelper.tipHeaderFont, 1);
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(6f), buttonWidth, screenH(0.12f)))
-                .setColors(panelColor, Settings.GOLD_COLOR)
-                .setAlignment(0.82f, 0.1f, true)
+                .setAlignment(0.92f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
         previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(8.3f), buttonWidth, buttonHeight)
@@ -281,7 +276,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         for (PCLLoadout series : data.getEveryLoadout()) {
             boolean isSelected = Objects.equals(series.ID, data.selectedLoadout.ID);
             // Add series representation to the grid selection
-            final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID), data.customDisablesProgression() && series instanceof PCLCustomLoadout);
+            final boolean isBeta = data.customDisablesProgression() &&
+                    (series instanceof PCLCustomLoadout || series.cardDatas.isEmpty());
+            final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID), isBeta);
             if (gridCard != null) {
                 loadouts.add(gridCard);
                 gridCard.targetTransparency = 1f;
@@ -350,6 +347,15 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .sorted((a, b) -> {
                     PCLLoadout lA = a.value;
                     PCLLoadout lB = b.value;
+                    boolean lACustom = lA.isOnlyCustom();
+                    boolean lBCustom = lB.isOnlyCustom();
+                    if (lACustom && !lBCustom) {
+                        return 1;
+                    }
+                    else if (lBCustom && !lACustom) {
+                        return -1;
+                    }
+
                     if (lA.unlockLevel != lB.unlockLevel) {
                         return lA.unlockLevel - lB.unlockLevel;
                     }
@@ -471,7 +477,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         createCards(data);
         cardGrid.add(getAllCards());
-        updateStartingDeckText();
 
         EUI.countingPanel.open(shownCards, data.resources.cardColor, false, false);
 
@@ -480,7 +485,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
                 new EUITourTooltip(cardGrid.group.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
                         .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
-                new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
+                new EUITourTooltip(statsPanel.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
                         .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
                 loadoutEditor.makeTour(true),
                 colorlessButton.makeTour(true),
@@ -583,8 +588,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         confirm.renderImpl(sb);
 
         previewCardsInfo.renderImpl(sb);
-        startingDeck.renderImpl(sb);
-        typesAmount.renderImpl(sb);
+        statsPanel.renderImpl(sb);
 
         if (currentEffect != null) {
             currentEffect.render(sb);
@@ -610,7 +614,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             currentSeriesCard = (ChoiceCard<PCLLoadout>) card;
             updateGlows();
             calculateCardCounts();
-            updateStartingDeckText();
         }
     }
 
@@ -631,14 +634,19 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         }
 
         PCLLoadout cur = currentSeriesCard != null ? currentSeriesCard.value : null;
-        typesAmount.setLabel(PGR.core.strings.sui_totalCards(
+        String seriesLabel = PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("g", (currentSeriesCard != null) ? currentSeriesCard.name : "");
+        String totalLabel = PGR.core.strings.sui_totalCards(
                 cur != null && !selectedLoadouts.contains(cur.ID) ? 1 + selectedLoadouts.size() : selectedLoadouts.size(),
                 totalCards >= data.minimumCards ? "g" : "r",
                 totalCards,
                 data.minimumCards,
                 totalColorless >= data.minimumColorless ? "g" : "r",
                 totalColorless,
-                data.minimumColorless));
+                data.minimumColorless);
+        statsPanel.setLabel(
+                isCustom ? EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, seriesLabel, totalLabel, PCLCoreStrings.colorString("r", PGR.core.strings.csel_betaCardSet))
+                        : EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, seriesLabel, totalLabel)
+        );
 
         confirm.setInteractable(isValid());
     }
@@ -722,15 +730,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             confirm.updateImpl();
             cardGrid.tryUpdate();
             previewCardsInfo.tryUpdate();
-            startingDeck.tryUpdate();
-            typesAmount.tryUpdate();
+            statsPanel.tryUpdate();
+            statsPanel.tryUpdate();
         }
 
         contextMenu.tryUpdate();
-    }
-
-    protected void updateStartingDeckText() {
-        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("g", (currentSeriesCard != null) ? currentSeriesCard.name : ""));
     }
 
     public enum ContextOption {

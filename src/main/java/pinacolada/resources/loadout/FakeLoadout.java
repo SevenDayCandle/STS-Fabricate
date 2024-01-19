@@ -51,6 +51,25 @@ public class FakeLoadout extends PCLLoadout {
                 }
             }
         }
+        for (AbstractCard c : CustomCardLibraryScreen.getCards(AbstractCard.CardColor.COLORLESS)) {
+            switch (c.rarity) {
+                case BASIC:
+                case COMMON:
+                case UNCOMMON:
+                case RARE:
+                    base.add(c.cardID);
+            }
+        }
+        for (PCLCustomCardSlot custom : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+            PCLDynamicCardData data = custom.getFirstBuilder();
+            switch (data.cardRarity) {
+                case BASIC:
+                case COMMON:
+                case UNCOMMON:
+                case RARE:
+                    base.add(data.ID);
+            }
+        }
         return base;
     }
 
