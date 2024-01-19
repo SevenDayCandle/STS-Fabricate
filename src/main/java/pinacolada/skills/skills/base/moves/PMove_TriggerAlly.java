@@ -16,8 +16,7 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PMove_TriggerAlly extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_TriggerAlly.class, PField_Empty.class)
-            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
-            .pclOnly();
+            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly);
 
     public PMove_TriggerAlly() {
         this(1);

@@ -19,8 +19,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_KillAlly extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_KillAlly.class, PField_Empty.class)
-            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
-            .pclOnly();
+            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly);
 
     public PMove_KillAlly() {
         this(1);

@@ -20,8 +20,7 @@ import java.util.List;
 @VisibleSkill
 public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_WithdrawAlly.class, PField_Empty.class)
-            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
-            .pclOnly();
+            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly);
 
     public PMove_WithdrawAlly() {
         this(0);

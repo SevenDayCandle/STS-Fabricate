@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
@@ -47,7 +48,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
             if (fields.random) {
-                return getWheneverAreString(PGR.core.tooltips.fatal.title, perspective);
+                return getWheneverAreString(EUIRM.strings.adjNoun(PGR.core.tooltips.fatal.title, PGR.core.tooltips.kill.present()), perspective);
             }
             return getWheneverString(PGR.core.tooltips.kill.present(), perspective);
         }

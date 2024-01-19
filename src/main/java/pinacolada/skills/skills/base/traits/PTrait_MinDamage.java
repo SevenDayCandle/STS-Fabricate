@@ -6,12 +6,13 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
-public class PTrait_MinDamage extends PTrait<PField_Not> {
+public class PTrait_MinDamage extends PDamageTrait<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PTrait_MinDamage.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
@@ -25,6 +26,11 @@ public class PTrait_MinDamage extends PTrait<PField_Not> {
 
     public PTrait_MinDamage(PSkillSaveData content) {
         super(DATA, content);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return getSubSampleText();
     }
 
     @Override
@@ -44,7 +50,12 @@ public class PTrait_MinDamage extends PTrait<PField_Not> {
     }
 
     @Override
-    public boolean shouldHideText() {
-        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
+    }
+
+    @Override
+    public String wrapTextAmountSelf(int input) {
+        return String.valueOf(input);
     }
 }

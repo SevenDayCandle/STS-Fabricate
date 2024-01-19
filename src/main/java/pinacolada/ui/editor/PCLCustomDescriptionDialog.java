@@ -65,7 +65,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.9f, 0.1f, false)
                 .setFont(FontHelper.cardTitleFont, 0.7f);
-        preview = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(Settings.WIDTH * 0.08f, Settings.HEIGHT * 0.55f, Settings.scale * 256f, Settings.scale * 256f))
+        preview = new EUITextBox(EUIRM.images.greySquare.texture(), new EUIHitbox(Settings.WIDTH * 0.08f, Settings.HEIGHT * 0.53f, Settings.scale * 256f, Settings.scale * 256f))
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.tooltipFont, 1f);
         preview.label.setSmartText(true);

@@ -5,14 +5,13 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PBlockTrait;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
-public class PTrait_MaxBlock extends PTrait<PField_Not> {
+public class PTrait_MaxBlock extends PBlockTrait<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PTrait_MaxBlock.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
@@ -26,6 +25,11 @@ public class PTrait_MaxBlock extends PTrait<PField_Not> {
 
     public PTrait_MaxBlock(PSkillSaveData content) {
         super(DATA, content);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return getSubSampleText();
     }
 
     @Override
@@ -45,7 +49,12 @@ public class PTrait_MaxBlock extends PTrait<PField_Not> {
     }
 
     @Override
-    public boolean shouldHideText() {
-        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
+    }
+
+    @Override
+    public String wrapTextAmountSelf(int input) {
+        return String.valueOf(input);
     }
 }

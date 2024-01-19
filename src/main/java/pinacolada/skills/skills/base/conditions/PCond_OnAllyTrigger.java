@@ -17,7 +17,6 @@ import pinacolada.skills.skills.PDelegateCardCond;
 public class PCond_OnAllyTrigger extends PDelegateCardCond implements OnAllyTriggerSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnAllyTrigger.class, PField_CardCategory.class, 1, 1)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power)
-            .pclOnly()
             .noTarget();
 
     public PCond_OnAllyTrigger() {

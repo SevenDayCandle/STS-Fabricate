@@ -14,8 +14,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
 public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
-    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_RestoreCardHP.class, PField_CardCategory.class)
-            .pclOnly();
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_RestoreCardHP.class, PField_CardCategory.class);
 
     public PMove_RestoreCardHP() {
         this(1, 1);
