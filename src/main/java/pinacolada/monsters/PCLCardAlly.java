@@ -22,6 +22,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.utilities.EUIColors;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
 import pinacolada.cards.base.PCLCard;
@@ -210,8 +211,8 @@ public class PCLCardAlly extends PCLCardCreature {
                     font.getData().setScale(card.drawScale * 0.9f);
                     EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.rectangularButton.texture(), 0, -AbstractCard.RAW_H * 0.65f,
                             AbstractCard.IMG_WIDTH * 0.6f, font.getLineHeight() * 1.8f, Color.DARK_GRAY, 0.75f, 1);
-                    EUIRenderHelpers.writeOnCard(sb, card, font, PGR.core.strings.combat_rightClickRetarget, 0, -AbstractCard.RAW_H * 0.65f, Color.ORANGE);
-                    EUIRenderHelpers.resetFont(font);
+                    EUITextHelper.writeOnCard(sb, card, font, PGR.core.strings.combat_rightClickRetarget, 0, -AbstractCard.RAW_H * 0.65f, Color.ORANGE);
+                    EUITextHelper.resetFont(font);
                 }
             }
         }

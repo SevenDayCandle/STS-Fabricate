@@ -15,7 +15,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.*;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
@@ -481,7 +481,7 @@ public class PCLCharacterSelectOverlay extends EUIBase implements RunAttributesP
             int unlockCost = UnlockTracker.getCurrentScoreCost(characterOption.c.chosenClass);
             EUITextHelper.renderSmart(sb, FontHelper.topPanelAmountFont, unlockProgress + "/" + unlockCost + CharacterOption.TEXT[9], infoX - 26.0F * Settings.scale, infoY - 108.0F * Settings.scale, 10000.0F, 10000.0F, Settings.CREAM_COLOR);
         }
-        EUIRenderHelpers.resetFont(FontHelper.topPanelAmountFont);
+        EUITextHelper.resetFont(FontHelper.topPanelAmountFont);
     }
 
     // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly

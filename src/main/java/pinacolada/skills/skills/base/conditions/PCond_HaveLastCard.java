@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;

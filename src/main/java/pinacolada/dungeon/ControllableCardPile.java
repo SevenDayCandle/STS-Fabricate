@@ -91,11 +91,11 @@ public class ControllableCardPile {
                     c.card.drawScale = c.card.targetDrawScale = 0.75f;
                 }
             }
-            if (cardGroup.size() > 0) {
+            if (!cardGroup.isEmpty()) {
                 PCLActions.top.selectFromPile("", 1, cardGroup)
                         .setAnyNumber(false)
                         .addCallback(cards -> {
-                            if (cards.size() > 0) {
+                            if (!cards.isEmpty()) {
                                 CardController co = EUIUtils.find(subscribers, c -> c.card == cards.get(0));
                                 if (co != null) {
                                     setCurrentCard(co);
@@ -149,7 +149,7 @@ public class ControllableCardPile {
             }
         }
 
-        if (currentCard == null && subscribers.size() > 0) {
+        if (currentCard == null && !subscribers.isEmpty()) {
             setCurrentCard(EUIUtils.find(subscribers, CardController::canUse));
         }
 
@@ -194,7 +194,7 @@ public class ControllableCardPile {
     }
 
     public void update() {
-        isHidden = !CombatManager.inBattle() || subscribers.size() == 0;
+        isHidden = !CombatManager.inBattle() || subscribers.isEmpty();
         if (!AbstractDungeon.isScreenUp) {
             hb.update();
         }

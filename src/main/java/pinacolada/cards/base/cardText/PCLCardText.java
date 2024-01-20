@@ -9,11 +9,11 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +115,7 @@ public class PCLCardText {
         int predictedLength = EUIUtils.sumInt(internalParser.getTokens(), PCLTextToken::getCharCount);
         final float max = isIdeographicLanguage() ? 32f : 75f;
         if (predictedLength > max) {
-            scaleModifier = Math.max(0.79f, (0.1f * (predictedLength / max)));
+            scaleModifier = Math.max(0.79f, scaleModifier - (0.1f * (predictedLength / max)));
         }
         this.font.getData().setScale(scaleModifier);
 
@@ -166,7 +166,7 @@ public class PCLCardText {
         }
 
 
-        PCLRenderHelpers.resetFont(font);
+        EUITextHelper.resetFont(font);
     }
 
     public void overrideDescription(String description) {
@@ -195,6 +195,6 @@ public class PCLCardText {
             lines.get(lineIndex).render(sb);
         }
 
-        PCLRenderHelpers.resetFont(font);
+        EUITextHelper.resetFont(font);
     }
 }

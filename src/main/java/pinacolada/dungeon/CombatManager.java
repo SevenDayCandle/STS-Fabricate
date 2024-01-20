@@ -40,6 +40,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
@@ -1256,7 +1257,7 @@ public class CombatManager extends EUIBase {
                 PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, startX, startY, texture.getWidth(), texture.getHeight(), 0.55f, 0f);
                 FontHelper.renderFontLeftTopAligned(sb, FontHelper.damageNumberFont, String.valueOf(-1 * damage), startX + EUIBase.scale(22), startY + EUIBase.scale(10), Color.SALMON);
             }
-            PCLRenderHelpers.resetFont(FontHelper.damageNumberFont);
+            EUITextHelper.resetFont(FontHelper.damageNumberFont);
         }
         delayDisplay.tryRender(sb);
         if (PGR.config.showFormulaDisplay.get()) {

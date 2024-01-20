@@ -16,6 +16,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     public boolean showEffect = true;
     public boolean allowNegative = false;
     public boolean canStack = true;
+    public boolean forceIfDead = false;
     public boolean skipIfZero = true;
 
     public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerData power) {
@@ -71,7 +72,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
 
     @Override
     protected void firstUpdate() {
-        if (shouldCancelAction() || (amount == 0 && skipIfZero)) {
+        if ((!forceIfDead && shouldCancelAction()) || (amount == 0 && skipIfZero)) {
             complete(null);
             return;
         }
@@ -99,6 +100,12 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     protected void onNestCompleted() {
         // TODO check if the power was actually successfully applied
         complete(extractPower());
+    }
+
+    public ApplyOrReducePowerAction forceIfDead(boolean forceIfDead) {
+        this.forceIfDead = forceIfDead;
+
+        return this;
     }
 
     public ApplyOrReducePowerAction skipIfZero(boolean skipIfZero) {

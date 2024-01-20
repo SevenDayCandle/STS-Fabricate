@@ -6,7 +6,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;

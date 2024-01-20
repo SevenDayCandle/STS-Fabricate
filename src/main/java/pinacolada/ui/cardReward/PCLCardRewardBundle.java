@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLCardRewardBundle {
@@ -47,8 +48,8 @@ public class PCLCardRewardBundle {
         BitmapFont font = FontHelper.buttonLabelFont;
         font.getData().setScale(card.drawScale * 0.8f);
         PCLRenderHelpers.drawOnCardAuto(sb, card, icon, iconOffsetX, iconOffsetY, icon.getWidth(), icon.getHeight());
-        PCLRenderHelpers.writeOnCard(sb, card, font, title, textOffsetX, textOffsetY, textColor);
-        PCLRenderHelpers.resetFont(font);
+        EUITextHelper.writeOnCard(sb, card, font, title, textOffsetX, textOffsetY, textColor);
+        EUITextHelper.resetFont(font);
         tooltipHB.render(sb);
     }
 

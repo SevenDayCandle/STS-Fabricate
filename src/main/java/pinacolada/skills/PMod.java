@@ -95,7 +95,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_PerPower bonusPerPowerAny(int amount, PCLPowerData... powers) {
-        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any).edit(f -> f.setNot(true));
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.All).edit(f -> f.setNot(true));
     }
 
     public static PMod_PerPower bonusPerPowerAoe(PCLPowerData... powers) {
@@ -299,7 +299,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     public static PMod_PerPower perPowerAny(int amount, PCLPowerData... powers) {
-        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.All);
     }
 
     public static PMod_PerPower perPowerAoe(PCLPowerData... powers) {

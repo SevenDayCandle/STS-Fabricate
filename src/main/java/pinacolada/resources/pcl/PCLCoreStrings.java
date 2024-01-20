@@ -10,7 +10,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.dungeon.SummonPool;
 import pinacolada.resources.AbstractStrings;

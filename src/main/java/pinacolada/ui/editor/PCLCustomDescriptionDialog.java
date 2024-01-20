@@ -9,9 +9,8 @@ import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIRM;
-import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
@@ -203,7 +202,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
 
         FontHelper.cardDescFont_N.getData().setScale(0.65f);
         EUITextHelper.renderFont(sb, FontHelper.cardDescFont_N, PGR.core.strings.cetut_legendDynamic2, x, Settings.HEIGHT * 0.53f, Color.LIGHT_GRAY);
-        EUIRenderHelpers.resetFont(FontHelper.cardDescFont_N);
+        EUITextHelper.resetFont(FontHelper.cardDescFont_N);
     }
 
     @Override

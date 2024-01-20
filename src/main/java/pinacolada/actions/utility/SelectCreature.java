@@ -32,12 +32,13 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     private final Vector2 controlPoint = new Vector2();
     private final Vector2 origin = new Vector2();
     private float arrowScaleTimer;
-    protected ActionT1<AbstractCreature> onHovering;
-    protected AbstractCreature previous;
-    protected PCLCardTarget targeting;
-    protected boolean autoSelect;
-    protected boolean skipConfirmation;
-    protected boolean cancellable;
+    private ActionT1<AbstractCreature> onHovering;
+    private AbstractCreature previous;
+    private PCLCardTarget targeting;
+    private boolean allowSummonSlot;
+    private boolean autoSelect;
+    private boolean cancellable;
+    private boolean skipConfirmation;
 
     public SelectCreature(AbstractCreature target) {
         this(AbstractDungeon.player, target);
@@ -87,6 +88,12 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         initialize(source, null, 1, card.name);
     }
 
+    public SelectCreature allowSummonSlot(boolean allowSummonSlot) {
+        this.allowSummonSlot = allowSummonSlot;
+
+        return this;
+    }
+
     public SelectCreature autoSelectSingleTarget(boolean autoSelectSingleTarget) {
         this.autoSelect = autoSelectSingleTarget;
 
@@ -96,6 +103,9 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     @Override
     protected void completeImpl() {
         GameCursor.hidden = false;
+        if (allowSummonSlot) {
+            PCLCardAlly.emptyAnimation.unhighlight();
+        }
         super.completeImpl();
     }
 
@@ -127,13 +137,17 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             return;
         }
 
+        if (allowSummonSlot) {
+            PCLCardAlly.emptyAnimation.highlight();
+        }
+
         final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
-        final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(true);
-        if (enemies.size() == 0 && targeting == PCLCardTarget.Single) {
+        final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(allowSummonSlot ? null : true);
+        if (enemies.isEmpty() && targeting == PCLCardTarget.Single) {
             complete(null);
             return;
         }
-        else if (summons.size() == 0 && targeting == PCLCardTarget.SingleAlly) {
+        else if (summons.isEmpty() && targeting == PCLCardTarget.SingleAlly) {
             complete(null);
             return;
         }
@@ -177,7 +191,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                     return;
                 case SelfSingleAlly:
                 case RandomAlly:
-                    complete(GameUtilities.getRandomSummon(true));
+                    complete(GameUtilities.getRandomSummon(allowSummonSlot ? null : true));
                     return;
                 case AllEnemy:
                 case All:
@@ -235,7 +249,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         }
 
         final String message = updateMessage();
-        if (message.length() > 0) {
+        if (!message.isEmpty()) {
             FontHelper.renderDeckViewTip(sb, message, Settings.scale * 96f, Settings.CREAM_COLOR);
         }
     }
@@ -393,7 +407,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                 }
             }
             if (targetAlly && target == null) {
-                for (AbstractMonster m : GameUtilities.getSummons(true)) {
+                for (AbstractMonster m : GameUtilities.getSummons(allowSummonSlot ? null : true)) {
                     if (m.hb.hovered && !m.isDying && (canTargetSelf || m != source)) {
                         target = m;
                         break;

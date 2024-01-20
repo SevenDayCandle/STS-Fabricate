@@ -139,23 +139,6 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
         return result;
     }
 
-    // Original name is used by PCLCard for title rendering instead of name for compatibility reasons
-    // Prevent title from getting too small to read
-    public static BitmapFont getTitleFont(PCLCard card) {
-        BitmapFont result;
-        final float scale = 1 / (MathUtils.clamp(card.originalName.length(), 14f, 19f) / 14f);
-        if (card.isPopup) {
-            result = FontHelper.SCP_cardTitleFont_small;
-            result.getData().setScale(card.drawScale * 0.5f * scale);
-        }
-        else {
-            result = FontHelper.cardTitleFont;
-            result.getData().setScale(card.drawScale * scale);
-        }
-
-        return result;
-    }
-
     public static BufferedImage scalrScale(BufferedImage image, float xScale, float yScale) {
         return scalrScale(image, xScale, yScale, Scalr.Method.AUTOMATIC);
     }

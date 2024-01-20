@@ -276,21 +276,23 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         for (PCLLoadout series : data.getEveryLoadout()) {
             boolean isSelected = Objects.equals(series.ID, data.selectedLoadout.ID);
             // Add series representation to the grid selection
-            final boolean isBeta = data.customDisablesProgression() &&
-                    (series instanceof PCLCustomLoadout || series.cardDatas.isEmpty());
-            final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID), isBeta);
-            if (gridCard != null) {
-                loadouts.add(gridCard);
-                gridCard.targetTransparency = 1f;
+            if (!series.getCards().isEmpty()) {
+                final boolean isBeta = data.customDisablesProgression() &&
+                        (series instanceof PCLCustomLoadout || series.cardDatas.isEmpty());
+                final ChoiceCard<PCLLoadout> gridCard = series.buildCard(isSelected, selectedLoadouts.contains(series.ID), isBeta);
+                if (gridCard != null) {
+                    loadouts.add(gridCard);
+                    gridCard.targetTransparency = 1f;
 
-                if (isSelected) {
-                    currentSeriesCard = gridCard;
-                    gridCard.setCardRarity(AbstractCard.CardRarity.RARE);
-                    gridCard.beginGlowing();
+                    if (isSelected) {
+                        currentSeriesCard = gridCard;
+                        gridCard.setCardRarity(AbstractCard.CardRarity.RARE);
+                        gridCard.beginGlowing();
+                    }
                 }
-            }
-            else {
-                EUIUtils.logError(this, "BuildCard() failed, " + series.getName());
+                else {
+                    EUIUtils.logError(this, "BuildCard() failed, " + series.getName());
+                }
             }
 
             // Add this series cards to the total list of available cards

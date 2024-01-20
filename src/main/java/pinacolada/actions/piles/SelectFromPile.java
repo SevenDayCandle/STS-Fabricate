@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;

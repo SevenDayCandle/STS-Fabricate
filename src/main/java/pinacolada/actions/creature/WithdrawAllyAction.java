@@ -45,11 +45,13 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
 
                 if (returnedCard != null) {
                     ally.onWithdraw();
-                    for (int i = 0; i < amount; i++) {
-                        ally.takeTurn(true);
+                    if (amount > 0) {
+                        for (int i = 0; i < amount; i++) {
+                            ally.takeTurn(true);
+                        }
+                        PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard.makeStatEquivalentCopy(), ally.hb.cX, ally.hb.cY));
                     }
                     toRelease.add(ally);
-                    PCLEffects.Queue.add(new ShowCardAfterWithdrawEffect(returnedCard.makeStatEquivalentCopy(), ally.hb.cX, ally.hb.cY));
                     if (showEffect) {
                         PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
                     }

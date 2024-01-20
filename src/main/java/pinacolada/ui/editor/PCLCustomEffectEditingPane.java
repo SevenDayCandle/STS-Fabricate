@@ -13,7 +13,7 @@ import extendedui.*;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
@@ -42,7 +42,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
-import pinacolada.ui.editor.card.PCLCustomCardPrimaryInfoPage;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
 

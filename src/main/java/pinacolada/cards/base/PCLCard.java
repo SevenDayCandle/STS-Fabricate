@@ -46,7 +46,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.text.EUITextHelper;
+import extendedui.utilities.EUITextHelper;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
@@ -110,14 +110,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     private final static float BANNER_OFFSET_Y = -AbstractCard.RAW_H * 0.04f;
     private final static float BANNER_OFFSET_Y2 = -AbstractCard.RAW_H * 0.06f;
     private final static float FOOTER_SIZE = 52f;
-    protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
-    protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
-    protected static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
-    protected static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.2f, 1f);
-    protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
-    protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
-    protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
-    protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
+    private final static float HEADER_WIDTH = AbstractCard.IMG_WIDTH * 0.73f;
+    private static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
+    private static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
+    private static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
+    private static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.2f, 1f);
+    private static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
+    private static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
+    private static final float SHADOW_OFFSET_X = 18f * Settings.scale;
+    private static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
     public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
     public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
@@ -1198,7 +1199,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Reset name back to original after initializeTitle to get the correct width
     public void initializeName() {
         String temp = getUpgradeName();
-        name = originalName = CardModifierManager.onRenderTitle(this, name);
+        name = originalName = CardModifierManager.onRenderTitle(this, temp);
         initializeTitle();
         name = temp;
     }
@@ -1932,9 +1933,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float text_width = offsMult * (isPopup ? 0.25f : 0.52f) * EUITextHelper.getTextWidth(largeFont, text) / Settings.scale;
         float suffix_width = 0;
         float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetX);
-        PCLRenderHelpers.writeOnCard(sb, this, largeFont, text, offsetX + (text_width), offsetY, textColor, true);
+        EUITextHelper.writeOnCard(sb, this, largeFont, text, offsetX + (text_width), offsetY, textColor, true);
 
-        PCLRenderHelpers.resetFont(largeFont);
+        EUITextHelper.resetFont(largeFont);
     }
 
     protected void renderAttributes(SpriteBatch sb) {
@@ -2037,8 +2038,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
                 if (bottomText != null) {
                     BitmapFont font = PCLRenderHelpers.getSmallTextFont(this, bottomText);
-                    PCLRenderHelpers.writeOnCard(sb, this, font, bottomText, 0, -0.47f * AbstractCard.RAW_H, Settings.CREAM_COLOR, true);
-                    PCLRenderHelpers.resetFont(font);
+                    EUITextHelper.writeOnCard(sb, this, font, bottomText, 0, -0.47f * AbstractCard.RAW_H, Settings.CREAM_COLOR, true);
+                    EUITextHelper.resetFont(font);
                 }
             }
         }
@@ -2086,8 +2087,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             energyColor.set(1, 1, 1, transparency);
         }
         BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
-        PCLRenderHelpers.writeOnCard(sb, this, font, text, xOffset, yOffset, energyColor);
-        PCLRenderHelpers.resetFont(font);
+        EUITextHelper.writeOnCard(sb, this, font, text, xOffset, yOffset, energyColor);
+        EUITextHelper.resetFont(font);
     }
 
     private float renderFooter(SpriteBatch sb, Texture texture, float y) {
@@ -2299,7 +2300,17 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     @SpireOverride
     protected void renderTitle(SpriteBatch sb) {
-        final BitmapFont font = PCLRenderHelpers.getTitleFont(this);
+        final float nameRatio = MathUtils.clamp(originalName.length(), 13, 19) / 13f;
+        final float scale = 1 / nameRatio;
+        BitmapFont result;
+        if (isPopup) {
+            result = FontHelper.SCP_cardTitleFont_small;
+            result.getData().setScale(drawScale * 0.5f * scale);
+        }
+        else {
+            result = FontHelper.cardTitleFont;
+            result.getData().setScale(drawScale * scale);
+        }
 
         Color color;
         String text;
@@ -2314,12 +2325,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         // Base game text is SLIGHTLY off
         if (isPopup && !shouldUsePCLFrame()) {
-            PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.4f, color, false);
+            EUITextHelper.writeOnCardWrapped(sb, this, result, text, 0, RAW_H * 0.4f, HEADER_WIDTH * nameRatio, color);
         }
         else {
-            PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.416f, color, false);
+            EUITextHelper.writeOnCardWrapped(sb, this, result, text, 0, RAW_H * 0.416f, HEADER_WIDTH * nameRatio, color);
         }
-        PCLRenderHelpers.resetFont(font);
+        EUITextHelper.resetFont(result);
     }
 
     @SpireOverride

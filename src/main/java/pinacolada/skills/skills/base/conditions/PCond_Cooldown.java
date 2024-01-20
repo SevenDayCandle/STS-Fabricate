@@ -41,14 +41,17 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
 
     public PCond_Cooldown(PSkillSaveData content) {
         super(DATA, content);
+        cooldown = amount;
     }
 
     public PCond_Cooldown() {
         super(DATA, PCLCardTarget.None, 1);
+        cooldown = amount;
     }
 
     public PCond_Cooldown(int amount) {
         super(DATA, PCLCardTarget.None, amount);
+        cooldown = amount;
     }
 
     // Must return true when using or cooldown will not progress in a multicond
@@ -104,6 +107,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     @Override
     public PCond_Cooldown onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
+        cooldown = amount;
         return this;
     }
 
