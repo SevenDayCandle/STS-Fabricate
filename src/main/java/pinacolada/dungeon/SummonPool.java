@@ -27,7 +27,7 @@ public class SummonPool extends EUIBase {
     public static int BASE_DAMAGE_BONUS = 0;
     public static int BASE_TRIGGER = 2;
     public static int BASE_LIMIT = 3;
-    public static float OFFSET = scale(160);
+    public static float OFFSET = scale(190);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public int damageBonus = BASE_DAMAGE_BONUS;

@@ -2076,12 +2076,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally) {
+    public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally, boolean triggerEffects) {
         if (this instanceof OnAllyWithdrawSubscriber) {
-            ((OnAllyWithdrawSubscriber) this).onAllyWithdraw(c, ally);
+            ((OnAllyWithdrawSubscriber) this).onAllyWithdraw(c, ally, triggerEffects);
         }
         else if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyWithdraw(c, ally);
+            this.childEffect.triggerOnAllyWithdraw(c, ally, triggerEffects);
         }
     }
 

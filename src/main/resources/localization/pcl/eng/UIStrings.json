@@ -555,7 +555,8 @@
 												"Use custom card framework for all cards",
 												"Show targeting indicators on custom cards",
 												"Enable augments in normal runs",
-												"Augment chance"
+												"Augment chance",
+												"Allow card text overflow"
 								]
 				},
 				"pcl:OptionDescriptions": {
@@ -576,7 +577,8 @@
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods.",
 												"Adds a panel on the right-hand side of cards that describes the card's targeting. NL Certain cards may always have this panel visible regardless of this setting.",
 												"Enables #yAugments, including those created with Fabricate, to appear as combat rewards for all characters.",
-												"The percentage chance for an #yAugment to appear in a card reward, from #b0% to #b100%."
+												"The percentage chance for an #yAugment to appear in a card reward, from #b0% to #b100%.",
+												"Prevents text on custom cards from getting too small by allow it to extend past the card's vertical boundaries."
 								]
 				},
 				"pcl:Power": {

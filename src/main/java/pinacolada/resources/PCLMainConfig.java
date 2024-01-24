@@ -31,6 +31,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static ExtraModSettingsPanel.Category pclCategory;
     private HashSet<String> tips = null;
     public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("AbbreviateEffects"), false);
+    public STSConfigItem<Boolean> cardTextClip = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("CardTextClip"), false);
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("UseCroppedPortrait"), false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("DisplayCardTagDescription"), false);
     public STSConfigItem<Boolean> enableCustomAugments = new STSConfigItem<Boolean>(PCLMainConfig.createFullID("EnableCustomAugments"), false);
@@ -136,6 +137,7 @@ public class PCLMainConfig extends AbstractConfig {
 
         float yPos = BASE_OPTION_OFFSET_Y * Settings.scale;
         yPos = addToggle(0, abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
+        yPos = addToggle(0, cardTextClip, PGR.core.strings.options_cardTextClip, yPos, PGR.core.strings.optionDesc_cardTextClip);
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
@@ -159,6 +161,7 @@ public class PCLMainConfig extends AbstractConfig {
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
         makeModToggle(abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
+        makeModToggle(cardTextClip, PGR.core.strings.options_cardTextClip, PGR.core.strings.optionDesc_cardTextClip);
         makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
         makeModToggle(removeLineBreaks, PGR.core.strings.options_removeLineBreaks, PGR.core.strings.optionDesc_removeLineBreaks);
@@ -173,6 +176,7 @@ public class PCLMainConfig extends AbstractConfig {
         EUIConfiguration.enableDescriptionIcons.addListener(val -> updateAllDescriptions());
         displayCardTagDescription.addListener(val -> updateAllDescriptions());
         abbreviateEffects.addListener(val -> updateAllDescriptions());
+        cardTextClip.addListener(val -> updateAllDescriptions());
         removeLineBreaks.addListener(val -> updateAllDescriptions());
     }
 
@@ -195,6 +199,7 @@ public class PCLMainConfig extends AbstractConfig {
         ascensionGlyph0.addConfig(config);
         ascensionGlyph1.addConfig(config);
         augmentChance.addConfig(config);
+        cardTextClip.addConfig(config);
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
         displayCardTagDescription.addConfig(config);

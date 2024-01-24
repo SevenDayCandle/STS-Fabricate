@@ -58,13 +58,19 @@ public class ConditionToken extends PCLTextToken {
                                     parser.addTooltip(tooltip);
                                 }
                             }
+                            else if (token instanceof PointerToken) {
+                                ((PointerToken) token).parent = move;
+                            }
+                            else if (token instanceof LogicToken) {
+                                ((LogicToken) token).parent = move;
+                            }
                             parser.addToken(token);
                         }
                     }
                 }
             }
             else {
-                EUIUtils.logWarning(PointerToken.class, "Invalid pointer: " + parser.text);
+                EUIUtils.logWarning(ConditionToken.class, "Invalid pointer: " + parser.text);
             }
 
             return 4;

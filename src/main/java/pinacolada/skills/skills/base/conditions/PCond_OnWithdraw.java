@@ -40,7 +40,9 @@ public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdra
     }
 
     @Override
-    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally) {
-        triggerOnCard(returned, ally);
+    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally, boolean triggerEffects) {
+        if (triggerEffects) {
+            triggerOnCard(returned, ally);
+        }
     }
 }

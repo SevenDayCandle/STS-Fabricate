@@ -105,6 +105,13 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
+    public PCond_Cooldown makeCopy() {
+        PCond_Cooldown copy = (PCond_Cooldown) super.makeCopy();
+        copy.cooldown = cooldown = amount;
+        return copy;
+    }
+
+    @Override
     public PCond_Cooldown onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
         cooldown = amount;

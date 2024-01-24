@@ -194,7 +194,6 @@ public class CombatManager extends EUIBase {
         dodgeChance = 0;
 
         subscriberDo(OnStartOfTurnSubscriber.class, OnStartOfTurnSubscriber::onStartOfTurn);
-
         summons.onStartOfTurn();
 
         if (blockRetained > 0 && !AbstractDungeon.player.hasPower(BarricadePower.POWER_ID) && !AbstractDungeon.player.hasPower(BlurPower.POWER_ID)) {
@@ -308,7 +307,7 @@ public class CombatManager extends EUIBase {
         formulaDisplay.initialize();
         DrawPileCardPreview.reset();
         DelayUse.clear();
-        controlPile.clear();
+        controlPile.reset();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
         showAffinities.clear();
@@ -547,11 +546,11 @@ public class CombatManager extends EUIBase {
         subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, target, ally, ally));
     }
 
-    public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally) {
+    public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally, boolean triggerEffects) {
         if (card != null) {
-            card.triggerWhenWithdrawn(ally);
+            card.triggerWhenWithdrawn(ally, triggerEffects);
         }
-        subscriberDo(OnAllyWithdrawSubscriber.class, s -> s.onAllyWithdraw(card, ally));
+        subscriberDo(OnAllyWithdrawSubscriber.class, s -> s.onAllyWithdraw(card, ally, triggerEffects));
     }
 
     public static void onApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower power) {

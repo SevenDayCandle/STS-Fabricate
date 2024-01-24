@@ -21,6 +21,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.utilities.GameUtilities;
 
@@ -35,7 +36,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     private ActionT1<AbstractCreature> onHovering;
     private AbstractCreature previous;
     private PCLCardTarget targeting;
-    private boolean allowSummonSlot;
+    private boolean actForSummon;
     private boolean autoSelect;
     private boolean cancellable;
     private boolean skipConfirmation;
@@ -88,8 +89,9 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         initialize(source, null, 1, card.name);
     }
 
-    public SelectCreature allowSummonSlot(boolean allowSummonSlot) {
-        this.allowSummonSlot = allowSummonSlot;
+    public SelectCreature actForSummon(boolean allowSummonSlot) {
+        this.actForSummon = allowSummonSlot;
+        targeting = PCLCardTarget.SingleAlly;
 
         return this;
     }
@@ -103,7 +105,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     @Override
     protected void completeImpl() {
         GameCursor.hidden = false;
-        if (allowSummonSlot) {
+        if (actForSummon) {
             PCLCardAlly.emptyAnimation.unhighlight();
         }
         super.completeImpl();
@@ -137,12 +139,8 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             return;
         }
 
-        if (allowSummonSlot) {
-            PCLCardAlly.emptyAnimation.highlight();
-        }
-
         final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
-        final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(allowSummonSlot ? null : true);
+        final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(actForSummon ? null : true);
         if (enemies.isEmpty() && targeting == PCLCardTarget.Single) {
             complete(null);
             return;
@@ -191,7 +189,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                     return;
                 case SelfSingleAlly:
                 case RandomAlly:
-                    complete(GameUtilities.getRandomSummon(allowSummonSlot ? null : true));
+                    complete(GameUtilities.getRandomSummon(actForSummon ? null : true));
                     return;
                 case AllEnemy:
                 case All:
@@ -217,23 +215,18 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
 
     protected void render(SpriteBatch sb) {
         switch (targeting) {
-            case Self:
-            case Single:
-            case SelfSingle:
-            case SelfSingleAlly:
-            case SelfPlayer:
-            case Any:
-                renderArrow(sb);
-                if (target != null) {
-                    target.renderReticle(sb);
+            case AllAllyEnemy:
+                for (AbstractCreature c : GameUtilities.getSummons(true)) {
+                    c.renderReticle(sb);
                 }
-                break;
             case RandomEnemy:
             case AllEnemy:
+            case SelfAllEnemy:
                 for (AbstractCreature c : GameUtilities.getEnemies(true)) {
                     c.renderReticle(sb);
                 }
                 break;
+            case Team:
             case AllAlly:
                 for (AbstractCreature c : GameUtilities.getSummons(true)) {
                     c.renderReticle(sb);
@@ -245,6 +238,12 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                 }
                 break;
             case None:
+                break;
+            default:
+                renderArrow(sb);
+                if (target != null) {
+                    target.renderReticle(sb);
+                }
                 break;
         }
 
@@ -389,6 +388,10 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     }
 
     protected void updateTarget(boolean targetPlayer, boolean targetEnemy, boolean targetAlly, boolean canTargetSelf) {
+        if (actForSummon) {
+            PCLCardAlly.emptyAnimation.highlight();
+        }
+
         if (target != null) {
             previous = target;
             target = null;
@@ -407,8 +410,9 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                 }
             }
             if (targetAlly && target == null) {
-                for (AbstractMonster m : GameUtilities.getSummons(allowSummonSlot ? null : true)) {
-                    if (m.hb.hovered && !m.isDying && (canTargetSelf || m != source)) {
+                for (AbstractMonster m : GameUtilities.getSummons(actForSummon ? null : true)) {
+                    m.hb.update();
+                    if (m.hb.hovered && (actForSummon || !m.isDying) && (canTargetSelf || m != source)) {
                         target = m;
                         break;
                     }

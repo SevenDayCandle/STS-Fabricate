@@ -1,12 +1,15 @@
 package pinacolada.cards.base.cardText;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
 
 import java.util.ArrayList;
@@ -21,8 +24,10 @@ public class LogicToken extends PCLTextToken {
     private final List<LogicTokenBlock> blocks;
     private final char variableID;
     private final PSkill<?> move;
+    private Color parentColor;
     private int cachedValue;
     private LogicTokenBlock cachedResult;
+    protected PSkill<?> parent;
 
     protected LogicToken(char variableID, PSkill<?> move, List<LogicTokenBlock> blocks, int initialValue) {
         super(PCLTextTokenType.Text, null);
@@ -161,6 +166,14 @@ public class LogicToken extends PCLTextToken {
     }
 
     @Override
+    public void refresh(PCLUseInfo info) {
+        super.refresh(info);
+        if (parent != null && EUI.elapsed(25)) {
+            parentColor = parent.getConditionColor();
+        }
+    }
+
+    @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         if (move != null) {
             int value = move.getAttribute(variableID);
@@ -175,7 +188,12 @@ public class LogicToken extends PCLTextToken {
             }
         }
         if (cachedResult != null) {
-            cachedResult.token.render(sb, context);
+            if (parentColor != null) {
+                cachedResult.token.render(sb, context, cachedResult.token.coloredString.text, parentColor);
+            }
+            else {
+                cachedResult.token.render(sb, context);
+            }
         }
     }
 

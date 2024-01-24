@@ -1,7 +1,9 @@
 package pinacolada.cards.base.cardText;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ public class PointerToken extends PCLTextToken {
     protected final char variableID;
     protected final PSkill<?> move;
     private final ColoredString coloredString;
+    protected PSkill<?> parent;
     private int cachedValue = PSkill.DEFAULT_MAX;
 
     private PointerToken(char variableID, PSkill<?> move) {
@@ -50,8 +53,8 @@ public class PointerToken extends PCLTextToken {
     @Override
     public void forceRefresh() {
         cachedValue = move.getAttribute(variableID);
-        coloredString.setText(move.getAttributeString(variableID))
-                .setColor(move.getAttributeColor(variableID));
+        coloredString.setText(move.getAttributeString(variableID));
+        setColorFromParent();
     }
 
     // X value will not show text unless in combat, but we need to make sure that it doesn't go over the line
@@ -74,13 +77,31 @@ public class PointerToken extends PCLTextToken {
         int newAmount = move.getAttribute(variableID);
         if (cachedValue != newAmount) {
             cachedValue = newAmount;
-            coloredString.setText(move.getAttributeString(variableID))
-                    .setColor(move.getAttributeColor(variableID));
+            coloredString.setText(move.getAttributeString(variableID));
+            setColorFromParent();
+        }
+        else if (parent != null && EUI.elapsed25()) {
+            setColorFromParent();
         }
     }
 
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         super.render(sb, context, coloredString);
+    }
+
+    private void setColorFromParent() {
+        if (parent != null) {
+            Color c = parent.getConditionColor();
+            if (c != null) {
+                coloredString.setColor(c);
+            }
+            else {
+                coloredString.setColor(move.getAttributeColor(variableID));
+            }
+        }
+        else {
+            coloredString.setColor(move.getAttributeColor(variableID));
+        }
     }
 }

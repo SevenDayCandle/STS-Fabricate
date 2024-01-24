@@ -113,9 +113,12 @@ public class PCLCardText {
         // Cap size to avoid text becoming illegible
         this.font = FontHelper.cardDescFont_N;
         int predictedLength = EUIUtils.sumInt(internalParser.getTokens(), PCLTextToken::getCharCount);
-        final float max = isIdeographicLanguage() ? 32f : 75f;
+        final float max = isIdeographicLanguage() ? 50f : 85f;
         if (predictedLength > max) {
-            scaleModifier = Math.max(0.79f, scaleModifier - (0.1f * (predictedLength / max)));
+            scaleModifier = scaleModifier - (0.13f * (predictedLength / max));
+            if (PGR.config.cardTextClip.get()) {
+                scaleModifier = Math.max(0.79f, scaleModifier);
+            }
         }
         this.font.getData().setScale(scaleModifier);
 

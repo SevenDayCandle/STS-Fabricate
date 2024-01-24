@@ -17,9 +17,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
-    public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
-    public boolean clearPowers = true;
-    public boolean showEffect = true;
+    private final ArrayList<PCLCardAlly> allies = new ArrayList<>();
+    private boolean clearPowers = true;
+    private boolean showEffect = true;
+    private boolean triggerWithdraw = true;
     public CardGroup destination = AbstractDungeon.player.discardPile;
 
     public WithdrawAllyAction(PCLCardAlly slot, int amount) {
@@ -88,7 +89,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
             returnedCard.unfadeOut();
         }
 
-        CombatManager.onAllyWithdraw(returnedCard, ally);
+        CombatManager.onAllyWithdraw(returnedCard, ally, triggerWithdraw);
     }
 
     public WithdrawAllyAction setClearPowers(boolean clearPowers) {
@@ -103,6 +104,11 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
 
     public WithdrawAllyAction showEffect(boolean showEffect) {
         this.showEffect = showEffect;
+        return this;
+    }
+
+    public WithdrawAllyAction triggerWithdraw(boolean showEffect) {
+        this.triggerWithdraw = showEffect;
         return this;
     }
 }

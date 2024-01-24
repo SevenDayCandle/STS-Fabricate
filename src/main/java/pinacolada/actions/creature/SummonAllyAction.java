@@ -1,6 +1,7 @@
 package pinacolada.actions.creature;
 
 import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
@@ -21,6 +22,7 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
     private boolean delayForTurn = true;
     private boolean showEffect = true;
     private boolean summonCardOnly = true;
+    private boolean triggerWithdraw = true;
     public PCLCardAlly ally;
 
     public SummonAllyAction(PCLCard card, PCLCardAlly slot) {
@@ -58,7 +60,10 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
         // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
         // Also, do not clear powers in this withdraw call, in case we want to retain powers on the card
         if (returnedCard != null) {
-            CombatManager.summons.withdraw(ally).setClearPowers(false).addCallback(this::initializeAlly);
+            PCLActions.top.withdrawAlly(ally, triggerWithdraw ? CombatManager.summons.triggerTimes : 0)
+                    .triggerWithdraw(triggerWithdraw)
+                    .setClearPowers(false)
+                    .addCallback(this::initializeAlly);
         }
         else {
             initializeAlly();
@@ -89,12 +94,28 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
         });
     }
 
-    public SummonAllyAction setOptions(boolean requireTarget, boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly) {
-        this.requireTarget = requireTarget;
-        this.retainPowers = retainPowers;
-        this.delayForTurn = stun;
-        this.showEffect = showEffect;
-        this.summonCardOnly = summonCardOnly;
+    public SummonAllyAction requireTarget(boolean v) {
+        this.requireTarget = v;
+        return this;
+    }
+
+    public SummonAllyAction retainPowers(boolean v) {
+        this.retainPowers = v;
+        return this;
+    }
+
+    public SummonAllyAction setDelay(boolean v) {
+        this.delayForTurn = v;
+        return this;
+    }
+
+    public SummonAllyAction showEffect(boolean v) {
+        this.showEffect = v;
+        return this;
+    }
+
+    public SummonAllyAction triggerWithdraw(boolean v) {
+        this.triggerWithdraw = v;
         return this;
     }
 }

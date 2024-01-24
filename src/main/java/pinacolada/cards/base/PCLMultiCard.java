@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIPreview;
@@ -464,8 +463,8 @@ public abstract class PCLMultiCard extends PCLCard {
         }
 
         @Override
-        public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally) {
-            doPCL(card -> card.triggerWhenWithdrawn(ally));
+        public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally, boolean triggerEffects) {
+            doPCL(card -> card.triggerWhenWithdrawn(ally, triggerEffects));
         }
 
         @Override
