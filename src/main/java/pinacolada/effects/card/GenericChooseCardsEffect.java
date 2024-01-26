@@ -35,7 +35,7 @@ public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<Gen
 
         this.cardsToChoose = choose;
         this.filter = filter;
-        this.screenColor = AbstractDungeon.fadeColor.cpy();
+        this.screenColor = AbstractDungeon.fadeColor != null ? AbstractDungeon.fadeColor.cpy() : Color.BLACK.cpy();
         this.screenColor.a = 0f;
         AbstractDungeon.overlayMenu.proceedButton.hide();
     }

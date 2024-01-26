@@ -15,7 +15,7 @@ public class FrailPowerPatches {
     public static int BASE_POWER = 25;
 
     public static float estimateDamage(AbstractPower power) {
-        if (GameUtilities.inGame() && power != null) {
+        if (GameUtilities.inGame() && power != null && power.owner != null) {
             float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
             return PCLPower.DUMMY_MULT - estimate;
         }

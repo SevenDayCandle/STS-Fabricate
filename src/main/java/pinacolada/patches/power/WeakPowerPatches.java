@@ -16,7 +16,7 @@ public class WeakPowerPatches {
     public static int BASE_POWER = 25;
 
     public static float estimateDamage(AbstractPower power) {
-        if (GameUtilities.inGame() && power != null) {
+        if (GameUtilities.inGame() && power != null && power.owner != null) {
             float estimate = power.atDamageGive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
             return PCLPower.DUMMY_MULT - estimate;
         }

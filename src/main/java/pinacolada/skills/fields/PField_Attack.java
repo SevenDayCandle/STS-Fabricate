@@ -62,7 +62,7 @@ public class PField_Attack extends PField {
         editor.registerDropdown(PCLAttackVFX.keys()
                 , EUIUtils.arrayList(attackEffect)
                 , item -> {
-                    if (item.size() > 0) {
+                    if (!item.isEmpty()) {
                         attackEffect = item.get(0);
                     }
                 }
@@ -75,7 +75,7 @@ public class PField_Attack extends PField {
         editor.registerDropdown(EffekseerEFK.sortedValues()
                 , EUIUtils.arrayList(effekseer)
                 , item -> {
-                    if (item.size() > 0) {
+                    if (!item.isEmpty()) {
                         effekseer = item.get(0);
                     }
                 }
