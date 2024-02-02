@@ -3,8 +3,8 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.utilities.EUITextHelper;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class HighlightToken extends PCLTextToken {

@@ -24,10 +24,10 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUITextHelper;
 import extendedui.utilities.RotatingList;
 import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +57,8 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.base.conditions.PLimit_Limited;
+import pinacolada.skills.skills.base.conditions.PLimit_SemiLimited;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -322,6 +324,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return e != null ? e.getEligibleTargets() : new ArrayList<>();
     }
 
+    private static PSkillData<?> getLegacy(String id) {
+        switch (id) {
+            case "pcl:PLimit_Limited":
+                return PLimit_Limited.DATA;
+            case "pcl:PLimit_SemiLimited":
+                return PLimit_SemiLimited.DATA;
+        }
+        return null;
+    }
+
     /**
      * Load the data for all skills annotated with @VisibleSkill for usage in the card editor
      * Note that even though they don't appear in the editor, PMultiBase and PCardPrimary skills still need to be loaded with this method to allow them to be deserialized in the editor
@@ -449,8 +461,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
-        return this.childEffect == null || this.childEffect.canPlay(info, triggerSource);
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
+        return this.childEffect == null ? origValue : this.childEffect.canPlay(info, triggerSource, origValue);
     }
 
     public TryChooseChoice<PSkill<?>> chooseEffect(PCLUseInfo info, PCLActions order, List<? extends PSkill<?>> effects) {
@@ -1013,13 +1025,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getPowerTextForDisplay(Object requestor) {
+        String res = null;
         if (overrideDesc != null) {
-            return getUncascadedPowerOverride(requestor);
+            res = getUncascadedPowerOverride(requestor);
         }
-        if (source instanceof PointerProvider) {
-            return ((PointerProvider) source).makePowerString(getText(requestor));
+        else if (source instanceof PointerProvider) {
+            res = ((PointerProvider) source).makePowerString(getText(requestor));
         }
-        return getText(requestor);
+        else {
+            res = getText(requestor);
+        }
+        return StringUtils.isEmpty(res) ? null : res;
     }
 
     public final String getPowerTextForTooltip(Object requestor) {
@@ -1399,7 +1415,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getTextForDisplay() {
-        return overrideDesc != null ? getUncascadedOverride(null) : getText();
+        String res = overrideDesc != null ? getUncascadedOverride(null) : getText();
+        return StringUtils.isEmpty(res) ? null : res;
     }
 
     public final String getTextForDisplay(Object requestor) {

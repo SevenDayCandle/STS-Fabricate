@@ -10,8 +10,8 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.dungeon.SummonPool;
 import pinacolada.resources.AbstractStrings;
 import pinacolada.resources.PCLResources;
@@ -166,6 +166,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_viewSummonTutorial = cedit.TEXT[101];
     public final String cedit_viewAugmentTutorial = cedit.TEXT[102];
     public final String cedit_quickAdd = cedit.TEXT[103];
+    public final String cedit_enable = cedit.TEXT[104];
+    public final String cedit_disable = cedit.TEXT[105];
     // Card Editor Tutorial
     public final String cetut_selectorGeneric = cetut.TEXT[0];
     public final String cetut_selectorCard = cetut.TEXT[1];

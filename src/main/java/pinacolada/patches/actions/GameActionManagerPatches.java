@@ -1,7 +1,6 @@
 package pinacolada.patches.actions;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -11,8 +10,6 @@ import javassist.expr.ExprEditor;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.card.AbstractCardPatches;
-
-import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class GameActionManagerPatches {

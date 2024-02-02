@@ -4,11 +4,11 @@ import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.skills.*;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PDamageTrait;
-import pinacolada.skills.skills.base.primary.PTrigger_Passive;
-import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill

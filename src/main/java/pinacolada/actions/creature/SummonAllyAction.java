@@ -1,7 +1,6 @@
 package pinacolada.actions.creature;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;

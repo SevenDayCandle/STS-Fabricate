@@ -26,7 +26,6 @@ import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.effects.screen.PCLCustomDeletionConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomFlagEditEffect;
 import pinacolada.effects.screen.PCLCustomLoadoutEditEffect;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLCustomLoadoutInfo;
@@ -38,9 +37,7 @@ import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomFlagDialog;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomLoadoutDialog;
-import pinacolada.utilities.GameUtilities;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {

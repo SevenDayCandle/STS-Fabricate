@@ -87,7 +87,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     @Override
     public boolean canUse() {
-        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null, null)) && super.canUse();
+        return EUIUtils.all(skills.onUseEffects, sk -> sk.canPlay(null, null, true)) && super.canUse();
     }
 
     public void fillPreviews(RotatingList<EUIPreview> list) {

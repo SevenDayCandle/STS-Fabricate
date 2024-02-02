@@ -83,7 +83,6 @@ import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.potions.PCLPotionData;
-import pinacolada.powers.PCLPointerPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PTriggerPower;

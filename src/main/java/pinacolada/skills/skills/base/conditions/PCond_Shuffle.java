@@ -26,7 +26,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     // This should not activate the child effect when played normally
 
     @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
         return true;
     }
 

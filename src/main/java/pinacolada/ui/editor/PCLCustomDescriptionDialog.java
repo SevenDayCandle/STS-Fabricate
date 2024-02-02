@@ -10,12 +10,12 @@ import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.EUIFontHelper;
+import extendedui.utilities.EUITextHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 import pinacolada.cards.base.PCLCard;
@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.StringJoiner;
 
 public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDialog> {
+    private static final Color CLEAR_COLOR = new Color(0.7f, 0.4f, 0.4f, 1);
+    private static final Color ENABLE_COLOR = new Color(0.4f, 0.4f, 0.7f, 1);
     private final EUIButton clearButton;
     private final EUITextBoxInput textInput;
     private final EUITextBox preview;
@@ -38,6 +40,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
     private PSkill<?> skillAt;
     private String textList = EUIUtils.EMPTY_STRING;
     protected int index;
+    public boolean disabled = true;
     public HashMap<Settings.GameLanguage, String[]> currentLanguageMap;
 
     public PCLCustomDescriptionDialog(String headerText) {
@@ -83,11 +86,9 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         textInput.label.setWrap(true);
 
         clearButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y, scale(95), scale(32)))
-                .setLabel(FontHelper.cardTitleFont, 0.8f, EUIRM.strings.misc_clear)
+                .setLabel(FontHelper.cardTitleFont, 0.8f, PGR.core.strings.cedit_enable)
                 .setColor(new Color(0.7f, 0.4f, 0.4f, 1))
-                .setOnClick(() -> {
-                    textInput.setTextAndCommit(EUIUtils.EMPTY_STRING);
-                });
+                .setOnClick(this::updateTextDisable);
 
         keywordReference = (EUISearchableDropdown<EUIKeywordTooltip>) new EUISearchableDropdown<EUIKeywordTooltip>(new EUIHitbox(preview.hb.x, preview.hb.y - scale(130), scale(95), scale(32)))
                 .setLabelFunctionForOption(item -> item.icon != null ? item.getTitleOrIconForced() + " " + item.ID : item.ID, true)
@@ -221,11 +222,12 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         String[] strings = getStringsForLanguage(activeLanguage);
         if (strings.length <= index) {
             textInput.setLabel(EUIUtils.EMPTY_STRING);
+            updatePreview(null);
         }
         else {
             textInput.setLabel(strings[index] != null ? strings[index] : EUIUtils.EMPTY_STRING);
+            updatePreview(strings[index]);
         }
-        updatePreview(textInput.label.text);
     }
 
     private void updatePreview(String overrideDesc) {
@@ -234,7 +236,16 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
             return;
         }
 
-        preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
+        if (overrideDesc != null) {
+            preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
+            clearButton.setLabel(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
+            disabled = false;
+        }
+        else {
+            preview.setLabel(skillAt.getText());
+            clearButton.setLabel(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
+            disabled = true;
+        }
     }
 
     private void updateText(String name) {
@@ -250,5 +261,20 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
     private void updateTextAppend(String append) {
         String[] strings = getStringsForLanguage(activeLanguage);
         textInput.setTextAndCommit((strings.length > index && strings[index] != null ? strings[index] : EUIUtils.EMPTY_STRING) + append);
+    }
+
+    private void updateTextDisable() {
+        if (disabled) {
+            textInput.setTextAndCommit(EUIUtils.EMPTY_STRING);
+        }
+        else {
+            textInput.setText(EUIUtils.EMPTY_STRING);
+            String[] strings = getStringsForLanguage(activeLanguage);
+            if (strings.length > index) {
+                strings[index] = null;
+            }
+            currentLanguageMap.put(activeLanguage, strings);
+            updatePreview(null);
+        }
     }
 }

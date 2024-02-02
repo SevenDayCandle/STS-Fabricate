@@ -46,7 +46,7 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     @Override
     public boolean canUse(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse) {
         if (canActivate(trigger)) {
-            canUse = trigger.canPlay(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), trigger);
+            canUse = trigger.canPlay(CombatManager.playerSystem.getInfo(card, getOwner(), getOwner()), trigger, canUse);
         }
         return canUse;
     }

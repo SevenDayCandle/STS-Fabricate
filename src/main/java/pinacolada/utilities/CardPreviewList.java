@@ -3,7 +3,6 @@ package pinacolada.utilities;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
-import extendedui.utilities.RotatingList;
 
 import java.util.ArrayList;
 

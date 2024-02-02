@@ -29,10 +29,6 @@ import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     protected PCLCustomPotionEditScreen effect;

@@ -17,7 +17,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PActiveNonCheckCond;
-import pinacolada.skills.skills.PLimit;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -74,7 +73,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         // Copy list in case info list changes from other effects
         ArrayList<? extends AbstractCreature> targs = new ArrayList<>(fields.random ? info.fillWithTargets() : getTargetList(info));
         return PCLActions.last.callback(targs, (targets, __) -> {
-            if (!targets.isEmpty() && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, !fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+            if (!targets.isEmpty() && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, !fields.random)) && tryPassParent(this, info)) {
                 onComplete.invoke(info);
             }
             else {

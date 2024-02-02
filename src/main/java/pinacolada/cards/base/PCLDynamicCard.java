@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.CardStrings;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.FabricateItem;
@@ -409,7 +408,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             CardStrings s = builder.getStringsForLanguage(Settings.language);
             if (s != null && s.EXTENDED_DESCRIPTION != null && s.EXTENDED_DESCRIPTION.length > index) {
                 String res = s.EXTENDED_DESCRIPTION[index];
-                if (!StringUtils.isEmpty(res)) {
+                if (res != null) {
                     skill.overrideDesc = res;
                 }
             }

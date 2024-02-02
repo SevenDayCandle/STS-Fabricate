@@ -187,7 +187,9 @@
 												"Show Page Tour",
 												"View Summon Tutorial",
 												"View Augment Tutorial",
-												"Quick Add Keyword"
+												"Quick Add Keyword",
+												"Enable",
+												"Disable"
 								]
 				},
 				"pcl:CardEditorTutorial": {

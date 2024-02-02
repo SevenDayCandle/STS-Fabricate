@@ -119,7 +119,7 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
         refreshTriggers(info);
         boolean canPlay = true;
         for (PSkill<?> effect : getEffects()) {
-            canPlay = canPlay & effect.canPlay(info, effect);
+            canPlay = effect.canPlay(info, effect, canPlay);
         }
         return canPlay;
     }

@@ -127,7 +127,7 @@ public final class PCLEffects {
                 return UnlistedEffects;
         }
 
-        throw new RuntimeException("Enum value does not exist.");
+        throw new RuntimeException("Enum value does not exist." + effectType);
     }
 
     public FadingParticleEffect particle(Texture texture, float x, float y) {

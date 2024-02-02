@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import extendedui.utilities.EUITextHelper;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.dungeon.PCLUseInfo;
 
 // Copied and modified from STS-AnimatorMod

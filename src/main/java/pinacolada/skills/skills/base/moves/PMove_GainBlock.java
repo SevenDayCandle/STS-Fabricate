@@ -11,8 +11,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-import java.util.ArrayList;
-
 @VisibleSkill
 public class PMove_GainBlock extends PMove_Gain {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainBlock.class, PField_Empty.class)

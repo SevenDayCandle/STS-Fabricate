@@ -94,10 +94,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
-        boolean canPlay = true;
+    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
+        boolean canPlay = origValue;
         for (PSkill<?> be : effects) {
-            canPlay = canPlay & be.canPlay(info, triggerSource);
+            canPlay = be.canPlay(info, triggerSource, origValue);
         }
         return canPlay;
     }

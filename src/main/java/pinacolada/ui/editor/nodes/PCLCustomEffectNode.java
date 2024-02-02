@@ -332,6 +332,12 @@ public class PCLCustomEffectNode extends EUIButton {
         return null;
     }
 
+    protected void tryQueueForDrag() {
+        if (dragging && !hb.hovered && hologram == null) {
+            hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
+        }
+    }
+
     @Override
     public void updateImpl() {
         super.updateImpl();
@@ -339,9 +345,7 @@ public class PCLCustomEffectNode extends EUIButton {
         if (child != null) {
             child.updateImpl();
         }
-        if (dragging && !hb.hovered && hologram == null) {
-            hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
-        }
+        tryQueueForDrag();
         deleteButton.update();
         warningImage.update();
     }
@@ -355,7 +359,6 @@ public class PCLCustomEffectNode extends EUIButton {
         Multimove,
         Trait,
         Delay,
-        Limit,
         Trigger,
         Attack,
         Block,
@@ -401,7 +404,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return Color.OLIVE.cpy();
                 case Delay:
                     return Settings.RED_TEXT_COLOR.cpy();
-                case Limit:
                 case Trigger:
                 case Attack:
                 case Block:
@@ -430,7 +432,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PGR.core.strings.cetut_effectTrait;
                 case Delay:
                     return PGR.core.strings.cetut_effectTurnDelay;
-                case Limit:
                 case Trigger:
                 case Attack:
                 case Block:
@@ -459,8 +460,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PTrait.class;
                 case Delay:
                     return PDelay.class;
-                case Limit:
-                    return PLimit.class;
                 case Trigger:
                     return PTrigger.class;
                 case Attack:
@@ -473,11 +472,8 @@ public class PCLCustomEffectNode extends EUIButton {
 
         @SuppressWarnings("rawtypes")
         public List<? extends PSkill> getSkills(AbstractCard.CardColor color) {
-            switch (this) {
-                case Limit:
-                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PLimit.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PLimit.class, PTrigger.class, PShift.class));
-                case Trigger:
-                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
+            if (this == NodeType.Trigger) {
+                return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
             }
             return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(getSkillClass()) : PSkill.getEligibleEffects(color, getSkillClass()));
         }
@@ -493,7 +489,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PCLCoreImages.Menu.nodeHexagon.texture();
                 case Delay:
                     return PCLCoreImages.Menu.nodeTriangle.texture();
-                case Limit:
                 case Trigger:
                 case Attack:
                 case Block:
@@ -527,7 +522,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PGR.core.strings.cedit_turnDelay;
                 case Trigger:
                     return PGR.core.strings.cedit_trigger;
-                case Limit:
                 case Attack:
                 case Block:
                     return PGR.core.strings.cedit_primary;
@@ -540,11 +534,8 @@ public class PCLCustomEffectNode extends EUIButton {
         }
 
         public boolean matchesNode(PSkill<?> skill) {
-            switch (this) {
-                case Limit:
-                    return getSkillClass().isInstance(skill) || skill instanceof PShift || skill instanceof PTrigger;
-                case Trigger:
-                    return getSkillClass().isInstance(skill) || skill instanceof PShift;
+            if (this == NodeType.Trigger) {
+                return getSkillClass().isInstance(skill) || skill instanceof PShift;
             }
             return getSkillClass().isInstance(skill);
         }

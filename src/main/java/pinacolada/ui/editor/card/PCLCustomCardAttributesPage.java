@@ -27,7 +27,6 @@ import pinacolada.skills.delay.DelayTiming;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.ui.editor.PCLCustomUpgradableEditor;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;

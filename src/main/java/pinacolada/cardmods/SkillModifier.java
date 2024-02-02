@@ -43,7 +43,7 @@ public class SkillModifier extends AbstractCardModifier {
     }
 
     public boolean canPlayCard(AbstractCard card) {
-        return skill.canPlay(getInfo(card, null), null);
+        return skill.canPlay(getInfo(card, null), null, true);
     }
 
     public PCLUseInfo getInfo(AbstractCard card, AbstractCreature target) {

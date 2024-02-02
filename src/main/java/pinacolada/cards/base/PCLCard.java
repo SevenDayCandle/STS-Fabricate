@@ -46,7 +46,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
@@ -1215,7 +1214,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected boolean isEffectPlayable(AbstractMonster m) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(this, getSourceCreature(), m);
         for (PSkill<?> be : getFullEffects()) {
-            if (!be.canPlay(info, null)) {
+            if (!be.canPlay(info, null, true)) {
                 return false;
             }
         }

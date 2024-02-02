@@ -13,10 +13,10 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
-import extendedui.utilities.EUITextHelper;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIClassUtils;
+import extendedui.utilities.EUITextHelper;
 import pinacolada.relics.PCLRelic;
 
 import java.util.ArrayList;

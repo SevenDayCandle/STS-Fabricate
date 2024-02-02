@@ -19,7 +19,6 @@ import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLTriggerUsePool;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;

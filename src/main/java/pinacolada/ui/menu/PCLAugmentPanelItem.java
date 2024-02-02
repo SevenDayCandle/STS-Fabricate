@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorial;
-import extendedui.ui.controls.EUITutorialImagePage;
 import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
@@ -23,8 +22,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.ArrayList;
-
-import static pinacolada.dungeon.PCLPlayerMeter.makeTitle;
 
 public class PCLAugmentPanelItem extends PCLTopPanelItem {
     public static final String ID = createFullID(PCLAugmentPanelItem.class);

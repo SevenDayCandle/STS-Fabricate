@@ -15,7 +15,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActiveNonCheckCond;
-import pinacolada.skills.skills.PLimit;
 
 import java.util.ArrayList;
 
@@ -64,7 +63,7 @@ public class PCond_BlockBreak extends PActiveNonCheckCond<PField_Not> implements
         // Checks to see if any of the targets had block before this effect
         ArrayList<AbstractCreature> creaturesWithBlock = EUIUtils.filter(getTargetList(info), c -> c.currentBlock > 0);
         return PCLActions.last.callback(creaturesWithBlock, (targets, __) -> {
-            if (EUIUtils.any(targets, t -> t.currentBlock <= 0) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
+            if (EUIUtils.any(targets, t -> t.currentBlock <= 0) && tryPassParent(this, info)) {
                 onComplete.invoke(info);
             }
             else {

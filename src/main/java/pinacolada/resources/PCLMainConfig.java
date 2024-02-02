@@ -15,7 +15,6 @@ import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ExtraModSettingsPanel;
-import extendedui.ui.tooltips.EUIPreview;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.powers.PCLCustomPowerSlot;

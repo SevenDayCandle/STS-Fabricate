@@ -178,7 +178,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         refreshTriggers(info);
         boolean canPlay = true;
         for (PTrigger effect : ptriggers) {
-            canPlay = canPlay & effect.canPlay(info, effect);
+            canPlay = effect.canPlay(info, effect, canPlay);
         }
         return canPlay;
     }

@@ -51,7 +51,7 @@ public class AugmentModifier extends AbstractCardModifier {
     public boolean canPlayCard(AbstractCard card) {
         PCLUseInfo info = getInfo(card, null);
         for (PSkill<?> be : augment.getFullEffects()) {
-            if (!be.canPlay(info, null)) {
+            if (!be.canPlay(info, null, true)) {
                 return false;
             }
         }

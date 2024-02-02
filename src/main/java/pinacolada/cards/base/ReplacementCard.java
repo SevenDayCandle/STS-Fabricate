@@ -107,7 +107,7 @@ public class ReplacementCard extends PCLDynamicCard {
         }
 
         @Override
-        public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource) {
+        public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
             return card.original.cardPlayable(GameUtilities.asMonster(info.target));
         }
 

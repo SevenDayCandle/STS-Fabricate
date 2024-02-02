@@ -71,7 +71,7 @@ public class PCLUseInfo {
                 object = dataClass.newInstance();
             }
             catch (Exception e) {
-                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName());
+                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName(), e);
             }
         }
         auxiliaryData.put(meter, object);
@@ -85,7 +85,7 @@ public class PCLUseInfo {
                 object = dataClass.newInstance(args);
             }
             catch (Exception e) {
-                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName());
+                throw new RuntimeException("Failed to instantiate PCLUseInfo auxiliary data for meter " + meter.getClass().getName() + ", dataClass " + dataClass.getName(), e);
             }
         }
         auxiliaryData.put(meter, object);

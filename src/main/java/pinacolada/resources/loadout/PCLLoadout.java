@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
-import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
@@ -23,7 +22,7 @@ import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 import pinacolada.utilities.GameUtilities;
 
@@ -177,9 +176,7 @@ public abstract class PCLLoadout {
     public ChoiceCard<PCLLoadout> buildCard(boolean selected, boolean inPool, boolean isBeta) {
         final PCLCardData data = getSymbolicCard();
         ChoiceCardData<PCLLoadout> cd = new ChoiceCardData<>(String.valueOf(ID), this);
-        if (!isBeta) {
-            cd.setColor(color);
-        }
+        cd.setColor(color);
         cd.setMaxUpgrades(0);
         if (!isLocked()) {
             cd.setImagePath(data.imagePath);
@@ -196,7 +193,7 @@ public abstract class PCLLoadout {
         }
         else {
             if (isBeta) {
-                card.addSpecialMove(PGR.core.strings.sui_selected + EUIUtils.SPLIT_LINE + PGR.core.strings.csel_betaSet, (a, b, c) -> {}, 0, getCards().size());
+                card.addSpecialMove(PGR.core.strings.sui_selected + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("p", PGR.core.strings.csel_betaSet), (a, b, c) -> {}, 0, getCards().size());
                 card.tooltips.add(new EUIKeywordTooltip(PGR.core.strings.csel_betaSet, PGR.core.strings.csel_betaSetDesc));
             }
             else {

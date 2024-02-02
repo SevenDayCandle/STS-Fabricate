@@ -1,6 +1,5 @@
 package pinacolada.interfaces.markers;
 
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkill;
 
@@ -13,7 +12,7 @@ public interface FabricateItem extends PointerProvider {
             String[] desc = getDynamicData().getDescString();
             if (desc != null && desc.length > index) {
                 String res = desc[index];
-                if (!StringUtils.isEmpty(res)) {
+                if (res != null) {
                     skill.overrideDesc = res;
                 }
             }

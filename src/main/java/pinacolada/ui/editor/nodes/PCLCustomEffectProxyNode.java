@@ -66,6 +66,10 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     }
 
     @Override
+    protected void tryQueueForDrag() {
+    }
+
+    @Override
     public void updateImpl() {
         super.updateImpl();
         if (PCLCustomEffectHologram.current != null) {
