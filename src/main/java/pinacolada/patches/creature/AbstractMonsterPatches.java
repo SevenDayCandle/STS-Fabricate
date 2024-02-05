@@ -40,8 +40,8 @@ public class AbstractMonsterPatches {
         }
 
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator3.class)
-        public static void insertPre3(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount) {
-            CombatManager.onAttack(info, damageAmount[0], __instance);
+        public static void insertPre3(AbstractMonster __instance, DamageInfo info, int damageAmount) {
+            CombatManager.onAttack(info, damageAmount, __instance);
         }
 
         private static class Locator extends SpireInsertLocator {

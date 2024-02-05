@@ -5,17 +5,30 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager;
+import com.evacipated.cardcrawl.mod.stslib.patches.BindingPatches;
+import com.evacipated.cardcrawl.mod.stslib.patches.BlockModifierPatches;
+import com.evacipated.cardcrawl.mod.stslib.patches.DamageModifierPatches;
+import com.evacipated.cardcrawl.mod.stslib.patches.tempHp.MonsterDamage;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.IntangiblePlayerPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
+import com.megacrit.cardcrawl.vfx.combat.BlockedWordEffect;
+import com.megacrit.cardcrawl.vfx.combat.DeckPoofEffect;
+import com.megacrit.cardcrawl.vfx.combat.HbBlockBrokenEffect;
+import com.megacrit.cardcrawl.vfx.combat.StrikeEffect;
 import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
@@ -35,6 +48,8 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
+import pinacolada.patches.creature.AbstractMonsterPatches;
+import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -42,6 +57,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static pinacolada.utilities.GameUtilities.scale;
 
@@ -71,6 +87,117 @@ public class PCLCardAlly extends PCLCardCreature {
 
     public float atDamageLastModify(PCLUseInfo info, float damage) {
         return damage * damageMult;
+    }
+
+    // Intentional override to prevent unintended interactions with enemy modifications
+    @Override
+    public void damage(DamageInfo info) {
+        BindingPatches.DisableReactionaryActionBinding.disableBefore(this);
+        if (info.output > 0 && hasPower(IntangiblePlayerPower.POWER_ID))
+            info.output = 1;
+        int damageAmount = info.output;
+        if (!this.isDying && !this.isEscaping) {
+            if (damageAmount < 0) {
+                damageAmount = 0;
+            }
+
+            boolean hadBlock = this.currentBlock > 0;
+            boolean weakenedToZero = damageAmount == 0;
+            damageAmount = Math.max(0, CombatManager.onIncomingDamageFirst(this, info, damageAmount));
+            damageAmount = this.decrementBlock(info, damageAmount);
+
+            // Unfortunately I don't have a better way of reproducing this patch's effects
+            int[] arrayOfInt1 = new int[] {damageAmount};
+            boolean[] arrayOfBoolean = new boolean[] {hadBlock};
+            MonsterDamage.Insert(this, info, arrayOfInt1, arrayOfBoolean);
+            damageAmount = arrayOfInt1[0];
+            hadBlock = arrayOfBoolean[0];
+
+            if (info.owner == AbstractDungeon.player) {
+                for (AbstractRelic r : AbstractDungeon.player.relics) {
+                    damageAmount = r.onAttackToChangeDamage(info, damageAmount);
+                }
+
+            }
+
+            if (info.owner != null) {
+                for (AbstractPower p : info.owner.powers) {
+                    damageAmount = p.onAttackToChangeDamage(info, damageAmount);
+                }
+            }
+
+            CombatManager.onAttack(info, damageAmount, this);
+            for (AbstractDamageModifier mod : DamageModifierManager.getDamageMods(info)) {
+                damageAmount = mod.onAttackToChangeDamage(info, damageAmount, this);
+            }
+
+            for (AbstractPower p : this.powers) {
+                damageAmount = p.onAttackedToChangeDamage(info, damageAmount);
+            }
+
+
+            if (info.owner == AbstractDungeon.player) {
+                for (AbstractRelic r : AbstractDungeon.player.relics) {
+                    r.onAttack(info, damageAmount, this);
+                }
+            }
+
+            for (AbstractPower p : this.powers) {
+                p.wasHPLost(info, damageAmount);
+            }
+            if (info.owner != null) {
+                BlockModifierPatches.OnAttackMonster.onAttack(this, info, damageAmount);
+                for (AbstractPower p : info.owner.powers) {
+                    p.onAttack(info, damageAmount, this);
+                }
+            }
+            DamageModifierPatches.OnAttackMonster.onAttack(this, info, damageAmount);
+            for (AbstractPower p : this.powers) {
+                damageAmount = p.onAttacked(info, damageAmount);
+            }
+
+            damageAmount = Math.max(0, CombatManager.onIncomingDamageLast(this, info, damageAmount));
+            this.lastDamageTaken = Math.min(damageAmount, this.currentHealth);
+            boolean probablyInstantKill = this.currentHealth == 0;
+            if (damageAmount > 0) {
+                this.currentHealth -= damageAmount;
+                if (!probablyInstantKill) {
+                    AbstractDungeon.effectList.add(new StrikeEffect(this, this.hb.cX, this.hb.cY, damageAmount));
+                }
+
+                // Summon damage should not trigger overkill
+
+                if (this.currentHealth < 0) {
+                    this.currentHealth = 0;
+                }
+
+                this.healthBarUpdatedEvent();
+            } else if (!probablyInstantKill) {
+                if (weakenedToZero && this.currentBlock == 0) {
+                    if (hadBlock) {
+                        AbstractDungeon.effectList.add(new BlockedWordEffect(this, this.hb.cX, this.hb.cY, TEXT[30]));
+                    } else {
+                        AbstractDungeon.effectList.add(new StrikeEffect(this, this.hb.cX, this.hb.cY, 0));
+                    }
+                } else if (Settings.SHOW_DMG_BLOCK) {
+                    AbstractDungeon.effectList.add(new BlockedWordEffect(this, this.hb.cX, this.hb.cY, TEXT[30]));
+                }
+            }
+
+            if (this.currentHealth <= 0) {
+                this.die();
+
+                // Summon death should not trigger end of room
+
+                if (this.currentBlock > 0) {
+                    BlockModifierPatches.ClearContainerOnDeath.byeByeContainers(this);
+                    this.loseBlock();
+                    AbstractDungeon.effectList.add(new HbBlockBrokenEffect(this.hb.cX - this.hb.width / 2.0F + BLOCK_ICON_X, this.hb.cY - this.hb.height / 2.0F + BLOCK_ICON_Y));
+                }
+            }
+        }
+        DamageModifierPatches.OnAttackMonster.removeModsAfterUse(this, info);
+        BindingPatches.DisableReactionaryActionBinding.enableAfter(this);
     }
 
     @Override
