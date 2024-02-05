@@ -94,10 +94,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     // Remove unrecognized characters and sequences from the description pulled from by the base game and other mods
-    // This kills me
     public static String sanitizePowerDescription(String description) {
         if (description == null) {
-            return "";
+            return EUIUtils.EMPTY_STRING;
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < description.length(); i++) {
@@ -380,11 +379,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     @Override
     public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
-        renderPrimaryAmount(sb, x, y, c);
-        renderSecondaryAmount(sb, x, y, c);
-    }
-
-    protected void renderPrimaryAmount(SpriteBatch sb, float x, float y, Color c) {
         if (amount > 0 || this.canGoNegative) {
             Color color;
             if (isTurnBased) {
@@ -398,9 +392,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             }
             FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(amount), x, y, fontScale, color);
         }
-    }
-
-    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
     }
 
     @Override

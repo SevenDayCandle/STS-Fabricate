@@ -337,12 +337,13 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     }
 
     @Override
-    protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
+    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
+        super.renderAmount(sb, x, y, c);
         for (PTrigger trigger : ptriggers) {
             int uses = trigger.getUses();
             if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
                 Color color = uses > 0 && (trigger.fields.forced || uses >= trigger.amount) ? EUIColors.green(c.a) : EUIColors.gray(c.a);
-                FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(amount), x, y + 15 * Settings.scale, fontScale, color);
+                FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, String.valueOf(uses), x, y + 15 * Settings.scale, fontScale, color);
                 return;
             }
         }

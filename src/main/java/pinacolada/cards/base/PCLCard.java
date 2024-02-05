@@ -467,25 +467,25 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return addSpecialMove(description, onUse, amount, 0);
     }
 
-    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    public PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialPowerSkill addSpecialPower(String description, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
         PSpecialPowerSkill move = (PSpecialPowerSkill) getSpecialPower(description, onUse, amount, extra).setSource(this).onAddToCard(this);
         getEffects().add(move);
         return move;
     }
 
-    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialPowerSkill addSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
         return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
     }
 
-    public PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialPowerSkill addSpecialPower(String description, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount) {
         return addSpecialPower(description, onUse, amount, 0);
     }
 
@@ -1036,28 +1036,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return new PSpecialSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
+        return getSpecialPower(description, PCLCardTarget.Self, onUse, amount, extra);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+    protected PSpecialPowerSkill getSpecialPower(String description, PCLCardTarget target, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), description, target, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse) {
         return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount) {
         return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
         return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialPower(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
     @Override

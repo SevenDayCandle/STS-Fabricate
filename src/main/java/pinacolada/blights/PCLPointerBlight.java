@@ -2,15 +2,19 @@ package pinacolada.blights;
 
 import basemod.abstracts.CustomSavable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.interfaces.delegates.FuncT3;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
@@ -204,16 +208,12 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
         return new PSpecialSkill(this.blightID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.blightID + this.getEffects().size(), description, onUse, amount, extra);
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
+        return getSpecialPower(description, PCLCardTarget.Self, onUse, amount, extra);
     }
 
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialPower(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.blightID + this.getEffects().size(), strFunc, onUse, amount, extra);
+    protected PSpecialPowerSkill getSpecialPower(String description, PCLCardTarget target, FuncT3<? extends AbstractPower, AbstractCreature, AbstractCreature, PSpecialPowerSkill> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.blightID + this.getEffects().size(), description, target, onUse, amount, extra);
     }
 
     @Override

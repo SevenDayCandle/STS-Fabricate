@@ -40,7 +40,8 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
 
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective, requestor)));
+            return TEXT.cond_xConditional(childText,
+                    TEXT.cond_xPerY(getAmountRawString(), this.extra <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getExtraRawString(), getSubText(perspective, requestor))));
         }
         return TEXT.cond_xPerY(childText,
                 this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective, requestor)));
@@ -48,7 +49,8 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
 
     @Override
     public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
-        return fields.not ? (baseAmount + (getMultiplier(info, isUsing) * amount)) : baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
+        return fields.not ? (baseAmount + (getMultiplier(info, isUsing) * amount) / Math.max(1, this.extra))
+                : baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
     }
 
     @Override
@@ -62,9 +64,8 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
         String childText = childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "";
-        return getConditionText(perspective, requestor, childText) + appendix + PCLCoreStrings.period(addPeriod);
+        return getConditionText(perspective, requestor, childText) + getXRawString() + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

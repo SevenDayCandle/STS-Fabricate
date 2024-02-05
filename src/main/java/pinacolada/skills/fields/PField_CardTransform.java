@@ -46,7 +46,7 @@ public class PField_CardTransform extends PField_CardCategory {
         editor.registerPile(groupTypes);
         editor.registerCard(Collections.singletonList(result),
                 cards -> {
-                    if (cards.size() > 0) {
+                    if (!cards.isEmpty()) {
                         result = cards.get(0).cardID;
                     }
                     else {

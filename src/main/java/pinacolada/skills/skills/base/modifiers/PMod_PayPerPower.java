@@ -50,8 +50,8 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
             return EUIUtils.sumInt(powers, po -> po.amount) / Math.max(1, this.amount);
         }
         return baseAmount * (fields.powers.isEmpty() ?
-                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? limitPer(po.amount) : 0) : 0) :
-                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> limitPer(GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
+                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? (po.amount) : 0) : 0) :
+                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> (GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
     }
 
     @Override

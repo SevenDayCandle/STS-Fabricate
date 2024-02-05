@@ -408,7 +408,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        String subText = extra > 0 ? getSubText(perspective, requestor) + getMaxExtraString() : getSubText(perspective, requestor);
+        String subText = getSubText(perspective, requestor);
         return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : EUIUtils.EMPTY_STRING,
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
@@ -432,13 +432,9 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return childEffect == null;
     }
 
-    protected int limitPer(int val) {
-        return extra > 0 ? Math.min(extra, val) : val;
-    }
-
     @Override
     public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        cachedValue = limitPer(getModifiedAmount(info, amount, isUsing));
+        cachedValue = getModifiedAmount(info, amount, isUsing);
         return cachedValue;
     }
 

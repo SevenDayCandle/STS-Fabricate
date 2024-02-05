@@ -76,12 +76,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
                     EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
             return order.sequential(actions).addCallback(() -> {
                 info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
-                if (conditionMetCache) {
-                    onComplete.invoke(info);
-                }
-                else {
-                    onFail.invoke(info);
-                }
+                onComplete.invoke(info);
             });
         }
         else {
@@ -92,12 +87,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
                     })));
             return order.sequential(actions).addCallback(() -> {
                 info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));
-                if (conditionMetCache) {
-                    onComplete.invoke(info);
-                }
-                else {
-                    onFail.invoke(info);
-                }
+                onComplete.invoke(info);
             });
         }
     }

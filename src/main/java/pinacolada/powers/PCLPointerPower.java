@@ -284,6 +284,11 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
     }
 
     @Override
+    public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
+        super.renderAmount(sb, x, y, c);
+        renderSecondaryAmount(sb, x, y, c);
+    }
+
     protected void renderSecondaryAmount(SpriteBatch sb, float x, float y, Color c) {
         for (PSkill<?> effect : getEffects()) {
             if (effect instanceof PTrigger) {

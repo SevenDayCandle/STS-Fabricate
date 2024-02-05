@@ -168,15 +168,16 @@ public class PCLClickableUse {
 
     public void use(AbstractMonster m, int amount) {
         // Manually check to use to prevent abuse
-        if (!(checkCondition())) {
-            return;
-        }
-
         AbstractCreature owner = move.getSourceCreature();
         if (owner == null) {
             owner = source.getSource();
         }
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(EUIUtils.safeCast(move.source, AbstractCard.class), owner, m);
+        move.refresh(info, true, true);
+        if (!(checkCondition())) {
+            return;
+        }
+
         info.setData(amount);
         move.use(info, PCLActions.bottom, CombatManager.onClickableUsed(this, m, amount));
         pool.use(amount);

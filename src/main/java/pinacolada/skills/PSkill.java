@@ -1,6 +1,7 @@
 package pinacolada.skills;
 
 import basemod.ReflectionHacks;
+import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -1858,7 +1859,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        return amount;
+        return source instanceof AbstractCard ? (int) CardModifierManager.onModifyBaseMagic(amount, (AbstractCard) source) : amount;
     }
 
     public void registerUseParentBoolean(PCLCustomEffectEditingPane editor) {
