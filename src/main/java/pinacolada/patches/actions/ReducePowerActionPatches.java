@@ -1,11 +1,20 @@
 package pinacolada.patches.actions;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
+import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.vfx.combat.PowerExpireTextEffect;
+import extendedui.utilities.EUIClassUtils;
+import javassist.CannotCompileException;
+import javassist.CtBehavior;
+import javassist.expr.ExprEditor;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.effects.powers.PCLExpirePowerEffect;
+import pinacolada.powers.PCLPower;
 
 public class ReducePowerActionPatches {
 
@@ -29,6 +38,34 @@ public class ReducePowerActionPatches {
                                    AbstractPower powerInstance, int amount) {
             if (!CombatManager.canReducePower(source, target, powerInstance, __instance)) {
                 __instance.isDone = true;
+            }
+        }
+    }
+
+    @SpirePatch(clz = ReducePowerAction.class, method = "update")
+    public static class ReducePowerAction_Update {
+
+        @SpireInsertPatch(locator = Locator.class, localvars = {"reduceMe"})
+        public static void insert(ReducePowerAction __instance, AbstractPower reduceMe) {
+            EUIClassUtils.setField(__instance, "powerInstance", reduceMe); // Force set the powerInstance field so we can grab it through callbacks
+        }
+
+        @SpireInsertPatch(locator = Locator2.class, localvars = {"reduceMe"})
+        public static void insert2(ReducePowerAction __instance, AbstractPower reduceMe) {
+            EUIClassUtils.setField(__instance, "powerInstance", reduceMe); // Force set the powerInstance field so we can grab it through callbacks
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractDungeon.class, "onModifyPower");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
+        }
+
+        private static class Locator2 extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.NewExprMatcher(RemoveSpecificPowerAction.class);
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
         }
     }

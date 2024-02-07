@@ -45,13 +45,22 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     @Override
     public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
-        List<? extends AbstractPower> powers = info.getDataAsList(AbstractPower.class);
-        if (powers != null) {
-            return EUIUtils.sumInt(powers, po -> po.amount) / Math.max(1, this.amount);
+        Integer payAmount = info.getData(Integer.class);
+        if (payAmount != null) {
+            return baseAmount * payAmount;
         }
-        return baseAmount * (fields.powers.isEmpty() ?
-                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? (po.amount) : 0) : 0) :
-                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> (GameUtilities.getPowerAmount(t, po))))) / Math.max(1, this.amount);
+        return baseAmount * getModifiedAmountForCallback(info);
+    }
+
+    private int getModifiedAmountForCallback(PCLUseInfo info) {
+        return (fields.powers.isEmpty() ?
+                sumTargets(info, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> (po.type == AbstractPower.PowerType.DEBUFF) ^ !fields.debuff ? getPayAmount(po.amount) : 0) : 0) :
+                sumTargets(info, t -> EUIUtils.sumInt(fields.powers, po -> (getPayAmount(GameUtilities.getPowerAmount(t, po)))))
+        ) / Math.max(1, this.amount);
+    }
+
+    private int getPayAmount(int am) {
+        return extra > 0 ? Math.min(extra, am) : am;
     }
 
     @Override
@@ -87,6 +96,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
         AbstractCreature sourceCreature = getSourceCreature();
+        int payAmount = getModifiedAmountForCallback(info);
         if (extra > 0) {
             ArrayList<ApplyOrReducePowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
                     EUIUtils.mapAsNonnull(fields.powers, id -> {
@@ -94,7 +104,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
                         return power != null ? new ApplyOrReducePowerAction(sourceCreature, t, power, -extra) : null;
                     })));
             order.sequential(actions).addCallback(() -> {
-                info.setData(EUIUtils.map(actions, ApplyOrReducePowerAction::extractPower));
+                info.setData(payAmount);
                 callback.invoke();
             });
         }
@@ -102,7 +112,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
             ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
                     EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));
             order.callback(new SequentialAction(actions), () -> {
-                info.setData(EUIUtils.map(actions, p -> (AbstractPower) EUIClassUtils.getField(p, "powerInstance")));
+                info.setData(payAmount);
                 callback.invoke();
             });
         }
