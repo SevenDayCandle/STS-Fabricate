@@ -212,6 +212,7 @@ public class PCLSkinDialog extends EUIDialog<String> {
         if (index >= 0) {
             this.page = index;
             this.selection = page;
+            this.skins.setSelection(this.selection, false);
             if (this.img != null) {
                 this.img.dispose();
                 this.img = null;

@@ -205,14 +205,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             }
 
             boolean refreshText = false;
-            PSkill<?> unlockEffect = entry.getEffect(0);
-            if (unlockEffect != null) {
-                unlockEffect.setAmount(unlockedAmount);
-                refreshText = true;
-            }
-            PSkill<?> bannedEffect = entry.getEffect(1);
+            PSkill<?> bannedEffect = entry.getEffect(0);
             if (bannedEffect != null) {
                 bannedEffect.setAmount(allowedAmount);
+                refreshText = true;
+            }
+            PSkill<?> unlockEffect = entry.getEffect(1);
+            if (unlockEffect != null) {
+                unlockEffect.setAmount(unlockedAmount);
                 refreshText = true;
             }
             if (refreshText) {

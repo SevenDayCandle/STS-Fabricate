@@ -83,14 +83,14 @@ public class PCLCharacterAnimation extends AbstractAnimation {
     }
 
     // TODO load all enemies
-    // TODO load custom animations folder
     public static void postInitialize() {
         FileHandle folder = Gdx.files.local(ANIMATION_PATH);
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        for (FileHandle f : folder.list(JSON_FILTER)) {
-            String base = ANIMATION_PATH + "/" + f.name();
+        for (FileHandle f : folder.list()) {
+            String name = f.nameWithoutExtension();
+            String base = ANIMATION_PATH + "/" + name;
             switch (f.extension()) {
                 case "json":
                     String atlasUrl = base + ".atlas";
@@ -99,7 +99,7 @@ public class PCLCharacterAnimation extends AbstractAnimation {
                     }
                     break;
                 case "scml":
-                    registerCustomSpriter(f.name(), f.path(), true);
+                    registerCustomSpriter(name, f.path(), true);
                     break;
             }
         }

@@ -298,6 +298,10 @@ public abstract class PCLCharacter extends CustomPlayer {
         else if (animation instanceof PCLCharacterAnimation) {
             loadSpineAnimation(((PCLCharacterAnimation) animation).atlasUrl, ((PCLCharacterAnimation) animation).skeletonUrl, ((PCLCharacterAnimation) animation).scale, idleStr, hitStr);
         }
+        // Because apparently the player image logic doesn't get hit if the atlas is null, even if it is never actually used
+        else {
+            this.atlas = new TextureAtlas();
+        }
     }
 
     public void reloadDefaultAnimation() {
@@ -389,8 +393,13 @@ public abstract class PCLCharacter extends CustomPlayer {
                 }
                 this.atlas = null;
             }
-            else if (this.img == null) {
-                this.img = ImageMaster.loadImage(QuestionMark.DATA.imagePath);
+            else {
+                EUIUtils.logError(this, "Both animation and image was missing for id " + id);
+                if (this.img != null) {
+                    this.img.dispose();
+                }
+                this.img = null;
+                resetCreature();
             }
         }
 

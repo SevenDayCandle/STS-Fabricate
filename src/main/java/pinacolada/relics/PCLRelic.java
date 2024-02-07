@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
@@ -245,6 +246,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
 
+    protected Color getFlashColor() {
+        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "flashColor");
+    }
+
     public String getNameFromData() {
         String name = relicData.strings.NAME;
         if (auxiliaryData.timesUpgraded > 0) {
@@ -464,6 +469,28 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
     @Override
     public void renderBossTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(euiTips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
+    }
+
+    @Override
+    public void renderFlash(SpriteBatch sb, boolean inTopPanel) {
+        if (this.flashTimer > 0) {
+            float rScale = this.scale * 0.5f;
+            float rotation = getRotation();
+            float tmp = Interpolation.exp10In.apply(0.0F, 4.0F, this.flashTimer / 2.0F);
+            Color flashColor = getFlashColor();
+            sb.setBlendFunction(770, 1);
+            flashColor.a = this.flashTimer * 0.2F;
+            sb.setColor(flashColor);
+            float tmpX = this.currentX - 64.0F;
+            if (inTopPanel) {
+                tmpX += getOffsetX();
+            }
+
+            sb.draw(this.img, tmpX, this.currentY - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, rScale + tmp, rScale + tmp, rotation, 0, 0, 128, 128, false, false);
+            sb.draw(this.img, tmpX, this.currentY - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, rScale + tmp * 0.66F, rScale + tmp * 0.66F, rotation, 0, 0, 128, 128, false, false);
+            sb.draw(this.img, tmpX, this.currentY - 64.0F, 64.0F, 64.0F, 128.0F, 128.0F, rScale + tmp / 3.0F, rScale + tmp / 3.0F, rotation, 0, 0, 128, 128, false, false);
+            sb.setBlendFunction(770, 771);
+        }
     }
 
     @Override

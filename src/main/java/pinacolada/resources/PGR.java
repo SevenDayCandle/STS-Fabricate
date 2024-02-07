@@ -37,6 +37,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
+import pinacolada.characters.PCLCharacterAnimation;
 import pinacolada.commands.*;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLCardTargetingManager;
@@ -460,6 +461,7 @@ public class PGR {
             resources.receivePostInitialize();
         }
         PCLLoadoutDataInfo.reloadLoadouts();
+        PCLCharacterAnimation.postInitialize();
 
         for (AbstractCard c : CardLibrary.getAllCards()) {
             if (c instanceof PCLCard) {
