@@ -193,7 +193,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {
         if (fields.random || fields.isFilterSolo()) {
-            if (!fields.colors.isEmpty()
+            if ( (!fields.colors.isEmpty() && EUIUtils.any(fields.colors, c -> c != AbstractCard.CardColor.COLORLESS))
                     || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
                     || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
                 return GameUtilities.getCardsFromAllColorCombatPool(getSourceFilter(), limit);
@@ -205,7 +205,12 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         else if (!fields.isFilterEmpty()) {
             ArrayList<AbstractCard> cards = new ArrayList<>();
             for (AbstractCard.CardColor co : fields.colors) {
-                cards.addAll(GameUtilities.getCardsFromAllColorCombatPool(c -> c.color == co, limit));
+                if (co == AbstractCard.CardColor.COLORLESS) {
+                    cards.addAll(GameUtilities.getCardsFromFullCombatPool(c -> c.color == co, limit));
+                }
+                else {
+                    cards.addAll(GameUtilities.getCardsFromAllColorCombatPool(c -> c.color == co, limit));
+                }
             }
             for (AbstractCard.CardRarity co : fields.rarities) {
                 cards.addAll(GameUtilities.getCardsFromFullCombatPool(c -> c.rarity == co, limit));

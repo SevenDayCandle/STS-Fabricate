@@ -55,10 +55,9 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                     return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
                             : TEXT.act_gainAmount(amountString, joinedString));
                 case Single:
-                case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
+                    return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
                 default:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
+                    return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
             }
         }
         joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString());
@@ -71,13 +70,12 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                 return amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
                         : TEXT.act_gainAmount(amountString, joinedString);
             case Single:
-            case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(amountString, joinedString)) :
-                        fields.powers.size() > 0 && !useParent ?
+                        !fields.powers.isEmpty() && !useParent ?
                                 TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);
             default:
                 return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(amountString, joinedString), getTargetStringPerspective(perspective))
-                        : fields.powers.size() > 0 && !useParent
+                        : !fields.powers.isEmpty() && !useParent
                         ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);
         }
     }

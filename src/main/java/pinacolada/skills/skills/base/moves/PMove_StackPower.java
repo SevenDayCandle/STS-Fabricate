@@ -56,7 +56,6 @@ public class PMove_StackPower extends PMove<PField_Power> {
                     return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
                             : TEXT.act_gainAmount(amountString, joinedString));
                 case Single:
-                case SingleAlly:
                     return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
                 default:
                     return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
@@ -83,7 +82,6 @@ public class PMove_StackPower extends PMove<PField_Power> {
                 return amount < 0 ? TEXT.act_loseAmount(amountString, joinedString)
                         : TEXT.act_gainAmount(amountString, joinedString);
             case Single:
-            case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(amountString, joinedString)) :
                         !fields.powers.isEmpty() && !useParent ?
                                 TEXT.act_applyAmountX(amountString, joinedString) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString);

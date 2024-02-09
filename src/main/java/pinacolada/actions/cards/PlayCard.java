@@ -2,6 +2,7 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.evacipated.cardcrawl.mod.stslib.patches.CustomTargeting;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -113,6 +114,9 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         card.exhaustOnUseOnce = exhaust;
         card.purgeOnUse = purge;
         card.calculateCardDamage(enemy);
+
+        // Ensure PCL card target matches the chosen enemy
+        CustomTargeting.setCardTarget(card, enemy);
 
         //GameActions.Top.Add(new UnlimboAction(card));
         PCLActions.top.wait(Settings.FAST_MODE ? Settings.ACTION_DUR_FASTER : Settings.ACTION_DUR_MED);

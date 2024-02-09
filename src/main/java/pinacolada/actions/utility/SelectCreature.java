@@ -140,23 +140,23 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
 
         final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
         final ArrayList<PCLCardAlly> summons = GameUtilities.getSummons(actForSummon ? null : true);
-        if (enemies.isEmpty() && targeting == PCLCardTarget.Single) {
+        if (enemies.isEmpty() && targeting.targetsSingle() && targeting.targetsEnemies()) {
             complete(null);
             return;
         }
-        else if (summons.isEmpty() && targeting == PCLCardTarget.SingleAlly) {
+        else if (summons.isEmpty() && targeting.targetsSingle() && targeting.targetsAllies()) {
             complete(null);
             return;
         }
 
         if (autoSelect) {
-            if ((targeting == PCLCardTarget.Single || targeting == PCLCardTarget.SelfSingle) && enemies.size() == 1) {
+            if ((targeting.targetsSingle() && targeting.targetsEnemies()) && enemies.size() == 1) {
                 target = enemies.get(0);
                 if (card != null) {
                     card.calculateCardDamage((AbstractMonster) target);
                 }
             }
-            else if ((targeting == PCLCardTarget.SingleAlly || targeting == PCLCardTarget.SelfSingleAlly) && summons.size() == 1) {
+            else if ((targeting.targetsSingle() && targeting.targetsAllies()) && summons.size() == 1) {
                 target = summons.get(0);
                 if (card != null) {
                     card.calculateCardDamage((AbstractMonster) target);
@@ -339,6 +339,9 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
             case Single:
                 updateTarget(false, true, true, false);
                 break;
+            case SingleEnemy:
+                updateTarget(false, true, false, false);
+                break;
             case SingleAlly:
                 updateTarget(false, false, true, false);
                 break;
@@ -375,6 +378,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                 case SelfSingle:
                 case SelfSingleAlly:
                 case SingleAlly:
+                case SingleEnemy:
                 case Any:
                     if (target != null) {
                         complete(target);
