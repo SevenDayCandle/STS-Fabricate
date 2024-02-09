@@ -51,9 +51,9 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     public static final String SYM_UNKNOWN = "U";
     private static PCLAffinity[] AFFINITIES = new PCLAffinity[]{};
     // Affinities with special purposes, these are deliberately not registered
-    public static final PCLAffinity Unknown = new PCLAffinity(ID_UNKNOWN, SYM_UNKNOWN);
-    public static final PCLAffinity General = new PCLAffinity(ID_GENERAL, SYM_GENERAL);
-    public static final PCLAffinity Star = new PCLAffinity(ID_STAR, SYM_STAR);
+    public static final PCLAffinity Unknown = new PCLAffinity(ID_UNKNOWN, SYM_UNKNOWN, getAffinityTip(SYM_UNKNOWN, true));
+    public static final PCLAffinity General = new PCLAffinity(ID_GENERAL, SYM_GENERAL, getAffinityTip(SYM_GENERAL, true));
+    public static final PCLAffinity Star = new PCLAffinity(ID_STAR, SYM_STAR, getAffinityTip(SYM_STAR, true));
     public static final PCLAffinity Red = registerAffinityAt(ID_RED, SYM_RED).setColor(new Color(0.8f, 0.5f, 0.5f, 1f));
     public static final PCLAffinity Blue = registerAffinityAt(ID_BLUE, SYM_BLUE).setColor(new Color(0.45f, 0.55f, 0.7f, 1f));
     public static final PCLAffinity Green = registerAffinityAt(ID_GREEN, SYM_GREEN).setColor(new Color(0.45f, 0.7f, 0.55f, 1f));
@@ -68,7 +68,7 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
     protected Color color;
 
     PCLAffinity(int ID, String powerSymbol) {
-        this(ID, powerSymbol, EUIKeywordTooltip.findByID(getAffinitySymbol(powerSymbol)).forceIcon(true));
+        this(ID, powerSymbol, getAffinityTip(powerSymbol, false));
     }
 
     PCLAffinity(int ID, String powerSymbol, EUIKeywordTooltip tip) {
@@ -82,7 +82,6 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
         BY_SYMBOL.put(powerSymbol, this);
     }
 
-    // TODO find way to make array iterator without making new copy and preserving privacy
     public static List<PCLAffinity> basic() {
         return Arrays.asList(AFFINITIES);
     }
@@ -105,6 +104,14 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
 
     public static String getAffinitySymbol(String symbol) {
         return EUIUtils.format("A-{0}", symbol);
+    }
+
+    private static EUIKeywordTooltip getAffinityTip(String powerSymbol, boolean canAdd) {
+        EUIKeywordTooltip tip = EUIKeywordTooltip.findByID(getAffinitySymbol(powerSymbol));
+        tip.forceIcon(true);
+        tip.canHighlight(canAdd);
+        tip.setCanAdd(canAdd);
+        return tip;
     }
 
     public static Collection<PCLAffinity> getAvailableAffinities() {

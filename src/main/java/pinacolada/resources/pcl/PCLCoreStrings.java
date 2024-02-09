@@ -1410,7 +1410,13 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String subjects_onTarget(Object desc1, Object desc2) {
         return EUIUtils.format(subjects_xOnY, desc1, desc2);
     }
+    public final String subjects_onTheAlly(Object desc1) {
+        return subjects_onTarget(desc1, subjects_ally);
+    }
     public final String subjects_onTheEnemy(Object desc1) {
+        return subjects_onTarget(desc1, subjects_enemy);
+    }
+    public final String subjects_onTheTarget(Object desc1) {
         return subjects_onTarget(desc1, subjects_target);
     }
     public final String subjects_onThis(Object desc1) {

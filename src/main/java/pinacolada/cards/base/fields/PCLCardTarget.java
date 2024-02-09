@@ -262,7 +262,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 }
                 else {
                     GameUtilities.fillWithSummons(true, sourceList);
-                    popRandomTargets(sourceList, autoAmount);
+                    popRandomTargets(sourceList, 1);
                 }
                 break;
             case SingleEnemy: {
@@ -271,7 +271,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 }
                 else {
                     GameUtilities.fillWithEnemies(true, sourceList);
-                    popRandomTargets(sourceList, autoAmount);
+                    popRandomTargets(sourceList, 1);
                 }
                 break;
             }

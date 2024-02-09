@@ -113,9 +113,6 @@ public class GameUtilities {
     public static final String JSON_EXT = ".json";
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(JSON_EXT);
     public static final int CHAR_OFFSET = 97;
-    private static Field darkgladeGensokyoAlly;
-    private static Field darkgladePokemonAlly;
-    private static Field darkgladeRuinaAlly;
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -294,21 +291,6 @@ public class GameUtilities {
 
         if (!aliveOnly || !isDeadOrEscaped(player)) {
             characters.add(player);
-        }
-    }
-
-    public static void fillWithAlliedCharactersImpl(boolean aliveOnly, ArrayList<AbstractCreature> characters) {
-        try {
-            // Darkglade allies have halfDead set to prevent targeting, so cannot use target.isDeadOrEscaped
-            if (darkgladePokemonAlly != null) {
-                AbstractCreature c = (AbstractCreature) darkgladeGensokyoAlly.get(player);
-                if (c != null && (!aliveOnly || (!c.isDead && c.currentHealth > 0))) {
-                    characters.add(c);
-                }
-            }
-        }
-        catch (Exception ignored) {
-
         }
     }
 
@@ -1678,6 +1660,12 @@ public class GameUtilities {
 
     public static boolean isActingColor(AbstractCard.CardColor co) {
         return getActingColor() == co;
+    }
+
+    // Check if creature is allied
+    // TODO support for together in spire and pokemon
+    public static boolean isAlly(AbstractCreature c) {
+        return c instanceof PCLCardAlly;
     }
 
     // Move intent is the source of truth; the actual intent might not be set in time for start of turn effects

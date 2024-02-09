@@ -1195,9 +1195,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return TEXT.subjects_onAnyEnemy(baseString);
             case SingleAlly:
             case SelfSingleAlly:
+                return TEXT.subjects_onTheAlly(baseString);
+            case SingleEnemy:
+                return TEXT.subjects_onTheEnemy(baseString);
             case Single:
             case SelfSingle:
-                return TEXT.subjects_onTheEnemy(baseString);
+                return TEXT.subjects_onTheTarget(baseString);
             case UseParent:
                 return TEXT.subjects_onTarget(baseString, TEXT.subjects_them(0));
             case Self:
@@ -1246,7 +1249,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case Single:
                 return count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)) : TEXT.subjects_target;
             case SingleAlly:
-                return count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)) : TEXT.subjects_ally;
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count));
+            case SingleEnemy:
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count));
             case Team:
                 return TEXT.subjects_your(target.getTitle().toLowerCase());
             case SelfAllEnemy:
@@ -1306,6 +1311,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case RandomEnemy:
             case SelfSingle:
             case Single:
+            case SingleEnemy:
                 return PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, amount);
             case AllAllyEnemy:
             case RandomAllyEnemy:
@@ -1331,6 +1337,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case RandomEnemy:
             case SelfSingle:
             case Single:
+            case SingleEnemy:
                 return TEXT.subjects_enemy;
             case AllAllyEnemy:
             case RandomAllyEnemy:
@@ -1346,6 +1353,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 return PGR.core.strings.subjects_target;
             case SingleAlly:
                 return PGR.core.strings.subjects_ally;
+            case SingleEnemy:
+                return PGR.core.strings.subjects_enemy;
             case AllEnemy:
                 return PGR.core.strings.subjects_allEnemies();
             case RandomAlly:
@@ -1875,7 +1884,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public boolean requiresTarget() {
-        return target == PCLCardTarget.Single || (this.childEffect != null && this.childEffect.requiresTarget());
+        return target.targetsSingle() || (this.childEffect != null && this.childEffect.requiresTarget());
     }
 
     public void resetUses() {
