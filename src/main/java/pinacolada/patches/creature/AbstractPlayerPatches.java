@@ -3,13 +3,17 @@ package pinacolada.patches.creature;
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import extendedui.EUI;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -122,6 +126,14 @@ public class AbstractPlayerPatches {
             damageAmount[0] = Math.max(0, CombatManager.onPlayerLoseHP(__instance, info, damageAmount[0]));
         }
 
+        @SpireInsertPatch(locator = DeathLocator.class)
+        public static SpireReturn<Void> insertDeath(AbstractPlayer __instance, DamageInfo info) {
+            if (!CombatManager.onCreatureDeath(__instance, false)) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
+        }
+
         private static class Locator extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer.class, "decrementBlock");
@@ -146,6 +158,13 @@ public class AbstractPlayerPatches {
         private static class Locator4 extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 Matcher matcher = new Matcher.FieldAccessMatcher(AbstractPlayer.class, "lastDamageTaken");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
+        }
+
+        private static class DeathLocator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctBehavior) throws CannotCompileException, PatchingException {
+                Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer.class, "hasPotion");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }

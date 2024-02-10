@@ -53,9 +53,6 @@ public class PCond_PayOrb extends PActiveCond<PField_Orb> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        if (!conditionMetCache) {
-            return order.callback(() -> onFail.invoke(info));
-        }
         int am = refreshAmount(info);
         return order.removeOrb(am).setFilter(fields.getOrbFilter())
                 .addCallback(orbs -> {

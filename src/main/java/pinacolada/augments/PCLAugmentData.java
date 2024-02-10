@@ -4,6 +4,7 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
@@ -12,6 +13,9 @@ import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.patches.basemod.PotionPoolPatches;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLPotionData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
@@ -76,6 +80,16 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
             stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
         }
         return stream.collect(Collectors.toList());
+    }
+
+    public static String getAugmentNameForID(String augmentID) {
+        if (augmentID != null) {
+            PCLAugmentData data = getStaticDataOrCustom(augmentID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+        }
+        return EUIUtils.EMPTY_STRING;
     }
 
     public static ArrayList<PCLAugmentData> getAvailable() {

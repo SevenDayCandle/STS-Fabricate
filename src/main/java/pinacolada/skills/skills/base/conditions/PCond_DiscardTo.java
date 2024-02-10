@@ -43,4 +43,9 @@ public class PCond_DiscardTo extends PCond_DoToCard {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.DiscardPile;
+    }
 }

@@ -720,6 +720,10 @@ public class CombatManager extends EUIBase {
         return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(cooldown, source, m));
     }
 
+    public static boolean onCreatureDeath(AbstractCreature monster, boolean triggerRelics) {
+        return subscriberCanDeny(OnCreatureDeathSubscriber.class, s -> s.onDeath(monster, triggerRelics));
+    }
+
     public static int onCreatureHeal(AbstractCreature instance, int block) {
         return subscriberInout(OnCreatureHealSubscriber.class, block, (s, b) -> s.onHeal(instance, b));
     }
@@ -849,10 +853,6 @@ public class CombatManager extends EUIBase {
             original += 2;
         }
         return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onModifyXCost(d, card));
-    }
-
-    public static void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
-        subscriberDo(OnMonsterDeathSubscriber.class, s -> s.onMonsterDeath(monster, triggerRelics));
     }
 
     public static boolean onMonsterMove(AbstractMonster target) {

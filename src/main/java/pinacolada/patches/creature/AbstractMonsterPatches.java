@@ -69,11 +69,14 @@ public class AbstractMonsterPatches {
     @SpirePatch(clz = AbstractMonster.class, method = "die", paramtypez = {boolean.class})
     public static class AbstractMonster_Die {
         @SpirePrefixPatch
-        public static void method(AbstractMonster __instance, boolean triggerRelics) {
+        public static SpireReturn<Void> method(AbstractMonster __instance, boolean triggerRelics) {
             if (!__instance.isDying) // to avoid triggering this more than once
             {
-                CombatManager.onMonsterDeath(__instance, triggerRelics);
+                if (!CombatManager.onCreatureDeath(__instance, triggerRelics)) {
+                    return SpireReturn.Return();
+                }
             }
+            return SpireReturn.Continue();
         }
     }
 

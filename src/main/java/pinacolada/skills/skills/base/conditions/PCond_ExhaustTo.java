@@ -43,4 +43,9 @@ public class PCond_ExhaustTo extends PCond_DoToCard {
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
+
+    @Override
+    public PCLCardGroupHelper getDestinationGroup() {
+        return PCLCardGroupHelper.ExhaustPile;
+    }
 }

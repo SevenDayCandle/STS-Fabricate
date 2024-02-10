@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -32,7 +33,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info != null && info.source.gold >= refreshAmount(info);
+        return info != null && AbstractDungeon.player != null && AbstractDungeon.player.gold >= refreshAmount(info);
     }
 
     @Override
@@ -47,9 +48,6 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        if (!conditionMetCache) {
-            return order.callback(() -> onFail.invoke(info));
-        }
         return order.gainGold(-refreshAmount(info)).addCallback((res) -> {
             if (res != null) {
                 onComplete.invoke(info);

@@ -63,6 +63,10 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                 : getAmountRawString();
     }
 
+    public PCLCardGroupHelper getDestinationGroup() {
+        return null;
+    }
+
     @Override
     public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
         return fields.getQualifiers(info);
@@ -76,8 +80,17 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
-        return fields.hasGroups() && !fields.shouldHideGroupNames() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fcs);
+        if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
+            return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
+                    shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
+                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
+                                    : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard());
+        }
+        String dest = fields.getDestinationString(getDestinationGroup().name);
+        return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
+                shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fcs, dest) :
+                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString(), dest)
+                                : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard(), dest);
     }
 
     @Override
@@ -85,8 +98,12 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         return capital(childEffect == null ? getSubText(perspective, requestor) : TEXT.cond_xToY(getSubText(perspective, requestor), childEffect.getText(perspective, requestor, false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
+    public boolean shouldHideGroupNames() {
+        return fields.shouldHideGroupNames();
+    }
+
     public PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return order.add(fields.getGenericPileAction(getAction(), info, order, extra))
+        return fields.getGenericPileAction(getAction(), info, order, extra)
                 .addCallback(cards -> {
                     if (cards.size() >= amount) {
                         info.setData(cards);

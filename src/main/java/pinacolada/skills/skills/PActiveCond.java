@@ -44,7 +44,8 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        if (checkCondition(info, true, null) && childEffect != null) {
+        conditionMetCache = checkCondition(info, false, null);
+        if (conditionMetCache && childEffect != null) {
             useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {});
         }
     }

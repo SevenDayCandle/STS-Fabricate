@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -10,7 +11,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
+import pinacolada.interfaces.subscribers.OnCreatureDeathSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -23,7 +24,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 @VisibleSkill
-public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber {
+public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnCreatureDeathSubscriber {
     public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1);
 
     public PCond_Fatal() {
@@ -46,6 +47,10 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
+            PCLCardTarget actual = getTargetForPerspective(perspective);
+            if (fields.not || actual == PCLCardTarget.None || (actual == PCLCardTarget.Self && !isFromCreature())) {
+                return TEXT.cond_ifTargetWouldDie(getTargetString(actual));
+            }
             if (fields.random) {
                 return getWheneverAreString(EUIRM.strings.adjNoun(PGR.core.tooltips.fatal.title, PGR.core.tooltips.kill.present()), perspective);
             }
@@ -58,10 +63,15 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     }
 
     @Override
-    public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
-        if (GameUtilities.isFatal(monster, !fields.random)) {
-            useFromTrigger(generateInfo(getOwnerCreature(), monster));
+    public boolean onDeath(AbstractCreature t, boolean triggerRelics) {
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo info = generateInfo(owner, t);
+        boolean eval = evaluateTargets(info, c -> c == t);
+        if (GameUtilities.isFatal(t, !fields.random) && eval) {
+            useFromTrigger(info);
+            return !fields.not || t == AbstractDungeon.player; // fields.not prevents death when true or if its a player (because it would be completely useless if you died)
         }
+        return true;
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

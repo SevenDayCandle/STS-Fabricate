@@ -27,6 +27,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLAugmentData;
+import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.blights.PCLCustomBlightSlot;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -70,6 +72,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
     public static final float START_X = Settings.WIDTH * (0.24f);
     public static final float START_Y = Settings.HEIGHT * (0.93f);
+    private static ArrayList<PCLAugmentData> availableAugments;
     private static ArrayList<AbstractBlight> availableBlights;
     private static ArrayList<AbstractCard> availableCards;
     private static ArrayList<PCLOrbData> availableOrbs;
@@ -126,7 +129,16 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         }
     }
 
-    public static ArrayList<AbstractBlight> getAvailableBlights(AbstractCard.CardColor cardColor) {
+    public static ArrayList<PCLAugmentData> getAvailableAugments() {
+        if (PCLCustomEditEntityScreen.availableAugments == null) {
+            PCLCustomEditEntityScreen.availableAugments = new ArrayList<>(PCLAugmentData.getAllData());
+            PCLCustomEditEntityScreen.availableAugments.addAll(EUIUtils.map(PCLCustomAugmentSlot.getAugments(), slot -> slot.getBuilder(0)));
+            PCLCustomEditEntityScreen.availableAugments.sort((a, b) -> StringUtils.compare(a.getName(), b.getName()));
+        }
+        return PCLCustomEditEntityScreen.availableAugments;
+    }
+
+    public static ArrayList<AbstractBlight> getAvailableBlights() {
         if (PCLCustomEditEntityScreen.availableBlights == null) {
             PCLCustomEditEntityScreen.availableBlights = EUIGameUtils.getAllBlights();
             PCLCustomEditEntityScreen.availableBlights.addAll(EUIUtils.map(PCLCustomBlightSlot.getBlights(), PCLCustomBlightSlot::make));
@@ -185,6 +197,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     public static void invalidateItems() {
+        availableAugments = null;
         availableBlights = null;
         availableCards = null;
         availablePotions = null;

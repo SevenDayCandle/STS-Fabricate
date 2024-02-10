@@ -25,6 +25,8 @@ import extendedui.utilities.BlightTier;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.EUITextHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -246,10 +248,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     protected ArrayList<AbstractCard> getAvailableCards() {
         return PCLCustomEditEntityScreen.getAvailableCards(getColor());
-    }
-
-    protected ArrayList<AbstractBlight> getAvailableBlights() {
-        return PCLCustomEditEntityScreen.getAvailableBlights(getColor());
     }
 
     protected ArrayList<AbstractPotion> getAvailablePotions() {
@@ -682,8 +680,24 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(getColor()), title), items);
     }
 
+    public void registerAugment(List<String> augmentIDs) {
+        registerDropdown(initializeSearchable(PCLCustomEditEntityScreen.getAvailableAugments(), PCLAugmentData::getName, PGR.core.tooltips.augment.title),
+                augments -> {
+                    augmentIDs.clear();
+                    augmentIDs.addAll(EUIUtils.mapAsNonnull(augments, t -> t.ID));
+                },
+                augmentIDs,
+                augment -> augment.ID
+        );
+    }
+
+    public void registerAugmentCategory(List<PCLAugmentCategory> categories) {
+        registerDropdown(initializeSearchable(PCLAugmentCategory.values(), PCLAugmentCategory::getName, PGR.core.strings.augment_category), categories)
+                .setTooltip(PGR.core.strings.augment_category, PGR.core.strings.cetut_augmentCategory);
+    }
+
     public void registerBlight(List<String> blightIDs) {
-        registerDropdown(initializeSearchable(getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
+        registerDropdown(initializeSearchable(PCLCustomEditEntityScreen.getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
                 blights -> {
                     blightIDs.clear();
                     blightIDs.addAll(EUIUtils.mapAsNonnull(blights, t -> t.blightID));
@@ -694,7 +708,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerBlight(List<String> blightIDs, ActionT1<List<AbstractBlight>> onChangeImpl) {
-        registerDropdown(initializeSearchable(getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
+        registerDropdown(initializeSearchable(PCLCustomEditEntityScreen.getAvailableBlights(), blight -> blight.name, StringUtils.capitalize(PGR.core.strings.subjects_blight)),
                 onChangeImpl,
                 blightIDs,
                 blight -> blight.blightID

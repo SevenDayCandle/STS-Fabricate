@@ -1194,14 +1194,14 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cond_ifThere(Object number, Object target) {
         return condFmt(14, number, target);
     }
-    public final String cond_ifHighest(Object subject) {
-        return condFmt(15, subject);
-    }
     public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
-        return condFmt(16, target, ordinal, desc);
+        return condFmt(15, target, ordinal, desc);
     }
     public final String cond_ifTargetTook(Object target, Object desc) {
-        return condFmt(17, target, desc);
+        return condFmt(16, target, desc);
+    }
+    public final String cond_ifTargetWouldDie(Object target) {
+        return condFmt(17, target);
     }
     public final String cond_ifTargetDidX(Object target, Object subject, Object desc11) {
         return condFmt(18, target, subject, desc11);
