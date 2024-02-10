@@ -68,8 +68,9 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         PCLUseInfo info = generateInfo(owner, t);
         boolean eval = evaluateTargets(info, c -> c == t);
         if (GameUtilities.isFatal(t, !fields.random) && eval) {
-            useFromTrigger(info);
-            return !fields.not || t == AbstractDungeon.player; // fields.not prevents death when true or if its a player (because it would be completely useless if you died)
+            boolean preventDeath = fields.not || t == AbstractDungeon.player;
+            useFromTrigger(info, preventDeath ? PCLActions.top : PCLActions.bottom);
+            return !(preventDeath);
         }
         return true;
     }
@@ -77,6 +78,10 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         fields.registerNotBoolean(editor);
         fields.registerRBoolean(editor, PGR.core.tooltips.fatal.title, PGR.core.tooltips.fatal.description);
+    }
+
+    public boolean shouldUseWhenText() {
+        return !(fields.not || target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()));
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {

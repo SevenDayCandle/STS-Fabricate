@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
@@ -129,6 +130,8 @@ public class AbstractPlayerPatches {
         @SpireInsertPatch(locator = DeathLocator.class)
         public static SpireReturn<Void> insertDeath(AbstractPlayer __instance, DamageInfo info) {
             if (!CombatManager.onCreatureDeath(__instance, false)) {
+                __instance.currentHealth = 0; // To prevent softlocks
+                __instance.heal(1, false);
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

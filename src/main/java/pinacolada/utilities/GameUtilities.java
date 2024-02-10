@@ -1699,7 +1699,7 @@ public class GameUtilities {
     }
 
     public static boolean isDeadOrEscaped(AbstractCreature target) {
-        return target == null || target.isDeadOrEscaped() || target.currentHealth <= 0;
+        return target == null || target.isDeadOrEscaped();
     }
 
     public static boolean isDebuff(AbstractPower power) {
