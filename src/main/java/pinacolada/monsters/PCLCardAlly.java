@@ -69,6 +69,7 @@ public class PCLCardAlly extends PCLCardCreature {
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
     protected float damageMult = 1;
     protected boolean forPreview;
+    protected boolean isWithdrawing;
     public int index;
 
     public PCLCardAlly(int index, float xPos, float yPos) {
@@ -259,6 +260,10 @@ public class PCLCardAlly extends PCLCardCreature {
         damageMult = 1;
     }
 
+    public boolean isWithdrawing() {
+        return isWithdrawing;
+    }
+
     public void onHover() {
         damageMult = 1 + (CombatManager.summons.damageBonus / 100f);
         forPreview = true;
@@ -283,6 +288,7 @@ public class PCLCardAlly extends PCLCardCreature {
     public void onWithdraw() {
         damageMult = 1 + (CombatManager.summons.damageBonus / 100f);
         forPreview = false;
+        isWithdrawing = true;
     }
 
     @Override
@@ -300,6 +306,7 @@ public class PCLCardAlly extends PCLCardCreature {
     }
 
     public PCLCard releaseCard(boolean clearPowers) {
+        isWithdrawing = false;
         PCLCard releasedCard = this.card;
         if (releasedCard != null) {
             if (clearPowers) {

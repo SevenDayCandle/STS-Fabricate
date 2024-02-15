@@ -534,7 +534,9 @@
 												"Overwrite the starting character's deck and attributes with a custom loadout",
 												"Enable Augments",
 												"Enables #yAugments, including those created with Fabricate, to appear in combat rewards",
-												"Replaces {0}"
+												"Replaces {0}",
+												"Enable Neow",
+												"Allows Neow's blessings to be chosen at the start of the run"
 								]
 				},
 				"pcl:Options": {

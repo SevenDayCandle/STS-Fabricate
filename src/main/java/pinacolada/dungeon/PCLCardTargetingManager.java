@@ -177,7 +177,6 @@ public class PCLCardTargetingManager extends TargetingHandler<AbstractCreature> 
         }
         if (directionIndex != 0) {
 
-            AbstractCreature newTarget = null;
             ArrayList<AbstractCreature> creatures = new ArrayList<>();
             if (card.type == PCLEnum.CardType.SUMMON) {
                 creatures.addAll(CombatManager.summons.summons);
@@ -197,19 +196,16 @@ public class PCLCardTargetingManager extends TargetingHandler<AbstractCreature> 
             if (!creatures.isEmpty()) {
                 creatures.sort((o1, o2) -> (int) (o1.hb.cX - o2.hb.cX));
 
+                int targetIndex;
                 if (hovered != null) {
-                    int currentTargetIndex = creatures.indexOf(hovered);
-                    int newTargetIndex = currentTargetIndex + directionIndex;
-
-                    if (newTargetIndex == -1) {
-                        newTarget = AbstractDungeon.player;
-                    }
-                    else {
-                        newTargetIndex = (newTargetIndex + creatures.size()) % creatures.size();
-                        newTarget = creatures.get(newTargetIndex);
-                    }
+                    targetIndex = creatures.indexOf(hovered) + directionIndex;
+                }
+                else {
+                    targetIndex = Math.min(directionIndex, 0);
                 }
 
+                targetIndex = (targetIndex + creatures.size()) % creatures.size();
+                AbstractCreature newTarget = creatures.get(targetIndex);
                 updateTargetFromCursor(newTarget);
             }
         }
@@ -220,7 +216,6 @@ public class PCLCardTargetingManager extends TargetingHandler<AbstractCreature> 
             Hitbox target = newTarget.hb;
             Gdx.input.setCursorPosition((int) target.cX, Settings.HEIGHT - (int) target.cY); //cursor y position is inverted for some reason :)
             hovered = newTarget;
-            ReflectionHacks.setPrivate(AbstractDungeon.player, AbstractPlayer.class, "isUsingClickDragControl", true);
             AbstractDungeon.player.isDraggingCard = true;
         }
 

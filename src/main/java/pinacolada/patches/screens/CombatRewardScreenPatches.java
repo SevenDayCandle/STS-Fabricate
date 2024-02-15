@@ -70,8 +70,7 @@ public class CombatRewardScreenPatches {
             @Override
             public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
                 Matcher finalMatcher = new Matcher.MethodCallMatcher(CombatRewardScreen.class, "positionRewards");
-                int[] found = LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
-                return new int[]{found[0]};
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
         }
     }

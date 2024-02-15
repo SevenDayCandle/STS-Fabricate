@@ -201,7 +201,7 @@ public class SummonPool extends EUIBase {
     public void removeSummon(int amount) {
         int curSize = summons.size();
         for (int i = 0; i < amount; i++) {
-            if (summons.size() > 0) {
+            if (!summons.isEmpty()) {
                 PCLCardAlly ally = summons.remove(summons.size() - 1);
                 if (ally.card != null) {
                     PCLActions.bottom.withdrawAlly(ally, triggerTimes);
@@ -231,7 +231,7 @@ public class SummonPool extends EUIBase {
     }
 
     public SummonAllyAction summon(PCLCard card, PCLCardAlly target) {
-        return PCLActions.bottom.summonAlly(card, target);
+        return PCLActions.delayed.summonAlly(card, target);
     }
 
     public int tryDamage(DamageInfo info, int damageAmount) {

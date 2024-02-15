@@ -58,6 +58,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUILabel selectedCharacterLabel;
     public final EUIToggle endlessToggle;
     public final EUIToggle endingActToggle;
+    public final EUIToggle neowToggle;
     public final EUIToggle customCardToggle;
     public final EUIToggle customRelicToggle;
     public final EUIToggle customPotionToggle;
@@ -127,6 +128,15 @@ public class PCLCustomRunCanvas extends EUICanvas {
                     screen.isFinalActAvailable = v;
                 })
                 .setTooltip(endingActStrings.NAME, endingActStrings.DESCRIPTION);
+
+        neowToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
+                .setFont(FontHelper.cardDescFont_L, 1f)
+                .setText(endingActStrings.NAME)
+                .setOnToggle(v -> {
+                    screen.allowNeow = v;
+                })
+                .setTooltip(PGR.core.strings.misc_enableNeow, PGR.core.strings.misc_enableNeowDesc);
+
 
         customCardToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 32f))
                 .setFont(FontHelper.cardDescFont_L, 1f)
@@ -294,6 +304,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             selectedCharacterLabel.tryRender(sb);
             endlessToggle.tryRender(sb);
             endingActToggle.tryRender(sb);
+            neowToggle.tryRender(sb);
             customCardToggle.tryRender(sb);
             customRelicToggle.tryRender(sb);
             customPotionToggle.tryRender(sb);
@@ -367,6 +378,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             selectedCharacterLabel.tryUpdate();
             endlessToggle.tryUpdate();
             endingActToggle.tryUpdate();
+            neowToggle.tryUpdate();
             customCardToggle.tryUpdate();
             customRelicToggle.tryUpdate();
             customPotionToggle.tryUpdate();
@@ -422,6 +434,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(modifiersLabel, yPos, scale(70));
         yPos = positionElement(endlessToggle, yPos, scale(35));
         yPos = positionElement(endingActToggle, yPos, scale(35));
+        yPos = positionElement(neowToggle, yPos, scale(35));
         yPos = positionElement(customCardToggle, yPos, scale(35));
         yPos = positionElement(customRelicToggle, yPos, scale(35));
         yPos = positionElement(customPotionToggle, yPos, scale(35));

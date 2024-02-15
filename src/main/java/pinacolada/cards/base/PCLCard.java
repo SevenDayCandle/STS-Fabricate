@@ -112,8 +112,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     private final static float HEADER_WIDTH = AbstractCard.IMG_WIDTH * 0.73f;
     private static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     private static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
-    private static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
-    private static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.2f, 1f);
+    private static final Color COLOR_SECRET = new Color(0.6f, 0.45f, 0.1f, 1f);
+    private static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.3f, 1f);
     private static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     private static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
     private static final float SHADOW_OFFSET_X = 18f * Settings.scale;
@@ -450,7 +450,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
-        PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra).setSource(this).onAddToCard(this);
+        PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra)
+                .setSource(this)
+                .setTarget(this.pclTarget)
+                .onAddToCard(this);
         getEffects().add(move);
         return move;
     }
@@ -980,6 +983,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         return EUIGameUtils.colorForRarity(rarity);
+    }
+
+    public Color getRarityTextColor() {
+        switch (rarity) {
+            case BASIC:
+            case CURSE:
+                return Color.WHITE;
+        }
+
+        return CARD_TYPE_COLOR;
     }
 
     public Color getRarityVanillaColor() {
@@ -2236,11 +2249,29 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         float sc = isPopup ? 0.5f : 1f;
         if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), sc)) {
             // Copying base game location behavior
-            if (isPopup) {
-                renderAtlas(sb, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
-            }
-            else {
-                renderAtlas(sb, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), current_x, current_y, sc);
+            // Use colorize for non base game frames
+            switch (rarity) {
+                case BASIC:
+                case COMMON:
+                case CURSE:
+                case UNCOMMON:
+                case RARE:
+                    if (isPopup) {
+                        renderAtlas(sb, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
+                    }
+                    else {
+                        renderAtlas(sb, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), current_x, current_y, sc);
+                    }
+                    break;
+                default:
+                    EUIRenderHelpers.drawColorized(sb, s -> {
+                        if (isPopup) {
+                            renderAtlas(s, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
+                        }
+                        else {
+                            renderAtlas(s, getRarityVanillaColor(), getPortraitFrameVanillaRegion(), current_x, current_y, sc);
+                        }
+                    });
             }
         }
     }
@@ -2337,14 +2368,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
         else {
             if (isPopup) {
-                FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
+                FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, getRarityTextColor());
             }
             else {
                 BitmapFont font = FontHelper.cardTypeFont;
                 font.getData().setScale(this.drawScale);
                 Color typeColor = getTypeColor();
                 typeColor.a = getRenderColor().a;
-                FontHelper.renderRotatedText(sb, font, EUIGameUtils.textForType(type), this.current_x, this.current_y - 22.0F * this.drawScale * Settings.scale, 0.0F, -1.0F * this.drawScale * Settings.scale, this.angle, false, typeColor);
+                FontHelper.renderRotatedText(sb, font, EUIGameUtils.textForType(type), this.current_x, this.current_y - 22.0F * this.drawScale * Settings.scale, 0.0F, -1.0F * this.drawScale * Settings.scale, this.angle, false, getRarityTextColor());
             }
         }
     }

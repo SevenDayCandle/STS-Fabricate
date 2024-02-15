@@ -3,6 +3,7 @@ package pinacolada.actions.creature;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -37,6 +38,17 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
 
     @Override
     protected void firstUpdate() {
+        // Prevent incorrect card being withdrawn if you queue up withdraws
+        if (EUIUtils.any(allies, PCLCardAlly::isWithdrawing)) {
+            PCLActions.last.withdrawAlly(allies, amount)
+                    .setClearPowers(clearPowers)
+                    .showEffect(showEffect)
+                    .triggerWithdraw(triggerWithdraw)
+                    .setDestination(destination)
+                    .addCallbacks(callbacks);
+            return;
+        }
+
         ArrayList<PCLCard> returned = new ArrayList<>();
         ArrayList<PCLCardAlly> toRelease = new ArrayList<>();
 

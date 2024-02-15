@@ -48,6 +48,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public boolean allowCustomPotions = true;
     public boolean allowCustomRelics = true;
     public boolean allowLoadout;
+    public boolean allowNeow;
     public boolean isAscensionMode;
     public boolean isEndless;
     public boolean isFinalActAvailable;
@@ -147,6 +148,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         trial.allowCustomCards = allowCustomCards;
         trial.allowCustomPotions = allowCustomPotions;
         trial.allowCustomRelics = allowCustomRelics;
+        trial.allowNeow = allowNeow;
         trial.augmentChance = augmentChance;
         Settings.isEndless = isEndless;
         CustomModeScreen.finalActAvailable = isFinalActAvailable;

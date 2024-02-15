@@ -62,6 +62,12 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         return this;
     }
 
+    protected PCLAction<T> addCallbacks(ArrayList<ActionT1<T>> callbacks) {
+        this.callbacks.addAll(callbacks);
+
+        return this;
+    }
+
     public PCLAction<T> addDuration(float duration) {
         this.startDuration += duration;
         this.duration += duration;

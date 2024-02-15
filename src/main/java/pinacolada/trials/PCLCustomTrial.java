@@ -37,6 +37,7 @@ public class PCLCustomTrial extends CustomTrial {
     public boolean allowCustomCards;
     public boolean allowCustomPotions;
     public boolean allowCustomRelics;
+    public boolean allowNeow;
     public int augmentChance;
     public FakeLoadout fakeLoadout;
 
