@@ -3,8 +3,11 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
+import extendedui.ui.tooltips.EUIPreview;
+import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.actions.utility.CardFilterAction;
@@ -14,6 +17,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -150,6 +154,22 @@ public class PField_CardGeneric extends PField_Random {
 
     public String getShortCardString() {
         return isRandom() ? PSkill.TEXT.subjects_randomX(skill.pluralCard()) : skill.pluralCard();
+    }
+
+    public int getWorth() {
+        return destination != PCLCardSelection.Manual ? 1 : 2;
+    }
+
+    public int randomize(Random rng, int value) {
+        groupTypes.clear();
+        groupTypes.add(GameUtilities.getRandomElement(PCLCardGroupHelper.getStandard()));
+        if (rng.randomBoolean(0.04f)) {
+            destination = GameUtilities.getRandomElement(PCLCardSelection.values());
+        }
+        if (rng.randomBoolean(destination != PCLCardSelection.Manual ? 0.025f : 0.04f)) {
+            origin = GameUtilities.getRandomElement(PCLCardSelection.values());
+        }
+        return getWorth();
     }
 
     public boolean hasGroups() {

@@ -37,7 +37,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         super(DATA, content);
     }
 
-    public PCardPrimary_GainBlock(EditorCard card) {
+    public PCardPrimary_GainBlock(AbstractCard card) {
         super(DATA, card);
     }
 
@@ -151,7 +151,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         return this;
     }
 
-    public PCardPrimary_GainBlock setProvider(EditorCard card) {
+    public PCardPrimary_GainBlock setProvider(AbstractCard card) {
         setSource(card);
         return this;
     }

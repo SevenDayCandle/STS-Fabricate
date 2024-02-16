@@ -2,13 +2,18 @@ package pinacolada.cardmods;
 
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
+import basemod.helpers.TooltipInfo;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.CommonKeywordIconsField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PGR;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // Modifier for displaying tags if they are applied to a card. Does NOT actually apply any tags
 @AbstractCardModifier.SaveIgnore
@@ -35,6 +40,18 @@ public class TagDisplayModifier extends AbstractCardModifier {
             text = text + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + postString;
         }
         return text;
+    }
+
+    @Override
+    public List<TooltipInfo> additionalTooltips(AbstractCard card) {
+        List<TooltipInfo> infos = new ArrayList<>();
+        for (PCLCardTag tag : PCLCardTag.getAll()) {
+            if (tag.has(card)) {
+                EUITooltip tip = tag.getTooltip();
+                infos.add(new TooltipInfo(tip.title, tip.description));
+            }
+        }
+        return infos.isEmpty() ? null : infos;
     }
 
     @Override

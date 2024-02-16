@@ -137,7 +137,7 @@ public class PCLCardRewardScreen extends EUIBase {
 
             final ArrayList<AbstractCard> toRemove = new ArrayList<>();
             for (AbstractCard card : cards) {
-                if (PGR.dungeon.tryCancelCardReward(card)) {
+                if (PGR.dungeon.tryModifyCardReward(card)) {
                     toRemove.add(card);
                 }
             }

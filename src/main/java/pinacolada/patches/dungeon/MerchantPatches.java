@@ -21,7 +21,7 @@ public class MerchantPatches {
         private static CardGroup getReplacement(CardGroup group, int minAttackSkill, int minPower) {
             final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
             for (AbstractCard c : group.group) {
-                if (!PGR.dungeon.tryCancelCardReward(c) && PGR.dungeon.canObtainCopy(c)) {
+                if (!PGR.dungeon.tryModifyCardReward(c) && PGR.dungeon.canObtainCopy(c)) {
                     replacement.group.add(c);
                 }
             }

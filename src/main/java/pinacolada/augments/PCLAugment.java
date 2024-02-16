@@ -68,7 +68,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
      *   3. Card doesn't already have an augment of its lineage
      */
     protected boolean canApplyImpl(PCLCard c) {
-        return c != card && data.canApplyImpl(c);
+        return c != card && data.canApplyPCL(c);
     }
 
     public boolean canRemove() {

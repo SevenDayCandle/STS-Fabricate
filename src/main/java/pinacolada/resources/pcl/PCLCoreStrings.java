@@ -426,8 +426,6 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String misc_customAugment = misc.TEXT[18];
     public final String misc_customAugmentDesc = misc.TEXT[19];
     public final String misc_replaces = misc.TEXT[20];
-    public final String misc_enableNeow = misc.TEXT[21];
-    public final String misc_enableNeowDesc = misc.TEXT[22];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];

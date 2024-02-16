@@ -1,4 +1,4 @@
-package pinacolada.trials;
+package pinacolada.dungeon;
 
 import com.megacrit.cardcrawl.cards.blue.EchoForm;
 import com.megacrit.cardcrawl.cards.green.WraithForm;
@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.relics.UnceasingTop;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 import pinacolada.patches.creature.AbstractPlayerPatches;
+import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 
 import java.util.*;
@@ -37,7 +38,6 @@ public class PCLCustomTrial extends CustomTrial {
     public boolean allowCustomCards;
     public boolean allowCustomPotions;
     public boolean allowCustomRelics;
-    public boolean allowNeow;
     public int augmentChance;
     public FakeLoadout fakeLoadout;
 
@@ -48,7 +48,6 @@ public class PCLCustomTrial extends CustomTrial {
         this.bannedAugments = bannedAugments;
     }
 
-    // TODO Add custom mods
     public void addMod(CustomMod mod) {
         // Handle non daily mods. Ignoring Blight Chests BECAUSE IT IS ALREADY A DAILY MOD WTF
         switch (mod.ID) {

@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -207,8 +208,16 @@ public abstract class PField implements Serializable {
         return new ArrayList<>();
     }
 
+    public int getWorth() {
+        return 1;
+    }
+
     public void makePreviews(RotatingList<EUIPreview> previews) {
 
+    }
+
+    public int randomize(Random rng, int value) {
+        return getWorth();
     }
 
     public PField setSkill(PSkill<?> skill) {

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -25,7 +26,7 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         super(data, target, amount, extra);
     }
 
-    public PCardPrimary(PSkillData<T> data, EditorCard card) {
+    public PCardPrimary(PSkillData<T> data, AbstractCard card) {
         super(data);
         setProvider(card);
     }
@@ -52,7 +53,7 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     }
 
     // Obtains the target and numerical values from the given card
-    public abstract PCardPrimary<T> setProvider(EditorCard card);
+    public abstract PCardPrimary<T> setProvider(AbstractCard card);
 
     protected abstract void useImpl(PCLUseInfo info, PCLActions order);
 }

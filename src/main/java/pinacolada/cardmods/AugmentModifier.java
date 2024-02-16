@@ -88,7 +88,8 @@ public class AugmentModifier extends AbstractCardModifier {
 
     @Override
     public AbstractCardModifier makeCopy() {
-        return new AugmentModifier(augment.makeCopy());
+        PCLAugment copy = save.create();
+        return new AugmentModifier(copy);
     }
 
     // Generate infos manually because we cannot attach the augment.skill to the card if it is not an EditorCard
@@ -175,6 +176,7 @@ public class AugmentModifier extends AbstractCardModifier {
     @Override
     public void onInitialApplication(AbstractCard card) {
         for (PSkill<?> be : augment.getFullEffects()) {
+            be.refresh(getInfo(card, null), true, false);
             be.onAddToCard(card);
         }
     }

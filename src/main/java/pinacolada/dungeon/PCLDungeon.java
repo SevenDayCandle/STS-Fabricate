@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.random.Random;
@@ -27,6 +28,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.augments.PCLDynamicAugmentData;
+import pinacolada.cardmods.AugmentModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.characters.PCLCharacter;
@@ -35,6 +37,7 @@ import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.patches.dungeon.ModHelperPatches;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -46,7 +49,6 @@ import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.rewards.pcl.AugmentReward;
-import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
@@ -444,7 +446,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 break;
             }
 
-            searchingCard = tryCancelCardReward(temp);
+            searchingCard = tryModifyCardReward(temp);
 
             if (!searchingCard) {
                 replacement = temp.makeCopy();
@@ -971,20 +973,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         eventLog.put(eventID, value.toString());
     }
 
-    // TODO check master deck
-    public boolean tryCancelCardReward(AbstractCard temp) {
-        for (AbstractRelic r : player.relics) {
-            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
-                return true;
-            }
-        }
-        for (AbstractBlight r : player.blights) {
-            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean tryCreateAugmentReward(ArrayList<RewardItem> rewards) {
         return tryCreateAugmentReward(rewards, augmentChance);
@@ -998,6 +986,36 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 return true;
             }
         }
+        return false;
+    }
+
+    // TODO check master deck
+    // Returns true if the card reward should be cancelled
+    // Otherwise, applies run modifiers to cards
+    public boolean tryModifyCardReward(AbstractCard temp) {
+        for (AbstractRelic r : player.relics) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+        for (AbstractBlight r : player.blights) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+
+        if (ModHelper.isModEnabled(ModHelperPatches.Augmented)) {
+            PCLAugment augment = getAugment((aug, tier) -> canAugmentSpawn(aug, tier) && (!(temp instanceof PCLCard) || aug.canApply(temp)));
+            if (augment != null) {
+                if (allowAugments && temp instanceof PCLCard) {
+                    augment.addToCard((PCLCard) temp);
+                }
+                else {
+                    AugmentModifier.apply(augment, temp);
+                }
+            }
+        }
+
         return false;
     }
 

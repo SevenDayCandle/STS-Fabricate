@@ -1,8 +1,11 @@
 package pinacolada.skills.skills.base.traits;
 
+import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cardmods.TagDisplayModifier;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
@@ -57,6 +60,17 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
         else {
             for (PCLCardTag tag : fields.tags) {
                 tag.add(c, (fields.random ^ conditionMet ? 1 : -1) * actualAmount);
+            }
+        }
+        checkTagModifier(c);
+    }
+
+    private void checkTagModifier(AbstractCard card) {
+        if (!(card instanceof PCLCard)) {
+            TagDisplayModifier mod = TagDisplayModifier.get(card);
+            if (mod == null) {
+                mod = new TagDisplayModifier();
+                CardModifierManager.addModifier(card, mod);
             }
         }
     }

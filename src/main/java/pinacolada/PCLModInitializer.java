@@ -5,15 +5,20 @@ import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLSFX;
+import pinacolada.patches.dungeon.ModHelperPatches;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
+
+import java.util.List;
 
 @SpireInitializer //
 public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber, OnStartBattleSubscriber,
                                           PreStartGameSubscriber, OnPlayerTurnStartPostDrawSubscriber, OnPlayerTurnStartSubscriber,
-                                          EditCardsSubscriber, EditCharactersSubscriber, EditKeywordsSubscriber, EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber, AddAudioSubscriber {
+                                          EditCardsSubscriber, EditCharactersSubscriber, EditKeywordsSubscriber, EditRelicsSubscriber,
+                                          EditStringsSubscriber, PostInitializeSubscriber, AddAudioSubscriber, AddCustomModeModsSubscriber {
     private static final PCLModInitializer instance = new PCLModInitializer();
 
     public static void initialize() {
@@ -24,6 +29,11 @@ public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscri
     @Override
     public void receiveAddAudio() {
         PCLSFX.initialize();
+    }
+
+    @Override
+    public void receiveCustomModeMods(List<CustomMod> list) {
+        ModHelperPatches.createCustomMods(list);
     }
 
     @Override

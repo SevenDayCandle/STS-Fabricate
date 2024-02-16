@@ -7,8 +7,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
@@ -17,12 +19,22 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.skills.PSkill;
+import pinacolada.skills.*;
+import pinacolada.skills.skills.PDelegateCardCond;
+import pinacolada.skills.skills.PFacetCond;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 @AbstractCardModifier.SaveIgnore
 public class SkillModifier extends AbstractCardModifier {
+    private static transient ArrayList<PSkillData<?>> MOVES;
+    private static transient ArrayList<PSkillData<?>> MODS;
+    private static transient ArrayList<PSkillData<?>> DELCONDS;
+    private static transient ArrayList<PSkillData<?>> CONDS;
+    private static transient ArrayList<PSkillData<?>> TRAITS;
     private transient String descCache = EUIUtils.EMPTY_STRING;
     private String serialized;
     private transient PSkill<?> skill;
@@ -40,6 +52,103 @@ public class SkillModifier extends AbstractCardModifier {
 
     public static ArrayList<? extends SkillModifier> getAll(AbstractCard c) {
         return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, SkillModifier.class));
+    }
+
+    /* Generate a random skill with the following rules:
+    *
+    * Attacks/Summons will also always have a damage move, handled separately
+    * Skills have a 3% chance to have a Block move, 30% if it originally gave Block
+    *
+    * 8% chance to double value and have a negative tag (Exhaust/Ethereal)
+    *
+    * For Attack/Skill/Summon
+    * 100% chance to have PMove
+    * 25% base chance to have a PMod. Chance decreases with effect value.
+    * 30% base chance to have a PCond. Chance increases with effect value.
+    * If no PMod, and PMove is PCallbackMove, 20% chance to chain a PMove with use parent with the same PField type
+    *
+    * For Power
+    * 100% chance to have PMove
+    * 15% chance to have a PMod. Chance decreases with effect value.
+    * 100% chance to have a PCond
+    * If cond is PFacetCond, use PLimitPassive. Otherwise, PLimitWhen
+    * If no PMod, and PMove is PCallbackMove, 15% chance to chain a PMove with use parent with the same PField type
+    * Wrap in an apply power skill
+    *
+    * For Status/Curse
+    * 100% chance to have PMove that is negative
+    * If unplayable, 100% to have a PDelegateCardCond
+    *
+    * Given a card ID and a seed, the same skill modifier will always get generated
+    * */
+    public static PSkill<?> generateRandom(AbstractCard c, boolean exhausts) {
+        Long seed = Settings.seed != null ? Settings.seed + c.cardID.hashCode() : c.cardID.hashCode();
+        Random generate = new Random(seed);
+        int value =
+                c.cost < 0 ? exhausts ? c.cost * 2 : c.cost :
+                exhausts ? (((c.cost + 2) * 2)) : c.cost + 2;
+        PSkill<?> current = null;
+        initializeChoices();
+
+        switch (c.type) {
+            case STATUS:
+            case CURSE:
+                current = getChoice(MOVES, generate, value);
+                if (c.cost < -1) {
+                    current = getChoice(DELCONDS, generate, value);
+                }
+                break;
+            case POWER:
+                current = getChoice(MOVES, generate, value);
+                if (passesChance(15, current, generate)) {
+                    current = getChoice(MODS, generate, value, current);
+                }
+                current = getChoice(CONDS, generate, value, current);
+                if (current instanceof PFacetCond) {
+                    current = new PTrigger_Passive().setChild(current);
+                }
+                else {
+                    current = new PTrigger_When().setChild(current);
+                }
+                break;
+            default:
+                current = getChoice(MOVES, generate, value);
+                if (passesChance(25, current, generate)) {
+                    current = getChoice(MODS, generate, value, current);
+                }
+                if (passesChance(25, current, generate)) {
+                    current = getChoice(MODS, generate, value, current);
+                }
+        }
+        return current;
+    }
+
+    private static PSkill<?> getChoice(ArrayList<PSkillData<?>> options, Random rng, int value) {
+        PSkillData<?> t = GameUtilities.getRandomElement(MOVES, rng);
+        assert t != null;
+        PSkill<?> res = t.instantiateSkill();
+        assert res != null;
+        res.randomize(rng, value);
+        return res;
+    }
+
+    private static PSkill<?> getChoice(ArrayList<PSkillData<?>> options, Random rng, int value, PSkill<?> current) {
+        return getChoice(options, rng, value).setChild(current);
+    }
+
+    private static void initializeChoices() {
+        if (MOVES == null) {
+            MOVES = PSkill.getEligibleClasses(PMove.class);
+            MODS = PSkill.getEligibleClasses(PMod.class);
+            CONDS = PSkill.getEligibleClasses(PCond.class);
+            DELCONDS = PSkill.getEligibleClasses(PDelegateCardCond.class);
+            TRAITS = PSkill.getEligibleClasses(PTrait.class);
+        }
+    }
+
+    private static boolean passesChance(int base, PSkill<?> current, Random rng) {
+        int chance = base + current.getWorth();
+        return rng.randomBoolean(chance / 100f);
     }
 
     public boolean canPlayCard(AbstractCard card) {

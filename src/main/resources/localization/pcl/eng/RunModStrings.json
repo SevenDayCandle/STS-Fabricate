@@ -1,4 +1,16 @@
 {
+  "pcl:AllowNeow": {
+    "NAME": "Allow Neow",
+    "DESCRIPTION": "Allows Neow to give blessings at the start of a custom run."
+  },
+  "pcl:Augmented": {
+    "NAME": "Augmented",
+    "DESCRIPTION": "Card rewards come with random Augments that add additional effects."
+  },
+  "pcl:Dearth": {
+    "NAME": "Dearth",
+    "DESCRIPTION": "Non-boss relic rewards are replaced with Circlets."
+  },
   "pcl:Glyph0": {
     "NAME": "Demonization",
     "DESCRIPTION": "Enemies gain Strength each turn."
@@ -6,5 +18,21 @@
   "pcl:Glyph1": {
     "NAME": "Persistence",
     "DESCRIPTION": "Enemies have more HP."
+  },
+  "pcl:HardMix": {
+    "NAME": "Hard Mix",
+    "DESCRIPTION": "Card effects are significantly altered."
+  },
+  "pcl:Hatred": {
+    "NAME": "Hatred",
+    "DESCRIPTION": "Creatures besides yourself act twice each turn. You cannot see enemy actions."
+  },
+  "pcl:SoftMix": {
+    "NAME": "Soft Mix",
+    "DESCRIPTION": "Card effects are slightly altered."
+  },
+  "pcl:Vengeance": {
+    "NAME": "Vengeance",
+    "DESCRIPTION": "Whenever a creature dies, spread its buffs to its teammates."
   }
 }

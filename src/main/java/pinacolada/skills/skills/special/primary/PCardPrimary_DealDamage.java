@@ -58,11 +58,11 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         super(DATA, content);
     }
 
-    public PCardPrimary_DealDamage(EditorCard card) {
+    public PCardPrimary_DealDamage(AbstractCard card) {
         super(DATA, card);
     }
 
-    public PCardPrimary_DealDamage(EditorCard card, AbstractGameAction.AttackEffect attackEffect) {
+    public PCardPrimary_DealDamage(AbstractCard card, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, card);
         fields.attackEffect = attackEffect;
     }
@@ -236,8 +236,8 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         }
     }
 
-    public PCardPrimary_DealDamage setProvider(EditorCard card) {
-        setTarget(card.pclTarget());
+    public PCardPrimary_DealDamage setProvider(AbstractCard card) {
+        setTarget(card instanceof EditorCard ? ((EditorCard) card).pclTarget() : PCLCardTarget.forVanilla(card.target));
         setSource(card);
         return this;
     }

@@ -65,6 +65,16 @@ public class PSkillData<T extends PField> {
         return null;
     }
 
+    public final PSkill<T> instantiateSkill() {
+        try {
+            return this.effectClass.newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public final boolean isColorCompatible(AbstractCard.CardColor co) {
         return colors.isEmpty() || (colors.contains(co));
     }

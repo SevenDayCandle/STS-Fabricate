@@ -1,16 +1,12 @@
 package pinacolada.patches.dungeon;
 
-import basemod.BaseMod;
 import com.evacipated.cardcrawl.modthespire.lib.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.neow.NeowEvent;
 import com.megacrit.cardcrawl.neow.NeowReward;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.EUIGameUtils;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
-import pinacolada.trials.PCLCustomTrial;
+import pinacolada.PCLModInitializer;
 
 public class NeowPatches {
 
@@ -19,7 +15,7 @@ public class NeowPatches {
     public static class NeowEvent_ShouldSkipDialog {
         @SpirePrefixPatch
         public static SpireReturn<Boolean> prefix(NeowEvent event) {
-            if (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowNeow) {
+            if (ModHelper.isModEnabled(ModHelperPatches.AllowNeow)) {
                 return SpireReturn.Return(false);
             }
             return SpireReturn.Continue();

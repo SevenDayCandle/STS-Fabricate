@@ -17,6 +17,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
@@ -455,6 +456,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public PSkill<T> addAmountForCombat(int amount, int limit) {
         this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, Math.min(limit, data != null ? data.maxAmount : DEFAULT_MAX));
         return this;
+    }
+
+    public int getWorth() {
+        return fields.getWorth() * this.amount * getWorthBase();
+    }
+
+    public int getWorthBase() {
+        return 1;
     }
 
     public PSkill<T> multiplyAmountForCombat(int amount, int limit) {
@@ -1844,6 +1853,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String pluralCardExtra() {
         return EUIUtils.format(PGR.core.strings.subjects_cardN, extra);
+    }
+
+    // Set random values for the fields based on the value
+    // Resulting fields will influence the amounts/extra set on this item
+    public void randomize(Random rng, int value) {
+        int projected = fields.randomize(rng, value);
+        setAmount(rng.random(projected));
+        setExtra(rng.random(projected));
     }
 
     public void recurse(ActionT1<PSkill<?>> onRecurse) {
