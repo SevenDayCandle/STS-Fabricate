@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
@@ -20,11 +21,11 @@ import pinacolada.patches.library.CardLibraryPatches;
 
 // Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLAction<AbstractCard> {
-    protected final CardGroup cardGroup;
-    protected boolean makeCopy;
-    protected boolean cancelIfFull;
-    protected PCLCardSelection destination;
-    protected AbstractCard actualCard;
+    private CardGroup cardGroup;
+    private boolean makeCopy;
+    private boolean cancelIfFull;
+    private PCLCardSelection destination;
+    private AbstractCard actualCard;
 
     public GenerateCard(AbstractCard card, CardGroup group) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_MED);
@@ -33,6 +34,7 @@ public class GenerateCard extends PCLAction<AbstractCard> {
         if (this.card == null) {
             this.card = card;
         }
+        this.actualCard = card;
         this.cardGroup = group;
 
         UnlockTracker.markCardAsSeen(this.card.cardID);
@@ -83,7 +85,9 @@ public class GenerateCard extends PCLAction<AbstractCard> {
                     }
 
                     player.createHandIsFullDialog();
-                    generateCard(c -> AbstractDungeon.getCurrRoom().souls.discard(c, true));
+                    // Make the card in the discard pile instead
+                    cardGroup = player.discardPile;
+                    generateCard(c -> {AbstractDungeon.getCurrRoom().souls.discard(c, true);});
                 }
                 else {
                     generateCard(null, 0.01f);

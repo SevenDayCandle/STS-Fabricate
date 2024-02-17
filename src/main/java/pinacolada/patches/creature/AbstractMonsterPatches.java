@@ -80,7 +80,7 @@ public class AbstractMonsterPatches {
         }
     }
 
-    @SpirePatch(clz = AbstractMonster.class, method = "calculateDamage", paramtypez = {int.class})
+    @SpirePatch2(clz = AbstractMonster.class, method = "calculateDamage", paramtypez = {int.class})
     public static class AbstractMonster_CalculateDamage {
         @SpireInsertPatch(locator = MonsterDamageFinalGiveLocator.class, localvars = {"tmp"})
         public static void finalGive(AbstractMonster __instance, @ByRef float[] tmp) {
