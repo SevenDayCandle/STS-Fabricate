@@ -19,14 +19,6 @@ public class PField_Power extends PField_Random {
     public ArrayList<String> powers = new ArrayList<>();
     public boolean debuff;
 
-    public static boolean checkPowers(String po, FuncT1<Boolean, String> valFunc) {
-        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(po);
-        if (data != null) {
-            return data.ifAny(valFunc);
-        }
-        return valFunc.invoke(po);
-    }
-
     public PField_Power addPower(PCLPowerData... powers) {
         for (PCLPowerData power : powers) {
             this.powers.add(power.ID);
@@ -40,11 +32,19 @@ public class PField_Power extends PField_Random {
     }
 
     public boolean allOrAnyPower(PCLUseInfo info, AbstractCreature t) {
-        return allOrAnyPower(po -> doesValueMatchThreshold(info, GameUtilities.getPowerAmount(t, po)));
+        return allOrAnyR(powers, po -> checkPowers(po, info, t));
     }
 
-    public boolean allOrAnyPower(FuncT1<Boolean, String> valFunc) {
-        return allOrAnyR(powers, po -> checkPowers(po, valFunc));
+    public boolean checkPowers(String po, PCLUseInfo info, AbstractCreature t) {
+        PCLPowerData data = PCLPowerData.getStaticDataOrCustom(po);
+        if (data != null) {
+            // Powers that aren't stacked base should be treated as all or none
+            if (data.maxAmount < 0) {
+                return data.ifAny(s -> doesValueMatchThreshold(info, Math.abs(GameUtilities.getPowerAmount(t, s))));
+            }
+            return data.ifAny(s -> doesValueMatchThreshold(info, GameUtilities.getPowerAmount(t, s)));
+        }
+        return doesValueMatchThreshold(info, GameUtilities.getPowerAmount(t, po));
     }
 
     @Override

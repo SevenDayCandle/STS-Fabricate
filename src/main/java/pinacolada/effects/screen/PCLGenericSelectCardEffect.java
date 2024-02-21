@@ -93,7 +93,7 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
                 return;
             }
 
-            if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
                 complete();
             }
         }

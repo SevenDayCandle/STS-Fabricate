@@ -1,6 +1,7 @@
 package pinacolada.effects.screen;
 
 import basemod.abstracts.CustomCard;
+import basemod.abstracts.CustomRelic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -14,20 +15,31 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.FuncT0;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.patches.screens.RelicViewScreenPatches;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLPointerRelic;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomColorEditor;
+import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -37,11 +49,13 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
+    private static final String LARGE_RELIC_PATH = "images/largeRelics/";
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     private static final float OFFSET_BASE_CARD_Y = Settings.scale * -6;
     private static final float OUTLINE_SIZE = Settings.scale * 7;
@@ -69,6 +83,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private final FrameBuffer imageBuffer;
     private final OrthographicCamera camera;
     private boolean enableTint;
+    private FuncT1<PCLEffectWithCallback<?>, PCLCustomImageEffect> imageFunc;
     private Pixmap insideImage;
     private Texture baseTexture;
     private TextureRegion insideImageRenderable;
@@ -78,7 +93,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     protected int targetWidth = CARD_IMG_WIDTH;
     protected int targetHeight = CARD_IMG_HEIGHT;
 
-    public PCLCustomImageEffect(Texture base, int imageWidth, int imageHeight) {
+    public PCLCustomImageEffect(Texture base, FuncT1<PCLEffectWithCallback<?>, PCLCustomImageEffect> imageFunc, int imageWidth, int imageHeight) {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);
         final float buttonWidth = Settings.WIDTH * (0.16f);
@@ -88,6 +103,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         hb = new DraggableHitbox(0, 0, Settings.WIDTH * 2, Settings.HEIGHT * 2, true);
         targetWidth = imageWidth;
         targetHeight = imageHeight;
+        this.imageFunc = imageFunc;
         renderer = new ShapeRenderer();
 
         instructionsLabel = new EUILabel(FontHelper.topPanelAmountFont,
@@ -119,7 +135,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
                 .setPosition(cancelButton.hb.cX, pasteButton.hb.y + pasteButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setLabel(FontHelper.buttonLabelFont, 0.85f, PGR.core.strings.cedit_loadFromCard)
-                .setOnClick(this::selectExistingCards);
+                .setOnClick(this::selectExisting);
 
         loadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 0.8f)
@@ -176,24 +192,79 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
         if (base != null) {
             baseTexture = new Texture(base.getTextureData());
+            zoomBar.setActive(true);
+            instructionsLabel.setLabel(PGR.core.strings.cetut_imageCrop);
+            saveButton.setInteractable(true);
             updatePictures();
         }
     }
 
     public static PCLCustomImageEffect forCard(Texture texture) {
-        return new PCLCustomImageEffect(texture, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
+        return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingCards, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
     }
 
     public static PCLCustomImageEffect forOrb(Texture texture) {
-        return new PCLCustomImageEffect(texture, ORB_IMG_SIZE, ORB_IMG_SIZE);
+        return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingRelics, ORB_IMG_SIZE, ORB_IMG_SIZE);
     }
 
     public static PCLCustomImageEffect forPower(Texture texture) {
-        return new PCLCustomImageEffect(texture, POWER_IMG_SIZE, POWER_IMG_SIZE);
+        return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingRelics, POWER_IMG_SIZE, POWER_IMG_SIZE);
     }
 
     public static PCLCustomImageEffect forRelic(Texture texture) {
-        return new PCLCustomImageEffect(texture, RELIC_IMG_SIZE, RELIC_IMG_SIZE);
+        return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingRelics, RELIC_IMG_SIZE, RELIC_IMG_SIZE);
+    }
+
+    private static PCLEffectWithCallback<?> selectExistingCards(PCLCustomImageEffect effect) {
+        CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
+        group.sortAlphabetically(true);
+        return new PCLGenericSelectCardEffect(group.group)
+                .addCallback(card -> {
+                            if (card != null) {
+                                if (card instanceof PCLCard) {
+                                    effect.updateImage(new Texture(Gdx.files.internal(card.assetUrl), true));
+                                }
+                                else {
+                                    // Zoom in slightly for non-PCLCards because base game images have weird-ass transparent offsets
+                                    effect.updateImage(
+                                            card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
+                                                    : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true)
+                                            , 0.53f, Settings.WIDTH, Settings.HEIGHT + OFFSET_BASE_CARD_Y);
+                                }
+                            }
+                        }
+                );
+    }
+
+    private static PCLEffectWithCallback<?> selectExistingRelics(PCLCustomImageEffect effect) {
+        ArrayList<AbstractRelic> relics = RelicViewScreenPatches.getAllRelics();
+        relics.removeIf(r -> StringUtils.isEmpty(r.imgUrl)); // Remove relics without images
+        relics.sort((a, b) -> {
+            if (a.isSeen != b.isSeen) {
+                return a.isSeen ? 1 : -1;
+            }
+            return StringUtils.compare(a.name, b.name);
+        });
+
+        return new PCLGenericSelectRelicEffect(relics).addCallback(relic -> {
+                    if (relic != null) {
+                        if (relic instanceof PCLRelic) {
+                            effect.updateImage(new Texture(Gdx.files.internal(((PCLRelic) relic).relicData.imagePath), true));
+                        }
+                        else {
+                            // Hardcoded stuff -_-
+                            String path = LARGE_RELIC_PATH + relic.imgUrl;
+                            FileHandle f = Gdx.files.internal(path);
+                            if (f.exists()) {
+                                effect.updateImage(new Texture(f, true));
+                            }
+                            else {
+                                effect.updateImage(new Texture(Gdx.files.internal(relic.getAssetURL()), true));
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     protected void commit() {
@@ -325,26 +396,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
     }
 
-    private void selectExistingCards() {
-        CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
-        group.sortAlphabetically(true);
-        curEffect = new PCLGenericSelectCardEffect(group.group)
-                .addCallback(card -> {
-                            if (card != null) {
-                                if (card instanceof PCLCard) {
-                                    // TODO handle EYBCardBase with PCLCard check
-                                    updateImage(new Texture(Gdx.files.internal(card.assetUrl), true));
-                                }
-                                else {
-                                    // Zoom in slightly for non-PCLCards because base game card images have weird-ass transparent offsets
-                                    updateImage(
-                                            card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
-                                                    : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true)
-                                            , 0.53f, Settings.WIDTH, Settings.HEIGHT + OFFSET_BASE_CARD_Y);
-                                }
-                            }
-                        }
-                );
+    private void selectExisting() {
+        curEffect = imageFunc.invoke(this);
     }
 
     private void setEnableTint(boolean val) {

@@ -94,7 +94,7 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
                 return;
             }
 
-            if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
                 complete();
             }
         }

@@ -83,7 +83,7 @@ public class PCLGenericSelectRenderableEffect<T extends PCLGenericItemRenderable
             return;
         }
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+        if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
             complete();
         }
     }

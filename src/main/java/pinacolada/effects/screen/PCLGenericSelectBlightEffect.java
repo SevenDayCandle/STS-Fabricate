@@ -79,7 +79,7 @@ public class PCLGenericSelectBlightEffect extends PCLEffectWithCallback<Abstract
             return;
         }
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
+        if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
             complete();
         }
     }
