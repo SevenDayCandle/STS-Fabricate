@@ -278,7 +278,7 @@
 												"{#o:Click this to enable this card to deal damage.}",
 												"{#o:Click this to enable this card to give Block.}",
 												"If relics are specified here, this relic will not spawn unless the player has any of those relics, and obtaining this relic will replace those relics.",
-												"Occurrences of Anchor Color 1 will be recolored to Target Color 1, and Anchor Color 2 to Target Color 2. Every other color will be made into a color between the two targets color, based on its distance to the anchors.",
+												"Occurrences of Anchor Color 1 will be recolored to Target Color 1, and Anchor Color 2 to Target Color 2. Every other color will be made into a color between the two Target colors, based on its distance to the anchors.",
 												"The sound that plays when this #yOrb is #yChanneled or #yEvoked.",
 												"How quickly this item's image rotates. Positive values produce counter-clockwise rotations, and negative values produce clockwise rotations.",
 												"Determines the color of the flash that appears when this #yOrb is #yChanneled or #yEvoked.",

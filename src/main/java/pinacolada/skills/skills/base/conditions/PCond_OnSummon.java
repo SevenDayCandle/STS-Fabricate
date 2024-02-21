@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnAllySummonSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
@@ -36,7 +37,9 @@ public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSub
     public void onAllySummon(PCLCardAlly ally, PCLCard card, PCLCard returnedCard) {
         // Ally is treated as the source
         if (fields.getFullCardFilter().invoke(card)) {
-            useFromTrigger(generateInfo(ally, ally).setData(Collections.singletonList(card)));
+            PCLUseInfo info = generateInfo(ally, ally);
+            info.setTempTargets(ally).setData(Collections.singletonList(card));
+            useFromTrigger(info);
         }
     }
 }

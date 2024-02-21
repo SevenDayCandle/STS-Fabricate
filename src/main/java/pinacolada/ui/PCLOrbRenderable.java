@@ -11,9 +11,10 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLOrbRenderable extends PCLGenericItemRenderable<PCLOrbData> {
-    public static final float BASE_SCALE = Settings.scale * 0.6f;
+    public static final float BASE_SCALE = Settings.scale * 0.35f;
     protected Texture texture;
     public PCLOrbRenderable(PCLOrbData power) {
         super(power, power.tooltip, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
@@ -40,8 +41,7 @@ public class PCLOrbRenderable extends PCLGenericItemRenderable<PCLOrbData> {
     }
 
     public void render(SpriteBatch sb) {
-        sb.setColor(Color.WHITE);
-        sb.draw(texture, this.hb.x, this.hb.y, 42.0F, 42.0F, 84f, 84f, this.scale, this.scale, this.rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+        PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, this.hb.cX, this.hb.cY, texture.getWidth(), texture.getHeight(), this.scale, this.rotation);
         super.render(sb);
     }
 }

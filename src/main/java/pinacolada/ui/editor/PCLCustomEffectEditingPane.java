@@ -855,7 +855,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerFlag(List<String> cardIDs) {
-        registerDropdown(initializeSearchable(CardFlag.getAll(getColor()), CardFlag::getName, PGR.core.strings.cedit_flags),
+        registerDropdown(initializeSearchable(CardFlag.getAll(), CardFlag::getName, PGR.core.strings.cedit_flags),
                 cards -> {
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.ID));
@@ -867,7 +867,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerFlag(List<String> cardIDs, ActionT1<List<CardFlag>> onChangeImpl) {
-        registerDropdown(initializeSearchable(CardFlag.getAll(getColor()), CardFlag::getName, PGR.core.strings.cedit_flags),
+        registerDropdown(initializeSearchable(CardFlag.getAll(), CardFlag::getName, PGR.core.strings.cedit_flags),
                 onChangeImpl,
                 cardIDs,
                 card -> card.ID

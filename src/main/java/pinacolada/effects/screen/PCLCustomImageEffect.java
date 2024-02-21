@@ -173,6 +173,11 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         camera = new OrthographicCamera((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         sb = new SpriteBatch();
         sb.setProjectionMatrix(camera.combined.scl(1, -1, 1));
+
+        if (base != null) {
+            baseTexture = new Texture(base.getTextureData());
+            updatePictures();
+        }
     }
 
     public static PCLCustomImageEffect forCard(Texture texture) {

@@ -14,9 +14,10 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
-    public static final float BASE_SCALE = Settings.scale * 0.6f;
+    public static final float BASE_SCALE = Settings.scale * 0.35f;
     protected Texture texture;
     protected TextureRegion region;
     public PCLPowerRenderable(PCLPowerData power) {
@@ -47,12 +48,11 @@ public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
     }
 
     public void render(SpriteBatch sb) {
-        sb.setColor(Color.WHITE);
         if (this.region != null) {
-            sb.draw(region, this.hb.x, this.hb.y, 42.0F, 42.0F, 84f, 84f, this.scale, this.scale, this.rotation);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, region, this.hb.cX, this.hb.cY, region.getRegionWidth(), region.getRegionHeight(), this.scale, this.rotation);
         }
         else {
-            sb.draw(texture, this.hb.x, this.hb.y, 42.0F, 42.0F, 84f, 84f, this.scale, this.scale, this.rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, this.hb.cX, this.hb.cY, texture.getWidth(), texture.getHeight(), this.scale, this.rotation);
         }
         if (amountText != null) {
             FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amountText, this.hb.x + this.hb.width, this.hb.y + 15f * Settings.scale, 1.5f, Settings.GREEN_TEXT_COLOR);

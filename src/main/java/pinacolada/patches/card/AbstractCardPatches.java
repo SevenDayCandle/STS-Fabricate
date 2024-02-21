@@ -27,7 +27,7 @@ import pinacolada.utilities.GameUtilities;
 public class AbstractCardPatches {
     public static boolean forcePlay;
 
-    @SpirePatch(clz = AbstractCard.class, method = "applyPowersToBlock")
+    @SpirePatch2(clz = AbstractCard.class, method = "applyPowersToBlock")
     public static class AbstractCard_ApplyPowersToBlock {
         @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
         public static void insertPre(AbstractCard __instance, @ByRef float[] tmp) {
@@ -76,7 +76,7 @@ public class AbstractCardPatches {
         }
     }
 
-    @SpirePatch(clz = AbstractCard.class, method = "calculateCardDamage")
+    @SpirePatch2(clz = AbstractCard.class, method = "calculateCardDamage")
     public static class PlayerDamageGivePatches {
 
         @SpireInsertPatch(locator = MonsterMultiDamageFinalReceiveLocator.class, localvars = {"tmp", "i"})

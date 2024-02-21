@@ -72,7 +72,9 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     public void triggerOnCard(AbstractCard c, AbstractCreature target) {
         if (fields.getFullCardFilter().invoke(c)) {
-            useFromTrigger(generateInfo(target).setData(Collections.singletonList(c)));
+            PCLUseInfo info = generateInfo(target);
+            info.setTempTargets(target).setData(Collections.singletonList(c));
+            useFromTrigger(info);
         }
     }
 

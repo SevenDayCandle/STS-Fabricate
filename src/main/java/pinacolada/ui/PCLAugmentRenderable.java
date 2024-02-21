@@ -9,9 +9,10 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLDynamicAugmentData;
+import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLAugmentRenderable extends PCLGenericItemRenderable<PCLAugment> {
-    public static final float BASE_SCALE = Settings.scale * 0.45f;
+    public static final float BASE_SCALE = Settings.scale * 0.35f;
     protected Texture texture;
     protected Texture textureBase;
 
@@ -43,10 +44,10 @@ public class PCLAugmentRenderable extends PCLGenericItemRenderable<PCLAugment> {
 
     public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        sb.draw(textureBase, this.hb.x, this.hb.y, 64.0F, 64.0F, 128f, 128f, this.scale, this.scale, this.rotation, 0, 0, 128, 128, false, false);
+        PCLRenderHelpers.drawCentered(sb, Color.WHITE, textureBase, this.hb.cX, this.hb.cY, 128f, 128f, this.scale, this.rotation);
         if (texture != null) {
             int h = texture.getHeight();
-            sb.draw(texture, this.hb.x, this.hb.y, h / 2f, h / 2f, h, h, this.scale, this.scale, this.rotation, 0, 0, h, h, false, false);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, this.hb.cX, this.hb.cY, h, h, this.scale, this.rotation);
         }
         super.render(sb);
     }

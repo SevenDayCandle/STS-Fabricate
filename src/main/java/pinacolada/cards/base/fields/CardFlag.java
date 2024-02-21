@@ -68,26 +68,6 @@ public class CardFlag implements TooltipProvider {
         return base;
     }
 
-    public static ArrayList<CardFlag> getAll(AbstractCard.CardColor targetColor) {
-        if (targetColor == null) {
-            return getAll();
-        }
-        ArrayList<CardFlag> base = EUIUtils.filter(ALL.values(), f -> f.colors == null || f.colors.length == 0 || EUIUtils.any(f.colors, co -> co == targetColor));
-        for (PCLCustomFlagInfo custom : PCLCustomFlagInfo.getFlags(targetColor)) {
-            if (custom.flag != null) {
-                base.add(custom.flag);
-            }
-        }
-        if (targetColor != AbstractCard.CardColor.COLORLESS) {
-            for (PCLCustomFlagInfo custom : PCLCustomFlagInfo.getFlags(AbstractCard.CardColor.COLORLESS)) {
-                if (custom.flag != null) {
-                    base.add(custom.flag);
-                }
-            }
-        }
-        return base;
-    }
-
     public static List<CardFlag> getFromCard(AbstractCard card) {
         if (card instanceof PCLCard) {
             return ((PCLCard) card).cardData.flags;
