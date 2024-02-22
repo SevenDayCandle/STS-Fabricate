@@ -7,14 +7,10 @@ import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.vfx.combat.PowerExpireTextEffect;
 import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
-import javassist.expr.ExprEditor;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.effects.powers.PCLExpirePowerEffect;
-import pinacolada.powers.PCLPower;
 
 public class ReducePowerActionPatches {
 

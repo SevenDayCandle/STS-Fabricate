@@ -18,8 +18,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
     public static final float BASE_SCALE = Settings.scale * 0.35f;
-    protected Texture texture;
-    protected TextureRegion region;
+    private Texture texture;
+    private TextureRegion region;
     public PCLPowerRenderable(PCLPowerData power) {
         super(power, power.tooltip, new Hitbox(AbstractRelic.PAD_X, AbstractRelic.PAD_X));
     }
@@ -30,6 +30,14 @@ public class PCLPowerRenderable extends PCLGenericItemRenderable<PCLPowerData> {
 
     public PCLPowerRenderable(PCLPowerData power, EUIKeywordTooltip tip, Hitbox hb) {
         super(power, tip, hb);
+    }
+
+    public TextureRegion getRegion() {
+        return region;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 
     public void initializeImage() {

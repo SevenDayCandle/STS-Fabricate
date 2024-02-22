@@ -9,7 +9,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.TargetFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;

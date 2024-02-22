@@ -120,15 +120,15 @@
 								"DESCRIPTIONS": ["The next #yOrb #yChanneled has +#b{0} effectiveness. While active, deal +{0} [Immaterial Damage]."],
 								"NAME": "Sorcery"
 				},
+				"pcl:StabilizingPower":
+				{
+							"DESCRIPTIONS": ["{#y:{0}} will not decrease for #b{1} turn(s)."],
+							"NAME": "Stabilized"
+				},
 				"pcl:SuperchargedPower":
 				{
 								"DESCRIPTIONS": ["Gain #b{0} additional [E] each turn."],
 								"NAME": "Supercharged"
-				},
-				"pcl:SupportDamagePower":
-				{
-								"DESCRIPTIONS": ["Deal #b{0} damage to the enemy with lowest HP at the end of your turn.{1}"," | Will deal #b{0} damage to {1}."],
-								"NAME": "Support Damage"
 				},
 				"pcl:TemporaryPower":
 				{

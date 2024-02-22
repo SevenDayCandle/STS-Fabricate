@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.ApplyOrReducePowerAction;
 import pinacolada.actions.utility.SequentialAction;
@@ -23,7 +22,6 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @VisibleSkill
 public class PMod_PayPerPower extends PActiveMod<PField_Power> {

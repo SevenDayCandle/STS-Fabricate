@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.relics.UnceasingTop;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 import pinacolada.patches.creature.AbstractPlayerPatches;
-import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 
 import java.util.*;

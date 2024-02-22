@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField;
 import pinacolada.ui.editor.PCLCustomEffectPage;

@@ -213,10 +213,6 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         return new PCLDynamicPowerData(this);
     }
 
-    public PCLPowerRenderable makeRenderable() {
-        return new PCLPowerRenderable(this);
-    }
-
     public PCLPowerRenderable makeRenderableWithLevel(int level) {
         return new PCLPowerRenderable(this, new EUIKeywordTooltip(getName(), getEffectTextForPreview(level)));
     }

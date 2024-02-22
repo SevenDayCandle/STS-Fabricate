@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static pinacolada.utilities.GameUtilities.JSON_FILTER;
-
 public class PCLCharacterAnimation extends AbstractAnimation {
     private static final String ANIMATION_PATH = PCLCustomLoadable.FOLDER + "/animations";
     private static final HashMap<String, AbstractAnimation> creatureAnimations = new HashMap<>();

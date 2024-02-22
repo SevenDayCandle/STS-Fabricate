@@ -13,8 +13,6 @@ import com.evacipated.cardcrawl.mod.stslib.patches.DamageModifierPatches;
 import com.evacipated.cardcrawl.mod.stslib.patches.tempHp.MonsterDamage;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -26,7 +24,6 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import com.megacrit.cardcrawl.vfx.combat.BlockedWordEffect;
-import com.megacrit.cardcrawl.vfx.combat.DeckPoofEffect;
 import com.megacrit.cardcrawl.vfx.combat.HbBlockBrokenEffect;
 import com.megacrit.cardcrawl.vfx.combat.StrikeEffect;
 import extendedui.EUI;
@@ -48,8 +45,6 @@ import pinacolada.effects.PCLSFX;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
-import pinacolada.patches.creature.AbstractMonsterPatches;
-import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -57,7 +52,6 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 import static pinacolada.utilities.GameUtilities.scale;
 

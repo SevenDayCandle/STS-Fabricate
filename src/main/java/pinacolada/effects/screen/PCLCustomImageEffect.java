@@ -1,7 +1,6 @@
 package pinacolada.effects.screen;
 
 import basemod.abstracts.CustomCard;
-import basemod.abstracts.CustomRelic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -15,8 +14,6 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -24,7 +21,6 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.interfaces.delegates.FuncT0;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.patches.screens.RelicViewScreenPatches;
 import extendedui.ui.EUIBase;
@@ -34,12 +30,9 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomColorEditor;
-import pinacolada.ui.editor.relic.PCLCustomRelicEditScreen;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -241,7 +234,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         relics.removeIf(r -> StringUtils.isEmpty(r.imgUrl)); // Remove relics without images
         relics.sort((a, b) -> {
             if (a.isSeen != b.isSeen) {
-                return a.isSeen ? 1 : -1;
+                return a.isSeen ? -1 : 1;
             }
             return StringUtils.compare(a.name, b.name);
         });

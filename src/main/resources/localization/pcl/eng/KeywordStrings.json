@@ -44,9 +44,21 @@
 		"DESCRIPTION": "#yAffinities appear above a card's name.",
 		"NAME": "Yellow Affinity"
 	},
+	"Accuracy":	{
+		"DESCRIPTION": "#yShiv cards deal additional damage.",
+		"NAME": "Accuracy"
+	},
 	"After Image":	{
 		"DESCRIPTION": "Gain [Block] whenever you play a card.",
 		"NAME": "After Image"
+	},
+	"Amplify":	{
+		"DESCRIPTION": "The next Power card played is played twice.",
+		"NAME": "Amplify"
+	},
+	"Angry":	{
+		"DESCRIPTION": "Gain [Strength] when attacked.",
+		"NAME": "Angry"
 	},
 	"Augment":	{
 		"DESCRIPTION": "#yAugments modify the effect or properties of the card they are slotted into.",
@@ -64,9 +76,25 @@
 		"DESCRIPTION": "[Block] is not removed at the end of your turn.",
 		"NAME": "Barricade"
 	},
-	"Blinded":	{
-		"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
-		"NAME": "Blinded"
+	"Battle Hymn":	{
+		"DESCRIPTION": "At the start of turn, add #ySmite to your hand.",
+		"NAME": "Battle Hymn"
+	},
+	"Beat Of Death":	{
+		"DESCRIPTION": "Whenever you play a card, take damage.",
+		"NAME": "Beat of Death"
+	},
+	"Berserk":	{
+		"DESCRIPTION": "At the start of turn, gain [E].",
+		"NAME": "Berserk"
+	},
+	"Blasphemer":	{
+		"DESCRIPTION": "Die on your next turn.",
+		"NAME": "Blasphemer"
+	},
+	"Block Return":	{
+		"DESCRIPTION": "When attacked, give the attacker [Block].",
+		"NAME": "Block Return"
 	},
 	"Blur":	{
 		"DESCRIPTION": "[Block] is conserved between turns.",
@@ -84,6 +112,10 @@
 		"DESCRIPTION": "Affected twice by powers that modify damage.",
 		"NAME": "Brutal Damage"
 	},
+	"Brutality":	{
+		"DESCRIPTION": "At the start of turn, lose HP and draw cards.",
+		"NAME": "Brutality"
+	},
 	"Buff":	{
 		"DESCRIPTION": "Powers with positive effects.",
 		"NAME": "Buff",
@@ -96,6 +128,10 @@
 		"DESCRIPTION": "Negate the next HP loss you receive, then reduce stacks by #b1.",
 		"NAME": "Buffer"
 	},
+	"Burst":	{
+		"DESCRIPTION": "The next Skill card played is played twice.",
+		"NAME": "Burst"
+	},
 	"Chance":	{
 		"DESCRIPTION": "Activate an effect with a certain probability.",
 		"NAME": "Chance"
@@ -103,6 +139,14 @@
 	"Choked":	{
 		"DESCRIPTION": "Lose HP whenever a card is played.",
 		"NAME": "Choked"
+	},
+	"Collect":	{
+		"DESCRIPTION": "At the start of turn, add an upgraded #yMiracle to your hand.",
+		"NAME": "Collect"
+	},
+	"Combust":	{
+		"DESCRIPTION": "At the end of turn, lose HP and deal damage to ALL enemies.",
+		"NAME": "Combust"
 	},
 	"Confused":	{
 		"DESCRIPTION": "Randomize the cost of cards drawn.",
@@ -120,6 +164,10 @@
 		"DESCRIPTION": "On death, deals damage to all enemies based on its Max HP.",
 		"NAME": "Corpse Explosion"
 	},
+	"Corruption":	{
+		"DESCRIPTION": "Skills cost 0 and #yExhaust when played.",
+		"NAME": "Corruption"
+	},
 	"Counter":	{
 		"DESCRIPTION": "Card property used for custom card effects.",
 		"NAME": "Counter",
@@ -132,9 +180,17 @@
 		"PROGRESSIVE": "creating",
 		"NAME": "Create"
 	},
+	"Creative AI":	{
+		"DESCRIPTION": "At the start of turn, put random Power cards in your hand.",
+		"NAME": "Creative AI"
+	},
 	"Critical":	{
 		"DESCRIPTION": "The next #yAttack played deals #b+{0}% damage per stack.",
 		"NAME": "Critical"
+	},
+	"Curiosity":	{
+		"DESCRIPTION": "Gain [Strength] when a Power card is played.",
+		"NAME": "Curiosity"
 	},
 	"Curl Up":	{
 		"DESCRIPTION": "Gain [Block] when you receive unblocked attack damage, then remove this power.",
@@ -146,6 +202,10 @@
 		"PRESENT": "Cycles",
 		"PROGRESSIVE": "Cycling",
 		"NAME": "Cycle"
+	},
+	"Dark Embrace":	{
+		"DESCRIPTION": "Draw cards when a card is #yExhausted.",
+		"NAME": "Dark Embrace"
 	},
 	"Debuff":	{
 		"DESCRIPTION": "Powers with negative effects.",
@@ -167,6 +227,14 @@
 		"DESCRIPTION": "Take damage at the end of your turn. Only enemies can die from this damage.",
 		"NAME": "Delayed Damage"
 	},
+	"Deva":	{
+		"DESCRIPTION": "At the start of turn, gain [E]. This increases each turn.",
+		"NAME": "Deva"
+	},
+	"Devotion":	{
+		"DESCRIPTION": "Gain [Mantra] at the start of your turn.",
+		"NAME": "Devotion"
+	},
 	"Die":	{
 		"DESCRIPTION": "Remove this creature from battle.",
 		"PAST": "died",
@@ -177,6 +245,10 @@
 	"Double Damage":	{
 		"DESCRIPTION": "Attacks deal #b+100% damage.",
 		"NAME": "Double Damage"
+	},
+	"Double Tap":	{
+		"DESCRIPTION": "The next Attack card played is played twice.",
+		"NAME": "Double Tap"
 	},
 	"Draw Minus":	{
 		"DESCRIPTION": "Draw fewer cards at the start of next turn.",
@@ -190,16 +262,21 @@
 		"DESCRIPTION": "The next card played is played an additional time.",
 		"NAME": "Duplication"
 	},
+	"Echo":	{
+		"DESCRIPTION": "The first card played each turn is played twice.",
+		"NAME": "Echo"
+	},
+	"Electro":	{
+		"DESCRIPTION": "[Lightning] hits ALL enemies.",
+		"NAME": "Electro"
+	},
 	"Energized":	{
 		"DESCRIPTION": "Gain [E] at the start of next turn.",
 		"NAME": "Energized"
 	},
-	"Escape":	{
-		"DESCRIPTION": "Skip the current battle. Receive no rewards.",
-		"NAME": "Escape",
-		"PAST": "escaped",
-		"PRESENT": "escapes",
-		"PROGRESSIVE": "escaping"
+	"Enrage":	{
+		"DESCRIPTION": "Gain [Strength] when a Skill card is played.",
+		"NAME": "Enrage"
 	},
 	"Entangled":	{
 		"DESCRIPTION": "You may not play any Attacks this turn.",
@@ -216,6 +293,25 @@
 	"Equilibrium":	{
 		"DESCRIPTION": "Retain your hand this turn",
 		"NAME": "Equilibrium"
+	},
+	"Escape":	{
+		"DESCRIPTION": "Skip the current battle. Receive no rewards.",
+		"NAME": "Escape",
+		"PAST": "escaped",
+		"PRESENT": "escapes",
+		"PROGRESSIVE": "escaping"
+	},
+	"Establishment":	{
+		"DESCRIPTION": "When a card is #yRetained, lower its cost.",
+		"NAME": "Establishment"
+	},
+	"Explosive":	{
+		"DESCRIPTION": "After a set number of turns, dies and deals damage to enemies.",
+		"NAME": "Explosive"
+	},
+	"Fading":	{
+		"DESCRIPTION": "Dies in a set number of turns.",
+		"NAME": "Fading"
 	},
 	"Fleeting":	{
 		"DESCRIPTION": "When used, remove this card from play and your deck.",
@@ -259,6 +355,10 @@
 		"PRESENT": "heals",
 		"PROGRESSIVE": "healing",
 		"NAME": "Heal"
+	},
+	"Hex":	{
+		"DESCRIPTION": "Whenever you play a non-Attack card, add #yDazed to your draw pile.",
+		"NAME": "Hex"
 	},
 	"Immaterial Damage":	{
 		"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
@@ -454,8 +554,16 @@
 		"NAME": "Semi-Limited"
 	},
 	"Shackles":	{
-		"DESCRIPTION": "Reduce [Strength] until end of turn.",
+		"DESCRIPTION": "Reduce [Strength] until the end of turn.",
 		"NAME": "Shackles"
+	},
+	"Sharp Hide":	{
+		"DESCRIPTION": "When an Attack card is played, an enemy takes damage.",
+		"NAME": "Sharp Hide"
+	},
+	"Shifting":	{
+		"DESCRIPTION": "Upon losing HP, lose [Strength] until the end of turn.",
+		"NAME": "Shifting"
 	},
 	"Silenced":	{
 		"DESCRIPTION": "Negate incoming buffs. Does not affect powers specific to cards or monsters.",
@@ -473,10 +581,21 @@
 		"DESCRIPTION": "Cannot be removed from your deck.",
 		"NAME": "Soulbound"
 	},
+	"Spore Cloud":	{
+		"DESCRIPTION": "On death, apply [Vulnerable] to enemies.",
+		"NAME": "Spore Cloud"
+	},
 	"Spread":	{
 		"DESCRIPTION": "Spread a target's power to its allies.",
 		"NAME": "Spread",
 		"PRESENT": "Spreads"
+	},
+	"Stabilize":	{
+		"DESCRIPTION": "Prevent a power from being reduced this turn.",
+		"NAME": "Stabilize",
+		"PAST": "Stabilized",
+		"PRESENT": "Stabilizes",
+		"PROGRESSIVE": "Stabilizing"
 	},
 	"Starter":	{
 		"DESCRIPTION": "Activates if played at the start of turn.",
@@ -525,9 +644,17 @@
 		"DESCRIPTION": "Temporary HP lasts until end of combat.",
 		"NAME": "Temporary HP"
 	},
+	"Thievery":	{
+		"DESCRIPTION": "Attacks steal #yGold from the target.",
+		"NAME": "Thievery"
+	},
 	"Thousand Cuts":	{
 		"DESCRIPTION": "Deal damage to ALL enemies whenever you play a card.",
 		"NAME": "Thousand Cuts"
+	},
+	"Time Warp":	{
+		"DESCRIPTION": "Ends your turn and gains [Strength] after a certain number of cards are played.",
+		"NAME": "Time Warp"
 	},
 	"Timing":	{
 		"DESCRIPTION": "Determines whether a card or effect triggers before or after your turn.",

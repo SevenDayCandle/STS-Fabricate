@@ -43,7 +43,6 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.TextureCache;

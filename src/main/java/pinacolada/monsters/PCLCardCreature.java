@@ -18,7 +18,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PSpecialCardPower;

@@ -13,7 +13,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;

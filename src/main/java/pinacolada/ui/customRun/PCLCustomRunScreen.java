@@ -19,12 +19,12 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.dungeon.PCLCustomTrial;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
-import pinacolada.dungeon.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
