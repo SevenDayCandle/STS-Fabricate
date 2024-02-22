@@ -166,7 +166,7 @@ public class PCLCustomEffectNode extends EUIButton {
     protected EUIHeaderlessTooltip getWarningTooltip() {
         StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
 
-        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill, editor))) {
+        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill, editor, this))) {
             sj.add(PGR.core.strings.cetut_primaryWarning);
         }
 
@@ -180,7 +180,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public void initializeDefaultSkill() {
         getEffects();
-        this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef, editor));
+        this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef, editor, this));
 
         if (this.skill == null) {
             try {

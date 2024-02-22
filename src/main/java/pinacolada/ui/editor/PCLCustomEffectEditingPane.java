@@ -267,7 +267,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public Color getColorForEffect(PSkill<?> effect) {
-        return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect, editor) ? Color.WHITE : Color.GRAY;
+        return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect, editor, node) ? Color.WHITE : Color.GRAY;
     }
 
     public int getExtra2ForSkill(PSkill<?> skill) {

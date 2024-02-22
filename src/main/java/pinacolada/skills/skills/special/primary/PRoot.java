@@ -21,6 +21,7 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.ui.editor.PCLCustomEffectPage;
+import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
 @VisibleSkill
@@ -82,7 +83,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
+    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor, PCLCustomEffectNode node) {
         return skill.data.sourceTypes == null || EUIUtils.any(skill.data.sourceTypes, s -> s.isSourceAllowed(editor));
     }
 

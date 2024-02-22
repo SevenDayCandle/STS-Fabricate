@@ -7,6 +7,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField;
 import pinacolada.ui.editor.PCLCustomEffectPage;
+import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 
 public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     public PCardPrimary(PSkillData<T> data, PSkillSaveData content) {
@@ -28,12 +29,6 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
     public PCardPrimary(PSkillData<T> data, AbstractCard card) {
         super(data);
         setProvider(card);
-    }
-
-    @Override
-    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
-        return (skill instanceof PCond && !(skill instanceof PActiveNonCheckCond))
-                || (skill instanceof PMod);
     }
 
     // Only set the amount for this effect and not its children. Used in refresh to avoid refreshing chained children twice

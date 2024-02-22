@@ -7,16 +7,16 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
-public abstract class PBlockTrait<T extends PField_Not> extends PTrait<T> {
-    public PBlockTrait(PSkillData<T> data, PSkillSaveData content) {
+public abstract class PStatTrait<T extends PField_Not> extends PTrait<T> {
+    public PStatTrait(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PBlockTrait(PSkillData<T> data) {
+    public PStatTrait(PSkillData<T> data) {
         super(data);
     }
 
-    public PBlockTrait(PSkillData<T> data, int amount) {
+    public PStatTrait(PSkillData<T> data, int amount) {
         super(data, amount);
     }
 

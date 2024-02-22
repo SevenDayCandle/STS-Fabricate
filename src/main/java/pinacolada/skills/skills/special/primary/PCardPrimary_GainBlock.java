@@ -18,9 +18,7 @@ import pinacolada.monsters.PCLCreature;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
-import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
 @VisibleSkill
@@ -86,12 +84,6 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, PGR.core.tooltips.block);
         }
         return EUIRM.strings.numNoun(amountString, PGR.core.tooltips.block);
-    }
-
-    @Override
-    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
-        return super.isSkillAllowed(skill, editor) ||
-                skill instanceof PBlockTrait;
     }
 
     @Override

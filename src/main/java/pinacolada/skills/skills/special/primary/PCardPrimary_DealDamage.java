@@ -32,10 +32,8 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.skills.PCardPrimary;
-import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -121,12 +119,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
         return EUIRM.strings.numNoun(amountString, attackString);
-    }
-
-    @Override
-    public boolean isSkillAllowed(PSkill<?> skill, PCLCustomEffectPage editor) {
-        return super.isSkillAllowed(skill, editor) ||
-                skill instanceof PDamageTrait;
     }
 
     @Override

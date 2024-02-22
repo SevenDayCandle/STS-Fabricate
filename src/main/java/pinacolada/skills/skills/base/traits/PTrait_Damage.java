@@ -7,10 +7,10 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.PDamageTrait;
+import pinacolada.skills.skills.PStatTrait;
 
 @VisibleSkill
-public class PTrait_Damage extends PDamageTrait<PField_Not> {
+public class PTrait_Damage extends PStatTrait<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PTrait_Damage.class, PField_Not.class)
             .setSourceTypes(PSkillData.SourceType.Card, PSkillData.SourceType.Power);
 
