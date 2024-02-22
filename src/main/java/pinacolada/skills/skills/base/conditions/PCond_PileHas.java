@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -43,7 +44,7 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.cond_ifX(TEXT.subjects_anyPile());
+        return TEXT.cond_ifX(EUIRM.strings.adjNoun(TEXT.subjects_card, TEXT.cpile_pile));
     }
 
     @Override

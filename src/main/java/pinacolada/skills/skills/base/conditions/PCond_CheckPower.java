@@ -9,11 +9,13 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.powers.PCLPowerData;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnApplyPowerSubscriber {
@@ -66,5 +68,11 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
             info.setTempTargets(t);
             useFromTrigger(info.setData(power));
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }

@@ -14,6 +14,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> implements OnApplyPowerSubscriber {
@@ -74,5 +75,11 @@ public class PCond_CheckDistinctPower extends PPassiveCond<PField_Power> impleme
                 useFromTrigger(info.setData(power));
             }
         }
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_or, null);
     }
 }
