@@ -37,11 +37,14 @@ public class PCLCardSaveData {
         }
     }
 
-    public void addAugment(PCLAugment.SaveData id) {
+    public void addAugment(PCLAugment.SaveData id, int index) {
         if (augments == null) {
             augments = new ArrayList<>();
         }
-        augments.add(id);
+        while (augments.size() <= index) {
+            augments.add(null);
+        }
+        augments.set(index, null);
     }
 
     public void removeAugmentAt(int index) {

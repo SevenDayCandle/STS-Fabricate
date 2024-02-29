@@ -84,11 +84,6 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> {
     }
 
     @Override
-    public boolean shouldHideText() {
-        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
-    }
-
-    @Override
     public String wrapTextAmountSelf(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }

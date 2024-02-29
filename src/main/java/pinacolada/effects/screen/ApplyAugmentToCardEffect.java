@@ -18,7 +18,7 @@ public class ApplyAugmentToCardEffect extends PCLEffectWithCallback<PCLAugment> 
                 panel.addPanelItem(augment);
             }
         }
-        if (panel.augments.size() == 0) {
+        if (panel.augments.isEmpty()) {
             complete();
         }
     }

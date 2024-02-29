@@ -27,11 +27,6 @@ public abstract class PStatTrait<T extends PField_Not> extends PTrait<T> {
     }
 
     @Override
-    public boolean shouldHideText() {
-        return !fields.not && baseAmount == 0 && !hasParentType(PMod.class);
-    }
-
-    @Override
     public String wrapTextAmountSelf(int input) {
         return input >= 0 && !fields.not ? "+" + input : String.valueOf(input);
     }

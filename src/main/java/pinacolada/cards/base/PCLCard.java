@@ -50,6 +50,7 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.*;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
@@ -321,7 +322,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             augments.add(augment);
         }
         if (save) {
-            auxiliaryData.addAugment(augment.save);
+            auxiliaryData.addAugment(augment.save, slot);
         }
         augment.onAddToCard(this);
         refresh(null);
@@ -330,9 +331,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public void addAugment(PCLAugment augment, int slot, boolean save) {
         if (slot >= 0) {
             augments.set(slot, augment);
-        }
-        if (save) {
-            auxiliaryData.addAugment(augment.save);
+            if (save) {
+                auxiliaryData.addAugment(augment.save, slot);
+            }
         }
         augment.onAddToCard(this);
         refresh(null);
@@ -825,6 +826,20 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public String getDescriptionForSort() {
         return CardModifierManager.onCreateDescription(this, makeExportString(getEffectStrings()));
+    }
+
+    @Override
+    public String getEffectPowerTextStrings() {
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null && !(ef.isPassiveOnly() && ef.source != this) ? StringUtils.capitalize(ef.getPowerTextForDisplay(null)) : null,
+                getFullEffects());
+    }
+
+    @Override
+    public String getEffectStrings() {
+        return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
+                ef -> ef != null && !(ef.isPassiveOnly() && ef.source != this) ? StringUtils.capitalize(ef.getTextForDisplay()) : null,
+                getFullEffects());
     }
 
     protected Texture getEnergyOrb() {

@@ -20,6 +20,7 @@ import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
 import pinacolada.skills.skills.PMultiCond;
+import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 
@@ -79,7 +80,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public boolean isPassiveOnly() {
-        return childEffect instanceof PTrait || (childEffect instanceof PMultiBase<?> && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), ef -> ef instanceof PTrait));
+        return childEffect instanceof PTrait || (childEffect instanceof PMultiSkill && EUIUtils.all(((PMultiSkill) childEffect).getSubEffects(), ef -> ef instanceof PTrait));
     }
 
     @Override

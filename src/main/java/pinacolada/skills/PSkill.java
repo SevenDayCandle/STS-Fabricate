@@ -1422,7 +1422,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null && !childEffect.shouldHideText() ? PCLCoreStrings.period(true) + " " + capital(childEffect.getText(perspective, requestor, addPeriod), true) : PCLCoreStrings.period(addPeriod));
+        return getCapitalSubText(perspective, requestor, addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + capital(childEffect.getText(perspective, requestor, addPeriod), true) : PCLCoreStrings.period(addPeriod));
     }
 
     public final String getText() {
@@ -2047,10 +2047,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public boolean shouldActAsAll() {
         return baseAmount <= 0 && getUpgrade() <= 0;
-    }
-
-    public boolean shouldHideText() {
-        return false;
     }
 
     public boolean shouldOverrideTarget() {

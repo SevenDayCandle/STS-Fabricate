@@ -179,14 +179,14 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     @Override
     public String getText(int index, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return effects.size() > index && !effects.get(index).shouldHideText() ? effects.get(index).getText(perspective, requestor, addPeriod) : EUIUtils.EMPTY_STRING;
+        return effects.size() > index ? effects.get(index).getText(perspective, requestor, addPeriod) : EUIUtils.EMPTY_STRING;
     }
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR +
-                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(EUIUtils.filter(effects, ef -> !ef.shouldHideText()), perspective, requestor, addPeriod))), true)) :
-                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(EUIUtils.filter(effects, ef -> !ef.shouldHideText()), perspective, requestor, addPeriod)) + PCLCoreStrings.period(addPeriod);
+                capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod))), true)) :
+                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

@@ -150,13 +150,13 @@ public interface PointerProvider extends ValueProvider {
 
     default String getEffectPowerTextStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getPowerTextForDisplay(null)) : null,
+                ef -> ef != null ? StringUtils.capitalize(ef.getPowerTextForDisplay(null)) : null,
                 getFullEffects());
     }
 
     default String getEffectStrings() {
         return EUIUtils.joinStringsMapNonnull(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE,
-                ef -> ef != null && !(ef.isPassiveOnly()) ? StringUtils.capitalize(ef.getTextForDisplay()) : null,
+                ef -> ef != null ? StringUtils.capitalize(ef.getTextForDisplay()) : null,
                 getFullEffects());
     }
 

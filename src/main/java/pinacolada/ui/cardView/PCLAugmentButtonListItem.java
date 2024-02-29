@@ -17,7 +17,7 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     public PCLAugmentButtonListItem(ActionT1<PCLAugment> panel, ActionT1<PCLAugment> rClick, PCLAugment augment) {
         super(panel, rClick, augment, 4f);
-        background = new EUIImage(ImageMaster.REWARD_SCREEN_ITEM, RelativeHitbox.fromPercentages(hb, 5, 1.12f, 2.2f, 0.7f))
+        background = new EUIImage(ImageMaster.REWARD_SCREEN_ITEM, RelativeHitbox.fromPercentages(hb, 5, 1.12f, 2.2f, 0.5f))
                 .setBackgroundTexture(ImageMaster.REWARD_SCREEN_ITEM, new Color(0.2f, 0.4f, 0.4f, 1f), 1.05f)
                 .setColor(new Color(0.45f, 0.6f, 0.6f, 1f));
     }
@@ -34,18 +34,22 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     @Override
     public void updateImpl() {
-        super.updateImpl();
         background.updateImpl();
-        if (background.hb.hovered && !augment.hb.hovered) {
+        augment.update();
+        if (background.hb.hovered || augment.hb.hovered) {
             EUITooltip.queueTooltips(augment.getTips());
             if (EUIInputManager.leftClick.isJustPressed()) {
                 background.hb.unhover();
+                augment.hb.unhover();
                 onClick.invoke(augment.item);
             }
             else if (EUIInputManager.rightClick.isJustPressed()) {
                 background.hb.unhover();
+                augment.hb.unhover();
                 onRightClick.invoke(augment.item);
             }
         }
+        ownerText.updateImpl();
+        title.updateImpl();
     }
 }

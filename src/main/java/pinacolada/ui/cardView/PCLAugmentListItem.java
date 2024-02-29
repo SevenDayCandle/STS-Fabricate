@@ -32,13 +32,13 @@ public class PCLAugmentListItem extends EUIHoverable {
         this.augment = new PCLAugmentRenderable(augment, augment.getTooltip(), hb);
         this.onClick = onClick;
         this.onRightClick = onRightClick;
-        title = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.75f))
-                .setFontScale(0.6f)
+        title = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.5f))
+                .setFontScale(0.9f)
                 .setLabel(augment.getName())
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         ownerText = new
-                EUILabel(FontHelper.topPanelAmountFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.4f))
+                EUILabel(FontHelper.topPanelAmountFont, new RelativeHitbox(hb, scale(360), scale(360), hb.width * xOffsetPercentage, hb.height * 0.15f))
                 .setAlignment(0.5f, 0.01f)
                 .setFontScale(0.65f)
                 .setColor(Settings.RED_TEXT_COLOR);
