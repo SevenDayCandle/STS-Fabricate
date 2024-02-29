@@ -411,6 +411,10 @@
 		"DESCRIPTION": "Receive #b+{0}% damage from #yOrbs.",
 		"NAME": "Lock-On"
 	},
+	"Loop":	{
+		"DESCRIPTION": "At the start of turn, #yTrigger your rightmost #yOrb.",
+		"NAME": "Loop"
+	},
 	"Loyal":	{
 		"DESCRIPTION": "If this would enter your discard pile, move it to your draw pile instead.",
 		"NAME": "Loyal"

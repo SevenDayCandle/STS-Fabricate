@@ -6,13 +6,17 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.city.Byrd;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FlightPower;
+import com.megacrit.cardcrawl.powers.SadisticPower;
 import com.megacrit.cardcrawl.powers.watcher.BlockReturnPower;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
+import pinacolada.monsters.PCLCardAlly;
 
 public class PowerFixPatches {
     // Make block return power give block to the attacker instead of always to the player
@@ -39,6 +43,18 @@ public class PowerFixPatches {
                 return SpireReturn.Continue();
             }
             return SpireReturn.Return();
+        }
+    }
+
+    // Prevent Sadistic Nature from hurting summons
+    @SpirePatch(clz = SadisticPower.class, method = "onApplyPower")
+    public static class SadisticPower_OnApplyPower {
+        @SpirePrefixPatch
+        public static SpireReturn<Void> prefix(SadisticPower __instance, AbstractPower power, AbstractCreature target, AbstractCreature source) {
+            if (target instanceof PCLCardAlly && source == AbstractDungeon.player && __instance.owner == AbstractDungeon.player) {
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 

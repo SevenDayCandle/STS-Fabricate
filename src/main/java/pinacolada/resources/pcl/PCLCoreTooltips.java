@@ -140,6 +140,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip lightning = tryLoadTip("Lightning");
     public EUIKeywordTooltip limited = tryLoadTip("Limited");
     public EUIKeywordTooltip lockOn = tryLoadTip("Lock-On");
+    public EUIKeywordTooltip loop = tryLoadTip("Loop");
     public EUIKeywordTooltip loyal = tryLoadTip("Loyal");
     public EUIKeywordTooltip malleable = tryLoadTip("Malleable");
     public EUIKeywordTooltip mantra = tryLoadTip("Prayer"); // YES THIS THING IS CALLED PRAYER

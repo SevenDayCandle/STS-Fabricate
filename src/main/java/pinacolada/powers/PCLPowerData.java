@@ -67,10 +67,12 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final String ICON_FORESIGHT = "wireheading";
     public static final String ICON_FRAIL = "frail";
     public static final String ICON_FREEATTACK = "swivel";
+    public static final String ICON_HEX = "hex";
     public static final String ICON_INTANGIBLE = "intangible";
     public static final String ICON_INVINCIBLE = "heartDef";
     public static final String ICON_JUGGERNAUT = "juggernaut";
     public static final String ICON_LOCKON = "lockon";
+    public static final String ICON_LOOP = "loop";
     public static final String ICON_MALLEABLE = "malleable";
     public static final String ICON_MANTRA = "mantra";
     public static final String ICON_MARKED = "pressure_points";
@@ -102,6 +104,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData CorpseExplosion = registerBaseDebuff(CorpseExplosionPower.class, CorpseExplosionPower.POWER_ID, PGR.core.tooltips.corpseExplosion).setImageRegion(ICON_CORPSE_EXPLOSION).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Entangled = registerBaseDebuff(EntanglePower.class, EntanglePower.POWER_ID, PGR.core.tooltips.entangled).setImageRegion(ICON_ENTANGLE).setEndTurnBehavior(Behavior.SingleTurn);
     public static final PCLPowerData Frail = registerBaseDebuffCommon(FrailPower.class, FrailPower.POWER_ID, PGR.core.tooltips.frail).setImageRegion(ICON_FRAIL).setEndTurnBehavior(Behavior.TurnBased);
+    public static final PCLPowerData Hex = registerBaseDebuff(HexPower.class, HexPower.POWER_ID, PGR.core.tooltips.hex).setImageRegion(ICON_HEX).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Mark = registerBaseDebuff(MarkPower.class, MarkPower.POWER_ID, PGR.core.tooltips.mark).setImageRegion(ICON_MARKED).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData NoBlock = registerBaseDebuff(NoBlockPower.class, NoBlockPower.POWER_ID, PGR.core.tooltips.noBlock).setImageRegion(ICON_NO_BLOCK).setEndTurnBehavior(PCLPowerData.Behavior.TurnBased);
     public static final PCLPowerData NoDraw = registerBaseDebuff(NoDrawPower.class, NoDrawPower.POWER_ID, PGR.core.tooltips.noDraw).setImageRegion(ICON_NO_DRAW).setEndTurnBehavior(PCLPowerData.Behavior.SingleTurn);
@@ -137,6 +140,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
             .setEquivalents(IntangiblePower.POWER_ID);
     public static final PCLPowerData Invincible = registerBaseBuff(InvinciblePower.class, InvinciblePower.POWER_ID, PGR.core.tooltips.invincible).setImageRegion(ICON_INVINCIBLE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Juggernaut = registerBaseBuff(JuggernautPower.class, JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut).setImageRegion(ICON_JUGGERNAUT).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Loop = registerBaseBuff(LoopPower.class, LoopPower.POWER_ID, PGR.core.tooltips.loop).setImageRegion(ICON_LOOP).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Malleable = registerBaseBuff(MalleablePower.class, MalleablePower.POWER_ID, PGR.core.tooltips.malleable).setImageRegion(ICON_MALLEABLE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Mantra = registerBaseBuff(MantraPower.class, MantraPower.POWER_ID, PGR.core.tooltips.mantra).setImageRegion(ICON_MANTRA).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Metallicize = registerBaseBuffCommon(MetallicizePower.class, MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize).setImageRegion(ICON_METALLICIZE).setEndTurnBehavior(Behavior.Permanent);
