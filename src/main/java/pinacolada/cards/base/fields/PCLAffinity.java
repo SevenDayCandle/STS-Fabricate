@@ -8,12 +8,14 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CountingPanelItem;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PCLResources;
@@ -25,7 +27,7 @@ import java.io.IOException;
 import java.util.*;
 
 @JsonAdapter(PCLAffinity.PCLAffinityAdapter.class)
-public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, CountingPanelItem {
+public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, CountingPanelItem<AbstractCard> {
     private static final HashMap<AbstractCard.CardColor, Set<PCLAffinity>> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
     private static final HashMap<String, PCLAffinity> BY_SYMBOL = new HashMap<>();
@@ -235,6 +237,13 @@ public class PCLAffinity implements KeywordProvider, Comparable<PCLAffinity>, Co
         PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
         Texture tex = resources.images.getAffinityTexture(this);
         return tex != null ? tex : getDefaultIcon();
+    }
+
+    @Override
+    public EUITooltip getTipForButton() {
+        EUIKeywordTooltip k = new EUIKeywordTooltip(tooltip.title, tooltip.description + EUIUtils.SPLIT_LINE + EUIRM.strings.misc_countPanelItem);
+        k.setIcon(tooltip.icon);
+        return k;
     }
 
     public String getPowerSymbol() {

@@ -1,16 +1,18 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Creature;
 import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
-public class PMod_PerCreature extends PMod_Per<PField_Not> {
+public class PMod_PerCreature extends PMod_Per<PField_Creature> {
 
-    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreature.class, PField_Not.class);
+    public static final PSkillData<PField_Creature> DATA = register(PMod_PerCreature.class, PField_Creature.class);
 
     public PMod_PerCreature(PSkillSaveData content) {
         super(DATA, content);
@@ -30,7 +32,7 @@ public class PMod_PerCreature extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info, boolean isUsing) {
-        return getTargetList(info).size();
+        return fields.creatures.isEmpty() ? getTargetList(info).size() : EUIUtils.count(getTargetList(info), fields::filter);
     }
 
     public String getSubSampleText() {
@@ -39,6 +41,6 @@ public class PMod_PerCreature extends PMod_Per<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return getTargetStringSingular();
+        return fields.creatures.isEmpty() ? getTargetStringPluralSuffix() : fields.getString();
     }
 }

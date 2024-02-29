@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CountingPanelItem;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public enum PCLAugmentCategory implements CountingPanelItem, TooltipProvider {
+public enum PCLAugmentCategory implements CountingPanelItem<PCLAugment>, TooltipProvider {
     General,
     Summon,
     Played,
@@ -60,6 +61,11 @@ public enum PCLAugmentCategory implements CountingPanelItem, TooltipProvider {
         return PCLCoreImages.CardUI.augmentBase.texture();
     }
 
+    @Override
+    public EUITooltip getTipForButton() {
+        return new EUITooltip(getName(), getDesc() + EUIUtils.SPLIT_LINE + EUIRM.strings.misc_countPanelItem);
+    }
+
     public String getName() {
         switch (this) {
             case Summon:
@@ -77,9 +83,9 @@ public enum PCLAugmentCategory implements CountingPanelItem, TooltipProvider {
     }
 
     @Override
-    public int getRank(AbstractCard c) {
-        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
-        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
+    public int getRank(PCLAugment c) {
+        int ordinal = c.data.category.ordinal();
+        return c.data.category == this ? ordinal + 1000 : ordinal;
     }
 
     @Override

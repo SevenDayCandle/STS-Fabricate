@@ -18,7 +18,7 @@ import extendedui.exporter.EUIExporterRow;
 import extendedui.patches.game.TooltipPatches;
 import extendedui.patches.screens.MenuPanelScreenPatches;
 import extendedui.ui.TextureCache;
-import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
+import extendedui.ui.cardFilter.panels.card.CardTypePanelFilterItem;
 import extendedui.ui.controls.EUIMainMenuPanelButton;
 import extendedui.utilities.BlightTier;
 import pinacolada.blights.PCLBlight;

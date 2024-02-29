@@ -17,7 +17,6 @@ import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
-import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -147,10 +146,6 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getRelicNameForID(g) + "}", relicIDs);
     }
 
-    public static String getStanceString(ArrayList<PCLStanceHelper> stances) {
-        return PCLCoreStrings.joinWithOr(stance -> "{" + stance.tooltip.title + "}", stances);
-    }
-
     public static String getTagAndOrString(ArrayList<PCLCardTag> tags, boolean or) {
         return or ? getTagOrString(tags) : getTagAndString(tags);
     }
@@ -162,11 +157,6 @@ public abstract class PField implements Serializable {
 
     public static String getTagOrString(ArrayList<PCLCardTag> tags) {
         return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(PGR.config.displayCardTagDescription.get() ? PField::safeInvokeTipTitle : PField::safeInvokeTip, tags);
-    }
-
-    public static String getTagString(ArrayList<PCLCardTag> tags) {
-        return (PGR.config.displayCardTagDescription.get() || PSkill.isVerbose()) ? getTagAndString(tags) :
-                tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStringsMap(" ", PField::safeInvokeTip, tags));
     }
 
     protected static String safeInvokeTip(TooltipProvider provider) {

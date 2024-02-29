@@ -480,7 +480,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         createCards(data);
         cardGrid.add(getAllCards());
 
-        EUI.countingPanel.open(shownCards, data.resources.cardColor, false, false);
+        EUI.cardCounters.open(shownCards, f -> shownCards.sort(f.type));
 
         EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
                 new EUITourTooltip(cardGrid.group.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
@@ -596,7 +596,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             currentEffect.render(sb);
         }
         else {
-            EUI.countingPanel.tryRender(sb);
+            EUI.cardCounters.tryRender(sb);
         }
 
         contextMenu.tryRender(sb);
@@ -631,8 +631,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     protected void totalCardsChanged(int totalCards, int totalColorless) {
-        if (EUI.countingPanel.isActive) {
-            EUI.countingPanel.open(shownCards, data.resources.cardColor, false, false);
+        if (EUI.cardCounters.isActive) {
+            EUI.cardCounters.open(shownCards, f -> shownCards.sort(f.type));
         }
 
         PCLLoadout cur = currentSeriesCard != null ? currentSeriesCard.value : null;
@@ -698,7 +698,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void updateImpl() {
         CardCrawlGame.mainMenuScreen.screenColor.a = MathHelper.popLerpSnap(CardCrawlGame.mainMenuScreen.screenColor.a, 0.8F);
 
-        EUI.countingPanel.tryUpdate();
+        EUI.cardCounters.tryUpdate();
 
         if (currentEffect != null) {
             currentEffect.update();

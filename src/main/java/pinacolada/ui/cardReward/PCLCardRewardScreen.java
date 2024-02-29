@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUI;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CacheableCard;
@@ -64,7 +63,7 @@ public class PCLCardRewardScreen extends EUIBase {
     }
 
     public void close(boolean clearBundles) {
-        EUI.countingPanel.close();
+        EUI.cardCounters.close();
         upgradeToggle.toggleForce(false);
         buttons.clear();
         if (clearBundles) {
@@ -121,7 +120,7 @@ public class PCLCardRewardScreen extends EUIBase {
             return;
         }
 
-        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group, AbstractDungeon.player.getCardColor(), EUIGameUtils.canReceiveAnyColorCard(), false);
+        EUI.cardCounters.open(AbstractDungeon.player.masterDeck.group, c -> cards.sort(c.type));
         openForBundle(rItem, cards);
         openForReroll(rItem);
         upgradeToggle.toggleForce(false);
@@ -182,7 +181,7 @@ public class PCLCardRewardScreen extends EUIBase {
     }
 
     public void preRender(SpriteBatch sb) {
-        EUI.countingPanel.tryRender(sb);
+        EUI.cardCounters.tryRender(sb);
         upgradeToggle.renderImpl(sb);
         if (canReroll) {
             for (PCLCardRewardActionButton banButton : buttons) {
@@ -231,7 +230,7 @@ public class PCLCardRewardScreen extends EUIBase {
     }
 
     public void updateImpl() {
-        EUI.countingPanel.tryUpdate();
+        EUI.cardCounters.tryUpdate();
         upgradeToggle.updateImpl();
         for (PCLCardRewardBundle cardRewardBundle : bundles) {
             cardRewardBundle.update();

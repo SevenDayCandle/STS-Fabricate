@@ -1,6 +1,9 @@
 package pinacolada.skills.fields;
 
+import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
@@ -21,7 +24,8 @@ public class PField_Tag extends PField_Random {
     }
 
     public String getTagString() {
-        return getTagString(tags);
+        return (PGR.config.displayCardTagDescription.get() || PSkill.isVerbose()) ? getTagAndString(tags) :
+                tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStringsMap(" ", PField::safeInvokeTip, tags));
     }
 
     @Override

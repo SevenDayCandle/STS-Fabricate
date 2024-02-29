@@ -454,7 +454,7 @@ public class PGR {
         EffekseerEFK.initialize();
         CardFlag.postInitialize();
         reloadCustoms();
-        CountingPanel.register(new PCLAffinityPanelFilter());
+        CountingPanel.registerForCard(new PCLAffinityPanelFilter());
         CustomTargeting.registerCustomTargeting(PCLCardTargetingManager.PCL, CombatManager.targeting);
         core.receivePostInitialize();
         for (PCLResources<?, ?, ?, ?> resources : getRegisteredResources()) {

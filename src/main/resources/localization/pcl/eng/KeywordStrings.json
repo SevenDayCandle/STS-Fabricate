@@ -92,6 +92,10 @@
 		"DESCRIPTION": "Die on your next turn.",
 		"NAME": "Blasphemer"
 	},
+	"Blinded":	{
+		"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn start.",
+		"NAME": "Blinded"
+	},
 	"Block Return":	{
 		"DESCRIPTION": "When attacked, give the attacker [Block].",
 		"NAME": "Block Return"

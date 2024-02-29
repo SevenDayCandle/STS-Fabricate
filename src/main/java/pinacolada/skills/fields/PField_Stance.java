@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
@@ -21,7 +22,7 @@ public class PField_Stance extends PField_Random {
     }
 
     public String getStanceString() {
-        return getStanceString(stances);
+        return PCLCoreStrings.joinWithOr(stance -> "{" + stance.tooltip.title + "}", stances);
     }
 
     @Override

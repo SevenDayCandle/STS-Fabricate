@@ -25,6 +25,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.*;
+import com.megacrit.cardcrawl.localization.LocalizedStrings;
+import com.megacrit.cardcrawl.localization.MonsterStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
@@ -45,6 +47,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import org.apache.commons.lang3.StringUtils;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
@@ -661,6 +664,16 @@ public class GameUtilities {
 
     public static ArrayList<AbstractCard> getCardsInPile(CardGroup... groups) {
         return EUIUtils.flattenList(EUIUtils.map(groups, group -> group.group));
+    }
+
+    public static Collection<String> getCreatureIDs() {
+        Map<String, MonsterStrings> monsters = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "monsters");
+        return monsters.keySet();
+    }
+
+    public static String getCreatureName(String id) {
+        MonsterStrings strings = PGR.getMonsterStrings(id);
+        return strings != null ? !StringUtils.isEmpty(strings.NAME) ? strings.NAME : id : id;
     }
 
     public static List<Class<?>> getClassesWithAnnotation(Class<?> annotation) {

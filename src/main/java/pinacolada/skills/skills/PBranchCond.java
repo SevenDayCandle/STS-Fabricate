@@ -102,12 +102,24 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
             case 0:
                 return EUIUtils.EMPTY_STRING;
             case 1:
-                return this.effects.get(0).getText(perspective, requestor, addPeriod);
+                if (this.effects.get(0) != null) {
+                    return this.effects.get(0).getText(perspective, requestor, addPeriod);
+                }
+                break;
             case 2:
                 if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
-                    return getCapitalSubText(perspective, requestor, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, requestor, false) + EFFECT_SEPARATOR +
-                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, requestor, addPeriod)));
+                    if (this.effects.get(0) != null && this.effects.get(1) != null) {
+                        return getCapitalSubText(perspective, requestor, addPeriod) + COMMA_SEPARATOR + this.effects.get(0).getText(perspective, requestor, false) + EFFECT_SEPARATOR +
+                                StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(perspective, requestor, addPeriod)));
+                    }
+                    if (this.effects.get(1) != null) {
+                        return this.effects.get(1).getText(perspective, requestor, addPeriod);
+                    }
+                    if (this.effects.get(0) != null) {
+                        return this.effects.get(0).getText(perspective, requestor, addPeriod);
+                    }
                 }
+                break;
             default:
                 ArrayList<String> effectTexts = new ArrayList<>();
                 for (int i = 0; i < effects.size(); i++) {
@@ -115,6 +127,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
                 }
                 return getSubText(perspective, requestor) + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
         }
+        return EUIUtils.EMPTY_STRING;
     }
 
     @Override

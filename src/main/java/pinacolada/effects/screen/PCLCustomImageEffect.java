@@ -1,6 +1,7 @@
 package pinacolada.effects.screen;
 
 import basemod.abstracts.CustomCard;
+import basemod.abstracts.CustomRelic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -49,6 +50,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private static final String LARGE_RELIC_PATH = "images/largeRelics/";
+    private static final String SMALL_RELIC_PATH = "images/relics/";
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     private static final float OFFSET_BASE_CARD_Y = Settings.scale * -6;
     private static final float OUTLINE_SIZE = Settings.scale * 7;
@@ -192,6 +194,15 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
     }
 
+    private static Texture duplicateTexture(Texture existing) {
+        TextureData texData = existing.getTextureData();
+        if (!texData.isPrepared()) {
+            texData.prepare();
+        }
+
+        return new Texture(texData);
+    }
+
     public static PCLCustomImageEffect forCard(Texture texture) {
         return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingCards, CARD_IMG_WIDTH, CARD_IMG_HEIGHT);
     }
@@ -210,19 +221,26 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private static PCLEffectWithCallback<?> selectExistingCards(PCLCustomImageEffect effect) {
         CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
+        group.group.removeIf(r -> GameUtilities.isCardLocked(r.cardID) || !r.isSeen); // Remove cards that you can't see yet
         group.sortAlphabetically(true);
         return new PCLGenericSelectCardEffect(group.group)
                 .addCallback(card -> {
                             if (card != null) {
                                 if (card instanceof PCLCard) {
-                                    effect.updateImage(new Texture(Gdx.files.internal(card.assetUrl), true));
+                                    effect.updateImage(duplicateTexture(((PCLCard) card).getPortraitImageTexture()));
                                 }
                                 else {
+                                    try {
+                                        effect.updateImage(
+                                                card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
+                                                        : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true)
+                                                , 0.53f, Settings.WIDTH, Settings.HEIGHT + OFFSET_BASE_CARD_Y);
+                                    }
+                                    catch (Exception e) {
+                                        EUIUtils.logError(PCLCustomImageEffect.class, "WTF card doesn't have an image: " + card.cardID);
+                                        e.printStackTrace();
+                                    }
                                     // Zoom in slightly for non-PCLCards because base game images have weird-ass transparent offsets
-                                    effect.updateImage(
-                                            card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
-                                                    : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true)
-                                            , 0.53f, Settings.WIDTH, Settings.HEIGHT + OFFSET_BASE_CARD_Y);
                                 }
                             }
                         }
@@ -231,7 +249,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private static PCLEffectWithCallback<?> selectExistingRelics(PCLCustomImageEffect effect) {
         ArrayList<AbstractRelic> relics = RelicViewScreenPatches.getAllRelics();
-        relics.removeIf(r -> StringUtils.isEmpty(r.imgUrl)); // Remove relics without images
+        relics.removeIf(r -> ((!(r instanceof PCLRelic)) && StringUtils.isEmpty(r.imgUrl)) || GameUtilities.isRelicLocked(r.relicId) || !r.isSeen); // Remove relics without images and relics that you can't see yet
         relics.sort((a, b) -> {
             if (a.isSeen != b.isSeen) {
                 return a.isSeen ? -1 : 1;
@@ -242,17 +260,25 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         return new PCLGenericSelectRelicEffect(relics).addCallback(relic -> {
                     if (relic != null) {
                         if (relic instanceof PCLRelic) {
-                            effect.updateImage(new Texture(Gdx.files.internal(((PCLRelic) relic).relicData.imagePath), true));
+                            effect.updateImage(duplicateTexture(relic.img));
+                        }
+                        else if (relic.largeImg != null){
+                            effect.updateImage(duplicateTexture(relic.largeImg));
                         }
                         else {
-                            // Hardcoded stuff -_-
-                            String path = LARGE_RELIC_PATH + relic.imgUrl;
-                            FileHandle f = Gdx.files.internal(path);
-                            if (f.exists()) {
-                                effect.updateImage(new Texture(f, true));
+                            try {
+                                String path = LARGE_RELIC_PATH + relic.imgUrl;
+                                FileHandle f = Gdx.files.internal(path);
+                                if (f.exists()) {
+                                    effect.updateImage(new Texture(f, true));
+                                }
+                                else {
+                                    effect.updateImage(duplicateTexture(relic.img));
+                                }
                             }
-                            else {
-                                effect.updateImage(new Texture(Gdx.files.internal(relic.getAssetURL()), true));
+                            catch (Exception e) {
+                                EUIUtils.logError(PCLCustomImageEffect.class, "WTF relic doesn't have an image: " + relic.relicId);
+                                e.printStackTrace();
                             }
                         }
                     }

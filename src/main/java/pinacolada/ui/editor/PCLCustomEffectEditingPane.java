@@ -46,6 +46,7 @@ import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditScreen;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.ui.editor.power.PCLCustomPowerEditScreen;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -767,6 +768,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerCost(List<CostFilter> items) {
         registerDropdown(initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]), items);
+    }
+
+    public void registerCreature(List<String> creatures) {
+        EUISearchableDropdown<String> searchable = initializeSearchable(GameUtilities.getCreatureIDs(), GameUtilities::getCreatureName, StringUtils.capitalize(PGR.core.strings.subjects_enemy));
+        searchable.sortByLabel();
+        registerDropdown(searchable, creatures);
     }
 
     public void registerDestination(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl) {

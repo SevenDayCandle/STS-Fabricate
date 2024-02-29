@@ -2,16 +2,20 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.CardTriggerConnection;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.interfaces.subscribers.*;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -249,13 +253,119 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return this;
     }
 
-    @Override
+    // Do not trigger card triggers underneath since this already handles this logic
+    public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnAllyDeath(c, ally);
+        }
+    }
+
+    public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnAllySummon(c, ally);
+        }
+    }
+
+    public void triggerOnAllyTrigger(PCLCard c, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnAllyTrigger(c, target, ally, caller);
+        }
+    }
+
+    public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally, boolean triggerEffects) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnAllyWithdraw(c, ally, triggerEffects);
+        }
+    }
+
     public void triggerOnCreate(AbstractCard c, boolean startOfBattle) {
-        super.triggerOnCreate(c, startOfBattle);
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnCreate(c, startOfBattle);
+        }
         if (controller == null) {
             CardTriggerConnection ct = new CardTriggerConnection(this, c);
             ct.initialize();
             controller = ct;
+        }
+    }
+
+    public void triggerOnDiscard(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnDiscard(c);
+        }
+    }
+
+    public void triggerOnDraw(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnDraw(c);
+        }
+    }
+
+    public boolean triggerOnEndOfTurn(boolean isUsing) {
+        if (this.childEffect != null) {
+            return this.childEffect.triggerOnEndOfTurn(isUsing);
+        }
+        return false;
+    }
+
+    public void triggerOnExhaust(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnExhaust(c);
+        }
+    }
+
+    public void triggerOnFetch(AbstractCard c, CardGroup sourcePile) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnFetch(c, sourcePile);
+        }
+    }
+
+    public void triggerOnOtherCardPlayed(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnOtherCardPlayed(c);
+        }
+    }
+
+    public void triggerOnPurge(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnPurge(c);
+        }
+    }
+
+    public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnReshuffle(c, sourcePile);
+        }
+    }
+
+    public void triggerOnRetain(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnRetain(c);
+        }
+    }
+
+    public void triggerOnScry(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnScry(c);
+        }
+    }
+
+    public void triggerOnShuffle() {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnShuffle();
+        }
+    }
+
+    public boolean triggerOnStartOfTurn() {
+        if (this.childEffect != null) {
+            return this.childEffect.triggerOnStartOfTurn();
+        }
+        return false;
+    }
+
+    public void triggerOnUpgrade(AbstractCard c) {
+        if (this.childEffect != null) {
+            this.childEffect.triggerOnUpgrade(c);
         }
     }
 

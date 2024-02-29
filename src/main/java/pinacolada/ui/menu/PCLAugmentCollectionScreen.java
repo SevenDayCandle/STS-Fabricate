@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.patches.game.AbstractDungeonPatches;
+import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.screens.EUIPoolScreen;
+import extendedui.utilities.RotatingList;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
@@ -23,14 +26,16 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
     @SpireEnum
     public static AbstractDungeon.CurrentScreen AUGMENT_SCREEN;
 
-    protected PCLAugmentList panel;
-    protected PCLEffect curEffect;
-    protected FuncT0<ArrayList<PCLAugment>> getEntries;
-    protected ActionT1<PCLAugment> addItem;
-    protected boolean canSelect;
+    private PCLAugmentList panel;
+    private PCLEffect curEffect;
+    private FuncT0<ArrayList<PCLAugment>> getEntries;
+    private ActionT1<PCLAugment> addItem;
+    private CountingPanel<PCLAugment> panelCounter;
+    private boolean canSelect;
 
     public PCLAugmentCollectionScreen() {
         panel = new PCLAugmentList(this::doAction, this::doRemove).enableCancel(false);
+        panelCounter = new CountingPanel<>(new RotatingList<>());
     }
 
     // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
@@ -96,7 +101,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         for (PCLAugment aug : entries) {
             addItem.invoke(aug);
         }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), __ -> {}, false);
+        panelCounter.open(GameUtilities.augmentStats(entries), __ -> {});
     }
 
     @Override
@@ -107,7 +112,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         else {
             panel.renderImpl(sb);
         }
-        EUI.countingPanel.tryRender(sb);
+        panelCounter.tryRender(sb);
     }
 
     @Override
@@ -122,7 +127,7 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         else {
             panel.updateImpl();
         }
-        EUI.countingPanel.tryUpdate();
+        panelCounter.tryUpdate();
 
     }
 
