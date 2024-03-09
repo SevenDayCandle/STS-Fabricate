@@ -84,6 +84,8 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 public class CombatManager extends EUIBase {
     private static final ArrayList<AbstractCard> cardsDiscardedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsDiscardedThisTurn = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsDrawnThisCombat = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsDrawnThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> hasteInfinitesThisTurn = new ArrayList<>();
@@ -111,7 +113,6 @@ public class CombatManager extends EUIBase {
     private static boolean draggingCard;
     private static boolean shouldRefreshHand;
     private static final TreeSet<PCLAffinity> showAffinities = new TreeSet<>();
-    private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
     private static PCLUseInfo lastInfo = null; // Needed for has played checks
     private static UUID battleID;
@@ -169,7 +170,7 @@ public class CombatManager extends EUIBase {
         hasteInfinitesThisTurn.clear();
         turnData.clear();
         cardsExhaustedThisTurn.clear();
-        cardsDrawnThisTurn = 0;
+        cardsDrawnThisTurn.clear();
         unplayableCards.clear();
         orbsEvokedThisTurn.clear();
         turnCount += 1;
@@ -271,7 +272,11 @@ public class CombatManager extends EUIBase {
         return cardsDiscardedThisTurn;
     }
 
-    public static int cardsDrawnThisTurn() {
+    public static List<AbstractCard> cardsDrawnThisCombat() {
+        return cardsDrawnThisCombat;
+    }
+
+    public static List<AbstractCard> cardsDrawnThisTurn() {
         return cardsDrawnThisTurn;
     }
 
@@ -325,9 +330,10 @@ public class CombatManager extends EUIBase {
         shouldRefreshHand = false;
         scriesThisTurn = 0;
         turnCount = 0;
-        cardsDrawnThisTurn = 0;
         orbsEvokedThisCombat.clear();
         orbsEvokedThisTurn.clear();
+        cardsDrawnThisCombat.clear();
+        cardsDrawnThisTurn.clear();
         cardsDiscardedThisCombat.clear();
         cardsDiscardedThisTurn.clear();
         cardsPlayedThisCombat.clear();
@@ -519,7 +525,8 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onAfterDraw(AbstractCard card) {
-        cardsDrawnThisTurn += 1;
+        cardsDrawnThisCombat.add(card);
+        cardsDrawnThisTurn.add(card);
         subscriberDo(OnCardDrawnSubscriber.class, s -> s.onCardDrawn(card));
 
         if (PCLCardTag.Haste.has(card)) {

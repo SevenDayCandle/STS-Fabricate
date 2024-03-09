@@ -20,7 +20,7 @@ public class PCLGeneralAllyAnimation extends PCLAllyAnimation {
         sb.setColor(this.renderColor);
         Texture metal = PCLCoreImages.Monsters.metal.texture();
         int size = metal.getHeight();
-        float rSize = Settings.scale * size;
+        float rSize = Settings.scale * 0.8f * size;
         float hSize = rSize / 2;
         float scaleExt = owner.getBobEffect().y / 535f;
         float scaleInt = -(owner.getBobEffect().y / 550f);

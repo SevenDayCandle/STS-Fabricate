@@ -25,13 +25,6 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
         super(DATA, content);
     }
 
-    // This should not activate the child effect when played normally
-
-    @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
-        return true;
-    }
-
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return !isUnderWhen(callingSkill, parentSkill) && source instanceof AbstractCard ? TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand) : TEXT.cond_atEndOfTurn();

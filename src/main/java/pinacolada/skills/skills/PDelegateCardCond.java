@@ -22,11 +22,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         super(data, content);
     }
 
-    @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
-        return true;
-    }
-
     public String getDelegatePastText() {
         return getDelegateTooltip().past();
     }

@@ -24,13 +24,6 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
         super(DATA, content);
     }
 
-    // This should not activate the child effect when played normally
-
-    @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
-        return true;
-    }
-
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return !isUnderWhen(callingSkill, parentSkill) && source != null ? TEXT.cond_inXAtTurnStart(TEXT.cpile_hand) : TEXT.cond_atStartOfTurn();

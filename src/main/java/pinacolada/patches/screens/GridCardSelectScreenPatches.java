@@ -81,14 +81,14 @@ public class GridCardSelectScreenPatches {
         }
         else {
             int minForm = getFormMin(base);
-
-            for (int i = minForm; i < Math.min(base.maxForms(), minForm + base.cardData.branchFactor); i++) {
+            int limit = Math.min(base.maxForms(), minForm + base.cardData.branchFactor);
+            for (int i = minForm; i < limit; i++) {
                 cardList.add(base.makeUpgradePreview(i));
             }
         }
 
         // If you ran out of forms, do not change the card form
-        if (cardList.size() == 0) {
+        if (cardList.isEmpty()) {
             cardList.add(base.makeUpgradePreview(base.getForm()));
         }
     }

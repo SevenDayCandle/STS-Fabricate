@@ -23,13 +23,6 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
         super(DATA, content);
     }
 
-    // This should not activate the child effect when played normally
-
-    @Override
-    public boolean canPlay(PCLUseInfo info, PSkill<?> triggerSource, boolean origValue) {
-        return true;
-    }
-
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.subjects_shuffleYourDeck) : TEXT.cond_onGeneric(TEXT.subjects_shuffle);

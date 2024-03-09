@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import extendedui.EUIRM;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
@@ -7,6 +8,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnAllyDeathSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -29,6 +31,11 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     @Override
     public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.kill;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_aObjectIs(fields.getFullSummonStringSingular(), getDelegateSampleText()) : TEXT.cond_onGeneric(EUIRM.strings.nounVerb(fields.getFullSummonStringSingular(), getDelegateSampleText()));
     }
 
     @Override

@@ -97,14 +97,18 @@ public class PCLCardAffinities {
         return setStar((star == null ? 0 : star.level) + level);
     }
 
-    public void applyUpgrades(PCLCardDataAffinityGroup affinities, int form) {
+    public void applyUpgrades(PCLCardDataAffinityGroup affinities, int form, int prevLevel, int newLevel) {
         if (star != null) {
-            star.level += affinities.getUpgrade(PCLAffinity.Star, form);
+            int diff = star.level - (affinities.getLevel(PCLAffinity.Star, form) + affinities.getUpgrade(PCLAffinity.Star, form * prevLevel));
+            int total = affinities.getLevel(PCLAffinity.Star, form) + affinities.getUpgrade(PCLAffinity.Star, form * newLevel);
+            star.level = total + diff;
         }
 
         for (PCLCardAffinity a : list) {
             if (a != null) {
-                a.level += affinities.getUpgrade(a.type, form);
+                int diff = a.level - (affinities.getLevel(a.type, form) + affinities.getUpgrade(a.type, form * prevLevel));
+                int total = affinities.getLevel(a.type, form) + affinities.getUpgrade(a.type, form * newLevel);
+                a.level = total + diff;
             }
         }
 

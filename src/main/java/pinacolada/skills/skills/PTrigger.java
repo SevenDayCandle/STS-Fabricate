@@ -253,35 +253,20 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return this;
     }
 
-    // Do not trigger card triggers underneath since this already handles this logic
+    // Do not trigger card triggers underneath
     public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyDeath(c, ally);
-        }
     }
 
     public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnAllySummon(c, ally);
-        }
     }
 
     public void triggerOnAllyTrigger(PCLCard c, AbstractCreature target, PCLCardAlly ally, PCLCardAlly caller) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyTrigger(c, target, ally, caller);
-        }
     }
 
     public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally, boolean triggerEffects) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnAllyWithdraw(c, ally, triggerEffects);
-        }
     }
 
     public void triggerOnCreate(AbstractCard c, boolean startOfBattle) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnCreate(c, startOfBattle);
-        }
         if (controller == null) {
             CardTriggerConnection ct = new CardTriggerConnection(this, c);
             ct.initialize();
@@ -290,83 +275,44 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
     }
 
     public void triggerOnDiscard(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnDiscard(c);
-        }
     }
 
     public void triggerOnDraw(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnDraw(c);
-        }
     }
 
     public boolean triggerOnEndOfTurn(boolean isUsing) {
-        if (this.childEffect != null) {
-            return this.childEffect.triggerOnEndOfTurn(isUsing);
-        }
         return false;
     }
 
     public void triggerOnExhaust(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnExhaust(c);
-        }
     }
 
     public void triggerOnFetch(AbstractCard c, CardGroup sourcePile) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnFetch(c, sourcePile);
-        }
     }
 
     public void triggerOnOtherCardPlayed(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnOtherCardPlayed(c);
-        }
     }
 
     public void triggerOnPurge(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnPurge(c);
-        }
     }
 
     public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnReshuffle(c, sourcePile);
-        }
     }
 
     public void triggerOnRetain(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnRetain(c);
-        }
     }
 
     public void triggerOnScry(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnScry(c);
-        }
     }
 
     public void triggerOnShuffle() {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnShuffle();
-        }
     }
 
     public boolean triggerOnStartOfTurn() {
-        if (this.childEffect != null) {
-            return this.childEffect.triggerOnStartOfTurn();
-        }
         return false;
     }
 
     public void triggerOnUpgrade(AbstractCard c) {
-        if (this.childEffect != null) {
-            this.childEffect.triggerOnUpgrade(c);
-        }
     }
 
     @Override

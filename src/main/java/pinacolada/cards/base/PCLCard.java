@@ -640,6 +640,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         int newCost = cardData.getCost(form) + cardData.getCostUpgrade(form) * timesUpgraded;
         setCost(newCost + costDiff);
         upgradedCost = cost < cardData.getCost(form);
+        affinities.applyUpgrades(cardData.affinities, auxiliaryData.form, prevUpgrade, timesUpgraded);
 
         return setForm(form, timesUpgraded);
     }
@@ -1397,10 +1398,9 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public PCLCard makeUpgradePreview(int form) {
         PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
-        upgrade.changeForm(form, timesUpgraded);
-        upgrade.isPreview = true;
         upgrade.previousAffinities = new ArrayList<>(upgrade.affinities.sorted);
-        upgrade.upgrade();
+        upgrade.changeForm(form, timesUpgraded + 1);
+        upgrade.isPreview = true;
         upgrade.displayUpgrades();
         return upgrade;
     }
@@ -2964,7 +2964,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             onUpgrade();
             int minPossibleForm = GridCardSelectScreenPatches.clampUpgradeForm(auxiliaryData.form, cardData.branchFactor, timesUpgraded, maxForms());
             changeForm(minPossibleForm, timesUpgraded, timesUpgraded + 1);
-            affinities.applyUpgrades(cardData.affinities, auxiliaryData.form);
         }
     }
 
