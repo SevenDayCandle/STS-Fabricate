@@ -52,13 +52,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         return TEXT.cond_onGeneric(getDelegateText());
     }
 
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        if (isWhenClause() || isBranch()) {
-            fields.setupEditor(editor);
-        }
-    }
-
     public void triggerOnCard(AbstractCard c) {
         if (fields.getFullCardFilter().invoke(c)) {
             useFromTrigger(generateInfo(null).setData(Collections.singletonList(c)));

@@ -168,6 +168,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_quickAdd = cedit.TEXT[103];
     public final String cedit_enable = cedit.TEXT[104];
     public final String cedit_disable = cedit.TEXT[105];
+    public final String cedit_cardPoolRestrict = cedit.TEXT[106];
     // Card Editor Tutorial
     public final String cetut_selectorGeneric = cetut.TEXT[0];
     public final String cetut_selectorCard = cetut.TEXT[1];
@@ -274,6 +275,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cetut_legendUpgrade = cetut.TEXT[102];
     public final String cetut_legendDynamic = cetut.TEXT[103];
     public final String cetut_legendDynamic2 = cetut.TEXT[104];
+    public final String cetut_cardPoolRestrict = cetut.TEXT[105];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];

@@ -13,10 +13,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardModify;
 
 @VisibleSkill
 public class PMove_Create extends PMove_GenerateCard {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Create.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardModify> DATA = register(PMove_Create.class, PField_CardModify.class)
             .setExtra(1, DEFAULT_MAX)
             .setExtra2(0, DEFAULT_MAX)
             .setOrigins(PCLCardSelection.Manual)

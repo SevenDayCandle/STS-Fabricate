@@ -87,4 +87,8 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
             editor.startEdit(editor.root);
         }
     }
+
+    @Override
+    protected void tryQueueForDrag() {
+    }
 }

@@ -47,7 +47,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
     }
 
     public DealDamage(AbstractCard card, AbstractCreature target, DamageInfo info, AttackEffect effect, int times) {
-        super(ActionType.DAMAGE, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
+        super(ActionType.DAMAGE, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST * 0.5f : Settings.ACTION_DUR_FAST);
 
         this.card = card;
         this.info = info;
@@ -84,7 +84,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         if (onDamageEffect != null) {
             AbstractCreature effectTarget = target != null ? target : shouldRandomize || canRedirect ? GameUtilities.getRandomEnemy(true) : null;
             if (effectTarget != null) {
-                addDuration(onDamageEffect.invoke(source, effectTarget));
+                addDuration(onDamageEffect.invoke(source, effectTarget) * (Settings.FAST_MODE ? 0.25f : 1f));
             }
         }
     }

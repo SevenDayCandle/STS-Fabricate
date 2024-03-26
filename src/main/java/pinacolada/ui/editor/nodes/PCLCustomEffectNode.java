@@ -333,7 +333,7 @@ public class PCLCustomEffectNode extends EUIButton {
     }
 
     protected void tryQueueForDrag() {
-        if (dragging && !hb.hovered && hologram == null) {
+        if (this.type.canDrag() && dragging && !hb.hovered && hologram == null) {
             hologram = PCLCustomEffectHologram.queue(this.background, this.type, this::onHologramRelease);
         }
     }
@@ -375,6 +375,18 @@ public class PCLCustomEffectNode extends EUIButton {
                 }
             }
             return cur;
+        }
+
+        public boolean canDrag() {
+            switch (this) {
+                case Trigger:
+                case Attack:
+                case Block:
+                case Root:
+                case Proxy:
+                    return false;
+            }
+            return true;
         }
 
         public boolean canRemove() {

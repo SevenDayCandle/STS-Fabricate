@@ -20,13 +20,14 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 @VisibleSkill
 public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatMove {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardModify> DATA = register(PMove_ObtainCard.class, PField_CardModify.class)
             .setExtra(1, DEFAULT_MAX)
             .setExtra2(0, DEFAULT_MAX)
             .setOrigins(PCLCardSelection.Manual)

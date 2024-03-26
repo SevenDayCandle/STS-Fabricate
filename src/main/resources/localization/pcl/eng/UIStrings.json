@@ -189,7 +189,8 @@
 												"View Augment Tutorial",
 												"Quick Add Keyword",
 												"Enable",
-												"Disable"
+												"Disable",
+												"All Colors"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -298,7 +299,8 @@
 												"~I0~ : Scope for skill at position 0",
 												"~U~ : Upgraded count",
 												"$var@cnd$ : Evaluate var with dynamic text block",
-												"https://github.com/SevenDayCandle/STS-EUI/wiki/Smart-Text-Rendering"
+												"https://github.com/SevenDayCandle/STS-EUI/wiki/Smart-Text-Rendering",
+												"If checked, the cards that can be generated can come from any card in the compendium as opposed to being restricted to the card pool for the current run."
 								]
 				},
 				"pcl:CardPile": {
