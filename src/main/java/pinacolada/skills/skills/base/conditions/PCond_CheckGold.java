@@ -39,7 +39,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String baseString = fields.getThresholdRawString(PGR.core.tooltips.gold.title);
+        String baseString = fields.getThresholdRawString(PGR.core.tooltips.gold.title, requestor);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), baseString), perspective);
         }

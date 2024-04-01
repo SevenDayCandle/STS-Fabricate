@@ -30,7 +30,7 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
 
     @Override
     public String getConditionText(PCLCardTarget perspective, Object requestor) {
-        return EUIRM.strings.generic2(getAmountRawString(), getSubText(perspective, requestor));
+        return EUIRM.strings.generic2(getAmountRawString(requestor), getSubText(perspective, requestor));
     }
 
     @Override
@@ -43,10 +43,10 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
         if (fields.groupTypes.isEmpty() && source != null) {
             String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
                     TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
-            return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;
+            return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString(requestor))) : base;
         }
-        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString()))) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardOrString(getExtraRawString())));
+        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(requestor), fields.getFullCardOrString(getExtraRawString(requestor)))) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(requestor), fields.getFullCardOrString(getExtraRawString(requestor))));
     }
 
     @Override

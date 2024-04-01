@@ -52,11 +52,11 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
         if (isBranch()) {
             return getWheneverString(PGR.core.tooltips.trigger.title, perspective);
         }
-        String tt = fields.getOrbAndOrString();
+        String tt = fields.getOrbAndOrString(requestor);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_trigger(tt), perspective);
         }
-        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(tt));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(tt, requestor));
     }
 
     @Override

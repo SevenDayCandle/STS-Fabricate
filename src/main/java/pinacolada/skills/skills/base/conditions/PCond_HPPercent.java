@@ -43,6 +43,6 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return getTargetHasStringPerspective(perspective, fields.getThresholdPercentRawString(PGR.core.tooltips.hp.title));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdPercentRawString(PGR.core.tooltips.hp.title, requestor));
     }
 }

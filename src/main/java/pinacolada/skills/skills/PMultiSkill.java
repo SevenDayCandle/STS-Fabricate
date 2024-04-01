@@ -184,7 +184,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString()), addPeriod) + COLON_SEPARATOR +
+        return amount > 0 ? (capital(TEXT.act_choose(getAmountRawString(requestor)), addPeriod) + COLON_SEPARATOR +
                 capital((generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod))), true)) :
                 generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, perspective, requestor, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }

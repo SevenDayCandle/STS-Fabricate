@@ -1,5 +1,6 @@
 package pinacolada.augments;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
@@ -11,7 +12,6 @@ import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.blights.PCLPointerBlight;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
@@ -27,7 +27,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomAugmentSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
     private static final HashMap<String, PCLCustomAugmentSlot> CUSTOM_MAPPING = new HashMap<>();
-    private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
     public static final String BASE_BLIGHT_ID = "PCLA";
     public static final String SUBFOLDER = "augments";
 
@@ -94,7 +94,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(CustomFileProvider provider) {
+    public static void addProvider(String provider) {
         PROVIDERS.add(provider);
     }
 
@@ -168,8 +168,8 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
-        for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder(), null, true);
+        for (String provider : PROVIDERS) {
+            loadFolder(Gdx.files.internal(provider), null, true);
         }
         if (PGR.debugAugments != null) {
             PGR.debugAugments.refresh();

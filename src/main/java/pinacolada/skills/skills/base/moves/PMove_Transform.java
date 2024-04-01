@@ -67,7 +67,7 @@ public class PMove_Transform extends PMove_DoCard<PField_CardTransform> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         return TEXT.act_transform(
-                useParent ? getInheritedThemString() : !fields.groupTypes.isEmpty() ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard(), fields.getCardIDString()
+                useParent ? getInheritedThemString() : !fields.groupTypes.isEmpty() ? EUIRM.strings.numNounPlace(getAmountRawString(requestor), fields.getFullCardString(requestor), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard(), fields.getCardIDString()
         );
     }
 

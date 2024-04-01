@@ -67,9 +67,9 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.relicIDs.isEmpty() ?
-                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString())
-                : fields.getFullRelicString();
-        return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString()) : TEXT.act_upgrade(base);
+                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(requestor), fields.getFullRelicString(requestor))
+                : fields.getFullRelicString(requestor);
+        return amount > 1 ? TEXT.act_genericTimes(PGR.core.tooltips.upgrade.title, base, getAmountRawString(requestor)) : TEXT.act_upgrade(base);
     }
 
     @Override

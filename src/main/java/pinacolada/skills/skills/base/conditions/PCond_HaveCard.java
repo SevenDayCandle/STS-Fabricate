@@ -52,10 +52,10 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
         if (fields.groupTypes.isEmpty() && source instanceof AbstractCard) {
             String base = fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard()) :
                     TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), TEXT.subjects_thisCard());
-            return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString())) : base;
+            return baseAmount > 1 ? TEXT.act_generic2(base, TEXT.subjects_times(getAmountRawString(requestor))) : base;
         }
-        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), fields.getThresholdRawString(fields.getFullCardString())) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), fields.getThresholdRawString(fields.getFullCardString()));
+        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), fields.getThresholdRawString(fields.getFullCardString(requestor), requestor)) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), fields.getThresholdRawString(fields.getFullCardString(requestor), requestor));
     }
 
     @Override

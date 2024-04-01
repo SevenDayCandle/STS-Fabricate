@@ -62,12 +62,12 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
         if (isBranch()) {
             return getWheneverString(PGR.core.tooltips.channel.title, perspective);
         }
-        String tt = fields.getOrbAndOrString();
+        String tt = fields.getOrbAndOrString(requestor);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_channel(tt), perspective);
         }
-        return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt)) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt));
+        return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(requestor), tt)) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(requestor), tt));
     }
 
     @Override

@@ -46,23 +46,23 @@ public class PField_Blight extends PField_Random {
                         && (rarities.isEmpty() || rarities.contains(BlightTier.getTier(c))));
     }
 
-    public String getFullBlightString() {
-        return getFullBlightString(skill.getAmountRawString());
+    public String getFullBlightString(Object requestor) {
+        return getFullBlightStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getFullBlightString(Object value) {
-        return !blightIDs.isEmpty() ? getBlightIDOrString() : random ? PSkill.TEXT.subjects_randomX(getBlightOrString(value)) : getBlightOrString(value);
+    public String getFullBlightStringForValue(Object value) {
+        return !blightIDs.isEmpty() ? getBlightIDOrString() : random ? PSkill.TEXT.subjects_randomX(getBlightOrStringForValue(value)) : getBlightOrStringForValue(value);
     }
 
     public String getFullBlightStringSingular() {
         return !blightIDs.isEmpty() ? getBlightIDOrString() : getBlightXString(PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
-    public String getBlightAndString() {
-        return getBlightAndString(skill.getAmountRawString());
+    public String getBlightAndString(Object requestor) {
+        return getBlightAndStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getBlightAndString(Object value) {
+    public String getBlightAndStringForValue(Object value) {
         return getBlightXString(PCLCoreStrings::joinWithAnd, (s) -> EUIUtils.format(s, value));
     }
 
@@ -74,11 +74,11 @@ public class PField_Blight extends PField_Random {
         return getBlightIDOrString(blightIDs);
     }
 
-    public String getBlightOrString() {
-        return getBlightOrString(skill.getAmountRawString());
+    public String getBlightOrString(Object requestor) {
+        return getBlightOrStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getBlightOrString(Object value) {
+    public String getBlightOrStringForValue(Object value) {
         return getBlightXString(PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 

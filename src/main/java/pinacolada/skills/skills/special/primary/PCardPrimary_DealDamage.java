@@ -94,7 +94,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
-        String amountString = (count != 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+        String amountString = (count != 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString(requestor) + "x" + getExtraRawString(requestor) : getAmountRawString(requestor);
 
         // When displayed as text, we can just write normal damage down as "damage"
         EUITooltip attackTooltip = getAttackTooltip();

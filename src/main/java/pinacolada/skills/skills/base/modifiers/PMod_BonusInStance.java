@@ -39,7 +39,7 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String base = fields.getAnyStanceString();
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "", TEXT.cond_bonusIf(getAmountRawString(), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "", TEXT.cond_bonusIf(getAmountRawString(requestor), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

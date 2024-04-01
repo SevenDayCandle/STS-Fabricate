@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomLoadable;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     private static final HashMap<String, PCLCustomLoadoutInfo> CUSTOM_LOADOUTS = new HashMap<>();
-    private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
     private static final TypeToken<PCLCustomLoadoutInfo> TTOKEN = new TypeToken<PCLCustomLoadoutInfo>() {
     };
     protected static final String SUBFOLDER = "loadout";
@@ -39,7 +38,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     /**
      * Subscribe a provider that provides a folder to load custom loadouts from whenever the cards are reloaded
      */
-    public static void addProvider(CustomFileProvider provider) {
+    public static void addProvider(String provider) {
         PROVIDERS.add(provider);
     }
 
@@ -57,8 +56,8 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     public static void initialize() {
         CUSTOM_LOADOUTS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
-        for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder());
+        for (String provider : PROVIDERS) {
+            loadFolder(Gdx.files.internal(provider));
         }
     }
 

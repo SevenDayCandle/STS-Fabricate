@@ -40,16 +40,16 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return PGR.core.tooltips.cooldown.title;
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return useParent ? TEXT.act_reduceBy(TEXT.subjects_theirX(getObjectText()), getExtraRawString()) :
+        return useParent ? TEXT.act_reduceBy(TEXT.subjects_theirX(getObjectText(requestor)), getExtraRawString(requestor)) :
                 fields.hasGroups() ?
-                        TEXT.act_reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), getExtraRawString()) :
-                        TEXT.act_reduceBy(getObjectText(), getExtraRawString());
+                        TEXT.act_reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(requestor), pluralCard()), getExtraRawString(requestor)) :
+                        TEXT.act_reduceBy(getObjectText(requestor), getExtraRawString(requestor));
     }
 
     @Override

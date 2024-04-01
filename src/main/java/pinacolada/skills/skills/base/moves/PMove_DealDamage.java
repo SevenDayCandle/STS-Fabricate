@@ -62,7 +62,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String amountString = getAmountRawString();
+        String amountString = getAmountRawString(requestor);
         if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && perspective == PCLCardTarget.Self)) {
             return TEXT.act_takeDamage(amountString);
         }

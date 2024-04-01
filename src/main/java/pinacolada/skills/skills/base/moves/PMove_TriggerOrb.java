@@ -46,8 +46,8 @@ public class PMove_TriggerOrb extends PMove<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString();
-        return amount == 1 ? TEXT.act_trigger(orbStr) : TEXT.act_triggerXTimes(orbStr, getAmountRawString());
+        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString(requestor);
+        return amount == 1 ? TEXT.act_trigger(orbStr) : TEXT.act_triggerXTimes(orbStr, getAmountRawString(requestor));
     }
 
     @Override

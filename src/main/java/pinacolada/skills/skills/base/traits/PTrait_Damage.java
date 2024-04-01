@@ -27,8 +27,8 @@ public class PTrait_Damage extends PStatTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString(), getDamageString(perspective));
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor), getDamageString(perspective));
     }
 
     @Override

@@ -153,11 +153,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         );
     }
 
-    public String getCardAndString() {
-        return getCardAndString(skill.getAmountRawString());
+    public String getCardAndString(Object requestor) {
+        return getCardAndStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getCardAndString(Object value) {
+    public String getCardAndStringForValue(Object value) {
         return getCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, (s) -> EUIUtils.format(s, value));
     }
 
@@ -169,11 +169,11 @@ public class PField_CardCategory extends PField_CardGeneric {
         return getCardIDOrString(cardIDs, skill.extra2, 0);
     }
 
-    public String getCardOrString() {
-        return getCardOrString(skill.getAmountRawString());
+    public String getCardOrString(Object requestor) {
+        return getCardOrStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getCardOrString(Object value) {
+    public String getCardOrStringForValue(Object value) {
         return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 
@@ -236,7 +236,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardAndString(Object value) {
-        String sub = targetsSpecificCards() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
+        String sub = targetsSpecificCards() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrStringForValue(value)) : getCardAndStringForValue(value);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
@@ -259,15 +259,15 @@ public class PField_CardCategory extends PField_CardGeneric {
     }
 
     public String getFullCardOrString(Object value) {
-        String sub = targetsSpecificCards() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
+        String sub = targetsSpecificCards() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrStringForValue(value)) : getCardOrStringForValue(value);
         return invert ? PSkill.TEXT.subjects_non(sub) : sub;
     }
 
-    public String getFullCardString() {
-        return getFullCardOrString(skill.getAmountRawString());
+    public String getFullCardString(Object requestor) {
+        return getFullCardOrString(skill.getAmountRawString(requestor));
     }
 
-    public String getFullCardString(Object parse) {
+    public String getFullCardStringForValue(Object parse) {
         return getFullCardOrString(parse);
     }
 
@@ -380,13 +380,6 @@ public class PField_CardCategory extends PField_CardGeneric {
     @Override
     public PField_CardCategory makeCopy() {
         return new PField_CardCategory(this);
-    }
-
-    public String makeFullString(EUITooltip tooltip) {
-        String tooltipTitle = tooltip.title;
-        return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedThemString()) :
-                !groupTypes.isEmpty() ? TEXT.act_zXFromY(tooltipTitle, skill.getAmountRawOrAllString(), targetsSpecificCards() ? getCardIDOrString(cardIDs, skill.extra2, 0) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard());
     }
 
     public void makePreviews(RotatingList<EUIPreview> previews) {

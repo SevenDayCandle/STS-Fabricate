@@ -80,7 +80,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title), perspective);
         }
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getXRawString());
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getXRawString(requestor));
     }
 
     @Override

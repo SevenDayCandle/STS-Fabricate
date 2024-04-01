@@ -35,7 +35,7 @@ public class PMove_ModifyCounter extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return PGR.core.tooltips.counter.title;
     }
 }

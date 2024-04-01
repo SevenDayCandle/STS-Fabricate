@@ -43,8 +43,8 @@ public class PMove_EvokeOrb extends PMove<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String orbStr = fields.getOrbExtraString();
-        return amount == 1 ? TEXT.act_evoke(orbStr) : TEXT.act_evokeXTimes(orbStr, getAmountRawString());
+        String orbStr = fields.getOrbExtraString(requestor);
+        return amount == 1 ? TEXT.act_evoke(orbStr) : TEXT.act_evokeXTimes(orbStr, getAmountRawString(requestor));
     }
 
     @Override

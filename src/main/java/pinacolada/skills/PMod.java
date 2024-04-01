@@ -410,7 +410,7 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String subText = getSubText(perspective, requestor);
         return TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : EUIUtils.EMPTY_STRING,
-                subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
+                subText + getXRawString(requestor)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

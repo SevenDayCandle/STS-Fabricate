@@ -44,10 +44,10 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
-    public String getAmountRawOrAllString() {
+    public String getAmountRawOrAllString(Object requestor) {
         return (shouldActAsAll()) ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
-                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : getAmountRawString();
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(requestor), getAmountRawString(requestor))
+                : getAmountRawString(requestor);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
         else if (fields.groupTypes.isEmpty()) {
             return TEXT.act_removeFrom(TEXT.subjects_thisCard(), TEXT.cpile_deck);
         }
-        String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)));
+        String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(requestor), fields.getCardOrStringForValue(getRawString(EXTRA_CHAR, requestor)));
         return fields.groupTypes.size() == 1 && fields.groupTypes.get(0) == PCLCardGroupHelper.MasterDeck ? TEXT.act_removeFrom(cString, TEXT.cpile_deck) :
                 TEXT.act_removeInPlace(cString, fields.getGroupString(), TEXT.cpile_deck);
     }

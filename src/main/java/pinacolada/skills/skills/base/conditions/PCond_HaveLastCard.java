@@ -68,7 +68,7 @@ public abstract class PCond_HaveLastCard extends PPassiveCond<PField_CardCategor
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String verb = fields.forced ? TEXT.subjects_thisCombat(PCLCoreStrings.past(getActionTooltip())) : TEXT.subjects_thisTurn(PCLCoreStrings.past(getActionTooltip()));
-        return TEXT.cond_ifLast(fields.getThresholdRawString(fields.getShortCardString()), PCLCoreStrings.past(getActionTooltip()), getAmountRawString(), fields.groupTypes.isEmpty() && source instanceof AbstractCard ? TEXT.subjects_thisCard() : fields.getFullCardString());
+        return TEXT.cond_ifLast(fields.getThresholdRawString(fields.getShortCardString(), requestor), PCLCoreStrings.past(getActionTooltip()), getAmountRawString(requestor), fields.groupTypes.isEmpty() && source instanceof AbstractCard ? TEXT.subjects_thisCard() : fields.getFullCardString(requestor));
     }
 
     @Override

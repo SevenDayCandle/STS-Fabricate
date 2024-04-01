@@ -48,8 +48,8 @@ public class PMove_IncreaseOrbEvoke extends PMove<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString();
-        return TEXT.act_increasePropertyBy(PGR.core.tooltips.evoke.title, orbStr, getAmountRawString());
+        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString(requestor);
+        return TEXT.act_increasePropertyBy(PGR.core.tooltips.evoke.title, orbStr, getAmountRawString(requestor));
     }
 
     @Override

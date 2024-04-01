@@ -12,7 +12,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.fields.PField_CardModify;
 
 @VisibleSkill
@@ -51,7 +50,7 @@ public class PMove_Create extends PMove_GenerateCard {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String groupName = fields.getDestinationString(!fields.groupTypes.isEmpty() ? fields.groupTypes.get(0).name : PCLCardGroupHelper.Hand.name);
-        return TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), groupName);
+        return TEXT.act_addAmountToPile(getAmountRawOrAllString(requestor), getCopiesOfString(requestor), groupName);
     }
 
     @Override

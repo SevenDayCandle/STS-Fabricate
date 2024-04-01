@@ -39,7 +39,7 @@ public class PMod_PerPotion extends PMod_Per<PField_Potion> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString();
+        return this.amount <= 1 ? fields.getFullPotionStringSingular() : fields.getFullPotionString(requestor);
     }
 
     @Override

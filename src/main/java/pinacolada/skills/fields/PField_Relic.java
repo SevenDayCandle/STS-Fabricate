@@ -59,20 +59,16 @@ public class PField_Relic extends PField_Random {
                         && (rarities.isEmpty() || rarities.contains(c.tier)));
     }
 
-    public String getFullRelicString() {
-        return getFullRelicString(skill.getAmountRawString());
+    public String getFullRelicString(Object requestor) {
+        return getFullRelicStringForAmount(skill.getAmountRawString(requestor));
     }
 
-    public String getFullRelicString(Object value) {
+    public String getFullRelicStringForAmount(Object value) {
         return !relicIDs.isEmpty() ? getRelicIDOrString() : random ? PSkill.TEXT.subjects_randomX(getRelicOrString(value)) : getRelicOrString(value);
     }
 
     public String getFullRelicStringSingular() {
         return !relicIDs.isEmpty() ? getRelicIDOrString() : getRelicXString(PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
-    }
-
-    public String getRelicAndString() {
-        return getRelicAndString(skill.getAmountRawString());
     }
 
     public String getRelicAndString(Object value) {
@@ -85,10 +81,6 @@ public class PField_Relic extends PField_Random {
 
     public String getRelicIDOrString() {
         return getRelicIDOrString(relicIDs);
-    }
-
-    public String getRelicOrString() {
-        return getRelicOrString(skill.getAmountRawString());
     }
 
     public String getRelicOrString(Object value) {

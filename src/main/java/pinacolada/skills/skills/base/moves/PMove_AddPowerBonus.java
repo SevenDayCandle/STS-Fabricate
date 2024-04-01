@@ -36,7 +36,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.act_zGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), TEXT.subjects_effectBonus);
+        return TEXT.act_zGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString(requestor)) : getAmountRawString(requestor)), TEXT.subjects_effectBonus);
     }
 
     @Override

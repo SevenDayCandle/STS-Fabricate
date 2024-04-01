@@ -10,7 +10,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -76,7 +75,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
         String base = PField.getTagAndString(fields.tags);
         if (fields.not) {
             if (amount == 1) {
@@ -86,7 +85,7 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
                 return EUIRM.strings.numNoun(TEXT.subjects_infinite, base);
             }
         }
-        return EUIRM.strings.numNoun(getAmountRawString(), base);
+        return EUIRM.strings.numNoun(getAmountRawString(requestor), base);
     }
 
     @Override
@@ -97,9 +96,9 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return fields.random && !fields.not ? TEXT.act_removeFrom(getSubDescText(perspective), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective));
+            return fields.random && !fields.not ? TEXT.act_removeFrom(getSubDescText(perspective, requestor), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective, requestor));
         }
-        return fields.random && !fields.not ? TEXT.act_remove(getSubDescText(perspective)) : TEXT.act_has(getSubDescText(perspective));
+        return fields.random && !fields.not ? TEXT.act_remove(getSubDescText(perspective, requestor)) : TEXT.act_has(getSubDescText(perspective, requestor));
     }
 
     @Override

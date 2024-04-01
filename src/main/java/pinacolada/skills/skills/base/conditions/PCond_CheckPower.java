@@ -9,7 +9,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.powers.PCLPowerData;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -50,10 +49,10 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isWhenClause()) {
-            return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), fields.getThresholdRawString(fields.powers.isEmpty() ? fields.getBuffString(2) : fields.getPowerOrString())), perspective);
+            return getWheneverString(TEXT.act_gainOrdinal(getTargetOrdinalPerspective(perspective), fields.getThresholdRawString(fields.powers.isEmpty() ? fields.getBuffString(2) : fields.getPowerOrString(), requestor)), perspective);
         }
 
-        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(fields.getPowerSubjectString()));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(fields.getPowerSubjectString(), requestor));
     }
 
     // When the specified creatures gain a power, triggers the effect on that target

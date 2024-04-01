@@ -36,31 +36,31 @@ public class PField_Orb extends PField_Random {
         return other instanceof PField_Orb && orbs.equals(((PField_Orb) other).orbs) && ((PField_Orb) other).random == random;
     }
 
-    public String getOrbAmountString() {
-        String efString = skill.getRawString(PSkill.EFFECT_CHAR);
-        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb)));
+    public String getOrbAmountString(Object requestor) {
+        String efString = skill.getRawString(PSkill.EFFECT_CHAR, requestor);
+        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb, requestor)));
     }
 
-    public String getOrbAndOrString() {
-        return random ? getOrbOrString() : getOrbAndString();
+    public String getOrbAndOrString(Object requestor) {
+        return random ? getOrbOrString(requestor) : getOrbAndString(requestor);
     }
 
-    public String getOrbAndString() {
-        return getOrbAndString(orbs, skill.getAmountRawString());
+    public String getOrbAndString(Object requestor) {
+        return getOrbAndString(orbs, skill.getAmountRawString(requestor));
     }
 
-    public String getOrbAndString(Object amount) {
-        return getOrbAndString(orbs, amount);
+    public String getOrbAndStringSingular() {
+        return getOrbAndString(orbs, 1);
     }
 
-    public String getOrbExtraString() {
-        String orbStr = !orbs.isEmpty() ? getOrbAmountString() : skill.plural(PGR.core.tooltips.orb, EXTRA_CHAR);
+    public String getOrbExtraString(Object requestor) {
+        String orbStr = !orbs.isEmpty() ? getOrbAmountString(requestor) : skill.plural(PGR.core.tooltips.orb, requestor, EXTRA_CHAR);
         if (random) {
-            orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), TEXT.subjects_randomX(orbStr));
+            orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(requestor), TEXT.subjects_randomX(orbStr));
         }
         else {
             if (skill.extra > 1) {
-                orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), orbStr);
+                orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(requestor), orbStr);
             }
             orbStr = skill.extra <= 0 ? TEXT.subjects_allX(orbStr) : TEXT.subjects_yourFirst(orbStr);
         }
@@ -71,12 +71,8 @@ public class PField_Orb extends PField_Random {
         return (c -> ((orbs.isEmpty() && !(c instanceof EmptyOrbSlot)) || EUIUtils.any(orbs, orb -> orb.equals(c.ID))));
     }
 
-    public String getOrbOrString() {
-        return getOrbOrString(orbs, skill.getAmountRawString());
-    }
-
-    public String getOrbOrString(Object amount) {
-        return getOrbOrString(orbs, amount);
+    public String getOrbOrString(Object requestor) {
+        return getOrbOrString(orbs, skill.getAmountRawString(requestor));
     }
 
     public String getOrbString() {

@@ -37,7 +37,7 @@ public class PMove_PermanentModifyCost extends PMove_PermanentModify implements 
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_cost;
     }
 

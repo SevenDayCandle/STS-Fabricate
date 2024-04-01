@@ -38,7 +38,7 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_damage;
     }
 

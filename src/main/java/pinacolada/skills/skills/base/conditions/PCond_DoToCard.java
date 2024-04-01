@@ -57,10 +57,10 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public String getAmountRawOrAllString() {
+    public String getAmountRawOrAllString(Object requestor) {
         return shouldActAsAll() ? TEXT.subjects_all
-                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : getAmountRawString();
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(requestor), getAmountRawString(requestor))
+                : getAmountRawString(requestor);
     }
 
     public PCLCardGroupHelper getDestinationGroup() {
@@ -79,17 +79,17 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String fcs = fields.getFullCardString(extra > 1 ? getExtraRawString() : getAmountRawString());
+        String fcs = fields.getFullCardStringForValue(extra > 1 ? getExtraRawString(requestor) : getAmountRawString(requestor));
         if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
             return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
-                    shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fcs) :
-                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString())
+                    shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(requestor), fcs) :
+                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(requestor), fcs, fields.getGroupString())
                                     : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard());
         }
         String dest = fields.getDestinationString(getDestinationGroup().name);
         return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
-                shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fcs, dest) :
-                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fcs, fields.getGroupString(), dest)
+                shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(requestor), fcs, dest) :
+                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(requestor), fcs, fields.getGroupString(), dest)
                                 : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard(), dest);
     }
 

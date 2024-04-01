@@ -428,7 +428,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
             int qr = this.childEffect.getQualifierRange();
             boolean canGoOver = qr < this.effects.size();
             for (int i : qualifiers) {
-                input = onDo.invoke(this.effects.get(i), input);
+                if (i < this.effects.size()) {
+                    input = onDo.invoke(this.effects.get(i), input);
+                }
             }
             if (qualifiers.isEmpty() && canGoOver) {
                 input = onDo.invoke(this.effects.get(qr), input);

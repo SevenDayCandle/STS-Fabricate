@@ -39,16 +39,16 @@ public class PMove_ModifyDamagePercent extends PMove_Modify<PField_CardModify> {
         return (c) -> order.add(new ModifyDamagePercent(c, refreshAmount(info), fields.forced, !fields.not, fields.or));
     }
 
-    public String getNumericalObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getObjectText());
+    public String getNumericalObjectText(Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor) + "%", getObjectText(requestor));
     }
 
     public String getObjectSampleText() {
-        return getObjectText() + "%";
+        return getObjectText(null) + "%";
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_damage;
     }
 

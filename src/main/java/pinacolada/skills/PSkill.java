@@ -61,6 +61,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.conditions.PLimit_Limited;
 import pinacolada.skills.skills.base.conditions.PLimit_SemiLimited;
+import pinacolada.ui.editor.PCLCustomDescriptionDialog;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -79,6 +80,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     };
     private static final String SUB_SEPARATOR = "<";
     private static final String BOUND_FORMAT = "¦{0}¦";
+    private static final String CASCADE_FORMAT = "~{0}~";
     private static final String CONDITION_FORMAT = "║{0}║";
     private static final String SINGLE_FORMAT = "1";
     protected final static String[] PTEXT = CardCrawlGame.languagePack.getUIString("RunHistoryPathNodes").TEXT;
@@ -593,12 +595,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     /**
      * Effects whose BASE amount is set to 0 target any number of cards
      */
-    public String getAmountRawOrAllString() {
-        return amount <= 0 ? TEXT.subjects_all : getAmountRawString();
+    public String getAmountRawOrAllString(Object requestor) {
+        return amount <= 0 ? TEXT.subjects_all : getAmountRawString(requestor);
     }
 
-    public final String getAmountRawString() {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) : wrapTextAmount(amount);
+    public final String getAmountRawString(Object requestor) {
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) :
+                requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, EFFECT_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
+                wrapTextAmount(amount);
     }
 
     public PCLCardValueSource getAmountSource() {
@@ -904,8 +908,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return baseExtra;
     }
 
-    public final String getExtraRawString() {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) : String.valueOf(extra);
+    public final String getExtraRawString(Object requestor) {
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) :
+                requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, EXTRA_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
+                String.valueOf(extra);
     }
 
     public PCLCardValueSource getExtraSource() {
@@ -1067,14 +1073,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return fields.getQualifiers(info);
     }
 
-    public final String getRawString(char attributeID) {
+    public final String getRawString(char attributeID, Object requestor) {
         switch (attributeID) {
             case EFFECT_CHAR:
-                return getAmountRawString();
+                return getAmountRawString(requestor);
             case XVALUE_CHAR:
-                return getXRawString();
+                return getXRawString(requestor);
             case EXTRA_CHAR:
-                return getExtraRawString();
+                return getExtraRawString(requestor);
             case EXTRA2_CHAR:
                 return getExtra2RawString();
             case SCOPE_CHAR:
@@ -1478,7 +1484,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 if (EUIRenderHelpers.isCharAt(overrideDesc, i + 3, CASCADE_CHAR)) {
                     PSkill<?> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
                     if (move != null) {
-                        sb.append(move.getRawString(overrideDesc.charAt(i + 1)));
+                        sb.append(move.getRawString(overrideDesc.charAt(i + 1), requestor));
                     }
                     i += 3;
                 }
@@ -1575,8 +1581,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return upgradeScope[Math.min(getUpgradeForm(), upgradeScope.length - 1)];
     }
 
-    public final String getXRawString() {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) : getXString();
+    public final String getXRawString(Object requestor) {
+        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) :
+                requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, XVALUE_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
+                getXString();
     }
 
     public String getXString() {
@@ -1839,12 +1847,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public final String plural(EUIKeywordTooltip obj) {
-        return PCLCoreStrings.plural(obj, getRawString(EFFECT_CHAR));
+    public final String plural(EUIKeywordTooltip obj, Object requestor) {
+        return PCLCoreStrings.plural(obj, getRawString(EFFECT_CHAR, requestor));
     }
 
-    public final String plural(EUIKeywordTooltip obj, char effect) {
-        return PCLCoreStrings.plural(obj, getRawString(effect));
+    public final String plural(EUIKeywordTooltip obj, Object requestor, char effect) {
+        return PCLCoreStrings.plural(obj, getRawString(effect, requestor));
     }
 
     public final String pluralCard() {

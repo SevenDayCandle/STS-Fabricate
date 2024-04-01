@@ -38,6 +38,6 @@ public class PCond_TurnCount extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return fields.getThresholdRawString(PGR.core.strings.subjects_turnCount);
+        return fields.getThresholdRawString(PGR.core.strings.subjects_turnCount, requestor);
     }
 }

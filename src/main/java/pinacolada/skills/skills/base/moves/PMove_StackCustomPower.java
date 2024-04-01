@@ -78,13 +78,13 @@ public class PMove_StackCustomPower extends PMove<PField_Numeric> implements Sum
         }
 
         if (referencesSelf) {
-            return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_this);
+            return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString(requestor)) : TEXT.act_remove(TEXT.subjects_this);
         }
 
         // Perpsective of self depends on the target this is applied to
         String base = joinEffectDisplayTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, target, requestor, true);
         if (baseAmount > 0) {
-            return (TEXT.cond_forTurns(getAmountRawString()) + ", " + StringUtils.uncapitalize(base));
+            return (TEXT.cond_forTurns(getAmountRawString(requestor)) + ", " + StringUtils.uncapitalize(base));
         }
 
         return base;

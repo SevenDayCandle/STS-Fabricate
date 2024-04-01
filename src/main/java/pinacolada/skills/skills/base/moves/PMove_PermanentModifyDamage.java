@@ -42,7 +42,7 @@ public class PMove_PermanentModifyDamage extends PMove_PermanentModify implement
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_damage;
     }
 }

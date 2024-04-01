@@ -31,18 +31,18 @@ public class PMove_GainMaxHPPercent extends PMove_Gain implements OutOfCombatMov
     }
 
     @Override
-    public String gainAmountText() {
-        return getAmountRawString() + "%";
+    public String gainAmountText(Object requestor) {
+        return getAmountRawString(requestor) + "%";
     }
 
     @Override
-    public String gainText() {
+    public String gainText(Object requestor) {
         return PGR.core.tooltips.maxHP.title;
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x + "%", gainText());
+        return TEXT.act_gainAmount(TEXT.subjects_x + "%", gainText(null));
     }
 
     @Override

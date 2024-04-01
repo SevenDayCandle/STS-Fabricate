@@ -23,7 +23,9 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
+import pinacolada.utilities.UniqueList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringJoiner;
@@ -31,7 +33,7 @@ import java.util.StringJoiner;
 public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDialog> {
     private static final Color CLEAR_COLOR = new Color(0.7f, 0.4f, 0.4f, 1);
     private static final Color ENABLE_COLOR = new Color(0.4f, 0.4f, 0.7f, 1);
-    private final EUIButton clearButton;
+    private final EUIButton disableButton;
     private final EUITextBoxInput textInput;
     private final EUITextBox preview;
     private final EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
@@ -39,6 +41,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
     private Settings.GameLanguage activeLanguage = Settings.language;
     private PSkill<?> skillAt;
     private String textList = EUIUtils.EMPTY_STRING;
+    private final UniqueList<PSkill<?>> skillChildren = new UniqueList<>();
     protected int index;
     public boolean disabled = true;
     public HashMap<Settings.GameLanguage, String[]> currentLanguageMap;
@@ -85,10 +88,10 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
         textInput.label.setWrap(true);
 
-        clearButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y, scale(95), scale(32)))
+        disableButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y, scale(95), scale(32)))
                 .setLabel(FontHelper.cardTitleFont, 0.8f, PGR.core.strings.cedit_enable)
                 .setColor(new Color(0.7f, 0.4f, 0.4f, 1))
-                .setOnClick(this::updateTextDisable);
+                .setOnClick(this::updateTextDisableOrEnable);
 
         keywordReference = (EUISearchableDropdown<EUIKeywordTooltip>) new EUISearchableDropdown<EUIKeywordTooltip>(new EUIHitbox(preview.hb.x, preview.hb.y - scale(130), scale(95), scale(32)))
                 .setLabelFunctionForOption(item -> item.icon != null ? item.getTitleOrIconForced() + " " + item.ID : item.ID, true)
@@ -144,6 +147,10 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setLabel(headerText);
     }
 
+    public int getIndexForEffect(PSkill<?> sk) {
+        return skillChildren.getIndex(sk);
+    }
+
     protected String[] getStringsForLanguage(Settings.GameLanguage language) {
         return currentLanguageMap.getOrDefault(language,
                 currentLanguageMap.getOrDefault(Settings.GameLanguage.ENG,
@@ -155,14 +162,14 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         currentLanguageMap = data.createDescMap();
         this.index = index;
 
+        skillChildren.clear();
         skillAt = data.getEffectAtIndex(index);
         if (skillAt != null) {
             StringJoiner sb = new StringJoiner(EUIUtils.SPLIT_LINE);
-            MutableInt mint = new MutableInt(0);
             skillAt.recurse(sk -> {
+                skillChildren.add(sk);
                 String res = sk.getSubText(PCLCardTarget.Self, null);
-                sb.add(mint + ": " + StringUtils.capitalize(StringUtils.isEmpty(res) ? sk.getSampleText(null, null) : res));
-                mint.add(1);
+                sb.add((skillChildren.size() - 1) + ": " + StringUtils.capitalize(StringUtils.isEmpty(res) ? sk.getSampleText(null, null) : res));
             });
             textList = sb.toString();
         }
@@ -181,7 +188,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.textInput.tryRender(sb);
         this.languageDropdown.tryRender(sb);
         this.keywordReference.tryRender(sb);
-        this.clearButton.tryRender(sb);
+        this.disableButton.tryRender(sb);
         // Must render this text manually without smart text in order to properly display these symbols
         float x = Settings.WIDTH * 0.665f;
         EUITextHelper.renderFont(sb, FontHelper.cardDescFont_N, PGR.core.strings.cetut_legendDesc, x, Settings.HEIGHT * 0.8f, Settings.GOLD_COLOR);
@@ -213,7 +220,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.textInput.tryUpdate();
         this.languageDropdown.tryUpdate();
         this.keywordReference.tryUpdate();
-        this.clearButton.tryUpdate();
+        this.disableButton.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {
@@ -238,12 +245,12 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
 
         if (overrideDesc != null) {
             preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
-            clearButton.setLabel(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
+            disableButton.setLabel(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
             disabled = false;
         }
         else {
             preview.setLabel(skillAt.getText());
-            clearButton.setLabel(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
+            disableButton.setLabel(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
             disabled = true;
         }
     }
@@ -263,12 +270,12 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         textInput.setTextAndCommit((strings.length > index && strings[index] != null ? strings[index] : EUIUtils.EMPTY_STRING) + append);
     }
 
-    private void updateTextDisable() {
+    private void updateTextDisableOrEnable() {
         if (disabled) {
-            textInput.setTextAndCommit(EUIUtils.EMPTY_STRING);
+            textInput.setTextAndCommit(skillAt.getText(this));
         }
         else {
-            textInput.setText(EUIUtils.EMPTY_STRING);
+            textInput.setText(skillAt.getText(this));
             String[] strings = getStringsForLanguage(activeLanguage);
             if (strings.length > index) {
                 strings[index] = null;

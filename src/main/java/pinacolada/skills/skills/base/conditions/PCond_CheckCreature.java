@@ -9,7 +9,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Creature;
-import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
@@ -42,7 +41,7 @@ public class PCond_CheckCreature extends PPassiveCond<PField_Creature> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (fields.creatures.isEmpty()) {
-            return TEXT.cond_ifThere(getAmountRawString(), fields.getThresholdRawString(getTargetStringPluralSuffix()));
+            return TEXT.cond_ifThere(getAmountRawString(requestor), fields.getThresholdRawString(getTargetStringPluralSuffix(), requestor));
         }
         return getTargetIsString(getTargetForPerspective(perspective), fields.getString());
     }

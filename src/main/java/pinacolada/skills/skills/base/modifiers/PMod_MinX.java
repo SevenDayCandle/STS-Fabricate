@@ -40,7 +40,7 @@ public class PMod_MinX extends PMathMod {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return PGR.core.strings.subjects_min(getAmountRawString());
+        return PGR.core.strings.subjects_min(getAmountRawString(requestor));
     }
 
     @Override

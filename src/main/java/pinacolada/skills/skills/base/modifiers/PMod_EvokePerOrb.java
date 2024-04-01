@@ -54,7 +54,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+        return this.amount <= 1 ? fields.getOrbAndString(requestor) : EUIRM.strings.numNoun(getAmountRawString(requestor), fields.getOrbAndString(requestor));
     }
 
     @Override

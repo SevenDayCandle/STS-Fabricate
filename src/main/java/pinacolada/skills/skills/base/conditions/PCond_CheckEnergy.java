@@ -42,6 +42,6 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(PGR.core.tooltips.energy.toString()));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(PGR.core.tooltips.energy.toString(), requestor));
     }
 }

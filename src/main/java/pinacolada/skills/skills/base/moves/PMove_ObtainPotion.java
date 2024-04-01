@@ -103,7 +103,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullPotionString()) : TEXT.act_obtain(fields.getFullPotionString());
+        return fields.potionIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(requestor), fields.getFullPotionString(requestor)) : TEXT.act_obtain(fields.getFullPotionString(requestor));
     }
 
     @Override

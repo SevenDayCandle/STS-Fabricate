@@ -71,15 +71,15 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.relicIDs.isEmpty() ?
-                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(), fields.getFullRelicString())
-                : fields.getFullRelicString();
+                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getExtraRawString(requestor), fields.getFullRelicString(requestor))
+                : fields.getFullRelicString(requestor);
         if (fields.not) {
-            return TEXT.act_setOf(PGR.core.tooltips.counter.title, base, getAmountRawString());
+            return TEXT.act_setOf(PGR.core.tooltips.counter.title, base, getAmountRawString(requestor));
         }
         else if (amount > 0) {
-            return TEXT.act_increasePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString());
+            return TEXT.act_increasePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString(requestor));
         }
-        return TEXT.act_reducePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString());
+        return TEXT.act_reducePropertyBy(PGR.core.tooltips.counter.title, base, getAmountRawString(requestor));
     }
 
     @Override

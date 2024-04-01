@@ -100,7 +100,7 @@ public class PMove_ObtainBlight extends PMove<PField_Blight> implements OutOfCom
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return fields.blightIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullBlightString()) : TEXT.act_obtain(fields.not ? fields.getBlightIDOrString() : fields.getBlightIDAndString());
+        return fields.blightIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(requestor), fields.getFullBlightString(requestor)) : TEXT.act_obtain(fields.not ? fields.getBlightIDOrString() : fields.getBlightIDAndString());
     }
 
     @Override

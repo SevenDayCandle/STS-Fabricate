@@ -28,8 +28,8 @@ public class PMove_GainSummonSlots extends PMove_Gain {
     }
 
     @Override
-    public String gainText() {
-        return plural(PGR.core.tooltips.summonSlot);
+    public String gainText(Object requestor) {
+        return plural(PGR.core.tooltips.summonSlot, requestor);
     }
 
     @Override

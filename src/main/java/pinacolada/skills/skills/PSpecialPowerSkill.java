@@ -43,7 +43,7 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return EUIUtils.format(getSubText(perspective, requestor), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
+        return EUIUtils.format(getSubText(perspective, requestor), getAmountRawString(requestor), getExtraRawString(requestor)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

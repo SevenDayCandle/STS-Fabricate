@@ -56,7 +56,7 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : fields.getPowerAndOrString());
+        String baseString = (this.amount <= 1 ? "" : getAmountRawString(requestor) + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff, requestor) : fields.getPowerAndOrString());
         return target == PCLCardTarget.Any ? TEXT.subjects_characterWithX(baseString) : TEXT.subjects_enemyWithX(baseString);
     }
 

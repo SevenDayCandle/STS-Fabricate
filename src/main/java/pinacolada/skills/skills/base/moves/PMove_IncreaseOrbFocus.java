@@ -48,8 +48,8 @@ public class PMove_IncreaseOrbFocus extends PMove<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString();
-        return TEXT.act_increasePropertyBy(PGR.core.tooltips.focus.title, orbStr, getAmountRawString());
+        String orbStr = fields.not ? TEXT.subjects_this : fields.getOrbExtraString(requestor);
+        return TEXT.act_increasePropertyBy(PGR.core.tooltips.focus.title, orbStr, getAmountRawString(requestor));
     }
 
     @Override

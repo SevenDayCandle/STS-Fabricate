@@ -57,8 +57,8 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String getNumericalObjectText() {
-        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getObjectText()) : getObjectText();
+    public String getNumericalObjectText(Object requestor) {
+        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(requestor), getObjectText(requestor)) : getObjectText(requestor);
     }
 
     @Override
@@ -67,13 +67,13 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return fields.getAddTagChoiceString();
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return amount < 0 ? getBasicRemoveString() : getBasicGiveString();
+        return amount < 0 ? getBasicRemoveString(requestor) : getBasicGiveString(requestor);
     }
 
     @Override

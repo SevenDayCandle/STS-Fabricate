@@ -33,7 +33,7 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
         return getDamageString(perspective);
     }
 
@@ -45,9 +45,9 @@ public class PTrait_TakeDamage extends PTrait<PField_Empty> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (!perspective.targetsSelf()) {
-            return TEXT.act_targetTakesDamage(getTargetString(perspective), getTargetOrdinal(perspective), getAmountRawString());
+            return TEXT.act_targetTakesDamage(getTargetString(perspective), getTargetOrdinal(perspective), getAmountRawString(requestor));
         }
-        return TEXT.act_takeDamage(getAmountRawString());
+        return TEXT.act_takeDamage(getAmountRawString(requestor));
     }
 
     @Override

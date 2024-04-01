@@ -68,7 +68,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return this.amount <= 1 ? fields.getPowerAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getPowerAndString());
+        return this.amount <= 1 ? fields.getPowerAndString() : EUIRM.strings.numNoun(getAmountRawString(requestor), fields.getPowerAndString());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
         String pay = extra > 0 ? TEXT.subjects_upToX(extra) : TEXT.subjects_all;
         String payString = target == PCLCardTarget.None || (target == PCLCardTarget.Single && !isFromCreature()) ? TEXT.act_pay(pay, fields.getPowerString()) : TEXT.act_removeFrom(EUIRM.strings.numNoun(pay, fields.getPowerString()), getTargetStringPerspective(perspective));
         return payString + EFFECT_SEPARATOR + TEXT.cond_xPerY(childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "",
-                getSubText(perspective, requestor) + getXRawString()) + PCLCoreStrings.period(addPeriod);
+                getSubText(perspective, requestor) + getXRawString(requestor)) + PCLCoreStrings.period(addPeriod);
     }
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {

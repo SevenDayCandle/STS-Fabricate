@@ -30,12 +30,12 @@ public class PField_Not extends PField {
         return other instanceof PField_Not && not == ((PField_Not) other).not;
     }
 
-    public String getThresholdPercentRawString(String subject) {
-        return getThresholdRawString(skill.getAmountRawString() + "%", subject, skill.baseAmount);
+    public String getThresholdPercentRawString(String subject, Object requestor) {
+        return getThresholdRawString(skill.getAmountRawString(requestor) + "%", subject, skill.baseAmount);
     }
 
-    public String getThresholdRawString(String subject) {
-        return getThresholdRawString(skill.getAmountRawString(), subject, skill.baseAmount);
+    public String getThresholdRawString(String subject, Object requestor) {
+        return getThresholdRawString(skill.getAmountRawString(requestor), subject, skill.baseAmount);
     }
 
     public String getThresholdRawString(String valueStr, String subject, int amount) {

@@ -47,7 +47,7 @@ public class PCond_CheckDamage extends PPassiveCond<PField_Not> implements OnAtt
         if (isWhenClause()) {
             return getWheneverString(TEXT.subjects_attacks(getTargetOrdinalPerspective(perspective)), perspective);
         }
-        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(TEXT.subjects_damage));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(TEXT.subjects_damage, requestor));
     }
 
     // When the owner attacks, triggers the effect on the target

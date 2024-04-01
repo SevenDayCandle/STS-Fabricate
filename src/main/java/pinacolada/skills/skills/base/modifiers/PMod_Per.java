@@ -41,10 +41,10 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
-                    TEXT.cond_xPerY(getAmountRawString(), this.extra <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getExtraRawString(), getSubText(perspective, requestor))));
+                    TEXT.cond_xPerY(getAmountRawString(requestor), this.extra <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getExtraRawString(requestor), getSubText(perspective, requestor))));
         }
         return TEXT.cond_xPerY(childText,
-                this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective, requestor)));
+                this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(requestor), getSubText(perspective, requestor)));
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String childText = childEffect != null ? capital(childEffect.getText(perspective, requestor, false), addPeriod) : "";
-        return getConditionText(perspective, requestor, childText) + getXRawString() + PCLCoreStrings.period(addPeriod);
+        return getConditionText(perspective, requestor, childText) + getXRawString(requestor) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

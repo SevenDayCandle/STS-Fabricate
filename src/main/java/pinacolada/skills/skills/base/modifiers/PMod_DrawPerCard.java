@@ -60,12 +60,12 @@ public class PMod_DrawPerCard extends PMod_Do {
     }
 
     @Override
-    public String getAmountRawOrAllString() {
-        return getAmountRawString();
+    public String getAmountRawOrAllString(Object requestor) {
+        return getAmountRawString(requestor);
     }
 
     @Override
-    public String getMoveString(boolean addPeriod) {
-        return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
+    public String getMoveString(Object requestor, boolean addPeriod) {
+        return TEXT.act_drawType(getAmountRawString(requestor), fields.getFullCardString(requestor));
     }
 }

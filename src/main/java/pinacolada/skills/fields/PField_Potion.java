@@ -39,20 +39,20 @@ public class PField_Potion extends PField_Random {
                 );
     }
 
-    public String getFullPotionString() {
-        return getFullPotionString(skill.getAmountRawString());
+    public String getFullPotionString(Object requestor) {
+        return getFullPotionStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getFullPotionString(Object value) {
-        return !potionIDs.isEmpty() ? getPotionIDOrString() : random ? PSkill.TEXT.subjects_randomX(getPotionOrString(value)) : getPotionOrString(value);
+    public String getFullPotionStringForValue(Object value) {
+        return !potionIDs.isEmpty() ? getPotionIDOrString() : random ? PSkill.TEXT.subjects_randomX(getPotionOrStringForValue(value)) : getPotionOrStringForValue(value);
     }
 
     public String getFullPotionStringSingular() {
         return !potionIDs.isEmpty() ? getPotionIDOrString() : getPotionXString(PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
-    public String getPotionAndString() {
-        return getPotionAndString(skill.getAmountRawString());
+    public String getPotionAndStringForValue(Object requestor) {
+        return getPotionAndString(skill.getAmountRawString(requestor));
     }
 
     public String getPotionAndString(Object value) {
@@ -67,11 +67,11 @@ public class PField_Potion extends PField_Random {
         return getPotionIDOrString(potionIDs);
     }
 
-    public String getPotionOrString() {
-        return getPotionOrString(skill.getAmountRawString());
+    public String getPotionOrString(Object requestor) {
+        return getPotionOrStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getPotionOrString(Object value) {
+    public String getPotionOrStringForValue(Object value) {
         return getPotionXString(PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 

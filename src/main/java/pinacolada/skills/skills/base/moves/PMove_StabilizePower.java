@@ -48,7 +48,7 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
         String powerString = fields.getPowerSubjectString();
         String mainString = TEXT.act_zOn(PGR.core.tooltips.stabilize.title, powerString, getTargetStringPerspective(perspective));
         if (amount != 1) {
-            mainString = (TEXT.cond_forTurns(getAmountRawString()) + ", " + mainString);
+            mainString = (TEXT.cond_forTurns(getAmountRawString(requestor)) + ", " + mainString);
         }
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }

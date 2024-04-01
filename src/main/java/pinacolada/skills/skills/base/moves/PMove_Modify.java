@@ -39,56 +39,56 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
         }
     }
 
-    public String getBasicAddString() {
-        String giveString = getObjectText();
+    public String getBasicAddString(Object requestor) {
+        String giveString = getObjectText(requestor);
         if (fields.not) {
-            return useParent ? TEXT.act_setOf(giveString, getInheritedThemString(), getAmountRawString()) :
+            return useParent ? TEXT.act_setOf(giveString, getInheritedThemString(), getAmountRawString(requestor)) :
                     fields.hasGroups() ?
-                            TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                            TEXT.act_setOf(giveString, TEXT.subjects_thisCard(), getAmountRawString());
+                            TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(requestor), fields.getFullCardStringForValue(getExtraRawString(requestor))), fields.getGroupString(), getAmountRawString(requestor)) :
+                            TEXT.act_setOf(giveString, TEXT.subjects_thisCard(), getAmountRawString(requestor));
         }
         if (amount >= 0) {
-            return useParent ? TEXT.act_increasePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
+            return useParent ? TEXT.act_increasePropertyBy(giveString, getInheritedThemString(), getAmountRawString(requestor)) :
                     fields.hasGroups() ?
-                            TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                            TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString());
+                            TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(requestor), fields.getFullCardStringForValue(getExtraRawString(requestor))), fields.getGroupString(), getAmountRawString(requestor)) :
+                            TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString(requestor));
         }
-        return useParent ? TEXT.act_reducePropertyBy(giveString, getInheritedThemString(), getAmountRawString()) :
+        return useParent ? TEXT.act_reducePropertyBy(giveString, getInheritedThemString(), getAmountRawString(requestor)) :
                 fields.hasGroups() ?
-                        TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString())), fields.getGroupString(), getAmountRawString()) :
-                        TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString());
+                        TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(requestor), fields.getFullCardStringForValue(getExtraRawString(requestor))), fields.getGroupString(), getAmountRawString(requestor)) :
+                        TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard(), getAmountRawString(requestor));
     }
 
-    public String getBasicGiveString() {
-        return getBasicGiveString(getNumericalObjectText());
+    public String getBasicGiveString(Object requestor) {
+        return getBasicGiveString(getNumericalObjectText(requestor), requestor);
     }
 
-    public String getBasicGiveString(String giveString) {
-        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString()));
+    public String getBasicGiveString(String giveString, Object requestor) {
+        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(requestor), fields.getFullCardStringForValue(getExtraRawString(requestor)));
         return useParent ? TEXT.act_giveTarget(getInheritedThemString(), giveString) :
                 fields.hasGroups() ?
                         TEXT.act_giveFrom(destString, fields.getGroupString(), giveString) :
                         TEXT.act_giveTarget(TEXT.subjects_thisCard(), giveString);
     }
 
-    public String getBasicRemoveString() {
-        return getBasicGiveString();
+    public String getBasicRemoveString(Object requestor) {
+        return getBasicGiveString(requestor);
     }
 
-    public String getBasicRemoveString(String giveString) {
-        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString(getExtraRawString()));
+    public String getBasicRemoveString(String giveString, Object requestor) {
+        String destString = EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(requestor), fields.getFullCardStringForValue(getExtraRawString(requestor)));
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedThemString()) :
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, destString, fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard());
     }
 
-    public String getNumericalObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString(), getObjectText());
+    public String getNumericalObjectText(Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor), getObjectText(requestor));
     }
 
     public String getObjectSampleText() {
-        return getObjectText();
+        return getObjectText(null);
     }
 
     @Override
@@ -98,7 +98,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return getBasicGiveString();
+        return getBasicGiveString(requestor);
     }
 
     public String getUntilPlayedString() {
@@ -141,5 +141,5 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
 
     public abstract ActionT1<AbstractCard> getAction(PCLUseInfo info, PCLActions order);
 
-    public abstract String getObjectText();
+    public abstract String getObjectText(Object requestor);
 }

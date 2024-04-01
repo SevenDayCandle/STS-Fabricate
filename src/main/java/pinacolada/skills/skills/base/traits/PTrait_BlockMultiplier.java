@@ -33,8 +33,8 @@ public class PTrait_BlockMultiplier extends PStatTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", PGR.core.tooltips.block);
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor) + "%", PGR.core.tooltips.block);
     }
 
     @Override

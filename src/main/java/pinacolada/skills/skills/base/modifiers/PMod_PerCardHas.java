@@ -38,15 +38,15 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     @Override
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.groupTypes.isEmpty() && source != null) {
-            return fields.forced ? TEXT.cond_perThisCombat(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()))
-                    : TEXT.cond_perThisTurn(childText, TEXT.subjects_times(getAmountRawString()), PCLCoreStrings.past(getActionTooltip()));
+            return fields.forced ? TEXT.cond_perThisCombat(childText, TEXT.subjects_times(getAmountRawString(requestor)), PCLCoreStrings.past(getActionTooltip()))
+                    : TEXT.cond_perThisTurn(childText, TEXT.subjects_times(getAmountRawString(requestor)), PCLCoreStrings.past(getActionTooltip()));
         }
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
-                    fields.forced ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip()))
-                            : TEXT.cond_perThisTurn(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())));
+                    fields.forced ? TEXT.cond_perThisCombat(getAmountRawString(requestor), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip()))
+                            : TEXT.cond_perThisTurn(getAmountRawString(requestor), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())));
         }
-        String subjString = this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());
+        String subjString = this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(requestor), fields.getFullCardStringSingular());
         return fields.forced ? TEXT.cond_perThisCombat(childText, subjString, PCLCoreStrings.past(getActionTooltip())) : TEXT.cond_perThisTurn(childText, subjString, PCLCoreStrings.past(getActionTooltip()));
     }
 
@@ -64,7 +64,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return fields.getFullCardString();
+        return fields.getFullCardString(requestor);
     }
 
     @Override

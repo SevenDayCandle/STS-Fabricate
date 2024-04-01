@@ -43,6 +43,6 @@ public class PCond_CheckPotion extends PPassiveCond<PField_Potion> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(fields.getFullPotionString()));
+        return getTargetHasStringPerspective(perspective, fields.getThresholdRawString(fields.getFullPotionString(requestor), requestor));
     }
 }

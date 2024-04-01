@@ -31,8 +31,8 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return getAmountRawString();
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return getAmountRawString(requestor);
     }
 
     @Override
@@ -43,9 +43,9 @@ public class PTrait_Cost extends PTrait<PField_Not> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class)) {
-            return TEXT.act_zCosts(getParentCardString(perspective, requestor), 2, getSubDescText(perspective));
+            return TEXT.act_zCosts(getParentCardString(perspective, requestor), 2, getSubDescText(perspective, requestor));
         }
-        return TEXT.act_costs(getSubDescText(perspective));
+        return TEXT.act_costs(getSubDescText(perspective, requestor));
     }
 
     @Override

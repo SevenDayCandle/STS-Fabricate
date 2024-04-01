@@ -47,6 +47,6 @@ public class PMove_Scout extends PMove_DoCard<PField_CardCategory> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(requestor), fields.getFullCardString(requestor));
     }
 }

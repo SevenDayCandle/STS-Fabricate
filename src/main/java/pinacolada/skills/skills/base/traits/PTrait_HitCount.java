@@ -27,8 +27,8 @@ public class PTrait_HitCount extends PStatTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_hits);
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor), TEXT.subjects_hits);
     }
 
     @Override

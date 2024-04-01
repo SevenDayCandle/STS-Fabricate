@@ -48,12 +48,12 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String base = fields.getOrbAmountString();
+        String base = fields.getOrbAmountString(requestor);
         if (extra > 0) {
-            base = TEXT.subjects_withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));
+            base = TEXT.subjects_withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(requestor), PGR.core.tooltips.focus.title));
         }
-        return fields.random ? TEXT.subjects_randomly(TEXT.act_channelX(getAmountRawString(), base))
-                : TEXT.act_channelX(getAmountRawString(), base);
+        return fields.random ? TEXT.subjects_randomly(TEXT.act_channelX(getAmountRawString(requestor), base))
+                : TEXT.act_channelX(getAmountRawString(requestor), base);
     }
 
     protected void modifyFocus(List<AbstractOrb> orbs) {

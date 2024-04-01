@@ -43,7 +43,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.gold.title), true);
+        return capital(TEXT.act_pay(getAmountRawString(requestor), PGR.core.tooltips.gold.title), true);
     }
 
     @Override

@@ -38,8 +38,8 @@ public class PMove_ModifyCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getObjectText() {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.hp);
+    public String getObjectText(Object requestor) {
+        return EUIRM.strings.numNoun(getExtraRawString(requestor), PGR.core.tooltips.hp);
     }
 
     @Override

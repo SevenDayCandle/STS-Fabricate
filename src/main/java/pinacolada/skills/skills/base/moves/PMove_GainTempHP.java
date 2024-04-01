@@ -32,7 +32,7 @@ public class PMove_GainTempHP extends PMove_Gain {
     }
 
     @Override
-    public String gainText() {
+    public String gainText(Object requestor) {
         return PGR.core.tooltips.tempHP.toString();
     }
 

@@ -86,8 +86,8 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardModify
     }
 
     @Override
-    public String getAmountRawOrAllString() {
-        return isOutOf() ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+    public String getAmountRawOrAllString(Object requestor) {
+        return isOutOf() ? TEXT.subjects_xOfY(getAmountRawString(requestor), getExtraRawString(requestor)) : getAmountRawString(requestor);
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
@@ -178,13 +178,13 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardModify
         return new ArrayList<>();
     }
 
-    protected String getCopiesOfString() {
+    protected String getCopiesOfString(Object requestor) {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.not && source != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard())
                 : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
-                : isOutOf() ? fields.getFullCardOrString(getExtraRawString()) :
-                fields.random ? fields.getFullCardOrString(getAmountRawString()) :
-                fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() ? fields.getFullCardOrString(getExtraRawString(requestor)) :
+                fields.random ? fields.getFullCardOrString(getAmountRawString(requestor)) :
+                fields.getFullCardAndString(getAmountRawString(requestor));
     }
 
     @Override
@@ -252,7 +252,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardModify
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(requestor), getCopiesOfString(requestor));
         return (fields.random) && fields.targetsSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 

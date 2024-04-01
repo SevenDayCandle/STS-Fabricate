@@ -41,7 +41,7 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.unplayable.title;
     }
 
@@ -55,7 +55,7 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
         if (hasParentType(PTrigger_Passive.class)) {
             return TEXT.act_zCannot(TEXT.subjects_you, StringUtils.lowerCase(PGR.core.tooltips.play.title), getParentCardString(perspective, requestor));
         }
-        return getSubDescText(perspective);
+        return getSubDescText(perspective, requestor);
     }
 
     @Override

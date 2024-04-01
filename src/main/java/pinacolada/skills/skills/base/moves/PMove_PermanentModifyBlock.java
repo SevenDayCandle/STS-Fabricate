@@ -42,7 +42,7 @@ public class PMove_PermanentModifyBlock extends PMove_PermanentModify {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return PGR.core.tooltips.block.title;
     }
 }

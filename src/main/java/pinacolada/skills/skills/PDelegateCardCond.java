@@ -9,7 +9,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.Collections;
 
@@ -29,10 +28,10 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     // This should not activate the child effect when played normally
 
     public String getDelegateSampleText() {
-        return getDelegateText();
+        return getDelegateText(null);
     }
 
-    public String getDelegateText() {
+    public String getDelegateText(Object requestor) {
         return getDelegateTooltip().title;
     }
 
@@ -44,12 +43,12 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isBranch()) {
-            return getWheneverYouString(getDelegateText());
+            return getWheneverYouString(getDelegateText(requestor));
         }
         if (isWhenClause()) {
             return TEXT.cond_aObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
-        return TEXT.cond_onGeneric(getDelegateText());
+        return TEXT.cond_onGeneric(getDelegateText(requestor));
     }
 
     public void triggerOnCard(AbstractCard c) {

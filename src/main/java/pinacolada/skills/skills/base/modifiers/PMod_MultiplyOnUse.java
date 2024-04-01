@@ -39,7 +39,7 @@ public class PMod_MultiplyOnUse extends PActiveMod<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.act_multiplyBy(TEXT.subjects_this, getAmountRawString() + "%");
+        return TEXT.act_multiplyBy(TEXT.subjects_this, getAmountRawString(requestor) + "%");
     }
 
     @Override

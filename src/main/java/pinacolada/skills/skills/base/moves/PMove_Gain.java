@@ -22,23 +22,23 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
         super(data, target, amount);
     }
 
-    public String gainAmountText() {
-        return getAmountRawString();
+    public String gainAmountText(Object requestor) {
+        return getAmountRawString(requestor);
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
+        return TEXT.act_gainAmount(TEXT.subjects_x, gainText(null));
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (isSelfOnlyTarget(perspective)) {
-            return amount < 0 ? TEXT.act_loseAmount(gainAmountText(), gainText()) : TEXT.act_gainAmount(gainAmountText(), gainText());
+            return amount < 0 ? TEXT.act_loseAmount(gainAmountText(requestor), gainText(requestor)) : TEXT.act_gainAmount(gainAmountText(requestor), gainText(requestor));
         }
         return amount < 0 ?
-                TEXT.act_removeFrom(EUIRM.strings.numNoun(gainAmountText(), gainText()), getTargetStringPerspective(perspective)) :
-                TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), gainAmountText(), gainText());
+                TEXT.act_removeFrom(EUIRM.strings.numNoun(gainAmountText(requestor), gainText(requestor)), getTargetStringPerspective(perspective)) :
+                TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), gainAmountText(requestor), gainText(requestor));
     }
 
     @Override
@@ -51,5 +51,5 @@ public abstract class PMove_Gain extends PMove<PField_Empty> {
         return String.valueOf(Math.abs(input));
     }
 
-    public abstract String gainText();
+    public abstract String gainText(Object requestor);
 }

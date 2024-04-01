@@ -39,7 +39,7 @@ public class PMod_PerRelic extends PMod_Per<PField_Relic> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString();
+        return this.amount <= 1 ? fields.getFullRelicStringSingular() : fields.getFullRelicString(requestor);
     }
 
     @Override

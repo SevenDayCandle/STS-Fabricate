@@ -48,8 +48,8 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        Object tt = fields.getOrbAndOrString();
-        return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
+        Object tt = fields.getOrbAndOrString(requestor);
+        return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(requestor), tt)));
     }
 
     @Override

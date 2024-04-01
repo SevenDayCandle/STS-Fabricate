@@ -48,13 +48,13 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_cost;
     }
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String base = useParent ? TEXT.act_zCosts(getInheritedTheyString(), parent != null ? parent.baseAmount : 1, getAmountRawString()) : super.getSubText(perspective, requestor);
+        String base = useParent ? TEXT.act_zCosts(getInheritedTheyString(), parent != null ? parent.baseAmount : 1, getAmountRawString(requestor)) : super.getSubText(perspective, requestor);
         if (!fields.forced) {
             base = TEXT.subjects_thisTurn(base);
         }

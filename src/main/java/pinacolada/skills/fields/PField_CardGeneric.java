@@ -125,16 +125,16 @@ public class PField_CardGeneric extends PField_Random {
         return getOriginWrappedString(base, destination);
     }
 
-    public String getFullCardString() {
+    public String getFullCardString(Object requestor) {
         return getShortCardString();
     }
 
-    public String getFullCardString(Object parse) {
-        return getFullCardString();
+    public String getFullCardStringForValue(Object parse) {
+        return getShortCardString();
     }
 
     public String getFullCardStringSingular() {
-        return getFullCardString();
+        return getFullCardString(1);
     }
 
     public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, PCLCardSelection, CardGroup[]> action, PCLUseInfo info, PCLActions order, int subchoices) {

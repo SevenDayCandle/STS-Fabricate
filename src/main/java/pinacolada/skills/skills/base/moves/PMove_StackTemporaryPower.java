@@ -42,7 +42,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String amountString = getAmountRawString();
+        String amountString = getAmountRawString(requestor);
         String joinedString;
         if (fields.random && !fields.powers.isEmpty()) {
             joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerOrString());
@@ -60,7 +60,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
                     return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
             }
         }
-        joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString());
+        joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff, requestor)) : fields.getPowerString());
         switch (target) {
             case Self:
                 if (isFromCreature() || perspective != PCLCardTarget.Self) {

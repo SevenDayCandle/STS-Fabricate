@@ -40,7 +40,7 @@ public class PMod_MaxX extends PMathMod {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return PGR.core.strings.subjects_max(getAmountRawString());
+        return PGR.core.strings.subjects_max(getAmountRawString(requestor));
     }
 
     @Override

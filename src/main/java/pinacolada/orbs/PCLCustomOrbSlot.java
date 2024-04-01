@@ -1,5 +1,6 @@
 package pinacolada.orbs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
@@ -8,7 +9,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
-import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLOrbRenderable;
@@ -26,7 +26,7 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
     private static final TypeToken<OrbForm> TORBFORM = new TypeToken<OrbForm>() {
     };
     private static final HashMap<String, PCLCustomOrbSlot> CUSTOM_ORBS = new HashMap<>();
-    private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
     public static final String BASE_POWER_ID = "PCLO";
     public static final String SUBFOLDER = "orbs";
 
@@ -79,7 +79,7 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(CustomFileProvider provider) {
+    public static void addProvider(String provider) {
         PROVIDERS.add(provider);
     }
 
@@ -130,8 +130,8 @@ public class PCLCustomOrbSlot extends PCLCustomEditorLoadable<PCLDynamicOrbData,
         for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
-        for (CustomFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getFolder(), null, true);
+        for (String provider : PROVIDERS) {
+            loadFolder(Gdx.files.internal(provider), null, true);
         }
 
         // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured

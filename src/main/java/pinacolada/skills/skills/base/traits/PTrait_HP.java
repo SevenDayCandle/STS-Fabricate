@@ -28,8 +28,8 @@ public class PTrait_HP extends PTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title);
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor), PGR.core.tooltips.hp.title);
     }
 
     @Override

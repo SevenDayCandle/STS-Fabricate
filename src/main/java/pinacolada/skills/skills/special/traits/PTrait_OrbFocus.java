@@ -27,7 +27,7 @@ public class PTrait_OrbFocus extends PTrait<PField_Orb> implements OnOrbApplyFoc
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
         return PGR.core.tooltips.focus.title;
     }
 

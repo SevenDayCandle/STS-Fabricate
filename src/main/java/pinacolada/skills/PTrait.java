@@ -164,12 +164,12 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         if (hasParentType(PTrigger_Passive.class)) {
-            return TEXT.act_zHas(getParentCardString(perspective, requestor), getSubDescText(perspective));
+            return TEXT.act_zHas(getParentCardString(perspective, requestor), getSubDescText(perspective, requestor));
         }
         if (isVerbose()) {
-            return TEXT.act_has(getSubDescText(perspective));
+            return TEXT.act_has(getSubDescText(perspective, requestor));
         }
-        return getSubDescText(perspective);
+        return getSubDescText(perspective, requestor);
     }
 
     public boolean isPassiveOnly() {
@@ -228,7 +228,7 @@ public abstract class PTrait<T extends PField> extends PSkill<T> {
         return input >= 0 ? "+" + input : String.valueOf(input);
     }
 
-    abstract public String getSubDescText(PCLCardTarget perspective);
+    abstract public String getSubDescText(PCLCardTarget perspective, Object requestor);
 
     abstract public String getSubSampleText();
 

@@ -37,10 +37,10 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
-            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(), getSubText(perspective, requestor)));
+            return TEXT.cond_xConditional(childText, TEXT.cond_xPerY(getAmountRawString(requestor), getSubText(perspective, requestor)));
         }
         return TEXT.cond_xPerY(childText,
-                this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(), getSubText(perspective, requestor)));
+                this.amount <= 1 ? getSubText(perspective, requestor) : EUIRM.strings.numNoun(getAmountRawString(requestor), getSubText(perspective, requestor)));
     }
 
     @Override

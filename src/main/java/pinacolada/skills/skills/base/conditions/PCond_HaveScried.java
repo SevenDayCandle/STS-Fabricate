@@ -39,7 +39,7 @@ public class PCond_HaveScried extends PPassiveCond<PField_Not> implements OnScry
             return getWheneverYouString(PGR.core.tooltips.scry.title);
         }
         if (baseAmount > 1) {
-            return TEXT.act_genericTimes(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getAmountRawString());
+            return TEXT.act_genericTimes(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getAmountRawString(requestor));
         }
         return TEXT.cond_ifYouDidThisTurn(fields.not ? TEXT.cond_not(PGR.core.tooltips.scry.past()) : PGR.core.tooltips.scry.past(), PCLCoreStrings.pluralForce(TEXT.subjects_cardN));
     }

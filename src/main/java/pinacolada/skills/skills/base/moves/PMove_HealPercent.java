@@ -41,7 +41,7 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String percentLoss = getAmountRawString() + "%";
+        String percentLoss = getAmountRawString(requestor) + "%";
         if (isSelfOnlyTarget(perspective)) {
             return TEXT.act_heal(percentLoss);
         }

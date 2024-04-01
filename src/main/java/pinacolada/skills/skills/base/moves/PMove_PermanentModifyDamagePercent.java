@@ -33,17 +33,17 @@ public class PMove_PermanentModifyDamagePercent extends PMove_PermanentModify im
     }
 
     @Override
-    public String getNumericalObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getObjectText());
+    public String getNumericalObjectText(Object requestor) {
+        return EUIRM.strings.numNoun(getAmountRawString(requestor) + "%", getObjectText(requestor));
     }
 
     @Override
     public String getObjectSampleText() {
-        return getObjectText() + "%";
+        return getObjectText(null) + "%";
     }
 
     @Override
-    public String getObjectText() {
+    public String getObjectText(Object requestor) {
         return TEXT.subjects_damage;
     }
 

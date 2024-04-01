@@ -52,7 +52,7 @@ public class PCond_RemoveTo extends PCond_DoToCard {
         else if (fields.groupTypes.isEmpty()) {
             return TEXT.act_removeFrom(TEXT.subjects_thisCard(), TEXT.cpile_deck);
         }
-        String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)));
+        String cString = EUIRM.strings.numNoun(getAmountRawOrAllString(requestor), fields.getCardOrStringForValue(getRawString(EXTRA_CHAR, requestor)));
         return fields.groupTypes.size() == 1 && fields.groupTypes.get(0) == PCLCardGroupHelper.MasterDeck ? TEXT.act_removeFrom(cString, TEXT.cpile_deck) :
                 TEXT.act_removeInPlace(cString, fields.getGroupString(), TEXT.cpile_deck);
     }

@@ -62,12 +62,12 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
         if (isBranch()) {
             return getWheneverString(PGR.core.tooltips.evoke.title, perspective);
         }
-        Object tt = fields.getOrbAndOrString();
+        Object tt = fields.getOrbAndOrString(requestor);
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_evoke(tt), perspective);
         }
-        return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt)) :
-                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), tt));
+        return fields.random ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(requestor), tt)) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(requestor), tt));
     }
 
     @Override

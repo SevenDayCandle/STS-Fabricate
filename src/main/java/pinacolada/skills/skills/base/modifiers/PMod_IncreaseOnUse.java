@@ -39,7 +39,7 @@ public class PMod_IncreaseOnUse extends PActiveMod<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
+        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString(requestor)) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString(requestor));
     }
 
     @Override

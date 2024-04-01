@@ -64,10 +64,10 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public String getAmountRawOrAllString() {
+    public String getAmountRawOrAllString(Object requestor) {
         return shouldActAsAll() ? (isForced() ? TEXT.subjects_all : TEXT.subjects_any)
-                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : isForced() ? getAmountRawString() : TEXT.subjects_upToX(getAmountRawString());
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(requestor), getAmountRawString(requestor))
+                : isForced() ? getAmountRawString(requestor) : TEXT.subjects_upToX(getAmountRawString(requestor));
     }
 
     public PCLCardGroupHelper getDestinationGroup() {
@@ -82,18 +82,18 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         )));
     }
 
-    public String getMoveString(boolean addPeriod) {
-        String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
+    public String getMoveString(Object requestor, boolean addPeriod) {
+        String cardString = isForced() ? fields.getFullCardString(requestor) : fields.getShortCardString();
         if (fields.destination == PCLCardSelection.Manual || getDestinationGroup() == null) {
             return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
-                    fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), cardString) :
-                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+                    fields.shouldHideGroupNames() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(requestor), cardString) :
+                            fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(requestor), cardString, fields.getGroupString())
                                     : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard());
         }
         String dest = fields.getDestinationString(getDestinationGroup().name);
         return useParent ? TEXT.act_zToX(getActionTitle(), getInheritedThemString(), dest) :
-                fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), cardString, dest) :
-                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString(), dest)
+                fields.shouldHideGroupNames() ? TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(requestor), cardString, dest) :
+                        fields.hasGroups() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(requestor), cardString, fields.getGroupString(), dest)
                                 : TEXT.act_zToX(getActionTitle(), TEXT.subjects_thisCard(), dest);
     }
 
@@ -109,7 +109,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
 
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
+        return getMoveString(requestor, addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
                 (isChildEffectUsingParent() ? capital(childEffect.getText(perspective, requestor, addPeriod), true) :
                         (TEXT.cond_xPerY(capital(childEffect.getText(perspective, requestor, false), true), EUIRM.strings.nounVerb(getSubText(perspective, requestor), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");

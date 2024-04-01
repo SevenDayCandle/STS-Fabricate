@@ -43,7 +43,7 @@ public class PCond_TempHP extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String baseString = fields.getThresholdRawString(PGR.core.tooltips.tempHP.title);
+        String baseString = fields.getThresholdRawString(PGR.core.tooltips.tempHP.title, requestor);
         return getTargetHasStringPerspective(perspective, baseString);
     }
 }

@@ -31,7 +31,7 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public String gainText() {
+    public String gainText(Object requestor) {
         return PGR.core.tooltips.gold.title;
     }
 

@@ -36,7 +36,7 @@ public class PMod_Repeat extends PActiveMod<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.act_doThis(getAmountRawString());
+        return TEXT.act_doThis(getAmountRawString(requestor));
     }
 
     @Override

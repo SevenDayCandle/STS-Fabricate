@@ -14,7 +14,6 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
@@ -133,7 +132,7 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
 
         // Times per combat. Overwritten by Every x times
         if (amount > 0 && !fields.forced) {
-            String amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : TEXT.cond_timesPerTurn(getAmountRawString());
+            String amountStr = fields.not ? TEXT.cond_timesPerCombat(getAmountRawString(requestor)) : TEXT.cond_timesPerTurn(getAmountRawString(requestor));
             return base != null ? amountStr + COMMA_SEPARATOR + base : amountStr != null ? amountStr : "";
         }
         return base != null ? base : "";

@@ -35,8 +35,8 @@ public class PTrait_MaxBlock extends PStatTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return TEXT.subjects_max(EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block));
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_max(EUIRM.strings.numNoun(getAmountRawString(requestor), PGR.core.tooltips.block));
     }
 
     @Override

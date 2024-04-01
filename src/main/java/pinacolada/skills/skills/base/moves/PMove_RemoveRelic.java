@@ -71,8 +71,8 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.relicIDs.isEmpty() ?
-                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullRelicString())
-                : fields.getFullRelicString();
+                fields.isFilterEmpty() ? TEXT.subjects_thisRelic() : EUIRM.strings.numNoun(getAmountRawString(requestor), fields.getFullRelicString(requestor))
+                : fields.getFullRelicString(requestor);
         return TEXT.act_remove(base);
     }
 

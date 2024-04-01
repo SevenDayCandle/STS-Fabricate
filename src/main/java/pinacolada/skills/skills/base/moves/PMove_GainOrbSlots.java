@@ -28,8 +28,8 @@ public class PMove_GainOrbSlots extends PMove_Gain {
     }
 
     @Override
-    public String gainText() {
-        return plural(PGR.core.tooltips.orbSlot);
+    public String gainText(Object requestor) {
+        return plural(PGR.core.tooltips.orbSlot, requestor);
     }
 
     @Override

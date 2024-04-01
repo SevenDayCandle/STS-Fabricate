@@ -45,11 +45,11 @@ public class PMod_PerOrbEvoke extends PMod_Per<PField_Orb> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        String subjectString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.evoke.title) : PGR.core.tooltips.evoke.title;
+        String subjectString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(requestor), PGR.core.tooltips.evoke.title) : PGR.core.tooltips.evoke.title;
         if (useParent) {
             return TEXT.subjects_onTarget(subjectString, getInheritedThemString());
         }
-        return TEXT.subjects_onTarget(subjectString, !fields.random && (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) ? TEXT.subjects_this : fields.getOrbAndString());
+        return TEXT.subjects_onTarget(subjectString, !fields.random && (source instanceof AbstractOrb || requestor instanceof PCLDynamicOrbData) ? TEXT.subjects_this : fields.getOrbAndString(requestor));
     }
 
     @Override

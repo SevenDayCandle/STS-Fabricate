@@ -36,23 +36,23 @@ public class PField_Augment extends PField_Random {
                 ));
     }
 
-    public String getFullAugmentString() {
-        return getFullAugmentString(skill.getAmountRawString());
+    public String getFullAugmentString(Object requestor) {
+        return getFullAugmentStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getFullAugmentString(Object value) {
-        return !augmentIDs.isEmpty() ? getAugmentIDOrString() : random ? PSkill.TEXT.subjects_randomX(getAugmentOrString(value)) : getAugmentOrString(value);
+    public String getFullAugmentStringForValue(Object value) {
+        return !augmentIDs.isEmpty() ? getAugmentIDOrString() : random ? PSkill.TEXT.subjects_randomX(getAugmentOrStringForValue(value)) : getAugmentOrStringForValue(value);
     }
 
     public String getFullAugmentStringSingular() {
         return !augmentIDs.isEmpty() ? getAugmentIDOrString() : getAugmentXString(PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
-    public String getAugmentAndString() {
-        return getAugmentAndString(skill.getAmountRawString());
+    public String getAugmentAndString(Object requestor) {
+        return getAugmentAndStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getAugmentAndString(Object value) {
+    public String getAugmentAndStringForValue(Object value) {
         return getAugmentXString(PCLCoreStrings::joinWithAnd, (s) -> EUIUtils.format(s, value));
     }
 
@@ -64,11 +64,11 @@ public class PField_Augment extends PField_Random {
         return getAugmentIDOrString(augmentIDs);
     }
 
-    public String getAugmentOrString() {
-        return getAugmentOrString(skill.getAmountRawString());
+    public String getAugmentOrString(Object requestor) {
+        return getAugmentOrStringForValue(skill.getAmountRawString(requestor));
     }
 
-    public String getAugmentOrString(Object value) {
+    public String getAugmentOrStringForValue(Object value) {
         return getAugmentXString(PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 

@@ -43,7 +43,7 @@ public class PTrigger_When extends PTrigger {
 
         // Every x times
         if (fields.forced && childEffect != null) {
-            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(), childEffect.getText(perspective, requestor, false)) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(), childEffect.getText(perspective, requestor, false)))
+            childText = (fields.not ? TEXT.cond_everyXTimesY(getAmountRawString(requestor), childEffect.getText(perspective, requestor, false)) : TEXT.cond_everyXTimesYThisTurn(getAmountRawString(requestor), childEffect.getText(perspective, requestor, false)))
                     + PCLCoreStrings.period(addPeriod);
         }
         else {

@@ -35,8 +35,8 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
     }
 
     @Override
-    public String getDelegateText() {
-        return TEXT.subjects_playingXWith(fields.getFullCardString(), TEXT.cpile_hand);
+    public String getDelegateText(Object requestor) {
+        return TEXT.subjects_playingXWith(fields.getFullCardString(requestor), TEXT.cpile_hand);
     }
 
     @Override

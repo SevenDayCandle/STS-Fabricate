@@ -42,7 +42,7 @@ public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory>
             return TEXT.subjects_onTarget(subjectString, getInheritedThemString());
         }
         else if (fields.hasGroups()) {
-            return TEXT.subjects_xOnYInZ(subjectString, fields.getFullCardString(), fields.getGroupString());
+            return TEXT.subjects_xOnYInZ(subjectString, fields.getFullCardString(requestor), fields.getGroupString());
         }
         return TEXT.subjects_onTarget(subjectString, TEXT.subjects_thisCard());
     }

@@ -34,8 +34,8 @@ public class PTrait_MaxDamage extends PStatTrait<PField_Not> {
     }
 
     @Override
-    public String getSubDescText(PCLCardTarget perspective) {
-        return TEXT.subjects_max(EUIRM.strings.numNoun(getAmountRawString(), getDamageString(perspective)));
+    public String getSubDescText(PCLCardTarget perspective, Object requestor) {
+        return TEXT.subjects_max(EUIRM.strings.numNoun(getAmountRawString(requestor), getDamageString(perspective)));
     }
 
     @Override

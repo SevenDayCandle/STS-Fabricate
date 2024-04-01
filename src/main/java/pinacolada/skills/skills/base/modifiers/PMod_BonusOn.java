@@ -28,7 +28,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
     }
 
     public String getConditionText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.cond_bonusIf(getAmountRawString(), getSubText(perspective, requestor));
+        return TEXT.cond_bonusIf(getAmountRawString(requestor), getSubText(perspective, requestor));
     }
 
     @Override

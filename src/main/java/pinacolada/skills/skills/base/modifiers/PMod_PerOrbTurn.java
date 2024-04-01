@@ -40,9 +40,9 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     public String getConditionText(PCLCardTarget perspective, Object requestor, String childText) {
         if (fields.not) {
             return TEXT.cond_xConditional(childText,
-                    fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
+                    fields.random ? TEXT.cond_perThisCombat(getAmountRawString(requestor), fields.getOrbAndStringSingular(), PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(getAmountRawString(requestor), fields.getOrbAndStringSingular(), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
         }
-        String subjString = this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+        String subjString = this.amount <= 1 ? fields.getOrbAndStringSingular() : EUIRM.strings.numNoun(getAmountRawString(requestor), fields.getOrbAndString(requestor));
         return fields.random ? TEXT.cond_perThisCombat(childText, subjString, PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(childText, subjString, PCLCoreStrings.past(PGR.core.tooltips.channel));
     }
 
