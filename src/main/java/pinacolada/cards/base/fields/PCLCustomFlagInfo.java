@@ -3,13 +3,18 @@ package pinacolada.cards.base.fields;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.augments.PCLCustomAugmentSlot;
 import pinacolada.misc.PCLCustomLoadable;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +22,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomFlagInfo extends PCLCustomLoadable {
     private static final HashMap<String, PCLCustomFlagInfo> CUSTOM_FLAGS = new HashMap<>();
-    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<TupleT2<URL,String>> PROVIDERS = new ArrayList<>();
     private static final TypeToken<PCLCustomFlagInfo> TTOKEN = new TypeToken<PCLCustomFlagInfo>() {
     };
     private static final TypeToken<HashMap<Settings.GameLanguage, String>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, String>>() {
@@ -40,8 +45,18 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
     /**
      * Subscribe a provider that provides a folder to load custom loadouts from whenever the cards are reloaded
      */
-    public static void addProvider(String provider) {
-        PROVIDERS.add(provider);
+    public static void addProvider(String id, String path) {
+        ModInfo info = EUIGameUtils.getModInfoFromID(id);
+        if (info != null) {
+            addProvider(info, path);
+        }
+        else {
+            EUIUtils.logError(PCLCustomFlagInfo.class, "Failed to add provider. Invalid mod ID: " + id);
+        }
+    }
+
+    public static void addProvider(ModInfo info, String path) {
+        PROVIDERS.add(new TupleT2<>(info.jarURL, path));
     }
 
     public static PCLCustomFlagInfo get(String id) {
@@ -58,8 +73,8 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
     public static void initialize() {
         CUSTOM_FLAGS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
-        for (String provider : PROVIDERS) {
-            loadFolder(Gdx.files.internal(provider));
+        for (TupleT2<URL,String> provider : PROVIDERS) {
+            doForFilesInJar(provider.v1, provider.v2, PCLCustomFlagInfo::loadSingleImpl);
         }
     }
 
@@ -69,11 +84,11 @@ public class PCLCustomFlagInfo extends PCLCustomLoadable {
 
     private static void loadFolder(FileHandle folder) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleFlagImpl(f);
+            loadSingleImpl(f);
         }
     }
 
-    private static void loadSingleFlagImpl(FileHandle f) {
+    private static void loadSingleImpl(FileHandle f) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);

@@ -5,16 +5,26 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.google.gson.reflect.TypeToken;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.PGR;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import static pinacolada.utilities.GameUtilities.JSON_EXT;
 
 public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U, ?>, U extends FabricateItem> extends PCLCustomLoadable {
     protected static final TypeToken<EffectItemForm> TTOKENFORM = new TypeToken<EffectItemForm>() {

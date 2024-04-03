@@ -1,18 +1,21 @@
 package pinacolada.powers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.TupleT2;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLPowerRenderable;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -23,7 +26,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     private static final TypeToken<PCLCustomPowerSlot> TTOKEN = new TypeToken<PCLCustomPowerSlot>() {
     };
     private static final HashMap<String, PCLCustomPowerSlot> CUSTOM_POWERS = new HashMap<>();
-    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<TupleT2<URL,String>> PROVIDERS = new ArrayList<>();
     public static final String BASE_POWER_ID = "PCLW";
     public static final String SUBFOLDER = "powers";
 
@@ -78,8 +81,18 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(String provider) {
-        PROVIDERS.add(provider);
+    public static void addProvider(String id, String path) {
+        ModInfo info = EUIGameUtils.getModInfoFromID(id);
+        if (info != null) {
+            addProvider(info, path);
+        }
+        else {
+            EUIUtils.logError(PCLCustomPowerSlot.class, "Failed to add provider. Invalid mod ID: " + id);
+        }
+    }
+
+    public static void addProvider(ModInfo info, String path) {
+        PROVIDERS.add(new TupleT2<>(info.jarURL, path));
     }
 
     public static void addSlot(PCLCustomPowerSlot slot) {
@@ -129,8 +142,8 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
-        for (String provider : PROVIDERS) {
-            loadFolder(Gdx.files.internal(provider), null, true);
+        for (TupleT2<URL,String> provider : PROVIDERS) {
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
         }
 
         // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured
@@ -143,11 +156,11 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
 
     private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSinglePowerImpl(f, workshopPath, isInternal);
+            loadSingleImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSinglePowerImpl(FileHandle f, String workshopPath, boolean isInternal) {
+    private static void loadSingleImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);

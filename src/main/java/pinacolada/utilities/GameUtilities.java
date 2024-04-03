@@ -4,6 +4,7 @@ import basemod.BaseMod;
 import basemod.DevConsole;
 import basemod.ReflectionHacks;
 import basemod.helpers.CardModifierManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -103,7 +104,11 @@ import pinacolada.stances.PCLStanceHelper;
 
 import java.io.FilenameFilter;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import static com.evacipated.cardcrawl.modthespire.Patcher.annotationDBMap;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.actionManager;

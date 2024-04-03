@@ -4,14 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.Loader;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.TupleT2;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import static pinacolada.utilities.GameUtilities.JSON_EXT;
 
 public abstract class PCLCustomLoadable implements Serializable {
     static final long serialVersionUID = 1L;
@@ -22,6 +32,29 @@ public abstract class PCLCustomLoadable implements Serializable {
     protected boolean isInternal;
     protected String workshopFolder;
     public String ID;
+
+    protected static void doForFilesInJar(ModInfo info, String folder, ActionT1<FileHandle> onFile) {
+        doForFilesInJar(info.jarURL, folder, onFile);
+    }
+
+    protected static void doForFilesInJar(URL jarUrl, String folder, ActionT1<FileHandle> onFile) {
+        String jarPath = jarUrl.getPath();
+        JarFile jar = null;
+        try {
+            jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+            Enumeration<JarEntry> entries = jar.entries();
+            while(entries.hasMoreElements()) {
+                String name = entries.nextElement().getName();
+                if (name.startsWith(folder) && name.endsWith(JSON_EXT)) {
+                    onFile.invoke(Gdx.files.internal(name));
+                }
+            }
+            jar.close();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected static String getBaseIDPrefix(String baseIDPrefix, AbstractCard.CardColor color) {
         return baseIDPrefix + "_" + color.name() + "_";

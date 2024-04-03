@@ -3,10 +3,12 @@ package pinacolada.augments;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
@@ -16,6 +18,7 @@ import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +30,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomAugmentSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
     private static final HashMap<String, PCLCustomAugmentSlot> CUSTOM_MAPPING = new HashMap<>();
-    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<TupleT2<URL,String>> PROVIDERS = new ArrayList<>();
     public static final String BASE_BLIGHT_ID = "PCLA";
     public static final String SUBFOLDER = "augments";
 
@@ -94,8 +97,18 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(String provider) {
-        PROVIDERS.add(provider);
+    public static void addProvider(String id, String path) {
+        ModInfo info = EUIGameUtils.getModInfoFromID(id);
+        if (info != null) {
+            addProvider(info, path);
+        }
+        else {
+            EUIUtils.logError(PCLCustomAugmentSlot.class, "Failed to add provider. Invalid mod ID: " + id);
+        }
+    }
+
+    public static void addProvider(ModInfo info, String path) {
+        PROVIDERS.add(new TupleT2<>(info.jarURL, path));
     }
 
     public static void addSlot(PCLCustomAugmentSlot slot) {
@@ -168,8 +181,8 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
-        for (String provider : PROVIDERS) {
-            loadFolder(Gdx.files.internal(provider), null, true);
+        for (TupleT2<URL,String> provider : PROVIDERS) {
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
         }
         if (PGR.debugAugments != null) {
             PGR.debugAugments.refresh();

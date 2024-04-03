@@ -3,13 +3,18 @@ package pinacolada.resources.loadout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.utilities.TupleT2;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.misc.PCLCustomLoadable;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +22,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 
 public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     private static final HashMap<String, PCLCustomLoadoutInfo> CUSTOM_LOADOUTS = new HashMap<>();
-    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<TupleT2<URL,String>> PROVIDERS = new ArrayList<>();
     private static final TypeToken<PCLCustomLoadoutInfo> TTOKEN = new TypeToken<PCLCustomLoadoutInfo>() {
     };
     protected static final String SUBFOLDER = "loadout";
@@ -38,8 +43,18 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     /**
      * Subscribe a provider that provides a folder to load custom loadouts from whenever the cards are reloaded
      */
-    public static void addProvider(String provider) {
-        PROVIDERS.add(provider);
+    public static void addProvider(String id, String path) {
+        ModInfo info = EUIGameUtils.getModInfoFromID(id);
+        if (info != null) {
+            addProvider(info, path);
+        }
+        else {
+            EUIUtils.logError(PCLCustomLoadoutInfo.class, "Failed to add provider. Invalid mod ID: " + id);
+        }
+    }
+
+    public static void addProvider(ModInfo info, String path) {
+        PROVIDERS.add(new TupleT2<>(info.jarURL, path));
     }
 
     public static PCLCustomLoadoutInfo get(String id) {
@@ -56,8 +71,8 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
     public static void initialize() {
         CUSTOM_LOADOUTS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
-        for (String provider : PROVIDERS) {
-            loadFolder(Gdx.files.internal(provider));
+        for (TupleT2<URL,String> provider : PROVIDERS) {
+            doForFilesInJar(provider.v1, provider.v2, PCLCustomLoadoutInfo::loadSingleImpl);
         }
     }
 
@@ -67,11 +82,11 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
 
     private static void loadFolder(FileHandle folder) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleLoadoutImpl(f);
+            loadSingleImpl(f);
         }
     }
 
-    private static void loadSingleLoadoutImpl(FileHandle f) {
+    private static void loadSingleImpl(FileHandle f) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);

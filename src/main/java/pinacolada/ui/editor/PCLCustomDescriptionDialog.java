@@ -228,7 +228,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         textInput.setFont(language == Settings.language ? FontHelper.cardTitleFont : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f);
         String[] strings = getStringsForLanguage(activeLanguage);
         if (strings.length <= index) {
-            textInput.setLabel(EUIUtils.EMPTY_STRING);
+            textInput.setLabel(skillAt.getText(this));
             updatePreview(null);
         }
         else {
@@ -246,11 +246,13 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         if (overrideDesc != null) {
             preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
             disableButton.setLabel(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
+            textInput.setFontColor(Settings.CREAM_COLOR);
             disabled = false;
         }
         else {
             preview.setLabel(skillAt.getText());
             disableButton.setLabel(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
+            textInput.setFontColor(Color.DARK_GRAY);
             disabled = true;
         }
     }

@@ -1,12 +1,13 @@
 package pinacolada.potions;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.steam.SteamSearch;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
 import pinacolada.annotations.VisibleSkill;
@@ -14,6 +15,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,7 +27,7 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomPotionSlot>> CUSTOM_COLOR_LISTS = new HashMap<>();
     private static final HashMap<String, PCLCustomPotionSlot> CUSTOM_MAPPING = new HashMap<>();
-    private static final ArrayList<String> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<TupleT2<URL,String>> PROVIDERS = new ArrayList<>();
     public static final String BASE_POTION_ID = "PCLP";
     public static final String SUBFOLDER = "potions";
 
@@ -95,9 +97,20 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(String provider) {
-        PROVIDERS.add(provider);
+    public static void addProvider(String id, String path) {
+        ModInfo info = EUIGameUtils.getModInfoFromID(id);
+        if (info != null) {
+            addProvider(info, path);
+        }
+        else {
+            EUIUtils.logError(PCLCustomPotionSlot.class, "Failed to add provider. Invalid mod ID: " + id);
+        }
     }
+
+    public static void addProvider(ModInfo info, String path) {
+        PROVIDERS.add(new TupleT2<>(info.jarURL, path));
+    }
+
 
     public static void addSlot(PCLCustomPotionSlot slot) {
         getPotions(slot.slotColor).add(slot);
@@ -169,8 +182,8 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
         for (TupleT2<SteamSearch.WorkshopInfo, FileHandle> workshop : getWorkshopFolders(SUBFOLDER)) {
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
-        for (String provider : PROVIDERS) {
-            loadFolder(Gdx.files.internal(provider), null, true);
+        for (TupleT2<URL,String> provider : PROVIDERS) {
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
         }
         if (PGR.debugPotions != null) {
             PGR.debugPotions.refresh();
@@ -183,11 +196,11 @@ public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotio
 
     private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSinglePotionImpl(f, workshopPath, isInternal);
+            loadSingleImpl(f, workshopPath, isInternal);
         }
     }
 
-    private static void loadSinglePotionImpl(FileHandle f, String workshopPath, boolean isInternal) {
+    private static void loadSingleImpl(FileHandle f, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
