@@ -33,6 +33,7 @@ import java.util.List;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
+    private static final HashMap<String, PCLLoadoutGroup> GROUPS = new HashMap<>();
     public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
     public static final int BASE_POTION = 3;
     public static final int MAX_LIMIT = 6;
@@ -40,6 +41,7 @@ public abstract class PCLLoadout {
     public static final int MIN_CARDS = 10;
     public final String ID;
     public AbstractCard.CardColor color;
+    public PCLLoadoutGroup group;
     public String preset;
     public int unlockLevel = 0;
     public int maxValue;
@@ -64,6 +66,15 @@ public abstract class PCLLoadout {
         this.minTotalCards = minTotalCards;
     }
 
+    public PCLLoadout(PCLLoadoutGroup group, AbstractCard.CardColor color, String id, int unlockLevel) {
+        this(group, color, id, unlockLevel, MAX_VALUE, MIN_CARDS, MAX_LIMIT);
+    }
+
+    public PCLLoadout(PCLLoadoutGroup group, AbstractCard.CardColor color, String id, int unlockLevel, int maxValue, int minTotalCards, int maxCardsPerSlot) {
+        this(color, id, unlockLevel, maxValue, minTotalCards, maxCardsPerSlot);
+        this.group = group;
+    }
+
     public static String createID(Class<? extends PCLLoadout> type) {
         return createID(PGR.BASE_PREFIX, type);
     }
@@ -81,6 +92,10 @@ public abstract class PCLLoadout {
             }
         }
         return loadout;
+    }
+
+    public static PCLLoadoutGroup getGroup(String id) {
+        return GROUPS.get(id);
     }
 
     public static ArrayList<PCLLoadout> getAll() {
@@ -166,6 +181,15 @@ public abstract class PCLLoadout {
 
     public static <T extends PCLLoadout> T register(T loadout) {
         LOADOUTS.put(loadout.ID, loadout);
+        return loadout;
+    }
+
+    public static PCLLoadoutGroup registerGroup(AbstractCard.CardColor color, String id) {
+        return registerGroup(new PCLLoadoutGroup(color, id));
+    }
+
+    public static <T extends PCLLoadoutGroup> T registerGroup(T loadout) {
+        GROUPS.put(loadout.ID, loadout);
         return loadout;
     }
 
@@ -597,10 +621,44 @@ public abstract class PCLLoadout {
         }
     }
 
+    public PCLLoadout setGroup(PCLLoadoutGroup group) {
+        this.group = group;
+        return this;
+    }
+
     public void sortItems() {
         cardDatas.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
     public abstract ArrayList<String> getBaseStartingRelics();
+
+    public static class PCLLoadoutGroup {
+        public AbstractCard.CardColor color;
+        public final String ID;
+
+        public PCLLoadoutGroup(AbstractCard.CardColor color, String id) {
+            ID = id;
+            this.color = color;
+        }
+
+        public ArrayList<PCLLoadout> getLoadouts() {
+            // TODO allow loadout groupings on custom loadouts
+            return EUIUtils.filter(LOADOUTS.values(), l -> l.group == this);
+        }
+
+        public String getName() {
+            LoadoutStrings strings = PGR.getLoadoutStrings(ID);
+            return strings != null ? strings.NAME : EUIUtils.EMPTY_STRING;
+        }
+
+        public String getNameForFilter() {
+            String base = getName();
+            return base.isEmpty() ? PGR.core.strings.sui_core : base;
+        }
+
+        public final PCLResources<?, ?, ?, ?> getResources() {
+            return PGR.getResources(color);
+        }
+    }
 }

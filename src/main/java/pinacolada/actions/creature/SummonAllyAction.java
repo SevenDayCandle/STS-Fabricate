@@ -62,17 +62,16 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
             PCLActions.instant.withdrawAlly(ally, triggerWithdraw ? CombatManager.summons.triggerTimes : 0)
                     .triggerWithdraw(triggerWithdraw)
                     .setClearPowers(false)
-                    .addCallback(this::initializeAlly);
+                    .addCallback(() -> initializeAlly(returnedCard));
         }
         else {
-            initializeAlly();
+            initializeAlly(returnedCard);
         }
 
-        CombatManager.onAllySummon(ally, card, returnedCard);
         complete(returnedCard);
     }
 
-    protected void initializeAlly() {
+    protected void initializeAlly(PCLCard returned) {
         PCLActions.bottom.callback(() -> {
             if (showEffect) {
                 Color particleColor = null;
@@ -90,6 +89,7 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
                 PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY, particleColor));
             }
             this.ally.initializeForCard(card, retainPowers, delayForTurn);
+            CombatManager.onAllySummon(ally, card, returned);
         });
     }
 

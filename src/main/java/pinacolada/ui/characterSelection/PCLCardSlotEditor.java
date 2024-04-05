@@ -20,6 +20,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutCanvas.BUTTON_SIZE;
 
@@ -85,7 +86,7 @@ public class PCLCardSlotEditor extends EUIHoverable {
     }
 
     public ArrayList<String> getAvailableCards() {
-        final ArrayList<String> cards = new ArrayList<>();
+        final HashSet<String> cards = new HashSet<>();
 
         for (String cardID : canvas.screen.loadout.getAvailableCardIDs()) {
             boolean add = isCardAllowed(cardID);
@@ -103,9 +104,10 @@ public class PCLCardSlotEditor extends EUIHoverable {
             }
         }
 
-        cards.sort(LoadoutCardSlot::getLoadoutCardSort);
+        final ArrayList<String> sorted = new ArrayList<>(cards);
+        sorted.sort(LoadoutCardSlot::getLoadoutCardSort);
 
-        return cards;
+        return sorted;
     }
 
     protected boolean isCardAllowed(String id) {

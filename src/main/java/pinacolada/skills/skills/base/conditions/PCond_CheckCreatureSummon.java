@@ -9,13 +9,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_CheckCreatureSummon extends PPassiveCond<PField_Not> {
-    public static final PSkillData<PField_Not> DATA = register(PCond_CheckCreatureSummon.class, PField_Not.class, 1, 1);
+public class PCond_CheckCreatureSummon extends PPassiveCond<PField_CardCategory> {
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_CheckCreatureSummon.class, PField_CardCategory.class, 1, 1);
 
     public PCond_CheckCreatureSummon(PSkillSaveData content) {
         super(DATA, content);
@@ -31,7 +32,7 @@ public class PCond_CheckCreatureSummon extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return evaluateTargets(info, m -> !GameUtilities.isDeadOrEscaped(m) && m instanceof PCLCardAlly);
+        return evaluateTargets(info, m -> m instanceof PCLCardAlly && ((PCLCardAlly) m).card != null && fields.getFullCardFilter().invoke(((PCLCardAlly) m).card));
     }
 
     @Override
@@ -41,6 +42,7 @@ public class PCond_CheckCreatureSummon extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.cond_ifTargetIs(getTargetStringPerspective(perspective), getTargetOrdinal(target), PGR.core.tooltips.summon.title);
+        String text = fields.isFilterEmpty() ? PGR.core.tooltips.summon.title : fields.getFullSummonStringSingular();
+        return TEXT.cond_ifTargetIs(getTargetStringPerspective(perspective), getTargetOrdinal(target), text);
     }
 }

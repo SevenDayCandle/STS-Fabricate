@@ -22,6 +22,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static pinacolada.ui.characterSelection.PCLCardSlotEditor.ITEM_HEIGHT;
 import static pinacolada.ui.characterSelection.PCLLoadoutCanvas.BUTTON_SIZE;
@@ -65,7 +66,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
     }
 
     public ArrayList<String> getAvailableRelics() {
-        final ArrayList<String> relics = new ArrayList<>();
+        final HashSet<String> relics = new HashSet<>();
 
         for (String relicID : canvas.screen.loadout.getAvailableRelicIDs()) {
             boolean add = isRelicAllowed(relicID);
@@ -83,7 +84,8 @@ public class PCLRelicSlotEditor extends EUIHoverable {
             }
         }
 
-        relics.sort((a, b) -> {
+        final ArrayList<String> sorted = new ArrayList<>(relics);
+        sorted.sort((a, b) -> {
             int aEst = LoadoutRelicSlot.getLoadoutValue(a);
             if (aEst < 0) {
                 aEst = -aEst * 1000;
@@ -95,7 +97,7 @@ public class PCLRelicSlotEditor extends EUIHoverable {
             return aEst - bEst;
         });
 
-        return relics;
+        return sorted;
     }
 
     protected boolean isRelicAllowed(String id) {

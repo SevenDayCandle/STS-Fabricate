@@ -34,6 +34,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
     private static final Color CLEAR_COLOR = new Color(0.7f, 0.4f, 0.4f, 1);
     private static final Color ENABLE_COLOR = new Color(0.4f, 0.4f, 0.7f, 1);
     private final EUIButton disableButton;
+    private final EUIButton clearButton;
     private final EUITextBoxInput textInput;
     private final EUITextBox preview;
     private final EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
@@ -74,7 +75,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.tooltipFont, 1f);
         preview.label.setSmartText(true);
-        languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(hb.x + hb.width / 4, textInput.hb.y + textInput.hb.height + scale(15), scale(95), scale(32))
+        languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(hb.x + hb.width / 4, textInput.hb.y + textInput.hb.height + scale(17), scale(95), scale(32))
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(languages -> {
                     if (!languages.isEmpty()) {
@@ -88,10 +89,14 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
         textInput.label.setWrap(true);
 
-        disableButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y, scale(95), scale(32)))
-                .setLabel(FontHelper.cardTitleFont, 0.8f, PGR.core.strings.cedit_enable)
+        disableButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(languageDropdown.hb.x + languageDropdown.hb.width + scale(15), languageDropdown.hb.y + scale(22), scale(95), scale(26)))
+                .setLabel(FontHelper.cardTitleFont, 0.7f, PGR.core.strings.cedit_enable)
                 .setColor(new Color(0.7f, 0.4f, 0.4f, 1))
                 .setOnClick(this::updateTextDisableOrEnable);
+        clearButton = new EUIButton(EUIRM.images.rectangularButton.texture(), new EUIHitbox(disableButton.hb.x, languageDropdown.hb.y - scale(8), scale(95), scale(26)))
+                .setLabel(FontHelper.cardTitleFont, 0.7f, EUIRM.strings.misc_clear)
+                .setColor(new Color(0.75f, 0.85f, 0.75f, 1))
+                .setOnClick(() -> textInput.setTextAndCommit(EUIUtils.EMPTY_STRING));
 
         keywordReference = (EUISearchableDropdown<EUIKeywordTooltip>) new EUISearchableDropdown<EUIKeywordTooltip>(new EUIHitbox(preview.hb.x, preview.hb.y - scale(130), scale(95), scale(32)))
                 .setLabelFunctionForOption(item -> item.icon != null ? item.getTitleOrIconForced() + " " + item.ID : item.ID, true)
@@ -189,6 +194,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.languageDropdown.tryRender(sb);
         this.keywordReference.tryRender(sb);
         this.disableButton.tryRender(sb);
+        this.clearButton.tryRender(sb);
         // Must render this text manually without smart text in order to properly display these symbols
         float x = Settings.WIDTH * 0.665f;
         EUITextHelper.renderFont(sb, FontHelper.cardDescFont_N, PGR.core.strings.cetut_legendDesc, x, Settings.HEIGHT * 0.8f, Settings.GOLD_COLOR);
@@ -221,6 +227,7 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
         this.languageDropdown.tryUpdate();
         this.keywordReference.tryUpdate();
         this.disableButton.tryUpdate();
+        this.clearButton.tryUpdate();
     }
 
     private void updateLanguage(Settings.GameLanguage language) {
@@ -245,13 +252,13 @@ public class PCLCustomDescriptionDialog extends EUIDialog<PCLCustomDescriptionDi
 
         if (overrideDesc != null) {
             preview.setLabel(skillAt.getUncascadedOverride(overrideDesc, null));
-            disableButton.setLabel(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
+            disableButton.setText(PGR.core.strings.cedit_disable).setColor(CLEAR_COLOR);
             textInput.setFontColor(Settings.CREAM_COLOR);
             disabled = false;
         }
         else {
             preview.setLabel(skillAt.getText());
-            disableButton.setLabel(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
+            disableButton.setText(PGR.core.strings.cedit_enable).setColor(ENABLE_COLOR);
             textInput.setFontColor(Color.DARK_GRAY);
             disabled = true;
         }

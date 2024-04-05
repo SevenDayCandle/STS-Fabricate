@@ -628,7 +628,7 @@
 		"PROGRESSIVE": "stunning"
 	},
 	"Summon":	{
-		"DESCRIPTION": "#ySummon cards act every turn and intercept unblocked damage.",
+		"DESCRIPTION": "#ySummon cards act every turn and intercept half of unblocked damage dealt to you.",
 		"NAME": "Summon",
 		"PAST": "Summoned",
 		"PLURAL": "${0}@>1:Summons@:Summon$",

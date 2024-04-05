@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import extendedui.EUIUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -178,7 +179,14 @@ public class AbstractPlayerPatches {
 
         public static ArrayList<String> getCardList(AbstractPlayer p) {
             ArrayList<String> getCards = AbstractPlayerFields.overrideCards.get(p);
-            return getCards != null ? getCards : p.getStartingDeck();
+            if (getCards == null) {
+                return p.getStartingDeck();
+            }
+            if (getCards.isEmpty()) {
+                EUIUtils.logWarning(AbstractPlayerPatches.class, "Override cards is empty, falling back to default starting deck.");
+                return p.getStartingDeck();
+            }
+            return getCards;
         }
 
         @SpireInstrumentPatch
