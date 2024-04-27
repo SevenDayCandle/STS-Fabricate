@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPF
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUI;
 import extendedui.EUIUtils;
@@ -15,6 +16,7 @@ import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -47,6 +49,9 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
             if (target == null) {
                 target = GameUtilities.getRandomEnemy(true);
             }
+        }
+        else if (card.pclTarget.targetsPlayer()) {
+            target = AbstractDungeon.player;
         }
         if (target == null || GameUtilities.isDeadOrEscaped(target)) {
             target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);

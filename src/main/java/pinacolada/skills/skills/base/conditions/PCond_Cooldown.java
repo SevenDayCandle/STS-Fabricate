@@ -161,8 +161,7 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
-            });
+            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {});
         }
     }
 

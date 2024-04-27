@@ -84,14 +84,17 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        builders.add((PCLDynamicCardData) new PCLDynamicCardData(card.cardData, true)
-                .setColor(color)
-                .setID(ID)
-                .setImagePath(imagePath)
-                .setFlags(CardFlag.getFromCard(card))
-                .setPSkill(card.getEffects(), true, true)
-                .setPPower(card.getPowerEffects(), true, true)
-        );
+        for (int i = 0; i < card.maxForms(); i++) {
+            card.setForm(i, card.timesUpgraded + i);
+            builders.add((PCLDynamicCardData) new PCLDynamicCardData(card.cardData, true)
+                    .setColor(color)
+                    .setID(ID)
+                    .setImagePath(imagePath)
+                    .setFlags(CardFlag.getFromCard(card))
+                    .setPSkill(card.getEffects(), true, true)
+                    .setPPower(card.getPowerEffects(), true, true)
+            );
+        }
         recordBuilder();
     }
 

@@ -89,6 +89,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final String ICON_REGEN = "regen";
     public static final String ICON_RITUAL = "ritual";
     public static final String ICON_SHACKLE = "shackle";
+    public static final String ICON_SHARP_HIDE = "sharpHide";
     public static final String ICON_SLOW = "slow";
     public static final String ICON_STRENGTH = "strength";
     public static final String ICON_THORNS = "thorns";
@@ -151,6 +152,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData Rebound = registerBaseBuff(ReboundPower.class, ReboundPower.POWER_ID, PGR.core.tooltips.rebound).setImageRegion(ICON_REBOUND).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Regen = registerBaseBuff(RegenPower.class, RegenPower.POWER_ID, PGR.core.tooltips.regeneration).setImageRegion(ICON_REGEN).setEndTurnBehavior(Behavior.TurnBased).setIsMetascaling(true);
     public static final PCLPowerData Ritual = registerBaseBuffCommon(RitualPower.class, RitualPower.POWER_ID, PGR.core.tooltips.ritual).setImageRegion(ICON_RITUAL).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData SharpHide = registerBaseBuff(SharpHidePower.class, SharpHidePower.POWER_ID, PGR.core.tooltips.sharpHide).setImageRegion(ICON_SHARP_HIDE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Strength = registerBaseBuffCommon(StrengthPower.class, StrengthPower.POWER_ID, PGR.core.tooltips.strength).setImageRegion(ICON_STRENGTH).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Thorns = registerBaseBuffCommon(ThornsPower.class, ThornsPower.POWER_ID, PGR.core.tooltips.thorns).setImageRegion(ICON_THORNS).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData ThousandCuts = registerBaseBuff(ThousandCutsPower.class, ThousandCutsPower.POWER_ID, PGR.core.tooltips.thousandCuts).setImageRegion(ICON_THOUSAND_CUTS).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);

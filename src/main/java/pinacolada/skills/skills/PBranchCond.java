@@ -410,7 +410,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect instanceof PActiveCond) {
-            ((PActiveCond<?>) childEffect).useImpl(info, order,
+            ((PActiveCond<?>) childEffect).useFromBranch(info, order,
                     (i) -> useSubEffect(childEffect.getQualifiers(i, true), sk -> sk.use(i, order)),
                     (i) -> useSubEffect(childEffect.getQualifiers(i, false), sk -> sk.use(i, order))
             );

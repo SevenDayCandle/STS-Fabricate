@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PGR;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public class TemplateCardData extends PCLCardData {
     public String originalID;
 
     public TemplateCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
-        super(type, resources);
+        super(type, resources, resources.createID(type.getSimpleName()), PGR.getCardStrings(sourceID));
         this.originalID = sourceID;
         TEMPLATES.put(sourceID, this);
     }

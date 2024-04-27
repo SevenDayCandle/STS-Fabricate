@@ -72,6 +72,12 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         return fields.getQualifiers(info);
     }
 
+    // Qualifiers are dependent on the outcome of the action
+    @Override
+    public String getQualifierText(int i) {
+        return fields.getQualifierText(i);
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);

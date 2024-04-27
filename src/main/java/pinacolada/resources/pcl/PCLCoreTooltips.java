@@ -173,6 +173,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip selfImmolation = tryLoadTip("Self-Immolation");
     public EUIKeywordTooltip semiLimited = tryLoadTip("Semi-Limited");
     public EUIKeywordTooltip shackles = tryLoadTip("Shackles");
+    public EUIKeywordTooltip sharpHide = tryLoadTip("Sharp Hide");
     public EUIKeywordTooltip shifting = tryLoadTip("Shifting");
     public EUIKeywordTooltip silenced = tryLoadTip("Silenced");
     public EUIKeywordTooltip slow = tryLoadTip("Slow");

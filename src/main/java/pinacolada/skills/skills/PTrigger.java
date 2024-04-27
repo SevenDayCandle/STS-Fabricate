@@ -157,6 +157,12 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         return copy;
     }
 
+    protected void propagateUpdate() {
+        if (controller != null) {
+            controller.onReceiveUpdate();
+        }
+    }
+
     public void resetUses() {
         if (!fields.not) {
             forceResetUses();
@@ -209,6 +215,14 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
         super.setExtra(amount);
         updateUsesAmount();
         onUpdateUsesPerTurn();
+        return this;
+    }
+
+    public PTrigger setSource(Object card) {
+        super.setSource(card);
+        if (source instanceof TriggerConnection && controller == null) {
+            controller = (TriggerConnection) source;
+        }
         return this;
     }
 

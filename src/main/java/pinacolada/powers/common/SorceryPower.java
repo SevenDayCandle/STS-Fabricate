@@ -3,6 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.annotations.VisiblePower;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.powers.PCLSubscribingPower;
@@ -27,6 +28,7 @@ public class SorceryPower extends PCLSubscribingPower implements OnOrbChannelSub
     @Override
     public void onChannelOrb(AbstractOrb orb) {
         GameUtilities.modifyOrbBaseFocus(orb, amount, true, false);
+        CombatManager.onSpecificPowerActivated(this, owner, true);
         removePower();
     }
 }

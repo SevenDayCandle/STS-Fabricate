@@ -296,7 +296,16 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         super.onAfterUseCard(card, act);
     }
 
+    @Override
+    protected void onAmountChanged(int previousAmount, int difference) {
+        if (difference != 0) {
+            PCLUseInfo info = CombatManager.getLastInfo();
+            refreshTriggers(info);
+            updateDescription();
+        }
+    }
 
+    @Override
     public void onDeath() {
         super.onDeath();
         for (PTrigger effect : ptriggers) {
@@ -304,6 +313,7 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         }
     }
 
+    @Override
     public void onInitialApplication() {
         super.onInitialApplication();
         for (PTrigger effect : ptriggers) {
@@ -311,6 +321,12 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
         }
     }
 
+    @Override
+    public void onReceiveUpdate() {
+        updateDescription();
+    }
+
+    @Override
     public void onRemove() {
         super.onRemove();
         for (PTrigger effect : ptriggers) {

@@ -7,6 +7,9 @@ public interface TriggerConnection {
     default void onActivate() {
     }
 
+    default void onReceiveUpdate() {
+    }
+
     boolean canActivate(PTrigger trigger);
 
     AbstractCreature getOwner();

@@ -95,8 +95,8 @@ public class PTrait_Tag extends PTrait<PField_Tag> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return fields.random && !fields.not ? TEXT.act_removeFrom(getSubDescText(perspective, requestor), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective, requestor));
+        if (hasParentType(PTrigger_Passive.class)) {
+            return fields.random && !fields.not ? TEXT.act_removeFrom(getSubDescText(perspective, requestor), getParentCardString(perspective, requestor)) : TEXT.act_zHas(getParentCardString(perspective, requestor), getSubDescText(perspective, requestor));
         }
         return fields.random && !fields.not ? TEXT.act_remove(getSubDescText(perspective, requestor)) : TEXT.act_has(getSubDescText(perspective, requestor));
     }

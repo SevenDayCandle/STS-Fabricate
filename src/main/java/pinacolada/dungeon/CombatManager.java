@@ -88,6 +88,10 @@ public class CombatManager extends EUIBase {
     private static final ArrayList<AbstractCard> cardsDrawnThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisTurn = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsReshuffledThisCombat = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsReshuffledThisTurn = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsRetainedThisCombat = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsRetainedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> hasteInfinitesThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
@@ -167,10 +171,12 @@ public class CombatManager extends EUIBase {
         summons.onEndOfTurnLast();
         CombatManager.playerSystem.onEndOfTurn();
         cardsDiscardedThisTurn.clear();
+        cardsDrawnThisTurn.clear();
+        cardsExhaustedThisTurn.clear();
+        cardsReshuffledThisTurn.clear();
+        cardsRetainedThisTurn.clear();
         hasteInfinitesThisTurn.clear();
         turnData.clear();
-        cardsExhaustedThisTurn.clear();
-        cardsDrawnThisTurn.clear();
         unplayableCards.clear();
         orbsEvokedThisTurn.clear();
         turnCount += 1;
@@ -292,6 +298,22 @@ public class CombatManager extends EUIBase {
         return cardsPlayedThisCombat.computeIfAbsent(turn, k -> new ArrayList<>());
     }
 
+    public static List<AbstractCard> cardsReshuffledThisCombat() {
+        return cardsReshuffledThisCombat;
+    }
+
+    public static List<AbstractCard> cardsReshuffledThisTurn() {
+        return cardsReshuffledThisTurn;
+    }
+
+    public static List<AbstractCard> cardsRetainedThisCombat() {
+        return cardsRetainedThisCombat;
+    }
+
+    public static List<AbstractCard> cardsRetainedThisTurn() {
+        return cardsRetainedThisTurn;
+    }
+
     private static <T extends PCLCombatSubscriber> void castAndSubscribe(Class<T> subtype, PCLCombatSubscriber subscriber) {
         subscribe(subtype, (T) subscriber);
     }
@@ -339,6 +361,10 @@ public class CombatManager extends EUIBase {
         cardsPlayedThisCombat.clear();
         cardsExhaustedThisCombat.clear();
         cardsExhaustedThisTurn.clear();
+        cardsReshuffledThisCombat.clear();
+        cardsReshuffledThisTurn.clear();
+        cardsRetainedThisCombat.clear();
+        cardsRetainedThisTurn.clear();
         hasteInfinitesThisTurn.clear();
         unplayableCards.clear();
         currentPhase = null;
@@ -678,10 +704,14 @@ public class CombatManager extends EUIBase {
             wrapper.onReshuffled(card, sourcePile);
         }
 
+        cardsReshuffledThisTurn.add(card);
+        cardsReshuffledThisCombat.add(card);
         subscriberDo(OnCardReshuffledSubscriber.class, s -> s.onCardReshuffled(card, sourcePile));
     }
 
     public static void onCardRetain(AbstractCard card) {
+        cardsRetainedThisCombat.add(card);
+        cardsRetainedThisTurn.add(card);
         subscriberDo(OnCardRetainSubscriber.class, s -> s.onRetain(card));
     }
 
@@ -767,10 +797,10 @@ public class CombatManager extends EUIBase {
     public static void onExhaust(AbstractCard card) {
         card.clearPowers();
 
-        subscriberDo(OnCardExhaustedSubscriber.class, s -> s.onCardExhausted(card));
-
         cardsExhaustedThisCombat.add(card);
         cardsExhaustedThisTurn.add(card);
+
+        subscriberDo(OnCardExhaustedSubscriber.class, s -> s.onCardExhausted(card));
     }
 
     public static int onGainTempHP(int amount) {

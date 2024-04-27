@@ -10,6 +10,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ValueProvider;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.orbs.PCLOrbData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -222,10 +223,6 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerCreature(target, amount);
     }
 
-    public static PMod_PerCreatureIntent perCreatureAttacking(int amount) {
-        return new PMod_PerCreatureIntent(amount);
-    }
-
     public static PMod_PerCreatureBlock perCreatureBlock(int amount) {
         return new PMod_PerCreatureBlock(amount);
     }
@@ -240,6 +237,38 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
 
     public static PMod_PerCreatureHP perCreatureHP(PCLCardTarget target, int amount) {
         return new PMod_PerCreatureHP(target, amount);
+    }
+
+    public static PMod_PerCreatureHP perCreatureHPMissing(int amount) {
+        return (PMod_PerCreatureHP) new PMod_PerCreatureHP(amount).edit(f -> f.setRandom(true));
+    }
+
+    public static PMod_PerCreatureHP perCreatureHPMissing(PCLCardTarget target, int amount) {
+        return (PMod_PerCreatureHP) new PMod_PerCreatureHP(target, amount).edit(f -> f.setRandom(true));
+    }
+
+    public static PMod_PerCreatureHPPercent perCreatureHPPercent(int amount) {
+        return new PMod_PerCreatureHPPercent(amount);
+    }
+
+    public static PMod_PerCreatureHPPercent perCreatureHPPercent(PCLCardTarget target, int amount) {
+        return new PMod_PerCreatureHPPercent(target, amount);
+    }
+
+    public static PMod_PerCreatureHPPercent perCreatureHPPercentMissing(int amount) {
+        return (PMod_PerCreatureHPPercent) new PMod_PerCreatureHPPercent(amount).edit(f -> f.setRandom(true));
+    }
+
+    public static PMod_PerCreatureHPPercent perCreatureHPPercentMissing(PCLCardTarget target, int amount) {
+        return (PMod_PerCreatureHPPercent) new PMod_PerCreatureHPPercent(target, amount).edit(f -> f.setRandom(true));
+    }
+
+    public static PMod_PerCreatureIntent perCreatureIntent(PCLCardTarget target, PCLIntentType... powers) {
+        return new PMod_PerCreatureIntent(target, 1, powers);
+    }
+
+    public static PMod_PerCreatureIntent perCreatureIntent(PCLCardTarget target, int amount, PCLIntentType... powers) {
+        return new PMod_PerCreatureIntent(target, amount, powers);
     }
 
     public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerData... powers) {
@@ -433,8 +462,22 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet, boolean isUsing) {
+        int newAmount = getModifiedAmount(info, amount, isUsing);
+        if (newAmount != cachedValue) {
+            propagateUpdate();
+        }
+        cachedValue = newAmount;
+        super.refresh(info, conditionMet, isUsing);
+    }
+    
+    @Override
     public int refreshChildAmount(PCLUseInfo info, int amount, boolean isUsing) {
-        cachedValue = getModifiedAmount(info, amount, isUsing);
+        int newAmount = getModifiedAmount(info, amount, isUsing);
+        if (newAmount != cachedValue) {
+            propagateUpdate();
+        }
+        cachedValue = newAmount;
         return cachedValue;
     }
 

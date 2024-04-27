@@ -34,14 +34,14 @@ public class PTrait_AttackType extends PTrait<PField_AttackType> {
 
     @Override
     public void applyToCard(PCLUseInfo info, AbstractCard c, boolean conditionMet) {
-        if (c instanceof PCLCard && fields.attackTypes.size() > 0) {
+        if (c instanceof PCLCard && !fields.attackTypes.isEmpty()) {
             ((PCLCard) c).setAttackType(conditionMet ? fields.attackTypes.get(0) : ((PCLCard) c).cardData.attackType);
         }
     }
 
     @Override
     public String getSubDescText(PCLCardTarget perspective, Object requestor) {
-        return fields.attackTypes.size() > 0 ? fields.attackTypes.get(0).getTooltip().getTitleOrIcon() : "";
+        return !fields.attackTypes.isEmpty() ? fields.attackTypes.get(0).getTooltip().getTitleOrIcon() : "";
     }
 
     @Override
@@ -51,8 +51,8 @@ public class PTrait_AttackType extends PTrait<PField_AttackType> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        if (hasParentType(PTrigger_Passive.class) && !hasParentType(PFacetCond.class)) {
-            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective, requestor), PCLCoreStrings.pluralForce(TEXT.subjects_cardN)) : TEXT.act_zHas(PCLCoreStrings.pluralForce(TEXT.subjects_cardN), getSubDescText(perspective, requestor));
+        if (hasParentType(PTrigger_Passive.class)) {
+            return fields.random ? TEXT.act_removeFrom(getSubDescText(perspective, requestor), getParentCardString(perspective, requestor)) : TEXT.act_zHas(getParentCardString(perspective, requestor), getSubDescText(perspective, requestor));
         }
         return fields.random ? TEXT.act_remove(getSubDescText(perspective, requestor)) : TEXT.act_has(getSubDescText(perspective, requestor));
     }

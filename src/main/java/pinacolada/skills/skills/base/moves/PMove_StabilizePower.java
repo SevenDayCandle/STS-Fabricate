@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.StabilizePowerAction;
 import pinacolada.annotations.VisibleSkill;
@@ -53,11 +54,12 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
-    protected void stabilizePower(PCLUseInfo info, PCLPowerData power, PCLActions order) {
+    protected void stabilizePowerAsNew(PCLUseInfo info, PCLPowerData power, PCLActions order) {
         if (power != null) {
             List<? extends AbstractCreature> targets = getTargetListAsNew(info);
             for (AbstractCreature t : targets) {
-                power.doFor(po -> order.add(new StabilizePowerAction(info.source, t, po, refreshAmount(info))));
+                AbstractPower sample = power.create(t, t, 1); // Only needed for the StabilizePowerAction reference
+                power.doFor(po -> order.add(new StabilizePowerAction(info.source, t, po, refreshAmount(info)).setPower(sample)));
             }
         }
     }
@@ -65,19 +67,22 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (fields.powers.isEmpty()) {
+            List<? extends AbstractCreature> targets = getTargetListAsNew(info);
             for (PCLPowerData power : PCLPowerData.getAllData(false, c -> c.isCommon && c.isDebuff())) {
-                stabilizePower(info, power, order);
+                for (AbstractCreature t : targets) {
+                    power.doFor(po -> order.add(new StabilizePowerAction(info.source, t, po, refreshAmount(info))));
+                }
             }
         }
         else if (fields.random) {
             String powerID = GameUtilities.getRandomElement(fields.powers);
             PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-            stabilizePower(info, power, order);
+            stabilizePowerAsNew(info, power, order);
         }
         else {
             for (String powerID : fields.powers) {
                 PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
-                stabilizePower(info, power, order);
+                stabilizePowerAsNew(info, power, order);
             }
         }
         super.use(info, order);

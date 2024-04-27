@@ -28,6 +28,7 @@
 												"increase {0} of {1} from {2} by {3}",
 												"lose {0}",
 												"lose {0} {1}",
+												"${0}@?0?2?3?4?10?11?12:lose@:loses$ {1}",
 												"move {0} to {1}",
 												"move {0} in {1} to {2}",
 												"multiply {0} by {1}",

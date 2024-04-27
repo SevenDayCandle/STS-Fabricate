@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.monsters.PCLIntentType;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Intent;
@@ -25,8 +26,9 @@ public class PMod_PerCreatureIntent extends PMod_Per<PField_Intent> {
         super(DATA, PCLCardTarget.AllEnemy, amount);
     }
 
-    public PMod_PerCreatureIntent(PCLCardTarget target, int amount) {
+    public PMod_PerCreatureIntent(PCLCardTarget target, int amount, PCLIntentType... intent) {
         super(DATA, target, amount);
+        fields.setIntent(intent);
     }
 
     @Override

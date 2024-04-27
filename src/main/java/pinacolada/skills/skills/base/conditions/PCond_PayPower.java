@@ -66,7 +66,6 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         AbstractCreature sourceCreature = getSourceCreature();
-
         if (baseAmount <= 0) {
             ArrayList<RemoveSpecificPowerAction> actions = EUIUtils.flattenList(EUIUtils.map(getTargetList(info), t ->
                     EUIUtils.map(fields.powers, power -> new RemoveSpecificPowerAction(sourceCreature, t, power))));

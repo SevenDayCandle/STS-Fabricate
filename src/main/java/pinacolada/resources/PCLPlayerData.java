@@ -40,7 +40,7 @@ public abstract class PCLPlayerData<T extends PCLResources<?, ?, ?, ?>, U extend
     public static final int DEFAULT_ENERGY = 3;
     public static final int DEFAULT_ORBS = 0;
     public static final int MINIMUM_CARDS = 70;
-    public static final int MINIMUM_COLORLESS = 30;
+    public static final int MINIMUM_COLORLESS = 20;
     public static final ArrayList<AbstractGlyph> GLYPHS = new ArrayList<>();
     public final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
     public final ArrayList<PCLLoadout> extraLoadouts = new ArrayList<>();

@@ -4,7 +4,6 @@ import basemod.BaseMod;
 import basemod.DevConsole;
 import basemod.ReflectionHacks;
 import basemod.helpers.CardModifierManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -104,11 +103,7 @@ import pinacolada.stances.PCLStanceHelper;
 
 import java.io.FilenameFilter;
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import static com.evacipated.cardcrawl.modthespire.Patcher.annotationDBMap;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.actionManager;
@@ -120,6 +115,8 @@ public class GameUtilities {
     private static final String BETA_PATH = "images/1024PortraitsBeta/";
     public static final String JSON_EXT = ".json";
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(JSON_EXT);
+    public static final float BLIGHT_START_X = 64.0F * Settings.scale;
+    public static final float BLIGHT_START_Y = Settings.isMobile ? (float)Settings.HEIGHT - 206.0F * Settings.scale : (float)Settings.HEIGHT - 176.0F * Settings.scale;
     public static final int CHAR_OFFSET = 97;
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
@@ -2081,6 +2078,22 @@ public class GameUtilities {
         }
     }
 
+    public static void removeBlights(AbstractBlight... r) {
+        removeBlights(Arrays.asList(r));
+    }
+
+    public static void removeBlights(Collection<AbstractBlight> blights) {
+        player.blights.removeAll(blights);
+        if (!blights.isEmpty()) {
+            for(int i = 0; i < player.blights.size(); ++i) {
+                AbstractBlight b = player.blights.get(i);
+                b.currentX = b.targetX = BLIGHT_START_X + i * AbstractRelic.PAD_X;
+                b.currentY = b.targetY = BLIGHT_START_Y;
+                b.hb.move(b.currentX, b.currentY);
+            }
+        }
+    }
+
     public static void removeBlock(AbstractCard card) {
         card.baseBlock = card.block = 0;
         card.isBlockModified = false;
@@ -2095,7 +2108,7 @@ public class GameUtilities {
         for (AbstractRelic r : relics) {
             r.onUnequip();
         }
-        if (relics.size() > 0) {
+        if (!relics.isEmpty()) {
             player.reorganizeRelics();
         }
     }

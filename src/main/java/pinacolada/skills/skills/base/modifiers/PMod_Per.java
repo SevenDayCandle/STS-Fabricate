@@ -49,8 +49,9 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
 
     @Override
     public int getModifiedAmount(PCLUseInfo info, int baseAmount, boolean isUsing) {
-        return fields.not ? (baseAmount + (getMultiplier(info, isUsing) * amount) / Math.max(1, this.extra))
-                : baseAmount * getMultiplier(info, isUsing) / Math.max(1, this.amount);
+        int baseMult = getMultiplier(info, isUsing);
+        return fields.not ? (baseAmount + (baseMult * amount) / Math.max(1, this.extra))
+                : baseAmount * baseMult / Math.max(1, this.amount);
     }
 
     @Override

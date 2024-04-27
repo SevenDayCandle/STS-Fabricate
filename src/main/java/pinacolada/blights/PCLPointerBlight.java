@@ -16,6 +16,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.TriggerConnection;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLCollectibleSaveData;
@@ -24,8 +25,10 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillContainer;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.utilities.GameUtilities;
 
-public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider, CustomSavable<PCLCollectibleSaveData> {
+public abstract class PCLPointerBlight extends PCLBlight implements PointerProvider, ClickableProvider, TriggerConnection, CustomSavable<PCLCollectibleSaveData> {
     public PSkillContainer skills;
     public PCLClickableUse triggerCondition;
 
@@ -170,6 +173,16 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
         return blightData.branchFactor;
     }
 
+    @Override
+    public boolean canActivate(PTrigger trigger) {
+        return GameUtilities.isDeadOrEscaped(AbstractDungeon.player);
+    }
+
+    @Override
+    public AbstractCreature getOwner() {
+        return AbstractDungeon.player;
+    }
+
     public void fillPreviews(RotatingList<EUIPreview> list) {
         PointerProvider.fillPreviewsForKeywordProvider(this, list);
     }
@@ -246,6 +259,11 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
             effect.triggerOnObtain();
         }
         subscribe();
+    }
+
+    @Override
+    public void onReceiveUpdate() {
+        updateDescription(null);
     }
 
     @Override

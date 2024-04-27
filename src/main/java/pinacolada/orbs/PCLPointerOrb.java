@@ -197,6 +197,11 @@ public abstract class PCLPointerOrb extends PCLOrb implements PointerProvider, T
     }
 
     @Override
+    public void onReceiveUpdate() {
+        updateDescription();
+    }
+
+    @Override
     public void passive() {
         final PCLUseInfo info = CombatManager.playerSystem.generateInfo(null, AbstractDungeon.player, target);
         for (PSkill<?> ef : getEffects()) {

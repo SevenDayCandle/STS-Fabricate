@@ -94,7 +94,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
         this.maxCopiesLabel.setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies);
 
         this.changeVariantEditor = new PCLValueEditor(
-                new EUIHitbox(screenW(0.1f), screenH(0.8f), ICON_SIZE, ICON_SIZE), PGR.core.strings.scp_variant, this::changePreviewForm);
+                new EUIHitbox(screenW(0.1f), screenH(0.76f), ICON_SIZE, ICON_SIZE), PGR.core.strings.scp_variant, this::changePreviewForm);
         this.changeVariantEditor.header.setFont(FontHelper.tipHeaderFont)
                 .setAlignment(0.9f, 0.1f, false)
                 .setColor(Color.WHITE)
@@ -454,7 +454,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
 
         if (currentItem != null) {
             this.changeVariantEditor.setValue(currentForm, false)
-                    .setActive(currentItem.cardData != null && currentItem.maxForms() > 1 && currentItem.cardData.canToggleOnUpgrade && SingleCardViewPopup.isViewingUpgrade)
+                    .setActive(currentItem.cardData != null && currentItem.maxForms() > 1 && currentItem.cardData.canToggleOnUpgrade && currentItem.cardData.branchFactor != 1 && SingleCardViewPopup.isViewingUpgrade)
                     .tryUpdate();
             this.changeVariant.setInteractable(currentItem.auxiliaryData.form != currentForm).tryUpdate();
         }

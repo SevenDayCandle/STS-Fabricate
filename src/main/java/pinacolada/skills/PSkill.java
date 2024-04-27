@@ -1863,6 +1863,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.format(PGR.core.strings.subjects_cardN, extra);
     }
 
+    protected void propagateUpdate() {
+        if (parent != null) {
+            parent.propagateUpdate();
+        }
+    }
+
     // Set random values for the fields based on the value
     // Resulting fields will influence the amounts/extra set on this item
     public void randomize(Random rng, int value) {
@@ -1980,6 +1986,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    /* Customizes the behavior for this skill when its form is changed. Parameter 1 is the skill, Parameter 2 is the new form, and Parameter 3 is the new upgrade level */
     public PSkill<T> setCustomUpgrade(ActionT3<PSkill<T>, Integer, Integer> customUpgrade) {
         this.customUpgrade = customUpgrade;
         return this;

@@ -240,6 +240,8 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
             for (PSkill<?> effect : getEffects()) {
                 effect.setAmountFromCard();
             }
+            PCLUseInfo info = CombatManager.getLastInfo();
+            refreshTriggers(info);
             updateDescription();
         }
     }
@@ -275,6 +277,11 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
             effect.unsubscribeChildren();
             effect.triggerOnRemove(this);
         }
+    }
+
+    @Override
+    public void onReceiveUpdate() {
+        updateDescription();
     }
 
     public void refreshTriggers(PCLUseInfo info) {

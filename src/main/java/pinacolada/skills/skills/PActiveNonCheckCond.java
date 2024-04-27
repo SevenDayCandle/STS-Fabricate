@@ -37,17 +37,6 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
         return true;
     }
 
-    // Qualifiers are dependent on the outcome of the action
-    @Override
-    public String getQualifierText(int i) {
-        return fields.getQualifierText(i);
-    }
-
-    @Override
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
-        return EUIUtils.arrayList(conditionPassed ? 0 : 1);
-    }
-
     @Override
     public String getText(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
         String condString = isWhenClause() ? getCapitalSubText(perspective, requestor, addPeriod) : getConditionRawString(perspective, requestor, addPeriod);
@@ -58,23 +47,5 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
             return condString + COMMA_SEPARATOR + childEffect.getText(perspective, requestor, false) + PCLCoreStrings.period(addPeriod);
         }
         return condString + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order) {
-        if (childEffect != null) {
-            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
-            });
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
-        if (shouldPay) {
-            use(info, order);
-        }
-        else if (childEffect != null) {
-            childEffect.use(info, order);
-        }
     }
 }

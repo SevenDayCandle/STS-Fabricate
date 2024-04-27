@@ -341,6 +341,13 @@
 		"DESCRIPTION": "The next Attack played costs #b0.",
 		"NAME": "Free Attack"
 	},
+	"Fuse":	{
+		"DESCRIPTION": "Combine multiple cards into a single card with their combined cost, effects, and properties. #yFleeting cards, #ySummons, and cards created from #yFuse cannot be #yFused.",
+		"PAST": "fused",
+		"PRESENT": "fuses",
+		"PROGRESSIVE": "fusing",
+		"NAME": "Fuse"
+	},
 	"Grave":	{
 		"DESCRIPTION": "Start each combat with this card in your discard pile.",
 		"NAME": "Grave"
