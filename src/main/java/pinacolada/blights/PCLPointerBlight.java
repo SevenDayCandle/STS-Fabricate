@@ -175,7 +175,7 @@ public abstract class PCLPointerBlight extends PCLBlight implements PointerProvi
 
     @Override
     public boolean canActivate(PTrigger trigger) {
-        return GameUtilities.isDeadOrEscaped(AbstractDungeon.player);
+        return true;
     }
 
     @Override

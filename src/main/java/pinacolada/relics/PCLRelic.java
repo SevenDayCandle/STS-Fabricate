@@ -94,6 +94,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return registerRelicData(new PCLRelicData(type, resources));
     }
 
+    protected static PCLRelicData register(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        return registerRelicData(new PCLRelicData(type, resources, color));
+    }
+
     protected static <T extends PCLRelicData> T registerRelicData(T cardData) {
         return PCLRelicData.registerData(cardData);
     }
@@ -137,32 +141,32 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
         return block;
     }
 
-    public int atCostModify(PCLUseInfo info, int block) {
-        return atCostModify(block, info.card);
+    public int atCostModify(PCLUseInfo info, int cost) {
+        return atCostModify(cost, info.card);
     }
 
     public int atCostModify(int cost, AbstractCard c) {
         return cost;
     }
 
-    public float atDamageLastModify(PCLUseInfo info, float block) {
-        return atDamageLastModify(block, info.card);
+    public float atDamageLastModify(PCLUseInfo info, float damage) {
+        return atDamageLastModify(damage, info.card);
     }
 
-    public float atDamageLastModify(float block, AbstractCard c) {
-        return block;
+    public float atDamageLastModify(float damage, AbstractCard c) {
+        return damage;
     }
 
-    public float atDamageModify(PCLUseInfo info, float block) {
-        return atDamageModify(block, info.card);
+    public float atDamageModify(PCLUseInfo info, float damage) {
+        return atDamageModify(damage, info.card);
     }
 
-    public float atHealModify(PCLUseInfo info, float block) {
-        return block;
+    public float atHealModify(PCLUseInfo info, float damage) {
+        return damage;
     }
 
-    public float atHitCountModify(PCLUseInfo info, float block) {
-        return block;
+    public float atHitCountModify(PCLUseInfo info, float damage) {
+        return damage;
     }
 
     @Override

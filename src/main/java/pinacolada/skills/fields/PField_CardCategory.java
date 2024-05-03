@@ -12,8 +12,8 @@ import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.CostFilter;
 import extendedui.utilities.RotatingList;
+import extendedui.utilities.panels.card.CostFilter;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.CardFlag;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -288,7 +288,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public String getQualifierText(int i) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (costs.size() > i) {
-            stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i).name));
+            stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i)));
         }
         if (rarities.size() > i) {
             stringsToJoin.add(EUIGameUtils.textForRarity(rarities.get(i)));

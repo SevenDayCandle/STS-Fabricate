@@ -336,7 +336,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         for (PCLCustomRunCharacterButton button : characters) {
             button.glowing = (button.character == c);
         }
-        ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
+        ascensionEditor.setValue(screen.ascensionLevel);
     }
 
     public void setup(CustomModeScreen original) {

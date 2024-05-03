@@ -11,7 +11,7 @@ import pinacolada.effects.PCLAttackVFX;
 
 @VisibleCard(add = false)
 public class SwiftStrike extends PCLCard {
-    public static final String ATLAS_URL = "colorless/attack/dramatic_entrance";
+    public static final String ATLAS_URL = "colorless/attack/swift_strike";
     public static final PCLCardData DATA = registerTemplate(SwiftStrike.class, com.megacrit.cardcrawl.cards.colorless.SwiftStrike.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setAttack(0, CardRarity.UNCOMMON)

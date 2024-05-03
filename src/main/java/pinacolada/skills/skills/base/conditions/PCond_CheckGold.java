@@ -1,9 +1,11 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnGoldChangedSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -12,7 +14,7 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_CheckGold extends PPassiveCond<PField_Not> {
+public class PCond_CheckGold extends PPassiveCond<PField_Not> implements OnGoldChangedSubscriber {
     public static final PSkillData<PField_Not> DATA = register(PCond_CheckGold.class, PField_Not.class).noTarget();
 
     public PCond_CheckGold(PSkillSaveData content) {
@@ -45,5 +47,15 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
         }
 
         return getTargetHasStringPerspective(perspective, baseString);
+    }
+
+    @Override
+    public int onGoldChanged(int amount) {
+        AbstractCreature owner = getOwnerCreature();
+        PCLUseInfo info = generateInfo(owner);
+        if (fields.doesValueMatchThreshold(amount, refreshAmount(info))) {
+            useFromTrigger(info.setData(amount));
+        }
+        return amount;
     }
 }

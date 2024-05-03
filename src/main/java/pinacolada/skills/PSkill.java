@@ -61,6 +61,7 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.conditions.PLimit_Limited;
 import pinacolada.skills.skills.base.conditions.PLimit_SemiLimited;
+import pinacolada.skills.skills.base.moves.PMove_Kill;
 import pinacolada.ui.editor.PCLCustomDescriptionDialog;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -204,7 +205,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static PSkill<?> get(String serializedString) {
         try {
             PSkillSaveData saveData = EUIUtils.deserialize(serializedString, TToken.getType());
-            PSkillData<?> skillData = EFFECT_MAP.get(saveData.effectID);
+            PSkillData<?> skillData = getData(saveData.effectID);
             // First attempt to load the PSkillSaveData constructor
             Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(skillData.effectClass, PSkillSaveData.class);
             if (c != null) {
@@ -232,7 +233,19 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public static PSkillData<?> getData(String id) {
-        return EFFECT_MAP.get(id);
+        PSkillData<?> data = EFFECT_MAP.get(id);
+        if (data == null) {
+            // Mapping for deprecated ids to new ids
+            switch (id) {
+                case "pcl:PMove_KillAlly":
+                    return PMove_Kill.DATA;
+                case "pcl:PLimit_Limited":
+                    return PLimit_Limited.DATA;
+                case "pcl:PLimit_SemiLimited":
+                    return PLimit_SemiLimited.DATA;
+            }
+        }
+        return data;
     }
 
     public static List<String> getEffectDisplayTexts(Collection<? extends PSkill<?>> effects, PCLCardTarget perspective, Object requestor, boolean addPeriod) {
@@ -1664,7 +1677,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final boolean isCompatible(AbstractCard.CardColor co) {
-        return EFFECT_MAP.get(effectID).isColorCompatible(co);
+        return getData(effectID).isColorCompatible(co);
     }
 
     // Used to determine whether this effect is detrimental to the owner
@@ -2011,6 +2024,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public PSkill<T> setExtra2(int amount) {
         this.baseExtra2 = this.extra2 = MathUtils.clamp(amount, data != null ? data.minExtra2 : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra2 : DEFAULT_MAX);
+        return this;
+    }
+
+    public PSkill<T> setOverrideDesc(String desc) {
+        this.overrideDesc = desc;
         return this;
     }
 

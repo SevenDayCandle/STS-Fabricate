@@ -8,7 +8,7 @@ import pinacolada.skills.PMove;
 
 @VisibleCard(add = false)
 public class Finesse extends PCLCard {
-    public static final String ATLAS_URL = "colorless/attack/finesse";
+    public static final String ATLAS_URL = "colorless/skill/finesse";
     public static final PCLCardData DATA = registerTemplate(Finesse.class, com.megacrit.cardcrawl.cards.colorless.Finesse.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.UNCOMMON)

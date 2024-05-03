@@ -200,7 +200,7 @@ public abstract class PCLPointerRelic extends PCLRelic implements PointerProvide
 
     @Override
     public boolean canActivate(PTrigger trigger) {
-        return GameUtilities.isDeadOrEscaped(AbstractDungeon.player);
+        return true;
     }
 
     @Override

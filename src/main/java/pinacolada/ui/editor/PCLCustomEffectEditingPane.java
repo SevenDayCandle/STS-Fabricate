@@ -22,8 +22,9 @@ import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.BlightTier;
-import extendedui.utilities.CostFilter;
+import extendedui.utilities.panels.card.CostFilter;
 import extendedui.utilities.EUITextHelper;
+import extendedui.utilities.panels.card.UpgradeFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
@@ -767,7 +768,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerCost(List<CostFilter> items) {
-        registerDropdown(initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]), items);
+        registerDropdown(initializeSearchable(CostFilter.values(), CostFilter::toString, CardLibSortHeader.TEXT[3]), items);
     }
 
     public void registerCreature(List<String> creatures) {

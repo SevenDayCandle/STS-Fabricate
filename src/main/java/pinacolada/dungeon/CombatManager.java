@@ -817,6 +817,31 @@ public class CombatManager extends EUIBase {
         PGR.dungeon.reset();
     }
 
+    public static int onGoldChanged(int gold) {
+        if (inBattle()) {
+            return subscriberInout(OnGoldChangedSubscriber.class, gold, OnGoldChangedSubscriber::onGoldChanged);
+        }
+        for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
+            if (c instanceof OnGoldChangedSubscriber) {
+                gold = ((OnGoldChangedSubscriber) c).onGoldChanged(gold);
+            }
+        }
+
+        for (AbstractRelic r : AbstractDungeon.player.relics) {
+            if (r instanceof OnGoldChangedSubscriber) {
+                gold = ((OnGoldChangedSubscriber) r).onGoldChanged(gold);
+            }
+        }
+
+        for (AbstractPotion po : player.potions) {
+            if (po instanceof OnGoldChangedSubscriber) {
+                gold = ((OnGoldChangedSubscriber) po).onGoldChanged(gold);
+            }
+        }
+
+        return gold;
+    }
+
     public static void onHealthBarUpdated(AbstractCreature creature) {
         if (creature == AbstractDungeon.player && creature.currentHealth > maxHPSinceLastTurn) {
             maxHPSinceLastTurn = creature.currentHealth;

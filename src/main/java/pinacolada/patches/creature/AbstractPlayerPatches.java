@@ -47,6 +47,24 @@ public class AbstractPlayerPatches {
         }
     }
 
+    @SpirePatch(clz = AbstractPlayer.class, method = "gainGold")
+    public static class AbstractPlayer_GainGold {
+
+        @SpirePrefixPatch
+        public static void insert(AbstractPlayer __instance, @ByRef int[] gold) {
+            gold[0] = CombatManager.onGoldChanged(gold[0]);
+        }
+    }
+
+    @SpirePatch(clz = AbstractPlayer.class, method = "loseGold")
+    public static class AbstractPlayer_LoseGold {
+
+        @SpirePrefixPatch
+        public static void insert(AbstractPlayer __instance, @ByRef int[] gold) {
+            gold[0] = -1 * CombatManager.onGoldChanged(-gold[0]);
+        }
+    }
+
     @SpirePatch(clz = AbstractPlayer.class, method = "renderHand")
     public static class AbstractPlayer_RenderHand {
         @SpirePrefixPatch

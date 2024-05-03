@@ -40,16 +40,20 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public Integer loadoutValue;
 
     public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
-        this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
+        this(invokeClass, resources, resources.cardColor, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
-        this(invokeClass, resources, cardID, PGR.getRelicStrings(cardID));
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        this(invokeClass, resources, color, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, RelicStrings strings) {
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID) {
+        this(invokeClass, resources, color, cardID, PGR.getRelicStrings(cardID));
+    }
+
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID, RelicStrings strings) {
         super(cardID, invokeClass, resources);
-        this.cardColor = resources.cardColor;
+        this.cardColor = color;
         this.strings = strings != null ? strings : new RelicStrings();
         this.initializeImage();
     }

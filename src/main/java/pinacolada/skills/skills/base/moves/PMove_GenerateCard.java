@@ -7,7 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.CostFilter;
+import extendedui.utilities.panels.card.CostFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;

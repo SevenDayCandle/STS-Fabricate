@@ -69,7 +69,7 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
 
     @Override
     public ArrayList<Integer> getQualifiers(PCLUseInfo info, boolean conditionPassed) {
-        return fields.getQualifiers(info);
+        return conditionPassed ? fields.getQualifiers(info) : super.getQualifiers(info, conditionPassed);
     }
 
     // Qualifiers are dependent on the outcome of the action

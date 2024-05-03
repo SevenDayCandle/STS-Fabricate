@@ -11,7 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIPreview;
-import extendedui.utilities.CostFilter;
+import extendedui.utilities.panels.card.CostFilter;
 import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
@@ -413,7 +413,7 @@ public abstract class PCLMultiCard extends PCLCard {
 
         @Override
         public String getSubText(PCLCardTarget perspective, Object requestor) {
-            return multicard.getCards().size() > 0 ?
+            return !multicard.getCards().isEmpty() ?
                     PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText(perspective, requestor);
         }
 

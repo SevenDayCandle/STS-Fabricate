@@ -29,15 +29,23 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker<PCL
     public Texture portraitImage;
 
     public PCLDynamicRelicData(String cardID) {
-        super(PCLDynamicRelic.class, PGR.core, cardID);
+        super(PCLDynamicRelic.class, PGR.core, PGR.core.cardColor, cardID);
     }
 
     public PCLDynamicRelicData(String cardID, PCLResources<?, ?, ?, ?> resources) {
-        super(PCLDynamicRelic.class, resources, cardID);
+        super(PCLDynamicRelic.class, resources, resources.cardColor, cardID);
+    }
+
+    public PCLDynamicRelicData(String cardID, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        super(PCLDynamicRelic.class, resources, color, cardID);
     }
 
     public PCLDynamicRelicData(PCLResources<?, ?, ?, ?> resources, String cardID, RelicStrings strings) {
-        super(PCLDynamicRelic.class, resources, cardID, strings);
+        super(PCLDynamicRelic.class, resources, resources.cardColor, cardID, strings);
+    }
+
+    public PCLDynamicRelicData(PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID, RelicStrings strings) {
+        super(PCLDynamicRelic.class, resources, color, cardID, strings);
     }
 
     public PCLDynamicRelicData(PCLRelicData original) {
