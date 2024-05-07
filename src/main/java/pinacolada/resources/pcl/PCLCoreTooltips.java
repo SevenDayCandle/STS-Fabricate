@@ -67,6 +67,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip autoplay = tryLoadTip("Autoplay");
     public EUIKeywordTooltip barricade = tryLoadTip("Barricade");
     public EUIKeywordTooltip beatOfDeath = tryLoadTip("Beat Of Death");
+    public EUIKeywordTooltip blessing = tryLoadTip("Blessing");
     public EUIKeywordTooltip blinded = tryLoadTip("Blinded");
     public EUIKeywordTooltip blockReturn = tryLoadTip("Block Return");
     public EUIKeywordTooltip blur = tryLoadTip("Blur");

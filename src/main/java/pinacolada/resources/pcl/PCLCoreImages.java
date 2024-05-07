@@ -195,6 +195,7 @@ public class PCLCoreImages extends AbstractImages {
     }
 
     public static class Types {
+        public static final TextureCache blessing = new TextureCache("images/pcl/cardui/types/Blessing.png", true);
         public static final TextureCache summon = new TextureCache("images/pcl/cardui/types/Summon.png", true);
     }
 

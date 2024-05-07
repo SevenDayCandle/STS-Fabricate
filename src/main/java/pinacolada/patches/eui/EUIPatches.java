@@ -37,6 +37,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public class EUIPatches {
+    protected static final CardTypePanelFilterItem BLESSING = new CardTypePanelFilterItem(PCLEnum.CardType.BLESSING);
     protected static final CardTypePanelFilterItem SUMMON = new CardTypePanelFilterItem(PCLEnum.CardType.SUMMON);
 
     @SpirePatch(clz = BlightTier.class, method = "getTier", paramtypez = {AbstractBlight.class})
@@ -73,7 +74,10 @@ public class EUIPatches {
     public static class CardTypePanelFilterItem_Get {
         @SpirePrefixPatch
         public static SpireReturn<CardTypePanelFilterItem> prefix(AbstractCard.CardType type) {
-            if (type == PCLEnum.CardType.SUMMON) {
+            if (type == PCLEnum.CardType.BLESSING) {
+                return SpireReturn.Return(BLESSING);
+            }
+            else if (type == PCLEnum.CardType.SUMMON) {
                 return SpireReturn.Return(SUMMON);
             }
             return SpireReturn.Continue();
@@ -159,6 +163,9 @@ public class EUIPatches {
     public static class ExtendedUIPatches_IconForType {
         @SpirePrefixPatch
         public static SpireReturn<TextureCache> prefix(AbstractCard.CardType type) {
+            if (type == PCLEnum.CardType.BLESSING) {
+                return SpireReturn.Return(PCLCoreImages.Types.blessing);
+            }
             if (type == PCLEnum.CardType.SUMMON) {
                 return SpireReturn.Return(PCLCoreImages.Types.summon);
             }
@@ -184,6 +191,9 @@ public class EUIPatches {
     public static class ExtendedUIPatches_TextForType {
         @SpirePrefixPatch
         public static SpireReturn<String> prefix(AbstractCard.CardType type) {
+            if (type == PCLEnum.CardType.BLESSING) {
+                return SpireReturn.Return(PGR.core.tooltips.blessing.title);
+            }
             if (type == PCLEnum.CardType.SUMMON) {
                 return SpireReturn.Return(PGR.core.tooltips.summon.title);
             }

@@ -39,6 +39,8 @@ public class PCLEnum {
 
     public static class CardType {
         @SpireEnum
+        public static AbstractCard.CardType BLESSING;
+        @SpireEnum
         public static AbstractCard.CardType SUMMON;
     }
 

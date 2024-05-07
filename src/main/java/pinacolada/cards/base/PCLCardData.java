@@ -398,6 +398,23 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
+    public PCLCardData setBlessing(AbstractCard.CardRarity rarity) {
+        return setBlessing(-2, rarity, PCLCardTarget.None);
+    }
+
+    public PCLCardData setBlessing(int cost, AbstractCard.CardRarity rarity) {
+        return setBlessing(cost, rarity, PCLCardTarget.None);
+    }
+
+    public PCLCardData setBlessing(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target) {
+        setRarityTypeAndCopies(rarity, PCLEnum.CardType.BLESSING);
+
+        cardTarget = target;
+        this.cost = array(cost);
+
+        return this;
+    }
+
     public PCLCardData setBlock(int block, int blockUpgrade) {
         this.block[0] = block;
         this.blockUpgrade[0] = blockUpgrade;

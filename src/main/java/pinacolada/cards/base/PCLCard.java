@@ -810,7 +810,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return shouldUsePCLFrame() || isSummon() ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
+        return shouldUsePCLFrame() || isSummon() || type == PCLEnum.CardType.BLESSING ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
     }
 
     public PCardPrimary_GainBlock getCardBlock() {
@@ -915,7 +915,29 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected TextureAtlas.AtlasRegion getPortraitFrameVanillaRegion() {
-        if (isPopup) {
+        if (isSummon()) {
+            if (isPopup) {
+                switch (rarity) {
+                    case RARE:
+                        return ImageMaster.CARD_FRAME_POWER_RARE_L;
+                    case UNCOMMON:
+                        return ImageMaster.CARD_FRAME_POWER_UNCOMMON_L;
+                    default:
+                        return ImageMaster.CARD_FRAME_POWER_COMMON_L;
+                }
+            }
+            else {
+                switch (rarity) {
+                    case RARE:
+                        return ImageMaster.CARD_FRAME_POWER_RARE;
+                    case UNCOMMON:
+                        return ImageMaster.CARD_FRAME_POWER_UNCOMMON;
+                    default:
+                        return ImageMaster.CARD_FRAME_POWER_COMMON;
+                }
+            }
+        }
+        else if (isPopup) {
             switch (type) {
                 case ATTACK:
                     switch (rarity) {

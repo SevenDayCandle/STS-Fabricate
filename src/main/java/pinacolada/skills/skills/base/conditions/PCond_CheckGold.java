@@ -36,7 +36,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> implements OnGoldC
 
     @Override
     public String getSampleText(PSkill<?> callingSkill, PSkill<?> parentSkill) {
-        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.gold.title);
+        return isUnderWhen(callingSkill, parentSkill) ? TEXT.cond_when(TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override

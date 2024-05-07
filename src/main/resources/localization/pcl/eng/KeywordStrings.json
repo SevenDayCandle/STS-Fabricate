@@ -92,6 +92,11 @@
 		"DESCRIPTION": "Die on your next turn.",
 		"NAME": "Blasphemer"
 	},
+	"Blessing":	{
+		"DESCRIPTION": "#yBlessing cards are positive cards that stay in your deck.",
+		"NAME": "Blessing",
+		"PLURAL": "${0}@>1:Blessings@:Blessing$"
+	},
 	"Blinded":	{
 		"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn start.",
 		"NAME": "Blinded"
