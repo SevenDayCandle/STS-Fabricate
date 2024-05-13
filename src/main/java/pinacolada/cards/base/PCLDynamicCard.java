@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.FabricateItem;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -85,6 +86,23 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     protected TextureAtlas.AtlasRegion getBaseGameCardBackground() {
+        if (type == PCLEnum.CardType.SUMMON) {
+            switch (color) {
+                case RED:
+                    return ImageMaster.CARD_POWER_BG_RED;
+                case GREEN:
+                    return ImageMaster.CARD_POWER_BG_GREEN;
+                case BLUE:
+                    return ImageMaster.CARD_POWER_BG_BLUE;
+                case PURPLE:
+                    return ImageMaster.CARD_POWER_BG_PURPLE;
+                case COLORLESS:
+                case CURSE:
+                    return ImageMaster.CARD_POWER_BG_GRAY;
+                default:
+                    return null;
+            }
+        }
         switch (type) {
             case POWER:
                 switch (color) {
@@ -139,6 +157,23 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     protected TextureAtlas.AtlasRegion getBaseGameCardPopupBackground() {
+        if (type == PCLEnum.CardType.SUMMON) {
+            switch (color) {
+                case RED:
+                    return ImageMaster.CARD_POWER_BG_RED_L;
+                case GREEN:
+                    return ImageMaster.CARD_POWER_BG_GREEN_L;
+                case BLUE:
+                    return ImageMaster.CARD_POWER_BG_BLUE_L;
+                case PURPLE:
+                    return ImageMaster.CARD_POWER_BG_PURPLE_L;
+                case COLORLESS:
+                case CURSE:
+                    return ImageMaster.CARD_POWER_BG_GRAY_L;
+                default:
+                    return null;
+            }
+        }
         switch (type) {
             case POWER:
                 switch (color) {

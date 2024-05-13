@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -16,6 +17,7 @@ import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -44,6 +46,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public PSkillContainer skills;
     public EUIKeywordTooltip mainTooltip;
     public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
+    protected Texture overrideImg;
 
     // We deliberately avoid using initializeData because we need to load the PotionStrings after the super call
     public PCLPotion(PCLPotionData data) {
@@ -51,6 +54,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         this.potionData = data;
         name = data.strings.NAME;
         initialize();
+        setupImages(data.imagePath);
     }
 
     public static String createFullID(Class<? extends PCLPotion> type) {
@@ -67,6 +71,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     protected static PCLPotionData register(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources) {
         return registerPotionData(new PCLPotionData(type, resources));
+    }
+
+    protected static PCLPotionData register(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        return registerPotionData(new PCLPotionData(type, resources, color));
     }
 
     protected static <T extends PCLPotionData> T registerPotionData(T cardData) {
@@ -235,35 +243,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         renderImpl(sb, false);
     }
 
-    protected void renderFlash(SpriteBatch sb, float x, float y, float scale, Texture containerImg, Texture liquidImg, Texture hybridImg, Texture spotsImg, Texture outlineImg) {
-        Color renderColor = EUIColors.white(liquidColor.a);
-        sb.setColor(renderColor);
-        sb.draw(containerImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        sb.setColor(this.liquidColor);
-        sb.draw(liquidImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        sb.setBlendFunction(770, 1);
-        sb.setColor(renderColor);
-        sb.draw(containerImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        sb.setColor(this.liquidColor);
-        sb.draw(liquidImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        if (hybridImg != null) {
-            sb.setColor(this.hybridColor);
-            sb.draw(hybridImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        }
-        if (spotsImg != null) {
-            sb.setColor(this.spotsColor);
-            sb.draw(spotsImg, x - 32.0F, y - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
-        }
-        sb.setBlendFunction(770, 771);
-    }
-
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
         float angle = ReflectionHacks.getPrivate(this, AbstractPotion.class, "angle");
-        Texture containerImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "containerImg");
-        Texture liquidImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "liquidImg");
-        Texture hybridImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "hybridImg");
-        Texture spotsImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "spotsImg");
-        Texture outlineImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "outlineImg");
+        float drawX = this.posX - 32.0F;
+        float drawY = this.posY - 32.0F;
 
         updateEffect();
         if (this.hb.hovered) {
@@ -274,25 +257,63 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
             this.scale = MathHelper.scaleLerpSnap(this.scale, Settings.scale);
         }
 
-        this.renderOutline(sb, useOutlineColor ? this.labOutlineColor : Settings.HALF_TRANSPARENT_BLACK_COLOR);
-        sb.setColor(this.liquidColor);
-        sb.draw(liquidImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
-        if (this.hybridColor != null && hybridImg != null) {
-            sb.setColor(this.hybridColor);
-            sb.draw(hybridImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+        if (overrideImg != null) {
+            sb.setColor(Color.WHITE);
+            sb.draw(overrideImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+            if (flashTime > 0) {
+                flashTime -= EUI.delta();
+                Color renderColor = EUIColors.white(liquidColor.a);
+                sb.setColor(renderColor);
+                sb.draw(overrideImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, scale, scale, 0.0F, 0, 0, 64, 64, false, false);
+                sb.setBlendFunction(770, 771);
+            }
         }
+        else {
+            Texture containerImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "containerImg");
+            Texture liquidImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "liquidImg");
+            Texture hybridImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "hybridImg");
+            Texture spotsImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "spotsImg");
+            Texture outlineImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "outlineImg");
 
-        if (this.spotsColor != null && spotsImg != null) {
-            sb.setColor(this.spotsColor);
-            sb.draw(spotsImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
-        }
+            this.renderOutline(sb, useOutlineColor ? this.labOutlineColor : Settings.HALF_TRANSPARENT_BLACK_COLOR);
+            sb.setColor(this.liquidColor);
+            sb.draw(liquidImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+            if (this.hybridColor != null && hybridImg != null) {
+                sb.setColor(this.hybridColor);
+                sb.draw(hybridImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+            }
 
-        sb.setColor(Color.WHITE);
-        sb.draw(containerImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+            if (this.spotsColor != null && spotsImg != null) {
+                sb.setColor(this.spotsColor);
+                sb.draw(spotsImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+            }
 
-        if (flashTime > 0) {
-            flashTime -= EUI.delta();
-            renderFlash(sb, posX, posY, Interpolation.exp10In.apply(Settings.scale, Settings.scale * 12f, flashTime), containerImg, liquidImg, hybridImg, spotsImg, outlineImg);
+            sb.setColor(Color.WHITE);
+            sb.draw(containerImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
+
+            if (flashTime > 0) {
+                flashTime -= EUI.delta();
+                float flashScale = Interpolation.exp10In.apply(Settings.scale, Settings.scale * 12f, flashTime);
+                Color renderColor = EUIColors.white(liquidColor.a);
+                sb.setColor(renderColor);
+                sb.draw(containerImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                sb.setColor(this.liquidColor);
+                sb.draw(liquidImg, posX - 32.0F, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                sb.setBlendFunction(770, 1);
+                sb.setColor(renderColor);
+                sb.draw(containerImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                sb.setColor(this.liquidColor);
+                sb.draw(liquidImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                if (hybridImg != null) {
+                    sb.setColor(this.hybridColor);
+                    sb.draw(hybridImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                }
+                if (spotsImg != null) {
+                    sb.setColor(this.spotsColor);
+                    sb.draw(spotsImg, drawX, drawY, 32.0F, 32.0F, 64.0F, 64.0F, flashScale, flashScale, 0.0F, 0, 0, 64, 64, false, false);
+                }
+                sb.setBlendFunction(770, 771);
+            }
         }
 
         if (this.hb != null) {
@@ -327,6 +348,10 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void setup() {
+    }
+
+    public void setupImages(String imagePath) {
+        overrideImg = EUIRM.getTexture(imagePath, true, false);
     }
 
     @Override

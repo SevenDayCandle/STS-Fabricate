@@ -203,7 +203,7 @@ public class CombatManager extends EUIBase {
         subscriberDo(OnStartOfTurnSubscriber.class, OnStartOfTurnSubscriber::onStartOfTurn);
         summons.onStartOfTurn();
 
-        if (blockRetained > 0 && !AbstractDungeon.player.hasPower(BarricadePower.POWER_ID) && !AbstractDungeon.player.hasPower(BlurPower.POWER_ID)) {
+        if (blockRetained > 0 && CombatManager.shouldLoseBlock(player)) {
             blockRetained = 0;
         }
     }
@@ -1065,15 +1065,17 @@ public class CombatManager extends EUIBase {
             pclCard.lighten(true);
             lastInfo = playerSystem.generateInfo(pclCard, p, finalTarget);
             pclCard.calculateCardDamage(finalTarget, true);
-            if (pclCard.type == PCLEnum.CardType.SUMMON) {
+
+            boolean isSummon = pclCard.type == PCLEnum.CardType.SUMMON;
+            if (isSummon) {
                 summons.summon(pclCard, EUIUtils.safeCast(lastInfo.target, PCLCardAlly.class));
             }
             else {
                 pclCard.onUse(lastInfo);
             }
 
-            // Hardcoded surrounded checks
-            if (p != null && shouldFlipPlayer(p) && finalTarget != null && !(finalTarget instanceof PCLCardAlly)) {
+            // Hardcoded surrounded checks. Do NOT flip when player summons
+            if (p != null && shouldFlipPlayer(p) && !isSummon && finalTarget != null && !(finalTarget instanceof PCLCardAlly)) {
                 p.flipHorizontal = finalTarget.drawX < p.drawX;
             }
 
@@ -1188,6 +1190,10 @@ public class CombatManager extends EUIBase {
 
     public static boolean shouldFlipPlayer(AbstractPlayer p) {
         return p.hasPower(SurroundedPower.POWER_ID);
+    }
+
+    public static boolean shouldLoseBlock(AbstractCreature c) {
+        return !c.hasPower(BarricadePower.POWER_ID) && !c.hasPower(BlurPower.POWER_ID);
     }
 
     public static TreeSet<PCLAffinity> showAffinities() {

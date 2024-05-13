@@ -52,7 +52,7 @@ public class PCLCustomPotionEditScreen extends PCLCustomEditEntityScreen<PCLCust
         if (image == null) {
             image = getBuilder().portraitImage;
         }
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
+        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forPotion(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));

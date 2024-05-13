@@ -810,7 +810,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return shouldUsePCLFrame() || isSummon() || type == PCLEnum.CardType.BLESSING ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
+        if (shouldUsePCLFrame() || type == PCLEnum.CardType.BLESSING ) {
+            return ImageMaster.CARD_SKILL_BG_SILHOUETTE;
+        }
+        if (isSummon()) {
+            return ImageMaster.CARD_POWER_BG_SILHOUETTE;
+        }
+        return super.getCardBgAtlas();
     }
 
     public PCardPrimary_GainBlock getCardBlock() {

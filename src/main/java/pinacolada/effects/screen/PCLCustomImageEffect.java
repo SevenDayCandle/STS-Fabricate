@@ -57,6 +57,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private static final int CARD_IMG_WIDTH = 500;
     private static final int CARD_IMG_HEIGHT = 380;
     private static final int ORB_IMG_SIZE = 96;
+    private static final int POTION_IMG_SIZE = 64;
     private static final int POWER_IMG_SIZE = 84;
     private static final int RELIC_IMG_SIZE = 128;
     private final DraggableHitbox hb;
@@ -209,6 +210,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     public static PCLCustomImageEffect forOrb(Texture texture) {
         return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingRelics, ORB_IMG_SIZE, ORB_IMG_SIZE);
+    }
+
+    public static PCLCustomImageEffect forPotion(Texture texture) {
+        return new PCLCustomImageEffect(texture, PCLCustomImageEffect::selectExistingRelics, POTION_IMG_SIZE, POTION_IMG_SIZE);
     }
 
     public static PCLCustomImageEffect forPower(Texture texture) {

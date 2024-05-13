@@ -181,7 +181,10 @@ public class SummonPool extends EUIBase {
 
     public void onStartOfTurn() {
         for (PCLCardAlly ally : summons) {
-            ally.loseBlock();
+            // Hardcoded blurring stuff -_-
+            if (CombatManager.shouldLoseBlock(ally)) {
+                ally.loseBlock();
+            }
             ally.applyStartOfTurnPowers();
             if (ally.priority == DelayTiming.StartOfTurnFirst) {
                 PCLActions.last.triggerAlly(ally, false);

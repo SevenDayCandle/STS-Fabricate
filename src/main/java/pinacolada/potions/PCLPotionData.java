@@ -9,6 +9,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
@@ -40,16 +41,20 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
     public int branchFactor = 0;
 
     public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources) {
-        this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
+        this(invokeClass, resources, resources.cardColor, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
-        this(invokeClass, resources, cardID, PGR.getPotionStrings(cardID));
+    public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        this(invokeClass, resources, color, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, PotionStrings strings) {
+    public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID) {
+        this(invokeClass, resources, color, cardID, PGR.getPotionStrings(cardID));
+    }
+
+    public PCLPotionData(Class<? extends PCLPotion> invokeClass, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID, PotionStrings strings) {
         super(cardID, invokeClass, resources);
-        this.cardColor = resources.cardColor;
+        this.cardColor = color;
         this.strings = strings != null ? strings : new PotionStrings();
         this.initializeImage();
     }
@@ -199,6 +204,16 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
 
     public PCLPotionData setSpotsColor(Color spotsColor) {
         this.spotsColor = spotsColor != null ? spotsColor : Color.WHITE;
+        return this;
+    }
+
+    public PCLPotionData withImage() {
+        this.imagePath = PGR.getRelicImage(ID);
+        return this;
+    }
+
+    public PCLPotionData withImage(String path) {
+        this.imagePath = path;
         return this;
     }
 }

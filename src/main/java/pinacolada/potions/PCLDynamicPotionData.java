@@ -6,10 +6,12 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.PotionStrings;
+import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -29,15 +31,23 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
     public Texture portraitImage;
 
     public PCLDynamicPotionData(String cardID) {
-        super(PCLDynamicPotion.class, PGR.core, cardID);
+        super(PCLDynamicPotion.class, PGR.core, PGR.core.cardColor, cardID);
     }
 
     public PCLDynamicPotionData(String cardID, PCLResources<?, ?, ?, ?> resources) {
-        super(PCLDynamicPotion.class, resources, cardID);
+        super(PCLDynamicPotion.class, resources, resources.cardColor, cardID);
+    }
+
+    public PCLDynamicPotionData(String cardID, PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color) {
+        super(PCLDynamicPotion.class, resources, color, cardID);
     }
 
     public PCLDynamicPotionData(PCLResources<?, ?, ?, ?> resources, String cardID, PotionStrings strings) {
-        super(PCLDynamicPotion.class, resources, cardID, strings);
+        super(PCLDynamicPotion.class, resources, resources.cardColor, cardID, strings);
+    }
+
+    public PCLDynamicPotionData(PCLResources<?, ?, ?, ?> resources, AbstractCard.CardColor color, String cardID, PotionStrings strings) {
+        super(PCLDynamicPotion.class, resources, color, cardID, strings);
     }
 
     public PCLDynamicPotionData(PCLPotionData original) {
@@ -106,9 +116,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
     @Override
     public PCLDynamicPotion create() {
         setTextForLanguage();
-        if (imagePath == null) {
-            imagePath = PCLCoreImages.CardAffinity.unknown.path();
-        }
         return new PCLDynamicPotion(this);
     }
 
@@ -154,7 +161,6 @@ public class PCLDynamicPotionData extends PCLPotionData implements EditorMaker<P
 
     @Override
     public void initializeImage() {
-        this.imagePath = PCLCoreImages.CardAffinity.unknown.path();
     }
 
     @Override

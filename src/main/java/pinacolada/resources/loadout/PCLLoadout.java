@@ -266,7 +266,7 @@ public abstract class PCLLoadout {
 
     public ArrayList<String> getAvailableCardIDs() {
         ArrayList<String> values = new ArrayList<>();
-        PCLLoadout coreLoadout = getPlayerData().getCoreLoadout();
+
         for (PCLCardData card : getCards()) {
             if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
                 values.add(card.ID);
@@ -277,14 +277,19 @@ public abstract class PCLLoadout {
                 values.add(card.ID);
             }
         }
-        for (PCLCardData card : coreLoadout.getCards()) {
-            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
-                values.add(card.ID);
+
+        PCLPlayerData<?,?,?> pData = getPlayerData();
+        if (pData != null) {
+            PCLLoadout coreLoadout = getPlayerData().getCoreLoadout();
+            for (PCLCardData card : coreLoadout.getCards()) {
+                if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                    values.add(card.ID);
+                }
             }
-        }
-        for (PCLCardData card : coreLoadout.getCardMiscs()) {
-            if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
-                values.add(card.ID);
+            for (PCLCardData card : coreLoadout.getCardMiscs()) {
+                if (card.cardRarity == AbstractCard.CardRarity.BASIC || card.cardRarity == AbstractCard.CardRarity.COMMON) {
+                    values.add(card.ID);
+                }
             }
         }
 
@@ -631,7 +636,9 @@ public abstract class PCLLoadout {
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
-    public abstract ArrayList<String> getBaseStartingRelics();
+    public ArrayList<String> getBaseStartingRelics() {
+        return new ArrayList<>();
+    }
 
     public static class PCLLoadoutGroup {
         public AbstractCard.CardColor color;
