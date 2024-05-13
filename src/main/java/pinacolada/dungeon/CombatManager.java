@@ -1074,11 +1074,6 @@ public class CombatManager extends EUIBase {
                 pclCard.onUse(lastInfo);
             }
 
-            // Hardcoded surrounded checks. Do NOT flip when player summons
-            if (p != null && shouldFlipPlayer(p) && !isSummon && finalTarget != null && !(finalTarget instanceof PCLCardAlly)) {
-                p.flipHorizontal = finalTarget.drawX < p.drawX;
-            }
-
             playerSystem.onCardPlayed(pclCard, lastInfo, false);
             return true;
         }
@@ -1186,10 +1181,6 @@ public class CombatManager extends EUIBase {
 
     private static boolean shouldBlockUpdate() {
         return player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden || GameUtilities.getCurrentRoom() == null;
-    }
-
-    public static boolean shouldFlipPlayer(AbstractPlayer p) {
-        return p.hasPower(SurroundedPower.POWER_ID);
     }
 
     public static boolean shouldLoseBlock(AbstractCreature c) {

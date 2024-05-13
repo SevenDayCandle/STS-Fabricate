@@ -232,6 +232,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         if (GameUtilities.isPCLOnlyCardColor(builder.cardColor)) {
             return super.getBorderTexture();
         }
+        if (type == PCLEnum.CardType.SUMMON) {
+            return ImageMaster.CARD_POWER_BG_SILHOUETTE;
+        }
         switch (this.type) {
             case ATTACK:
                 return ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
@@ -248,6 +251,9 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     }
 
     protected Texture getCardBackgroundMask() {
+        if (type == PCLEnum.CardType.SUMMON) {
+            return isPopup ? PCLCoreImages.CardUI.cardBackgroundPowerReplL.texture() : PCLCoreImages.CardUI.cardBackgroundPowerRepl.texture();
+        }
         switch (type) {
             case ATTACK:
                 return isPopup ? PCLCoreImages.CardUI.cardBackgroundAttackReplL.texture() : PCLCoreImages.CardUI.cardBackgroundAttackRepl.texture();
