@@ -57,10 +57,10 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
     private boolean showTopPanelOnComplete;
 
     public ViewInGameRelicPoolEffect(ArrayList<AbstractRelic> relics, HashSet<String> bannedRelics) {
-        this(relics, bannedRelics, null);
+        this(relics, bannedRelics, null, false);
     }
 
-    public ViewInGameRelicPoolEffect(ArrayList<AbstractRelic> relics, HashSet<String> bannedRelics, ActionT0 onRefresh) {
+    public ViewInGameRelicPoolEffect(ArrayList<AbstractRelic> relics, HashSet<String> bannedRelics, ActionT0 onRefresh, boolean disableLocks) {
         super(0.7f);
 
         this.bannedRelics = new HashSet<>();
@@ -95,7 +95,13 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
         this.grid = (EUIRelicGrid) new EUIRelicGrid()
                 .canDragScreen(false)
                 .setOnClick(this::toggleRelic);
-        this.grid.setItems(relics, RelicInfo::new);
+        if (disableLocks) {
+            this.grid.setItems(relics, r -> new RelicInfo(r, false));
+        }
+        else {
+            this.grid.setItems(relics, RelicInfo::new);
+        }
+
         for (RelicInfo c : grid.group) {
             updateRelicAlpha(c);
         }
@@ -301,7 +307,9 @@ public class ViewInGameRelicPoolEffect extends PCLEffectWithCallback<ViewInGameR
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
+        boolean wasFiltersOpen = EUI.relicFilters.isActive;
+        EUI.relicFilters.tryUpdate();
+        boolean shouldDoStandardUpdate = !wasFiltersOpen && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
             EUIExporter.exportButton.tryUpdate();

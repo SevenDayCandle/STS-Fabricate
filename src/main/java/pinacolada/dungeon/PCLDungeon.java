@@ -37,6 +37,7 @@ import pinacolada.dungeon.modifiers.AbstractGlyph;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.interfaces.listeners.OnCardPoolInitializeListener;
 import pinacolada.patches.dungeon.ModHelperPatches;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
 import pinacolada.potions.PCLCustomPotionSlot;
@@ -640,6 +641,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                         }
                     }
                 }
+            }
+        }
+
+        for (AbstractRelic r : player.relics) {
+            if (r instanceof OnCardPoolInitializeListener) {
+                ((OnCardPoolInitializeListener) r).onCardPoolInitialized(groups);
             }
         }
 

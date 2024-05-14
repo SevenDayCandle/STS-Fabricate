@@ -380,7 +380,9 @@ public abstract class PCLCustomSelectorScreen<T, U extends PCLCustomEditorLoadab
             // Do not close the screen with esc if there is an effect going on
             super.updateImpl();
             contextMenu.tryUpdate();
-            boolean shouldDoStandardUpdate = !getFilters().tryUpdate() && !CardCrawlGame.isPopupOpen;
+            boolean wasFiltersOpen = getFilters().isActive;
+            getFilters().tryUpdate();
+            boolean shouldDoStandardUpdate = !wasFiltersOpen && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
                 PGR.helpMeButton.tryUpdate();
                 EUI.openFiltersButton.tryUpdate();

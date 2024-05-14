@@ -84,8 +84,9 @@ public class PCLGenericSelectRelicEffect extends PCLEffectWithCallback<AbstractR
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate();
-        if (shouldDoStandardUpdate) {
+        boolean wasFiltersOpen = EUI.relicFilters.isActive;
+        EUI.relicFilters.tryUpdate();
+        if (!wasFiltersOpen) {
             grid.tryUpdate();
             EUI.sortHeader.update();
             EUI.openFiltersButton.update();

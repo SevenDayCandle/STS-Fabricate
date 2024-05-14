@@ -350,7 +350,9 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<ViewInGameCa
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
+        boolean wasFiltersOpen = EUI.cardFilters.isActive;
+        EUI.cardFilters.tryUpdate();
+        boolean shouldDoStandardUpdate = !wasFiltersOpen && !randomSelection.tryUpdate() && !EUIExporter.exportDropdown.isOpen();
         if (shouldDoStandardUpdate) {
             EUI.openFiltersButton.tryUpdate();
             EUIExporter.exportButton.tryUpdate();

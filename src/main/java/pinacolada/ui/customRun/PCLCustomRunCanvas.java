@@ -262,7 +262,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void openRelicPool() {
-        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics)
+        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics, null, true)
                 .addCallback(pool -> {
                     screen.bannedRelics = pool.bannedRelics;
                 });;

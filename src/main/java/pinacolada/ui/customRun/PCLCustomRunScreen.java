@@ -94,7 +94,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 
     private void addRelicsForGroup(ArrayList<AbstractRelic> group, AbstractCard.CardColor color) {
         for (AbstractRelic c : GameUtilities.getRelics(color).values()) {
-            if (isRelicEligible(c.tier) && !UnlockTracker.isRelicLocked(c.relicId)) {
+            if (isRelicEligible(c.tier)) {
                 AbstractRelic relic = c.makeCopy();
                 relic.isSeen = relic.isSeen || UnlockTracker.isRelicSeen(relic.relicId);
                 group.add(relic);

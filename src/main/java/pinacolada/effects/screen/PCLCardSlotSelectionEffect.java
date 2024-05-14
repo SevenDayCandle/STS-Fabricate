@@ -101,8 +101,9 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<PCLCardSlo
 
     @Override
     protected void updateInternal(float deltaTime) {
-        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate();
-        if (shouldDoStandardUpdate) {
+        boolean wasFiltersOpen = EUI.cardFilters.isActive;
+        EUI.cardFilters.tryUpdate();
+        if (!wasFiltersOpen) {
             grid.tryUpdate();
             EUI.sortHeader.update();
             EUI.openFiltersButton.update();
