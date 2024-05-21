@@ -61,16 +61,16 @@ public class PCLCardExportRow extends EUIExporterRow {
         Cost = data.getCost(form);
         Cost_Upgrade = data.getCostUpgrade(form);
         if (format == EUIExporter.ExportType.CSV) {
-            Affinities = EUIUtils.joinStringsMap("/", af -> af.tooltip.title, data.affinities.getAffinities());
-            Tags = EUIUtils.joinStringsMap("/", tagInfo -> tagInfo.tag.getName(), data.tags.values());
-            Flags = EUIUtils.joinStringsMap("/", CardFlag::getName, data.flags);
+            Affinities = EUIUtils.joinStringsMapNonnull("/", af -> af.tooltip.title, data.affinities.getAffinities());
+            Tags = EUIUtils.joinStringsMapNonnull("/", tagInfo -> tagInfo.tag.getName(), data.tags.values());
+            Flags = data.flags != null ? EUIUtils.joinStringsMapNonnull("/", CardFlag::getName, data.flags) : "";
         }
         else {
             Affinities = data.affinities.getAffinities();
             Tags = data.tags.keySet();
-            Flags = data.flags;
+            Flags = data.flags != null ? data.flags : "";
         }
-        Effects = EUIUtils.joinStringsMap(" ", PSkill::getExportText, card.getFullEffects());
+        Effects = EUIUtils.joinStringsMapNonnull(" ", PSkill::getExportText, card.getFullEffects());
     }
 
     @Override
