@@ -32,6 +32,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip create = tryLoadTip("Create").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip curse = tryLoadTip("Curse").setCanAdd(false);
     public EUIKeywordTooltip debuff = tryLoadTip("Debuff").setCanAdd(false).canHighlight(false);
+    public EUIKeywordTooltip die = tryLoadTip("Die").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip discard = tryLoadTip("Discard").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip draw = tryLoadTip("Draw").setCanAdd(false).canHighlight(false);
     public EUIKeywordTooltip fetch = tryLoadTip("Fetch").setCanAdd(false).canHighlight(false);

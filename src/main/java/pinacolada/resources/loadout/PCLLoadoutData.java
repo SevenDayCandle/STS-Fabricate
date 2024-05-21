@@ -1,6 +1,8 @@
 package pinacolada.resources.loadout;
 
 import com.google.gson.reflect.TypeToken;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
@@ -42,14 +44,14 @@ public class PCLLoadoutData {
                 addBlightSlot(blight);
             }
         }
-        for (String blight : info.relics) {
-            if (blight != null) {
-                addRelicSlot(blight);
+        for (String relic : info.relics) {
+            if (relic != null && RelicLibrary.getRelic(relic) != null) {
+                addRelicSlot(relic);
             }
         }
-        for (PCLLoadoutDataInfo.LoadoutCardInfo blight : info.cards) {
-            if (blight != null && blight.id != null) {
-                addCardSlot(blight.id, blight.count);
+        for (PCLLoadoutDataInfo.LoadoutCardInfo card : info.cards) {
+            if (card != null && card.id != null && CardLibrary.getCard(card.id) != null) {
+                addCardSlot(card.id, card.count);
             }
         }
     }

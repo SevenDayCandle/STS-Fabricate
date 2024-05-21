@@ -208,7 +208,7 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
     }
 
     public PCLPotionData withImage() {
-        this.imagePath = PGR.getRelicImage(ID);
+        this.imagePath = PGR.getPotionImage(ID);
         return this;
     }
 

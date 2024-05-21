@@ -6,6 +6,7 @@ import pinacolada.actions.special.DieAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -35,6 +36,11 @@ public class PMove_Kill extends PMove<PField_Empty> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
+        PCLCardTarget actual = getTargetForPerspective(perspective);
+        if (actual == PCLCardTarget.None || (actual == PCLCardTarget.Self && !isFromCreature())) {
+            return PGR.core.tooltips.die.title;
+        }
+
         return TEXT.act_kill(getTargetStringPerspective(perspective));
     }
 

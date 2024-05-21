@@ -3,6 +3,7 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -467,7 +468,7 @@ public abstract class PCLLoadout {
         final ArrayList<String> cards = new ArrayList<>();
         for (LoadoutCardSlot slot : getPreset().cardSlots) {
             String cardID = slot.selected;
-            if (cardID != null) {
+            if (cardID != null && CardLibrary.getCard(cardID) != null) {
                 for (int i = 0; i < slot.getAmount(); i++) {
                     cards.add(cardID);
                 }

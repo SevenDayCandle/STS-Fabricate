@@ -2227,6 +2227,9 @@ public class GameUtilities {
     }
 
     public static EUIKeywordTooltip tooltipForType(AbstractCard.CardType type) {
+        if (type == PCLEnum.CardType.SUMMON) {
+            return PGR.core.tooltips.summon;
+        }
         switch (type) {
             case ATTACK:
                 return PGR.core.tooltips.attack;
@@ -2239,7 +2242,7 @@ public class GameUtilities {
             case STATUS:
                 return PGR.core.tooltips.status;
             default:
-                return PGR.core.tooltips.summon;
+                return PGR.core.tooltips.blessing;
         }
     }
 

@@ -196,6 +196,10 @@ public class PGR {
         return getLanguagePack().getCharacterString(characterID);
     }
 
+    public static String getEventImage(String id) {
+        return getPng(id, "events");
+    }
+
     public static EventStrings getEventStrings(String eventID) {
         return getLanguagePack().getEventString(eventID);
     }
@@ -235,6 +239,10 @@ public class PGR {
     public static String getPng(String id, String subFolder) {
         String[] s = EUI.splitID(id);
         return s.length > 1 ? IMAGES_FOLDER + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png" : null;
+    }
+
+    public static String getPotionImage(String id) {
+        return getPng(id, "potions");
     }
 
     public static PotionStrings getPotionStrings(String relicID) {
@@ -290,6 +298,14 @@ public class PGR {
     }
 
     public static void initialize() {
+        // Ensure that Fabricate's BLESSING type is treated as the same type as other BLESSING types
+        try {
+            PCLEnum.CardType.BLESSING = AbstractCard.CardType.valueOf(PCLEnum.CardType.BLESSING.name());
+        }
+        catch (Exception e) {
+            EUIUtils.logError(PGR.class, "Blessing type is missing, WTF");
+        }
+
         if (core != null) {
             throw new RuntimeException("Already Initialized");
         }

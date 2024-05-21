@@ -51,9 +51,9 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
                 return TEXT.cond_ifTargetWouldDie(getTargetString(actual));
             }
             if (fields.random) {
-                return getWheneverAreString(EUIRM.strings.adjNoun(PGR.core.tooltips.fatal.title, PGR.core.tooltips.kill.present()), perspective);
+                return getWheneverString(EUIRM.strings.generic2(PGR.core.tooltips.fatal.title, PGR.core.tooltips.die.present()), perspective);
             }
-            return getWheneverString(PGR.core.tooltips.kill.present(), perspective);
+            return getWheneverString(PGR.core.tooltips.die.present(), perspective);
         }
         if (fields.random) {
             return TEXT.cond_ifX(fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : PGR.core.tooltips.fatal.title);

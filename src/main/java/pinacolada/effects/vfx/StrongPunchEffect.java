@@ -50,8 +50,8 @@ public class StrongPunchEffect extends VisualEffect {
                 triggered = true;
             }
             else {
-                x += Interpolation.sine.apply(-25f, 25f, this.duration * 50);
-                y += Interpolation.sine.apply(-25f, 25f, this.duration * 50);
+                x += Interpolation.sine.apply(-45f, 45f, this.duration * 40);
+                y += Interpolation.sine.apply(-45f, 45f, this.duration * 40);
             }
         }
         else {
