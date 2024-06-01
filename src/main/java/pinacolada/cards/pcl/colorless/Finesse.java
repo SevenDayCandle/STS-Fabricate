@@ -12,7 +12,7 @@ public class Finesse extends PCLCard {
     public static final PCLCardData DATA = registerTemplate(Finesse.class, com.megacrit.cardcrawl.cards.colorless.Finesse.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.UNCOMMON)
-            .setDamage(2, 2)
+            .setBlock(2, 2)
             .setColorless();
 
     public Finesse() {

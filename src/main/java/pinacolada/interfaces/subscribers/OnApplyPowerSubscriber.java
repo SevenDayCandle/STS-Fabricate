@@ -6,5 +6,5 @@ import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
 public interface OnApplyPowerSubscriber extends PCLCombatSubscriber {
-    void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source);
+    void onApplyPower(AbstractPower power, AbstractCreature source, AbstractCreature target);
 }

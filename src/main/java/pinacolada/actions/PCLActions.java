@@ -653,7 +653,7 @@ public final class PCLActions {
         return add(new SelectFromPile(sourceName, amount, groups));
     }
 
-    public SelectFromPile selectFromPile(String sourceName, int amount, Collection<AbstractCard> cards) {
+    public SelectFromPile selectFromPile(String sourceName, int amount, Collection<? extends AbstractCard> cards) {
         return add(new SelectFromPile(sourceName, amount, new CardGroup(CardGroup.CardGroupType.UNSPECIFIED)));
     }
 

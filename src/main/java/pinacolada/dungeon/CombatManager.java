@@ -267,7 +267,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static boolean canReducePower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action) {
-        return target == null || subscriberCanDeny(OnTryReducePowerSubscriber.class, s -> s.tryReducePower(powerToApply, target, source, action));
+        return target == null || subscriberCanDeny(OnTryReducePowerSubscriber.class, s -> s.tryReducePower(powerToApply, source, target, action));
     }
 
     public static List<AbstractCard> cardsDiscardedThisCombat() {
@@ -587,7 +587,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static void onApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower power) {
-        subscriberDo(OnApplyPowerSubscriber.class, s -> s.onApplyPower(power, target, source));
+        subscriberDo(OnApplyPowerSubscriber.class, s -> s.onApplyPower(power, source, target));
     }
 
     public static void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {

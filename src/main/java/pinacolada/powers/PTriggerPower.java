@@ -300,7 +300,9 @@ public class PTriggerPower extends PCLClickablePower implements TriggerConnectio
     protected void onAmountChanged(int previousAmount, int difference) {
         if (difference != 0) {
             PCLUseInfo info = CombatManager.getLastInfo();
-            refreshTriggers(info);
+            if (info != null) {
+                refreshTriggers(info);
+            }
             updateDescription();
         }
     }

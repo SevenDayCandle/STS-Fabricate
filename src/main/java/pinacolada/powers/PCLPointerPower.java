@@ -241,7 +241,10 @@ public class PCLPointerPower extends PCLClickablePower implements PointerProvide
                 effect.setAmountFromCard();
             }
             PCLUseInfo info = CombatManager.getLastInfo();
-            refreshTriggers(info);
+            if (info != null) {
+                refreshTriggers(info);
+            }
+
             updateDescription();
         }
     }

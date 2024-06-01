@@ -228,6 +228,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return null;
     }
 
+    public static Collection<PSkillData<?>> getAllData() {return EFFECT_MAP.values();}
+
     public static Set<String> getAllIDs() {
         return EFFECT_MAP.keySet();
     }

@@ -7,5 +7,5 @@ import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
 public interface OnTryReducePowerSubscriber extends PCLCombatSubscriber {
-    boolean tryReducePower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action);
+    boolean tryReducePower(AbstractPower power, AbstractCreature source, AbstractCreature target, AbstractGameAction action);
 }

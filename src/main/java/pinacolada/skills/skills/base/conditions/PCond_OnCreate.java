@@ -32,7 +32,9 @@ public class PCond_OnCreate extends PDelegateCardCond implements OnCardCreatedSu
 
     @Override
     public void onCardCreated(AbstractCard card, boolean startOfBattle) {
-        triggerOnCard(card);
+        if (!startOfBattle) {
+            triggerOnCard(card);
+        }
     }
 
     @Override

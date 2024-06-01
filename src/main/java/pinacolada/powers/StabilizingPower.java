@@ -47,7 +47,7 @@ public class StabilizingPower extends PCLSubscribingPower implements OnTryReduce
     }
 
     @Override
-    public boolean tryReducePower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action) {
+    public boolean tryReducePower(AbstractPower power, AbstractCreature source, AbstractCreature target, AbstractGameAction action) {
         return power == null || !(originalPower.ID.equals(power.ID) && target == owner);
     }
 }
