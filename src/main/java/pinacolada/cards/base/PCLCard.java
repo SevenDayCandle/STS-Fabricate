@@ -1,8 +1,10 @@
 package pinacolada.cards.base;
 
 import basemod.ReflectionHacks;
+import basemod.abstracts.AbstractCardModifier;
 import basemod.abstracts.CustomSavable;
 import basemod.helpers.CardModifierManager;
+import basemod.helpers.TooltipInfo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +34,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
@@ -1168,6 +1171,17 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 dynamicTooltips.add(tip);
             }
         }
+
+        // Add tips from modifiers
+        for (AbstractCardModifier modifier : CardModifierManager.modifiers(this)) {
+            List<TooltipInfo> tooltips = modifier.additionalTooltips(this);
+            if (tooltips != null) {
+                for (TooltipInfo info : tooltips) {
+                    dynamicTooltips.add(new EUIKeywordTooltip(info.title, GameUtilities.sanitizePowerDescription(info.description)));
+                }
+            }
+        }
+
         return dynamicTooltips;
     }
 

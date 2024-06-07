@@ -47,6 +47,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUITextHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
@@ -2146,6 +2147,59 @@ public class GameUtilities {
         }
 
         return false;
+    }
+
+    // Remove unrecognized characters and sequences from the description pulled from by the base game and other mods
+    public static String sanitizePowerDescription(String description) {
+        if (description == null) {
+            return EUIUtils.EMPTY_STRING;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < description.length(); i++) {
+            char c = description.charAt(i);
+            switch (c) {
+                case '|':
+                    sb.append(EUITextHelper.NEWLINE);
+                    break;
+                case '[':
+                case '†':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < description.length()) {
+                        i += 1;
+                        c = description.charAt(i);
+                        if (c == ']') {
+                            break;
+                        }
+                        else {
+                            sub.append(c);
+                        }
+                    }
+                    String key = sub.toString();
+                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(key);
+                    if (tip != null) {
+                        String[] split = EUIUtils.splitString(" ", tip.title);
+                        for (String s : split) {
+                            sb.append("#y");
+                            sb.append(s);
+                            sb.append(' ');
+                        }
+                    }
+                    else {
+                        sb.append(key);
+                    }
+                    break;
+                case '{':
+                    sb.append("#y");
+                    break;
+                case '}':
+                case ']':
+                    continue;
+                default:
+                    sb.append(c);
+            }
+        }
+
+        return sb.toString();
     }
 
     public static float scale(float value) {

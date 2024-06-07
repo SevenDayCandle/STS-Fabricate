@@ -23,7 +23,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
-import extendedui.utilities.EUITextHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
@@ -91,59 +90,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected static <T extends PCLPowerData> T registerPowerData(T cardData) {
         return PCLPowerData.registerPCLData(cardData);
-    }
-
-    // Remove unrecognized characters and sequences from the description pulled from by the base game and other mods
-    public static String sanitizePowerDescription(String description) {
-        if (description == null) {
-            return EUIUtils.EMPTY_STRING;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < description.length(); i++) {
-            char c = description.charAt(i);
-            switch (c) {
-                case '|':
-                    sb.append(EUITextHelper.NEWLINE);
-                    break;
-                case '[':
-                case '†':
-                    StringBuilder sub = new StringBuilder();
-                    while (i + 1 < description.length()) {
-                        i += 1;
-                        c = description.charAt(i);
-                        if (c == ']') {
-                            break;
-                        }
-                        else {
-                            sub.append(c);
-                        }
-                    }
-                    String key = sub.toString();
-                    EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(key);
-                    if (tip != null) {
-                        String[] split = EUIUtils.splitString(" ", tip.title);
-                        for (String s : split) {
-                            sb.append("#y");
-                            sb.append(s);
-                            sb.append(' ');
-                        }
-                    }
-                    else {
-                        sb.append(key);
-                    }
-                    break;
-                case '{':
-                    sb.append("#y");
-                    break;
-                case '}':
-                case ']':
-                    continue;
-                default:
-                    sb.append(c);
-            }
-        }
-
-        return sb.toString();
     }
 
     public void addTurns(int amount) {
@@ -465,7 +411,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             EUITooltip.scanForTips(desc, tooltips, tooltips, false);
         }
         // Base game descriptions don't support special characters
-        this.description = sanitizePowerDescription(desc);
+        this.description = GameUtilities.sanitizePowerDescription(desc);
     }
 
     protected void setupImages() {
@@ -536,7 +482,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             default:
                 mainTip.setBackgroundColor(Color.WHITE);
         }
-        this.description = sanitizePowerDescription(desc);
+        this.description = GameUtilities.sanitizePowerDescription(desc);
     }
 
     public void updateHitbox() {

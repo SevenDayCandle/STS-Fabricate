@@ -29,7 +29,6 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.OrbFlareNotActuallyNeedingOrbEffect;
-import pinacolada.powers.PCLPower;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -325,7 +324,7 @@ public abstract class PCLOrb extends AbstractOrb implements KeywordProvider {
             EUITooltip.scanForTips(desc, tooltips);
         }
         // Base game descriptions don't support special characters. Just gonna reuse PCLPower's here
-        this.description = PCLPower.sanitizePowerDescription(desc);
+        this.description = GameUtilities.sanitizePowerDescription(desc);
     }
 
     protected void setupImages() {
