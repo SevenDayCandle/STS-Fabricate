@@ -19,7 +19,7 @@ import pinacolada.powers.PCLClickableUse;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
-public class CardTriggerConnection implements ClickableProvider, TriggerConnection, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber,
+public class CardTriggerConnection implements ClickableProvider, TriggerConnection, OnStartOfTurnSubscriber, OnPhaseChangedSubscriber, OnModifyBlockFirstSubscriber,
                                               OnModifyBlockLastSubscriber, OnModifyCostSubscriber, OnModifyDamageGiveFirstSubscriber, OnModifyDamageGiveLastSubscriber,
                                               OnModifyDamageReceiveFirstSubscriber, OnModifyDamageReceiveLastSubscriber, OnModifyHitCountSubscriber, OnModifyRightCountSubscriber, OnTryUsingCardSubscriber {
     public final PTrigger trigger;
@@ -170,6 +170,11 @@ public class CardTriggerConnection implements ClickableProvider, TriggerConnecti
     public void onPhaseChanged(GameActionManager.Phase phase) {
         PCLUseInfo info = CombatManager.playerSystem.getInfo(card, getOwner(), null);
         trigger.refresh(info, true, false);
+    }
+
+    @Override
+    public void onStartOfTurn() {
+        trigger.resetUses();
     }
 
     public void targetToUse(int amount) {
