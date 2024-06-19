@@ -351,7 +351,9 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     public void setupImages(String imagePath) {
-        overrideImg = EUIRM.getTexture(imagePath, true, false);
+        if (imagePath != null) {
+            overrideImg = EUIRM.getTexture(imagePath, true, false);
+        }
     }
 
     @Override

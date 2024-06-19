@@ -89,7 +89,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, PCLActions.bottom);
                     }
                 });
     }

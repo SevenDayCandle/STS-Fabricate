@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -49,5 +50,10 @@ public class PMod_PerPower extends PMod_Per<PField_Power> {
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         return getTargetOnStringPerspective(perspective, fields.getPowerSubjectString());
+    }
+
+    public void use(PCLUseInfo info, PCLActions order) {
+        target.getTargets(info, scope);
+        super.use(info, order);
     }
 }

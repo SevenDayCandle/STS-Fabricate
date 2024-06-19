@@ -80,7 +80,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order) {
         order.callback(() -> {
             if (this.childEffect != null) {
-                this.childEffect.use(info, order);
+                this.childEffect.use(info, PCLActions.bottom);
                 if (source instanceof AbstractCard) {
                     GameUtilities.useXCostEnergy((AbstractCard) source);
                 }

@@ -55,4 +55,7 @@ public class PMove_PlayCopy extends PMove_GenerateCard {
     public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
         order.playCopy(c, target.getTarget(info, scope));
     }
+
+    @Override
+    protected PCLActions getUseActionOrder() {return PCLActions.last;}
 }

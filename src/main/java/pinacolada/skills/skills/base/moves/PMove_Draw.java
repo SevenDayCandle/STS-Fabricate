@@ -50,7 +50,7 @@ public class PMove_Draw extends PCallbackMove<PField_CardCategory> {
                     info.setData(ca);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, PCLActions.bottom);
                     }
                 });
     }

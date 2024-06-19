@@ -123,7 +123,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PCallb
                     callback.invoke(info);
                     cardAction(cards, info, order);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, PCLActions.bottom);
                     }
                 });
     }

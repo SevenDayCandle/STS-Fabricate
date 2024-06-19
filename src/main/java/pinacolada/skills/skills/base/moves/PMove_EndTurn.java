@@ -35,7 +35,8 @@ public class PMove_EndTurn extends PMove<PField_Empty> {
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        order.add(new PressEndTurnButtonAction());
+        // Enforce last ordering because this can interfere with other actions
+        PCLActions.last.add(new PressEndTurnButtonAction());
         super.use(info, order);
     }
 }

@@ -39,6 +39,6 @@ public class PCond_CheckCreatureElite extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText(PCLCardTarget perspective, Object requestor) {
-        return TEXT.cond_ifTargetIs(getTargetStringPerspective(perspective), getTargetOrdinal(target), PTEXT[4]);
+        return TEXT.cond_ifTargetIs(getTargetStringPerspective(perspective), getTargetOrdinal(target), PTEXT[2]);
     }
 }

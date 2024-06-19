@@ -287,10 +287,12 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardModify
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, getUseActionOrder());
                     }
                 });
     }
+
+    protected PCLActions getUseActionOrder() {return PCLActions.bottom;}
 
     public abstract EUITooltip getActionTooltip();
 

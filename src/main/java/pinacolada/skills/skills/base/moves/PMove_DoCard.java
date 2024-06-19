@@ -98,7 +98,7 @@ public abstract class PMove_DoCard<T extends PField_CardGeneric> extends PCallba
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, PCLActions.bottom);
                     }
                 });
     }

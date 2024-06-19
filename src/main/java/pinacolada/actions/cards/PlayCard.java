@@ -120,7 +120,7 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         CustomTargeting.setCardTarget(card, enemy);
 
         //GameActions.Top.Add(new UnlimboAction(card));
-        PCLActions.top.wait(Settings.FAST_MODE ? Settings.ACTION_DUR_FASTER : Settings.ACTION_DUR_MED);
+        //PCLActions.top.wait(Settings.FAST_MODE ? Settings.ACTION_DUR_FASTER : Settings.ACTION_DUR_MED);
 
         int energyOnUse = EnergyPanel.getCurrentEnergy();
 

@@ -136,7 +136,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 .addCallback(cards -> {
                     if (this.childEffect != null) {
                         info.setData(cards);
-                        this.childEffect.use(info, order);
+                        this.childEffect.use(info, PCLActions.bottom);
                     }
                 });
     }

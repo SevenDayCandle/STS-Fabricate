@@ -81,14 +81,14 @@ public class PMod_PayPerPower extends PActiveMod<PField_Power> {
 
     public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (shouldPay && childEffect != null) {
-            useImpl(info, order, () -> childEffect.use(info, order));
+            useImpl(info, order, () -> childEffect.use(info, PCLActions.bottom));
         }
     }
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, order, () -> childEffect.use(info, order));
+            useImpl(info, order, () -> childEffect.use(info, PCLActions.bottom));
         }
     }
 

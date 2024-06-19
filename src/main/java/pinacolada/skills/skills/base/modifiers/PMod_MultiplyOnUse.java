@@ -59,7 +59,7 @@ public class PMod_MultiplyOnUse extends PActiveMod<PField_Empty> {
     public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
             this.childEffect.use(info, order);
-            order.callback(() -> {
+            PCLActions.last.callback(() -> {
                 this.childEffect.multiplyAmountForCombat(refreshAmount(info), extra > 0 ? extra : Integer.MAX_VALUE);
             });
         }
