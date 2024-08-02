@@ -149,10 +149,10 @@ public class PCLUseInfo {
     }
 
     public boolean tryActivateLimited() {
-        return CombatManager.tryActivateLimited(card.cardID);
+        return card != null && CombatManager.tryActivateLimited(card.cardID);
     }
 
     public boolean tryActivateSemiLimited() {
-        return CombatManager.tryActivateSemiLimited(card.cardID);
+        return card != null && CombatManager.tryActivateSemiLimited(card.cardID);
     }
 }

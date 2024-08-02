@@ -82,7 +82,8 @@ public interface EditorMaker<T, U> {
             }
         }
         catch (Exception e) {
-            EUIUtils.logError(this, "Object doesn't have a description array???");
+            e.printStackTrace();
+            EUIUtils.logError(this, "Object doesn't have a description array?");
         }
         return new String[] {};
     }
@@ -157,7 +158,8 @@ public interface EditorMaker<T, U> {
             }
         }
         catch (Exception e) {
-            EUIUtils.logError(this, "Object doesn't have a description array???");
+            e.printStackTrace();
+            EUIUtils.logError(this, "Object doesn't have a description array?");
         }
     }
 
@@ -190,7 +192,8 @@ public interface EditorMaker<T, U> {
             }
         }
         catch (Exception e) {
-            EUIUtils.logError(this, "Object doesn't have a name array???");
+            e.printStackTrace();
+            EUIUtils.logError(this, "Object doesn't have a name array?");
         }
     }
 

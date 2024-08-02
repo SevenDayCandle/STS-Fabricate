@@ -252,7 +252,9 @@ public abstract class PTrigger extends PPrimary<PField_CardGeneric> {
             this.childEffect.stack(other.getChild());
         }
         else if (baseAmount > 0 && other.baseAmount > 0) {
+            int tempDiff = amount - baseAmount;
             setAmount(baseAmount + other.baseAmount);
+            addAmountForCombat(tempDiff, Integer.MAX_VALUE);
         }
         if (baseExtra > 0 && other.baseExtra > 0) {
             setExtra(baseExtra + other.baseExtra);

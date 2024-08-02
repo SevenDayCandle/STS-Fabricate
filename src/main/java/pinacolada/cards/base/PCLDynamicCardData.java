@@ -205,6 +205,11 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
     }
 
     @Override
+    public String[] getDescString() {
+        return getDescString(getStringsForLanguage(Settings.language));
+    }
+
+    @Override
     public String[] getDescString(CardStrings item) {
         return item.EXTENDED_DESCRIPTION;
     }

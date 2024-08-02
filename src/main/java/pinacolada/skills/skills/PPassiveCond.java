@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PCond;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -29,4 +30,15 @@ public abstract class PPassiveCond<T extends PField_Not> extends PCond<T> {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor);
     }
+
+    // Do not stack passive condition amounts
+    @Override
+    public PPassiveCond<T> stack(PSkill<?> other) {
+        if (this.childEffect != null && other.getChild()  != null) {
+            this.childEffect.stack(other.getChild());
+        }
+
+        return this;
+    }
+
 }

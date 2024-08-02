@@ -2094,7 +2094,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public PSkill<T> stack(PSkill<?> other) {
         if (baseAmount > 0 && other.baseAmount > 0) {
+            int tempDiff = amount - baseAmount;
             setAmount(baseAmount + other.baseAmount);
+            addAmountForCombat(tempDiff, Integer.MAX_VALUE);
         }
         if (baseExtra > 0 && other.baseExtra > 0) {
             setExtra(baseExtra + other.baseExtra);
