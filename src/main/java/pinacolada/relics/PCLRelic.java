@@ -344,6 +344,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider,
             return relicData.create();
         }
         catch (Exception e) {
+            EUIUtils.logError(this, e.getMessage());
             return null;
         }
     }
