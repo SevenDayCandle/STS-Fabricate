@@ -400,6 +400,7 @@
 												"if the last {0} {1} ${2}@!1:were@:was$ {3}",
 												"if there ${0}@!1:are@:is$ {1}",
 												"if {0} ${1}@?0?2?3?4?10?11?12:have@:has$ {2}",
+												"if {0} lost {1}",
 												"if {0} took {1}",
 												"if {0} would die",
 												"if {0} {1} {2}",

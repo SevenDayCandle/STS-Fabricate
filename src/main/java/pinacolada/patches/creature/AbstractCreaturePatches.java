@@ -17,14 +17,6 @@ public class AbstractCreaturePatches {
         }
     }
 
-    @SpirePatch(clz = AbstractCreature.class, method = "healthBarUpdatedEvent")
-    public static class AbstractCreaturePatches_HealthBarUpdatedEvent {
-        @SpirePostfixPatch
-        public static void method(AbstractCreature __instance) {
-            CombatManager.onHealthBarUpdated(__instance);
-        }
-    }
-
     @SpirePatch(clz = AbstractCreature.class, method = "addBlock", paramtypez = {int.class})
     public static class AbstractCreaturePatches_AddBlock {
         @SpirePrefixPatch

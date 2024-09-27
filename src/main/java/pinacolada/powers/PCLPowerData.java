@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.powers.watcher.*;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -151,7 +152,8 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData PlatedArmor = registerBaseBuffCommon(PlatedArmorPower.class, PlatedArmorPower.POWER_ID, PGR.core.tooltips.platedArmor).setImageRegion(ICON_PLATEDARMOR).setEndTurnBehavior(PCLPowerData.Behavior.Permanent);
     public static final PCLPowerData Rebound = registerBaseBuff(ReboundPower.class, ReboundPower.POWER_ID, PGR.core.tooltips.rebound).setImageRegion(ICON_REBOUND).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Regen = registerBaseBuff(RegenPower.class, RegenPower.POWER_ID, PGR.core.tooltips.regeneration).setImageRegion(ICON_REGEN).setEndTurnBehavior(Behavior.TurnBased).setIsMetascaling(true);
-    public static final PCLPowerData Ritual = registerBaseBuffCommon(RitualPower.class, RitualPower.POWER_ID, PGR.core.tooltips.ritual).setImageRegion(ICON_RITUAL).setEndTurnBehavior(Behavior.Permanent);
+    public static final PCLPowerData Ritual = registerBaseBuffCommon(RitualPower.class, RitualPower.POWER_ID, PGR.core.tooltips.ritual).setImageRegion(ICON_RITUAL).setEndTurnBehavior(Behavior.Permanent)
+            .setCustomPowerFunc((owner, source, amount) -> new RitualPower(owner, amount, GameUtilities.isPlayer(owner)));
     public static final PCLPowerData SharpHide = registerBaseBuff(SharpHidePower.class, SharpHidePower.POWER_ID, PGR.core.tooltips.sharpHide).setImageRegion(ICON_SHARP_HIDE).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Strength = registerBaseBuffCommon(StrengthPower.class, StrengthPower.POWER_ID, PGR.core.tooltips.strength).setImageRegion(ICON_STRENGTH).setEndTurnBehavior(Behavior.Permanent);
     public static final PCLPowerData Thorns = registerBaseBuffCommon(ThornsPower.class, ThornsPower.POWER_ID, PGR.core.tooltips.thorns).setImageRegion(ICON_THORNS).setEndTurnBehavior(Behavior.Permanent);
@@ -180,6 +182,7 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     public static final PCLPowerData Vitality = VitalityPower.DATA;
     public static final PCLPowerData Warding = WardingPower.DATA;
 
+    private FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> customPowerFunc;
     protected String[] equivalents;
     public AbstractPower.PowerType type = NeutralPowertypePatch.NEUTRAL;
     public EUIKeywordTooltip tooltip;
@@ -327,6 +330,10 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
     }
 
     public AbstractPower create(AbstractCreature owner, AbstractCreature source, int amount) {
+        if (customPowerFunc != null) {
+            return customPowerFunc.invoke(owner, source, amount);
+        }
+
         try {
             if (constructor == null) {
                 constructor = createConstructor(AbstractCreature.class, AbstractCreature.class, int.class);
@@ -452,6 +459,11 @@ public class PCLPowerData extends PCLGenericData<AbstractPower> implements Keywo
 
     public boolean matches(String powerID) {
         return ID.equals(powerID) || (equivalents != null && EUIUtils.any(equivalents, e -> e.equals(powerID)));
+    }
+
+    public PCLPowerData setCustomPowerFunc(FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> customPowerFunc) {
+        this.customPowerFunc = customPowerFunc;
+        return this;
     }
 
     public PCLPowerData setEndTurnBehavior(Behavior val) {

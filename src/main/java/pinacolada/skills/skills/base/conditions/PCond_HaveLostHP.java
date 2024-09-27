@@ -1,12 +1,12 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.resources.PGR;
@@ -34,7 +34,8 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= refreshAmount(info);
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(
+                fields.random ? CombatManager.hpLostThisCombat(m) : CombatManager.hpLostThisTurn(m), refreshAmount(info)));
     }
 
     @Override
@@ -47,12 +48,12 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_lose(amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(requestor) + "+", PGR.core.tooltips.hp.title) : PGR.core.tooltips.hp.title), perspective);
         }
-        String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(requestor), PGR.core.tooltips.hp.title));
+        String base = TEXT.cond_ifTargetLost(getTargetStringPerspective(perspective), EUIRM.strings.numNoun(getAmountRawString(requestor), PGR.core.tooltips.hp.title));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 
     @Override
-    public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
+    public int onLoseHP(AbstractCreature p, DamageInfo info, int amount) {
         PCLUseInfo i = generateInfo(getOwnerCreature(), p);
         if (amount >= refreshAmount(i)) {
             useFromTrigger(generateInfo(getOwnerCreature(), info.owner).setData(amount), isFromCreature() ? PCLActions.bottom : PCLActions.top);

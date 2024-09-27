@@ -2457,6 +2457,16 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         super.resetAttributes();
     }
 
+    public void resetTipsForCardText() {
+        tooltips.clear();
+        for (PSkill<?> skill : getEffects()) {
+            skill.recurse(s -> s.onSetupTips(this));
+        }
+        for (PSkill<?> skill : getPowerEffects()) {
+            skill.recurse(s -> s.onSetupTips(this));
+        }
+    }
+
     public int rightCount() {
         return rightCount;
     }

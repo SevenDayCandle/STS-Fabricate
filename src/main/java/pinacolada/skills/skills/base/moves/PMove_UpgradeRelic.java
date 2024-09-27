@@ -78,12 +78,10 @@ public class PMove_UpgradeRelic extends PMove<PField_Relic> implements OutOfComb
     }
 
     @Override
-    public PMove_UpgradeRelic onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
+    public void onSetupTips(AbstractCard card) {
         if (card instanceof KeywordProvider) {
             fields.addRelicTips((KeywordProvider) card);
         }
-        return this;
     }
 
     @Override

@@ -84,8 +84,7 @@ public class PMove_RemoveBlight extends PMove<PField_Blight> implements OutOfCom
     }
 
     @Override
-    public PMove_RemoveBlight onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
+    public void onSetupTips(AbstractCard card) {
         if (card instanceof KeywordProvider) {
             List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
             if (tips != null) {
@@ -97,7 +96,6 @@ public class PMove_RemoveBlight extends PMove<PField_Blight> implements OutOfCom
                 }
             }
         }
-        return this;
     }
 
     @Override

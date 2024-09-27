@@ -82,8 +82,7 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
-    public PMove_RemoveRelic onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
+    public void onSetupTips(AbstractCard card) {
         if (card instanceof KeywordProvider) {
             List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
             if (tips != null) {
@@ -95,7 +94,6 @@ public class PMove_RemoveRelic extends PMove<PField_Relic> implements OutOfComba
                 }
             }
         }
-        return this;
     }
 
     @Override

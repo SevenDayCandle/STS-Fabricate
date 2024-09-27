@@ -96,14 +96,16 @@ public class CombatManager extends EUIBase {
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
+    private static final HashMap<AbstractCreature, Integer> hpLostThisCombat = new HashMap<>();
+    private static final HashMap<AbstractCreature, Integer> hpLostThisTurn = new HashMap<>();
     private static final HashMap<Class<? extends PCLCombatSubscriber>, ConcurrentLinkedQueue<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
+    private static final HashMap<Integer, ArrayList<AbstractCard>> cardsPlayedThisCombat = new HashMap<>();
     private static final HashMap<String, Float> EFFECT_BONUSES = new HashMap<>();
     private static final HashMap<String, Float> PLAYER_EFFECT_BONUSES = new HashMap<>();
-    private static final Map<Integer, ArrayList<AbstractCard>> cardsPlayedThisCombat = new HashMap<>();
-    private static final Map<String, Integer> limitedData = new HashMap<>();
-    private static final Map<String, Integer> semiLimitedData = new HashMap<>();
-    private static final Map<String, Object> combatData = new HashMap<>();
-    private static final Map<String, Object> turnData = new HashMap<>();
+    private static final HashMap<String, Integer> limitedData = new HashMap<>();
+    private static final HashMap<String, Integer> semiLimitedData = new HashMap<>();
+    private static final HashMap<String, Object> combatData = new HashMap<>();
+    private static final HashMap<String, Object> turnData = new HashMap<>();
     public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
     public static final PCLCardTargetingManager targeting = new PCLCardTargetingManager();
     public static final CombatManager renderInstance = new CombatManager();
@@ -124,7 +126,6 @@ public class CombatManager extends EUIBase {
     public static int blockRetained;
     public static int dodgeChance;
     public static int energySuspended;
-    public static int maxHPSinceLastTurn;
     public static int scriesThisTurn;
 
     protected CombatManager() {
@@ -182,6 +183,7 @@ public class CombatManager extends EUIBase {
         turnCount += 1;
         scriesThisTurn = 0;
         lastInfo = null;
+        hpLostThisTurn.clear();
     }
 
     public static void atEndOfTurnPreEndTurnCards(boolean isPlayer) {
@@ -196,7 +198,6 @@ public class CombatManager extends EUIBase {
 
     public static void atPlayerTurnStart() {
         isPlayerTurn = true;
-        maxHPSinceLastTurn = GameActionManager.playerHpLastTurn;
         CombatManager.playerSystem.onStartOfTurn();
         dodgeChance = 0;
 
@@ -344,7 +345,8 @@ public class CombatManager extends EUIBase {
         }
         lastInfo = null;
         summons.initialize();
-        maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
+        hpLostThisCombat.clear();
+        hpLostThisTurn.clear();
         blockRetained = 0;
         battleID = null;
         estimatedDamages = null;
@@ -494,6 +496,9 @@ public class CombatManager extends EUIBase {
     public static List<AbstractCard> hasteInfinitesThisTurn() {
         return hasteInfinitesThisTurn;
     }
+
+    public static int hpLostThisCombat(AbstractCreature c) {return hpLostThisCombat.getOrDefault(c, 0); }
+    public static int hpLostThisTurn(AbstractCreature c) {return hpLostThisTurn.getOrDefault(c, 0); }
 
     public static boolean inBattle() {
         return battleID != null;
@@ -765,6 +770,15 @@ public class CombatManager extends EUIBase {
         return subscriberInout(OnCreatureHealSubscriber.class, block, (s, b) -> s.onHeal(instance, b));
     }
 
+    public static int onCreatureLoseHP(AbstractCreature mo, DamageInfo info, int damageAmount) {
+        int loss = subscriberInout(OnLoseHPSubscriber.class, damageAmount, (s, d) -> s.onLoseHP(mo, info, d));
+        if (loss > 0) {
+            hpLostThisCombat.merge(mo, loss, Integer::sum);
+            hpLostThisTurn.merge(mo, loss, Integer::sum);
+        }
+        return loss;
+    }
+
     public static void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect) {
         subscriberDo(OnDamageActionSubscriber.class, s -> s.onDamageAction(action, target, info, effect));
     }
@@ -840,15 +854,6 @@ public class CombatManager extends EUIBase {
         }
 
         return gold;
-    }
-
-    public static void onHealthBarUpdated(AbstractCreature creature) {
-        if (creature == AbstractDungeon.player && creature.currentHealth > maxHPSinceLastTurn) {
-            maxHPSinceLastTurn = creature.currentHealth;
-        }
-
-        subscriberDo(OnHealthBarUpdatedSubscriber.class, s -> s.onHealthBarUpdated(creature));
-        refreshHandLayout();
     }
 
     public static int onIncomingDamageFirst(AbstractCreature target, DamageInfo info, int damage) {
@@ -946,7 +951,7 @@ public class CombatManager extends EUIBase {
     }
 
     public static int onPlayerLoseHP(AbstractPlayer p, DamageInfo info, int damageAmount) {
-        damageAmount = subscriberInout(OnLoseHPSubscriber.class, damageAmount, (s, d) -> s.onLoseHP(p, info, d));
+        damageAmount = onCreatureLoseHP(p, info, damageAmount);
         if (damageAmount > 0 && info.type != DamageInfo.DamageType.HP_LOSS) {
             damageAmount = summons.tryDamage(info, damageAmount);
         }

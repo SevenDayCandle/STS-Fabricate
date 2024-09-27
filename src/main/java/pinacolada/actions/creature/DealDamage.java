@@ -54,7 +54,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         this.attackEffect = effect;
 
         initialize(info.owner, target, times);
-        this.applyPowers = card != null;
     }
 
     public DealDamage applyPowers(boolean applyPowers) {

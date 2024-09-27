@@ -2056,7 +2056,13 @@ public class GameUtilities {
     public static void obtainRelicFromEvent(AbstractRelic relic) {
         UnlockTracker.markRelicAsSeen(relic.relicId);
         relic.isSeen = true;
-        relic.instantObtain();
+        try {
+            relic.instantObtain();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(GameUtilities.class, "Failed to instant obtain relic:" + e.getMessage());
+        }
         CardCrawlGame.metricData.addRelicObtainData(relic);
     }
 

@@ -88,12 +88,10 @@ public class PMove_ModifyRelicCounter extends PMove<PField_Relic> implements Out
     }
 
     @Override
-    public PMove_ModifyRelicCounter onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
+    public void onSetupTips(AbstractCard card) {
         if (card instanceof KeywordProvider) {
             fields.addRelicTips((KeywordProvider) card);
         }
-        return this;
     }
 
     @Override

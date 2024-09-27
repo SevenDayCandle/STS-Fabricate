@@ -152,7 +152,7 @@ public class PCLCardAlly extends PCLCardCreature {
             }
 
             damageAmount = Math.max(0, CombatManager.onIncomingDamageLast(this, info, damageAmount));
-            this.lastDamageTaken = Math.min(damageAmount, this.currentHealth);
+            this.lastDamageTaken = Math.max(0, CombatManager.onCreatureLoseHP(this, info, Math.min(damageAmount, this.currentHealth)));
             boolean probablyInstantKill = this.currentHealth == 0;
             if (damageAmount > 0) {
                 this.currentHealth -= damageAmount;

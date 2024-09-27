@@ -98,7 +98,7 @@ public class PCLCardText {
         }
 
         if (card != null) {
-            this.card.tooltips.clear();
+            this.card.resetTipsForCardText();
         }
 
         this.lines.clear();

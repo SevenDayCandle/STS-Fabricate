@@ -44,6 +44,12 @@ public class AbstractMonsterPatches {
             CombatManager.onAttack(info, damageAmount, __instance);
         }
 
+        @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator4.class)
+        public static void insertPre4(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount) {
+            damageAmount[0] = Math.max(0, CombatManager.onCreatureLoseHP(__instance, info, damageAmount[0]));
+        }
+
+
         private static class Locator extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 Matcher matcher = new Matcher.MethodCallMatcher(AbstractMonster.class, "decrementBlock");
@@ -61,6 +67,13 @@ public class AbstractMonsterPatches {
         private static class Locator3 extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 final Matcher matcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
+        }
+
+        private static class Locator4 extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception {
+                final Matcher matcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "lastDamageTaken");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }

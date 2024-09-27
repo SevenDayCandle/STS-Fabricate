@@ -2,11 +2,13 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.resources.PGR;
@@ -38,8 +40,11 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        int count = fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn;
-        return amount == 0 ? count == 0 : fields.not ^ count >= refreshAmount(info);
+        // TODO last damage taken this combat check on monster
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(
+                m instanceof AbstractPlayer ?
+                        (fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn)
+                        : m.lastDamageTaken, refreshAmount(info)));
     }
 
     @Override
@@ -52,7 +57,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
         if (isWhenClause()) {
             return getWheneverAreString(PGR.core.tooltips.attack.past(), perspective);
         }
-        String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(requestor), TEXT.subjects_damage));
+        String base = TEXT.cond_ifTargetTook(getTargetStringPerspective(perspective), EUIRM.strings.numNoun(getAmountRawString(requestor), TEXT.subjects_damage));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 

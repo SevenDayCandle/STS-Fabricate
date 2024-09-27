@@ -1,13 +1,19 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.blights.AbstractBlight;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.powers.PCLDynamicPowerData;
 import pinacolada.powers.PCLPowerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
@@ -18,6 +24,8 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.List;
 
 @VisibleSkill
 public class PMove_StackPower extends PMove<PField_Power> {
@@ -61,6 +69,8 @@ public class PMove_StackPower extends PMove<PField_Power> {
                     return TEXT.subjects_randomly(!fields.powers.isEmpty() ? TEXT.act_applyAmountXToTarget(amountString, joinedString, getTargetStringPerspective(perspective)) : TEXT.act_giveTargetAmount(getTargetStringPerspective(perspective), amountString, joinedString));
             }
         }
+
+        // Keyword power
         if (!fields.powers.isEmpty() && EUIUtils.all(fields.powers, PCLPowerData::isInstant)) {
             String titleString = amount > 0 ? EUIRM.strings.generic2(PField.getPowerTitleAndString(fields.powers), amountString) : PField.getPowerTitleAndString(fields.powers);
             switch (target) {
@@ -101,6 +111,28 @@ public class PMove_StackPower extends PMove<PField_Power> {
     @Override
     public boolean isMetascaling() {
         return !isDetrimental() && EUIUtils.any(fields.powers, PCLPowerData::isMetascaling);
+    }
+
+    @Override
+    public void onSetupTips(AbstractCard card) {
+        if (card instanceof KeywordProvider && !fields.powers.isEmpty() && EUIUtils.all(fields.powers, PCLPowerData::isInstant)) {
+            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
+            for (String po : fields.powers) {
+                PCLPowerData data = PCLPowerData.getStaticDataOrCustom(po);
+                if (data != null) {
+                    if (data.tooltip != null) {
+                        tips.add(data.tooltip);
+                    }
+                    else {
+                        EUIKeywordTooltip tip = EUIKeywordTooltip.findByIDTemp(data.ID);
+                        if (tip == null) {
+                            tip = new EUIKeywordTooltip(data.getName(), data instanceof PCLDynamicPowerData ? ((PCLDynamicPowerData) data).getEffectTextForTip() : "");
+                        }
+                        tips.add(tip);
+                    }
+                }
+            }
+        }
     }
 
     @Override

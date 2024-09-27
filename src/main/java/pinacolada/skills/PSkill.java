@@ -1831,6 +1831,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         if (isMetascaling() && !card.tags.contains(AbstractCard.CardTags.HEALING)) {
             card.tags.add(AbstractCard.CardTags.HEALING);
         }
+        onSetupTips(card);
         if (this.childEffect != null) {
             this.childEffect.onAddToCard(card);
         }
@@ -1854,6 +1855,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             this.childEffect.onRemoveFromCard(card);
         }
         return this;
+    }
+
+    public void onSetupTips(AbstractCard card) {
     }
 
     public void onUpgrade() {

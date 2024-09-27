@@ -112,8 +112,7 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
     }
 
     @Override
-    public PMove_ObtainPotion onAddToCard(AbstractCard card) {
-        super.onAddToCard(card);
+    public void onSetupTips(AbstractCard card) {
         if (card instanceof KeywordProvider) {
             List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
             if (tips != null) {
@@ -125,7 +124,6 @@ public class PMove_ObtainPotion extends PMove<PField_Potion> implements OutOfCom
                 }
             }
         }
-        return this;
     }
 
     @Override
