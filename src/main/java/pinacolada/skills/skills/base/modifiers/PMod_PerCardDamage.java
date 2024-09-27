@@ -7,7 +7,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMod_PerCardDamage extends PMod_PerCardProperty {
+public class PMod_PerCardDamage extends PMod_PerCardProperty<PField_CardCategory> {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDamage.class, PField_CardCategory.class).noTarget();
 

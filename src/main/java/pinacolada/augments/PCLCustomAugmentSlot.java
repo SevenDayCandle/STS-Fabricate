@@ -15,6 +15,8 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.blights.PCLPointerBlight;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.orbs.PCLCustomOrbSlot;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
 
@@ -115,6 +117,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         getAugments(slot.slotColor).add(slot);
         CUSTOM_MAPPING.put(slot.ID, slot);
         slot.commitBuilder();
+        slot.registerTooltip();
     }
 
     // Only allow a blight to be copied into a custom slot if it is a PCLPointerBlight and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
@@ -129,6 +132,8 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         getAugments(slot.slotColor).remove(slot);
         CUSTOM_MAPPING.remove(slot.ID);
         slot.wipeBuilder();
+
+        refreshTooltips(); // Must refresh all power tooltips in case any of them mention this power
     }
 
     public static void editSlot(PCLCustomAugmentSlot slot, String oldID) {
@@ -137,6 +142,8 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
             CUSTOM_MAPPING.put(slot.ID, slot);
         }
         slot.commitBuilder();
+
+        refreshTooltips(); // Must refresh all power tooltips in case any of them mention this power
     }
 
     public static PCLCustomAugmentSlot get(String id) {
@@ -187,6 +194,9 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         if (PGR.debugAugments != null) {
             PGR.debugAugments.refresh();
         }
+
+        // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured
+        refreshTooltips();
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
@@ -205,6 +215,7 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomAugmentSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path, workshopPath, isInternal);
+            slot.registerTooltip();
             getAugments(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
         }
@@ -216,6 +227,12 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
 
     protected static String makeNewID(AbstractCard.CardColor color) {
         return makeNewID(getBaseIDPrefix(color), getAugments(color));
+    }
+
+    public static void refreshTooltips() {
+        for (PCLCustomAugmentSlot slot : CUSTOM_MAPPING.values()) {
+            slot.registerTooltip();
+        }
     }
 
     protected void commitBuilder() {
@@ -281,6 +298,13 @@ public class PCLCustomAugmentSlot extends PCLCustomEditorLoadable<PCLDynamicAugm
         }
 
         forms = tempForms.toArray(new String[]{});
+    }
+
+    protected void registerTooltip() {
+        PCLDynamicAugmentData first = getBuilder(0);
+        if (first != null) {
+            first.updateTooltip();
+        }
     }
 
     protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {

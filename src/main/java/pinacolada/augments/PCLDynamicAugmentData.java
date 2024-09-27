@@ -4,16 +4,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLCustomEditorLoadable;
+import pinacolada.orbs.PCLDynamicOrbData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLAugmentRenderable;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -158,6 +162,21 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
         return sj.toString();
     }
 
+    public String getEffectTextForTip() {
+        String[] desc = strings.DESCRIPTION;
+        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+        for (int i = 0; i < moves.size(); i++) {
+            PSkill<?> skill = moves.get(i);
+            if (!PSkill.isSkillBlank(skill)) {
+                String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i], null) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
+                if (s != null) {
+                    sj.add(s);
+                }
+            }
+        }
+        return StringUtils.capitalize(sj.toString());
+    }
+
     @Override
     public Texture getImage() {
         return portraitImage;
@@ -257,6 +276,25 @@ public class PCLDynamicAugmentData extends PCLAugmentData implements EditorMaker
             dest.DESCRIPTION = null;
         }
         return dest;
+    }
+
+    public PCLDynamicAugmentData updateTooltip() {
+        setTextForLanguage();
+        tooltip = EUIKeywordTooltip.findByIDTemp(ID);
+        if (tooltip == null) {
+            tooltip = new EUIKeywordTooltip(strings.NAME);
+        }
+        tooltip.title = strings.NAME;
+        tooltip.setDescription(getEffectTextForTip());
+        Texture tex = EUIRM.getTexture(imagePath);
+        if (tex != null) {
+            tooltip.setIcon(PCLRenderHelpers.generateIcon(tex));
+        }
+        else {
+            tooltip.setIcon(PCLCoreImages.CardAffinity.unknown.texture());
+        }
+        EUIKeywordTooltip.registerIDTemp(ID, tooltip);
+        return this;
     }
 
     @Override

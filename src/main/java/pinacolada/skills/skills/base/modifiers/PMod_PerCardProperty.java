@@ -11,17 +11,17 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
-public abstract class PMod_PerCardProperty extends PMod_Per<PField_CardCategory> {
+public abstract class PMod_PerCardProperty<T extends PField_CardCategory> extends PMod_Per<T> {
 
-    public PMod_PerCardProperty(PSkillData<PField_CardCategory> data, PSkillSaveData content) {
+    public PMod_PerCardProperty(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PMod_PerCardProperty(PSkillData<PField_CardCategory> data) {
+    public PMod_PerCardProperty(PSkillData<T> data) {
         this(data, 1);
     }
 
-    public PMod_PerCardProperty(PSkillData<PField_CardCategory> data, int amount) {
+    public PMod_PerCardProperty(PSkillData<T> data, int amount) {
         super(data, amount);
     }
 

@@ -7,11 +7,14 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.PCLGenericData;
+import pinacolada.orbs.PCLOrbData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLAugmentRenderable;
@@ -20,6 +23,7 @@ import pinacolada.utilities.GameUtilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,12 +31,13 @@ import java.util.stream.Stream;
 
 import static extendedui.EUIUtils.array;
 
-public class PCLAugmentData extends PCLGenericData<PCLAugment> {
+public class PCLAugmentData extends PCLGenericData<PCLAugment> implements KeywordProvider {
     private static final HashMap<String, PCLAugmentData> AUGMENT_MAP = new HashMap<>();
     private static final ArrayList<PCLAugmentData> AVAILABLE_AUGMENTS = new ArrayList<>();
 
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AugmentStrings strings;
+    public EUIKeywordTooltip tooltip;
     public Integer[] tier = array(1);
     public Integer[] tierUpgrade = array(1);
     public PCLAugmentCategory category;
@@ -108,7 +113,7 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         return null;
     }
 
-    // Each ID must be called at least once to have it selectable in the console
+    // Each ID must be called at least once to have it selectable in the console and to generate its tooltip
     public static void initialize() {
         for (Class<?> augmentClass : GameUtilities.getClassesWithAnnotation(VisibleAugment.class)) {
             try {
@@ -116,6 +121,10 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
                 PCLAugmentData data = ReflectionHacks.getPrivateStatic(augmentClass, a.data());
                 AVAILABLE_AUGMENTS.add(data);
                 EUIUtils.logInfoIfDebug(PCLAugment.class, "Adding augment " + data.ID);
+                if (data.tooltip == null) {
+                    PCLAugment aug = data.create();
+                    data.tooltip = new EUIKeywordTooltip(data.getName(), aug != null ? aug.getEffectPowerTextStrings() : EUIUtils.EMPTY_STRING);
+                }
             }
             catch (Exception e) {
                 EUIUtils.logError(PCLAugment.class, "Failed to load augment " + augmentClass + ": " + e.getLocalizedMessage());
@@ -194,6 +203,10 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         return reqs == null ? null : reqs.getString();
     }
 
+    public String getText() {
+        return tooltip != null ? tooltip.description : strings != null && strings.DESCRIPTION != null && strings.DESCRIPTION.length > 0 ? strings.DESCRIPTION[0] : EUIUtils.EMPTY_STRING;
+    }
+
     public Texture getTexture() {
         return EUIRM.getTexture(imagePath);
     }
@@ -208,6 +221,16 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
 
     public int getTierUpgrade(int form) {
         return tierUpgrade[Math.min(tierUpgrade.length - 1, form)];
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
+        return tooltip != null ? Collections.singletonList(tooltip) : Collections.emptyList();
+    }
+
+    @Override
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
     }
 
     public void initializeImage() {
@@ -291,6 +314,11 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
         this.tier[form] = val;
         this.tierUpgrade[form] = upgrade;
         this.maxForms = EUIUtils.max(this.maxForms, this.tier.length, this.tierUpgrade.length);
+        return this;
+    }
+
+    public PCLAugmentData setTooltip(EUIKeywordTooltip tooltip) {
+        this.tooltip = tooltip;
         return this;
     }
 

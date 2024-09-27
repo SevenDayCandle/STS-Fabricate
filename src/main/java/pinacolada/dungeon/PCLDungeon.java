@@ -115,6 +115,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
     public void addAugment(PCLAugment.SaveData data) {
         augmentList.add(data);
+        if (!panelAdded) {
+            panelAdded = true;
+            BaseMod.addTopPanelItem(PGR.augmentPanel);
+        }
         PGR.augmentPanel.flash();
     }
 

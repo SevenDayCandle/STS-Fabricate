@@ -718,6 +718,7 @@
 												"hits",
 												"intended {0} from {1}",
 												"intent",
+												"lost {0} on {1}",
 												"missing {0} on {1}",
 												"non-{0}",
 												"of {0}",

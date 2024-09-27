@@ -6,6 +6,7 @@ import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUIPreview;
 import extendedui.utilities.RotatingList;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -46,11 +47,11 @@ public abstract class PField implements Serializable {
     }
 
     public static String getAugmentIDAndString(ArrayList<String> augmentIDs) {
-        return PCLCoreStrings.joinWithAnd(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", augmentIDs);
+        return PCLCoreStrings.joinWithAnd(g -> "{" + PCLAugmentData.getAugmentNameForID(g) + "}", augmentIDs);
     }
 
     public static String getAugmentIDOrString(ArrayList<String> augmentIDs) {
-        return PCLCoreStrings.joinWithOr(g -> "{" + GameUtilities.getPotionNameForID(g) + "}", augmentIDs);
+        return PCLCoreStrings.joinWithOr(g -> "{" + PCLAugmentData.getAugmentNameForID(g) + "}", augmentIDs);
     }
 
     public static String getBlightIDAndString(ArrayList<String> relicIDs) {
