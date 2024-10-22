@@ -1048,6 +1048,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return parent;
     }
 
+    public final PSkill<?> getParentMatch(FuncT1<Boolean, PSkill<?>> matchFunc) {
+        return matchFunc.invoke(this) ? this : (parent != null ? parent.getParentMatch(matchFunc) : null);
+    }
+
     public String getPowerText(Object requestor) {
         if (source instanceof PointerProvider) {
             return ((PointerProvider) source).makePowerString(getText(requestor));
@@ -1621,6 +1625,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public boolean hasChildWarning() {
         return false;
+    }
+
+    public final boolean hasParentMatch(FuncT1<Boolean, PSkill<?>> matchFunc) {
+        return matchFunc.invoke(this) || (parent != null && parent.hasParentMatch(matchFunc));
     }
 
     // Necessary because we need to pass in class names, which are not reified

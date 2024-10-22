@@ -18,6 +18,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     public boolean canStack = true;
     public boolean forceIfDead = false;
     public boolean skipIfZero = true;
+    public boolean isRecusrive = false;
 
     public ApplyOrReducePowerAction(AbstractCreature source, AbstractCreature target, PCLPowerData power) {
         this(source, target, power, 1);
@@ -83,10 +84,18 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
             if (ignoreArtifact) {
                 ApplyPowerActionPatches.IgnoreArtifact.ignoreArtifact.set(action, true);
             }
+            // If triggered by a custom Fabricate power that triggers on power application of the same type, mark action as recursive to avoid infinite loops
+            if (isRecusrive) {
+                ApplyPowerActionPatches.Recursive.recursive.set(action, true);
+            }
         }
         // INVERT amount because reduce power expects a positive amount to remove
         else {
             action = new ReducePowerAction(target, source, power.ID, -amount);
+            // If triggered by a custom Fabricate power that triggers on power application of the same type, mark action as recursive to avoid infinite loops
+            if (isRecusrive) {
+                ApplyPowerActionPatches.Recursive.recursive.set(action, true);
+            }
         }
     }
 
@@ -104,6 +113,12 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
 
     public ApplyOrReducePowerAction forceIfDead(boolean forceIfDead) {
         this.forceIfDead = forceIfDead;
+
+        return this;
+    }
+
+    public ApplyOrReducePowerAction recursive(boolean recursive) {
+        this.isRecusrive = recursive;
 
         return this;
     }

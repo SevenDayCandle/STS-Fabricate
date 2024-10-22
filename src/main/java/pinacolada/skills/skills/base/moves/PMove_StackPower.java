@@ -22,6 +22,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Power;
+import pinacolada.skills.skills.base.conditions.PCond_CheckPower;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -165,6 +167,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
         }
         else {
             int actualAmount = refreshAmount(info);
+            boolean recursive = hasParentMatch(sk -> sk instanceof PCond_CheckPower && ((PCond_CheckPower) sk).isWhenClause());
             for (int i = 0; i < actualAmount; i++) {
                 for (AbstractCreature target : getTargetListAsNew(info)) {
                     order.applyPower(info.source, target, PCLPowerData.getRandom(p -> p.isCommon && fields.debuff ^ !p.isDebuff()), actualAmount);
@@ -177,9 +180,12 @@ public class PMove_StackPower extends PMove<PField_Power> {
     private void useApplyPower(String powerID, PCLUseInfo info, PCLActions order) {
         PCLPowerData power = PCLPowerData.getStaticDataOrCustom(powerID);
         if (power != null) {
+            PCond_CheckPower parent = EUIUtils.safeCast(getParentMatch(sk -> sk instanceof PCond_CheckPower && ((PCond_CheckPower) sk).isWhenClause()), PCond_CheckPower.class);
+            boolean recursive = parent != null && ((parent.fields.powers.isEmpty() && parent.fields.debuff == power.isDebuff()) || parent.fields.powers.contains(powerID));
             for (AbstractCreature target : getTargetListAsNew(info)) {
                 int actualAmount = refreshAmount(info);
-                order.applyPower(info.source, target, power, actualAmount);
+                order.applyPower(info.source, target, power, actualAmount)
+                        .recursive(recursive);
             }
         }
     }

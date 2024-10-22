@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
@@ -14,6 +15,8 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.markers.OutOfCombatMove;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLDynamicRelicData;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -22,10 +25,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @VisibleSkill
 public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfCombatMove {
@@ -72,6 +72,9 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                 if (fields.rarities.isEmpty()) {
                     for (AbstractCard.CardColor color : fields.colors) {
                         choices.addAll(GameUtilities.getRelics(color).keySet());
+                        for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
+                            choices.add(slot.ID);
+                        }
                     }
                 }
                 else {
@@ -81,13 +84,39 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
                                 choices.add(relic.getKey());
                             }
                         }
+                        for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
+                            PCLDynamicRelicData relic = slot.getFirstBuilder();
+                            if (relic != null && EUIUtils.any(fields.rarities, r -> r == relic.tier)) {
+                                choices.add(slot.ID);
+                            }
+                        }
                     }
                 }
             }
             else if (!fields.rarities.isEmpty()) {
                 for (AbstractRelic.RelicTier rarity : fields.rarities) {
-                    choices.addAll(GameUtilities.getRelicPool(rarity));
+                    ArrayList<String> pool = GameUtilities.getRelicPool(rarity);
+                    if (pool != null) {
+                        choices.addAll(GameUtilities.getRelicPool(rarity));
+                    }
+                    else {
+                        AbstractCard.CardColor targetColor = AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS;
+                        for (Map.Entry<String, AbstractRelic> relic : GameUtilities.getRelics(targetColor).entrySet()) {
+                            if (rarity == relic.getValue().tier) {
+                                choices.add(relic.getKey());
+                            }
+                        }
+                        for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(targetColor)) {
+                            PCLDynamicRelicData relic = slot.getFirstBuilder();
+                            if (relic != null && EUIUtils.any(fields.rarities, r -> r == relic.tier)) {
+                                choices.add(slot.ID);
+                            }
+                        }
+                    }
                 }
+            }
+            else {
+                choices.addAll(EUIGameUtils.getInGameRelicIDs());
             }
 
             for (int i = 0; i < refreshAmount(info); i++) {

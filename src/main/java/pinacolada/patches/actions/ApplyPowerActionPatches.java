@@ -46,6 +46,14 @@ public class ApplyPowerActionPatches {
         public static SpireField<Boolean> ignoreArtifact = new SpireField<>(() -> false);
     }
 
+    @SpirePatch(
+            clz = ApplyPowerAction.class,
+            method = SpirePatch.CLASS
+    )
+    public static class Recursive {
+        public static SpireField<Boolean> recursive = new SpireField<>(() -> false);
+    }
+
     @SpirePatch(clz = ApplyPowerAction.class, method = SpirePatch.CONSTRUCTOR, paramtypez =
             {AbstractCreature.class, AbstractCreature.class, AbstractPower.class, int.class, boolean.class, AbstractGameAction.AttackEffect.class})
     public static class ApplyPowerActionPatches_Vanilla {
@@ -73,7 +81,9 @@ public class ApplyPowerActionPatches {
     public static class ApplyPowerActionPatches_Update {
         @SpireInsertPatch(locator = LocatorApply.class)
         public static void insertPre(ApplyPowerAction __instance) {
-            CombatManager.onApplyPower(__instance.source, __instance.target, ReflectionHacks.getPrivate(__instance, ApplyPowerAction.class, "powerToApply"));
+            if (!ApplyPowerActionPatches.Recursive.recursive.get(__instance)) {
+                CombatManager.onApplyPower(__instance.source, __instance.target, ReflectionHacks.getPrivate(__instance, ApplyPowerAction.class, "powerToApply"));
+            }
         }
 
         @SpireInstrumentPatch

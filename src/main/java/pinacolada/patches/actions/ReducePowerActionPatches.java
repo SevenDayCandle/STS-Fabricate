@@ -14,13 +14,21 @@ import pinacolada.dungeon.CombatManager;
 
 public class ReducePowerActionPatches {
 
+    @SpirePatch(
+            clz = ReducePowerAction.class,
+            method = SpirePatch.CLASS
+    )
+    public static class Recursive {
+        public static SpireField<Boolean> recursive = new SpireField<>(() -> false);
+    }
+
     @SpirePatch(clz = ReducePowerAction.class, method = SpirePatch.CONSTRUCTOR, paramtypez =
             {AbstractCreature.class, AbstractCreature.class, String.class, int.class})
     public static class ReducePowerAction_Ctor {
         @SpirePostfixPatch
         public static void postfix(ReducePowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    String power, int amount) {
-            if (!CombatManager.canReducePower(source, target, power, __instance)) {
+            if (!ReducePowerActionPatches.Recursive.recursive.get(__instance) && !CombatManager.canReducePower(source, target, power, __instance)) {
                 __instance.isDone = true;
             }
         }
@@ -32,7 +40,7 @@ public class ReducePowerActionPatches {
         @SpirePostfixPatch
         public static void postfix(ReducePowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    AbstractPower powerInstance, int amount) {
-            if (!CombatManager.canReducePower(source, target, powerInstance, __instance)) {
+            if (!ReducePowerActionPatches.Recursive.recursive.get(__instance) && !CombatManager.canReducePower(source, target, powerInstance, __instance)) {
                 __instance.isDone = true;
             }
         }
