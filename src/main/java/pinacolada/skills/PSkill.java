@@ -1501,10 +1501,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             char c = overrideDesc.charAt(i);
             if (c == CASCADE_CHAR) {
                 if (EUIRenderHelpers.isCharAt(overrideDesc, i + 3, CASCADE_CHAR)) {
-                    PSkill<?> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET).v1;
-                    if (move != null) {
-                        sb.append(move.getRawString(overrideDesc.charAt(i + 1), requestor));
+                    TupleT2<PSkill<?>, Integer> move = getEffectAtIndex(overrideDesc.charAt(i + 2) - CHAR_OFFSET);
+                    if (move != null && move.v1 != null) {
+                        sb.append(move.v1.getRawString(overrideDesc.charAt(i + 1), requestor));
                     }
+
                     i += 3;
                 }
                 else if (EUIRenderHelpers.isCharAt(overrideDesc, i + 2, CASCADE_CHAR)) {

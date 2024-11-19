@@ -160,12 +160,15 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     public int add(AbstractCard card, int amount) {
-        int targetValue = getInt(card);
-        // Do not modify the value for infinite items
-        if (targetValue >= 0) {
-            return set(card, targetValue + amount);
+        if (card != null) {
+            int targetValue = getInt(card);
+            // Do not modify the value for infinite items
+            if (targetValue >= 0) {
+                return set(card, targetValue + amount);
+            }
+            return targetValue;
         }
-        return targetValue;
+        return 0;
     }
 
     public SpireField<Boolean> getFieldBoolean() {

@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
 import com.megacrit.cardcrawl.actions.common.HealAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.actions.defect.DecreaseMaxOrbAction;
 import com.megacrit.cardcrawl.actions.defect.IncreaseMaxOrbAction;
 import com.megacrit.cardcrawl.actions.utility.LoseBlockAction;
 import com.megacrit.cardcrawl.actions.utility.ShakeScreenAction;
@@ -607,6 +608,10 @@ public final class PCLActions {
 
     public RemoveOrb removeOrb(int times, boolean random) {
         return add(new RemoveOrb(times, random));
+    }
+
+    public DecreaseMaxOrbAction removeOrbSlots(int slots) {
+        return add(new DecreaseMaxOrbAction(slots));
     }
 
     public RemoveSpecificPowerAction removePower(AbstractCreature source, AbstractPower power) {
