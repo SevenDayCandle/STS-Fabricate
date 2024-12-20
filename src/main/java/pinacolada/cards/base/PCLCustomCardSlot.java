@@ -207,7 +207,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         }
 
         for (TupleT2<URL,String> provider : PROVIDERS) {
-            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, provider.v2, null, true));
         }
         if (PGR.debugCards != null) {
             PGR.debugCards.refresh();
@@ -220,16 +220,16 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
 
     private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleImpl(f, workshopPath, isInternal);
+            loadSingleImpl(f, folder.path(), workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleImpl(FileHandle f, String workshopPath, boolean isInternal) {
+    private static void loadSingleImpl(FileHandle f, String folder, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path, workshopPath, isInternal);
+            slot.setupBuilder(path, folder, workshopPath, isInternal);
             getCards(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
 
@@ -341,7 +341,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         forms = tempForms.toArray(new String[]{});
     }
 
-    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
+    protected void setupBuilder(String filePath, String folder, String workshopPath, boolean isInternal) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
         this.workshopFolder = workshopPath;
@@ -353,12 +353,12 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             builders.add(builder);
         }
 
-        imagePath = makeImagePath();
+        this.filePath = filePath;
+        imagePath = makeImagePath(folder);
         for (PCLDynamicCardData builder : builders) {
             builder.setImagePath(imagePath);
         }
 
-        this.filePath = filePath;
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Card: " + filePath);
     }
 

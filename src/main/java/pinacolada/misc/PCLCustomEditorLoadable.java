@@ -118,7 +118,7 @@ public abstract class PCLCustomEditorLoadable<T extends EditorMaker<U, ?>, U ext
 
     protected abstract void recordBuilder();
 
-    protected abstract void setupBuilder(String filePath, String workshopPath, boolean isInternal);
+    protected abstract void setupBuilder(String filePath, String folder, String workshopPath, boolean isInternal);
 
     public static class EffectItemForm implements Serializable {
         static final long serialVersionUID = 1L;

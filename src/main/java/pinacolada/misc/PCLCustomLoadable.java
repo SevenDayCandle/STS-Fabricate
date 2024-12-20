@@ -141,13 +141,19 @@ public abstract class PCLCustomLoadable implements Serializable {
     }
 
     protected final String makeFilePath() {
-        String base = getBaseFolderPath() + "/" + ID + ".json";
-        return workshopFolder != null ? workshopFolder + "/" + base : base;
+        return makeFilePath(workshopFolder != null ? workshopFolder + "/" + getBaseFolderPath() : getBaseFolderPath());
+    }
+
+    protected final String makeFilePath(String folder) {
+        return folder + "/" + ID + ".json";
     }
 
     protected final String makeImagePath() {
-        String base = getBaseFolderPath() + "/" + ID + ".png";
-        return workshopFolder != null ? workshopFolder + "/" + base : base;
+        return makeImagePath(workshopFolder != null ? workshopFolder + "/" + getBaseFolderPath() : getBaseFolderPath());
+    }
+
+    protected final String makeImagePath(String folder) {
+        return folder + "/" + ID + ".png";
     }
 
     abstract protected String getSubfolderPath();

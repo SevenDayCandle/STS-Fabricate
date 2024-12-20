@@ -143,7 +143,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
         for (TupleT2<URL,String> provider : PROVIDERS) {
-            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, provider.v2, null, true));
         }
 
         // After initializing all powers, re-initialize tooltips to ensure that tooltips from other powers are captured
@@ -156,16 +156,16 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
 
     private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleImpl(f, workshopPath, isInternal);
+            loadSingleImpl(f, folder.path(), workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleImpl(FileHandle f, String workshopPath, boolean isInternal) {
+    private static void loadSingleImpl(FileHandle f, String folder, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomPowerSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path, workshopPath, isInternal);
+            slot.setupBuilder(path, folder, workshopPath, isInternal);
             slot.registerTooltip();
             CUSTOM_POWERS.put(slot.ID, slot);
         }
@@ -253,7 +253,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
         }
     }
 
-    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
+    protected void setupBuilder(String filePath, String folder, String workshopPath, boolean isInternal) {
         builders = new ArrayList<>();
         this.workshopFolder = workshopPath;
         this.isInternal = isInternal;
@@ -276,7 +276,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
             }
         }
 
-        imagePath = makeImagePath();
+        imagePath = makeImagePath(folder);
         for (PCLDynamicPowerData builder : builders) {
             builder.setImagePath(imagePath);
         }

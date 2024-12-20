@@ -183,7 +183,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             loadFolder(workshop.v2, workshop.v1.getInstallPath(), false);
         }
         for (TupleT2<URL,String> provider : PROVIDERS) {
-            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, null, true));
+            doForFilesInJar(provider.v1, provider.v2, f -> loadSingleImpl(f, provider.v2, null, true));
         }
         if (PGR.debugRelics != null) {
             PGR.debugRelics.refresh();
@@ -196,16 +196,16 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
     private static void loadFolder(FileHandle folder, String workshopPath, boolean isInternal) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleImpl(f, workshopPath, isInternal);
+            loadSingleImpl(f, folder.path(), workshopPath, isInternal);
         }
     }
 
-    private static void loadSingleImpl(FileHandle f, String workshopPath, boolean isInternal) {
+    private static void loadSingleImpl(FileHandle f, String folder, String workshopPath, boolean isInternal) {
         String path = f.path();
         try {
             String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
             PCLCustomRelicSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path, workshopPath, isInternal);
+            slot.setupBuilder(path, folder, workshopPath, isInternal);
             getRelics(slot.slotColor).add(slot);
             CUSTOM_MAPPING.put(slot.ID, slot);
 
@@ -289,7 +289,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         forms = tempForms.toArray(new String[]{});
     }
 
-    protected void setupBuilder(String filePath, String workshopPath, boolean isInternal) {
+    protected void setupBuilder(String filePath, String folder, String workshopPath, boolean isInternal) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
         this.workshopFolder = workshopPath;
@@ -301,7 +301,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             builders.add(builder);
         }
 
-        imagePath = makeImagePath();
+        imagePath = makeImagePath(folder);
         for (PCLDynamicRelicData builder : builders) {
             builder.setImagePath(imagePath);
         }
