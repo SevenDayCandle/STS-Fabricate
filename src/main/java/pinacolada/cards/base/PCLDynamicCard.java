@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLCardTargetingManager;
 import pinacolada.interfaces.markers.FabricateItem;
@@ -402,11 +403,18 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
                 this.customEnergyOrb = getCustomEnergyOrb();
                 this.customEnergyOrbLarge = getCustomEnergyPopupOrb();
             }
+            else if (vanillaEnergyOrbLarge == null) {
+                vanillaEnergyOrbLarge = vanillaEnergyOrb;
+            }
+
             this.vanillaBg = getBaseGameCardBackground();
             this.vanillaBgLarge = getBaseGameCardPopupBackground();
             if (vanillaBg == null) {
                 this.customBg = getCustomCardBackground();
                 this.customBgLarge = getCustomCardPopupBackground();
+            }
+            else if (vanillaBgLarge == null) {
+                vanillaBgLarge = vanillaBg;
             }
         }
     }

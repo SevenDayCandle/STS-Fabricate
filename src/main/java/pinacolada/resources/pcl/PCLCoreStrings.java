@@ -1109,6 +1109,9 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
         return actFmt(62, verb, amount, subject, target);
     }
+    public final String act_exitX(String stance) {
+        return actFmt(63, stance);
+    }
 
     public final String combat_controlPileDescriptionFull(String keyName) {
         return EUIUtils.format(combat_controlPileDescription, keyName);

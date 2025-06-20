@@ -20,6 +20,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.PCLConditionalAction;
 import pinacolada.actions.utility.DelayAllActions;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.patches.card.AbstractCardPatches;
@@ -50,6 +51,9 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         if (copy) {
             this.card = card.makeSameInstanceOf();
             this.card.energyOnUse = card.energyOnUse;
+            // Purge and prevent recasting to avoid infinite loops and duplicating cards
+            this.purge = true;
+            PCLCardTag.Recast.set(this.card, 0);
         }
         else {
             this.card = card;

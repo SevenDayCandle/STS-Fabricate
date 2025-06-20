@@ -816,10 +816,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (shouldUsePCLFrame() || type == PCLEnum.CardType.BLESSING ) {
             return ImageMaster.CARD_SKILL_BG_SILHOUETTE;
         }
-        if (isSummon()) {
-            return ImageMaster.CARD_POWER_BG_SILHOUETTE;
-        }
-        return super.getCardBgAtlas();
+        TextureAtlas.AtlasRegion reg = super.getCardBgAtlas();
+        return reg != null ? reg : ImageMaster.CARD_POWER_BG_SILHOUETTE;
     }
 
     public PCardPrimary_GainBlock getCardBlock() {

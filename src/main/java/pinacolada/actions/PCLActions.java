@@ -554,8 +554,7 @@ public final class PCLActions {
     public PlayCard playCopy(AbstractCard card, AbstractCreature target) {
         return add(new PlayCard(card, target, true, actionOrder != PCLActions.ActionOrder.Top))
                 .setCurrentPosition(card.current_x, card.current_y)
-                .spendEnergy(false)
-                .setPurge(true);
+                .spendEnergy(false);
     }
 
     public PlayFromPile playFromPile(String sourceName, int amount, AbstractCreature target, CardGroup... groups) {

@@ -37,7 +37,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.random ^ (fields.stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(fields.stances, GameUtilities::inStance));
+        return (fields.not || fields.random) ^ (fields.stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(fields.stances, GameUtilities::inStance));
     }
 
     @Override
@@ -49,14 +49,22 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     public String getSubText(PCLCardTarget perspective, Object requestor) {
         String base = fields.getAnyStanceString();
         if (isWhenClause()) {
+            if (fields.random) {
+                return getWheneverYouString(TEXT.act_exitX(base));
+            }
             return getWheneverYouString(TEXT.act_enterStance(base));
         }
-        return fields.random ? TEXT.cond_not(base) : base;
+        return fields.random || fields.not ? TEXT.cond_not(base) : base;
     }
 
     @Override
     public void onStanceChanged(AbstractStance oldStance, AbstractStance newStance) {
-        if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(newStance.ID))) {
+        if (fields.random) {
+            if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(oldStance.ID))) {
+                useFromTrigger(generateInfo(null).setData(oldStance));
+            }
+        }
+        else if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(newStance.ID))) {
             useFromTrigger(generateInfo(null).setData(newStance));
         }
     }

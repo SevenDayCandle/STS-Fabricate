@@ -14,6 +14,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.interfaces.providers.ValueProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @JsonAdapter(PCLPowerData.PCLPowerDataAdapter.class)
-public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower, PowerStrings> {
+public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCLDynamicPower, PowerStrings>, ValueProvider {
     private static final TypeToken<HashMap<Settings.GameLanguage, PowerStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, PowerStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, PowerStrings> languageMap = new HashMap<>();
@@ -162,10 +163,13 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         for (int i = 0; i < moves.size(); i++) {
             PSkill<?> skill = moves.get(i);
             if (!PSkill.isSkillBlank(skill)) {
+                Object oldSource = skill.source;
+                skill.source = this;
                 String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i], null) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
                 if (!StringUtils.isEmpty(s)) {
                     sj.add(s);
                 }
+                skill.source = oldSource;
             }
         }
         String base = StringUtils.capitalize(sj.toString());
@@ -264,6 +268,12 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
     @Override
     public PCLDynamicPowerData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
+    }
+
+    // Used for power keyword tooltips
+    @Override
+    public int timesUpgraded() {
+        return 1;
     }
 
     @Override
