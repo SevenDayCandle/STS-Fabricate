@@ -210,7 +210,7 @@ public class PCLCustomPowerSlot extends PCLCustomEditorLoadable<PCLDynamicPowerD
     }
 
     public PCLPowerRenderable makeRenderable() {
-        return getBuilder(0).makeRenderableWithLevel(0);
+        return getBuilder(0).makeRenderableWithLevel(1);
     }
 
     // Copy down the properties from all builders into this slot

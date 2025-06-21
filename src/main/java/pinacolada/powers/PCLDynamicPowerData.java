@@ -20,6 +20,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.base.moves.PMove_Draw;
 import pinacolada.ui.PCLPowerRenderable;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -146,12 +147,18 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         for (int i = 0; i < moves.size(); i++) {
             PSkill<?> move = moves.get(i);
             if (!PSkill.isSkillBlank(move)) {
-                move.recurse(m -> m.amount = m.baseAmount + level * m.getUpgrade());
+                move.recurse(m -> {
+                    m.amount = m.baseAmount + level * m.getUpgrade();
+                    m.extra = m.baseExtra + level * m.getUpgradeExtra();
+                });
                 String pText = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? move.getUncascadedPowerOverride(desc[i], level) : move.getPowerTextForDisplay(this);
                 if (!StringUtils.isEmpty(pText)) {
                     sj.add(StringUtils.capitalize(pText));
                 }
-                move.recurse(m -> m.amount = m.baseAmount);
+                move.recurse(m -> {
+                    m.amount = m.baseAmount;
+                    m.extra = m.baseExtra;
+                });
             }
         }
         return sj.toString();
@@ -162,15 +169,15 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
         final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
         for (int i = 0; i < moves.size(); i++) {
             PSkill<?> skill = moves.get(i);
+            Object oldSource = skill.source;
+            skill.setSource(this);
             if (!PSkill.isSkillBlank(skill)) {
-                Object oldSource = skill.source;
-                skill.source = this;
                 String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i], null) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
                 if (!StringUtils.isEmpty(s)) {
                     sj.add(s);
                 }
-                skill.source = oldSource;
             }
+            skill.setSource(oldSource);
         }
         String base = StringUtils.capitalize(sj.toString());
         String add = endTurnBehavior.getAddendum(turns);
@@ -300,7 +307,6 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
             tooltip = new EUIKeywordTooltip(strings.NAME);
         }
         tooltip.title = strings.NAME;
-        tooltip.setDescription(getEffectTextForTip());
         Texture tex = EUIRM.getTexture(imagePath);
         if (tex != null) {
             tooltip.setIcon(PCLRenderHelpers.generateIcon(tex));
