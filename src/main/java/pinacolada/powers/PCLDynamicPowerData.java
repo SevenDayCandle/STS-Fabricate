@@ -172,10 +172,18 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
             Object oldSource = skill.source;
             skill.setSource(this);
             if (!PSkill.isSkillBlank(skill)) {
+                skill.recurse(m -> {
+                    m.amount = m.baseAmount + m.getUpgrade();
+                    m.extra = m.baseExtra + m.getUpgradeExtra();
+                });
                 String s = desc != null && desc.length > i && !StringUtils.isEmpty(desc[i]) ? skill.getUncascadedPowerOverride(desc[i], null) : StringUtils.capitalize(skill.getPowerTextForTooltip(this));
                 if (!StringUtils.isEmpty(s)) {
                     sj.add(s);
                 }
+                skill.recurse(m -> {
+                    m.amount = m.baseAmount;
+                    m.extra = m.baseExtra;
+                });
             }
             skill.setSource(oldSource);
         }

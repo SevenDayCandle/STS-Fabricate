@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
@@ -19,11 +20,13 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
@@ -50,6 +53,7 @@ import pinacolada.resources.loadout.LoadoutRelicSlot;
 import pinacolada.resources.loadout.PCLCustomLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.rewards.pcl.AugmentReward;
+import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
@@ -86,6 +90,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public Boolean allowCustomRelics = false;
     public Integer augmentChance = DEFAULT_AUGMENT_CHANCE;
     public ArrayList<PCLAugment.SaveData> augmentList = new ArrayList<>();
+    public HashSet<AbstractCard.CardColor> extraCardColors = new HashSet<>();
     public HashSet<String> bannedAugments = new HashSet<>();
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
@@ -475,6 +480,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         bannedCards.clear();
         bannedRelics.clear();
         augmentList.clear();
+        extraCardColors.clear();
         ascensionGlyphCounters.clear();
         valueDivisor = 1;
         if (dungeon != null) {
@@ -494,6 +500,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             bannedCards.addAll(dungeon.bannedCards);
             bannedRelics.addAll(dungeon.bannedRelics);
             augmentList.addAll(dungeon.augmentList);
+            extraCardColors.addAll(dungeon.extraCardColors);
             if (this.data != null) {
                 loadout = PCLLoadout.get(dungeon.startingLoadout);
                 for (String proxy : dungeon.loadoutIDs) {
@@ -505,14 +512,42 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
             }
         }
         else {
+            PCLCustomTrial customTrial = EUIUtils.safeCast(CardCrawlGame.trial, PCLCustomTrial.class);
             eventLog = new HashMap<>();
-            allowCustomAugments = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowAugments;
+
+            if (customTrial != null) {
+                allowCustomAugments = customTrial.allowAugments;
+                allowCustomBlights = PGR.config.enableCustomBlights.get() || customTrial.allowCustomBlights;
+                allowCustomCards = PGR.config.enableCustomCards.get() || customTrial.allowCustomCards;
+                allowCustomPotions = PGR.config.enableCustomPotions.get() || customTrial.allowCustomPotions;
+                allowCustomRelics = PGR.config.enableCustomRelics.get() || customTrial.allowCustomRelics;
+                augmentChance = customTrial.augmentChance;
+
+                // Extra card colors from custom trial mods
+                for (String id : customTrial.modIds) {
+                    // Diverse means that all card colors are considered
+                    if (Diverse.ID.equals(id)) {
+                        extraCardColors.addAll(PCLCustomRunScreen.COLOR_MOD_MAPPING.values());
+                        break;
+                    }
+                    else {
+                        AbstractCard.CardColor foundColor = PCLCustomRunScreen.COLOR_MOD_MAPPING.get(id);
+                        if (foundColor != null) {
+                            extraCardColors.add(foundColor);
+                        }
+                    }
+                }
+            }
+            else {
+                allowCustomAugments = false;
+                allowCustomBlights = PGR.config.enableCustomBlights.get();
+                allowCustomCards = PGR.config.enableCustomCards.get();
+                allowCustomPotions = PGR.config.enableCustomPotions.get();
+                allowCustomRelics = PGR.config.enableCustomRelics.get();
+                augmentChance = PGR.config.augmentChance.get();
+            }
             allowAugments = allowCustomAugments || (data != null && data.canUseAugments());
-            augmentChance = CardCrawlGame.trial instanceof PCLCustomTrial ? ((PCLCustomTrial) CardCrawlGame.trial).augmentChance : PGR.config.augmentChance.get();
-            allowCustomBlights = PGR.config.enableCustomBlights.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomBlights);
-            allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
-            allowCustomPotions = PGR.config.enableCustomPotions.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomPotions);
-            allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
+
             highestScore = 0;
             rNGCounter = 0;
 
@@ -572,17 +607,21 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
 
             boolean added = false;
             if (data.canUseCustom() || allowCustomCards) {
-                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
-                    if (!bannedCards.contains(c.ID) && (c.loadout == null || EUIUtils.any(loadouts, l -> l.isCardFromLoadout(c.ID)))) {
-                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
-                        CardGroup pool = GameUtilities.getCardPool(rarity);
-                        if (pool != null) {
-                            pool.addToBottom(c.make());
-                            added = true;
-                        }
-                        CardGroup spool = GameUtilities.getCardPoolSource(rarity);
-                        if (spool != null) {
-                            spool.addToBottom(c.make());
+                // Will contain all card colors from run mods as well as the player color
+                extraCardColors.add(player.getCardColor());
+                for (AbstractCard.CardColor color : extraCardColors) {
+                    for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(color)) {
+                        if (!bannedCards.contains(c.ID) && (c.loadout == null || EUIUtils.any(loadouts, l -> l.isCardFromLoadout(c.ID)))) {
+                            AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                            CardGroup pool = GameUtilities.getCardPool(rarity);
+                            if (pool != null) {
+                                pool.addToBottom(c.make());
+                                added = true;
+                            }
+                            CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+                            if (spool != null) {
+                                spool.addToBottom(c.make());
+                            }
                         }
                     }
                 }
@@ -958,6 +997,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
         bannedCards.clear();
         bannedRelics.clear();
         augmentList.clear();
+        extraCardColors.clear();
         loadout = new FakeLoadout();
         startingLoadout = loadout.ID;
         loadoutIDs.clear();
