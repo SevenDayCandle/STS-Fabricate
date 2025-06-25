@@ -20,13 +20,11 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.Circlet;
 import com.megacrit.cardcrawl.rewards.RewardItem;
-import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.ui.screens.CustomCardLibraryScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLCustomAugmentSlot;
@@ -655,16 +653,20 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
                 group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
             }
             if (allowCustomCards) {
-                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
-                    if (!bannedCards.contains(c.ID)) {
-                        AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
-                        CardGroup pool = GameUtilities.getCardPool(rarity);
-                        if (pool != null) {
-                            pool.addToBottom(c.make());
-                        }
-                        CardGroup spool = GameUtilities.getCardPoolSource(rarity);
-                        if (spool != null) {
-                            spool.addToBottom(c.make());
+                // Will contain all card colors from run mods as well as the player color
+                extraCardColors.add(player.getCardColor());
+                for (AbstractCard.CardColor color : extraCardColors) {
+                    for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(color)) {
+                        if (!bannedCards.contains(c.ID)) {
+                            AbstractCard.CardRarity rarity = c.getFirstBuilder().cardRarity;
+                            CardGroup pool = GameUtilities.getCardPool(rarity);
+                            if (pool != null) {
+                                pool.addToBottom(c.make());
+                            }
+                            CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+                            if (spool != null) {
+                                spool.addToBottom(c.make());
+                            }
                         }
                     }
                 }
@@ -991,19 +993,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PostDungeonInitial
     public void reset() {
         fullLog("RESETTING...");
 
-        importBaseData(null);
-        loadouts.clear();
-        bannedAugments.clear();
-        bannedCards.clear();
-        bannedRelics.clear();
-        augmentList.clear();
-        extraCardColors.clear();
         loadout = new FakeLoadout();
         startingLoadout = loadout.ID;
         loadoutIDs.clear();
-        valueDivisor = 1;
         anyColorCards = null;
-        allowAugments = null;
+        importBaseData(null);
 
         validate();
     }
