@@ -31,6 +31,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.*;
@@ -119,6 +120,20 @@ public class GameUtilities {
     public static final float BLIGHT_START_X = 64.0F * Settings.scale;
     public static final float BLIGHT_START_Y = Settings.isMobile ? (float)Settings.HEIGHT - 206.0F * Settings.scale : (float)Settings.HEIGHT - 176.0F * Settings.scale;
     public static final int CHAR_OFFSET = 97;
+
+    public static void addPotionSlots(int amount) {
+        player.potionSlots += amount;
+        if (amount > 0) {
+            while (player.potionSlots > player.potions.size()) {
+                player.potions.add(new PotionSlot(player.potions.size()));
+            }
+        }
+        else if (amount < 0) {
+            while (player.potions.size() > player.potionSlots) {
+                player.potions.remove(player.potions.size() - 1);
+            }
+        }
+    }
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -2104,6 +2119,20 @@ public class GameUtilities {
     public static void removeBlock(AbstractCard card) {
         card.baseBlock = card.block = 0;
         card.isBlockModified = false;
+    }
+
+    public static void removePotions(AbstractPotion... r) {
+        removePotions(Arrays.asList(r));
+    }
+
+    public static void removePotions(Collection<AbstractPotion> potions) {
+        player.potions.removeAll(potions);
+        for (AbstractPotion r : potions) {
+            player.removePotion(r);
+        }
+        if (!potions.isEmpty()) {
+            player.adjustPotionPositions();
+        }
     }
 
     public static void removeRelics(AbstractRelic... r) {

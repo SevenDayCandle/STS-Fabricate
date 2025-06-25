@@ -161,6 +161,7 @@ public class PCLCoreTooltips extends AbstractTooltips {
     public EUIKeywordTooltip plasma = tryLoadTip("Plasma");
     public EUIKeywordTooltip platedArmor = tryLoadTip("Plated Armor");
     public EUIKeywordTooltip poison = tryLoadTip("Poison");
+    public EUIKeywordTooltip potionSlot = tryLoadTip("Potion Slot");
     public EUIKeywordTooltip provoked = tryLoadTip("Provoked");
     public EUIKeywordTooltip purge = tryLoadTip("Purge");
     public EUIKeywordTooltip ranged = tryLoadTip("Ranged Damage");

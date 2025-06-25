@@ -96,6 +96,8 @@ public class CombatManager extends EUIBase {
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
+    private static final HashMap<AbstractCreature, Integer> hpGainedThisCombat = new HashMap<>();
+    private static final HashMap<AbstractCreature, Integer> hpGainedThisTurn = new HashMap<>();
     private static final HashMap<AbstractCreature, Integer> hpLostThisCombat = new HashMap<>();
     private static final HashMap<AbstractCreature, Integer> hpLostThisTurn = new HashMap<>();
     private static final HashMap<Class<? extends PCLCombatSubscriber>, ConcurrentLinkedQueue<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
@@ -497,6 +499,8 @@ public class CombatManager extends EUIBase {
         return hasteInfinitesThisTurn;
     }
 
+    public static int hpGainedThisCombat(AbstractCreature c) {return hpGainedThisCombat.getOrDefault(c, 0); }
+    public static int hpGainedThisTurn(AbstractCreature c) {return hpGainedThisTurn.getOrDefault(c, 0); }
     public static int hpLostThisCombat(AbstractCreature c) {return hpLostThisCombat.getOrDefault(c, 0); }
     public static int hpLostThisTurn(AbstractCreature c) {return hpLostThisTurn.getOrDefault(c, 0); }
 
@@ -767,7 +771,12 @@ public class CombatManager extends EUIBase {
     }
 
     public static int onCreatureHeal(AbstractCreature instance, int block) {
-        return subscriberInout(OnCreatureHealSubscriber.class, block, (s, b) -> s.onHeal(instance, b));
+        int gain = subscriberInout(OnCreatureHealSubscriber.class, block, (s, b) -> s.onHeal(instance, b));
+        if (gain > 0) {
+            hpLostThisCombat.merge(instance, gain, Integer::sum);
+            hpLostThisTurn.merge(instance, gain, Integer::sum);
+        }
+        return gain;
     }
 
     public static int onCreatureLoseHP(AbstractCreature mo, DamageInfo info, int damageAmount) {

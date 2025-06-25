@@ -91,6 +91,10 @@ public class PField_Potion extends PField_Random {
         return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
+    public boolean isFilterEmpty() {
+        return potionIDs.isEmpty() && colors.isEmpty() && rarities.isEmpty() && sizes.isEmpty();
+    }
+
     @Override
     public PField_Potion makeCopy() {
         return (PField_Potion) new PField_Potion()
