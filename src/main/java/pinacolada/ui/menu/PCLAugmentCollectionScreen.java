@@ -91,7 +91,8 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
     }
 
     @Override
-    public void openingSettings() {
+    public void switchScreen() {
+        super.switchScreen();
         AbstractDungeon.previousScreen = curScreen();
     }
 
