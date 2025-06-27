@@ -315,6 +315,7 @@ public class PCLDynamicPowerData extends PCLPowerData implements EditorMaker<PCL
             tooltip = new EUIKeywordTooltip(strings.NAME);
         }
         tooltip.title = strings.NAME;
+        tooltip.setDescription(getEffectTextForTip());
         Texture tex = EUIRM.getTexture(imagePath);
         if (tex != null) {
             tooltip.setIcon(PCLRenderHelpers.generateIcon(tex));
