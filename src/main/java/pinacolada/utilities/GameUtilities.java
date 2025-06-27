@@ -2126,7 +2126,6 @@ public class GameUtilities {
     }
 
     public static void removePotions(Collection<AbstractPotion> potions) {
-        player.potions.removeAll(potions);
         for (AbstractPotion r : potions) {
             player.removePotion(r);
         }

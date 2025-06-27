@@ -121,7 +121,7 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String cedit_useParent = cedit.TEXT[56];
     public final String cedit_loadFromCard = cedit.TEXT[57];
     public final String cedit_openFolder = cedit.TEXT[58];
-    public final String cedit_exportCSV = cedit.TEXT[59];
+    public final String cedit_export = cedit.TEXT[59];
     public final String cedit_random = cedit.TEXT[60];
     public final String cedit_required = cedit.TEXT[61];
     public final String cedit_origins = cedit.TEXT[62];
@@ -529,6 +529,8 @@ public class PCLCoreStrings extends AbstractStrings {
     public final String sui_totalInstructions = seriesui.TEXT[24];
     public final String sui_importFromFile = seriesui.TEXT[25];
     public final String sui_importFromFileInstructions = seriesui.TEXT[26];
+    public final String sui_importFromFileLoadout = seriesui.TEXT[27];
+    public final String sui_exportToFileLoadout = seriesui.TEXT[28];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];

@@ -5,9 +5,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.google.gson.reflect.TypeToken;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.misc.PCLCustomLoadable;
+import pinacolada.resources.PGR;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,6 +20,7 @@ import static pinacolada.utilities.GameUtilities.JSON_FILTER;
 public class PCLLoadoutDataInfo extends PCLCustomLoadable {
     static final long serialVersionUID = 1L;
     protected static final String SUBFOLDER = "preset";
+    protected static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("*.json", "json");
     public static final TypeToken<PCLLoadoutDataInfo> TInfo = new TypeToken<PCLLoadoutDataInfo>() {
     };
     public String loadout;
@@ -39,6 +44,24 @@ public class PCLLoadoutDataInfo extends PCLCustomLoadable {
     public static String makeNewID(PCLLoadout loadout) {
         ArrayList<String> keys = EUIUtils.flattenList(EUIUtils.map(PCLLoadout.getAll(loadout.color), l -> l.presets.keySet()));
         return makeNewIDByKey(loadout.ID.replace(':','_'), keys);
+    }
+
+    public static PCLLoadoutDataInfo loadFreeFile() {
+        try {
+            File openedFile = EUIUtils.loadFile(EXTENSIONS, PGR.config.lastCSVPath);
+            if (openedFile != null) {
+                FileHandle f = Gdx.files.absolute(openedFile.getAbsolutePath());
+                String path = f.path();
+                String jsonString = f.readString(HttpParametersUtils.defaultEncoding);
+                PCLLoadoutDataInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
+                return loadoutInfo;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(PCLCustomLoadoutInfo.class, "Failed to load loadout file: " + e.getLocalizedMessage());
+        }
+        return null;
     }
 
     private static void loadSingleLoadoutImpl(FileHandle f) {
@@ -86,6 +109,18 @@ public class PCLLoadoutDataInfo extends PCLCustomLoadable {
 
         writer.writeString(EUIUtils.serialize(this, TInfo.getType()), false, HttpParametersUtils.defaultEncoding);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Preset: " + filePath);
+    }
+
+    public void saveToFile() {
+        File file = EUIUtils.saveFile(EXTENSIONS, PGR.config.lastCSVPath);
+        if (file != null) {
+            FileHandle handle = Gdx.files.absolute(file.getAbsolutePath());
+            if (handle.exists()) {
+                handle.delete();
+            }
+            handle.writeString(EUIUtils.serialize(this, TInfo.getType()), false, HttpParametersUtils.defaultEncoding);
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved to file: " + filePath);
+        }
     }
 
     @Override

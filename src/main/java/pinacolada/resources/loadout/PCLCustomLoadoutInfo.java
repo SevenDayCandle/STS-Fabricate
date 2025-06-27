@@ -13,7 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLCustomFlagInfo;
 import pinacolada.misc.PCLCustomLoadable;
+import pinacolada.resources.PGR;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,7 +99,7 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Loadout: " + path);
+            EUIUtils.logError(PCLCustomLoadoutInfo.class, "Could not load Custom Loadout: " + path);
         }
     }
 

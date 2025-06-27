@@ -24,10 +24,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.screen.*;
 import pinacolada.resources.PCLPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.loadout.PCLLoadoutData;
-import pinacolada.resources.loadout.PCLLoadoutDataInfo;
-import pinacolada.resources.loadout.PCLLoadoutValidation;
+import pinacolada.resources.loadout.*;
 import pinacolada.ui.editor.card.EditDeleteDropdownRow;
 
 import java.util.ArrayList;
@@ -48,6 +45,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     protected EUIButton cancelButton;
     protected EUIButton clearButton;
     protected EUIButton saveButton;
+    protected EUIButton saveToFileButton;
+    protected EUIButton loadFromFileButton;
     protected EUIToggle upgradeToggle;
     protected EUITextBox cardscountText;
     protected EUITextBox cardsvalueText;
@@ -59,7 +58,7 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         final float buttonHeight = screenH(0.07f);
         final float labelHeight = screenH(0.04f);
         final float buttonWidth = screenW(0.18f);
-        final float labelWidth = screenW(0.20f);
+        final float labelWidth = screenW(0.15f);
         final float button_cY = buttonHeight * 1.5f;
 
         canvas = new PCLLoadoutCanvas(this);
@@ -91,6 +90,19 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setOnClick(() -> this.openPresetCreate(PGR.core.strings.loadout_newPreset))
                 .setTooltip(PGR.core.strings.loadout_newPreset, PGR.core.strings.loadout_tutorialPreset);
 
+        loadFromFileButton = new EUIButton(EUIRM.images.rectangularButton.texture(),
+                new EUIHitbox(screenW(0.74f), screenH(0.93f), scale(170), scale(50)))
+                .setTooltip(PGR.core.strings.sui_importFromFile, PGR.core.strings.sui_importFromFileLoadout)
+                .setLabel(FontHelper.tipHeaderFont, 0.98f, PGR.core.strings.sui_importFromFile)
+                .setColor(new Color(0.63f, 0.67f, 0.9f, 1))
+                .setOnClick(this::readFromFile);
+        saveToFileButton = new EUIButton(EUIRM.images.rectangularButton.texture(),
+                new EUIHitbox(screenW(0.84f), screenH(0.93f), scale(170), scale(50)))
+                .setTooltip(PGR.core.strings.cedit_export, PGR.core.strings.sui_exportToFileLoadout)
+                .setLabel(FontHelper.tipHeaderFont, 0.98f, PGR.core.strings.cedit_export)
+                .setColor(new Color(0.7f, 0.9f, 0.6f, 1))
+                .setOnClick(this::saveToFile);
+
         cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.85f, button_cY)
                 .setColor(Color.FIREBRICK)
@@ -110,10 +122,11 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
                 .setText(PGR.core.strings.loadout_reset)
                 .setOnClick(this::clear);
 
-        upgradeToggle = new EUIToggle(new EUIHitbox(0, 0, labelWidth * 0.75f, labelHeight))
+        upgradeToggle = new EUIToggle(new EUIHitbox(0, 0, labelWidth * 0.8f, labelHeight))
                 .setPosition(screenW(0.5f), screenH(0.055f))
                 .setBackground(EUIRM.images.panelRounded.texture(), new Color(0, 0, 0, 0.85f))
                 .setText(SingleCardViewPopup.TEXT[6])
+                .setFont(FontHelper.topPanelInfoFont, 0.93f)
                 .setOnToggle(this::toggleViewUpgrades);
 
         cardsvalueText = new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight))
@@ -220,6 +233,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         seriesButton.setActive(data != null && data.hasLoadouts());
         presetDropdown.setActive(data != null);
         addPresetButton.setActive(data != null);
+        loadFromFileButton.setActive(data == null);
+        saveToFileButton.setActive(data == null);
 
         if (!canvas.cardEditors.isEmpty() && !canvas.relicsEditors.isEmpty()) {
             EUITourTooltip.queueFirstView(PGR.config.tourLoadout,
@@ -287,6 +302,18 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         }
     }
 
+    private void readFromFile() {
+        PCLLoadoutDataInfo info = PCLLoadoutDataInfo.loadFreeFile();
+        if (info != null) {
+            PCLLoadoutData data = new PCLLoadoutData(loadout, info);
+            if (data.validate().isValid) {
+                loadout.presets.put(data.ID, data);
+                changePreset(data);
+                refresh();
+            }
+        }
+    }
+
     protected void refresh() {
         for (PCLBaseStatEditor beditor : baseStatEditors) {
             beditor.setLoadout(loadout, getCurrentPreset());
@@ -310,6 +337,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         else {
             seriesButton.tryRender(sb);
             presetDropdown.tryRender(sb);
+            saveToFileButton.tryRender(sb);
+            loadFromFileButton.tryRender(sb);
             addPresetButton.tryRender(sb);
             attributesText.renderImpl(sb);
 
@@ -345,6 +374,11 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
             data.saveSelectedLoadout();
         }
         close();
+    }
+
+    private void saveToFile() {
+        PCLLoadoutDataInfo info = new PCLLoadoutDataInfo(loadout.ID, current);
+        info.saveToFile();
     }
 
     public void toggleViewUpgrades(boolean value) {
@@ -398,6 +432,8 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
         else {
             seriesButton.tryUpdate();
             presetDropdown.tryUpdate();
+            saveToFileButton.tryUpdate();
+            loadFromFileButton.tryUpdate();
             addPresetButton.tryUpdate();
 
             for (PCLBaseStatEditor beditor : baseStatEditors) {

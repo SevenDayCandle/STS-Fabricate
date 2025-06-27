@@ -145,7 +145,7 @@
 												"Use Parent",
 												"Load Example",
 												"Open Folder",
-												"Export CSV",
+												"Export to File",
 												"Random",
 												"Required",
 												"Origin",
@@ -656,8 +656,10 @@
 												"Manage Relics",
 												"Choose which relics will appear in your runs. What relics are available depends on the selected sets.",
 												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes.",
-												"Import from CSV",
-												"Set the card pool from a CSV table exported by EUI"
+												"Import from File",
+												"Set the card pool from a CSV table exported by EUI",
+												"Load a loadout from a file. You can only load loadouts made for the currently selected character.",
+												"Save this loadout to a file."
 								]
 				},
 				"pcl:SingleCardPopupButtons": {
