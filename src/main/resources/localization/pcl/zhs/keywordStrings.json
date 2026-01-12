@@ -1,0 +1,737 @@
+{
+	"A-A":	{
+		"DESCRIPTION": "按每个#y亲和度计数。#y亲和度显示在卡牌名称上方。",
+		"NAME": "多色亲和"
+	},
+	"A-B":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "蓝色亲和"
+	},
+	"A-G":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "绿色亲和"
+	},
+	"A-K":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "粉色亲和"
+	},
+	"A-O":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "橙色亲和"
+	},
+	"A-P":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "紫色亲和"
+	},
+	"A-R":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "红色亲和"
+	},
+	"A-S":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "银色亲和"
+	},
+	"A-U":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "未知亲和"
+	},
+	"A-W":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "亲和度",
+		"PLURAL": "${0}@>1:亲和度@:亲和度$"
+	},
+	"A-Y":	{
+		"DESCRIPTION": "#y亲和度显示在卡牌名称上方。",
+		"NAME": "黄色亲和"
+	},
+	"Accuracy":	{
+		"DESCRIPTION": "#y Shiv（小刀）卡牌造成额外伤害。",
+		"NAME": "精准"
+	},
+	"After Image":	{
+		"DESCRIPTION": "每当你打出一张卡牌时，获得[格挡]。",
+		"NAME": "余象"
+	},
+	"Amplify":	{
+		"DESCRIPTION": "下一张打出的能力牌会被打出两次。",
+		"NAME": "增幅"
+	},
+	"Angry":	{
+		"DESCRIPTION": "受到攻击时，获得[力量]。",
+		"NAME": "愤怒"
+	},
+	"Augment":	{
+		"DESCRIPTION": "#y强化插件会修改其所嵌入卡牌的效果或属性。",
+		"NAME": "强化插件",
+		"PLURAL": "${0}@>1:强化插件@:强化插件$"
+	},
+	"Autoplay":	{
+		"DESCRIPTION": "在手牌中时自动打出。仍会消耗[能量]。",
+		"NAME": "自动施放",
+		"PAST": "已自动施放",
+		"PRESENT": "自动施放",
+		"PROGRESSIVE": "正在自动施放"
+	},
+	"Barricade":	{
+		"DESCRIPTION": "[格挡]不会在你的回合结束时清除。",
+		"NAME": "壁垒"
+	},
+	"Battle Hymn":	{
+		"DESCRIPTION": "回合开始时，将#y惩恶加入你的手牌。",
+		"NAME": "战歌"
+	},
+	"Beat Of Death":	{
+		"DESCRIPTION": "每当你打出一张卡牌时，受到伤害。",
+		"NAME": "死亡律动"
+	},
+	"Berserk":	{
+		"DESCRIPTION": "回合开始时，获得[能量]。",
+		"NAME": "狂暴"
+	},
+	"Blasphemer":	{
+		"DESCRIPTION": "你的下一回合死亡。",
+		"NAME": "渎神"
+	},
+	"Blessing":	{
+		"DESCRIPTION": "#y祝福卡牌是会保留在你的牌组中的增益卡牌。",
+		"NAME": "祝福",
+		"PLURAL": "${0}@>1:祝福@:祝福$"
+	},
+	"Blinded":	{
+		"DESCRIPTION": "每层使#y攻击伤害减少#b1点。回合开始时减少#b1层。",
+		"NAME": "钨合金棍"
+	},
+	"Block Return":	{
+		"DESCRIPTION": "受到攻击时，给予攻击者[格挡]。",
+		"NAME": "格挡返还"
+	},
+	"Blur":	{
+		"DESCRIPTION": "[格挡]可在回合间保留。",
+		"NAME": "残影"
+	},
+	"Bounce":	{
+		"DESCRIPTION": "打出后返回至你的手牌。",
+		"NAME": "弹回"
+	},
+	"Bruised":	{
+		"DESCRIPTION": "每层使你受到的#y攻击伤害增加#b1点。回合开始时减少#b1层。",
+		"NAME": "荆棘"
+	},
+	"Brutal Damage":	{
+		"DESCRIPTION": "受到修改伤害的能力效果影响翻倍。",
+		"NAME": "残暴伤害"
+	},
+	"Brutality":	{
+		"DESCRIPTION": "回合开始时，失去生命值并抽牌。",
+		"NAME": "残暴"
+	},
+	"Buff":	{
+		"DESCRIPTION": "具有正面效果的能力。",
+		"NAME": "增益",
+		"PAST": "已施加增益",
+		"PLURAL": "${0}@>1:增益@:增益$",
+		"PRESENT": "施加增益",
+		"PROGRESSIVE": "正在施加增益"
+	},
+	"Buffer":	{
+		"DESCRIPTION": "抵消你即将受到的下一次生命值损失，然后层数减少#b1。",
+		"NAME": "缓冲"
+	},
+	"Burst":	{
+		"DESCRIPTION": "下一张打出的技能牌会被打出两次。",
+		"NAME": "爆发"
+	},
+	"Chance":	{
+		"DESCRIPTION": "以一定概率触发效果。",
+		"NAME": "概率"
+	},
+	"Choked":	{
+		"DESCRIPTION": "每当打出一张卡牌时，失去生命值。",
+		"NAME": "勒脖"
+	},
+	"Collect":	{
+		"DESCRIPTION": "回合开始时，将一张升级后的#y奇迹加入你的手牌。",
+		"NAME": "收集"
+	},
+	"Combust":	{
+		"DESCRIPTION": "回合结束时，失去生命值并对所有敌人造成伤害。",
+		"NAME": "自然"
+	},
+	"Confused":	{
+		"DESCRIPTION": "随机化抽到卡牌的费用。",
+		"NAME": "混乱"
+	},
+	"Constricted":	{
+		"DESCRIPTION": "每个回合结束时受到伤害。",
+		"NAME": "束缚"
+	},
+	"Cooldown":	{
+		"DESCRIPTION": "使用一定次数后生效。",
+		"NAME": "冷却"
+	},
+	"Corpse Explosion":	{
+		"DESCRIPTION": "死亡时，根据其最大生命值对所有敌人造成伤害。",
+		"NAME": "尸爆"
+	},
+	"Corruption":	{
+		"DESCRIPTION": "技能牌费用为0，且打出时#y耗尽。",
+		"NAME": "腐化"
+	},
+	"Counter":	{
+		"DESCRIPTION": "用于自定义卡牌效果的卡牌属性。",
+		"NAME": "计数器",
+		"PLURAL": "${0}@>1:计数器@:计数器$"
+	},
+	"Create":	{
+		"DESCRIPTION": "在指定牌堆中添加一张新卡牌。",
+		"PAST": "已创建",
+		"PRESENT": "创建",
+		"PROGRESSIVE": "正在创建",
+		"NAME": "创建"
+	},
+	"Creative AI":	{
+		"DESCRIPTION": "回合开始时，将随机的能力牌置入你的手牌。",
+		"NAME": "ai"
+	},
+	"Critical":	{
+		"DESCRIPTION": "下一张打出的#y攻击每层造成#b+{0}%的伤害。",
+		"NAME": "暴走"
+	},
+	"Curiosity":	{
+		"DESCRIPTION": "打出能力牌时，获得[力量]。",
+		"NAME": "好奇"
+	},
+	"Curl Up":	{
+		"DESCRIPTION": "受到未被格挡的攻击伤害时，获得[格挡]，然后移除该能力。",
+		"NAME": "蜷缩"
+	},
+	"Cycle":	{
+		"DESCRIPTION": "弃置一定数量的卡牌，然后抽等量的卡牌。",
+		"PAST": "已循环",
+		"PRESENT": "循环",
+		"PROGRESSIVE": "正在循环",
+		"NAME": "循环"
+	},
+	"Dark Embrace":	{
+		"DESCRIPTION": "有卡牌被#y耗尽时抽牌。",
+		"NAME": "黑暗之拥"
+	},
+	"Debuff":	{
+		"DESCRIPTION": "具有负面效果的能力。",
+		"PAST": "已施加减益",
+		"PLURAL": "${0}@>1:减益@:减益$",
+		"PRESENT": "施加减益",
+		"PROGRESSIVE": "正在施加减益",
+		"NAME": "减益"
+	},
+	"Deflection":	{
+		"DESCRIPTION": "将被格挡的#y攻击伤害反弹给攻击者。",
+		"NAME": "偏转"
+	},
+	"Delayed":	{
+		"DESCRIPTION": "每次战斗开始时，此卡牌位于你的牌组底部。",
+		"NAME": "延迟"
+	},
+	"Delayed Damage":	{
+		"DESCRIPTION": "你的回合结束时受到伤害。只有敌人会因该伤害死亡。",
+		"NAME": "延迟伤害"
+	},
+	"Deva":	{
+		"DESCRIPTION": "回合开始时，获得[能量]。该效果每回合增强。",
+		"NAME": "天人"
+	},
+	"Devotion":	{
+		"DESCRIPTION": "你的回合开始时，获得[真言]。",
+		"NAME": "虔信"
+	},
+	"Die":	{
+		"DESCRIPTION": "将该生物从战斗中移除。",
+		"PAST": "已死亡",
+		"PRESENT": "死亡",
+		"PROGRESSIVE": "正在死亡",
+		"NAME": "死亡"
+	},
+	"Double Damage":	{
+		"DESCRIPTION": "攻击造成#b+100%的伤害。",
+		"NAME": "双倍伤害"
+	},
+	"Double Tap":	{
+		"DESCRIPTION": "下一张打出的攻击牌会被打出两次。",
+		"NAME": "双重打击"
+	},
+	"Draw Minus":	{
+		"DESCRIPTION": "下一回合开始时少抽卡牌。",
+		"NAME": "抽牌减少"
+	},
+	"Draw Plus":	{
+		"DESCRIPTION": "下一回合开始时多抽卡牌。",
+		"NAME": "抽牌增加"
+	},
+	"Duplication":	{
+		"DESCRIPTION": "下一张打出的卡牌会额外再打出一次。",
+		"NAME": "复制"
+	},
+	"Echo":	{
+		"DESCRIPTION": "每回合打出的第一张卡牌会被打出两次。",
+		"NAME": "回响"
+	},
+	"Electro":	{
+		"DESCRIPTION": "[闪电]击中所有敌人。",
+		"NAME": "电动力"
+	},
+	"Energized":	{
+		"DESCRIPTION": "下一回合开始时获得[能量]。",
+		"NAME": "充电"
+	},
+	"Enrage":	{
+		"DESCRIPTION": "打出技能牌时，获得[力量]。",
+		"NAME": "激怒"
+	},
+	"Entangled":	{
+		"DESCRIPTION": "本回合你不能打出任何攻击牌。",
+		"NAME": "缠身"
+	},
+	"Envenom":	{
+		"DESCRIPTION": "每当攻击造成未被格挡的伤害时，施加[中毒]。",
+		"NAME": "涂毒"
+	},
+	"Ephemeral":	{
+		"DESCRIPTION": "回合结束时或打出时被清除。",
+		"NAME": "短暂"
+	},
+	"Equilibrium":	{
+		"DESCRIPTION": "本回合保留你的手牌",
+		"NAME": "均衡"
+	},
+	"Escape":	{
+		"DESCRIPTION": "跳过当前战斗。无任何奖励。",
+		"NAME": "逃脱",
+		"PAST": "已逃脱",
+		"PRESENT": "逃脱",
+		"PROGRESSIVE": "正在逃脱"
+	},
+	"Establishment":	{
+		"DESCRIPTION": "有卡牌被#y保留时，降低其费用。",
+		"NAME": "确立基础"
+	},
+	"Explosive":	{
+		"DESCRIPTION": "若干回合后死亡，并对敌人造成伤害。",
+		"NAME": "爆炸"
+	},
+	"Fading":	{
+		"DESCRIPTION": "若干回合后死亡。",
+		"NAME": "凋零"
+	},
+	"Fleeting":	{
+		"DESCRIPTION": "使用时，将此卡牌从场上和牌组中移除。",
+		"NAME": "转瞬"
+	},
+	"Flight":	{
+		"DESCRIPTION": "受到的#y攻击伤害减少50%。受到#y攻击伤害后该效果降低。若未降至#b0，则回合开始时恢复。",
+		"NAME": "飞行"
+	},
+	"Foresight":	{
+		"DESCRIPTION": "你的回合开始时，检视牌堆。",
+		"NAME": "预见"
+	},
+	"Fortified":	{
+		"DESCRIPTION": "#y卡牌提供#b+{0}%的[格挡]。",
+		"NAME": "强化格挡"
+	},
+	"Fragile":	{
+		"DESCRIPTION": "若此卡牌在手牌中时你打出另一张卡牌，则其会被耗尽。",
+		"NAME": "易碎"
+	},
+	"Free Attack":	{
+		"DESCRIPTION": "下一张打出的攻击牌费用为#b0。",
+		"NAME": "免费攻击"
+	},
+	"Fuse":	{
+		"DESCRIPTION": "将多张卡牌合并为一张拥有其合计费用、效果和属性的卡牌。#y转瞬卡牌、#y召唤物以及通过#y融合创建的卡牌无法被#y融合。",
+		"PAST": "已融合",
+		"PRESENT": "融合",
+		"PROGRESSIVE": "正在融合",
+		"NAME": "融合"
+	},
+	"Grave":	{
+		"DESCRIPTION": "每次战斗开始时，此卡牌位于你的弃牌堆中。",
+		"NAME": "墓地"
+	},
+	"HP":	{
+		"DESCRIPTION": "生物的生命值耗尽时死亡。",
+		"NAME": "生命值"
+	},
+	"Haste":	{
+		"DESCRIPTION": "加入你的手牌时，抽1张卡牌。",
+		"NAME": "迅捷"
+	},
+	"Heal":	{
+		"DESCRIPTION": "恢复生命值",
+		"PAST": "已治疗",
+		"PRESENT": "治疗",
+		"PROGRESSIVE": "正在治疗",
+		"NAME": "治疗"
+	},
+	"Hex":	{
+		"DESCRIPTION": "每当你打出非攻击牌时，将#y晕眩加入你的抽牌堆。",
+		"NAME": "邪咒"
+	},
+	"Immaterial Damage":	{
+		"DESCRIPTION": "受到修改#y宝珠输出的#y能力影响。无视修改#y攻击伤害或接触触发的#y能力。",
+		"NAME": "无形伤害"
+	},
+	"Impaired":	{
+		"DESCRIPTION": "降低你的宝珠效果#b{0}%。",
+		"NAME": "受损"
+	},
+	"Innovation":	{
+		"DESCRIPTION": "无视下一个使用的#y可交互能力的费用。",
+		"NAME": "创新"
+	},
+	"Interactable":	{
+		"DESCRIPTION": "每回合一次（除非另有说明），点击此物品并支付其费用以激活该效果。",
+		"NAME": "可交互"
+	},
+	"Invigorated":	{
+		"DESCRIPTION": "#y攻击造成#b+{0}%的伤害。",
+		"NAME": "鼓舞"
+	},
+	"Invincible":	{
+		"DESCRIPTION": "限制每回合可损失的生命值上限。",
+		"NAME": "无敌"
+	},
+	"Juggernaut":	{
+		"DESCRIPTION": "每当你获得[格挡]时，对随机一名敌人造成伤害。",
+		"NAME": "势不可挡"
+	},
+	"Kill":	{
+		"DESCRIPTION": "将该生物从战斗中移除。",
+		"PAST": "已击杀",
+		"PRESENT": "击杀",
+		"PROGRESSIVE": "正在击杀",
+		"NAME": "击杀"
+	},
+	"Level":	{
+		"DESCRIPTION": "#y亲和度的#y等级会提升其对依赖该属性的卡牌和游戏机制的影响。",
+		"NAME": "等级"
+	},
+	"Limited":	{
+		"DESCRIPTION": "此效果在每场战斗中仅能触发一次，涵盖此卡牌的所有复制。",
+		"NAME": "限制"
+	},
+	"Lock-On":	{
+		"DESCRIPTION": "受到的#y宝珠伤害增加#b{0}%。",
+		"NAME": "锁定"
+	},
+	"Loop":	{
+		"DESCRIPTION": "回合开始时，#y触发你最右侧的#y宝珠。",
+		"NAME": "循环"
+	},
+	"Loyal":	{
+		"DESCRIPTION": "若此卡牌即将进入你的弃牌堆，则改为移至你的抽牌堆。",
+		"NAME": "忠诚"
+	},
+	"Malleable":	{
+		"DESCRIPTION": "受到伤害时，获得[格挡]，然后此能力层数增加#b1。回合开始时重置。",
+		"NAME": "韧性"
+	},
+	"Mark":	{
+		"DESCRIPTION": "被#y压力#y点数和自定义卡牌效果使用。",
+		"NAME": "标记"
+	},
+	"Max HP":	{
+		"DESCRIPTION": "",
+		"NAME": "最大生命值"
+	},
+	"Metallicize":	{
+		"DESCRIPTION": "你的回合开始时，获得[格挡]。",
+		"NAME": "金属化"
+	},
+	"Multiform":	{
+		"DESCRIPTION": "战斗外，你可在主牌组的弹出查看器中更改此卡牌的形态。",
+		"NAME": "变形"
+	},
+	"Next Turn Block":	{
+		"DESCRIPTION": "下一回合开始时获得[格挡]。",
+		"NAME": "下回合格挡"
+	},
+	"No Block":	{
+		"DESCRIPTION": "本回合抵消所有从卡牌获得的[格挡]。",
+		"NAME": "无法格挡"
+	},
+	"No Draw":	{
+		"DESCRIPTION": "本回合你无法抽牌。",
+		"NAME": "无法抽牌"
+	},
+	"Normal Damage":	{
+		"DESCRIPTION": "受到接触触发的能力影响。",
+		"NAME": "普通伤害"
+	},
+	"Noxious Fumes":	{
+		"DESCRIPTION": "每个回合开始时，对所有敌人施加[中毒]。",
+		"NAME": "剧毒烟雾"
+	},
+	"Obtain":	{
+		"DESCRIPTION": "将指定卡牌加入你的牌组。",
+		"NAME": "获取",
+		"PAST": "已获取",
+		"PRESENT": "获取",
+		"PROGRESSIVE": "正在获取"
+	},
+	"Orb Slot":	{
+		"DESCRIPTION": "#y宝珠#y槽位允许你引导额外的宝珠。",
+		"NAME": "宝珠槽位",
+		"PLURAL": "${0}@>1:宝珠槽位@:宝珠槽位$"
+	},
+	"Pay":	{
+		"DESCRIPTION": "失去指定实体以激活效果。",
+		"NAME": "支付",
+		"PAST": "已支付",
+		"PRESENT": "支付",
+		"PROGRESSIVE": "正在支付"
+	},
+	"Persist":	{
+		"DESCRIPTION": "每回合仅在使用一定次数后才会被弃置。",
+		"NAME": "存续"
+	},
+	"Piercing Damage":	{
+		"DESCRIPTION": "无视[格挡]和接触触发的#y能力。",
+		"NAME": "穿刺伤害"
+	},
+	"Plated Armor":	{
+		"DESCRIPTION": "你的回合结束时获得[格挡]。受到伤害时减少#b1层。",
+		"NAME": "镀层护甲"
+	},
+	"Play":	{
+		"DESCRIPTION": "使用一张卡牌且不消耗[能量]。",
+		"NAME": "打出",
+		"PAST": "已打出",
+		"PRESENT": "打出",
+		"PROGRESSIVE": "正在打出"
+	},
+	"Potion Slot":	{
+		"DESCRIPTION": "#y药水#y槽位允许你持有额外的药水。",
+		"NAME": "药水槽位",
+		"PLURAL": "${0}@>1:药水槽位@:药水槽位$"
+	},
+	"Provoked":	{
+		"DESCRIPTION": "目标受到的#y攻击伤害增加#b{0}%，且本回合必须进行攻击。",
+		"NAME": "激怒"
+	},
+	"Ranged Damage":	{
+		"DESCRIPTION": "无视接触触发的#y能力。",
+		"NAME": "远程伤害"
+	},
+	"Rebound":	{
+		"DESCRIPTION": "将你本回合打出的下一张卡牌置于抽牌堆顶部。",
+		"NAME": "反弹"
+	},
+	"Recast":	{
+		"DESCRIPTION": "下一回合，打出此卡牌的复制。该复制会被#y清除且不会#y重铸。",
+		"NAME": "重铸"
+	},
+	"Regeneration":	{
+		"DESCRIPTION": "回合结束时治疗生命值。每回合减少1层。",
+		"NAME": "再生"
+	},
+	"Remove":	{
+		"DESCRIPTION": "将指定卡牌从你的牌组中移除。",
+		"NAME": "移除",
+		"PAST": "已移除",
+		"PRESENT": "移除",
+		"PROGRESSIVE": "正在移除"
+	},
+	"Reshuffle":	{
+		"DESCRIPTION": "洗牌会将卡牌移至你的抽牌堆。",
+		"PAST": "已洗牌",
+		"PRESENT": "洗牌",
+		"PROGRESSIVE": "正在洗牌",
+		"NAME": "洗牌"
+	},
+	"Resistance":	{
+		"DESCRIPTION": "减少受到的#y攻击伤害。",
+		"NAME": "抗性"
+	},
+	"Sanctuary":	{
+		"DESCRIPTION": "若你即将死亡，将你的生命值设为此能力的层数并移除该能力。",
+		"NAME": "圣所"
+	},
+	"Scout":	{
+		"DESCRIPTION": "从抽牌堆顶部获取卡牌，然后将手牌中相同数量的卡牌放回原位。",
+		"NAME": "侦察",
+		"PAST": "已侦察",
+		"PRESENT": "侦察",
+		"PROGRESSIVE": "正在侦察"
+	},
+	"Select":	{
+		"DESCRIPTION": "对你选择的卡牌执行操作。",
+		"PAST": "已选择",
+		"PRESENT": "选择",
+		"PROGRESSIVE": "正在选择",
+		"NAME": "选择"
+	},
+	"Self-Immolation":	{
+		"DESCRIPTION": "当你打出带有[格挡]的卡牌时，所有角色在其回合结束时受到等同于该[格挡]数值乘以此能力层数的伤害。",
+		"NAME": "自焚"
+	},
+	"Semi-Limited":	{
+		"DESCRIPTION": "此效果每回合仅能触发一次，涵盖此卡牌的所有复制。",
+		"NAME": "半限制"
+	},
+	"Shackles":	{
+		"DESCRIPTION": "回合结束前降低[力量]。",
+		"NAME": "镣铐"
+	},
+	"Sharp Hide":	{
+		"DESCRIPTION": "打出攻击牌时，一名敌人受到伤害。",
+		"NAME": "尖刺外皮"
+	},
+	"Shifting":	{
+		"DESCRIPTION": "失去生命值时，回合结束前降低[力量]。",
+		"NAME": "动摇"
+	},
+	"Silenced":	{
+		"DESCRIPTION": "抵消即将获得的增益。不影响卡牌或怪物专属的能力。",
+		"NAME": "沉默"
+	},
+	"Slow":	{
+		"DESCRIPTION": "你本回合每打出一张卡牌，受到的#y攻击伤害增加#b10%。",
+		"NAME": "迟缓"
+	},
+	"Sorcery":	{
+		"DESCRIPTION": "提升下一个引导的宝珠的效果。同时在激活期间提升造成的[无形伤害]。",
+		"NAME": "巫术"
+	},
+	"Soulbound":	{
+		"DESCRIPTION": "无法从你的牌组中移除。",
+		"NAME": "灵魂绑定"
+	},
+	"Spore Cloud":	{
+		"DESCRIPTION": "死亡时，对敌人施加[易伤]。",
+		"NAME": "孢子云"
+	},
+	"Spread":	{
+		"DESCRIPTION": "将目标的能力扩散至其盟友。",
+		"NAME": "扩散",
+		"PRESENT": "扩散"
+	},
+	"Stabilize":	{
+		"DESCRIPTION": "防止某一能力在本回合被降低。",
+		"NAME": "稳定",
+		"PAST": "已稳定",
+		"PRESENT": "稳定",
+		"PROGRESSIVE": "正在稳定"
+	},
+	"Starter":	{
+		"DESCRIPTION": "若在回合开始时打出则激活。",
+		"NAME": "起始"
+	},
+	"Startup":	{
+		"DESCRIPTION": "战斗开始时打出此效果。",
+		"NAME": "启动"
+	},
+	"Steal":	{
+		"DESCRIPTION": "将物品从目标移至你身上。",
+		"NAME": "窃取",
+		"PAST": "已窃取",
+		"PRESENT": "窃取",
+		"PROGRESSIVE": "正在窃取"
+	},
+	"Stun":	{
+		"DESCRIPTION": "无法行动。",
+		"NAME": "眩晕",
+		"PAST": "已眩晕",
+		"PRESENT": "眩晕",
+		"PROGRESSIVE": "正在眩晕"
+	},
+	"Summon":	{
+		"DESCRIPTION": "#y召唤物每回合行动，并拦截对你造成的一半未被格挡的伤害。",
+		"NAME": "召唤物",
+		"PAST": "已召唤",
+		"PLURAL": "${0}@>1:召唤物@:召唤物$",
+		"PRESENT": "召唤",
+		"PROGRESSIVE": "正在召唤"
+	},
+	"Summon Slot":	{
+		"DESCRIPTION": "#y召唤物需拖放至#y召唤#y槽位来打出。",
+		"NAME": "召唤槽位",
+		"PLURAL": "${0}@>1:召唤槽位@:召唤槽位$"
+	},
+	"Supercharged":	{
+		"DESCRIPTION": "每个回合开始时获得额外的[能量]。",
+		"NAME": "超级充能"
+	},
+	"Suspensive":	{
+		"DESCRIPTION": "此卡牌可使用下一回合的[能量]打出。",
+		"NAME": "暂缓"
+	},
+	"Temporary HP":	{
+		"DESCRIPTION": "临时生命值持续至战斗结束。",
+		"NAME": "临时生命值"
+	},
+	"Thievery":	{
+		"DESCRIPTION": "攻击从目标处窃取#y金币。",
+		"NAME": "盗窃"
+	},
+	"Thousand Cuts":	{
+		"DESCRIPTION": "每当你打出一张卡牌时，对所有敌人造成伤害。",
+		"NAME": "千刀万剐"
+	},
+	"Time Warp":	{
+		"DESCRIPTION": "打出一定数量的卡牌后结束你的回合并获得[力量]。",
+		"NAME": "时间扭曲"
+	},
+	"Timing":	{
+		"DESCRIPTION": "决定卡牌或效果在你的回合之前还是之后触发。",
+		"NAME": "时机"
+	},
+	"Toxicology":	{
+		"DESCRIPTION": "额外施加多层基于层数的减益。",
+		"NAME": "毒理学"
+	},
+	"Transform":	{
+		"DESCRIPTION": "将一张卡牌替换为另一张。",
+		"NAME": "变形",
+		"PAST": "已变形",
+		"PRESENT": "变形",
+		"PROGRESSIVE": "正在变形"
+	},
+	"Trigger":	{
+		"DESCRIPTION": "激活#y宝珠或#y召唤物的被动效果。",
+		"NAME": "触发",
+		"PAST": "已触发",
+		"PRESENT": "触发",
+		"PROGRESSIVE": "正在触发"
+	},
+	"Turn End Timing":	{
+		"DESCRIPTION": "在你的回合结束时生效。被#y召唤的回合不生效。",
+		"NAME": "回合结束时机"
+	},
+	"Turn Start Timing":	{
+		"DESCRIPTION": "在你的回合开始时生效。",
+		"NAME": "回合开始时机"
+	},
+	"Unique":	{
+		"DESCRIPTION": "你只能拥有此物品的一个复制。额外的复制会#y升级此物品。",
+		"NAME": "唯一"
+	},
+	"Vigor":	{
+		"DESCRIPTION": "下一张打出的攻击每次命中造成额外伤害。",
+		"NAME": "活力"
+	},
+	"Vitality":	{
+		"DESCRIPTION": "每个回合开始时，获得[临时生命值]。",
+		"NAME": "生命力"
+	},
+	"Warding":	{
+		"DESCRIPTION": "下一次从卡牌直接获得的[格挡]会额外提供格挡值。",
+		"NAME": "守护"
+	},
+	"Withdraw":	{
+		"DESCRIPTION": "#y撤回一个#y召唤物会#y触发其两次效果并将其返回至你的弃牌堆。",
+		"NAME": "撤回",
+		"PAST": "已撤回",
+		"PRESENT": "撤回",
+		"PROGRESSIVE": "正在撤回"
+	}
+}

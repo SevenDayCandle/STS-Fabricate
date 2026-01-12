@@ -1,0 +1,18 @@
+{
+    "pcl:GBlue": {"NAME": "蓝色", "DESCRIPTIONS": []},
+    "pcl:GGreen": {"NAME": "绿色", "DESCRIPTIONS": []},
+    "pcl:GOrange": {"NAME": "橙色", "DESCRIPTIONS": []},
+    "pcl:GRed": {"NAME": "红色", "DESCRIPTIONS": []},
+    "pcl:PBounce": {"NAME": "弹回", "DESCRIPTIONS": []},
+    "pcl:PDelayed": {"NAME": "延迟", "DESCRIPTIONS": []},
+    "pcl:PExhaust": {"NAME": "消耗", "DESCRIPTIONS": []},
+    "pcl:PFleeting": {"NAME": "短暂", "DESCRIPTIONS": []},
+    "pcl:PHaste": {"NAME": "匆忙", "DESCRIPTIONS": []},
+    "pcl:PInnate": {"NAME": "固有", "DESCRIPTIONS": []},
+    "pcl:PLoyal": {"NAME": "忠诚", "DESCRIPTIONS": []},
+    "pcl:PRecast": {"NAME": "重播", "DESCRIPTIONS": []},
+    "pcl:PRetain": {"NAME": "保留", "DESCRIPTIONS": []},
+    "pcl:SDamage": {"NAME": "伤害", "DESCRIPTIONS": []},
+    "pcl:SDamageCount": {"NAME": "伤害次数", "DESCRIPTIONS": []},
+    "pcl:SHP": {"NAME": "生命值", "DESCRIPTIONS": []}
+}

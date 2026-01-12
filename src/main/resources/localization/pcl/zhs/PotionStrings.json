@@ -1,0 +1,44 @@
+{
+	"pcl:BerserkPotion":
+	{
+	  "NAME": "狂暴药水",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:BurgeoningPotion":
+	{
+	  "NAME": "激怒药水",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:HeartPotion":
+	{
+		"NAME": "生命药水",
+		"DESCRIPTIONS":
+		[
+		]
+	},
+	"pcl:ResistancePotion":
+	{
+	  "NAME": "抗性药水",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:SupportivePotion":
+	{
+	  "NAME": "辅助药水",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:VitalityPotion":
+	{
+	  "NAME": "生命力药水",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	}
+}

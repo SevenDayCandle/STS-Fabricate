@@ -1,0 +1,58 @@
+{
+				"CURSE":	{
+								"pcl:Curse_AscendersBane": {
+												"NAME": "进阶之灾"
+								},
+								"pcl:Curse_Clumsy": {"NAME": "笨拙"},
+								"pcl:Curse_CurseOfTheBell": {"NAME": "铃铛的诅咒"},
+								"pcl:Curse_Decay": {"NAME": "腐朽"},
+								"pcl:Curse_Doubt": {"NAME": "疑虑"},
+								"pcl:Curse_Injury": {"NAME": "受伤"},
+								"pcl:Curse_Necronomicurse": {"NAME": "死灵诅咒"},
+								"pcl:Curse_Normality": {
+												"NAME": "凡庸"
+								},
+								"pcl:Curse_Pain": {"NAME": "疼痛"},
+								"pcl:Curse_Parasite": {"NAME": "寄生"},
+								"pcl:Curse_Pride": {"NAME": "傲慢"},
+								"pcl:Curse_Regret": {"NAME": "悔恨"},
+								"pcl:Curse_Shame": {"NAME": "羞耻"},
+								"pcl:Curse_Writhe": {"NAME": "苦恼"}
+				},
+				"ENCHANTMENTS": {
+								"pcl:Glyph01": {"NAME": "魔术师符文"},
+								"pcl:Glyph02": {"NAME": "女祭司符文"},
+								"pcl:Glyph03": {"NAME": "女皇符文"},
+								"pcl:Glyph04": {"NAME": "皇帝符文"},
+								"pcl:Glyph05": {"EXTENDED_DESCRIPTION": ["{0} 在本次战斗中被禁用"], "NAME": "教皇符文"},
+								"pcl:Glyph06": {"EXTENDED_DESCRIPTION": ["所有敌人恢复 {0} [HP]"], "NAME": "恋人符文"},
+								"pcl:Glyph07": {
+												"NAME": "战车符文"
+								},
+								"pcl:Glyph08": {
+												"NAME": "正义符文"
+								},
+								"pcl:Glyph09": {
+												"NAME": "隐者符文"
+								}
+				},
+				"SPECIAL": {
+								"pcl:AffinityToken": {"NAME": "亲和"},
+								"pcl:MysteryCard": {
+												"EXTENDED_DESCRIPTION": [
+																"战斗开始时：转变为一张随机的 {0}",
+																"战斗开始时：转变为一张随机的升级版 {0}",
+																"选择此选项可在该槽位中填充一张每场战斗都变化的随机 {0}，而不是从你的牌组中移除一张牌"
+												],
+												"NAME": "? ? ?"
+								},
+								"pcl:QuestionMark": {"NAME": "? ? ?"}
+				},
+				"STATUS":	{
+								"pcl:Status_Burn": {"NAME": "灼伤"},
+								"pcl:Status_Dazed": {"NAME": "眩晕"},
+								"pcl:Status_Slimed": {"NAME": "粘液"},
+								"pcl:Status_Wound": {"NAME": "伤口"},
+								"pcl:Status_Void": {"NAME": "虚空"}
+				}
+}
