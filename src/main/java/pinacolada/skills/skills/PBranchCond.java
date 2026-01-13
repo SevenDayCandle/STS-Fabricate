@@ -223,67 +223,67 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
 
     @Override
     public float modifyBlockFirst(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyBlockFirst(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyBlockFirst(info, a));
     }
 
     @Override
     public float modifyBlockLast(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyBlockLast(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyBlockLast(info, a));
     }
 
     @Override
     public int modifyCost(PCLUseInfo info, int amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyCost(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyCost(info, a));
     }
 
     @Override
     public float modifyDamageGiveFirst(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageGiveFirst(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyDamageGiveFirst(info, a));
     }
 
     @Override
     public float modifyDamageGiveLast(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageGiveLast(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyDamageGiveLast(info, a));
     }
 
     @Override
     public float modifyDamageReceiveFirst(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageReceiveFirst(info, a, type));
+        return useModify(info, amount, (sk, a) -> sk.modifyDamageReceiveFirst(info, a, type));
     }
 
     @Override
     public float modifyDamageReceiveLast(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyDamageReceiveLast(info, a, type));
+        return useModify(info, amount, (sk, a) -> sk.modifyDamageReceiveLast(info, a, type));
     }
 
     @Override
     public float modifyHeal(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyHeal(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyHeal(info, a));
     }
 
     @Override
     public float modifyHitCount(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyHitCount(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyHitCount(info, a));
     }
 
     @Override
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyOrbIncoming(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyOrbIncoming(info, a));
     }
 
     @Override
     public float modifyOrbOutgoing(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyOrbOutgoing(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyOrbOutgoing(info, a));
     }
 
     @Override
     public float modifyRightCount(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifyRightCount(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifyRightCount(info, a));
     }
 
     @Override
     public float modifySkillBonus(PCLUseInfo info, float amount) {
-        return useModify(amount, childEffect.getQualifiers(info, true), (sk, a) -> sk.modifySkillBonus(info, a));
+        return useModify(info, amount, (sk, a) -> sk.modifySkillBonus(info, a));
     }
 
 
@@ -423,8 +423,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
-    private <T> T useModify(T input, List<Integer> qualifiers, FuncT2<T, PSkill<?>, T> onDo) {
-        if (!this.effects.isEmpty()) {
+    private <T> T useModify(PCLUseInfo info, T input, FuncT2<T, PSkill<?>, T> onDo) {
+        if (this.childEffect != null && !this.effects.isEmpty()) {
+            List<Integer> qualifiers = this.childEffect.getQualifiers(info, true);
             int qr = this.childEffect.getQualifierRange();
             boolean canGoOver = qr < this.effects.size();
             for (int i : qualifiers) {

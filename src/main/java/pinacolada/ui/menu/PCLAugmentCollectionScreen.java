@@ -38,13 +38,15 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         panelCounter = new CountingPanel<>(new RotatingList<>());
     }
 
+    @Override
     // To prevent the user from accessing the augment screen from the pop-up view while the augment selection is open
     public boolean allowOpenDeck() {
-        return curEffect != null;
+        return curEffect == null;
     }
 
+    @Override
     public boolean allowOpenMap() {
-        return curEffect != null;
+        return curEffect == null;
     }
 
     @Override
@@ -88,12 +90,6 @@ public class PCLAugmentCollectionScreen extends EUIPoolScreen {
         panel = new PCLAugmentList(this::doAction, this::doRemove, rows).enableCancel(false);
         addItem = canSelect ? (a) -> panel.addPanelItem(a) : panel::addListItem;
         refreshAugments();
-    }
-
-    @Override
-    public void switchScreen() {
-        super.switchScreen();
-        AbstractDungeon.previousScreen = curScreen();
     }
 
     public void refreshAugments() {
