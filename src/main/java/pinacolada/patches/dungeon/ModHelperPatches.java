@@ -15,11 +15,9 @@ import java.util.List;
 
 public class ModHelperPatches {
     private static final HashMap<String, AbstractDailyMod> CUSTOM_DAILY_MODS = new HashMap<>();
-    // Sadly have to hardcode the prefix for now to allow these to work with the switch statement
     public static final String AllowNeow = "pcl:AllowNeow";
     public static final String Augmented = "pcl:Augmented";
     public static final String Dearth = "pcl:Dearth";
-    public static final String Hatred = "pcl:Hatred";
 
     public static void createCustomMods(List<CustomMod> mods) {
         mods.add(makeCustomMod(AllowNeow));
@@ -27,12 +25,9 @@ public class ModHelperPatches {
         mods.add(makeCustomMod(Dearth));
     }
 
+    // TODO make into switch if more mods get added in the future
     public static boolean isModPositive(String key) {
-        switch (key) {
-            case Dearth:
-                return false;
-        }
-        return true;
+        return !key.equals(Dearth);
     }
 
     private static CustomMod makeCustomMod(String key) {
@@ -44,9 +39,11 @@ public class ModHelperPatches {
         // If there is a run mod strings entry, assume there's an abstract daily mod
         AbstractDailyMod res = null;
         RunModStrings strings = PGR.getRunModStrings(key);
-        if (strings != null) {
+        String path = PGR.getRunModImage(key);
+        // Apparently some vanilla non-daily mods get through this check so we need to ensure they don't actually appear in the modifiers list
+        if (strings != null && path != null) {
             res = new AbstractDailyMod(key, strings.NAME, strings.DESCRIPTION, "flight.png", isModPositive(key));
-            Texture tex = EUIRM.getTexture(PGR.getRunModImage(key));
+            Texture tex = EUIRM.getTexture(path);
             if (tex != null) {
                 res.img = tex;
             }
@@ -55,7 +52,7 @@ public class ModHelperPatches {
     }
 
     @SpirePatch(clz = ModHelper.class, method = "getMod")
-    public static class AbstractRoomPatches_EndTurn {
+    public static class ModHelperPatches_GetMod {
         @SpirePostfixPatch
         public static AbstractDailyMod postfix(AbstractDailyMod retVal, String key) {
             if (retVal != null) {
@@ -66,6 +63,7 @@ public class ModHelperPatches {
 
             if (res == null) {
                 res = makeDailyMod(key);
+                CUSTOM_DAILY_MODS.put(key, res);
             }
 
             return res;
