@@ -101,6 +101,27 @@ public interface EditorMaker<T, U> {
         return null;
     }
 
+    default String getNameString() {
+        return getNameString(getStringsForLanguage(Settings.language));
+    }
+
+    default String getNameString(U item) {
+        try {
+            for (Field f : item.getClass().getFields()) {
+                if (f.getName().equals("NAME")) {
+                    if (f.getType().isAssignableFrom(String.class)) {
+                        return f.get(item).toString();
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(this, "Object doesn't have a name array?");
+        }
+        return "";
+    }
+
     default U getStringsForLanguage(Settings.GameLanguage language) {
         HashMap<Settings.GameLanguage, U> languageMap = getLanguageMap();
         return languageMap.getOrDefault(language,
@@ -246,6 +267,12 @@ public interface EditorMaker<T, U> {
         HashMap<Settings.GameLanguage, U> map = getLanguageMap();
         for (Map.Entry<Settings.GameLanguage, String[]> entry : incoming.entrySet()) {
             U strings = map.get(entry.getKey());
+            if (strings == null) {
+                strings = getDefaultStrings();
+                String name = getNameString();
+                setNameString(strings, name);
+                map.put(entry.getKey(), strings);
+            }
             setDescString(strings, entry.getValue());
         }
     }

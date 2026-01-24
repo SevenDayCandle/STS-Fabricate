@@ -166,10 +166,12 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker<PCLDy
         return info.tag != null ? info : null;
     }
 
+    // Attempt to get the strings for the game's current language
     public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
         return getStringsForLanguage(languageMap, Settings.language);
     }
 
+    // Attempt to get the strings for the selected language. If this doesn't exist, fall back, in order, to the English strings and then to the first language that exists
     public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language) {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
