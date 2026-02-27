@@ -1,0 +1,12 @@
+{
+	"_CommonEvent":
+	{
+		"DESCRIPTIONS": [""],
+		"NAME": "",
+		"OPTIONS":
+		[
+			"[繼續]",
+			"[離開]"
+		]
+	}
+}

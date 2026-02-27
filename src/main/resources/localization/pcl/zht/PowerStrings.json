@@ -1,0 +1,152 @@
+{
+	"pcl:BatonPassPower":
+	{
+		"DESCRIPTIONS": ["當你通過在該#y召喚物的位置#y召喚另一個召喚物來#y撤回它時，將此#y召喚物的能力轉移給新召喚物。"],
+		"NAME": "接力傳遞"
+	},
+	"pcl:BlindedPower":
+	{
+		"DESCRIPTIONS": ["#y攻擊傷害減少#b{0}點。"],
+		"NAME": "鎢合金棍"
+	},
+	"pcl:BruisedPower":
+	{
+		"DESCRIPTIONS": ["受到的#y攻擊傷害增加#b{0}點。"],
+		"NAME": "瘀傷"
+	},
+	"pcl:CriticalPower":
+	{
+		"DESCRIPTIONS": ["下一張打出的#y攻擊造成#b{0}%的傷害。"],
+		"NAME": "暴擊"
+	},
+	"pcl:DeflectionPower":
+	{
+		"DESCRIPTIONS": ["持續#b{0}回合，將被格擋的#y攻擊傷害反彈給攻擊者。"],
+		"NAME": "偏轉"
+	},
+	"pcl:DelayedDamagePower":
+	{
+		"DESCRIPTIONS": ["你的回合結束時受到#b{0}點傷害。{1}", " 若此效果會導致你死亡，則保留#b1點生命值存活。"],
+		"NAME": "延遲傷害"
+	},
+	"pcl:DrawMinusPower":
+	{
+		"DESCRIPTIONS": ["下一回合少抽{0}張卡牌。"],
+		"NAME": "抽牌減少"
+	},
+	"pcl:EnergizedPower":
+	{
+		"DESCRIPTIONS": ["下一回合獲得#b{0}點額外的[能量]。"],
+		"NAME": "充能"
+	},
+	"pcl:ExitStancePower":
+	{
+		"DESCRIPTIONS": ["退出你的姿態。"],
+		"NAME": "退出姿態"
+	},
+	"pcl:FortifiedPower":
+	{
+		"DESCRIPTIONS": ["持續#b{1}個{2}，卡牌提供的[格擋]提升#b{0}%。", "回合", "回合"],
+		"NAME": "強化格擋"
+	},
+	"pcl:HandSizePower":
+	{
+		"DESCRIPTIONS": ["你當前的最大手牌上限為#b{0}。"],
+		"NAME": "手牌上限"
+	},
+	"pcl:ImpairedPower":
+	{
+		"DESCRIPTIONS": ["寶珠的#y專注效果降低#b{0}%，持續#b{1}個{2}。", "回合", "回合"],
+		"NAME": "受損"
+	},
+	"pcl:InnovationPower":
+	{
+		"DESCRIPTIONS": ["無視接下來使用的#b{0}個#y可交互#y能力的費用。"],
+		"NAME": "創新"
+	},
+	"pcl:InvigoratedPower":
+	{
+		"DESCRIPTIONS": ["持續#b{1}個{2}，攻擊造成的傷害提升#b{0}%。", "回合", "回合"],
+		"NAME": "鼓舞"
+	},
+	"pcl:MacroscopePower":
+	{
+		"DESCRIPTIONS": ["生命值、傷害、[格擋]和[臨時生命值]數值乘以{0}。"],
+		"NAME": "宏觀視野"
+	},
+	"pcl:PCLLockOnPower":
+	{
+		"DESCRIPTIONS": ["持續#b{1}個{2}，受到的寶珠傷害增加#b{0}%。擁有隨機目標的#y召喚物會優先攻擊此目標。", "回合", "回合"],
+		"NAME": "鎖定"
+	},
+	"pcl:ProvokedPower":
+	{
+		"DESCRIPTIONS": ["受到的#y攻擊傷害增加#b{0}%。本回合必定進行#y攻擊。"],
+		"NAME": "激怒"
+	},
+	"pcl:RerollAffinityPower":
+	{
+		"DESCRIPTIONS": ["#p已晉升：{0}。 | #p下一個：{1} || #o左鍵點擊/{2}重新隨機。", "#p已晉升：{0} | {0}張卡牌賦予#b{2}倍的#y{1}效果。", "#p下一個：{0} | 當你啟動一個#y光環時，其下方#y光環的[親和度]變為#y下一個，且{0}被#y晉升。"],
+		"NAME": "晉升親和度"
+	},
+	"pcl:RerollAffinityEternalPower":
+	{
+		"DESCRIPTIONS": [" | #o左鍵點擊/{0}回溯一次#y最後幾個#y親和度，將一個隨機的[親和度]置於末尾。"],
+		"NAME": "上一個親和度"
+	},
+	"pcl:ResistancePower":
+	{
+		"DESCRIPTIONS": ["受到的#y攻擊傷害降低#b{0}%。", "受到的#y攻擊傷害提升#b{0}%。"],
+		"NAME": "抗性"
+	},
+	"pcl:SelfImmolationPower":
+	{
+		"DESCRIPTIONS": ["當你打出一張提供[格擋]的卡牌時：所有角色受到的[延遲傷害]等於該卡牌[格擋]值乘以#b{0}。"],
+		"NAME": "自焚"
+	},
+	"pcl:ShacklesPower":
+	{
+		"DESCRIPTIONS": ["本回合結束前失去#b{0}點#y力量。"],
+		"NAME": "鐐銬"
+	},
+	"pcl:SilencedPower":
+	{
+		"DESCRIPTIONS": ["你無法獲得增益（不包括卡牌或怪物專屬的能力）。"],
+		"NAME": "沉默"
+	},
+	"pcl:SorceryPower":
+	{
+		"DESCRIPTIONS": ["下一個被#y引導的#y寶珠效果提升#b{0}。啟動期間，造成的[無形傷害]提升{0}點。"],
+		"NAME": "巫術"
+	},
+	"pcl:StabilizingPower":
+	{
+		"DESCRIPTIONS": ["{#y:{0}}在#b{1}個回合內不會減少。"],
+		"NAME": "穩定"
+	},
+	"pcl:SuperchargedPower":
+	{
+		"DESCRIPTIONS": ["每個回合獲得#b{0}點額外的[能量]。"],
+		"NAME": "超級充能"
+	},
+	"pcl:TemporaryPower":
+	{
+		"DESCRIPTIONS": ["你的下一回合開始時，失去#b{0}個#b{1}。", "你的下一回合開始時，獲得#b{0}個#b{1}。", "臨時{0}", "臨時{0}（縮寫）"],
+		"NAME": "臨時能力"
+	},
+	"pcl:ToxicologyPower":
+	{
+		"DESCRIPTIONS": ["每當你施加[中毒]、[瘀傷]、[致盲]或[鐐銬]時，額外施加#b{0}層。"],
+		"NAME": "毒理學"
+	},
+	"pcl:VitalityPower":
+	{
+		"DESCRIPTIONS": ["每個回合開始時，獲得#b{0}點#y臨時#y生命值（上限#b{1}點）。"],
+		"NAME": "生命力"
+	},
+	"pcl:WardingPower":
+	{
+		"DESCRIPTIONS": ["下一次從卡牌直接獲得[格擋]時，額外獲得{0}點。"],
+		"NAME": "守護"
+	}
+}

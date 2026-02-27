@@ -1,0 +1,38 @@
+{
+  "pcl:AllowNeow": {
+    "NAME": "允許尼奧",
+    "DESCRIPTION": "允許尼奧在自訂遊戲開局時給予祝福。"
+  },
+  "pcl:Augmented": {
+    "NAME": "強化賦能",
+    "DESCRIPTION": "卡牌獎勵會附帶隨機的強化外掛程式，為卡牌增加額外效果。"
+  },
+  "pcl:Dearth": {
+    "NAME": "稀缺",
+    "DESCRIPTION": "非首領遺物獎勵均替換為頭環。"
+  },
+  "pcl:Glyph0": {
+    "NAME": "魔化",
+    "DESCRIPTION": "敵人每回合獲得力量。"
+  },
+  "pcl:Glyph1": {
+    "NAME": "堅韌",
+    "DESCRIPTION": "敵人擁有更高的生命值。"
+  },
+  "pcl:HardMix": {
+    "NAME": "深度混搭",
+    "DESCRIPTION": "卡牌效果被大幅修改。"
+  },
+  "pcl:Hatred": {
+    "NAME": "憎恨",
+    "DESCRIPTION": "除你之外的所有生物每回合行動兩次。你無法查看敵人的行動。"
+  },
+  "pcl:SoftMix": {
+    "NAME": "輕度混搭",
+    "DESCRIPTION": "卡牌效果被小幅修改。"
+  },
+  "pcl:Vengeance": {
+    "NAME": "復仇",
+    "DESCRIPTION": "每當有生物死亡時，將其增益效果擴散至其隊友。"
+  }
+}

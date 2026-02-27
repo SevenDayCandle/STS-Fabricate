@@ -1,0 +1,56 @@
+{
+	"pcl:GenericDice":
+	{
+		"DESCRIPTIONS": ["你可以重新隨機卡牌獎勵，以獲取相同稀有度的其他卡牌。進入房間時，卡牌池中的每張卡牌都會使你有#b1%的概率獲得一次重新隨機機會。", "{#g:當前概率：{0}%}"],
+		"FLAVOR": "這只是個普通的骰子。別想太多。",
+		"NAME": "通用骰子"
+	},
+	"pcl:HeartShapedBox":
+	{
+		"DESCRIPTIONS": ["卡牌池中超#b{0}張卡牌後，每張卡牌都會使你的卡牌獎勵有#b1%的概率附帶#y金幣或#y最大生命值加成。", "{#g:當前概率：{0}%}"],
+		"FLAVOR": "你會因為這玩意兒收到不少抱怨。",
+		"NAME": "心形盒子"
+	},
+	"pcl:HomeRunBats":
+	{
+		"DESCRIPTIONS": [""],
+		"FLAVOR": "用兩根球棒能提高你擊中球的概率。",
+		"NAME": "全壘打棒球棒"
+	},
+	"pcl:Macroscope":
+	{
+	  "DESCRIPTIONS": ["戰鬥期間，所有生命值、傷害和格擋數值均乘以{0}。"],
+	  "FLAVOR": "湊近看，所有東西都變大了。",
+	  "NAME": "宏觀視野"
+	},
+	"pcl:Pacifiier":
+	{
+	  "DESCRIPTIONS": ["拾取後，你的最大生命值翻倍。此後所有最大生命值的提升效果也會翻倍。你的所有攻擊造成0點傷害。"],
+	  "FLAVOR": "熱到你頂不住！",
+	  "NAME": "辣椒"
+	},
+	"pcl:PizzaBox":
+	{
+		"DESCRIPTIONS": [],
+		"FLAVOR": "披薩時間到！",
+		"NAME": "披薩盒"
+	},
+	"pcl:ReconScanner":
+	{
+		"DESCRIPTIONS": ["現在你可以在進入房間前查看可能遭遇的敵人列表。"],
+		"FLAVOR": "洞察一切！",
+		"NAME": "偵察掃描器"
+	},
+	"pcl:TimeShare":
+	{
+	  "DESCRIPTIONS": ["在商店中，你可以租借#y普通（Uncommon）和#y稀有（Rare）卡牌與遺物，每場戰鬥後獲得#y金幣。"],
+	  "FLAVOR": "",
+	  "NAME": "分時共用"
+	},
+	"pcl:UsefulBox":
+	{
+	  "DESCRIPTIONS": [""],
+	  "FLAVOR": "一個很實用的盒子。",
+	  "NAME": "實用盒子"
+	}
+}
