@@ -44,7 +44,7 @@ public class PCLCardSaveData {
         while (augments.size() <= index) {
             augments.add(null);
         }
-        augments.set(index, null);
+        augments.set(index, id);
     }
 
     public void removeAugmentAt(int index) {

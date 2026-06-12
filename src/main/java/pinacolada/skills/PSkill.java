@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.TryChooseChoice;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -617,7 +618,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getAmountRawString(Object requestor) {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) :
+        // Do not use pointers for augments because the card pointers as shown on cards will be unable to be linked back to the augment
+        return source instanceof PointerProvider && !(source instanceof PCLAugment) ? EUIUtils.format(BOUND_FORMAT, EFFECT_CHAR + String.valueOf(getCardPointer())) :
                 requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, EFFECT_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
                 wrapTextAmount(amount);
     }
@@ -711,7 +713,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getConditionRawString(PCLCardTarget perspective, Object requestor, boolean addPeriod) {
-        return source instanceof PointerProvider ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
+        return (source instanceof PointerProvider && !(source instanceof PCLAugment)) ? EUIUtils.format(CONDITION_FORMAT, (addPeriod ? "C" : "c") + getCardPointer()) : getCapitalSubText(perspective, requestor, addPeriod);
     }
 
     public TupleT2<PSkill<?>, Integer> getEffectAtIndex(int ind) {
@@ -862,7 +864,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getExtra2RawString() {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA2_CHAR + String.valueOf(getCardPointer())) : String.valueOf(extra2);
+        return (source instanceof PointerProvider && !(source instanceof PCLAugment)) ? EUIUtils.format(BOUND_FORMAT, EXTRA2_CHAR + String.valueOf(getCardPointer())) : String.valueOf(extra2);
     }
 
     public PCLCardValueSource getExtra2Source() {
@@ -926,7 +928,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getExtraRawString(Object requestor) {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) :
+        return (source instanceof PointerProvider && !(source instanceof PCLAugment)) ? EUIUtils.format(BOUND_FORMAT, EXTRA_CHAR + String.valueOf(getCardPointer())) :
                 requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, EXTRA_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
                 String.valueOf(extra);
     }
@@ -1172,7 +1174,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getScopeRawString() {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, SCOPE_CHAR + String.valueOf(getCardPointer())) : String.valueOf(scope);
+        return (source instanceof PointerProvider && !(source instanceof PCLAugment)) ? EUIUtils.format(BOUND_FORMAT, SCOPE_CHAR + String.valueOf(getCardPointer())) : String.valueOf(scope);
     }
 
     public PCLCardValueSource getScopeSource() {
@@ -1604,7 +1606,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getXRawString(Object requestor) {
-        return source instanceof PointerProvider ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) :
+        return (source instanceof PointerProvider && !(source instanceof PCLAugment)) ? EUIUtils.format(BOUND_FORMAT, XVALUE_CHAR + String.valueOf(getCardPointer())) :
                 requestor instanceof PCLCustomDescriptionDialog ? EUIUtils.format(CASCADE_FORMAT, XVALUE_CHAR + String.valueOf(((PCLCustomDescriptionDialog) requestor).getIndexForEffect(this))) :
                 getXString();
     }

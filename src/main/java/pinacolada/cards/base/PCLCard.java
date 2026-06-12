@@ -1426,6 +1426,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
         upgrade.addAugment(augment.makeCopy(), false);
         upgrade.isPreview = true;
+        upgrade.initializeDescription();
         return upgrade;
     }
 
@@ -1530,8 +1531,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (data != null) {
             changeForm(data.form, timesUpgraded);
             this.auxiliaryData = new PCLCardSaveData(data);
-            if (data.augments != null) {
-                for (PCLAugment.SaveData dat : data.augments) {
+            if (auxiliaryData.augments != null) {
+                for (PCLAugment.SaveData dat : auxiliaryData.augments) {
                     if (dat != null) {
                         PCLAugmentData augment = PCLAugmentData.getStaticDataOrCustom(dat.ID);
                         if (augment != null) {
