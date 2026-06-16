@@ -3,6 +3,7 @@ package pinacolada.effects.card;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUIUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.patches.screens.GridCardSelectScreenPatches;
@@ -36,14 +37,16 @@ public class ChooseCardForAugmentEffect extends GenericChooseCardsEffect {
 
     public void onCardSelected(AbstractCard c) {
         // Transfer augment if it was already attached
-        if (augment.card instanceof PCLCard) {
-            PCLAugment retrieved = ((PCLCard) augment.card).removeAugment(augment);
+        PCLCard augmentCard = EUIUtils.safeCast(augment.card, PCLCard.class);
+        if (augmentCard != null) {
+            PCLAugment retrieved = augmentCard.removeAugment(augment);
+            augmentCard.initializeDescription();
             if (retrieved != null) {
                 PGR.dungeon.removeAugment(retrieved.save);
                 retrieved.addToCard((PCLCard) c);
             }
         }
-        else {
+        else if (c instanceof PCLCard) {
             PGR.dungeon.removeAugment(augment.save);
             augment.addToCard((PCLCard) c);
         }

@@ -116,6 +116,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     private void applyAugment(PCLAugment augment, int ind) {
         PGR.dungeon.removeAugment(augment.save);
         currentItem.addAugment(augment, ind, true);
+        currentItem.initializeDescription();
         this.displayCard = currentItem.makePopupCopy();
         this.upgradedCard = getUpgradeCard();
         refreshAugments();
@@ -352,6 +353,7 @@ public class PCLSingleCardPopup extends PCLSingleItemPopup<AbstractCard, PCLCard
     private void removeAugment(int index) {
         PCLAugment augment = currentItem.removeAugment(index);
         if (augment != null) {
+            this.currentItem.initializeDescription();
             this.displayCard = currentItem.makePopupCopy();
             this.upgradedCard = getUpgradeCard();
             PGR.dungeon.addAugment(augment.save);

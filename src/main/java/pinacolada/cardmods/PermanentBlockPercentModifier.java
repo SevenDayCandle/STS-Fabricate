@@ -3,6 +3,8 @@ package pinacolada.cardmods;
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
+import pinacolada.cards.base.PCLCard;
 
 public class PermanentBlockPercentModifier extends AbstractCardModifier {
     public int change;
@@ -47,5 +49,9 @@ public class PermanentBlockPercentModifier extends AbstractCardModifier {
     public void onInitialApplication(AbstractCard card) {
         card.block = (int) (card.baseBlock + card.baseBlock * change / 100f);
         card.isBlockModified = card.baseBlock != card.block;
+        PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
+        if (pclCard != null) {
+            pclCard.refresh(null);
+        }
     }
 }

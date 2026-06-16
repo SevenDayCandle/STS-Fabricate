@@ -5,6 +5,8 @@ import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIUtils;
+import pinacolada.cards.base.PCLCard;
 
 public class PermanentDamagePercentModifier extends AbstractCardModifier {
     public int change;
@@ -49,5 +51,9 @@ public class PermanentDamagePercentModifier extends AbstractCardModifier {
     public void onInitialApplication(AbstractCard card) {
         card.damage = (int) (card.baseDamage + card.baseDamage * change / 100f);
         card.isDamageModified = card.baseDamage != card.damage;
+        PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
+        if (pclCard != null) {
+            pclCard.refresh(null);
+        }
     }
 }

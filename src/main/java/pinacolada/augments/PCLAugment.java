@@ -54,6 +54,7 @@ public abstract class PCLAugment implements KeywordProvider, PointerProvider {
     public void addToCard(PCLCard c) {
         if (canApplyImpl(c)) {
             c.addAugment(this);
+            c.initializeDescription();
         }
     }
 
